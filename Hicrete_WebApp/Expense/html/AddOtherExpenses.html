@@ -1,0 +1,161 @@
+<div class="row" ng-controller="expenseEntryController">
+                        <div class="col-md-12">
+                            
+                            <!--Start of form section-->
+                            <div class="panel panel-default">
+                                <!--Start of form heading section-->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Other</strong> Expenses</h3>
+                                </div>
+                                <!--End of form heading section-->
+                                
+                                <div class="panel-body">                              
+                                    <form name="otherExpenseForm" class="form-horizontal" novalidate>  
+                                                                  
+                                    <!--Start of form container row-->
+                                    <div class="row">
+                
+                                        <!--start-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">Select cost center</label>
+                                            <div class="col-md-7">                   
+                                                
+                                                    <select class="form-control" name="costCenterName" required  ng-model="expenseDetails.costCenter">
+                                                        <option  ng-repeat="costCenterEntry in costCenterList" value="{{costCenterEntry.id}}">{{costCenterEntry.name}}</option>
+                                                        
+                                                    </select> 
+                                            </div>
+                                            <div class="help-block" ng-messages="otherExpenseForm.costCenterName.$error" ng-show="otherExpenseClicked">
+                                                    <p style="color:red" ng-message="required">Select Cost Center Name</p>     
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                                <label class="col-md-2 control-label">Select Budget segment</label>
+                                                <div class="col-md-7">                                                                                            
+                                                <select class="form-control" name="segmentName" ng-model="expenseDetails.segmentName" required>
+                                                       <option  ng-repeat="segmentEntry in segmentList" value="{{segmentEntry.id}}">{{segmentEntry.name}}</option>
+                                                </select>
+                                                </div>
+                                                <div class="help-block" ng-messages="otherExpenseForm.segmentName.$error" ng-show="otherExpenseClicked">
+                                                    <p style="color:red" ng-message="required">Select Segment Name</p>     
+                                            </div>
+                                        </div>
+
+
+                                         <div class="form-group">                                                
+                                                <label class="col-md-2  control-label">Amount</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group">
+                                                     <span class="input-group-addon"><span class="fa fa-rupee"></span></span>
+                                                        <input type="text"  name="amount"  ng-model="expenseDetails.amount" class="form-control" required pattern="[0-9]+"/>
+                                                    </div>  
+                                                    <div class="help-block" ng-messages="otherExpenseForm.amount.$error" ng-show="otherExpenseClicked">
+                                                        <p style="color:red" ng-message="required">Amount cannot be blank</p>
+                                                        <p style="color:red" ng-message="pattern">Invalid amount.Only numbers are allowed</p>     
+                                                     </div>
+                                                    </div>  
+                                        </div> 
+                                        <!--end-->    
+
+                                         <!--start-->
+                                        
+                                            <div class="form-group">
+                                                
+                                                <label class="col-md-2 col-xs-12 control-label">Description</label>
+                                                <div class="col-md-7 col-xs-12">                                            
+                                                    <textarea name="description" class="form-control" rows="5" ng-model="expenseDetails.desc"></textarea>
+                                                    <span class="help-block"></span>
+                                                </div>
+                                           
+                                        </div></br/>
+                                        <!--end--> 
+
+                                        <!--start-->
+
+                                        <div class="form-group">
+                                                <label class="col-md-2  control-label">Expense proof</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group col-md-8">
+                                                     <label class="check" for="chkPassport">
+                                                        <input type="checkbox" class="mycheck" ng-model="expenseDetails.isBillApplicable"/>Mark if applicable</label>
+                                                    </div>  
+                                                    </div>  
+                                        </div> 
+                                    </div>
+                                  </form>      
+                                        <!--end--> 
+                                            
+                                        <div class="row" id="paymentmode" ng-show="expenseDetails.isBillApplicable">
+                                            <!--start-->
+                                            <form name="billForm" class="form-horizontal" novalidate> 
+                                            <div class="form-group">
+                                                        <label class="col-md-2  control-label">Bill no</label>
+                                                        <div class="col-md-7">                                       
+                                                            <div class="input-group col-md-8">
+                                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control" required/>
+                                                            </div>  
+                                                             <div class="help-block" ng-messages="billForm.billNo.$error" ng-show="otherExpenseClicked">
+                                                                <p style="color:red" ng-message="required">BillNo cannot be blank</p>
+                                                                      
+                                                            </div>
+                                                        </div>  
+                                                
+                                            </div> 
+                                            <!--end--> 
+
+                                        <!--start-->
+                                        <div class="form-group">
+                                                <label class="col-md-2  control-label">Firm name</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group col-md-8">
+                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="text"  name="firmName"  ng-model="billDetails.firmName" class="form-control" required/>
+                                                    
+                                                    </div>  
+                                                    <div class="help-block" ng-messages="billForm.firmName.$error" ng-show="otherExpenseClicked">
+                                                            <p style="color:red" ng-message="required">Firm Name cannot be blank</p>
+                                                                      
+                                                    </div>
+                                                    </div>  
+                                        </div>
+                                        <!--end-->
+
+                                        <!--start-->
+                                        <div class="form-group">
+                                                <label class="col-md-2  control-label">Date of Bill</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group col-md-8">
+                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                        <input   name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control datepicker" required/>
+                                                    </div> 
+                                                        <div class="help-block" ng-messages="billForm.billDate.$error" ng-show="otherExpenseClicked">
+                                                            <p style="color:red" ng-message="required">Date Of Bill cannot be blank</p>
+                                                                      
+                                                    </div> 
+                                                    </div>  
+                                        </div>
+                                        <!--end-->  
+                                       </form> 
+
+                                    </div>
+
+
+
+                                
+                                <!--End of form container row-->
+
+                                <!--Start of buttons section-->
+                                <div class="panel-footer">
+                                    <button class="btn  btn-primary pull-right" ng-click="(otherExpenseClicked=true) &&  ( otherExpenseForm.$valid && (!expenseDetails.isBillApplicable || billForm.$valid ) ) &&addOtherExpense()">Submit</button>
+                                        
+                                    <button class="btn  btn-default pull-right">Clear Form</button> 
+                                </div>
+                                <!--End of buttons section-->
+                            </div>
+                            <!--End of form section-->
+                             </form>
+                            
+                        </div>
+                    </div>

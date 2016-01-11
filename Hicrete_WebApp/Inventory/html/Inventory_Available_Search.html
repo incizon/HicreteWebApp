@@ -1,0 +1,51 @@
+  <div class="search-results">
+                      
+                        <div class="sr-item">
+                            <div class="sr-item-title">Products Available</div>
+                            
+                            
+                            <div class="table-responsive push-up-10">
+                                <table class="table table-actions table-striped">
+                                    <thead>                                            
+                                        <tr>
+                                            <th width="5%">Sr.No</th>
+                                            <th width="10%">ProductName</th>
+                                            <th width="10%">Company</th>
+                                            <th width="10%">Warehouse</th>
+                                            <th width="15%">Quantity</th>
+                                            <th width="40%">Material Type</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="product in inventoryData | filter:keywords | orderBy:'productname'">
+                                            <td width="5%">{{$index + 1}}</td>
+                                            <td width="20%">{{product.productname}}</td>
+                                            <td width="10%">{{product.companyid}}</td>
+                                            <td width="15%">{{product.warehouseid}}</td>  
+                                            <td width="15%">{{product.totalquantity}}</td>
+                                            <td width="35%">{{product.materialtype}}
+
+                                                </td>
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                        <!-- END SEARCH RESULT -->
+                        
+                        <ul class="pagination pagination-sm pull-right push-down-20">
+                            <li class="disabled"><a href="#">«</a></li>
+                            <li class="active"><a href="#">1</a></li>
+                            <li><a href="#">2</a></li>
+                            <li><a href="#">3</a></li>
+                            <li><a href="#">4</a></li>                                    
+                            <li><a href="#">»</a></li>
+                        </ul>                            
+                        
+</div> 

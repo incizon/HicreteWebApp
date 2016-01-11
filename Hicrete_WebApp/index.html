@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html lang="en" class="body-full-height" >
+    <head>        
+        <!-- META SECTION -->
+        <title>Hicrete Systems</title>            
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        
+        <!-- END META SECTION -->
+        
+        <!-- CSS INCLUDE -->        
+        <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-default.css"/>
+
+        <script src="Assets/plugins/jquery/jquery.min.js"></script>
+        <script src="Assets/js/angular.min.js"></script>
+        <script src="loginApp.js"></script>
+
+
+         
+       
+        <!-- EOF CSS INCLUDE -->                                    
+    </head>
+    <body ng-app="loginApp" ng-controller="loginController">
+        
+        <div class="login-container">
+        
+            <div class="login-box animated fadeInDown">
+                <div class="login-logo"></div>
+                <div class="login-body">
+                    <div class="login-title"><strong>Welcome</strong>, Please login</div>
+                    <div ng-show="vm.error" class="alert alert-danger">{{vm.error}}</div>
+                    <form name="form" ng-submit="login()"  class="form-horizontal" role="form">
+                     
+                    <div class="form-group" >
+                        <div class="col-md-12" >
+                            <input  name="username" ng-model="vm.username" type="text" class="form-control" placeholder="Username" required />
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+
+                        </div>
+                    </div>  
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input name="password"  ng-model="vm.password" type="password" class="form-control" placeholder="Password" required />
+                             <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>    
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <a href="#" class="btn btn-link btn-block">Forgot your password?</a>
+                        </div>
+                        <div class="col-md-6">
+                            <button  type="submit" class="btn btn-info btn-block" ng-disabled="form.$invalid || vm.dataLoading">Log In</button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="login-footer">
+                    <div class="pull-left">
+                        &copy; 2015 Incizon Systems
+                    </div>
+                    <div class="pull-right">
+                        <a href="#">About</a> |
+                        <a href="#">Privacy</a> |
+                        <a href="#">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </body>
+</html>
+
+
+
+
+
+

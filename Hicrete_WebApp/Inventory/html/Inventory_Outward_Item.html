@@ -1,0 +1,272 @@
+
+<div class="row">
+    <div class="col-md-12">
+        
+        <form class="form-horizontal" name="outwardMaterialForm" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title"><strong>Outward Details</strong></h4>
+                </div>
+                
+                <div class="panel-body">                                                                        
+                    <div>
+                    <h5>Material</h5>
+                        <span style="color:red" ng-show="availableTotalquantity==0">Selected material is not available. Contact inventory manager</span>
+                        <span style="color:red" ng-show="availableTotalquantity<OutwardData.materialQuantity">Don't have sufficient quantity available in stock. Current available quantity is {{availableTotalquantity}}</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Outward Number</label>
+                                <div class="col-md-9">                                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.OutwardNumber" name="OutwardNumber" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.OutwardNumber.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter outward number</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">                                        
+                                <label class="col-md-3 control-label">Material</label>
+                                <div class="col-md-9 col-xs-12">
+                                    <select class="form-control select" ng-change="setAvailableQty(OutwardData.material)" ng-model="OutwardData.material" ng-value="Select" name="material" required>
+                                        <option value="" disabled selected>Select Material</option>
+                                        <option ng-repeat="x in productsToModify" value={{x.materialid}}>{{x.productname}}</option>
+                                        
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.material.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select material</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Packaging</label>
+                                <div class="col-md-9">                                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.packageUnit" name="packageUnit" required/>
+                                    </div>                                            
+                                    
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"> Company</label>
+                                <div class="col-md-9">                                      
+                                    <select class="form-control" ng-disabled="availableTotalquantity==0" ng-model="OutwardData.companyName" name="companyName" required>
+                                        <option value="" disabled selected>Select Company</option>
+                                        <option ng-repeat="x in Company" 
+                                            value={{x.companyId}}>{{x.companyName}}
+                                        </option>
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.companyName.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select company name</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Suppervisor</label>
+                                <div class="col-md-9">                                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.suppervisor" name="suppervisor" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.suppervisor.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter suppervisor name</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+                            
+                            <div class="form-group">                                        
+                                <label class="col-md-3 control-label">Date</label>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="date" ng-disabled="availableTotalquantity==0" class="form-control datepicker" ng-model="OutwardData.date" name="date" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.date.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter date</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Quantity</label>
+                                <div class="col-md-9">                                            
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="number" min="0" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.materialQuantity" name="materialQuantity" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.materialQuantity.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter material quantity</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Availbale Quantity :</label>
+                                <div class="col-md-9">                                            
+                                    <div class="input-group">
+                                        
+                                        <label class="col-md-4 control-label text-left pt12">{{availableTotalquantity}}</label>
+                                    </div>                                            
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Warehouse</label>
+                                <div class="col-md-9">                                               
+                                   <select class="form-control" ng-disabled="availableTotalquantity==0" ng-model="OutwardData.warehouseName" name="warehouseName" required>
+                                    <option value="" disabled selected>Select Warehouse</option>
+                                        <option ng-repeat="x in warehouses" 
+                                        value={{x.warehouseId}}>{{x.warehouseName}}
+                                        </option>
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.warehouseName.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select warehouse name</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Has Transport?</label>
+                                <div class="col-md-9 col-xs-12">          
+                                     <select class="form-control select" ng- ng-disabled="availableTotalquantity==0" ng-model="OutwardData.hasTransportDetails" ng-value="Select" name="hasTransportDetails" required>
+                                        <option value="" disabled selected>Select</option>
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardMaterialForm.hasTransportDetails.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select the transport requirement</p>
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer" style="text-align:center">
+                    <button class="btn btn-default" ng-disabled="availableTotalquantity==0" ng-click="clearFields(OutwardData)">Clear Form</button>                                    
+                    <button class="btn btn-primary" ng-disabled="availableTotalquantity==0" data-ng-click="(submitted=true) && outwardMaterialForm.$valid && nextStep()">Submit</button>
+                </div>
+            </div>
+        </form>
+        
+    </div>
+
+</div>
+
+<style>
+    .pt12{
+        padding-top: 12px;
+    }
+    .pt7{
+        padding-top: 7px;
+    }
+</style>
+        
+<!--
+    MODAL SHOW
+-->
+<!-- <hicretemodal visible="showModal" class="inventoryDetails" id="viewDetails">
+
+    <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 padRight">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Outward No:</label>
+                                    <div class="col-md-8 pt7">                       
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" disabled class="form-control" ng-model="OutwardData.OutwardNumber" value="{{OutwardData.OutwardNumber}}"/>
+                                        </div>                                          
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Material :</label>
+                                    <div class="col-md-8 pt7">                       
+                                        <select class="form-control" disabled ng-model="OutwardData.material">
+                                            <option ng-repeat="x in productsToModify " value={{x.materialid}}>
+                                            {{x.productname}}</option>
+                                        </select>                                          
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Packaging :</label>
+                                    <div class="col-md-8 pt7">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" disabled class="form-control" ng-model="OutwardData.packageUnit" value="{{OutwardData.packageUnit}}"/>
+                                        </div>                       
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Company :</label>
+                                    <div class="col-md-8 pt7">
+                                        <select class="form-control" disabled ng-model="OutwardData.companyName">
+                                            <option ng-repeat="x in Company" value={{x.companyId}}>
+                                                {{x.companyName}}
+                                            </option>
+                                        </select>                       
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Date :</label>
+                                    <div class="col-md-8 pt7">
+                                         <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" disabled class="form-control" ng-model="OutwardData.date" value="{{OutwardData.date}}"/>
+                                        </div>                      
+                                    </div>
+                            </div> 
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Quantity :</label>
+                                    <div class="col-md-8 pt7">
+                                         <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" disabled class="form-control" ng-model="OutwardData.materialQuantity" value="{{OutwardData.materialQuantity}}"/>
+                                        </div>                      
+                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Warehouse :</label>
+                                    <div class="col-md-8 pt7">
+                                        <select class="form-control" disabled ng-model="OutwardData.warehouseName">
+                                            <option ng-repeat="x in warehouses" value={{x.warehouseId}}>
+                                                {{x.warehouseName}}
+                                            </option>
+                                        </select>                      
+                                    </div>
+                            </div>      
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left pt12">Supervisor :</label>
+                                    <div class="col-md-8 pt7">
+                                         <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" disabled class="form-control" ng-model="OutwardData.suppervisor" value="{{OutwardData.suppervisor}}"/>
+                                        </div>                      
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" data-ng-click="addOutwardDetails(OutwardData)" data-dismiss="modal" class="btn btn-default">Submit</button>
+            
+            </div>
+</hicretemodal> -->

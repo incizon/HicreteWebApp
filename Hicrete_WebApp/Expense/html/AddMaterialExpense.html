@@ -1,0 +1,160 @@
+        <div class="row">
+                        <div class="col-md-12">
+                            
+                            <!--Start of form section-->
+                            <div class="panel panel-default">
+                                <!--Start of form heading section-->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Material</strong> Expenses</h3>
+                                </div>
+                                <!--End of form heading section-->
+                                
+                                <div class="panel-body">                              
+                                    <form name="materialExpenseForm" class="form-horizontal" novalidate>  
+                                                                  
+                                    <!--Start of form container row-->
+                                    <div class="row">
+                
+                                        <!--start-->
+                                        <div class="form-group">
+                                            <label class="col-md-2 control-label">Material</label>
+                                            <div class="col-md-7">                   
+                                                
+                                                    <select class="form-control" name="material" required  ng-model="expenseDetails.material">
+                                                        <option  ng-repeat="materialEntry in materialEntryList" value="{{materialEntry.id}}">{{materialEntry.name}}</option>
+                                                    </select>
+                                                    <div class="help-block"
+                                                         ng-messages="materialExpenseForm.material.$error"
+                                                         ng-show="materialExpenseClicked"> 
+                                                         <span style="color:red" ng-message="required">Please select material </span>      
+                                                    </div> 
+                                            </div>
+                                            <!-- <div class="help-block" ng-messages="materialExpenseForm.material.$error" ng-show="materialExpenseClicked">
+                                                    <p style="color:red" ng-message="required">Select Material</p>     
+                                            </div> -->
+                                        </div>
+
+                                         <div class="form-group">                                                
+                                                <label class="col-md-2  control-label">Amount</label>
+                                                    <div class="col-md-7">                                      
+                                                    <div class="input-group">
+                                                     <span class="input-group-addon"><span class="fa fa-rupee"></span></span>
+                                                        <input type="text"  name="amount"  ng-model="expenseDetails.amount" class="form-control" required pattern="[0-9]+"/>
+                                                    </div>
+                                                    <div class="help-block"
+                                                         ng-messages="materialExpenseForm.amount.$error"
+                                                         ng-show="materialExpenseClicked"> 
+                                                         <span style="color:red" ng-message="required">Please select country </span>
+                                                         <span style="color:red" ng-message="pattern">Invalid amount.Only numbers are allowed </span>       
+                                                    </div>   
+                                                    <!-- <div class="help-block" ng-messages="materialExpenseForm.amount.$error" ng-show="materialExpenseClicked">
+                                                        <p style="color:red" ng-message="required">Amount cannot be blank</p>
+                                                        <p style="color:red" ng-message="pattern">Invalid amount.Only numbers are allowed</p>     
+                                                     </div> -->
+                                                    </div>  
+                                        </div> 
+                                        <!--end-->    
+
+                                         <!--start-->
+                                        
+                                            <div class="form-group">
+                                                
+                                                <label class="col-md-2 col-xs-12 control-label">Description</label>
+                                                <div class="col-md-7 col-xs-12">                                            
+                                                    <textarea name="description" class="form-control" rows="5" ng-model="expenseDetails.desc"></textarea>
+                                                    <span class="help-block"></span>
+                                                </div>
+                                           
+                                        </div></br/>
+                                        <!--end--> 
+
+                                        <!--start-->
+
+                                        <div class="form-group">
+                                                <label class="col-md-2  control-label">Expense proof</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group col-md-8">
+                                                     <label class="check" for="chkPassport">
+                                                        <input type="checkbox" class="mycheck" ng-model="expenseDetails.isBillApplicable"/>Mark if applicable</label>
+                                                    </div>  
+                                                    </div>  
+                                        </div> 
+                                    </div>
+                                  </form>      
+                                        <!--end--> 
+                                            
+                                        <div class="row" id="paymentmode" ng-show="expenseDetails.isBillApplicable">
+                                            <!--start-->
+                                            <form name="materialBillForm" class="form-horizontal" novalidate> 
+                                            <div class="form-group">
+                                                        <label class="col-md-2  control-label">Bill no</label>
+                                                        <div class="col-md-7">                                       
+                                                            <div class="input-group col-md-8">
+                                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control" pattern="[0-9]+" minlength="5" maxlength="8" required/>
+                                                            </div>  
+                                                             <div class="help-block" ng-messages="materialBillForm.billNo.$error" ng-show="materialExpenseClicked">
+                                                                <p style="color:red" ng-message="required">BillNo cannot be blank</p>
+                                                                <p style="color:red" ng-message="pattern">Only digits are allowed</p> 
+                                                                <p style="color:red" ng-message="minlength">Atleast 8 digits are allowed</p> 
+                                                                <p style="color:red" ng-message="maxlength">Only 10 digits are allowed</p>      
+                                                            </div>
+                                                        </div>  
+                                                
+                                            </div> 
+                                            <!--end--> 
+
+                                        <!--start-->
+                                        <div class="form-group">
+                                                <label class="col-md-2  control-label">Firm name</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group col-md-8">
+                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="text"  name="firmName"  ng-model="billDetails.firmName" class="form-control" pattern="[a-zA-Z0-9 ]+" required/>
+                                                    
+                                                    </div>  
+                                                    <div class="help-block" ng-messages="materialBillForm.firmName.$error" ng-show="materialExpenseClicked">
+                                                            <p style="color:red" ng-message="required">Firm Name cannot be blank</p>
+                                                            <p style="color:red" ng-message="pattern">Should have only alphanumeric value</p>          
+                                                    </div>
+                                                    </div>  
+                                        </div>
+                                        <!--end-->
+
+                                        <!--start-->
+                                        <div class="form-group">
+                                                <label class="col-md-2  control-label">Date of Bill</label>
+                                                    <div class="col-md-7">                                       
+                                                    <div class="input-group col-md-8">
+                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                        <input   name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control datepicker" required/>
+                                                    </div> 
+                                                        <div class="help-block" ng-messages="materialBillForm.billDate.$error" ng-show="materialExpenseClicked">
+                                                            <p style="color:red" ng-message="required">Date Of Bill cannot be blank</p>
+                                                                      
+                                                    </div> 
+                                                    </div>  
+                                        </div>
+                                        <!--end-->  
+                                       </form> 
+
+                                    </div>
+
+
+
+                                
+                                <!--End of form container row-->
+
+                                <!--Start of buttons section-->
+                                <div class="panel-footer">
+                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true) &&  ( materialExpenseForm.$valid && (!expenseDetails.isBillApplicable || materialBillForm.$valid ))  &&  addMaterialExpense()">Submit</button>
+                                        
+                                    <button class="btn  btn-default pull-right">Clear Form</button> 
+                                </div>
+                                <!--End of buttons section-->
+                            </div>
+                            <!--End of form section-->
+                             </form>
+                            
+                        </div>
+                    </div>

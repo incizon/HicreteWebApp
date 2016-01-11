@@ -1,0 +1,70 @@
+
+<!-- START WIDGETS -->
+<div class="row">
+
+
+    <div class="col-md-4">
+
+        <!-- START COST CENTER -->
+        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
+            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
+                <span class="fa fa-rupee" style="color:#278c7d !important;"></span>
+                <div class="widget-subtitle" style="margin-top: -6px;color:#278c7d !important;"> Cost center</div>
+            </a>
+            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
+                <div class="col-md-6">
+                    <a ui-sref="Expense.createCostCenter"><span class="fa fa-plus" style="margin-top:5px;color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Create cost center</p></a>
+                </div>
+                <div class="col-md-6" style=" display:block;text-align:center"> 
+                    <a ui-sref="Expense.addSegment"><span class="fa fa-wrench" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Add segment</p></a>
+                </div>
+                
+            </div>
+        </div>
+        <!-- END COST CENTER-->
+
+    </div>
+
+    <div class="col-md-4">
+
+        <!-- START EXPENSE DETAILS -->
+        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
+            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
+                <span class="fa fa-money" style="color:#278c7d !important;"></span>
+                <div class="widget-subtitle" style="margin-top: -6px; color:#278c7d !important;">Expense Details</div>
+            </a>
+            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
+                <div class="col-md-6">
+                    <a ui-sref="Expense.materialExpense"><span class="fa fa-truck" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Material</p></a>
+                </div>
+                <div class="col-md-6">
+                    <a ui-sref="Expense.otherExpense"><span class="fa fa-plus" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Other</p></a>
+                </div>
+            </div>
+        </div>
+        <!-- END EXPENSE DETAILS -->
+
+    </div>
+
+    <div class="col-md-4">
+
+        <!-- START Budget Segments -->
+        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
+            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
+                <span class="fa fa-cogs" style="color:#278c7d !important;"></span>
+                <div class="widget-subtitle" style="margin-top: -6px;color:#278c7d !important;">Summary</div>
+            </a>
+            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
+                <div class="col-md-6" style=" display:block;text-align:center"> 
+                    <a ui-sref="Expense.searchExpense"><span class="fa fa-wrench" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Search</p></a>
+                </div>
+            </div>
+        </div>
+        <!-- END Budget Segments-->
+
+    </div>
+
+</div>
+<div ui-view></div>
+<!-- END WIDGETS -->
+

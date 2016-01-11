@@ -1,0 +1,139 @@
+
+<div class="row">
+    <div class="col-md-12">
+        <form class="form-horizontal" name="addProductForm" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Add Product</strong></h3>
+                </div>
+
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Product Name</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" name="productName" ng-model="product.productname" class="form-control" required/>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.productName.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please enter product name</p>
+                            </div>
+                            <!--<div ng-messages="addProductForm.product.$error">-->
+                                <!--<div ng-message='required'>* This is a required field</div>-->
+                            <!--</div>-->
+                 <!--              <span style="color:red" ng-show="addProductForm.product.$dirty && addProductForm.product.$invalid">
+                                <span ng-show="addProductForm.product.$error.required">Product Name is required.</span> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Abbrevations</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" ng-model="product.abbrevation" class="form-control"/>
+                            </div>
+                           <!--  <span class="help-block">This is sample of text field</span> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Product Type</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <select class="form-control" ng-model="product.materialtypeid" name="productType" required>
+                                    <option value="" selected="" disabled>Select Material Type</option>
+                                    <option ng-repeat="x in materialNames " value={{x.materialtypeid}}>{{x.materialtype}}</option>
+                                </select>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.productType.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please select product type</p>
+                            </div>
+                        <!-- {{product.productType}} -->
+
+                            <!-- <select  class="form-control select" name="productType" id="productType" ng-model="data.productType">
+                                <option  ng-repeat="materialName in materialNames" value={{materialName.Name}}>{{materialName.Name}}</option>
+                            </select>
+                            <span class="help-block">{{data.productType}}</span> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Unit Of Measure</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" name="unit_of_measure" data-ng-model="product.unitofmeasure" class="form-control" required/>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.unit_of_measure.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please select unit of measure</p>
+                            </div>
+                   <!--          <span style="color:red" ng-show="addProductForm.unit_of_measure.$dirty && addProductForm.unit_of_measure.$invalid">
+                                <span ng-show="addProductForm.unit_of_measure.$error.required">Unit Of Measure is required.</span> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Packaging</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" name="packaging" data-ng-model="product.packaging" class="form-control" required/>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.packaging.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please enter value of packaging</p>
+                            </div>
+                <!--             <span style="color:red" ng-show="addProductForm.Packaging.$dirty && addProductForm.Packaging.$invalid">
+                                <span ng-show="addProductForm.Packaging.$error.required">Packaging type is required.</span> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Alert Quantity</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="number" name="alert_qty" min="0" data-ng-model="product.alertquantity" class="form-control" required/>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.alert_qty.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please enter alert quantity for product</p>
+                            </div>
+               <!--             <span style="color:red" ng-show="addProductForm.alert_qty.$dirty && addProductForm.alert_qty.$invalid">
+                                <span ng-show="addProductForm.alert_qty.$error.required">Alert Qty is required.</span> -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Product Color</label>
+                        <div class="col-md-4 col-xs-12">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" name="productColor" data-ng-model="product.color" class="form-control" required/>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.productColor.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please enter product color</p>
+                            </div>
+                            <!-- <span class="help-block">This is sample of text field</span> -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 col-xs-12 control-label">Description</label>
+                        <div class="col-md-4 col-xs-12">
+                            <textarea class="form-control" ng-model="product.description" name="productDescription" rows="5" required></textarea>
+                            <div class="help-block" ng-messages="addProductForm.productDescription.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Please enter product description</p>
+                            </div>
+                            <!-- <span class="help-block">Default textarea field</span> -->
+                        </div>
+                    </div>
+
+                </div>
+                <div class="panel-footer" style="text-align: center;">
+                    <button class="btn btn-default" data-ng-click="clearFields(product)">Clear Form</button>
+                    <button class="btn btn-primary" name="submit" data-ng-click="(submitted=true) && addProductForm.$valid && addProduct(product)">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+

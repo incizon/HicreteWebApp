@@ -1,0 +1,101 @@
+<div class="row">
+                        <div class="col-md-12">
+                            
+                            <form name="tempAccessForm" class="form-horizontal" novalidate>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Access </strong>Information</h3>
+                                </div>
+                                    <div class="panel-body">                                                                        
+                                    
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label">Username</label>
+                                        <div class="col-md-6 col-xs-12">    <label class="col-md-2 col-xs-12 control-label col-sm-2">{{tempAccess.username}}</label>                                        
+                                                                                       
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label">Designation</label>
+                                        <div class="col-md-6 col-xs-12">     
+                                          <label class="col-md-2 col-xs-12 control-label col-sm-2">{{tempAccess.designation}}</label>                                                                                    
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Access requested</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4 permission">
+                                            <div class="panel panel-default">
+                                              <table class="table table-fixed">
+                                                <thead>
+                                                  <tr>
+                                                    <th class="col-xs-8">Module name</th>
+                                                    <th class="col-xs-2">Read</th>
+                                                    <th class="col-xs-2">Write</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr ng-repeat="accessEntry in accessRequested">
+                                                    <td ng-model="accessEntry.entry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
+                                                    <td class="col-xs-2 text-center"><input ng-model="accessEntry.read.ispresent" type="checkbox" disabled></td>
+                                                    <td class="col-xs-2 text-center"><input ng-model="accessEntry.write.ispresent"  type="checkbox" disabled></td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>                                            
+                                          </div>
+                                                          
+                                    </div>
+                                    <div class="form-group">                                        
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">From</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">
+                                            <div class="input-group">
+                                                <label class="col-md-2 col-xs-12 control-label col-sm-2">{{tempAccess.fromDate}}</label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">                                        
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">To</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">
+                                            <label class="col-md-2 col-xs-12 control-label col-sm-2">{{tempAccess.toDate}}</label>
+                                           
+                                        </div>
+                                    </div>
+
+                                     <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Reason For Request</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">                                            
+                                            <textarea ng-model="tempAccess.description" class="form-control" rows="5" readOnly></textarea>
+                                        </div>
+                                          
+                                    </div>    
+
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Remark</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">                                            
+                                            <textarea ng-model="remark" name="remark"class="form-control" rows="5" required></textarea>
+                                        </div>
+                                          
+                                          <div class="help-block" ng-messages="tempAccessForm.remark.$error" ng-show="tempSubmitted">
+                                                    <p style="color:red" ng-message="required">Remark can not be blank</p>                                                        
+                                             </div>  
+                                    </div>
+
+
+</div>
+
+                                </div>
+                                <div class="panel-footer">
+                                    
+                                    <button class="btn btn-default pull-right" ng-click="(tempSubmitted=true) && tempAccessForm.$valid && AddAccessRequestAction('Accepted')" ng-disabled="buttonDisabled">Approve</button>
+                                    <button class="btn btn-primary pull-right" ng-click="(tempSubmitted=true) && tempAccessForm.$valid && AddAccessRequestAction('Rejected')" ng-disabled="buttonDisabled">Decline</button>
+                                </div>
+                            </div>
+                            </form>
+                            
+                        </div>
+                    </div>                    
+                    <!-- ADD USER FORM END -->
+               
+                

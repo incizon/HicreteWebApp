@@ -1,0 +1,409 @@
+<style>
+    .pt7{
+        padding-top: 7px;
+    }
+</style>
+
+   <!-- START SEARCH RESULT -->
+   <div class="search-results" ng-controller="inwardController">
+
+    <div class="sr-item">
+        <div class="sr-item-title">Inward Products
+        </div>
+
+
+        <div class="table-responsive push-up-10">
+            <table class="table table-actions table-striped">
+                <thead>                                            
+                    <tr>
+                        <th width="4%">Sr.No</th>
+                        <th width="14%">ProductName</th>
+                        <!-- <th width="13%">Company</th> -->
+                        <th width="16%">Company</th>
+                        <th width="16%">Supplier</th>
+                        <th width="10%">Quantity</th>
+                        <th width="40%">Actions</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="product in InwardSearchData | filter:keywords">
+                        <td width="5%">{{$index + 1}}</td>
+                        <td width="20%">{{product.productname}}</td>
+                        <td width="10%">{{product.companyid}}</td>
+                        <td width="15%">{{product.suppliername}}</td>  
+                        <td width="15%">{{product.quantity}}</td>
+                        <td width="35%">
+                            <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
+                            <div class="modal fade inventoryDetails" id="viewInwardDetails" role="dialog">
+                                <div class="modal-dialog">
+                                    <form class="form-horizontal">
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Inward Details of {{product.inwardno}}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6 padRight">
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Inward Number :</label>
+                                                            <div class="col-md-8">                       
+                                                                <div class="input-group pt7">
+                                                                {{viewProduct.inwardno}}
+                                                                </div>                                          
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Material :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.productname}}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Quantity :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.quantity}}
+                                                                </div>                       
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Company :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.companyid}}
+                                                                </div>
+                                                            </div>
+                                                    </div> 
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Supplier :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.suppliername}}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Date :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.dateofentry}}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Package Unit :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.packagedunits}}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Warehouse :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.warehouseid}}
+                                                                </div>
+                                                            </div>
+                                                    </div>      
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Supervisor :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.supervisorid}}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Transport :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group pt7">
+                                                                    {{viewProduct.transportationmode}}
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Vehicle Number :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group pt7">
+                                                                    {{viewProduct.vehicleno}}
+                                                                </div>                      
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Transport Cost :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group pt7">
+                                                                    {{viewProduct.cost}}
+                                                                </div>                      
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Remark :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group pt7">
+                                                                    {{viewProduct.remark}}
+                                                                </div>                      
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Transport Agency :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group pt7">
+                                                                    {{viewProduct.transportagency}}
+                                                                </div>                      
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Driver :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group pt7">
+                                                                    {{viewProduct.drivername}}
+                                                                </div>                      
+                                                            </div>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                        <!--End of modal-footer-->
+                                    </div>
+                                    <!--End of Modal Content-->
+                                    </form>
+                                </div>
+                                <!--End of modal dialog-->
+                            </div>
+                            <button class="btn btn-info btn-sm" data-target="#modifyInwardDetails" data-toggle="modal" ng-click="getViewDataObject(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>
+                            <!-- START OF MODIFY MODAL-->
+                            <div class="modal fade inventoryDetails" id="modifyInwardDetails" role="dialog">
+                                <div class="modal-dialog">                                 
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Product Details</h4>
+                                        </div>
+                                        <form class="form-horizontal" name="inwardModifySearchForm" novalidate>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-6 padRight">
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Inward Number :</label>
+                                                            <div class="col-md-8">                       
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" class="form-control" name="inwardNumber" ng-change="setInwardTable()" ng-model="viewProduct.inwardno" value="{{viewProduct.inwardno}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.inwardNumber.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter inward number</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Material :</label>
+                                                            <div class="col-md-8">                       
+                                                                <select class="form-control" ng-change="setInwardDetailsTable()" ng-model="viewProduct.materialid" name="material" required>
+                                                                    <option ng-repeat="x in productsToModify" value={{x.materialid}}>{{x.productname}}
+                                                                    </option>
+                                                                </select>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.material.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please select material</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Quantity :</label>
+                                                            <div class="col-md-8">
+                                                                <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" class="form-control" ng-change="setInwardDetailsTable()" ng-model="viewProduct.quantity" name="quantity" value="{{viewProduct.quantity}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.quantity.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter quantity</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Company :</label>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control" ng-change="setInwardTable()" ng-model="viewProduct.companyid" name="company" required>
+                                                                    <option ng-repeat="x in Company"
+                                                                        value={{x.companyId}}>{{x.companyName}}
+                                                                    </option>
+                                                                </select>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.company.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please select company name</p>
+                                                                </div>
+                                                            </div>
+                                                    </div> 
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Supplier :</label>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control select" ng-change="setInwardDetailsTable()" ng-model="viewProduct.supplierid" name="supplier" ng-value="Select" required>
+                                                                    <option ng-repeat="x in suppliers " value={{x.supplierid}}>{{x.suppliername}}
+                                                                    </option>  
+                                                                </select>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.supplier.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please select supplier name</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Date :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" class="form-control" ng-change="setInwardTable()" ng-model="viewProduct.dateofentry" name="date" value="{{viewProduct.dateofentry}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.date.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter date</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Package Unit :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" class="form-control" ng-change="setInwardDetailsTable()" ng-model="viewProduct.packagedunits" name="packageUnit" value="{{viewProduct.packagedunits}}" required/>
+                                                                 </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.packageUnit.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter package unit</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Warehouse :</label>
+                                                            <div class="col-md-8">
+                                                                 <select class="form-control" ng-change="setInwardTable()" ng-model="viewProduct.warehouseid" name="warehouse" required>
+                                                                    <option ng-repeat="x in warehouses" value={{x.warehouseId}}>{{x.warehouseName}}
+                                                                    </option>
+                                                                </select>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.warehouse.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please select warehouse</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>      
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Supervisor :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" ng-change="setInwardTable()" class="form-control" ng-model="viewProduct.supervisorid" value="{{viewProduct.supervisorid}}" name="supervisor" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.supervisor.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter supervisor name</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Transport :</label>
+                                                            <div class="col-md-8">
+                                                                <select class="form-control" ng-change="setInwardTransport()" ng-model="viewProduct.transportationmode" name="transportMode" required>
+                                                                    <option ng-repeat="x in transportMode" value={{x.transportId}}>{{x.transport}}
+                                                                    </option>
+                                                                </select>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.transportMode.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please select transportation mode</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Vehicle Number :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" ng-change="setInwardTransport()" class="form-control" name="vehicleNumber" ng-model="viewProduct.vehicleno" value="{{viewProduct.vehicleno}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.vehicleNumber.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter vehicle number</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Transport Cost :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" class="form-control" name="transportCost" ng-change="setInwardTransport()" ng-model="viewProduct.cost" value="{{viewProduct.cost}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.transportCost.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter transport cost</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Remark :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" name="remark" class="form-control" ng-change="setInwardTransport()" ng-model="viewProduct.remark" value="{{viewProduct.remark}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.remark.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter remark</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Transport Agency :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" name="transportAgency" ng-change="setInwardTransport()" class="form-control" ng-model="viewProduct.transportagency" value="{{viewProduct.transportagency}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.transportAgency.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter transport agency</p>
+                                                                </div>
+                                                            </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label text-left">Driver :</label>
+                                                            <div class="col-md-8">
+                                                                 <div class="input-group">
+                                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                                    <input type="text" name="driver" class="form-control" ng-change="setInwardTransport()" ng-model="viewProduct.drivername" value="{{viewProduct.drivername}}" required/>
+                                                                </div>
+                                                                <div class="help-block" ng-messages="inwardModifySearchForm.driver.$error" ng-show="submitted">
+                                                                    <p style="color:red" ng-message="required">Please enter driver name</p>
+                                                                </div>
+                                                            </div>
+                                                    </div> 
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-ng-click="(submitted=false)" data-dismiss="modal">Close</button>
+                                            <button type="button" data-ng-click="(submitted=true) && inwardModifySearchForm.$valid && updateInwardEntry(viewProduct)" class="btn btn-default">Modify</button>
+                                        </div>
+                                        <!--End of modal-footer-->
+                                        </form>
+                                    </div>
+                                    <!--End of Modal Content-->           
+                                </div>
+                                <!--End of modal dialog-->
+                            </div>
+
+                            <!-- END OF MODIFY MODAL-->
+                            <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button></td>
+                        </tr>
+
+
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- END SEARCH RESULT -->
+</div>

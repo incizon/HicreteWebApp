@@ -1,0 +1,127 @@
+<div class="panel panel-default">
+    
+    <div class="panel-heading">
+    
+         <h3 class="panel-title"><strong>Package</strong> Details</h3>
+    
+    </div>
+    
+    <div class="panel-body">   
+
+        <div class="row">
+
+            <form  name="applicatorPackageForm" class="form-horizontal" novalidate>
+
+                <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <div class="col-md-3">
+                             
+                                <label class="control-label">Package Name</label>
+                            
+                            </div>
+                            <div class="col-md-9"> 
+
+                                <select class="form-control" name="packageName" ng-model="applicatorDetails.packageID" ng-change="getPackageDetails(applicatorDetails.packageID)" required/>
+
+                                    <option value="" disabled selected>Choose package</option>
+                                    <option ng-repeat="package in packages" value="{{package.payment_package_id }}">{{package.package_name}}</option>
+                                </select>
+                                <div class="help-block"
+                                     ng-messages="applicatorPackageForm.packageName.$error"
+                                     ng-show="formSubmitted"> 
+                                     <span style="color:red" ng-message="required">Please select package </span>      
+                                </div>      
+                               
+                            </div>        
+                        
+                        </div>
+                        <div class="form-group" ng-show="packageDetailsShow=='Yes'">
+                            
+                            <div class="col-md-3">
+                                
+                                <label class="control-label">Package Description</label>
+                            
+                            </div> 
+                            <div class="col-md-9">                                        
+                            
+                                <textarea class="form-control field-margin" name="packageDescription" rows="2" disabled>{{package_description}}
+                                </textarea>
+                            </div>
+                       
+                        </div>
+
+                </div>
+
+                <div class="col-md-6"  ng-show="packageDetailsShow=='Yes'"> 
+                    
+                    <div class="table-responsive">
+                    
+                        <table class="table table-actions table-striped">
+                    
+                            <thead>                                            
+                    
+                                <tr>
+                    
+                                    <th width="15%">Package Element</th>
+                                    <th width="15%">Element Quantity</th>
+                                    <th width="15%">Element Rate</th>
+                                    <th width="15%">Element Amount</th>
+                    
+                                </tr>
+                    
+                            </thead>
+                    
+                            <tbody>
+                    
+                                <tr ng-repeat="elementData in elementDetails">
+                    
+                                    <td>{{elementData.element_name}}</td>
+                                    <td>{{elementData.element_quantity}}</td>
+                                    <td>{{elementData.element_rate}}</td>
+                                    <td>{{elementData.element_amount}}</td>
+                    
+                                </tr>                                               
+                           
+                            </tbody>
+                         
+                        </table>
+                    
+                    </div>
+                    
+                    <div class="form-group">
+                    
+                        <div class="col-md-4">
+                    
+                            <label class="control-label"><b>Package Total Amount</b></label>
+                    
+                        </div>
+                    
+                        <div class="col-md-6">                                        
+                    
+                            <b> {{package_total_amount}} </b>
+                    
+                        </div>
+                    
+                     </div>      
+               
+                </div>
+
+            </form>
+    
+        </div>
+    
+    </div>
+
+    <div class="panel-footer">
+        <button ng-click="prevStep()" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Previous
+        </button> 
+        <button ng-click="(formSubmitted=true) 
+                    && applicatorPackageForm.$valid 
+                    && nextStep()"  class="btn  btn-primary pull-right">Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        </button>
+        <button ng-click="clearFields(applicatorDetails,'secondForm')" class="btn  btn-default pull-right">Clear Form</button>                
+    </div>
+
+</div>                 

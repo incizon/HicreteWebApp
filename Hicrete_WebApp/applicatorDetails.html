@@ -1,0 +1,197 @@
+                             
+                            <!--Start of form section-->
+                            <div class="panel panel-default">
+                                <!--Start of form heading section-->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Applicator</strong> Details</h3>
+                                </div>
+                                <!--End of form heading section-->
+                                
+                                <div class="panel-body">                                                                    
+                                    <!--Start of form container row-->
+                                    <div class="row">
+                                       
+                                        <!--Start of First column of form--> 
+                                        <div class="col-md-6">
+                                            <!--Start Firm name feild-->
+                                            <div class="form-group adjust-padding">
+                                                <label class="col-md-3 control-label">Firm Name</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="text" class="form-control" name="firmName" ng-model="formData.firmname" ng-pattern="/^(\D)+$/" required>
+                                                    </div>                           
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.firmName.$error" ng-if="applicatorForm.firmName.$touched && applicatorForm.firmName.$invalid">
+                                                <p ng-message="required">Firm Name is required.</p>
+                                                <!-- <p ng-message="pattern">Firm Name should contain only letters!</p> -->
+                                            </div>   
+                                            <div class="error-block" ng-messages="applicatorForm.firmName.$error" ng-if="applicatorForm.firmName.$touched && applicatorForm.firmName.$invalid">
+                                                <!-- <p ng-message="required">Firm Name is required.</p> -->
+                                                <p ng-message="pattern">Firm Name should contain only letters!</p>
+                                            </div>
+                                            <!--End of Firm name feild-->
+                                            
+                                            <!--Start of Address Line 1 feild-->
+                                            <div class="form-group adjust-padding">                                        
+                                                <label class="col-md-3 control-label">Address Line1</label>
+                                                <div class="col-md-9 col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="text" class="form-control" name="firmAddressline1" ng-model="formData.addressline1" required>
+                                                    </div>            
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.firmAddressline1.$error" ng-if="applicatorForm.firmAddressline1.$touched && applicatorForm.firmAddressline1.$invalid">
+                                                    <!-- <div ng-messages-include="messages.html"></div> -->
+                                                <p ng-message="required">Address is required.</p>
+                                            </div>
+                                            <!--End of Address line 1 feild-->
+                                            
+                                            <!--Start of Address Line 2 feild-->
+                                            <div class="form-group adjust-padding">                                        
+                                                <label class="col-md-3 control-label">Address Line1</label>
+                                                <div class="col-md-9 col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="text" class="form-control" name="firmAddressline2" ng-model="formData.addressline2">
+                                                    </div>            
+                                                </div>
+                                            </div>
+                                            <!--End of Address line 2 feild-->
+                                            
+                                            <!--Start of contact number feild-->
+                                            <div class="form-group adjust-padding">                                        
+                                                <label class="col-md-3 control-label">Contact No</label>
+                                                <div class="col-md-9 col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                                        <input type="text" class="form-control" name="firmContactNo" ng-model="formData.contactno" ng-maxlength="10" ng-pattern="/^(\d)+$/" required>
+                                                    </div>            
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.firmContactNo.$error" ng-if="applicatorForm.firmContactNo.$touched && applicatorForm.firmContactNo.$invalid">
+                                                <p ng-message="pattern">Contact number contain only letters!</p>
+                                                <p ng-message="maxlength">Contact number should be of 10 digits!</p>
+                                                <p ng-message="required">Contact number is required!</p>
+                                            </div>
+                                            <!--End of contact number feild-->
+
+                                            <!--Start of Point of contact feild-->
+                                            <div class="form-group adjust-padding">                                        
+                                                <label class="col-md-3 control-label">Point Of Contact</label>
+                                                <div class="col-md-9 col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="text" class="form-control" name="pointOfContact" ng-model="formData.pointofcontact" ng-pattern="/^(\D)+$/" required>
+                                                    </div>            
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.pointOfContact.$error" ng-if="applicatorForm.pointOfContact.$touched && applicatorForm.pointOfContact.$invalid">
+                                                <p ng-message="pattern">Point of contact should contain only letters!</p>
+                                                <p ng-message="required">Point of contact is required.</p>
+                                            </div>
+                                            <!--End of Point of contact feild-->
+                                              
+                                        </div>
+                                        <!--End of First column of form-->
+
+                                        <!--Start of Second column of form-->
+                                        <div class="col-md-6">
+                                            <!--Start of Country Field-->
+                                            <div class="form-group adjust-padding">
+                                                <label class="col-md-3 control-label">Country</label>
+                                                <div class="col-md-9">                                                                                            
+                                                <select class="form-control select" name="country" ng-model="formData.country" required>
+                                                        <option value="">Choose Country..</option>
+                                                        <option value="India">India</option>
+                                                        <option value="America">America</option>
+                                                        <option value="South Africa">South Africa</option>
+                                                        <option value="Japan">Japan</option>
+                                                        <option value="Italy">Italy</option>
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.country.$error" ng-if="applicatorForm.country.$touched && applicatorForm.country.$invalid">
+                                                <p ng-message="required">Country is required!</p>
+                                            </div>
+                                            <!--End of Country Field-->
+
+                                            <!--Start of State Field-->
+                                            <div class="form-group adjust-padding">
+                                                <label class="col-md-3 control-label">State</label>
+                                                <div class="col-md-9">                                                                                            
+                                                    <select class="form-control select" name="state" ng-model="formData.state" required>
+                                                        <option value="">Choose State..</option>
+                                                        <option value="Delhi">Delhi</option>
+                                                        <option value="Maharashtra">Maharashtra</option>
+                                                        <option value="Benglore">Benglore</option>
+                                                        <option value="Karnataka">Karnataka</option>
+                                                        <option value="Culcatta">Culcatta</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.state.$error" ng-if="applicatorForm.state.$touched && applicatorForm.state.$invalid">
+                                                <p ng-message="required">State is required!</p>
+                                            </div>
+                                            <!--End of State Field-->
+
+                                            <!--Start of City Field-->
+                                            <div class="form-group adjust-padding">
+                                                <label class="col-md-3 control-label">City</label>
+                                                <div class="col-md-9">                                               
+                                                    <select class="form-control select" name="city" ng-model="formData.city" required>
+                                                        <option value="">Choose City..</option>
+                                                        <option value="Pune">Pune</option>
+                                                        <option value="Mumbai">Mumbai</option>
+                                                        <option value="Nagar">Nagar</option>
+                                                        <option value="Nasik">Nasik</option>
+                                                        <option value="Pandharpur">Pandharpur</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.city.$error" ng-if="applicatorForm.city.$touched && applicatorForm.city.$invalid">
+                                                <p ng-message="required">City is required!</p>
+                                            </div>
+                                            <!--End of City Field-->
+                                            
+                                            <!--Start of source contact number Field-->
+                                            <div class="form-group adjust-padding">                                        
+                                                <label class="col-md-3 control-label">Source Contact No</label>
+                                                <div class="col-md-9 col-xs-12">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                                        <input type="text" class="form-control" name="pointContactNo" ng-model="formData.pointcontactno" ng-pattern="/^(\d)+$/" ng-maxlength="10" required>
+                                                    </div>            
+                                                </div>
+                                            </div>
+                                            <div class="error-block" ng-messages="applicatorForm.pointContactNo.$error" ng-if="applicatorForm.pointContactNo.$touched && applicatorForm.pointContactNo.$invalid">
+                                                <p ng-message="pattern">Contact number contain only letters!</p>
+                                                <p ng-message="maxlength">Contact number should be of 10 digits!</p>
+                                                <p ng-message="required">Contact number is required!</p>
+                                            </div>
+                                            <!--End of source contact number Field-->
+
+                                        </div>
+                                        <!--End of second column-->
+                                        
+                                    </div>
+                                    <!--End of second column of form-->
+
+                                </div>
+                                <!--End of form container row-->
+
+                                <!--Start of buttons section-->
+                                <div class="panel-footer">
+                                    <button ng-click="nextStep()"  class="btn  btn-primary pull-right">Next <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+                                        
+                                    <button class="btn  btn-default pull-right">Clear Form</button> 
+                                </div>
+                                <!--End of buttons section-->
+                            </div>
+                            <!--End of form section-->
+
+	<pre>
+        {{ formData }}
+    </pre>

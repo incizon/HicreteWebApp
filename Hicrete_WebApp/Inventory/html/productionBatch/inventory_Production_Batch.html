@@ -1,0 +1,30 @@
+<div  class="row">
+    
+    <div class="col-md-12">
+        
+        <!-- use ng-submit to catch the form submission and use our Angular function -->
+        <form  class="form-horizontal"  novalidate>
+
+            
+            <div ng-show="step==1">
+
+                <div ng-include="'Inventory/html/productionBatch/inventory_Initialise_ProdBatch.html'"></div>
+
+            </div>
+
+            <div ng-show="step==2">
+
+                <div ng-include="'Inventory/html/productionBatch/Inventory_Add_Raw_Material_ForProd.html'"></div>
+
+            </div>  
+
+            
+            <div ng-show="step==3">
+
+                <div ng-include="'Inventory/html/productionBatch/Inventory_prodBatch_outward.html'"></div>
+
+            </div>     
+
+        </form>
+    </div>
+</div>

@@ -1,0 +1,69 @@
+        <div class="page-content-wrap">
+            
+            <div class="row">
+                <div class="col-md-12" ng-controller="inwardController">
+                    
+                    <!-- START SEARCH -->                            
+                    <div class="panel panel-default">
+                        <div class="panel-body">                                    
+                            <div class="row stacked">
+                                <div class="col-md-3">
+                                    <div class="input-group" >
+                                        <select class="form-control" 
+                                            ng-model="SearchTerm" value="">
+                                            <option value="" disabled selected>Search by</option>
+                                            <option ng-repeat="x in filters" 
+                                                value={{x.filterName}}>{{x.filterName}}
+                                            </option>
+                                        </select>
+                                    </div>                                              
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group push-down-10" >
+                                        <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
+                                        <div class="input-group-btn">
+                                            <button class="btn btn-primary" ng-click="getInventory()">Search</button>
+                                        </div>
+                                    </div>                                              
+                                </div>
+                            </div>
+                        </div>                                                                
+                    </div>
+
+                    <!-- END SEARCH -->
+                    <div  class="row">
+    
+                        <div class="col-md-12">
+                            
+                            <!-- use ng-submit to catch the form submission and use our Angular function -->
+                            <!--<form class="form-horizontal">-->
+
+                                <div ng-show="SearchTerm=='Items'">
+
+                                    <div ng-include="'Inventory/html/Inventory_Items_Search.html'"></div>
+
+                                </div>
+
+                                <div ng-show="SearchTerm=='Inward'">
+
+                                    <div ng-include="'Inventory/html/Inventory_Inward_Search.html'"></div>
+
+                                </div>  
+                                <div ng-show="SearchTerm=='Outward'">
+
+                                    <div ng-include="'Inventory/html/Inventory_Outward_Search.html'"></div>
+
+                                </div> 
+                                <div ng-show="SearchTerm=='Available Inventory'">
+                                    <div ng-include="'Inventory/html/Inventory_Available_Search.html'"></div>                                    
+                                </div>  
+                            <!--</form>-->
+
+                        </div>
+                    </div>
+                    <!-- START SEARCH RESULT -->
+                                         
+                </div>
+                
+            </div>

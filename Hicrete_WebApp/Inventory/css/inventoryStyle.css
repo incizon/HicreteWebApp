@@ -1,0 +1,10 @@
+/*-------------------------Modal divs for inventory details-------------*/
+
+.inventoryDetails .modal-dialog{
+	width: 850px !important;	
+}
+
+/*----------------------------------------------------------------------*/
+.padRight {
+    padding-right: 15px !important;
+}

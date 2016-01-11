@@ -1,0 +1,322 @@
+                            
+<!--Start of form section-->
+<div class="panel panel-default">
+        <!--Start of form heading section-->
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Applicator</strong> Details</h3>
+        </div>
+        <!--End of form heading section-->
+        <div class="panel-body">    
+            <!--Start of form container row-->
+            <div class="row">
+                 <!--Form Starts here-->
+                <form  name="applicatorForm" class="form-horizontal" novalidate>
+                <!--Start of First column of form--> 
+                <div class="col-md-6">
+                    <!--Start Firm name feild-->
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Firm Name</label>
+                        </div>
+                        <div class="col-md-9">                                            
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="firmName" ng-model="applicatorDetails.firmname"  pattern="[a-zA-Z0-9 ]+"   minlength=2 required />
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmName.$error"
+                                 ng-show="formSubmitted">
+                                
+                                <span style="color:red" ng-message="required">Firm name is required</span> 
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+                                <span style="color:red" ng-message="minlength">Firm name is too short </span>     
+                            </div>
+                                                                       
+                        </div>
+                    </div>
+                    <!--End of Firm name feild-->
+                                            
+                    <!--Start of Address Line 1 feild-->
+                    <div class="form-group">  
+                        <div class="col-md-3">                                           
+                            <label class="control-label">Address Line1</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="firmAddressline1" ng-model="applicatorDetails.addressline1" pattern="[a-zA-Z0-9 ]+" required />
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmAddressline1.$error"
+                                 ng-show="formSubmitted">
+                                
+                                <span style="color:red" ng-message="required">Address is required</span> 
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+                                     
+                            </div>            
+                        </div>
+                    </div>
+                    <!--End of Address line 1 feild-->
+                    <!--Start of Address Line 2 feild-->
+                    <div class="form-group">                                        
+                        <div class="col-md-3"> 
+                            <label class="control-label">Address Line2</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="firmAddressline2" ng-model="applicatorDetails.addressline2" pattern="[a-zA-Z0-9 ]+" required />
+                            </div> 
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmAddressline2.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Address is required</span> 
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+                                     
+                            </div>             
+                        </div>
+                    </div>
+                    <!--End of Address line 2 feild-->
+                    <!--Start of contact number feild-->
+                    <div class="form-group"> 
+                        <div class="col-md-3">                                      
+                            <label class="control-label">Contact No</label>
+                        </div> 
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                <input type="text" class="form-control" name="firmContactNo" ng-model="applicatorDetails.contactno" pattern="[0-9]+" maxlength=10  minlength=8 required />
+                            </div> 
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmContactNo.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Contact No is required</span> 
+                                <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 10 digits Contact No allowed</span>
+                                <span style="color:red" ng-message="minlength">Min 8 digits Contact No allowed</span>                                  
+                            </div>            
+                        </div>
+                    </div>
+                    <!--End of contact number feild-->
+                    <!--Start of Country Fi eld-->
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Country</label>
+                        </div>
+                        <div class="col-md-9">                            
+                            <select class="form-control select" name="firmCountry" ng-model="applicatorDetails.country" required />
+                                <option value="" disabled selected>Choose Country..</option>
+                                <option value="India">India</option>
+                                <option value="America">America</option>
+                                <option value="South Africa">South Africa</option>
+                                <option value="Japan">Japan</option>
+                                <option value="Italy">Italy</option>
+                            </select>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmCountry.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Please select country </span>      
+                            </div>   
+                        </div>
+                    </div>
+                    <!--End of Country Field-->
+                    <!--Start of State Field-->
+                    <div class="form-group">
+                        <div class="col-md-3">    
+                            <label class="control-label">State</label>
+                        </div>
+                        <div class="col-md-9">                                              
+                            <select class="form-control select" name="firmState"ng-model="applicatorDetails.state" required />
+                                <option value="" disabled selected>Choose State..</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Benglore">Benglore</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Culcatta">Culcatta</option>
+                            </select>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmState.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Please select state </span>      
+                            </div>  
+                        </div>
+                    </div>
+                    <!--End of State Field-->
+                    <!--Start of City Field-->
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">City</label>
+                        </div>
+                        <div class="col-md-9">                                               
+                            <select class="form-control select" name="firmCity" ng-model="applicatorDetails.city" required />
+                                <option value="" disabled selected>Choose City..</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Nagar">Nagar</option>
+                                <option value="Nasik">Nasik</option>
+                                <option value="Pandharpur">Pandharpur</option>
+                            </select>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.firmCity.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Please select city </span>      
+                            </div>  
+                        </div>
+                    </div>
+                    <!--End of City Field-->                      
+                </div>
+                <!--End of First column of form-->
+                <!--Start of Second column of form-->
+                <div class="col-md-6">
+                    <!--Start of VAT No. feild-->
+                    <div class="form-group">
+                        <div class="col-md-3">                                      
+                            <label class="control-label">VAT Number </label>
+                        </div>  
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="vatNumber" ng-model="applicatorDetails.vatnumber" pattern="[0-9]+" maxlength=10  minlength=8 required />
+                            </div> 
+                             <div class="help-block"
+                                 ng-messages="applicatorForm.vatNumber.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Vat No is required</span> 
+                                <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 10 digits Vat No allowed</span>
+                                <span style="color:red" ng-message="minlength">Min 8 digits Vat No allowed</span>                                  
+                            </div>              
+                        </div>
+                       
+                    </div>
+                    <!--End of VAT No. feild-->
+                    <!--Start of CST No. feild-->
+                    <div class="form-group">
+                        <div class="col-md-3 ">                                    
+                            <label class="control-label">CST Number </label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber" pattern="[0-9]+" maxlength=10  minlength=8 required />
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.cstNumber.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">CST No is required</span> 
+                                <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 10 digits VST No allowed</span>
+                                <span style="color:red" ng-message="minlength">Min 8 digits CST No allowed</span>                                  
+                            </div>              
+                        </div>
+                        
+                    </div>
+                    <!--End of CST No. feild-->
+                    <!--Start of Service Tax No. feild-->
+                    <div class="form-group">                                        
+                        <div class="col-md-3">
+                            <label class="control-label">Service Tax No </label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="seviceTaxNumber" ng-model="applicatorDetails.servicetaxnumber" pattern="[0-9]+" maxlength=10  minlength=8 required />
+                            </div>            
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.seviceTaxNumber.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Service Tax No is required</span> 
+                                <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 10 digits Service Tax No allowed</span>
+                                <span style="color:red" ng-message="minlength">Min 8 digits Service Tax No allowed</span>                                  
+                            </div>  
+
+                        </div>
+
+                    </div>
+                    <!--End of Service Tax No. feild-->
+                    <!--Start of PAN No. feild-->
+                    <div class="form-group"> 
+                        <div class="col-md-3">                                       
+                            <label class="control-label">PAN Number </label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="panNumber" ng-model="applicatorDetails.pannumber" pattern="[0-9]+" maxlength=10  minlength=8 required />
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.panNumber.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">PAN No is required</span> 
+                                <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 10 digits PAN No allowed</span>
+                                <span style="color:red" ng-message="minlength">Min 8 digits PAN No allowed</span>                                  
+                            </div>              
+                        </div>
+                    </div>
+                    <!--End of PAN No. feild-->
+                    <!--Start of Point of contact feild-->
+                    <div class="form-group">  
+                        <div class="col-md-3">                                      
+                            <label class="control-label">Point Of Contact</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="pointOfContact" ng-model="applicatorDetails.pointofcontact" pattern="[a-zA-Z0-9 ]+" minlength=2  required/>
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.pointOfContact.$error"
+                                 ng-show="formSubmitted">
+                                
+                                <span style="color:red" ng-message="required">Point of contact is required</span> 
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+                                <span style="color:red" ng-message="minlength">Point of contact is too short </span>     
+                            </div>            
+                        </div>
+                    </div>
+                    <!--End of Point of contact feild-->
+                    <!--Start of source contact number Field-->
+                    <div class="form-group">
+                        <div class="col-md-3">                                        
+                            <label class="control-label">Source Contact No</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno" pattern="[0-9]+" maxlength=10  minlength=8 required />
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="applicatorForm.pointContactNo.$error"
+                                 ng-show="formSubmitted"> 
+                                 <span style="color:red" ng-message="required">Contact No is required</span> 
+                                <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 10 digits Contact No allowed</span>
+                                <span style="color:red" ng-message="minlength">Min 8 digits Contact No allowed</span>                                  
+                            </div>                 
+                        </div>
+                    </div>
+                    <!--End of source contact number Field-->
+                </div>
+                <!--End of second column-->
+                </form>
+                <!--End of Form-->
+            </div>
+            <!--End of second column of form-->
+        </div>
+        <!--End of form container row-->
+        <!--Start of buttons section-->
+        <div class="panel-footer">
+            <button ng-click="(formSubmitted=true) 
+                    && applicatorForm.$valid 
+                    && nextStep()"  class="btn  btn-primary pull-right">Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
+            </button>
+            <button ng-click="clearFields(applicatorDetails,'firstForm')"
+                     class="btn  btn-default pull-right">Clear Form
+            </button> 
+        </div>
+        <!--End of buttons section-->
+</div>
+<!--End of form section-->
+							

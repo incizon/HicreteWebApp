@@ -1,0 +1,139 @@
+                
+                    <div class="row" ng-controller="budgetSegmentController">
+                        <div class="col-md-12">
+                            
+                            <form class="form-horizontal" name="segmentForm" novalidate>  
+                            <!--Start of form section-->
+                            <div class="panel panel-default">
+                                <!--Start of form heading section-->
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Segment</strong> Details</h3>
+                                </div>
+                                <!--End of form heading section-->
+                               
+                                <div class="panel-body">                                                                    
+                                    <!--Start of form container row-->
+                                    <div class="row">
+                                        <!--Start of First column of form--> 
+                                        <div class="col-md-6">
+                                            
+                                            <!--Start of input segment-->
+                                            <div class="form-group">
+                                                <label class="col-md-3  control-label">Enter number of Element</label>
+                                                <div class="col-md-4">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input type="number"  name="noOfElement"  ng-model="noOfElement" class="form-control" required pattern="[0-9]+"/> 
+                                                    </div> 
+                                                    <div class="help-block" ng-messages="segmentForm.noOfElement.$error" ng-show="addClicked">
+                                                    <p style="color:red" ng-message="required">Enter Number</p> 
+                                                    <p style="color:red" ng-message="pattern">Only positive numbers is allowed</p>
+                                                        
+                                            </div> 
+                                                </div>  
+                                                <div class="col-md-3">
+                                                    <button class="btn btn-primary pull-right"  ng-click="(addClicked=true) && segmentForm.noOfElement.$valid && add()" >Add</button>
+                                                </div>
+                                            </div>
+                                            <!--End of input segment-->
+                                         
+                                            <!--Start of project Field-->
+                                            <div class="form-group"  ng-repeat="segment in segments">
+                                      
+                                        
+                                            <label class="col-md-3 control-label">Segment name</label>
+                                            <div class="col-md-5">                                            
+                                                <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                <input type="text" required pattern="[a-zA-Z]+"  name="elementType" ng-model="segment.name" class="form-control"/>
+                                            </div> 
+                                            <div class="help-block" ng-messages="segmentForm.elementType.$error" ng-show="submitClicked">
+                                                    <p style="color:red" ng-message="required">Segment Field can not be blank</p> 
+                                                    <p style="color:red" ng-message="pattern">Only alphabets are allowed</p>
+                                                        
+                                            </div> 
+
+                                             
+                                                                                            
+                                        </div>
+                                            <!--End of project Field-->
+
+                                            <div class="col-md-1">                                            
+                                               <div class="input-group">
+                                                <ul class="panel-controls">
+                                                <li><a ng-click="remove($index)" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                                </ul>
+                                                         
+                                              </div> 
+
+                                        </div>
+                                        <!--End of First column of form-->                    
+                                </div>
+                                <!--End of form container row-->
+
+                                <!--Start of buttons section-->
+                                <div class="panel-footer">
+                                    <button class="btn  btn-primary pull-right"  ng-click="(submitClicked=true) && segmentForm.elementType.$valid &&initializeMaterialSegment()">Submit</button>
+                                        
+                                    <button class="btn  btn-default pull-right"  ng-click="clearSegmentFields()" ng-disabled="isSegmentAdded">Clear Form</button> 
+                                </div>
+                                <!--End of buttons section-->
+                            </div>
+                            <!--End of form section-->
+                        </form>
+
+                          <div ng-show="showDialog" class="modal fade" id="selectMaterialSegment" role="dialog">
+                            <div class="modal-dialog">                   
+                                <!-- Modal content-->
+                                
+                                 <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                        <h4 class="modal-title">Choose Segment for Material Expense</h4>
+                                    </div>
+                                    <div class="row">
+                                    <div class="modal-body">  
+                                        <div class="col-md-12">
+                                            <div class="form-group"  ng-repeat="segment in segments">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" id="materialChkbox" ng-model="materialSegment" name="optionsRadios" value="{{segment.name}}"/>
+                                                        {{segment.name}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>  
+                                    </div>
+                                </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+                                        <button type="button" class="btn btn-default" ng-click="addSegment()">Submit</button>
+                                    </div>
+
+                                </div>
+                            
+                            </div> 
+                        </div>
+
+            
+                        </div>
+
+                        <hicretemodal title="Choose Segment for Material Expense" visible="showModal">
+                           <div class="col-md-12">
+                                            <div class="form-group"  ng-repeat="segment in segments">
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" id="materialChkbox" ng-model="materialSegment" name="optionsRadios" value="{{segment.name}}"/>
+                                                        {{segment.name}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                        <button type="button" class="btn btn-default" ng-click="addSegment()">Submit</button>
+                          </hicretemodal>
+                    </div>                    
+                    
+                <!-- END PAGE CONTENT WRAPPER --> 
+                               
+                                                       
+

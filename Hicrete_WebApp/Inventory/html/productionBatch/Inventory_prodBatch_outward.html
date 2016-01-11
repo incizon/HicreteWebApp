@@ -1,0 +1,192 @@
+ <div class="page-content-wrap">
+                
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <form class="form-horizontal" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Material Produced</strong></h3>
+                                    <!-- <ul class="panel-controls">
+                                        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                    </ul> -->
+                                </div>
+                             
+                                <div class="panel-body">  
+                                                               
+                                    
+                                    <div class="row" >
+                                        
+                                        <div class="col-md-6">
+                                            
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Material Produced</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
+                                                        <select style="width: 133%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.prodcdMaterial">
+                                                            <option value="" disabled selected>Select</option>
+                                                            <option ng-repeat="x in existingMaterials" 
+                                                                      value={{x.materialid}}>{{x.productname}}
+                                                                   </option>
+                                                        </select>
+                                                    </div>                                            
+                                              
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Quantity</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.quantityProdMat"class="form-control"/>
+                                                    </div>                                            
+                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Packaged Unit</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.pckgdUnits"class="form-control"/>
+                                                    </div>                                            
+                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Company</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.company"class="form-control"/>
+                                                    </div>                                            
+                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Warehouse</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.wareHouse"class="form-control"/>
+                                                    </div>                                            
+                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                </div>
+                                            </div>
+                                          
+                                            <div class="form-group">                                        
+                                            <label class="col-md-3  control-label">Date of Entry </label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group" >
+                                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                        <input style="width: 66%;" type="text"    
+                                                        name="dateOfEntry" class="form-control date"  ng-model="prodBatchInfo.dateOfEntryAftrProd" required data-date-format="dd-mm-yyyy">   
+                                                        <!-- data-provide="datepicker"                                          -->
+                                                    </div>
+                                                <!-- <span class="help-block" ng-show="prodBatchInitForm.">Click on input field to get datepicker</span>  -->
+                                                </div>
+                                                </div>
+
+                                                <div class="form-group">                                        
+                                           <label class="col-md-3  control-label">Transportation Required ?</label> 
+                                                <div class="col-md-9">
+                                                                                        
+                                                        <label class="check"><input type="checkbox" class="icheckbox" name="tranReq" ng-model="prodBatchInfo.tranReq"  /> </label>
+                                             
+                                                </div>
+                                                </div>
+                                             
+                                        </div>
+
+
+                                        <div class="col-md-6" ng-show="prodBatchInfo.tranReq == true">
+                                            
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Mode of Transportation</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.modeOfTransport" class="form-control" >  
+                                                                                                            
+                                                    </div>
+                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Vehicle Number</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.vehicleNo" class="form-control" >  
+                                                                                                            
+                                                    </div>
+                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Driver Name</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.driver" class="form-control" >  
+                                                                                                            
+                                                    </div>
+                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Transport Agency</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.TranspAgency" class="form-control" >  
+                                                                                                            
+                                                    </div>
+                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Cost</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="prodBatchInfo.cost" class="form-control" >  
+                                                                                                            
+                                                    </div>
+                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                </div>
+
+                                            </div>
+
+                                            
+                                        </div>
+                                            
+                                       
+
+
+                                    </div>
+
+                                </div>
+                                <div class="panel-footer">
+                                    <button class="btn btn-default" ng-click="clear('final')">Clear Form</button>                                    
+                                    <button style="margin-left: 5px;" class="btn btn-primary pull-right" ng-click="initProd(prodBatchInfo,'final','Add')">Submit</button>
+                                    <button class="btn btn-primary pull-right"  ng-click="goBack()">Back</button>
+                                </div>
+                            </div>
+                            </form>
+                            
+                        </div>
+                    </div>                    
+                    
+                </div>

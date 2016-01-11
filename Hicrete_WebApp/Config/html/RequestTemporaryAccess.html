@@ -1,0 +1,107 @@
+        
+            <!-- PAGE CONTENT -->
+
+                <!-- PAGE CONTENT WRAPPER -->
+                <div class="page-content-wrap">
+
+                <!--ADD USER FORM START-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <form name="requestAccessForm" class="form-horizontal" novalidate>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Request </strong>for Access</h3>
+                                </div>
+                                <div class="panel-body">                                                                        
+                               
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Access permission</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4 permission">
+                                            <div class="panel panel-default">
+              <span style="color:red" ng-show="showAccessError">Choose access permissions</span>                                
+        <table class="table table-fixed">
+          <thead>
+                    <tr>
+                      <th class="col-xs-8">Module name</th>
+                      <th class="col-xs-2">Read</th>
+                      <th class="col-xs-2">Write</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="accessEntry in exemptedAccessList">
+                      <td ng-model="accessEntry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
+                      <td class="col-xs-2 text-center"><input ng-model="accessEntry.read.val" type="checkbox" ng-show="accessEntry.read.ispresent" ></td>
+                      <td class="col-xs-2 text-center"><input ng-model="accessEntry.write.val"  type="checkbox"  ng-show="accessEntry.write.ispresent"></td>
+                    </tr>
+                  </tbody>
+        </table>
+      </div>                                            
+    </div>
+                    
+</div>
+                                    <div class="form-group">                                        
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">From</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                <input type="date" class="form-control datepicker"  ng-model="accessRequest.fromDate" name="fromDate" required>                                            
+                                            </div>
+                                            <div class="help-block" ng-messages="requestAccessForm.fromDate.$error" ng-show="accessRequestSubmitted">
+                                              <span style="color:red" ng-message="required">From Date is mandatory</span> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">                                        
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">To</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                <input type="date" class="form-control datepicker" name="toDate" ng-model="accessRequest.toDate" required>                                            
+                                            </div>
+                                            <div class="help-block" ng-messages="requestAccessForm.toDate.$error" ng-show="accessRequestSubmitted">
+                                              <span style="color:red" ng-message="required">To Date is mandatory</span> 
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Specify reason</label>
+                                        <div class="col-md-6 col-xs-12 col-sm-4">                                            
+                                            <textarea name="description" ng-model="accessRequest.description" class="form-control" rows="5" required></textarea>
+                                        </div>
+                                         <div class="help-block" ng-messages="requestAccessForm.description.$error" ng-show="accessRequestSubmitted">
+                                              <span style="color:red" ng-message="required">Description is mandatory</span> 
+                                            </div>  
+
+                                    </div>
+
+
+                                  </div>
+
+                                </div>
+                                <div class="panel-footer">
+                                    
+                                    
+                                    <button class="btn btn-primary pull-right" ng-click="(accessRequestSubmitted=true) && requestAccessForm.$valid && requestTemporaryAccess()" ng-disabled="submitDisable">Submit</button>
+                                    <button class="btn btn-default pull-right" ng-click="clearForm()" ng-disabled="clearDisable">Clear</button>
+                                </div>
+                            </div>
+                            </form>
+                            
+                        </div>
+                    </div>                    
+                    <!-- ADD USER FORM END -->
+                </div>
+                                                            
+                     
+            <!-- END PAGE CONTENT -->
+
+
+
+
+
+
+
+
+

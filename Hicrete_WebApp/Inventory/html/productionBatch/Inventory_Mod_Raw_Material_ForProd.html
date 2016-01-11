@@ -1,0 +1,90 @@
+ <div class="page-content-wrap" ng-controller="productionBatchController">
+                
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <form class="form-horizontal" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title"><strong>Raw material for Production</strong></h3>
+                                    <ul class="panel-controls">
+                                        <li><a data-dismiss="modal" ng-click="reset()" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                    </ul>
+                                </div>
+                             
+                                <div class="panel-body">  
+                                    <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label">Number of material to be Added</label>
+                                            <div class="col-md-6 col-xs-12">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input type="number" style="width:86%" name="noOfMat"  ng-model="modProdBatchInfo.noOfMaterials" class="form-control"/>
+                                                    <button class="btn btn-primary pull-right"  ng-click="addFields('Modify')" style="margin-right: 5px;" >Add</button>
+                                                </div>
+                                    
+                                            </div>
+                                    </div>                                
+                                    
+                                    <div class="row" ng-repeat="rawMat in modProdBatchInfo.rawMaterial" >
+                                        
+                                        <div class="col-md-6">
+                                            
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Material</label>
+                                                <div class="col-md-9">                                            
+                                                    <div class="input-group">
+                                                        <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
+                                                        <!-- try -->
+                                                           <select style="width: 101%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material">
+                                                                   
+                                                                   <option ng-repeat="x in existingMaterials"
+                                                                      value={{x.materialid}}>{{x.productname}}
+                                                                   </option>
+                                                            </select>
+
+                                              <!--           <!-- try end -->
+                                                       <!--  <input style="width: 66%;" type="text" ng-model="rawMat.material"class="form-control"/> --> 
+                                                    </div>                                            
+                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                </div>
+                                            </div>
+                                             
+                                        </div>
+                                        <div class="col-md-6">
+                                            
+                                            <div class="form-group">                                        
+                                                <label class="col-md-3 control-label">Quantity</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" ng-model="rawMat.quantity" class="form-control" >  
+                                                                      <ul class="panel-controls">
+                                        <li><a ng-click="addField('Modify')" class="panel-remove"><span class="fa fa-plus"></span></a></li>
+                                        </ul>
+
+                                        <ul class="panel-controls">
+                                        <li><a ng-click="remove($index,'Modify')" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                                        </ul>                                          
+                                                    </div>
+                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                </div>
+
+                                            </div>
+
+                                            
+                                        </div>
+                  
+                                    </div>
+
+                                </div>
+                                <div class="panel-footer">
+                                    <button class="btn btn-default" ng-click="clear('Raw')">Clear Form</button>                                    
+                                    <button class="btn btn-primary pull-right" ng-click="initProd(modProdBatchInfo,'Raw','Modify')">Next</button>
+                                </div>
+                            </div>
+                            </form>
+                            
+                        </div>
+                    </div>                    
+                    
+                </div>

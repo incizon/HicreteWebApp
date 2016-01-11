@@ -1,0 +1,188 @@
+/*--------------------------------------APPLICATOR DASHBOARD CSS----------------------------*/
+
+
+/*----------------------------------------------CSS FOR FOUR BLOCKS---------------------------------------------*/
+
+/*--------------------------------------------------------------------------------------------------------------
+
+CLASSES :- 
+1) .applicatorBox - widget box of applicator dashboard
+2) .border - border class for the widget bottom section
+3) .button-holder - button alignment for forms of applicator sections
+4) .move-left - this class is used for moving the p tags inside the widget box i.e.applicatorBox
+5) .adjust-padding - this class is used for adjusting the padding for form fields
+
+--------------------------------------------------------------------------------------------------------------*/
+
+
+
+a.applicatorBox span,a.applicatorBox .informer.informer-default.dir-bl{
+	color: #1caf9a;
+}
+
+a.tile.tile-default.tile-valign.applicatorBox:hover{
+	background:#fff !important;
+    text-decoration: none!important;
+}
+
+.applicatorBox div.col div.widget-subtitle{
+	padding: 10px 0 0 0;
+}
+
+div.applicatorBox .widget-title{
+	height:59px;
+}
+
+.tile.tile-default.tile-valign.applicatorBox {
+    line-height: 21px;
+    font-size: 21px;
+    padding: 20px 0 0 0;
+    color: #434a54;
+    font-weight:500;
+    text-decoration: none;
+}
+
+.tile.tile-default.tile-valign.applicatorBox span.fa{
+	font-size: 21px;
+    line-height: 21px;
+    color: #1caf9a;
+}
+
+.tile.tile-default.tile-valign.applicatorBox div.border{
+    width: 100%;
+    left: 0px !important;
+    text-align: left !important;
+    padding: 8px 0 0px 10px;
+    border-top: 1px solid #D5D5D5;
+}
+
+.tile.tile-default.tile-valign.applicatorBox div.border p{
+	display:inline-block;
+    font-size: 13px;
+    color: #1caf9a;
+}
+
+/*a.tile.tile-default.tile-valign.applicatorBox div.border p:nth-child(2) {
+    float: right;
+    position: relative;
+    right: 10px;
+}
+*/
+p.move-left {
+    padding: 0px 0 3px 10px;
+}
+
+p.pull-right.move {
+    padding: 5px 10px 0px 10px;
+}
+/*-------------------------------------------------CSS FOR APPLICATOR FORM----------------------------------*/
+.panel-footer.button-holder button{
+	margin: 0 10px 0 0;
+}
+
+.form-group.adjust-padding {
+    padding: 15px;
+}
+
+label.col-md-3.control-label.field-padding {
+    padding: 15px 0 15px 25px;
+}
+
+textarea.form-control.field-margin.ng-pristine.ng-untouched.ng-valid {
+    margin: 15px 0 15px 8px;
+}
+
+.input-group.field-margin {
+    padding: 15px 0 15px 8px;
+}
+/*-----------------------ADD ELEMENT SECTION OF PACKAGE DETAILS FORM--------------------------------*/
+fieldset{
+    background: #FCFCFC;
+    padding: 16px;
+    border: 1px solid #D5D5D5;
+}
+.addfields{
+    margin: 10px 0;
+}
+
+#choicesDisplay {
+    padding: 10px;
+    background: rgb(227, 250, 227);
+    border: 1px solid rgb(171, 239, 171);
+    color: rgb(9, 56, 9);
+}
+.remove{
+    background: #C76868;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 21px;
+    border: 0;
+    cursor: pointer;
+    display: inline-block;
+    padding: 4px 9px;
+    vertical-align: top;
+    line-height: 100%;   
+}
+/*-------------------------------------------------*/
+.error-block{
+    color:red;
+    padding:5px;
+    position: relative;
+    left: 170px;
+    top: 12px;
+    width: 300px;
+}
+
+.col-md-12.align-labels {
+    padding: 15px 0 0 0;
+}
+
+.align-box {
+    padding: 15px 0 0 0;
+}
+
+/*---------------------------------------SEARCH APPLICATORS--------------------------------*/
+#applicatorDetails th{
+	width:18%;
+	padding:3px 0 3px 0;
+}
+
+#applicatorDetails td,#packageDetails td{
+	width:20%;
+	padding:3px 0 3px 0;
+	line-height:21px;
+}
+
+#packageDetails th{
+	width:18%;
+	padding:3px 0 3px 0;	
+}
+
+/*----------------------------------------------CSS FOR MODAL--------------------------------*/
+.modal-header{
+	background:rgba(28,175,154,0.69);
+	border-radius:0;
+}
+
+h4.modal-title{
+	color:#fff;
+	font-weight:600;
+}
+
+.close:hover, .close:focus{
+	color:#fff !important;
+	opacity:1 !important;
+}
+
+.modal-header .close{
+	color:#fff !important;
+	opacity:1 !important;
+}
+
+.modal-footer{
+	background:#fff !important;
+}
+.modal-dialog1 {
+    width: 85%;
+    margin: 5% auto;
+}
