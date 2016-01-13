@@ -5,7 +5,7 @@
 </style>
 
    <!-- START SEARCH RESULT -->
-   <div class="search-results" ng-controller="inwardController">
+   <div class="search-results" ng-controller="SearchController">
 
     <div class="sr-item">
         <div class="sr-item-title">Inward Products
@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in InwardSearchData | filter:keywords">
+                    <tr ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyid}}</td>
@@ -403,6 +403,10 @@
 
                     </tbody>
             </table>
+                        <uib-pagination total-items="totalInwardItems" ng-model="currentInwardPage"
+                max-size="5" boundary-links="true"
+                items-per-page="InventoryInwardItemsPerPage" class="pagination-sm">
+            </uib-pagination>  
         </div>
     </div>
     <!-- END SEARCH RESULT -->

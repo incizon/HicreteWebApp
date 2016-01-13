@@ -64,6 +64,10 @@ myApp.controller('inventoryCommonController',function($scope, $http,inventorySer
 ***********************************************************************************/
 myApp.controller('productController', function($scope, $http,inventoryService){
 
+  //Pagination variables
+  $scope.totalItems =0;
+  $scope.currentPage = 1;
+  $scope.InventoryItemsPerPage = 5;
   //Initialize all the variables
   $scope.data={};
   //Init product object
@@ -85,7 +89,21 @@ myApp.controller('productController', function($scope, $http,inventoryService){
   var isPrductDetailsTable=false;
   var isProductPkgingTable=false;
 
-
+  /*
+  Start of Pagination Function
+  */
+  $scope.paginate = function(value) {
+            //console.log("In Paginate");
+            var begin, end, index;
+            begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
+            end = begin + $scope.InventoryItemsPerPage;
+            index = $scope.products.indexOf(value);
+                //console.log(index);
+                return (begin <= index && index < end);
+  };  
+  /*
+  End of Pagination Function
+  */
   /**********************************************************************************
   * Purpose- This function will Add product details into database
   * @param1- product (all product details)
@@ -194,6 +212,30 @@ myApp.controller('productController', function($scope, $http,inventoryService){
   *End of Getter
   **********************************************************************************/
 
+  /***************************************************************************
+  * Purpose- This function will retrieve the product details from database
+  * @param1- $scope and $http
+  * Return- Items available in database
+  ****************************************************************************/
+  // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
+  // $scope.productSearch=function($scope,$http){
+    $http.post("Inventory/php/ProductSearch.php", null)
+    .success(function (data)
+    {
+     console.log("Items Present in database");
+     console.log(data);
+     $scope.products=data;   
+     $scope.totalItems = $scope.products.length;
+    })
+    .error(function (data, status, headers)
+    {
+      console.log(data);
+
+    });
+  // };
+  /***************************************************************************
+  * End of Get Product Details  
+  ****************************************************************************/
 
   /**********************************************************************************
   *Setters to set true/false for tables to modify
@@ -791,7 +833,23 @@ myApp.controller('addSupplierController', function($scope, $http ,addSupplierSer
 * START of Search Controller
 *********************************************************************************************/
 myApp.controller('SearchController',function($scope, $http,inventoryService){
-  
+      //Pagination variables
+      $scope.submitted = false;
+      $scope.submittedModal = false;
+  $scope.totalItems =0;
+  $scope.currentPage = 1;
+  $scope.InventoryAvailableItemsPerPage = 10;
+
+  $scope.totalInwardItems =0;
+  $scope.currentInwardPage = 1;
+  $scope.InventoryInwardItemsPerPage = 10;
+  $scope.InwardSearchData=[];
+
+  $scope.totalOutwardItems =0;
+  $scope.currentOutwardPage = 1;
+  $scope.InventoryOutwardItemsPerPage = 10;
+  $scope.OutwardSearchData=[];
+
   $scope.inventoryData={};
   $scope.transportMode=[
     {transport:'Air Transport',transportId:1},
@@ -818,7 +876,8 @@ myApp.controller('SearchController',function($scope, $http,inventoryService){
      console.log("IN SERVICE OF Inventory Search=");
      console.log(data);
      $scope.inventoryData=data;
-
+      $scope.paginateItemsPerPage=data;
+     $scope.totalItems=$scope.inventoryData.length;
      console.log($scope.inventoryData);
     }) 
     .error(function (data, status, headers)
@@ -857,6 +916,7 @@ myApp.controller('SearchController',function($scope, $http,inventoryService){
 
    console.log("IN INWARD Search");
    $scope.InwardSearchData = data;
+    $scope.totalInwardItems=$scope.InwardSearchData.length;
    console.log(data);
   })
   .error(function (data,status,headers){
@@ -886,6 +946,7 @@ myApp.controller('SearchController',function($scope, $http,inventoryService){
 
    console.log("IN Outward Search");
    $scope.OutwardSearchData = data;
+    $scope.totalOutwardItems=$scope.OutwardSearchData.length;
    console.log(data);
   })
   .error(function (data,status,headers){
@@ -896,6 +957,40 @@ myApp.controller('SearchController',function($scope, $http,inventoryService){
   /*************************************************
   * END of GETTING INWARD DATA
   **************************************************/
+    /*
+  Start of Pagination Function
+  */
+  $scope.paginate = function(value) {
+            //console.log("In Paginate");
+            var begin, end, index;
+            begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
+            end = begin + $scope.InventoryAvailableItemsPerPage;
+            index = $scope.paginateItemsPerPage.indexOf(value);
+                //console.log(index);
+                return (begin <= index && index < end);
+  };  
+  $scope.paginateInward = function(value) {
+            //console.log("In Paginate");
+            var begin, end, index;
+            begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
+            end = begin + $scope.InventoryInwardItemsPerPage;
+            index = $scope.InwardSearchData.indexOf(value);
+                //console.log(index);
+                return (begin <= index && index < end);
+  };  
+  $scope.paginateOutward = function(value) {
+            //console.log("In Paginate");
+            var begin, end, index;
+            begin = ($scope.currentOutwardPage - 1) * $scope.InventoryOutwardItemsPerPage;
+            end = begin + $scope.InventoryOutwardItemsPerPage;
+            index = $scope.OutwardSearchData.indexOf(value);
+                //console.log(index);
+                return (begin <= index && index < end);
+  }; 
+  /*
+  End of Pagination Function
+  */
+
 });
 
 /*********************************************************************************************

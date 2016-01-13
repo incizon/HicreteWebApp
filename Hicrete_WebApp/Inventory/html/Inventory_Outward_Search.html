@@ -1,5 +1,5 @@
    <!-- START SEARCH RESULT -->
-   <div class="search-results" ng-controller="outwardController">
+   <div class="search-results" ng-controller="SearchController">
 
     <div class="sr-item">
         <div class="sr-item-title">Outward Products
@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in OutwardSearchData | filter:keywords | orderBy:'productname'">
+                    <tr ng-repeat="product in OutwardSearchData |filter:paginateOutward | filter:keywords | orderBy:'productname'">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyid}}</td>
@@ -363,6 +363,10 @@
 
                     </tbody>
             </table>
+            <uib-pagination total-items="totalOutwardItems" ng-model="currentOutwardPage"
+                max-size="5" boundary-links="true"
+                items-per-page="InventoryOutwardItemsPerPage" class="pagination-sm">
+            </uib-pagination>  
         </div>
     </div>
     <!-- END SEARCH RESULT -->

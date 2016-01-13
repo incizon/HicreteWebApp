@@ -17,7 +17,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr ng-repeat="product in products | filter:keywords | orderBy:'productname'">
+                                        <tr ng-repeat="product in products | filter :paginate | filter:keywords | orderBy:'productname'">
                                             <td width="5%">{{$index + 1}}</td>
                                             <td width="20%">{{product.productname}}</td>
                                             <td width="10%">{{product.unitofmeasure}}</td>
@@ -221,15 +221,9 @@
                             </div>
                         </div>
 
+                        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="InventoryItemsPerPage" class="pagination-sm">
+                     </uib-pagination>  
 
                     </div>
-                    <!-- END SEARCH RESULT -->
-
-                    <ul class="pagination pagination-sm pull-right push-down-20">
-                        <li class="disabled"><a href="#">«</a></li>
-                        <li class="active"><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>                                    
-                        <li><a href="#">»</a></li>
-                    </ul>   
