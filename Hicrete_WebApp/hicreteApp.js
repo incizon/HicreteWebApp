@@ -74,17 +74,17 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         //production batch entries end
         .state('Inventory.inwardItem', {
             url: '/inwardItem',
-            templateUrl: 'Inventory/html/Inventory_Inward_steps.html',
+            templateUrl: 'Inventory/html/inward/Inventory_Inward_steps.html',
             controller: 'inwardController'
         })
         .state('Inventory.inwardSearch', {
             url: '/inwardSearch',
-            templateUrl: 'Inventory/html/Inventory_Inward_Search.html',
+            templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
             controller: 'inwardController'
         })
         .state('Inventory.outwardItem', {
             url: '/outwardItem',
-            templateUrl: 'Inventory/html/Inventory_Outward_steps.html',
+            templateUrl: 'Inventory/html/outward/Inventory_Outward_steps.html',
             controller: 'outwardController'
         })
          .state('Inventory.addMaterialType', {
@@ -106,7 +106,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })    
         .state('Inventory.searchInventory', {
             url: '/searchInventory',
-            templateUrl: 'Inventory/html/Inventory_Search.html',
+            templateUrl: 'Inventory/html/search/Inventory_Search.html',
             controller: 'SearchController'
         })
         .state('Inventory.searchSupplier', {
