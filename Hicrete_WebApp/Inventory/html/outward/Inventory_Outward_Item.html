@@ -34,7 +34,7 @@
                                 <div class="col-md-9 col-xs-12">
                                     <select class="form-control select" ng-change="setAvailableQty(OutwardData.material)" ng-model="OutwardData.material" ng-value="Select" name="material" required>
                                         <option value="" disabled selected>Select Material</option>
-                                        <option ng-repeat="x in productsToModify" value={{x.materialid}}>{{x.productname}}</option>
+                                        <option ng-repeat="x in products" value={{x.materialid}}>{{x.productname}}</option>
                                         
                                     </select>
                                     <div class="help-block" ng-messages="outwardMaterialForm.material.$error" ng-show="submitted">

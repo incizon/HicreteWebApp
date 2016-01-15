@@ -89,6 +89,10 @@ myApp.controller('productController', function($scope, $http,inventoryService){
   var isPrductDetailsTable=false;
   var isProductPkgingTable=false;
 
+// inventoryService.getProductsForInwardandOutward($scope,$http);
+
+  //Available Products
+  inventoryService.getProducts($scope, $http);
   /*
   Start of Pagination Function
   */
@@ -128,6 +132,9 @@ myApp.controller('productController', function($scope, $http,inventoryService){
      console.log(data);
      $scope.clearFields(product);
      doShowAlert("Success",data.msg);
+      setTimeout(function(){
+          window.location.reload(true);
+      },1000);
    })
     .error(function (data, status, headers, config)
     {
@@ -189,6 +196,9 @@ myApp.controller('productController', function($scope, $http,inventoryService){
       console.log("IN POST UPDATE OPERATION:");
       console.log(data);
       doShowAlert("Success",data.msg);
+      setTimeout(function(){
+          window.location.reload(true);
+      },1000);
     })
     .error(function (data, status, headers, config)
     {
@@ -261,29 +271,29 @@ myApp.controller('productController', function($scope, $http,inventoryService){
   **********************************************************************************/
 
 
-  /***************************************************************************
-  * Purpose- This function will retrieve the product details from database
-  * @param1- $scope and $http
-  * Return- Items available in database
-  ****************************************************************************/
-  // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-  // $scope.productSearch=function($scope,$http){
-    $http.post("Inventory/php/ProductSearch.php", null)
-    .success(function (data)
-    {
-     console.log("Items Present in database");
-     console.log(data);
-     $scope.products=data;   
-    })
-    .error(function (data, status, headers)
-    {
-      console.log(data);
+  // /***************************************************************************
+  // * Purpose- This function will retrieve the product details from database
+  // * @param1- $scope and $http
+  // * Return- Items available in database
+  // ****************************************************************************/
+  // // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
+  // // $scope.productSearch=function($scope,$http){
+  //   $http.post("Inventory/php/ProductSearch.php", null)
+  //   .success(function (data)
+  //   {
+  //    console.log("Items Present in database");
+  //    console.log(data);
+  //    $scope.products=data;   
+  //   })
+  //   .error(function (data, status, headers)
+  //   {
+  //     console.log(data);
 
-    });
-  // };
-  /***************************************************************************
-  * End of Get Product Details  
-  ****************************************************************************/
+  //   });
+  // // };
+  // /***************************************************************************
+  // * End of Get Product Details  
+  // ****************************************************************************/
 
 
   /***************************************************************************
@@ -316,13 +326,22 @@ myApp.controller('productController', function($scope, $http,inventoryService){
 myApp.controller('inwardController',function($scope,$http,inwardService,inventoryService){
   $scope.InwardData={
     inwardNumber:"",
+    date:"",
     material:"",  
     packageUnit:"",
     companyName:"",
     suppplierName:"",
-    date:"",
     materialQuantity:"",
     warehouseName:"",
+    // inwardMaterials[
+    //   material:"",  
+    //   packageUnit:"",
+    //   companyName:"",
+    //   suppplierName:"",
+    //   materialQuantity:"",
+    //   warehouseName:"",
+    // ],
+
     suppervisor:"",
 
     transportMode:"",
@@ -423,6 +442,9 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
        console.log(data);
       if(data.msg!=""){
          doShowAlert("Success",data.msg);
+        setTimeout(function(){
+          window.location.reload(true);
+        },1000);
       }else if (data.error!="")
       doShowAlert("Failure",data.error);   
     })
@@ -435,8 +457,11 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
   /***************************************************************************
   * End of update inward entry function
   ****************************************************************************/
+//Get Material from DB
+  // inventoryService.getProductsForInwardandOutward($scope,$http);
 
-
+    //Available Products
+  inventoryService.getProducts($scope, $http);
 
   /**********************************************************************************
   *Setters to set true/false for tables to modify
@@ -487,7 +512,7 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
   *End of Clear Fields Function
   **************************************************/
 
-inventoryService.getProducts($scope,$http);
+// inventoryService.getProducts($scope,$http);
 // Get Suppliers From DB 
 $http.post("Inventory/php/supplierSearch.php", null)
 .success(function (data)
@@ -544,7 +569,9 @@ myApp.controller('outwardController',function($scope,$http,outwardService,invent
     {transport:'Road Transport',transportId:3}
   ];
 //Get Material from DB
-inventoryService.getProducts($scope,$http);
+  // inventoryService.getProductsForInwardandOutward($scope,$http);
+    //Available Products
+  inventoryService.getProducts($scope, $http);
 
   $scope.getProduct=function(product){
     $scope.selectedProduct=product;
@@ -611,8 +638,11 @@ $scope.setAvailableQty=function(pMaterialId){
      $scope.outwardData=data;
      if(data.msg!=""){
        doShowAlert("Success",data.msg);
-       $scope.clearFields($scope.OutwardData);
-         $scope.submitted = false;
+        $scope.clearFields($scope.OutwardData);
+        $scope.submitted = false;
+         setTimeout(function(){
+          window.location.reload(true);
+        },1000);
      }else if (data.error!="")
      doShowAlert("Failure",data.error);   
     })
@@ -661,6 +691,10 @@ $scope.setAvailableQty=function(pMaterialId){
       console.log("IN POST Outward UPDATE OPERATION:");
       console.log(data);
       doShowAlert("Success",data.msg);
+      setTimeout(function(){
+        window.location.reload(true);
+      },1000);
+
     })
     .error(function (data, status, headers, config)
     {
@@ -733,9 +767,9 @@ myApp.controller('addMaterialType', function($scope,$http,addMaterialTypeService
   $scope.materialType = [];
   $scope.submitted = false;
 
-    $scope.materialType.push({
+  $scope.materialType.push({
    type:""
- });
+  });
 
   
   
@@ -897,7 +931,9 @@ myApp.controller('SearchController',function($scope, $http,inventoryService){
   * END of GETTING INVENTORY DATA
   **************************************************/
 
-
+  $scope.getProduct=function(product){
+    $scope.selectedProduct=product;
+  }
   /*************************************************
   * START of GETTING INWARD DATA
   **************************************************/
@@ -1146,15 +1182,9 @@ $scope.initProd = function(prodBatchInfo,page,message){
       prodBatchInfo.company="";
       prodBatchInfo.wareHouse="";
 
-
-
-
-
-
-
       prodBatchInfo.step=$scope.step;
-       prodBatchInfo.option=message;
-       ProductionBatchService.addProdBatchInfo($scope,$http,prodBatchInfo);
+      prodBatchInfo.option=message;
+      ProductionBatchService.addProdBatchInfo($scope,$http,prodBatchInfo);
   }
   else if(message=='Modify')
   {

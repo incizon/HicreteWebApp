@@ -23,7 +23,30 @@ myApp.service('inventoryService', function(){
   /***************************************************************************
     Get Product Details  
   ****************************************************************************/
+  this.getProductsForInwardandOutward=function($scope,$http){
 
+  var data={
+    module:'getProducts'
+  }
+  var config={
+    params:{
+      data:data
+    }
+  };
+  $http.post("Inventory/php/InventoryIndex.php", null,config)
+   .success(function (data)
+    {
+     console.log("IN SERVICE OF Inventory PRODUCTS FOR INWARD OUTWARD=");
+     console.log(data);
+     $scope.materialsForOutwardInward=data;
+    }) 
+    .error(function (data, status, headers)
+    {
+      console.log("IN SERVICE OF Inventory Search Failure=");
+      console.log(data);
+
+    });
+  }
   /***************************************************************************
     Get Material Types 
    ****************************************************************************/
@@ -143,6 +166,9 @@ myApp.service('addSupplierService', function() {
        if(data.msg!=""){
          doShowAlert("Success",data.msg);
         $scope.clearFields(inwardData);
+        setTimeout(function(){
+          window.location.reload(true);
+        },1000);
       }else if (data.error!="")
       doShowAlert("Failure",data.error);   
     })

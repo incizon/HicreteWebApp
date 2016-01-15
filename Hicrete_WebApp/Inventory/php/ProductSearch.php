@@ -5,6 +5,8 @@
 	$db = Database::getInstance();
 	$dbh = $db->getConnection();
 
+
+
 	$stmt=$dbh->prepare("SELECT * FROM product_master  
             JOIN product_details ON
             product_master.productmasterid=product_details.productmasterid

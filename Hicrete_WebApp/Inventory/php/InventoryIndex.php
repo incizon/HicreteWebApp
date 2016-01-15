@@ -31,16 +31,19 @@ include_once 'crud/OutwardCrud.php';
 	switch ($mData->module) {
 		case 'inward':
 			# code...
-		inwardOperations($mData->operation,$mData);
-		break;
+			inwardOperations($mData->operation,$mData);
+			break;
 		case 'outward':
 			# code...
-		outwardOperations($mData->operation,$mData);
-		break;
+			outwardOperations($mData->operation,$mData);
+			break;
 		case 'inventorySearch':
-		getInventory();
-		break;
-		
+			getInventory();
+			break;
+		case 'getProducts':
+				getProducts();
+			break;
+
 		default:
 			# code...
 		break;
@@ -115,6 +118,24 @@ include_once 'crud/OutwardCrud.php';
 			JOIN materialtype ON
 			materialtype.materialtypeid=product_master.materialtypeid
 			");
+
+		$stmt->execute();
+		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+		$result = $stmt->fetchAll();
+		$json= json_encode($result);
+		echo $json;
+		
+	}
+	function getProducts(){
+		global $dbh;
+		$stmt=$dbh->prepare("SELECT * FROM product_master  
+            JOIN product_details ON
+            product_master.productmasterid=product_details.productmasterid
+            JOIN product_packaging ON
+            product_master.productmasterid=product_packaging.productmasterid
+            JOIN material ON 
+            product_master.productmasterid=material.productmasterid"
+        );
 
 		$stmt->execute();
 		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);

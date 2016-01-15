@@ -1,5 +1,5 @@
 
-<div class="row">
+<div class="row" ng-controller="inwardController">
     <div class="col-md-12">
         
         <form class="form-horizontal" name="inwardEntryForm" novalidate>
@@ -34,7 +34,7 @@
                                     
                                     <select class="form-control select" ng-model="InwardData.material" name="material" ng-value="Select" required>
                                         <option value="" disabled selected>Select Material</option>
-                                        <option ng-repeat="x in productsToModify " value={{x.materialid}}>{{x.productname}}</option>
+                                        <option ng-repeat="x in products " value={{x.materialid}}>{{x.productname}}</option>
                                         
                                     </select>
                                     <div class="help-block" ng-messages="inwardEntryForm.material.$error" ng-show="submitted">
