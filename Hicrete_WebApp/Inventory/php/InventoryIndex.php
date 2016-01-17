@@ -19,6 +19,12 @@ include_once 'crud/OutwardCrud.php';
 	**********************************************************/
 	$db = Database::getInstance();
 	$dbh = $db->getConnection();
+
+
+
+
+
+
 	$userId=1;
 	// Get Data From ANgular Service
 	$mData = json_decode($_GET["data"]); 
