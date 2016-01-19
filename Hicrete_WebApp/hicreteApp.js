@@ -11,35 +11,35 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         // Applicator STATES ========================================
         .state('Applicator', {
             url: '/Applicator',
-            templateUrl: 'Applicator/ApplicatorWidget.html'
+            templateUrl: 'Applicator/html/ApplicatorWidget.html'
         })
 
         .state('Applicator.addDealer', {
             url: '/addApplicator',
-            templateUrl: 'Applicator/CreateApplicator.html',
+            templateUrl: 'Applicator/html/CreateApplicator.html',
             controller: 'ApplicatorController'
         })
 
         .state('Applicator.addPackage', {
             url: '/addPackage',
-            templateUrl: 'Applicator/CreatePackage.html',
+            templateUrl: 'Applicator/html/CreatePackage.html',
             controller: 'PackageController'
         })
 
         .state('Applicator.viewPackages', {
             url: '/viewPackages',
-            templateUrl: 'Applicator/ViewPackages.html',
+            templateUrl: 'Applicator/html/ViewPackages.html',
             controller: 'ViewPackageController'
         })
 
         .state('Applicator.tentetiveApplicator', {
             url: '/tentetiveApplicators',
-            templateUrl: 'Applicator/ViewTentetiveApplicator.html',
+            templateUrl: 'Applicator/html/ViewTentetiveApplicator.html',
             controller: 'ViewTentetiveApplicatorController'
         })
         .state('Applicator.permanentApplicator', {
             url: '/permanentApplicators',
-            templateUrl: 'Applicator/ViewPermanentApplicator.html',
+            templateUrl: 'Applicator/html/ViewPermanentApplicator.html',
             controller: 'ViewPermanentApplicatorController'
         })
         .state('Inventory', {
