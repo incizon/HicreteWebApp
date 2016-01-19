@@ -161,14 +161,14 @@ myApp.service('addSupplierService', function() {
     {
        console.log("IN SERVICE OF INWARD=");
        console.log(data);
-       console.log(inwardData);
-       $scope.inwardData=data;
+       console.log(data);
+       //$scope.inwardData=data;
        if(data.msg!=""){
          doShowAlert("Success",data.msg);
         $scope.clearFields(inwardData);
-        setTimeout(function(){
-          window.location.reload(true);
-        },1000);
+        //setTimeout(function(){
+        //  window.location.reload(true);
+        //},1000);
       }else if (data.error!="")
       doShowAlert("Failure",data.error);   
     })

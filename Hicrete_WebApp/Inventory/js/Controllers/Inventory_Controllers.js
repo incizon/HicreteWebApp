@@ -327,21 +327,8 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
   $scope.InwardData={
     inwardNumber:"",
     date:"",
-    material:"",  
-    packageUnit:"",
     companyName:"",
-    suppplierName:"",
-    materialQuantity:"",
     warehouseName:"",
-    // inwardMaterials[
-    //   material:"",  
-    //   packageUnit:"",
-    //   companyName:"",
-    //   suppplierName:"",
-    //   materialQuantity:"",
-    //   warehouseName:"",
-    // ],
-
     suppervisor:"",
 
     transportMode:"",
@@ -350,7 +337,9 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
     transportRemark:"",
     transportAgency:"",
     driver:"",
-    transportPayable:""
+    transportPayable:"",
+    inwardMaterials:[
+    ]
   };
   // $scope.inventoryData={};
   $scope.material={};
@@ -386,6 +375,25 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
   var isInwardTable=false;
   var isInwardDetailsTable=false;
   var isInwardTransportTable=false;
+
+  /**********************************
+  Add material fields
+   *******************************/
+  $scope.addFields=function(){
+    for (var i = 0; i < $scope.noOfElement; i++) {
+      $scope.InwardData.inwardMaterials.push({
+
+        material:"",
+        materialQuantity:"",
+        packageUnit:"",
+        suppplierName:""
+      });
+    };
+  }
+  /**********************************
+   End of Add material fields
+   *******************************/
+
 
   $scope.nextStep = function() {
     alert("next step:"+$scope.InwardData.hasTransportDetails);
