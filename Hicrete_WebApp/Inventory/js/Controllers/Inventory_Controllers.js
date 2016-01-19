@@ -393,19 +393,23 @@ myApp.controller('inwardController',function($scope,$http,inwardService,inventor
   /**********************************
    End of Add material fields
    *******************************/
+  $scope.remove= function(index){
 
+    $scope.InwardData.inwardMaterials.splice(index,1); //remove item by index
+  };
 
   $scope.nextStep = function() {
-    alert("next step:"+$scope.InwardData.hasTransportDetails);
+    //alert("next step:"+$scope.InwardData.hasTransportDetails);
     if( $scope.InwardData.hasTransportDetails=='No'){
         // $scope.showModal=true;
-        alert("if");
+        //alert("if");
         $scope.addInwardDetails();
       }else if( $scope.InwardData.hasTransportDetails=='Yes'){
         // $scope.showModal=false;
-         $scope.submitted = false;
-       alert("else");
         $scope.step=2;
+         $scope.submitted = false;
+       //alert("else");
+
 
       }
    }
