@@ -85,7 +85,7 @@ include_once 'crud/OutwardCrud.php';
 			case 'insert':
 				# code...
 			$productObj = new OutwardData($pData);
-			$productObj->insertOutwardInToDb($dbh,$userId);
+			$productObj->insertOutwardInToDb($dbh,$userId,$pData);
 			break;
 			case 'delete':
 				# code...
