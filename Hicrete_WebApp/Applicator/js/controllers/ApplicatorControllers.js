@@ -216,6 +216,7 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
 
 myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,ApplicatorService){
 
+    $scope.formSubmitted=false;
     $scope.Applicators=[];
     $scope.totalItems =0;
     $scope.currentPage = 1;
@@ -260,6 +261,31 @@ myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,Appli
 
         };
 
+      $scope.applicatorPaymentDetails=function(applicator){
+
+          $scope.previousAmountPaid=applicator.amount_paid;
+          $scope.packageAmount=applicator.package_total_amount;
+          $scope.remainingAmount=$scope.packageAmount-$scope.previousAmountPaid;
+          $scope.paymentDate=applicator.date_of_payment;
+
+      }
+    $scope.getPendingAmount=function(){
+        console.log("In Pending amount function");
+        $scope.applicatorDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.applicatorDetails.amountpaid)-$scope.previousAmountPaid;
+
+
+        if($scope.applicatorDetails.pendingAmount!=0){
+
+            console.log("In pending amount if");
+
+        }
+    }
+    $scope.submitPaymentDetails=function(applicatorDetails){
+
+         $scope.formSubmitted=false;
+        $scope.applicatorDetails.operation='InsertPaymentDetails';
+        console.log(applicatorDetails);
+    }
 
 
 });

@@ -48,8 +48,10 @@
                                         <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
                                         
                                         <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
-                                                 
+
+
                                         <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#insertPaymentDetails" ng-click="applicatorPaymentDetails(applicator)"><span class="fa fa-edit"></span>Payment</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -539,6 +541,355 @@
                 <!--End of modal-footer-->
             </div>
             <!--End of Modal Content-->           
+    </div>
+    <!--End of modal dialog-->
+</div>
+
+
+<div class="modal fade" id="insertPaymentDetails" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Payment Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Total Amount :</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <strong>  {{packageAmount}}</strong>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Previous Amount Paid :</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <strong> {{previousAmountPaid}} </strong>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Amount Remaining :</label>
+                                </div>
+                                <div class="col-md-7">
+                                   <strong> {{remainingAmount}}</strong>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Last Date of Payment  :</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <strong>{{paymentDate}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+                <div class="row">
+                <!--Start of column for form-->
+
+                <div class="col-md-6">
+                    <!--<form  name="applicatorPaymentStatusForm" class="form-horizontal" novalidate>-->
+                        <!--<div class="form-group">-->
+
+                            <!--<div class="col-md-5">-->
+                                <!--<label class="control-label">Payment Recieved</label>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-7">-->
+                                <!--<div class="col-md-6">-->
+                                    <!--<input id="yesReceived" type="radio" value="Yes" ng-model="applicatorDetails.received" name="select" required/>-->
+                                    <!--<label for="yesReceived">Yes</label>-->
+                                <!--</div>-->
+                                <!--<div class="col-md-6">-->
+                                    <!--<input id="notReceived" type="radio" value="No" ng-model="applicatorDetails.received" name="select" required />-->
+                                    <!--<label for="notReceived">No</label>-->
+                                <!--</div>-->
+                                <!--<div class="help-block"-->
+                                     <!--ng-messages="applicatorPaymentStatusForm.select.$error"-->
+                                     <!--ng-show="formSubmitted">-->
+                                    <!--<span style="color:red" ng-message="required">Please select payment received or not</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</form>-->
+                    </br>
+                    <form  name="applicatorPaymentDetailsForm" class="form-horizontal" novalidate>
+                        <div id="paymentmode">
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Payment Mode</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select class="form-control select" name="paymentMode" ng-model="applicatorDetails.mode"  ng-change="(formSubmitted=false)" required />
+                                    <option value="" disabled selected>Choose Mode</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="cheque">Cheque</option>
+                                    <option value="dd">DD</option>
+                                    <option value="netBanking">Net Banking</option>
+                                    </select>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.paymentMode.$error"
+                                         ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Please select payment mode </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <!--Start of amount paid section for cash mode-->
+
+                        <div id="cash" ng-if="applicatorDetails.mode=='cash'">
+                            <!--Start of amount paid field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Amount Paid</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-blur = "getPendingAmount()" class="form-control"
+                                               name="cashAmountPaid"
+                                               ng-model="applicatorDetails.amountpaid" pattern="[0-9]+" required />
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.cashAmountPaid.$error"
+                                         ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Please Enter amount paid</span>
+                                        <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--End of amount paid field-->
+                            <!--Start of paid to field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Paid To</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control"
+                                               name="cashAmountReceiver"
+                                               ng-model="applicatorDetails.paidto"  pattern="[a-zA-Z]+" minlength=2 required />
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.cashAmountReceiver.$error"
+                                         ng-show="formSubmitted">
+
+                                        <span style="color:red" ng-message="required">Please provide name of amount receiver</span>
+                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
+                                        <span style="color:red" ng-message="minlength">Receiver name is too short </span>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <!--End of paid to field-->
+                            <!--Start of payment date field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Date of Payment</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="text" data-provide="datepicker" class="form-control datepicker" ng-model="applicatorDetails.paymentDate" />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--End of payment date field-->
+                            <!--Start of pending amount field-->
+                            <div class="form-group">
+                                <div class="col-md-5 ">
+                                    <label class="control-label">Pending Amount</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control"
+                                               name="cashPendingAmount"  ng-model="applicatorDetails.pendingAmount">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End of pending amount field-->
+                        </div>
+                        <!--End of amount paid section for cash mode-->
+
+                        <!--Start of amount paid Section-->
+                        <div id="cheque" ng-if="applicatorDetails.mode=='cheque' || applicatorDetails.mode=='dd' || applicatorDetails.mode=='netBanking'">
+                            <!--Start of amount paid field-->
+                            <div class="form-group">
+                                <div class="col-md-5 ">
+                                    <label class="control-label">Amount Paid</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-blur = "getPendingAmount()" class="form-control" name="chequeAmountPaid"
+                                               ng-model="applicatorDetails.amountpaid" pattern="[0-9]+" required/>
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.chequeAmountPaid.$error"
+                                         ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Please Enter amount paid</span>
+                                        <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End of amount paid field-->
+                            <!--Start of bank name field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Bank Name</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="chequeBankName" ng-model="applicatorDetails.bankname"  pattern="[a-zA-Z]+" required/>
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.chequeBankName.$error"
+                                         ng-show="formSubmitted">
+
+                                        <span style="color:red" ng-message="required">Please provide Bank Name</span>
+                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End of bank name field-->
+                            <!--Start of Branch Name field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Branch Name</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="chequeBranchName" ng-model="applicatorDetails.branchname" pattern="[a-zA-Z]+"  required />
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.chequeBranchName.$error"
+                                         ng-show="formSubmitted">
+
+                                        <span style="color:red" ng-message="required">Please provide Branch Name</span>
+                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End of Branch Name field-->
+                            <!--Start of Unique Number field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Unique Number</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="chequeUniqueNumber"
+                                               ng-model="applicatorDetails.uniquenumber"
+                                               pattern="[0-9]+" required/>
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.chequeUniqueNumber.$error"
+                                         ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Please provide Unique transaction number</span>
+                                        <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--End of Unique Number field-->
+                            <!--Start of paid to field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Paid To</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control"
+                                               name="chequeReceiver"
+                                               ng-model="applicatorDetails.paidto"
+                                               pattern="[a-zA-Z]+" minlength=2 required />
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="applicatorPaymentDetailsForm.chequeReceiver.$error"
+                                         ng-show="formSubmitted">
+
+                                        <span style="color:red" ng-message="required">Please provide name of amount receiver</span>
+                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
+                                        <span style="color:red" ng-message="minlength">Receiver name is too short </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End of paid to field-->
+                            <!--Start of pending amount field-->
+                            <div class="form-group">
+                                <div class="col-md-5 ">
+                                    <label class="control-label">Pending Amount</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="pendingAmount" ng-model="applicatorDetails.pendingAmount">
+                                    </div>
+                                </div>
+                            </div>
+                            <!--End of pending amount field-->
+
+                            <!--Start of payment date field-->
+                            <div class="form-group">
+                                <div class="col-md-5">
+                                    <label class="control-label">Date of Payment</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="text" data-provide="datepicker" data-date-format="mm/dd/yyyy" class="form-control datepicker" ng-model="applicatorDetails.paymentDate" value=""
+                                        />
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!--End of payment date field-->
+
+                        </div>
+                        <!--End of amount paid Section-->
+                    </form>
+
+                </div>
+                <!--End of col-md-6 -->
+            </div>
+            <!--End of Row-->
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button  ng-click="(formSubmitted=true)
+                    && applicatorPaymentDetailsForm.$valid && submitPaymentDetails(applicatorDetails)" class="btn  btn-danger pull-right">Submit <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
     </div>
     <!--End of modal dialog-->
 </div>
