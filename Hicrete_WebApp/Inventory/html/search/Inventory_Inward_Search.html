@@ -16,7 +16,7 @@
             <table class="table table-actions table-striped">
                 <thead>                                            
                     <tr>
-                        <th width="4%">Sr.No</th>
+                        <th width="4%">Inward.No</th>
                         <th width="14%">ProductName</th>
                         <!-- <th width="13%">Company</th> -->
                         <th width="16%">Company</th>
@@ -28,7 +28,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
-                        <td width="5%">{{$index + 1}}</td>
+                        <td width="5%">{{product.inwardno}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyid}}</td>
                         <td width="15%">{{product.suppliername}}</td>  
