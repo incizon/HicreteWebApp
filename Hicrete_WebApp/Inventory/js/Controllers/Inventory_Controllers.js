@@ -1,4 +1,4 @@
-// //MODAL DIRECTIVE
++// //MODAL DIRECTIVE
 // myApp.directive('modal', function () {
 //  return {
 //    template: '<div class="modal fade">' + 
@@ -89,7 +89,8 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 // inventoryService.getProductsForInwardandOutward($scope,$http);
 
     //Available Products
-    inventoryService.getProducts($scope, $http);
+    //inventoryService.getProducts($scope, $http);
+    inventoryService.getSavedProducts($scope);
     /*
      Start of Pagination Function
      */
@@ -460,8 +461,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         // inventoryService.getProductsForInwardandOutward($scope,$http);
 
         //Available Products
-    inventoryService.getProducts($scope, $http);
-
+    //inventoryService.getProducts($scope, $http);
+    inventoryService.getSavedProducts($scope);
     /**********************************************************************************
      *Setters to set true/false for tables to modify
      **********************************************************************************/
@@ -569,7 +570,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 //Get Material from DB
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-    inventoryService.getProducts($scope, $http);
+    //inventoryService.getProducts($scope, $http);
+    inventoryService.getSavedProducts($scope);
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
@@ -605,7 +607,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
      End of Add material fields
      *******************************/
     $scope.remove = function (index) {
-        $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
+        $scope.OutwardData.outwardMaterials.splice(index, 1); //remove item by index
     };
 
 
