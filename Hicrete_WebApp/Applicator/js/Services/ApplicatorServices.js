@@ -31,7 +31,7 @@ myApp.service('ApplicatorService',function(){
 	}
 	this.viewApplicatorDetails=function($scope,$http,applicatorDetails){
 
-				applicatorDetails.operation='view';
+				applicatorDetails.operation='viewApplicator';
 				var config = {
 								params: {
 										applicatorDetails: applicatorDetails
@@ -53,33 +53,7 @@ myApp.service('ApplicatorService',function(){
 						});
 
 		};
-	this.savePaymentDetails=function($scope,$http,$applicatorDetails){
 
-		$applicatorDetails.opeartion='SavePaymentDetails';
-		var config = {
-					params: {
-							applicatorDetails: applicatorDetails
-							}
-					};
-
-					$http.post("Applicator/php/Applicator.php", null,config)
-							.success(function (data, status, headers, config){
-								doShowAlert("Success",data);
-
-								//window.location="http://localhost/Hicrete_Web1-1-2016/dashboard.html#/Applicator";
-
-								setTimeout(function(){
-									window.location.reload(true);
-								},2000);
-
-							})
-
-							.error(function (data, status, headers){
-								console.log(data);
-
-							});
-
-	};
 
 });
 myApp.service('PackageService',function(){

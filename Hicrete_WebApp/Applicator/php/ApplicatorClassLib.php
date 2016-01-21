@@ -16,12 +16,12 @@
 		var $applicatorCstNumber;
 		var $applicatorServiceTaxNumber;
 		var $applicatorPanNumber;
-		
+
 		var $pointOfContact;
 		var $pointContactNo;
-		
+
 		var $MasterPackageId;
-		
+
 		var $paymentStatus;
 		var $paymentReceived;
 		var $companyId=1;
@@ -29,7 +29,7 @@
 		var $dateOfPayment;
 		var $amountPaidTo;
 		var $paymentMode;
-		
+
 		var $instrumentOfPayment;
 		var $numberOfInstrument;
 		var $bankName;
@@ -45,7 +45,7 @@
 
  		function __construct($applicatorDetails){
 
- 			if($applicatorDetails->operation=='create'){
+ 			if($applicatorDetails->operation=='createApplicator'){
 
  				$this->firmName=$applicatorDetails->firmname;
 				$this->applicatorAddressLine1=$applicatorDetails->addressline1;

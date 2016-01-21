@@ -42,7 +42,7 @@ $scope.elementDetails=[{
 				packageID=packageID-1;
 				$scope.packageDetailsShow='Yes';				
 				$scope.package_description=$scope.packages[packageID].package_description;
-        $scope.package_total_amount=$scope.packages[packageID].package_total_amount;
+                $scope.package_total_amount=$scope.packages[packageID].package_total_amount;
 				$scope.packageTotalAmount=0;
 				$scope.elementDetails=[];
 				for(var index=0;index<$scope.packages[packageID].elementType.length;index++){
@@ -81,7 +81,7 @@ $scope.elementDetails=[{
         		if($scope.applicatorDetails.pendingAmount==0 && $scope.applicatorDetails.received=='Yes'){
         			
         			console.log("Full Amount Paid ");
-        			applicatorDetails.operation='create';
+        			applicatorDetails.operation='createApplicator';
         			applicatorDetails.paymentStatus='Full';
         			//console.log(applicatorDetails);
 					   
@@ -104,14 +104,14 @@ $scope.elementDetails=[{
         	
         	if($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes'){
         		console.log("in pending amount function call");	
-        		applicatorDetails.operation='create';
+        		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="Partial";
         		ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         	   
           }
         	if($scope.applicatorDetails.received=='No'){
 
-        		applicatorDetails.operation='create';
+        		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="No";
         		 
             ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
