@@ -25,8 +25,8 @@
 	   				 	if(!$applicator->viewApplicator($applicatorDetails->applicator)){
 
 	   				 		echo "No Applicator Details to show";
-	   				 	}	
-	   				
+	   				 	}
+
 	   	default:
 	   		
 	   		#code...
