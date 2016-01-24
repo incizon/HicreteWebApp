@@ -60,6 +60,16 @@
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
 
     <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
+      <script type="text/javascript" src="Assets/plugins/jquery-pines/pnotify.custom.min.js"></script>
+    <script type='text/javascript' src='Assets/plugins/icheck/icheck.min.js'></script>
+    <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/scrolltotop/scrolltopcontrol.js"></script>
+    <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-datepicker.js'></script>
+    <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-timepicker.min.js'></script>
+    <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-select.js'></script>
+   <script type="text/javascript" src="Assets/plugins/morris/raphael-min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/morris/morris.min.js"></script>
 
     <script type="text/javascript" src="hicreteApp.js"></script>
 
@@ -163,9 +173,9 @@ if(!$userObj->init($userId)){
                 if($userObj->isApplicator){
                     echo "<li class=\"\">
                             <a href=\"Payroll\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
-                    </li>"; 
+                    </li>";
                 }
-            
+
                 if($userObj->isReporting){
                     echo "<li class=\"\">
                             <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>

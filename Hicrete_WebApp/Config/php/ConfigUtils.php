@@ -383,10 +383,6 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
 
     }
 
-
-
-
-
 }
 
 ?>

@@ -90,9 +90,9 @@ class OutwardData extends CommonMethods
 
             $stmtOutward = $dbh->prepare("INSERT INTO Outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
        values (:warehouseid,:companyid,:supervisorid,now(),:Outwardno,:lchnguserid,now(),:creuserid,now())");
-            $stmtOutward->bindParam(':warehouseid', $userId, PDO::PARAM_STR, 10);
-            $stmtOutward->bindParam(':companyid', $userId, PDO::PARAM_STR, 10);
-            $stmtOutward->bindParam(':supervisorid', $userId, PDO::PARAM_STR, 10);
+            $stmtOutward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+            $stmtOutward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
+            $stmtOutward->bindParam(':supervisorid',  $this->suppervisor, PDO::PARAM_STR, 10);
             // $stmtOutward->bindParam(':dateofentry', $this->dateOfInward, PDO::PARAM_STR, 40);
             $stmtOutward->bindParam(':Outwardno', $this->OutwardNumber, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
@@ -200,7 +200,6 @@ class OutwardData extends CommonMethods
     {
 
         $flag = false;
-        $userId = 2;
         //BEGIN THE TRANSACTION
         $dbh->beginTransaction();
 

@@ -83,7 +83,6 @@ class InwardData extends CommonMethods
             JOIN product_master ON
             material.productmasterid=product_master.productmasterid");
         if ($stmt->execute()) {
-            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $result = $stmt->fetchAll();
             $json = json_encode($result);
             echo $json;
@@ -103,18 +102,15 @@ class InwardData extends CommonMethods
     public function insertInwardInToDb($dbh, $userId, $data)
     {
         try {
-            // global $dbh;
-            $userId = 1;
-            $userId1 = 2;
-            $materialId = 1;
+
             //Begin Transaction
             $dbh->beginTransaction();
             //Create preapred Statement
             $stmtInward = $dbh->prepare("INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime) 
              values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())");
-            $stmtInward->bindParam(':warehouseid', $userId, PDO::PARAM_STR, 10);
-            $stmtInward->bindParam(':companyid', $userId, PDO::PARAM_STR, 10);
-            $stmtInward->bindParam(':supervisorid', $userId, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':supervisorid', $this->suppervisor, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':dateofentry', $this->dateOfInward, PDO::PARAM_STR, 40);
             $stmtInward->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
@@ -224,7 +220,6 @@ class InwardData extends CommonMethods
     public function updateInwardDetails($dbh, $userId, $pInwarData)
     {
         $flag = false;
-        $userId = 4;
         //BEGIN THE TRANSACTION
         $dbh->beginTransaction();
 
