@@ -116,8 +116,8 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                    <input type="text" data-provide="datepicker" class="form-control datepicker" ng-model="applicatorDetails.paymentDate" />    
+                                    <span class="input-group-addon"><span class="fa fa-calendar" ng-click="open1()"></span></span>
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  ng-required="true" close-text="Close"/>
                                 </div>
                                  
                             </div>
@@ -272,9 +272,9 @@
                             </div>
                             <div class="col-md-9">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                    <input type="text" data-provide="datepicker" data-date-format="mm/dd/yyyy" class="form-control datepicker" ng-model="applicatorDetails.paymentDate" value=""
-                                    />    
+                                    <span class="input-group-addon"><span class="fa fa-calendar" ng-click="open1()"></span></span>
+
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  ng-required="true" close-text="Close"/>
                                 </div>
                                 
                             </div>
@@ -307,7 +307,7 @@
 </div>        
 <!--End of panel-->
         
-<hicretemodal visible="showModal" title="Schedule Followup">
+<hicretemodal visible="showModal" title="Schedule Followup" backdrop="static">
      <div class="modal-body">
         <div class="row">
              <form  name="applicatorAmountFollowUpForm" class="form-horizontal" novalidate>
@@ -317,8 +317,9 @@
                 </div>
                  <div class="col-md-8">                        
                     <div class="input-group">
-                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                        <input type="text" data-provide="datepicker" data-date-format="dd/mm/yyyy" class="form-control datepicker date" ng-model="applicatorDetails.followupdate">
+                        <span class="input-group-addon"><span class="fa fa-calendar" ng-click="open1()"></span></span>
+                        <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="applicatorDetails.followupdate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  ng-required="true" close-text="Close"/>
+
                     </div>                                  
                 </div>
             </div>
@@ -329,6 +330,7 @@
                 <div class="col-md-8">                            
                     <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+
                         <input type="text" class="form-control" name="followupEmployeeId" ng-model="applicatorDetails.followupemployeeId">
                     </div>                                       
                 </div>
