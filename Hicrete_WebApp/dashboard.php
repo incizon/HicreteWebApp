@@ -12,7 +12,7 @@
 
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-white.css" />
-    <link rel="stylesheet" type="text/css"  href="Assets/plugins/jquery-pines/pnotify.custom.min.css" />
+    <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/bootstrap/bootstrap.min.css" />
 
     <!-- EOF CSS INCLUDE -->
 
@@ -44,18 +44,25 @@
     </style>
 
     <!-- START SCRIPTS -->
-      
+    <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="Assets/js/plugins.js"></script>
+    <script type="text/javascript" src="Assets/js/actions.js"></script>
+
     <script type="text/javascript" src="Assets/js/angular.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-route.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-cookies.js"></script>
 
     <script type="text/javascript" src="Assets/js/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
-    <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
+
     <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
-    s
+
     <script type="text/javascript" src="hicreteApp.js"></script>
+
     <!-- END SCRIPTS -->
 
     <!--Controllers and service-->
@@ -65,8 +72,8 @@
     <script type="text/javascript" src="Expense/js/expenseController.js"></script>
     <script type="text/javascript" src="Config/js/configController.js"></script>
     <script type="text/javascript" src="Config/js/configService.js"></script>
-    <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
-    <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
+      <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
+      <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
    
 
 
