@@ -124,13 +124,15 @@
             <?php
                 session_start();
                 if($_SESSION['user'] !='ADMIN'){
-                    echo "<li class=\"\">
-                        <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
+                    echo "<li class="active">
+                        <a ui-sref="Inventory"><span class="fa fa-industry"></span> <span class="xn-text">Inventory</span></a>
                         </li>"
                 }
-                
+
             ?>
-            
+            <li class="">
+                <a href="#"><span class="fa fa-industry"></span> <span class="xn-text">Inventory</span></a>
+            </li>
             <li class="">
                 <a href="#"><span class="fa fa-refresh"></span> <span class="xn-text">Process</span></a>
             </li>
