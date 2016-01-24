@@ -26,9 +26,22 @@
 
 	   				 		echo "No Applicator Details to show";
 	   				 	}
+             break;
 
-		  case 'savePaymentInfo':
+		  case 'getPaymentDetails':
 
+			        if(!$applicator->getApplicatorPaymentDetails()){
+						echo "Not Applicator Payment Details to Display";
+					}
+					else{}
+
+              break;
+
+		  case 'savePaymentDetails':
+
+                   $applicator->savePaymentDetails();
+
+			  break;
 
 	   	default:
 	   		

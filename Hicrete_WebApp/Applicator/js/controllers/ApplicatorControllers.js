@@ -309,7 +309,86 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,Appli
 
 });
 
+myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService){
 
+    $scope.applicatorDetails={
+        operation:""
+    };
+   $scope.formSubmitted=false;
+    $scope.showPaymentDetails=false;
+    $scope.Applicators=[];
+    $scope.paymentDetails=[];
+
+    ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
+
+
+    $scope.applicatorPaymentDetails=function(enrollmentId){
+
+        $scope.paymentDetails=[];
+        for(var index=0;index<$scope.Applicators.length;index++){
+
+               if($scope.Applicators[index].enrollment_id==enrollmentId) {
+
+                   $scope.showPaymentDetails = true;
+                    if ($scope.Applicators[index].total_paid_amount == null){
+
+                        $scope.previousAmountPaid =0;
+                    }
+                    else{
+
+                        $scope.previousAmountPaid=$scope.Applicators[index].total_paid_amount;
+                    }
+                         $scope.packageAmount=$scope.Applicators[index].package_total_amount;
+                         $scope.remainingAmount=$scope.packageAmount-$scope.previousAmountPaid;
+
+
+                   for(var index1=0;index1<$scope.Applicators[index].paymentDetails.length;index1++){
+
+                       $scope.paymentDetails.push({
+                           amount_paid:$scope.Applicators[index].paymentDetails[index1].amount_paid,
+                           date_of_payment:$scope.Applicators[index].paymentDetails[index1].date_of_payment,
+                           paid_to:$scope.Applicators[index].paymentDetails[index1].paid_to,
+                           payment_mode:$scope.Applicators[index].paymentDetails[index1].payment_mode
+
+                       });
+
+                   }
+                     break;
+               }
+        }
+
+    }
+
+    $scope.viewPaymentDetails=function(){
+
+
+
+    };
+    $scope.getPendingAmount=function(){
+        console.log("In Pending amount function");
+        $scope.applicatorDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.applicatorDetails.amountpaid)-$scope.previousAmountPaid;
+
+    }
+    $scope.submitPaymentDetails=function(applicatorDetails){
+
+        $scope.formSubmitted=false;
+
+       if($scope.applicatorDetails.pendingAmount==0) {
+
+           applicatorDetails.paymentStatus='Full';
+           ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+       }
+        else if($scope.applicatorDetails.pendingAmount!=0){
+           $scope.showModal = true;
+           applicatorDetails.paymentStatus='Partial';
+
+       }
+    }
+    $scope.processFollowup=function(applicatorDetails){
+
+        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+    }
+});
 // myApp.directive('modal', function () {
 //     return {
 //       template: '<div class="modal fade">' + 
