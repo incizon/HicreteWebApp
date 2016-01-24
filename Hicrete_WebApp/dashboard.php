@@ -54,6 +54,8 @@
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
     <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
+
+
     <!--<script type="text/javascript" src="Assets/js/plugins.js"></script>
     <script type="text/javascript" src="Assets/js/actions.js"></script>-->
 
