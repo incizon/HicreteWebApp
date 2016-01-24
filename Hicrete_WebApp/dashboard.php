@@ -12,7 +12,7 @@
 
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-white.css" />
-    <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/bootstrap/bootstrap.min.css" />
+
 
     <!-- EOF CSS INCLUDE -->
 
