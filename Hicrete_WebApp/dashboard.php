@@ -13,7 +13,6 @@
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-white.css" />
 
-
     <!-- EOF CSS INCLUDE -->
 
     <style>
