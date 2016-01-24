@@ -49,7 +49,11 @@ myApp.controller('inventoryCommonController', function ($scope, $http, inventory
     //Available Products
     inventoryService.getProducts($scope, $http);
 
-    //Supplier
+    //Get Warehouses
+    inventoryService.getWarehouses($scope,$http);
+    // Get Company
+    inventoryService.getCompanys($scope,$http);
+
 
 
 });
@@ -336,17 +340,9 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.showModal = false;
     $scope.submitted = false;
 
-    $scope.Company = [
-        {companyName: 'Hi-Crete Systems', companyId: 1},
-        {companyName: 'Hi-Tech Flooring', companyId: 2},
-        {companyName: 'Hi-Tech Engineering', companyId: 3}
-    ];
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
 
-    $scope.warehouses = [
-        {warehouseName: 'Shindewadi', warehouseId: 1},
-        {warehouseName: 'Mangdewadi', warehouseId: 2},
-        {warehouseName: 'Bhilarwadi', warehouseId: 3}
-    ];
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -551,16 +547,9 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
-    $scope.Company = [
-        {companyName: 'Hi-Crete Systems', companyId: 1},
-        {companyName: 'Hi-Tech Flooring', companyId: 2},
-        {companyName: 'Hi-Tech Engineering', companyId: 3}
-    ];
-    $scope.warehouses = [
-        {warehouseName: 'Shindewadi', warehouseId: 1},
-        {warehouseName: 'Mangdewadi', warehouseId: 2},
-        {warehouseName: 'Bhilarwadi', warehouseId: 3}
-    ];
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
+
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -584,6 +573,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
+                $scope.availableTotalquantity=qty;
             }
         }
         ;

@@ -1,6 +1,8 @@
 myApp.service('inventoryService', function () {
 
-    var savedData={};
+    var savedData = {};
+    var companys = {};
+    var warehouses = {};
     /***************************************************************************
      Get Product Details
      ****************************************************************************/
@@ -10,7 +12,7 @@ myApp.service('inventoryService', function () {
             .success(function (data) {
                 console.log("Items Present in database");
                 console.log(data);
-                savedData=data;
+                savedData = data;
                 //$scope.getSavedProducts($scope,data);
             })
             .error(function (data, status, headers) {
@@ -19,10 +21,10 @@ myApp.service('inventoryService', function () {
             });
     };
 
-    this.getSavedProducts=function($scope){
+    this.getSavedProducts = function ($scope) {
         console.log("In get saved products");
-        $scope.products =savedData;
-        $scope.productsToModify=savedData;
+        $scope.products = savedData;
+        $scope.productsToModify = savedData;
     }
     /***************************************************************************
      Get Product Details
@@ -62,6 +64,70 @@ myApp.service('inventoryService', function () {
                 console.log($scope.materialNames);
             });
     }
+
+    /***************************************************************************
+     Start of Get Company's
+     ****************************************************************************/
+
+    this.getCompanys = function ($scope, $http) {
+
+        var data = {
+            operation: "getCompanys",
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php", null, config)
+            .success(function (data) {
+                console.log("IN Company Get");
+                companys = data;
+                console.log(data);
+            });
+    }
+
+    this.getSavedCompanys = function ($scope) {
+        console.log("IN Saved Company Get");
+        $scope.Company = companys;
+        console.log(companys);
+    }
+
+    /***************************************************************************
+     End of Get Company's
+     ****************************************************************************/
+
+    /***************************************************************************
+     Start of Get Warehouses's
+     ****************************************************************************/
+
+    this.getWarehouses = function ($scope, $http) {
+        var data = {
+            operation: "getWarehouses",
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php", null, config)
+            .success(function (data) {
+                warehouses = data
+                console.log(data);
+            });
+    }
+
+    this.getSavedWarehouses = function ($scope) {
+        console.log("IN Saved Warehouse Get");
+        $scope.warehouses = warehouses;
+        console.log(warehouses);
+    }
+
+    /***************************************************************************
+     End of Get Warehouses's
+     ****************************************************************************/
+
+
 });
 /***************************************************************************
  Get Material Types
