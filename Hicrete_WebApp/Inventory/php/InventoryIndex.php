@@ -13,104 +13,113 @@ include_once 'crud/OutwardCrud.php';
 //Get Db connection
 
 //3.
-	//According to the call i.e. insert,update for inward or outward 
+//According to the call i.e. insert,update for inward or outward
 /********************************************************
-	Get connection to the Database
-	**********************************************************/
-	$db = Database::getInstance();
-	$dbh = $db->getConnection();
-	$userId=1;
-	// Get Data From ANgular Service
-	$mData = json_decode($_GET["data"]); 
+ * Get connection to the Database
+ **********************************************************/
+$db = Database::getInstance();
+$dbh = $db->getConnection();
+if (!isset($_SESSION['token'])) {
+    session_start();
+}
+$userId = $_SESSION['token'];
 
-	$opt = array(
-		PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-		);
+// Get Data From ANgular Service
+$mData = json_decode($_GET["data"]);
 
-	switch ($mData->module) {
-		case 'inward':
-			# code...
-			inwardOperations($mData->operation,$mData);
-			break;
-		case 'outward':
-			# code...
-			outwardOperations($mData->operation,$mData);
-			break;
-		case 'inventorySearch':
-			getInventory();
-			break;
-		case 'getProducts':
-				getProducts();
-			break;
+$opt = array(
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+);
 
-		default:
-			# code...
-		break;
-	}
+switch ($mData->module) {
+    case 'inward':
+        # code...
+        inwardOperations($mData->operation, $mData);
+        break;
+    case 'outward':
+        # code...
+        outwardOperations($mData->operation, $mData);
+        break;
+    case 'inventorySearch':
+        getInventory();
+        break;
+    case 'getProducts':
+        getProducts();
+        break;
 
-	function inwardOperations($pOperation,$pData){
-		global $dbh;
-		global $userId;
-		switch ($pOperation) {
-			case 'insert':
-				# code...
-			$productObj = new InwardData($pData);
-			$productObj->insertInwardInToDb($dbh,$userId,$pData);
-			break;
-			case 'delete':
-				# code...
+    default:
+        # code...
+        break;
+}
 
-			break;
-			case 'update':
-				# code...
-			$productObjUpdate = new InwardData($pData);
-			$productObjUpdate->updateInwardDetails($dbh,$userId,$pData);
-			break;
-			case 'search':
-				# code...
-			$productObjSearch=new InwardData($pData);
-			$productObjSearch->getInwardEntries($dbh);
-			break;
-			
-			default:
-				# code... return with error msg
-			break;
-		}
-	}
-	function outwardOperations($pOperation,$pData){
-		global $dbh;
-		global $userId;
-		switch ($pOperation) {
-			case 'insert':
-				# code...
-			$productObj = new OutwardData($pData);
-			$productObj->insertOutwardInToDb($dbh,$userId,$pData);
-			break;
-			case 'delete':
-				# code...
+function inwardOperations($pOperation, $pData)
+{
+    global $dbh;
+    global $userId;
+    switch ($pOperation) {
+        case 'insert':
+            # code...
+            $productObj = new InwardData($pData);
+            $productObj->insertInwardInToDb($dbh, $userId, $pData);
+            break;
+        case 'delete':
+            # code...
 
-			break;
-			case 'modify':
-				# code...
-			$productObjUpdate = new OutwardData($pData);
-			$productObjUpdate->updateOutwardDetails($dbh,$userId,$pData);
-			break;
-			case 'search':
-				# code...
-			$productObjSearch=new OutwardData($pData);
-			$productObjSearch->getOutwardEntries($dbh);
-			break;
-			
-			default:
-				# code... return with error msg
-			break;
-		}
-	}
-	function getInventory(){
-		global $dbh;
-		$stmt=$dbh->prepare(
-			"SELECT * FROM inventory  
+            break;
+        case 'update':
+            # code...
+            $productObjUpdate = new InwardData($pData);
+            $productObjUpdate->updateInwardDetails($dbh, $userId, $pData);
+            break;
+        case 'search':
+            # code...
+            $productObjSearch = new InwardData($pData);
+            $productObjSearch->getInwardEntries($dbh);
+            break;
+
+        default:
+            # code... return with error msg
+            break;
+    }
+}
+
+function outwardOperations($pOperation, $pData)
+{
+    global $dbh;
+    global $userId;
+    switch ($pOperation) {
+        case 'insert':
+            # code...
+            $productObj = new OutwardData($pData);
+            $productObj->insertOutwardInToDb($dbh, $userId, $pData);
+            break;
+        case 'delete':
+            # code...
+
+            break;
+        case 'modify':
+            # code...
+            $productObjUpdate = new OutwardData($pData);
+            $productObjUpdate->updateOutwardDetails($dbh, $userId, $pData);
+            break;
+        case 'search':
+            # code...
+            $productObjSearch = new OutwardData($pData);
+            $productObjSearch->getOutwardEntries($dbh);
+            break;
+
+        default:
+            # code... return with error msg
+            break;
+    }
+}
+
+function getInventory()
+{
+    global $dbh;
+    $stmt = $dbh->prepare(
+        "SELECT * FROM inventory
 			JOIN material ON 
 			inventory.materialid=material.materialid
 			JOIN product_master ON
@@ -119,16 +128,18 @@ include_once 'crud/OutwardCrud.php';
 			materialtype.materialtypeid=product_master.materialtypeid
 			");
 
-		$stmt->execute();
-		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-		$result = $stmt->fetchAll();
-		$json= json_encode($result);
-		echo $json;
-		
-	}
-	function getProducts(){
-		global $dbh;
-		$stmt=$dbh->prepare("SELECT * FROM product_master  
+    $stmt->execute();
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll();
+    $json = json_encode($result);
+    echo $json;
+
+}
+
+function getProducts()
+{
+    global $dbh;
+    $stmt = $dbh->prepare("SELECT * FROM product_master
             JOIN product_details ON
             product_master.productmasterid=product_details.productmasterid
             JOIN product_packaging ON
@@ -136,11 +147,12 @@ include_once 'crud/OutwardCrud.php';
             JOIN material ON 
             product_master.productmasterid=material.productmasterid");
 
-		$stmt->execute();
-		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-		$result = $stmt->fetchAll();
-		$json= json_encode($result);
-		echo $json;
-		
-	}
+    $stmt->execute();
+    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $result = $stmt->fetchAll();
+    $json = json_encode($result);
+    echo $json;
+
+}
+
 ?>

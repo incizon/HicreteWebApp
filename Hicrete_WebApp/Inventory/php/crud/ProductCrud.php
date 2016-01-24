@@ -149,7 +149,7 @@ public function updateProduct($dbh,$userId,$productDetails) {
   $flag=false;
   $updatedProductName=$productDetails->productname;
   $productmasterid=$productDetails->productmasterid;
-  $userId=2;
+
   if($productDetails->isProductMasterTable){
     $stmtMasterTable = $dbh->prepare("UPDATE product_master SET productname =:productname,materialtypeid=:materialtypeid,unitofmeasure=:unitofmeasure,lchnguserid=:lchnguserid,lchngtime=now()
       WHERE productmasterid = :productmasterid");

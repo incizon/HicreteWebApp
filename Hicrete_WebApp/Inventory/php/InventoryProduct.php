@@ -21,8 +21,10 @@ require_once 'utils/Common_Methods.php';
 	 *Get Data into variables 
 	 *
 	 *****************************************************************/
-
-	$userId="1";
+	if (!isset($_SESSION['token'])) {
+		session_start();
+	}
+	$userId = $_SESSION['token'];
 	$showAlerts=new CommonMethods();
 	$productModel=new ProductModel();
 	$productModel->_setProductName($productDetails->productname);
