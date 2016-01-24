@@ -11,8 +11,6 @@
                 <div class="panel-body">                                                                        
                     <div>
                     <h5>Material</h5>
-                        <span style="color:red" ng-show="availableTotalquantity==0">Selected material is not available. Contact inventory manager</span>
-                        <span style="color:red" ng-show="availableTotalquantity<OutwardData.materialQuantity">Don't have sufficient quantity available in stock. Current available quantity is {{availableTotalquantity}}</span>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -125,7 +123,7 @@
                                             ng-model="OutwardData.warehouseName" name="warehouseName" required>
                                         <option value="" disabled selected>Select Warehouse</option>
                                         <option ng-repeat="x in warehouses"
-                                                value={{x.warehouseId}}>{{x.warehouseName}}
+                                                value={{x.warehouseId}}>{{x.wareHouseName}}
                                         </option>
                                     </select>
                                     <div class="help-block" ng-messages="outwardMaterialForm.warehouseName.$error" ng-show="submitted">
@@ -186,6 +184,7 @@
                             </tr>
                             </thead>
                             <tr ng-repeat="materials in OutwardData.outwardMaterials">
+
                                 <td>
                                     <select class="form-control select"
                                             ng-model="materials.material" ng-value="Select" name="material" required>
@@ -215,7 +214,13 @@
                                     <!--</div>-->
                                 </td>
                                 <td>
-                                    <label class="col-md-4 control-label text-left pt12">{{getAvailableQty(materials.material)}}</label>
+                                    <label class="col-md-4 control-label text-left pt12" name="availableQty">{{getAvailableQty(materials.material)}}</label>
+                                    <div class="help-block" ng-show="availableTotalquantity==0">
+                                        <span style="color:red">Selected material is not available. Contact inventory manager</span>
+                                    </div>
+                                    <div class="help-block" ng-show="availableTotalquantity< materials.materialQuantity">
+                                        <span style="color:red" >Don't have sufficient quantity available in stock. Current available quantity is {{availableTotalquantity}}</span>
+                                    </div>
                                 </td>
                                 <td>
                                     <a ng-click="remove($index)" class="panel-remove">

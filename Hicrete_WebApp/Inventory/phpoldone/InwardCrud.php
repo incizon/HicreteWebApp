@@ -95,10 +95,7 @@ class InwardData extends CommonMethods{
     ***********************************************************************************/
     public function insertInwardInToDb($dbh,$userId){ 
       try{
-                // global $dbh;
-            $userId=1;
-            $userId1=2;
-            $materialId=1;
+
             //Begin Transaction
             $dbh->beginTransaction();
             //Create preapred Statement

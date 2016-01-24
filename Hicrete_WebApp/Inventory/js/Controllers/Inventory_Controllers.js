@@ -1,4 +1,4 @@
-// //MODAL DIRECTIVE
++// //MODAL DIRECTIVE
 // myApp.directive('modal', function () {
 //  return {
 //    template: '<div class="modal fade">' + 
@@ -49,7 +49,11 @@ myApp.controller('inventoryCommonController', function ($scope, $http, inventory
     //Available Products
     inventoryService.getProducts($scope, $http);
 
-    //Supplier
+    //Get Warehouses
+    inventoryService.getWarehouses($scope,$http);
+    // Get Company
+    inventoryService.getCompanys($scope,$http);
+
 
 
 });
@@ -89,7 +93,8 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 // inventoryService.getProductsForInwardandOutward($scope,$http);
 
     //Available Products
-    inventoryService.getProducts($scope, $http);
+    //inventoryService.getProducts($scope, $http);
+    inventoryService.getSavedProducts($scope);
     /*
      Start of Pagination Function
      */
@@ -335,17 +340,9 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.showModal = false;
     $scope.submitted = false;
 
-    $scope.Company = [
-        {companyName: 'Hi-Crete Systems', companyId: 1},
-        {companyName: 'Hi-Tech Flooring', companyId: 2},
-        {companyName: 'Hi-Tech Engineering', companyId: 3}
-    ];
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
 
-    $scope.warehouses = [
-        {warehouseName: 'Shindewadi', warehouseId: 1},
-        {warehouseName: 'Mangdewadi', warehouseId: 2},
-        {warehouseName: 'Bhilarwadi', warehouseId: 3}
-    ];
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -460,8 +457,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         // inventoryService.getProductsForInwardandOutward($scope,$http);
 
         //Available Products
-    inventoryService.getProducts($scope, $http);
-
+    //inventoryService.getProducts($scope, $http);
+    inventoryService.getSavedProducts($scope);
     /**********************************************************************************
      *Setters to set true/false for tables to modify
      **********************************************************************************/
@@ -550,16 +547,9 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
-    $scope.Company = [
-        {companyName: 'Hi-Crete Systems', companyId: 1},
-        {companyName: 'Hi-Tech Flooring', companyId: 2},
-        {companyName: 'Hi-Tech Engineering', companyId: 3}
-    ];
-    $scope.warehouses = [
-        {warehouseName: 'Shindewadi', warehouseId: 1},
-        {warehouseName: 'Mangdewadi', warehouseId: 2},
-        {warehouseName: 'Bhilarwadi', warehouseId: 3}
-    ];
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
+
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -569,7 +559,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 //Get Material from DB
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-    inventoryService.getProducts($scope, $http);
+    //inventoryService.getProducts($scope, $http);
+    inventoryService.getSavedProducts($scope);
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
@@ -582,6 +573,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
+                $scope.availableTotalquantity=qty;
             }
         }
         ;
@@ -605,7 +597,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
      End of Add material fields
      *******************************/
     $scope.remove = function (index) {
-        $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
+        $scope.OutwardData.outwardMaterials.splice(index, 1); //remove item by index
     };
 
 

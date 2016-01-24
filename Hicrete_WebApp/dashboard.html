@@ -17,6 +17,9 @@
 
     <!-- EOF CSS INCLUDE -->
 
+
+
+
     <style>
         .page-container {
             width: 100%;
@@ -47,21 +50,21 @@
     <!-- START SCRIPTS -->
     <script type="text/javascript" src="Assets/js/angular.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-route.min.js"></script>
-    <script type="text/javascript" src="Assets/js/angular-cookies.js"></script>
-
-    <script type="text/javascript" src="Assets/js/angular-ui-router.min.js"></script>
-    <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
     <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Assets/js/angular-ui-router.min.js"></script>
+    <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
+
     <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
-      <script type="text/javascript" src="Assets/plugins/jquery-pines/pnotify.custom.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/jquery-pines/pnotify.custom.min.js"></script>
     <script type='text/javascript' src='Assets/plugins/icheck/icheck.min.js'></script>
     <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/scrolltotop/scrolltopcontrol.js"></script>
     <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-datepicker.js'></script>
     <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-timepicker.min.js'></script>
     <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-select.js'></script>
-   <script type="text/javascript" src="Assets/plugins/morris/raphael-min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/morris/raphael-min.js"></script>
     <script type="text/javascript" src="Assets/plugins/morris/morris.min.js"></script>
 
     <script type="text/javascript" src="Assets/plugins/owl/owl.carousel.min.js"></script>
@@ -69,8 +72,8 @@
     <script type="text/javascript" src="Assets/js/plugins.js"></script>
     <script type="text/javascript" src="Assets/js/actions.js"></script>
 
-
-      <script type="text/javascript" src="hicreteApp.js"></script>
+    <script type="text/javascript" src="jsUtils.js"></script>
+    <script type="text/javascript" src="hicreteApp.js"></script>
 
     <!-- END SCRIPTS -->
 
@@ -121,13 +124,15 @@
             <?php
                 session_start();
                 if($_SESSION['user'] !='ADMIN'){
-                    echo "<li class=\"\">
-                        <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
+                    echo "<li class="active">
+                        <a ui-sref="Inventory"><span class="fa fa-industry"></span> <span class="xn-text">Inventory</span></a>
                         </li>"
                 }
-                
+
             ?>
-            
+            <li class="">
+                <a href="#"><span class="fa fa-industry"></span> <span class="xn-text">Inventory</span></a>
+            </li>
             <li class="">
                 <a href="#"><span class="fa fa-refresh"></span> <span class="xn-text">Process</span></a>
             </li>

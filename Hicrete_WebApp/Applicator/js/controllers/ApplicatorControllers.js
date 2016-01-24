@@ -21,7 +21,23 @@ $scope.elementDetails=[{
 						element_amount:""
 					}];
 
-	
+    $scope.today = function() {
+        $scope.applicatorDetails.paymentDate = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function() {
+        $scope.applicatorDetails.paymentDate = null;
+    };
+
+    $scope.open1 = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
 	PackageService.viewPackages($scope,$http,$scope.packageDetails);
 
 	$scope.nextStep = function() {
@@ -73,7 +89,27 @@ $scope.elementDetails=[{
 					return true;
 				}
 			}
-			
+
+    $scope.today = function() {
+        $scope.paymentDate = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function() {
+        $scope.paymentDate = null;
+    };
+
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.open1 = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
 	$scope.processForm = function(applicatorDetails) {
         		
         		$scope.formSubmitted=false;
@@ -97,7 +133,8 @@ $scope.elementDetails=[{
         			console.log("No Amount paid");
         			
         		}
-        
+
+
         };
     $scope.processFollowup=function(applicatorDetails){
       

@@ -12,8 +12,6 @@
 
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-white.css" />
-      <link rel="stylesheet" type="text/css"  href="Assets/plugins/jquery-pines/pnotify.custom.min.css" />
-    <link rel="stylesheet" type="text/css" href="Applicator/css/applicatorStyle.css"/>
 
     <!-- EOF CSS INCLUDE -->
 
@@ -41,42 +39,31 @@
        ::-webkit-scrollbar-thumb { background: #9E9E9E; border-radius: 4px;}
        ::-webkit-scrollbar-corner { display: none;}
        ::-webkit-resizer {display: none;}
-        
+
     </style>
 
     <!-- START SCRIPTS -->
-      
+
     <script type="text/javascript" src="Assets/js/angular.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-route.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-cookies.js"></script>
 
     <script type="text/javascript" src="Assets/js/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
-    <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
-  
-    <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
-      <script type="text/javascript" src="Assets/plugins/jquery-pines/pnotify.custom.min.js"></script>
-    <script type='text/javascript' src='Assets/plugins/icheck/icheck.min.js'></script>
-    <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/scrolltotop/scrolltopcontrol.js"></script>
-    <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-datepicker.js'></script>
-    <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-timepicker.min.js'></script>
-    <script type='text/javascript' src='Assets/plugins/bootstrap/bootstrap-select.js'></script>
-   <script type="text/javascript" src="Assets/plugins/morris/raphael-min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/morris/morris.min.js"></script>
 
-    <script type="text/javascript" src="Assets/plugins/owl/owl.carousel.min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/moment/moment.min.js"></script>
-   
-  
+    <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
 
     <script type="text/javascript" src="Assets/js/plugins.js"></script>
     <script type="text/javascript" src="Assets/js/actions.js"></script>
 
-       <script type="text/javascript" src="jsUtils.js"></script> 
-      <script type="text/javascript" src="hicreteApp.js"></script>
+
+    <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+
+    <script type="text/javascript" src="hicreteApp.js"></script>
 
     <!-- END SCRIPTS -->
 
@@ -89,8 +76,8 @@
     <script type="text/javascript" src="Config/js/configService.js"></script>
       <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
       <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
-   
-      <script type="text/javascript" src="chartNNotify.js"></script>
+
+
 
 
 
@@ -134,65 +121,65 @@ if(!$userObj->init($userId)){
                         <img src="Assets/images/users/avatar.jpg" alt="John Doe"/>
                     </div>
                     <div class="profile-data">
-                        
+
                         <?php
 
                             echo "<div class=\"profile-data-name\">".$userObj->username."</div>";
                             echo "<div class=\"profile-data-name\">".$userObj->designation."</div>";
                         ?>
-                        
+
                     </div>
                 </div>
             </li>
             <li class="active">
                 <a ui-sref="MainPage"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
             </li>
-            
+
 
             <?php
-               
+
                 if($userObj->isInventory){
                     echo "<li class=\"\">
                             <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
-                    </li>"; 
+                    </li>";
                 }
 
                 if($userObj->isBusinessProcess){
                     echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Process</span></a>
-                    </li>"; 
+                            <a href=\"#\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+                    </li>";
                 }
 
                 if($userObj->isExpense){
                     echo "<li class=\"\">
-                            <a ui-sref=\"Expense\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Expense</span></a>
-                    </li>"; 
+                            <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
+                    </li>";
                 }
 
                 if($userObj->isApplicator){
                     echo "<li class=\"\">
-                            <a ui-sref=\"Applicator\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Applicator</span></a>
-                    </li>"; 
+                            <a ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
+                    </li>";
                 }
 
                 if($userObj->isApplicator){
                     echo "<li class=\"\">
-                            <a href=\"Payroll\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Payroll</span></a>
-                    </li>"; 
+                            <a href=\"Payroll\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
+                    </li>";
                 }
-            
+
                 if($userObj->isReporting){
                     echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Reporting</span></a>
-                    </li>"; 
+                            <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
+                    </li>";
                 }
 
                 if($userObj->isAdmin){
                     echo "<li class=\"\">
-                            <a ui-sref=\"Config\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Configuration</span></a>
-                    </li>"; 
+                            <a ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
+                    </li>";
                 }
-                      
+
             // <li class="">
             //     <a href="#"><span class="fa fa-refresh"></span> <span class="xn-text">Process</span></a>
             // </li>
@@ -211,7 +198,7 @@ if(!$userObj->init($userId)){
             // <li class="">
             //     <a ui-sref="Config"><span class="fa fa-cog"></span> <span class="xn-text">Configuration</span></a>
             // </li>
-            ?> 
+            ?>
 
         </ul>
         <!-- END X-NAVIGATION -->

@@ -32,10 +32,14 @@ switch ($data->operation) {
     				    break;		
 
     case "TempAccessRequestAction" :ConfigUtils::addTempAccessRequestAction($data,$userId);
-    				    break;			    
+    				    break;
+    case "getCompanys" :Config::getCompanys($userId);
+                        break;
+    case "getWarehouses": Config::getWarehouse($userId);
+                        break;
 
 
-    
+
 }
 
 	/*	$opt = array(
