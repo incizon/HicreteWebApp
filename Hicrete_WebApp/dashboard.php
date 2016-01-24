@@ -12,7 +12,7 @@
 
     <!-- CSS INCLUDE -->
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-white.css" />
-    <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/bootstrap/bootstrap.min.css" />
+    <!--<link rel="stylesheet" type="text/css" id="theme" href="Assets/css/bootstrap/bootstrap.min.css" />-->
 
     <!-- EOF CSS INCLUDE -->
 
@@ -226,6 +226,7 @@ if(!$userObj->init($userId)){
                 <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>
             </li>
             <!-- END SIGN OUT -->
+
             <!-- MESSAGES -->
             <li class="xn-icon-button pull-right">
                 <a href="#"><span class="fa fa-comments"></span></a>
