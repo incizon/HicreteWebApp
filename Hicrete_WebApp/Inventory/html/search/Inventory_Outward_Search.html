@@ -22,7 +22,7 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="product in OutwardSearchData |filter:paginateOutward | filter:keywords | orderBy:'productname'">
-                        <td width="5%">{{$index + 1}}</td>
+                        <td width="5%">{{product.outwardno}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyid}}</td>
                         <td width="15%">{{product.warehouseid}}</td>  

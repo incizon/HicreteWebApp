@@ -31,7 +31,7 @@ myApp.service('ApplicatorService',function(){
 	}
 	this.viewApplicatorDetails=function($scope,$http,applicatorDetails){
 
-				applicatorDetails.operation='view';
+				applicatorDetails.operation='viewApplicator';
 				var config = {
 								params: {
 										applicatorDetails: applicatorDetails
@@ -54,6 +54,7 @@ myApp.service('ApplicatorService',function(){
 
 		};
 
+
 });
 myApp.service('PackageService',function(){
 
@@ -72,7 +73,9 @@ myApp.service('PackageService',function(){
 						            
 						            console.log(data);
 									doShowAlert("Success",data);
-									$scope.clearFields(packageDetails);
+									setTimeout(function(){
+										window.location.reload(true);
+									},2000);
 					})
 					.error(function (data, status, headers, config){
 									

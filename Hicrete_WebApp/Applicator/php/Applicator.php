@@ -8,7 +8,7 @@
 	 
 
 	  switch ($operation) {
-	   	case 'create':
+	   	case 'createApplicator':
 	   		          
 	   		           if($applicatorDetails->received=='Yes'){
 
@@ -20,13 +20,16 @@
 	   		            } 
 	   		break;
 	   	
-	   	case 'view':
+	   	case 'viewApplicator':
 	   				
 	   				 	if(!$applicator->viewApplicator($applicatorDetails->applicator)){
 
 	   				 		echo "No Applicator Details to show";
-	   				 	}	
-	   				
+	   				 	}
+
+		  case 'savePaymentInfo':
+
+
 	   	default:
 	   		
 	   		#code...
@@ -39,7 +42,8 @@
 	   		$paymentStatus=$applicatorDetails->paymentStatus;
 	   		switch ($paymentStatus) {
 	   			case 'Full':
-								   					
+
+
 	   					if($applicator->createApplicator()){
 	 									
 				 			if($applicator->createPointOfContact()){

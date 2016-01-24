@@ -19,12 +19,6 @@ include_once 'crud/OutwardCrud.php';
 	**********************************************************/
 	$db = Database::getInstance();
 	$dbh = $db->getConnection();
-
-
-
-
-
-
 	$userId=1;
 	// Get Data From ANgular Service
 	$mData = json_decode($_GET["data"]); 
@@ -62,7 +56,7 @@ include_once 'crud/OutwardCrud.php';
 			case 'insert':
 				# code...
 			$productObj = new InwardData($pData);
-			$productObj->insertInwardInToDb($dbh,$userId);
+			$productObj->insertInwardInToDb($dbh,$userId,$pData);
 			break;
 			case 'delete':
 				# code...
@@ -91,7 +85,7 @@ include_once 'crud/OutwardCrud.php';
 			case 'insert':
 				# code...
 			$productObj = new OutwardData($pData);
-			$productObj->insertOutwardInToDb($dbh,$userId);
+			$productObj->insertOutwardInToDb($dbh,$userId,$pData);
 			break;
 			case 'delete':
 				# code...
@@ -140,8 +134,7 @@ include_once 'crud/OutwardCrud.php';
             JOIN product_packaging ON
             product_master.productmasterid=product_packaging.productmasterid
             JOIN material ON 
-            product_master.productmasterid=material.productmasterid"
-        );
+            product_master.productmasterid=material.productmasterid");
 
 		$stmt->execute();
 		$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);

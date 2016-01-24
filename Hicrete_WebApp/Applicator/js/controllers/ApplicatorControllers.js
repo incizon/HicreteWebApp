@@ -58,7 +58,7 @@ $scope.elementDetails=[{
 				packageID=packageID-1;
 				$scope.packageDetailsShow='Yes';				
 				$scope.package_description=$scope.packages[packageID].package_description;
-        $scope.package_total_amount=$scope.packages[packageID].package_total_amount;
+                $scope.package_total_amount=$scope.packages[packageID].package_total_amount;
 				$scope.packageTotalAmount=0;
 				$scope.elementDetails=[];
 				for(var index=0;index<$scope.packages[packageID].elementType.length;index++){
@@ -79,12 +79,6 @@ $scope.elementDetails=[{
 	$scope.getPendingAmount=function(){
 				console.log("In Pending amount function");
 				$scope.applicatorDetails.pendingAmount=parseInt($scope.package_total_amount)-parseInt($scope.applicatorDetails.amountpaid);
-				
-				if($scope.applicatorDetails.pendingAmount!=0){
-					
-					console.log("In pending amount if");
-					
-				}
 			}
 	$scope.checkPaymentStatus=function(){
 				if($scope.applicatorDetails.received=='Yes'){
@@ -123,7 +117,7 @@ $scope.elementDetails=[{
         		if($scope.applicatorDetails.pendingAmount==0 && $scope.applicatorDetails.received=='Yes'){
         			
         			console.log("Full Amount Paid ");
-        			applicatorDetails.operation='create';
+        			applicatorDetails.operation='createApplicator';
         			applicatorDetails.paymentStatus='Full';
         			//console.log(applicatorDetails);
 					   
@@ -147,14 +141,14 @@ $scope.elementDetails=[{
         	
         	if($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes'){
         		console.log("in pending amount function call");	
-        		applicatorDetails.operation='create';
+        		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="Partial";
         		ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         	   
           }
         	if($scope.applicatorDetails.received=='No'){
 
-        		applicatorDetails.operation='create';
+        		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="No";
         		 
             ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
@@ -253,6 +247,7 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
 
 myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,ApplicatorService){
 
+
     $scope.Applicators=[];
     $scope.totalItems =0;
     $scope.currentPage = 1;
@@ -296,8 +291,6 @@ myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,Appli
           $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
 
         };
-
-
 
 });
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,ApplicatorService){

@@ -18,20 +18,17 @@
 //    scope:true,
 //    link: function postLink(scope, element, attrs) {
 //      scope.title = attrs.title;
-
 //      scope.$watch(attrs.visible, function(value){
 //        if(value == true)
 //          $(element).modal('show');
 //        else
 //          $(element).modal('hide');
 //      });
-
 //      $(element).on('shown.bs.modal', function(){
 //        scope.$apply(function(){
 //          scope.$parent[attrs.visible] = true;
 //        });
 //      });
-
 //      $(element).on('hidden.bs.modal', function(){
 //        scope.$apply(function(){
 //          scope.$parent[attrs.visible] = false;
@@ -44,1303 +41,1293 @@
 //END OF MODAL DIRECTIVE
 
 
-myApp.controller('inventoryCommonController',function($scope, $http,inventoryService){
+myApp.controller('inventoryCommonController', function ($scope, $http, inventoryService) {
 
-  //get Material Tyepes
-  inventoryService.getMaterialTypes($scope, $http);
+    //get Material Tyepes
+    inventoryService.getMaterialTypes($scope, $http);
 
-  //Available Products
-  inventoryService.getProducts($scope, $http);
+    //Available Products
+    inventoryService.getProducts($scope, $http);
 
-  //Supplier
+    //Supplier
 
 
 });
 
 
 /**********************************************************************************
-* Start of Product controller
-* 
-***********************************************************************************/
-myApp.controller('productController', function($scope, $http,inventoryService){
+ * Start of Product controller
+ *
+ ***********************************************************************************/
+myApp.controller('productController', function ($scope, $http, inventoryService) {
 
-  //Pagination variables
-  $scope.totalItems =0;
-  $scope.currentPage = 1;
-  $scope.InventoryItemsPerPage = 5;
-  //Initialize all the variables
-  $scope.data={};
-  //Init product object
-  $scope.product={
-    productDescription:"",
-    productColor:"",
-    productAlertQty:"",
-    productPackaging:"",
-    productUnitOfMeasure:"",
-    productType:"",
-    productAbbrevations:"",
-    productName:""
-  };
-  $scope.submitted=false;
+    //Pagination variables
+    $scope.totalItems = 0;
+    $scope.currentPage = 1;
+    $scope.InventoryItemsPerPage = 5;
+    //Initialize all the variables
+    $scope.data = {};
+    //Init product object
+    $scope.product = {
+        productDescription: "",
+        productColor: "",
+        productAlertQty: "",
+        productPackaging: "",
+        productUnitOfMeasure: "",
+        productType: "",
+        productAbbrevations: "",
+        productName: ""
+    };
+    $scope.submitted = false;
     $scope.submittedModal = false;
 
-  var isProductMasterTable=false;
-  var isMaterialTable=false;
-  var isPrductDetailsTable=false;
-  var isProductPkgingTable=false;
+    var isProductMasterTable = false;
+    var isMaterialTable = false;
+    var isPrductDetailsTable = false;
+    var isProductPkgingTable = false;
 
 // inventoryService.getProductsForInwardandOutward($scope,$http);
 
-  //Available Products
-  inventoryService.getProducts($scope, $http);
-  /*
-  Start of Pagination Function
-  */
-  $scope.paginate = function(value) {
-            //console.log("In Paginate");
-            var begin, end, index;
-            begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
-            end = begin + $scope.InventoryItemsPerPage;
-            index = $scope.products.indexOf(value);
-                //console.log(index);
-                return (begin <= index && index < end);
-  };  
-  /*
-  End of Pagination Function
-  */
-  /**********************************************************************************
-  * Purpose- This function will Add product details into database
-  * @param1- product (all product details)
-  * Return- success msg or failure msg
-  ***********************************************************************************/
-	$scope.addProduct=function(product){
-    //Set Extra attribute in object to identify operation to be performed
-    product.opertaion="insert";
-    $scope.submitted=false;
-
-    var config={
-      params:{
-        product:product
-      }
+    //Available Products
+    inventoryService.getProducts($scope, $http);
+    /*
+     Start of Pagination Function
+     */
+    $scope.paginate = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
+        end = begin + $scope.InventoryItemsPerPage;
+        index = $scope.products.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
     };
+    /*
+     End of Pagination Function
+     */
+    /**********************************************************************************
+     * Purpose- This function will Add product details into database
+     * @param1- product (all product details)
+     * Return- success msg or failure msg
+     ***********************************************************************************/
+    $scope.addProduct = function (product) {
+        //Set Extra attribute in object to identify operation to be performed
+        product.opertaion = "insert";
+        $scope.submitted = false;
 
-    //call service
-    $http.post("Inventory/php/InventoryProduct.php", null, config)
-    .success(function (data)
-    {
-     console.log("IN POST OF add product success");
-     console.log(data);
-     $scope.clearFields(product);
-     doShowAlert("Success",data.msg);
-      setTimeout(function(){
-          window.location.reload(true);
-      },1000);
-   })
-    .error(function (data, status, headers, config)
-    {
-      console.log(data.error);
-      doShowAlert("Failure",data.msg);
-    });
-    
-  };
-  /**********************************************************************************
-  *End of add product function
-  **********************************************************************************/
+        var config = {
+            params: {
+                product: product
+            }
+        };
 
+        //call service
+        $http.post("Inventory/php/InventoryProduct.php", null, config)
+            .success(function (data) {
+                console.log("IN POST OF add product success");
+                console.log(data);
+                $scope.clearFields(product);
+                doShowAlert("Success", data.msg);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+                doShowAlert("Failure", data.msg);
+            });
 
-  /**********************************************************************************
-  * Purpose- This function will Clear all fileds of form
-  * @param1- product (all product details)
-  * Return- nothing
-  ***********************************************************************************/
-  $scope.clearFields=function(product){
-    product.description="";
-    product.color="";
-    product.alertquantity="";
-    product.packaging="";
-    product.unitofmeasure="";
-    product.materialtypeid="";
-    product.abbrevation="";
-    product.productname="";
-  };
-  /**********************************************************************************
-  *End of add product function
-  **********************************************************************************/
-
-
-  /**********************************************************************************
-  * Purpose- This function will Update the product details
-  * @param1- product (all product details)
-  * Return- Success or Failure
-  ***********************************************************************************/
-  $scope.updateProductInfo=function(product){
-    console.log("Product in Update Info function");
-    //Set Extra attribute in object to identify operation to be performed as update
-    product.opertaion="modify";
-    //Check which tables should get affected
-    product.isProductMasterTable=isProductMasterTable;
-    product.isProductDetailsTable=isPrductDetailsTable;
-    product.isProductPackagingTable=isProductPkgingTable;
-    product.isProductMaterialTable=isMaterialTable;
-
-    // Create json object
-    var config={
-      params:{
-        product:product
-      }
     };
-    //call add product service
-    $http.post("Inventory/php/InventoryProduct.php", null, config)
-    .success(function (data)
-    {
-      console.log("IN POST UPDATE OPERATION:");
-      console.log(data);
-      doShowAlert("Success",data.msg);
-      setTimeout(function(){
-          window.location.reload(true);
-      },1000);
-    })
-    .error(function (data, status, headers, config)
-    {
-      console.log(data.error);
-      doShowAlert("Failure",data.msg);
-    });
-
-  }
-  /**********************************************************************************
-  *End of Update product function
-  **********************************************************************************/
+    /**********************************************************************************
+     *End of add product function
+     **********************************************************************************/
 
 
-  /**********************************************************************************
-  * Get Particular product details to show on modal
-  **********************************************************************************/
-  $scope.getProduct=function(product){
-    $scope.selectedProduct=product;
-  }
-  /**********************************************************************************
-  *End of Getter
-  **********************************************************************************/
+    /**********************************************************************************
+     * Purpose- This function will Clear all fileds of form
+     * @param1- product (all product details)
+     * Return- nothing
+     ***********************************************************************************/
+    $scope.clearFields = function (product) {
+        product.description = "";
+        product.color = "";
+        product.alertquantity = "";
+        product.packaging = "";
+        product.unitofmeasure = "";
+        product.materialtypeid = "";
+        product.abbrevation = "";
+        product.productname = "";
+    };
+    /**********************************************************************************
+     *End of add product function
+     **********************************************************************************/
 
-  /***************************************************************************
-  * Purpose- This function will retrieve the product details from database
-  * @param1- $scope and $http
-  * Return- Items available in database
-  ****************************************************************************/
-  // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-  // $scope.productSearch=function($scope,$http){
+
+    /**********************************************************************************
+     * Purpose- This function will Update the product details
+     * @param1- product (all product details)
+     * Return- Success or Failure
+     ***********************************************************************************/
+    $scope.updateProductInfo = function (product) {
+        console.log("Product in Update Info function");
+        //Set Extra attribute in object to identify operation to be performed as update
+        product.opertaion = "modify";
+        //Check which tables should get affected
+        product.isProductMasterTable = isProductMasterTable;
+        product.isProductDetailsTable = isPrductDetailsTable;
+        product.isProductPackagingTable = isProductPkgingTable;
+        product.isProductMaterialTable = isMaterialTable;
+
+        // Create json object
+        var config = {
+            params: {
+                product: product
+            }
+        };
+        //call add product service
+        $http.post("Inventory/php/InventoryProduct.php", null, config)
+            .success(function (data) {
+                console.log("IN POST UPDATE OPERATION:");
+                console.log(data);
+                doShowAlert("Success", data.msg);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+                doShowAlert("Failure", data.msg);
+            });
+
+    }
+    /**********************************************************************************
+     *End of Update product function
+     **********************************************************************************/
+
+
+    /**********************************************************************************
+     * Get Particular product details to show on modal
+     **********************************************************************************/
+    $scope.getProduct = function (product) {
+        $scope.selectedProduct = product;
+    }
+    /**********************************************************************************
+     *End of Getter
+     **********************************************************************************/
+
+    /***************************************************************************
+     * Purpose- This function will retrieve the product details from database
+     * @param1- $scope and $http
+     * Return- Items available in database
+     ****************************************************************************/
+        // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
+        // $scope.productSearch=function($scope,$http){
     $http.post("Inventory/php/ProductSearch.php", null)
-    .success(function (data)
-    {
-     console.log("Items Present in database");
-     console.log(data);
-     $scope.products=data;   
-     $scope.totalItems = $scope.products.length;
-    })
-    .error(function (data, status, headers)
-    {
-      console.log(data);
+        .success(function (data) {
+            console.log("Items Present in database");
+            console.log(data);
+            $scope.products = data;
+            $scope.totalItems = $scope.products.length;
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
 
-    });
-  // };
-  /***************************************************************************
-  * End of Get Product Details  
-  ****************************************************************************/
+        });
+    // };
+    /***************************************************************************
+     * End of Get Product Details
+     ****************************************************************************/
 
-  /**********************************************************************************
-  *Setters to set true/false for tables to modify
-  **********************************************************************************/
-  $scope.setMasterTable=function(){
-    isProductMasterTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setProductDetailsTable=function(){
-    isPrductDetailsTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setProductPackagingTable=function(){
-    isProductPkgingTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setProductMaterialTable=function(){
-    isMaterialTable=true;
-    console.log("IN ng CHANGE");
-  }
-  /**********************************************************************************
-  *End of Setters
-  **********************************************************************************/
+    /**********************************************************************************
+     *Setters to set true/false for tables to modify
+     **********************************************************************************/
+    $scope.setMasterTable = function () {
+        isProductMasterTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductDetailsTable = function () {
+        isPrductDetailsTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductPackagingTable = function () {
+        isProductPkgingTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductMaterialTable = function () {
+        isMaterialTable = true;
+        console.log("IN ng CHANGE");
+    }
+    /**********************************************************************************
+     *End of Setters
+     **********************************************************************************/
 
 
-  // /***************************************************************************
-  // * Purpose- This function will retrieve the product details from database
-  // * @param1- $scope and $http
-  // * Return- Items available in database
-  // ****************************************************************************/
-  // // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-  // // $scope.productSearch=function($scope,$http){
-  //   $http.post("Inventory/php/ProductSearch.php", null)
-  //   .success(function (data)
-  //   {
-  //    console.log("Items Present in database");
-  //    console.log(data);
-  //    $scope.products=data;   
-  //   })
-  //   .error(function (data, status, headers)
-  //   {
-  //     console.log(data);
+    // /***************************************************************************
+    // * Purpose- This function will retrieve the product details from database
+    // * @param1- $scope and $http
+    // * Return- Items available in database
+    // ****************************************************************************/
+    // // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
+    // // $scope.productSearch=function($scope,$http){
+    //   $http.post("Inventory/php/ProductSearch.php", null)
+    //   .success(function (data)
+    //   {
+    //    console.log("Items Present in database");
+    //    console.log(data);
+    //    $scope.products=data;
+    //   })
+    //   .error(function (data, status, headers)
+    //   {
+    //     console.log(data);
 
-  //   });
-  // // };
-  // /***************************************************************************
-  // * End of Get Product Details  
-  // ****************************************************************************/
+    //   });
+    // // };
+    // /***************************************************************************
+    // * End of Get Product Details
+    // ****************************************************************************/
 
 
-  /***************************************************************************
-  * Start of Get Material Types  
-  ****************************************************************************/
-  $http.get("Inventory/php/Material.php")
-  .success(function(data) {
-   console.log("IN MATERIAL");
-   $scope.materialNames = data;
-   console.log(data);
-  });
-  /***************************************************************************
-  * End of Get Material Types  
-  ****************************************************************************/
+    /***************************************************************************
+     * Start of Get Material Types
+     ****************************************************************************/
+    $http.get("Inventory/php/Material.php")
+        .success(function (data) {
+            console.log("IN MATERIAL");
+            $scope.materialNames = data;
+            console.log(data);
+        });
+    /***************************************************************************
+     * End of Get Material Types
+     ****************************************************************************/
 
 });
 /**********************************************************************************
-* End of Product controller
-* 
-***********************************************************************************/
-
-
+ * End of Product controller
+ *
+ ***********************************************************************************/
 
 
 /***********************************************************************************************************
-* Start of Inward Controlller
-*
-************************************************************************************************************/
+ * Start of Inward Controlller
+ *
+ ************************************************************************************************************/
 
-myApp.controller('inwardController',function($scope,$http,inwardService,inventoryService){
-  $scope.InwardData={
-    inwardNumber:"",
-    date:"",
-    material:"",  
-    packageUnit:"",
-    companyName:"",
-    suppplierName:"",
-    materialQuantity:"",
-    warehouseName:"",
-    // inwardMaterials[
-    //   material:"",  
-    //   packageUnit:"",
-    //   companyName:"",
-    //   suppplierName:"",
-    //   materialQuantity:"",
-    //   warehouseName:"",
-    // ],
+myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
+    $scope.InwardData = {
+        inwardNumber: "",
+        date: "",
+        companyName: "",
+        warehouseName: "",
+        suppervisor: "",
 
-    suppervisor:"",
-
-    transportMode:"",
-    vehicleNumber:"",
-    transportCost:"",
-    transportRemark:"",
-    transportAgency:"",
-    driver:"",
-    transportPayable:""
-  };
-  // $scope.inventoryData={};
-  $scope.material={};
-  $scope.step=1;
-  $scope.showModal=false;
-  $scope.submitted = false;
-
-  $scope.Company=[
-    {companyName:'Hi-Crete Systems',companyId:1},
-    {companyName:'Hi-Tech Flooring',companyId:2},
-    {companyName:'Hi-Tech Engineering',companyId:3}
-  ];
-
-  $scope.warehouses=[
-    {warehouseName:'Shindewadi',warehouseId:1},
-    {warehouseName:'Mangdewadi',warehouseId:2},
-    {warehouseName:'Bhilarwadi',warehouseId:3}
-  ];
-  $scope.transportMode=[
-    {transport:'Air Transport',transportId:1},
-    {transport:'Water Transport',transportId:2},
-    {transport:'Road Transport',transportId:3}
-  ];
-
-  $scope.filters=[
-    {filterName:'Items',id:1},
-    {filterName:'Inward',id:2},
-    {filterName:'Outward',id:3},
-    {filterName:'Available Inventory',id:4}
-  ];
-  $scope.SearchTerm=$scope.filters[3].filterName;
-
-  var isInwardTable=false;
-  var isInwardDetailsTable=false;
-  var isInwardTransportTable=false;
-
-  $scope.nextStep = function() {
-    alert("next step:"+$scope.InwardData.hasTransportDetails);
-    if( $scope.InwardData.hasTransportDetails=='No'){
-        // $scope.showModal=true;
-        alert("if");
-        $scope.addInwardDetails();
-      }else if( $scope.InwardData.hasTransportDetails=='Yes'){
-        // $scope.showModal=false;
-         $scope.submitted = false;
-       alert("else");
-        $scope.step=2;
-
-      }
-   }
-
-   $scope.prevStep = function() {
-    $scope.step--;
-  }
-
-  $scope.addInwardDetails=function(){
-    console.log($scope.InwardData);
-    inwardService.inwardEntry($scope,$http,$scope.InwardData);
-      $scope.submitted = false;
-  }
-
-  /***************************************************************************
-  * Purpose- This function will update inward entry into DB
-  * @param1- inwardData (data which needs to be updated)
-  * Return- Success or Failure while updating
-  ****************************************************************************/
-  $scope.updateInwardEntry=function(inwardData){
-
-    inwardData.isInwardTable=isInwardTable;
-    inwardData.isInwardDetailsTable=isInwardDetailsTable;
-    inwardData.isInwardTransportTable=isInwardTransportTable;
-
-    var data={
-      inwardData:inwardData,
-      module:'inward',
-      operation:'update'
-    }
-    var config={
-      params:{
-        data:data
-      }
+        transportMode: "",
+        vehicleNumber: "",
+        transportCost: "",
+        transportRemark: "",
+        transportAgency: "",
+        driver: "",
+        transportPayable: "",
+        inwardMaterials: []
     };
-    console.log("Inward Data to be Updated");
-    console.log(data);
-    $http.post("Inventory/php/InventoryIndex.php", null,config)
-    .success(function (data)
-    {
-       console.log("IN SERVICE OF INWARD=");
-       console.log(data);
-      if(data.msg!=""){
-         doShowAlert("Success",data.msg);
-        setTimeout(function(){
-          window.location.reload(true);
-        },1000);
-      }else if (data.error!="")
-      doShowAlert("Failure",data.error);   
-    })
-    .error(function (data, status, headers)
-    {
-      console.log(data);
+    // $scope.inventoryData={};
+    $scope.material = {};
+    $scope.step = 1;
+    $scope.showModal = false;
+    $scope.submitted = false;
 
-    });
-  }
-  /***************************************************************************
-  * End of update inward entry function
-  ****************************************************************************/
+    $scope.Company = [
+        {companyName: 'Hi-Crete Systems', companyId: 1},
+        {companyName: 'Hi-Tech Flooring', companyId: 2},
+        {companyName: 'Hi-Tech Engineering', companyId: 3}
+    ];
+
+    $scope.warehouses = [
+        {warehouseName: 'Shindewadi', warehouseId: 1},
+        {warehouseName: 'Mangdewadi', warehouseId: 2},
+        {warehouseName: 'Bhilarwadi', warehouseId: 3}
+    ];
+    $scope.transportMode = [
+        {transport: 'Air Transport', transportId: 1},
+        {transport: 'Water Transport', transportId: 2},
+        {transport: 'Road Transport', transportId: 3}
+    ];
+
+    $scope.filters = [
+        {filterName: 'Items', id: 1},
+        {filterName: 'Inward', id: 2},
+        {filterName: 'Outward', id: 3},
+        {filterName: 'Available Inventory', id: 4}
+    ];
+    $scope.SearchTerm = $scope.filters[3].filterName;
+
+    var isInwardTable = false;
+    var isInwardDetailsTable = false;
+    var isInwardTransportTable = false;
+
+    /**********************************
+     Add material fields
+     *******************************/
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.InwardData.inwardMaterials.push({
+
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            });
+        }
+        ;
+    }
+    /**********************************
+     End of Add material fields
+     *******************************/
+    $scope.remove = function (index) {
+
+        $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
+    };
+
+    $scope.nextStep = function () {
+        //alert("next step:"+$scope.InwardData.hasTransportDetails);
+        if ($scope.InwardData.hasTransportDetails == 'No') {
+            // $scope.showModal=true;
+            //alert("if");
+            $scope.addInwardDetails();
+        } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
+            // $scope.showModal=false;
+            $scope.step = 2;
+            $scope.submitted = false;
+            //alert("else");
+
+
+        }
+    }
+
+    $scope.prevStep = function () {
+        $scope.step--;
+    }
+
+    $scope.addInwardDetails = function () {
+        console.log($scope.InwardData);
+        inwardService.inwardEntry($scope, $http, $scope.InwardData);
+        $scope.submitted = false;
+    }
+
+    /***************************************************************************
+     * Purpose- This function will update inward entry into DB
+     * @param1- inwardData (data which needs to be updated)
+     * Return- Success or Failure while updating
+     ****************************************************************************/
+    $scope.updateInwardEntry = function (inwardData) {
+
+        inwardData.isInwardTable = isInwardTable;
+        inwardData.isInwardDetailsTable = isInwardDetailsTable;
+        inwardData.isInwardTransportTable = isInwardTransportTable;
+
+        var data = {
+            inwardData: inwardData,
+            module: 'inward',
+            operation: 'update'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log("Inward Data to be Updated");
+        console.log(data);
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log("IN SERVICE OF INWARD=");
+                console.log(data);
+                if (data.msg != "") {
+                    doShowAlert("Success", data.msg);
+                    setTimeout(function () {
+                        window.location.reload(true);
+                    }, 1000);
+                } else if (data.error != "")
+                    doShowAlert("Failure", data.error);
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+
+            });
+    }
+    /***************************************************************************
+     * End of update inward entry function
+     ****************************************************************************/
 //Get Material from DB
-  // inventoryService.getProductsForInwardandOutward($scope,$http);
+        // inventoryService.getProductsForInwardandOutward($scope,$http);
 
-    //Available Products
-  inventoryService.getProducts($scope, $http);
+        //Available Products
+    inventoryService.getProducts($scope, $http);
 
-  /**********************************************************************************
-  *Setters to set true/false for tables to modify
-  **********************************************************************************/
-  $scope.setInwardTable=function(){
-    isInwardTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setInwardDetailsTable=function(){
-    isInwardDetailsTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setInwardTransport=function(){
-    isInwardTransportTable=true;
-    console.log("IN ng CHANGE");
-  }
-  /**********************************************************************************
-  *End of Setters
-  **********************************************************************************/
+    /**********************************************************************************
+     *Setters to set true/false for tables to modify
+     **********************************************************************************/
+    $scope.setInwardTable = function () {
+        isInwardTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setInwardDetailsTable = function () {
+        isInwardDetailsTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setInwardTransport = function () {
+        isInwardTransportTable = true;
+        console.log("IN ng CHANGE");
+    }
+    /**********************************************************************************
+     *End of Setters
+     **********************************************************************************/
 
 
+    /***********************************************
+     *Start of Clear Fields Function
+     ************************************************/
+    $scope.clearFields = function (InwardData) {
 
-  /***********************************************
-  *Start of Clear Fields Function
-  ************************************************/
-  $scope.clearFields=function(InwardData){
+        InwardData.inwardNumber = "";
+        InwardData.material = "";
+        InwardData.packageUnit = "";
+        InwardData.companyName = "";
+        InwardData.suppplierName = "";
+        InwardData.date = "";
+        InwardData.materialQuantity = "";
+        InwardData.warehouseName = "";
+        InwardData.suppervisor = "";
 
-    InwardData.inwardNumber="";
-    InwardData.material="";  
-    InwardData.packageUnit="";
-    InwardData.companyName="";
-    InwardData.suppplierName="";
-    InwardData.date="";
-    InwardData.materialQuantity="";
-    InwardData.warehouseName="";
-    InwardData.suppervisor="";
+        InwardData.transportMode = "";
+        InwardData.vehicleNumber = "";
+        InwardData.transportCost = "";
+        InwardData.transportRemark = "";
+        InwardData.transportAgency = "";
+        InwardData.driver = "";
+        InwardData.transportPayable = "";
+    };
 
-    InwardData.transportMode="";
-    InwardData.vehicleNumber="";
-    InwardData.transportCost="";
-    InwardData.transportRemark="";
-    InwardData.transportAgency="";
-    InwardData.driver="";
-    InwardData.transportPayable="";
-  };
-
-  /*************************************************
-  *End of Clear Fields Function
-  **************************************************/
+    /*************************************************
+     *End of Clear Fields Function
+     **************************************************/
 
 // inventoryService.getProducts($scope,$http);
 // Get Suppliers From DB 
-$http.post("Inventory/php/supplierSearch.php", null)
-.success(function (data)
-{
- console.log(data);
- $scope.suppliers=data;
- console.log($scope.suppliers);
-})
-.error(function (data, status, headers)
-{
-  console.log(data);
-});
+    $http.post("Inventory/php/supplierSearch.php", null)
+        .success(function (data) {
+            console.log(data);
+            $scope.suppliers = data;
+            console.log($scope.suppliers);
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
+        });
 
 
 });
 
 /***********************************************************************************************************
-* End of Inward Controller
-*
-************************************************************************************************************/
-
+ * End of Inward Controller
+ *
+ ************************************************************************************************************/
 
 
 /***********************************************************************************************************
-* Start of Outward Controlller
-*
-************************************************************************************************************/
+ * Start of Outward Controlller
+ *
+ ************************************************************************************************************/
 
-myApp.controller('outwardController',function($scope,$http,outwardService,inventoryService){
-  $scope.OutwardData={};
-  $scope.material={};
-  $scope.step=1;
+myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService) {
+    $scope.OutwardData = {
+        outwardMaterials: []
+    };
+    $scope.material = {};
+    $scope.step = 1;
     $scope.submitted = false;
-  // $scope.availableMaterials = [];
+    // $scope.availableMaterials = [];
 
-  var isOutwardTable=false;
-  var isOutwardDetailsTable=false;
-  var isOutwardTransportTable=false;
+    var isOutwardTable = false;
+    var isOutwardDetailsTable = false;
+    var isOutwardTransportTable = false;
 
-  $scope.productsToModify=[];
-  $scope.Company=[
-  {companyName:'Hi-Crete Systems',companyId:1},
-  {companyName:'Hi-Tech Flooring',companyId:2},
-  {companyName:'Hi-Tech Engineering',companyId:3}
-  ];
-  $scope.warehouses=[
-  {warehouseName:'Shindewadi',warehouseId:1},
-  {warehouseName:'Mangdewadi',warehouseId:2},
-  {warehouseName:'Bhilarwadi',warehouseId:3}
-  ];
-  $scope.transportMode=[
-    {transport:'Air Transport',transportId:1},
-    {transport:'Water Transport',transportId:2},
-    {transport:'Road Transport',transportId:3}
-  ];
+    $scope.productsToModify = [];
+    $scope.Company = [
+        {companyName: 'Hi-Crete Systems', companyId: 1},
+        {companyName: 'Hi-Tech Flooring', companyId: 2},
+        {companyName: 'Hi-Tech Engineering', companyId: 3}
+    ];
+    $scope.warehouses = [
+        {warehouseName: 'Shindewadi', warehouseId: 1},
+        {warehouseName: 'Mangdewadi', warehouseId: 2},
+        {warehouseName: 'Bhilarwadi', warehouseId: 3}
+    ];
+    $scope.transportMode = [
+        {transport: 'Air Transport', transportId: 1},
+        {transport: 'Water Transport', transportId: 2},
+        {transport: 'Road Transport', transportId: 3}
+    ];
+    //$scope.availableTotalquantity=[];
 //Get Material from DB
-  // inventoryService.getProductsForInwardandOutward($scope,$http);
+    // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-  inventoryService.getProducts($scope, $http);
+    inventoryService.getProducts($scope, $http);
 
-  $scope.getProduct=function(product){
-    $scope.selectedProduct=product;
-  }
-$scope.setAvailableQty=function(pMaterialId){
-  
-  for (var i =0;i<$scope.productsToModify.length;i++ ) {
-      
-      if(pMaterialId==$scope.productsToModify[i].materialid){
-        $scope.availableTotalquantity=$scope.productsToModify[i].totalquantity;
-      }
-  };
-
-}
-
-  /************************************************************
-  * Purpose- This function opens next forms or Modal depends on condition
-  * Return- Nothing
-  *************************************************************/
-  $scope.nextStep = function() {
-    //alert("next step:"+$scope.OutwardData.hasTransportDetails);
-    if( $scope.OutwardData.hasTransportDetails=='No'){
-        // $scope.showModal=true;
-        //alert("if");
-        $scope.addOutwardDetails();
-      }else if( $scope.OutwardData.hasTransportDetails=='Yes'){
-        // $scope.showModal=false;
-         $scope.submitted = false;
-       //alert("else");
-        $scope.step=2;
-
-      }
-   }
-  $scope.prevStep = function() {
-    $scope.step--;
-  }
- /************************************************************
-  * End of NExt and Prev step functions
-  *************************************************************/
-
- /************************************************************
-  * Purpose- This function will addd  Outward Entry
-  * @param1- outward data
-  * Return- success or failure
-  *************************************************************/
-  $scope.addOutwardDetails=function(){
-    console.log($scope.OutwardData);
-   // outwardService.outwardEntry($scope,$http,$OutwardData);
-    var data={
-      outwardData:$scope.OutwardData,
-      module:'outward',
-      operation:'insert'
+    $scope.getProduct = function (product) {
+        $scope.selectedProduct = product;
     }
-    var config={
-      params:{
-        data:data
-      }
+
+
+    $scope.getAvailableQty = function (pMaterialId) {
+        var qty;
+        for (var i = 0; i < $scope.productsToModify.length; i++) {
+
+            if (pMaterialId == $scope.productsToModify[i].materialid) {
+                qty = $scope.productsToModify[i].totalquantity;
+            }
+        }
+        ;
+        return qty;
+    }
+    /**********************************
+     Add material fields
+     *******************************/
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.OutwardData.outwardMaterials.push({
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+            });
+        }
+        ;
+        //$scope.getAvailableQty();
+    }
+    /**********************************
+     End of Add material fields
+     *******************************/
+    $scope.remove = function (index) {
+        $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
     };
-    $http.post("Inventory/php/InventoryIndex.php", null,config)
-    .success(function (data)
-    {
-     console.log("In Post of outward entry success:");
-     console.log(data);
-     $scope.outwardData=data;
-     if(data.msg!=""){
-       doShowAlert("Success",data.msg);
-        $scope.clearFields($scope.OutwardData);
-        $scope.submitted = false;
-         setTimeout(function(){
-          window.location.reload(true);
-        },1000);
-     }else if (data.error!="")
-     doShowAlert("Failure",data.error);   
-    })
-    .error(function (data, status, headers)
-    {
-      console.log(data);
-
-    });
-  }
-  /***********************************************
-  *End of add Outward function
-  *************************************************/
 
 
- /************************************************************
-  * Purpose- This function will update the Outward Entry
-  * @param1- outward entry to modufy
-  * Return- success or failure
-  *************************************************************/
-  $scope.updateOutwardInfo=function(selectedProduct){
-    console.log("Product in Update Info function");
-    //Set Extra attribute in object to identify operation to be performed as update
+    /************************************************************
+     * Purpose- This function opens next forms or Modal depends on condition
+     * Return- Nothing
+     *************************************************************/
+    $scope.nextStep = function () {
+        //alert("next step:"+$scope.OutwardData.hasTransportDetails);
+        if ($scope.OutwardData.hasTransportDetails == 'No') {
+            // $scope.showModal=true;
+            //alert("if");
+            $scope.addOutwardDetails();
+        } else if ($scope.OutwardData.hasTransportDetails == 'Yes') {
+            // $scope.showModal=false;
+            $scope.submitted = false;
+            //alert("else");
+            $scope.step = 2;
 
-    //Check which tables should get affected
-    selectedProduct.isOutwardTable=isOutwardTable;
-    selectedProduct.isOutwardDetailsTable=isOutwardDetailsTable;
-    selectedProduct.isOutwardTransportTable=isOutwardTransportTable;
-    // pUpdatedProduct.isProductMaterialTable=isMaterialTable;
+        }
+    }
+    $scope.prevStep = function () {
+        $scope.step--;
+    }
+    /************************************************************
+     * End of NExt and Prev step functions
+     *************************************************************/
 
-    var data={
-      selectedProduct:selectedProduct,
-      module:'outward',
-      operation:'modify'
+    /************************************************************
+     * Purpose- This function will addd  Outward Entry
+     * @param1- outward data
+     * Return- success or failure
+     *************************************************************/
+    $scope.addOutwardDetails = function () {
+        console.log($scope.OutwardData);
+        // outwardService.outwardEntry($scope,$http,$OutwardData);
+        var data = {
+            outwardData: $scope.OutwardData,
+            module: 'outward',
+            operation: 'insert'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log("Outward Data::" + $scope.OutwardData);
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log("In Post of outward entry success:");
+                console.log(data);
+                $scope.outwardData = data;
+                if (data.msg != "") {
+                    doShowAlert("Success", data.msg);
+                    $scope.clearFields($scope.OutwardData);
+                    $scope.submitted = false;
+                    // setTimeout(function(){
+                    //  window.location.reload(true);
+                    //},1000);
+                } else if (data.error != "")
+                    doShowAlert("Failure", data.error);
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+
+            });
+    }
+    /***********************************************
+     *End of add Outward function
+     *************************************************/
+
+
+    /************************************************************
+     * Purpose- This function will update the Outward Entry
+     * @param1- outward entry to modufy
+     * Return- success or failure
+     *************************************************************/
+    $scope.updateOutwardInfo = function (selectedProduct) {
+        console.log("Product in Update Info function");
+        //Set Extra attribute in object to identify operation to be performed as update
+
+        //Check which tables should get affected
+        selectedProduct.isOutwardTable = isOutwardTable;
+        selectedProduct.isOutwardDetailsTable = isOutwardDetailsTable;
+        selectedProduct.isOutwardTransportTable = isOutwardTransportTable;
+        // pUpdatedProduct.isProductMaterialTable=isMaterialTable;
+
+        var data = {
+            selectedProduct: selectedProduct,
+            module: 'outward',
+            operation: 'modify'
+        };
+        // Create json object
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(data);
+        //call add product service
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log("IN POST Outward UPDATE OPERATION:");
+                console.log(data);
+                doShowAlert("Success", data.msg);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log("IN POST Outward Error in UPDATE OPERATION:");
+                doShowAlert("Failure", data.msg);
+            });
+    }
+    /***********************************************
+     *End of Update Outward function
+     *************************************************/
+
+
+    /***********************************************
+     * STart of clear field controller
+     *************************************************/
+    $scope.clearFields = function (OutwardData) {
+        OutwardData.inwardNumber = "";
+        OutwardData.material = "";
+        OutwardData.packageUnit = "";
+        OutwardData.companyName = "";
+        OutwardData.date = "";
+        OutwardData.materialQuantity = "";
+        OutwardData.warehouseName = "";
+        OutwardData.suppervisor = "";
+
+        OutwardData.transportMode = "";
+        OutwardData.vehicleNumber = "";
+        OutwardData.transportCost = "";
+        OutwardData.transportRemark = "";
+        OutwardData.transportAgency = "";
+        OutwardData.driver = "";
+        OutwardData.transportPayable = "";
     };
-    // Create json object
-    var config={
-      params:{
-        data:data
-      }
-    };
-    console.log(data);
-    //call add product service
-    $http.post("Inventory/php/InventoryIndex.php", null, config)
-    .success(function (data)
-    {
-      console.log("IN POST Outward UPDATE OPERATION:");
-      console.log(data);
-      doShowAlert("Success",data.msg);
-      setTimeout(function(){
-        window.location.reload(true);
-      },1000);
+    /***********************************************
+     * END of clear field controller
+     *************************************************/
 
-    })
-    .error(function (data, status, headers, config)
-    {
-      console.log("IN POST Outward Error in UPDATE OPERATION:");
-      doShowAlert("Failure",data.msg);
-    });
-  }
-  /***********************************************
-  *End of Update Outward function
-  *************************************************/
-
-
-  /***********************************************
-  * STart of clear field controller
-  *************************************************/
-  $scope.clearFields=function(OutwardData){
-    OutwardData.inwardNumber="";
-    OutwardData.material="";  
-    OutwardData.packageUnit="";
-    OutwardData.companyName="";
-    OutwardData.date="";
-    OutwardData.materialQuantity="";
-    OutwardData.warehouseName="";
-    OutwardData.suppervisor="";
-
-    OutwardData.transportMode="";
-    OutwardData.vehicleNumber="";
-    OutwardData.transportCost="";
-    OutwardData.transportRemark="";
-    OutwardData.transportAgency="";
-    OutwardData.driver="";
-    OutwardData.transportPayable="";
-  };
-  /***********************************************
-  * END of clear field controller
-  *************************************************/
-
-  /***************************************************
-  *Setters to set true/false for tables to modify
-  ****************************************************/
-  $scope.setOutwardTable=function(){
-    isOutwardTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setOutwardDetailsTable=function(){
-    isOutwardDetailsTable=true;
-    console.log("IN ng CHANGE");
-  }
-  $scope.setOutwardTransport=function(){
-    isOutwardTransportTable=true;
-    console.log("IN ng CHANGE");
-  }
-  /***************************************************
-  *End of Setters
-  ****************************************************/
+    /***************************************************
+     *Setters to set true/false for tables to modify
+     ****************************************************/
+    $scope.setOutwardTable = function () {
+        isOutwardTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setOutwardDetailsTable = function () {
+        isOutwardDetailsTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setOutwardTransport = function () {
+        isOutwardTransportTable = true;
+        console.log("IN ng CHANGE");
+    }
+    /***************************************************
+     *End of Setters
+     ****************************************************/
 });
 
 /***********************************************************************************************************
-* End of Outward Controller
-*
-************************************************************************************************************/
+ * End of Outward Controller
+ *
+ ************************************************************************************************************/
 
 /***********************************************************************************************************
-* MATERIAL TYPE CONTROLLER
-* Add Material Type to Inventory
-*
-************************************************************************************************************/
+ * MATERIAL TYPE CONTROLLER
+ * Add Material Type to Inventory
+ *
+ ************************************************************************************************************/
 
-myApp.controller('addMaterialType', function($scope,$http,addMaterialTypeService) {
-  $scope.materialType = [];
-  $scope.submitted = false;
+myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
+    $scope.materialType = [];
+    $scope.submitted = false;
 
-  $scope.materialType.push({
-   type:""
-  });
-
-  
-  
-  $scope.submit =function(materialType){
-    console.log($scope.materialType);
-    addMaterialTypeService.addMaterialtype($scope,$http,materialType)
-          //$scope.clear();
-      $scope.submitted = false;
-
-  };
-        $scope.addFields = function () {
-          console.log($scope.noOfMaterials);
-          for (var i = 0; i < $scope.noOfMaterials; i++) {
-           $scope.addField();
-         };
-         $scope.noOfMaterials=""; 
-       };
-
-       $scope.clear =function() {
-        $scope.materialType.splice(0,$scope.materialType.length);
-      };
-
-      $scope.remove= function(index)
-      {
-        $scope.materialType.splice(index,1);
-      };
-
-      $scope.addField= function(){
-
-       $scope.materialType.push({ 
-         type:""
-       });
-     };
-
-     
+    $scope.materialType.push({
+        type: ""
+    });
 
 
-   });
+    $scope.submit = function (materialType) {
+        console.log($scope.materialType);
+        addMaterialTypeService.addMaterialtype($scope, $http, materialType)
+        //$scope.clear();
+        $scope.submitted = false;
+
+    };
+    $scope.addFields = function () {
+        console.log($scope.noOfMaterials);
+        for (var i = 0; i < $scope.noOfMaterials; i++) {
+            $scope.addField();
+        }
+        ;
+        $scope.noOfMaterials = "";
+    };
+
+    $scope.clear = function () {
+        $scope.materialType.splice(0, $scope.materialType.length);
+    };
+
+    $scope.remove = function (index) {
+        $scope.materialType.splice(index, 1);
+    };
+
+    $scope.addField = function () {
+
+        $scope.materialType.push({
+            type: ""
+        });
+    };
+
+
+});
 /*********************************************************************************************
-* End of Material Type Controller
-*********************************************************************************************/
+ * End of Material Type Controller
+ *********************************************************************************************/
 
 
 /***********************************************************************************************
-* START OF SUPPLIER CONTROLLER
-*Add Supplier controller
-**************************************************************************************************/
-myApp.controller('addSupplierController', function($scope, $http ,addSupplierService) {
+ * START OF SUPPLIER CONTROLLER
+ *Add Supplier controller
+ **************************************************************************************************/
+myApp.controller('addSupplierController', function ($scope, $http, addSupplierService) {
 
-	$scope.supplier={
-    supplierName:"",
-    contactNo:"",
-    address:"",
-    city:"",
-    country:"",
-    pinCode:""
+    $scope.supplier = {
+        supplierName: "",
+        contactNo: "",
+        address: "",
+        city: "",
+        country: "",
+        pinCode: ""
 
-  };
-  $scope.messages = [];
-  //for clearing the fields 
-  $scope.clearData=function(supplier,msg){
-    supplier.supplierName="";
-    supplier.contactNo="";
-    supplier.address="";
-    supplier.city="";
-    supplier.country="";
-    supplier.pinCode="";
-    console.log(msg);
-    if(msg=='clear'){
-      $scope.messages[0] = "";
-    }
-  };
+    };
+    $scope.messages = [];
+    //for clearing the fields
+    $scope.clearData = function (supplier, msg) {
+        supplier.supplierName = "";
+        supplier.contactNo = "";
+        supplier.address = "";
+        supplier.city = "";
+        supplier.country = "";
+        supplier.pinCode = "";
+        console.log(msg);
+        if (msg == 'clear') {
+            $scope.messages[0] = "";
+        }
+    };
 
 
-  $scope.submitData=function(supplier){
+    $scope.submitData = function (supplier) {
 
-   console.log(supplier.supplierName);
-   console.log(supplier.contactNo);
-   console.log(supplier.address);
-   console.log(supplier.city);
-   console.log(supplier.country);
-   console.log(supplier.pinCode);
-   
-   addSupplierService.addSupplier($scope, $http ,supplier);
- };
+        console.log(supplier.supplierName);
+        console.log(supplier.contactNo);
+        console.log(supplier.address);
+        console.log(supplier.city);
+        console.log(supplier.country);
+        console.log(supplier.pinCode);
+
+        addSupplierService.addSupplier($scope, $http, supplier);
+    };
 
 
 });
 /*
-* End of Supplier Controller
-*/
+ * End of Supplier Controller
+ */
 
 
 /*********************************************************************************************
-* START of Search Controller
-*********************************************************************************************/
-myApp.controller('SearchController',function($scope, $http,inventoryService){
-      //Pagination variables
-      $scope.submitted = false;
-      $scope.submittedModal = false;
-  $scope.totalItems =0;
-  $scope.currentPage = 1;
-  $scope.InventoryAvailableItemsPerPage = 10;
+ * START of Search Controller
+ *********************************************************************************************/
+myApp.controller('SearchController', function ($scope, $http, inventoryService) {
+    //Pagination variables
+    $scope.submitted = false;
+    $scope.submittedModal = false;
+    $scope.totalItems = 0;
+    $scope.currentPage = 1;
+    $scope.InventoryAvailableItemsPerPage = 10;
 
-  $scope.totalInwardItems =0;
-  $scope.currentInwardPage = 1;
-  $scope.InventoryInwardItemsPerPage = 10;
-  $scope.InwardSearchData=[];
+    $scope.totalInwardItems = 0;
+    $scope.currentInwardPage = 1;
+    $scope.InventoryInwardItemsPerPage = 10;
+    $scope.InwardSearchData = [];
 
-  $scope.totalOutwardItems =0;
-  $scope.currentOutwardPage = 1;
-  $scope.InventoryOutwardItemsPerPage = 10;
-  $scope.OutwardSearchData=[];
+    $scope.totalOutwardItems = 0;
+    $scope.currentOutwardPage = 1;
+    $scope.InventoryOutwardItemsPerPage = 10;
+    $scope.OutwardSearchData = [];
 
-  $scope.inventoryData={};
-  $scope.transportMode=[
-    {transport:'Air Transport',transportId:1},
-    {transport:'Water Transport',transportId:2},
-    {transport:'Road Transport',transportId:3}
-  ];
+    $scope.inventoryData = {};
+    $scope.transportMode = [
+        {transport: 'Air Transport', transportId: 1},
+        {transport: 'Water Transport', transportId: 2},
+        {transport: 'Road Transport', transportId: 3}
+    ];
 
 
-
-  /*************************************************
-  * START of GETTING INVENTORY DATA
-  **************************************************/
-  var data={
-    module:'inventorySearch'
-  }
-  var config={
-    params:{
-      data:data
+    /*************************************************
+     * START of GETTING INVENTORY DATA
+     **************************************************/
+    var data = {
+        module: 'inventorySearch'
     }
-  };
-  $http.post("Inventory/php/InventoryIndex.php", null,config)
-   .success(function (data)
-    {
-     console.log("IN SERVICE OF Inventory Search=");
-     console.log(data);
-     $scope.inventoryData=data;
-      $scope.paginateItemsPerPage=data;
-     $scope.totalItems=$scope.inventoryData.length;
-     console.log($scope.inventoryData);
-    }) 
-    .error(function (data, status, headers)
-    {
-      console.log("IN SERVICE OF Inventory Search Failure=");
-      console.log(data);
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log("IN SERVICE OF Inventory Search=");
+            console.log(data);
+            $scope.inventoryData = data;
+            $scope.paginateItemsPerPage = data;
+            $scope.totalItems = $scope.inventoryData.length;
+            console.log($scope.inventoryData);
+        })
+        .error(function (data, status, headers) {
+            console.log("IN SERVICE OF Inventory Search Failure=");
+            console.log(data);
 
-    });
-    $scope.getViewDataObject=function(product){
-      $scope.viewProduct=product;
+        });
+    $scope.getViewDataObject = function (product) {
+        $scope.viewProduct = product;
     }
 
-  $scope.getDataObjectToModify=function(product){
-    $scope.modifyInwardData-product;
-  }
-  /*************************************************
-  * END of GETTING INVENTORY DATA
-  **************************************************/
-
-  $scope.getProduct=function(product){
-    $scope.selectedProduct=product;
-  }
-  /*************************************************
-  * START of GETTING INWARD DATA
-  **************************************************/
-  var data={
-    module:'inward',
-    operation:'search'
-  }
-  var config={
-    params:{
-      data:data
+    $scope.getDataObjectToModify = function (product) {
+        $scope.modifyInwardData - product;
     }
-  };
+    /*************************************************
+     * END of GETTING INVENTORY DATA
+     **************************************************/
 
-  $http.post("Inventory/php/InventoryIndex.php",null,config)
-  .success(function(data) {
-
-   console.log("IN INWARD Search");
-   $scope.InwardSearchData = data;
-    $scope.totalInwardItems=$scope.InwardSearchData.length;
-   console.log(data);
-  })
-  .error(function (data,status,headers){
-    console.log("IN SERVICE OF Inward Search Failure=");
-    console.log(data);
-
-  });
-  /*************************************************
-  * END of GETTING INWARD DATA
-  **************************************************/
-
-
-  /*************************************************
-  * START of GETTING OUTWARD DATA
-  **************************************************/
-  var data={
-    module:'outward',
-    operation:'search'
-  }
-  var config={
-    params:{
-      data:data
+    $scope.getProduct = function (product) {
+        $scope.selectedProduct = product;
     }
-  };
-  $http.post("Inventory/php/InventoryIndex.php",null,config)
-  .success(function(data) {
+    /*************************************************
+     * START of GETTING INWARD DATA
+     **************************************************/
+    var data = {
+        module: 'inward',
+        operation: 'search'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
 
-   console.log("IN Outward Search");
-   $scope.OutwardSearchData = data;
-    $scope.totalOutwardItems=$scope.OutwardSearchData.length;
-   console.log(data);
-  })
-  .error(function (data,status,headers){
-    console.log("IN SERVICE OF Outward Search Failure=");
-    console.log(data);
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
 
-  });
-  /*************************************************
-  * END of GETTING INWARD DATA
-  **************************************************/
+            console.log("IN INWARD Search");
+            $scope.InwardSearchData = data;
+            $scope.totalInwardItems = $scope.InwardSearchData.length;
+            console.log(data);
+        })
+        .error(function (data, status, headers) {
+            console.log("IN SERVICE OF Inward Search Failure=");
+            console.log(data);
+
+        });
+    /*************************************************
+     * END of GETTING INWARD DATA
+     **************************************************/
+
+
+    /*************************************************
+     * START of GETTING OUTWARD DATA
+     **************************************************/
+    var data = {
+        module: 'outward',
+        operation: 'search'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+
+            console.log("IN Outward Search");
+            $scope.OutwardSearchData = data;
+            $scope.totalOutwardItems = $scope.OutwardSearchData.length;
+            console.log(data);
+        })
+        .error(function (data, status, headers) {
+            console.log("IN SERVICE OF Outward Search Failure=");
+            console.log(data);
+
+        });
+    /*************************************************
+     * END of GETTING INWARD DATA
+     **************************************************/
     /*
-  Start of Pagination Function
-  */
-  $scope.paginate = function(value) {
-            //console.log("In Paginate");
-            var begin, end, index;
-            begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
-            end = begin + $scope.InventoryAvailableItemsPerPage;
-            index = $scope.paginateItemsPerPage.indexOf(value);
-                //console.log(index);
-                return (begin <= index && index < end);
-  };  
-  $scope.paginateInward = function(value) {
-            //console.log("In Paginate");
-            var begin, end, index;
-            begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
-            end = begin + $scope.InventoryInwardItemsPerPage;
-            index = $scope.InwardSearchData.indexOf(value);
-                //console.log(index);
-                return (begin <= index && index < end);
-  };  
-  $scope.paginateOutward = function(value) {
-            //console.log("In Paginate");
-            var begin, end, index;
-            begin = ($scope.currentOutwardPage - 1) * $scope.InventoryOutwardItemsPerPage;
-            end = begin + $scope.InventoryOutwardItemsPerPage;
-            index = $scope.OutwardSearchData.indexOf(value);
-                //console.log(index);
-                return (begin <= index && index < end);
-  }; 
-  /*
-  End of Pagination Function
-  */
+     Start of Pagination Function
+     */
+    $scope.paginate = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
+        end = begin + $scope.InventoryAvailableItemsPerPage;
+        index = $scope.paginateItemsPerPage.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+    $scope.paginateInward = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
+        end = begin + $scope.InventoryInwardItemsPerPage;
+        index = $scope.InwardSearchData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+    $scope.paginateOutward = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentOutwardPage - 1) * $scope.InventoryOutwardItemsPerPage;
+        end = begin + $scope.InventoryOutwardItemsPerPage;
+        index = $scope.OutwardSearchData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+    /*
+     End of Pagination Function
+     */
 
 });
 
 /*********************************************************************************************
-* END of Search Controller
-*********************************************************************************************/
+ * END of Search Controller
+ *********************************************************************************************/
 
 
 /*********************************************************************************************
-* Start of of PRODUCTION BATCH
-*********************************************************************************************/
+ * Start of of PRODUCTION BATCH
+ *********************************************************************************************/
 
-myApp.controller('productionBatchController', function($scope,$filter,$http,ProductionBatchService) {
+myApp.controller('productionBatchController', function ($scope, $filter, $http, ProductionBatchService) {
 
-$(function(){
-                  
-                $(".date").datepicker({format:"dd-mm-yyyy",autoclose:true});
-                        })
+    $(function () {
 
-$scope.today=$filter("date")(Date.now(), 'yyyy-MM-dd');
-$scope.today1=$filter("date")(Date.now(), 'dd-MM-yyyy');
-console.log($scope.today);
-$scope.prodBatchInfo={};
+        $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
+    })
 
-$scope.goBack = function()
-{
+    $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
+    $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
+    console.log($scope.today);
+    $scope.prodBatchInfo = {};
 
-$scope.step--;
-};
- 
-     $http.post("Inventory/php/fetch_materials.php", null)
-        .success(function (data)
-        {
-          //console.log(data);
-          $scope.existingMaterials=data;
-          console.log( $scope.existingMaterials);
-         //$scope.messages.push(data.msg);
-         // $scope.clearData(supplier,'submit'); 
+    $scope.goBack = function () {
+
+        $scope.step--;
+    };
+
+    $http.post("Inventory/php/fetch_materials.php", null)
+        .success(function (data) {
+            //console.log(data);
+            $scope.existingMaterials = data;
+            console.log($scope.existingMaterials);
+            //$scope.messages.push(data.msg);
+            // $scope.clearData(supplier,'submit');
         })
-        .error(function (data, status, headers, config)
-        {
-          console.log("Error calling php");
-          
+        .error(function (data, status, headers, config) {
+            console.log("Error calling php");
+
         });
 
- 
-$scope.prodBatchInfo={
-  batchNo:"",
-  batchCodeName:"",
-  dateOfEntry:$filter("date")(new Date, 'dd-MM-yyyy'),
-  startDate:$filter("date")(new Date, 'dd-MM-yyyy'),
-  endDate:$filter("date")(new Date, 'dd-MM-yyyy'),
-  rawMaterial : [],
-  supervisor:"",
-  prodcdMaterial:"",
-  quantityProdMat:"",
-  dateOfEntryAftrProd:"",
-  pckgdUnits:"",
-  company:"",
-  wareHouse:"",
-  modeOfTransport:"",
-  vehicleNo:"",
-  driver:"",
-  TranspAgency:"",
-  cost:"",
-  tranReq:""
-};
 
-$scope.modProdBatchInfo={
-  batchNo:"",
-  batchCodeName:"",
-  dateOfEntry:$filter("date")(new Date, 'dd-MM-yyyy'),
-  startDate:$filter("date")(new Date, 'dd-MM-yyyy'),
-  endDate:$filter("date")(new Date, 'dd-MM-yyyy'),
-  rawMaterial : [],
-  supervisor:"",
-  prodcdMaterial:"",
-  quantityProdMat:"",
-  dateOfEntryAftrProd:"",
-  pckgdUnits:"",
-  company:"",
-  wareHouse:"",
-  modeOfTransport:"",
-  vehicleNo:"",
-  driver:"",
-  TranspAgency:"",
-  cost:"",
-  tranReq:""
-};
- $scope.prodBatchInfo.rawMaterial.push({ 
-             material:"",
-             quantity:""
-             });
+    $scope.prodBatchInfo = {
+        batchNo: "",
+        batchCodeName: "",
+        dateOfEntry: $filter("date")(new Date, 'dd-MM-yyyy'),
+        startDate: $filter("date")(new Date, 'dd-MM-yyyy'),
+        endDate: $filter("date")(new Date, 'dd-MM-yyyy'),
+        rawMaterial: [],
+        supervisor: "",
+        prodcdMaterial: "",
+        quantityProdMat: "",
+        dateOfEntryAftrProd: "",
+        pckgdUnits: "",
+        company: "",
+        wareHouse: "",
+        modeOfTransport: "",
+        vehicleNo: "",
+        driver: "",
+        TranspAgency: "",
+        cost: "",
+        tranReq: ""
+    };
 
-$scope.step=1;
+    $scope.modProdBatchInfo = {
+        batchNo: "",
+        batchCodeName: "",
+        dateOfEntry: $filter("date")(new Date, 'dd-MM-yyyy'),
+        startDate: $filter("date")(new Date, 'dd-MM-yyyy'),
+        endDate: $filter("date")(new Date, 'dd-MM-yyyy'),
+        rawMaterial: [],
+        supervisor: "",
+        prodcdMaterial: "",
+        quantityProdMat: "",
+        dateOfEntryAftrProd: "",
+        pckgdUnits: "",
+        company: "",
+        wareHouse: "",
+        modeOfTransport: "",
+        vehicleNo: "",
+        driver: "",
+        TranspAgency: "",
+        cost: "",
+        tranReq: ""
+    };
+    $scope.prodBatchInfo.rawMaterial.push({
+        material: "",
+        quantity: ""
+    });
 
- $scope.addFields = function (Option) {
-          var noOfMat="";
-          if(Option=='Add')
-          {
-            noOfMat=$scope.prodBatchInfo.noOfMaterials;
-          }else if(Option=='Modify')
-          {
-            noOfMat=$scope.modProdBatchInfo.noOfMaterials;
-          }
+    $scope.step = 1;
 
-            //console.log($scope.prodBatchInfo.noOfMaterials);
-          for (var i = 0; i < noOfMat; i++) {
-           $scope.addField(Option);
-          }
-           $scope.noOfMaterials=""; 
-        };
+    $scope.addFields = function (Option) {
+        var noOfMat = "";
+        if (Option == 'Add') {
+            noOfMat = $scope.prodBatchInfo.noOfMaterials;
+        } else if (Option == 'Modify') {
+            noOfMat = $scope.modProdBatchInfo.noOfMaterials;
+        }
 
-$scope.reset = function()
-{
-  $scope.step=1;
-}
-$scope.initProd = function(prodBatchInfo,page,message){
+        //console.log($scope.prodBatchInfo.noOfMaterials);
+        for (var i = 0; i < noOfMat; i++) {
+            $scope.addField(Option);
+        }
+        $scope.noOfMaterials = "";
+    };
 
-  console.log(prodBatchInfo.batchNo);
-  console.log(prodBatchInfo.batchCodeName);
-  console.log(prodBatchInfo.dateOfEntry);
-  console.log(prodBatchInfo.startDate);
-  console.log(prodBatchInfo.endDate);
-  console.log(prodBatchInfo.supervisor);
+    $scope.reset = function () {
+        $scope.step = 1;
+    }
+    $scope.initProd = function (prodBatchInfo, page, message) {
 
-  console.log(prodBatchInfo.tranReq);
-  console.log(prodBatchInfo);
-  prodBatchInfo.option=message;
+        console.log(prodBatchInfo.batchNo);
+        console.log(prodBatchInfo.batchCodeName);
+        console.log(prodBatchInfo.dateOfEntry);
+        console.log(prodBatchInfo.startDate);
+        console.log(prodBatchInfo.endDate);
+        console.log(prodBatchInfo.supervisor);
 
-  if(prodBatchInfo.option=='complete' && prodBatchInfo.tranReq !=true)
-  {
-    prodBatchInfo.modeOfTransport="";
-    prodBatchInfo.vehicleNo="";
-    prodBatchInfo.driver="";
-    prodBatchInfo.TranspAgency="";
-    prodBatchInfo.cost="";
-    prodBatchInfo.tranReq="";
-    
-  }
+        console.log(prodBatchInfo.tranReq);
+        console.log(prodBatchInfo);
+        prodBatchInfo.option = message;
 
-  if(message=="ModifyPart")
-  {
-  prodBatchInfo.modeOfTransport="";
-      prodBatchInfo.vehicleNo="";
-      prodBatchInfo.driver="";
-      prodBatchInfo.TranspAgency="";
-      prodBatchInfo.cost="";
-      prodBatchInfo.tranReq="";
-      prodBatchInfo.prodcdMaterial="";
-      prodBatchInfo.quantityProdMat="";
-      prodBatchInfo.dateOfEntryAftrProd="";
-      prodBatchInfo.pckgdUnits="";
-      prodBatchInfo.company="";
-      prodBatchInfo.wareHouse="";
+        if (prodBatchInfo.option == 'complete' && prodBatchInfo.tranReq != true) {
+            prodBatchInfo.modeOfTransport = "";
+            prodBatchInfo.vehicleNo = "";
+            prodBatchInfo.driver = "";
+            prodBatchInfo.TranspAgency = "";
+            prodBatchInfo.cost = "";
+            prodBatchInfo.tranReq = "";
 
-      prodBatchInfo.step=$scope.step;
-      prodBatchInfo.option=message;
-      ProductionBatchService.addProdBatchInfo($scope,$http,prodBatchInfo);
-  }
-  else if(message=='Modify')
-  {
-    console.log(prodBatchInfo);
-    if(page=='final')
-     {
-        prodBatchInfo.step=$scope.step;
-       prodBatchInfo.option=message;
-       ProductionBatchService.addProdBatchInfo($scope,$http,prodBatchInfo);
-     } 
-     else
-     {
-      $scope.step++;
-     }
-  } 
-  else if((prodBatchInfo.endDate <= $filter("date")(Date.now(), 'dd-MM-yyyy') && page=='Raw')||page=='Init')
-  { 
-    $scope.step++;
-  }
-  else if((prodBatchInfo.endDate > $filter("date")(Date.now(), 'dd-MM-yyyy') && page=='Raw') || page=='final')
-  {
-    $scope.prodBatchInfo.step=$scope.step;
-    //$scope.submitPart();
-    console.log("submitting now with step"+$scope.prodBatchInfo.step);
-    ProductionBatchService.addProdBatchInfo($scope,$http,prodBatchInfo);
+        }
 
-  }
-  else if(page=="Search" || page=='Complete')
-  {
-    prodBatchInfo.option=message;
-    prodBatchInfo.step=0;
-    ProductionBatchService.addProdBatchInfo($scope,$http,prodBatchInfo);
-  }
+        if (message == "ModifyPart") {
+            prodBatchInfo.modeOfTransport = "";
+            prodBatchInfo.vehicleNo = "";
+            prodBatchInfo.driver = "";
+            prodBatchInfo.TranspAgency = "";
+            prodBatchInfo.cost = "";
+            prodBatchInfo.tranReq = "";
+            prodBatchInfo.prodcdMaterial = "";
+            prodBatchInfo.quantityProdMat = "";
+            prodBatchInfo.dateOfEntryAftrProd = "";
+            prodBatchInfo.pckgdUnits = "";
+            prodBatchInfo.company = "";
+            prodBatchInfo.wareHouse = "";
+
+            prodBatchInfo.step = $scope.step;
+            prodBatchInfo.option = message;
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+        }
+        else if (message == 'Modify') {
+            console.log(prodBatchInfo);
+            if (page == 'final') {
+                prodBatchInfo.step = $scope.step;
+                prodBatchInfo.option = message;
+                ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            }
+            else {
+                $scope.step++;
+            }
+        }
+        else if ((prodBatchInfo.endDate <= $filter("date")(Date.now(), 'dd-MM-yyyy') && page == 'Raw') || page == 'Init') {
+            $scope.step++;
+        }
+        else if ((prodBatchInfo.endDate > $filter("date")(Date.now(), 'dd-MM-yyyy') && page == 'Raw') || page == 'final') {
+            $scope.prodBatchInfo.step = $scope.step;
+            //$scope.submitPart();
+            console.log("submitting now with step" + $scope.prodBatchInfo.step);
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+
+        }
+        else if (page == "Search" || page == 'Complete') {
+            prodBatchInfo.option = message;
+            prodBatchInfo.step = 0;
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+        }
 
 
-};
-  
-
-  $scope.getProdInfo = function(prodInfo)
-  {
-    console.log(prodInfo);
-    $scope.modProdBatchInfo=prodInfo;
-    //console.log($scope.selectedProdBatchInfo);
-  };
-
-   $scope.clear =function(page)
-   {
-      if(page=='Init')
-      {
-      $scope.prodBatchInfo.batchNo="";
-      $scope.prodBatchInfo.batchCodeName="";
-      $scope.prodBatchInfo.dateOfEntry=$filter("date")(Date.now(), 'dd-MM-yyyy');
-      $scope.prodBatchInfo.startDate="";
-      $scope.prodBatchInfo.endDate="";
-      $scope.prodBatchInfo.supervisor="";
-      }
-      else if (page == 'Raw')
-      {
-        $scope.prodBatchInfo.rawMaterial.splice(0,$scope.prodBatchInfo.rawMaterial.length);
-         $scope.prodBatchInfo.rawMaterial.push({ 
-             material:"",
-             quantity:""
-             });
-
-      }
-      else if( page == 'final')
-      {
-        $scope.prodBatchInfo.prodcdMaterial="";
-        $scope.prodBatchInfo.quantityProdMat="";
-        $scope.prodBatchInfo.dateOfEntryAftrProd=$filter("date")(Date.now(), 'dd-MM-yyyy');
-        $scope.prodBatchInfo.pckgdUnits="";
-        $scope.prodBatchInfo.company="";
-        $scope.prodBatchInfo.wareHouse="";
-        
+    };
 
 
-        $scope.prodBatchInfo.modeOfTransport="";
-        $scope.prodBatchInfo.vehicleNo="";
-        $scope.prodBatchInfo.driver="";
-        $scope.prodBatchInfo.TranspAgency="";
-        $scope.prodBatchInfo.cost="";
+    $scope.getProdInfo = function (prodInfo) {
+        console.log(prodInfo);
+        $scope.modProdBatchInfo = prodInfo;
+        //console.log($scope.selectedProdBatchInfo);
+    };
+
+    $scope.clear = function (page) {
+        if (page == 'Init') {
+            $scope.prodBatchInfo.batchNo = "";
+            $scope.prodBatchInfo.batchCodeName = "";
+            $scope.prodBatchInfo.dateOfEntry = $filter("date")(Date.now(), 'dd-MM-yyyy');
+            $scope.prodBatchInfo.startDate = "";
+            $scope.prodBatchInfo.endDate = "";
+            $scope.prodBatchInfo.supervisor = "";
+        }
+        else if (page == 'Raw') {
+            $scope.prodBatchInfo.rawMaterial.splice(0, $scope.prodBatchInfo.rawMaterial.length);
+            $scope.prodBatchInfo.rawMaterial.push({
+                material: "",
+                quantity: ""
+            });
+
+        }
+        else if (page == 'final') {
+            $scope.prodBatchInfo.prodcdMaterial = "";
+            $scope.prodBatchInfo.quantityProdMat = "";
+            $scope.prodBatchInfo.dateOfEntryAftrProd = $filter("date")(Date.now(), 'dd-MM-yyyy');
+            $scope.prodBatchInfo.pckgdUnits = "";
+            $scope.prodBatchInfo.company = "";
+            $scope.prodBatchInfo.wareHouse = "";
 
 
-      }
-      else
-      {
-        $scope.prodBatchInfo.batchNo="";
-        $scope.prodBatchInfo.batchCodeName="";
-        $scope.prodBatchInfo.dateOfEntry=$filter("date")(Date.now(), 'dd-MM-yyyy');
-        $scope.prodBatchInfo.startDate="";
-        $scope.prodBatchInfo.endDate="";
-        $scope.prodBatchInfo.supervisor="";
-
-        $scope.prodBatchInfo.rawMaterial.splice(0,$scope.prodBatchInfo.rawMaterial.length);
-        $scope.prodBatchInfo.rawMaterial.push({ 
-             material:"",
-             quantity:""
-             });
-
-        $scope.prodBatchInfo.prodcdMaterial="";
-        $scope.prodBatchInfo.quantityProdMat="";
-        $scope.prodBatchInfo.dateOfEntryAftrProd=$filter("date")(Date.now(), 'dd-MM-yyyy');
-        $scope.prodBatchInfo.pckgdUnits="";
-        $scope.prodBatchInfo.company="";
-        $scope.prodBatchInfo.wareHouse="";
-
-        $scope.prodBatchInfo.modeOfTransport="";
-        $scope.prodBatchInfo.vehicleNo="";
-        $scope.prodBatchInfo.driver="";
-        $scope.prodBatchInfo.TranspAgency="";
-        $scope.prodBatchInfo.cost="";
+            $scope.prodBatchInfo.modeOfTransport = "";
+            $scope.prodBatchInfo.vehicleNo = "";
+            $scope.prodBatchInfo.driver = "";
+            $scope.prodBatchInfo.TranspAgency = "";
+            $scope.prodBatchInfo.cost = "";
 
 
+        }
+        else {
+            $scope.prodBatchInfo.batchNo = "";
+            $scope.prodBatchInfo.batchCodeName = "";
+            $scope.prodBatchInfo.dateOfEntry = $filter("date")(Date.now(), 'dd-MM-yyyy');
+            $scope.prodBatchInfo.startDate = "";
+            $scope.prodBatchInfo.endDate = "";
+            $scope.prodBatchInfo.supervisor = "";
 
-      }
+            $scope.prodBatchInfo.rawMaterial.splice(0, $scope.prodBatchInfo.rawMaterial.length);
+            $scope.prodBatchInfo.rawMaterial.push({
+                material: "",
+                quantity: ""
+            });
 
-   };
+            $scope.prodBatchInfo.prodcdMaterial = "";
+            $scope.prodBatchInfo.quantityProdMat = "";
+            $scope.prodBatchInfo.dateOfEntryAftrProd = $filter("date")(Date.now(), 'dd-MM-yyyy');
+            $scope.prodBatchInfo.pckgdUnits = "";
+            $scope.prodBatchInfo.company = "";
+            $scope.prodBatchInfo.wareHouse = "";
+
+            $scope.prodBatchInfo.modeOfTransport = "";
+            $scope.prodBatchInfo.vehicleNo = "";
+            $scope.prodBatchInfo.driver = "";
+            $scope.prodBatchInfo.TranspAgency = "";
+            $scope.prodBatchInfo.cost = "";
 
 
+        }
 
-        $scope.remove= function(index,Option)
-        {
-          if(Option=='Add'){
-          $scope.prodBatchInfo.rawMaterial.splice(index,1);
-          }
-          else if (Option=='Modify')
-          {
-            $scope.modProdBatchInfo.rawMaterial.splice(index,1);
-          }
-        };
+    };
 
-        $scope.addField= function(Option){
-              console.log("Inside function");
-              if(Option=='Add'){
-             $scope.prodBatchInfo.rawMaterial.push({ 
-              material:"",
-             quantity:""
-             });
-              }
-              else if (Option=='Modify')
-              {
-                 $scope.modProdBatchInfo.rawMaterial.push({ 
-                    material:"",
-                   quantity:""
-                   });
-              }
-        };
 
-        $scope.submitPart= function(){
-              console.log($scope.prodBatchInfo.rawMaterial);
+    $scope.remove = function (index, Option) {
+        if (Option == 'Add') {
+            $scope.prodBatchInfo.rawMaterial.splice(index, 1);
+        }
+        else if (Option == 'Modify') {
+            $scope.modProdBatchInfo.rawMaterial.splice(index, 1);
+        }
+    };
 
-        };
+    $scope.addField = function (Option) {
+        console.log("Inside function");
+        if (Option == 'Add') {
+            $scope.prodBatchInfo.rawMaterial.push({
+                material: "",
+                quantity: ""
+            });
+        }
+        else if (Option == 'Modify') {
+            $scope.modProdBatchInfo.rawMaterial.push({
+                material: "",
+                quantity: ""
+            });
+        }
+    };
+
+    $scope.submitPart = function () {
+        console.log($scope.prodBatchInfo.rawMaterial);
+
+    };
 
 });
 
 
 /*********************************************************************************************
-* END of PRODUCTION BATCH
-*********************************************************************************************/
+ * END of PRODUCTION BATCH
+ *********************************************************************************************/
