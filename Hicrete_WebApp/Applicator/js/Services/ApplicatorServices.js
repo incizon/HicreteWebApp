@@ -31,7 +31,7 @@ myApp.service('ApplicatorService',function(){
 	}
 	this.viewApplicatorDetails=function($scope,$http,applicatorDetails){
 
-				applicatorDetails.operation='view';
+				applicatorDetails.operation='viewApplicator';
 				var config = {
 								params: {
 										applicatorDetails: applicatorDetails
@@ -53,6 +53,7 @@ myApp.service('ApplicatorService',function(){
 						});
 
 		};
+
 
 });
 myApp.service('PackageService',function(){

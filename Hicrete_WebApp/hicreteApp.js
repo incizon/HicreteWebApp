@@ -292,8 +292,13 @@ myApp.directive('hicretemodal', function () {
       scope:true,
       link: function postLink(scope, element, attrs) {
         scope.title = attrs.title;
+          $(element).modal({
+              show: false,
+              keyboard: attrs.keyboard,
+              backdrop: attrs.backdrop
+          });
 
-        scope.$watch(attrs.visible, function(value){
+          scope.$watch(attrs.visible, function(value){
           if(value == true)
             $(element).modal('show');
           else

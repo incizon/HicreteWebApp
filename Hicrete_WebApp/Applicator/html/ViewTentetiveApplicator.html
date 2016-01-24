@@ -48,8 +48,10 @@
                                         <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
                                         
                                         <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
-                                                 
+
+
                                         <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+
                                     </td>
                                 </tr>
                             </tbody>
@@ -67,7 +69,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="viewDetails" role="dialog">
+<div class="modal fade" id="viewDetails" role="dialog" data-backdrop="static" keyboard="false">
     <div class="modal-dialog1">                                 
             <!-- Modal content-->
             <div class="modal-content">
@@ -269,7 +271,7 @@
     <!--End of modal dialog-->
 </div>
 <!--End of modal-->
-<div class="modal fade" id="modifyDetails" role="dialog">
+<div class="modal fade" id="modifyDetails" role="dialog" data-backdrop="static" keyboard="false">
     <div class="modal-dialog1">                   
         <!-- Modal content-->
         <div class="modal-content">
@@ -489,7 +491,7 @@
 </div>
 <!--End of modal-->
 
-<div class="modal fade" id="viewPackageDetails" role="dialog">
+<div class="modal fade" id="viewPackageDetails" role="dialog" data-backdrop="static" keyboard="false">
     <div class="modal-dialog">                                 
             <!-- Modal content-->
             <div class="modal-content">
@@ -542,3 +544,5 @@
     </div>
     <!--End of modal dialog-->
 </div>
+
+
