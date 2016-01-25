@@ -30,13 +30,7 @@ $scope.elementDetails=[{
         $scope.applicatorDetails.paymentDate = null;
     };
 
-    $scope.open1 = function() {
-        $scope.popup1.opened = true;
-    };
 
-    $scope.popup1 = {
-        opened: false
-    };
 
 	PackageService.viewPackages($scope,$http,$scope.packageDetails);
 
