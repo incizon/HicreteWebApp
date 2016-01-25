@@ -42,6 +42,7 @@
  		var $lastEnrollmentId;
  		var $lastPaymentId;
  		var $lastFollowupId;
+        var $enrollment_id;
 
  		function __construct($applicatorDetails){
 
@@ -118,7 +119,58 @@
 							}		
 				}
  			
- 			}	
+ 			}
+			if($applicatorDetails->operation=='savePaymentDetails'){
+
+				$this->paymentStatus=$applicatorDetails->paymentStatus;
+				$this->enrollment_id=$applicatorDetails->enrollmentID;
+
+				if($this->paymentStatus=='Full'){
+
+					$this->paymentMode=$applicatorDetails->mode;
+					$this->amountPaid=$applicatorDetails->amountpaid;
+					$this->amountPaidTo=$applicatorDetails->paidto;
+
+					$date1=new DateTime($applicatorDetails->paymentDate);
+					$this->dateOfPayment=$date1->format('Y-m-d');
+
+
+
+					if($this->paymentMode!="cash"){
+
+						$this->bankName=$applicatorDetails->bankname;
+						$this->branchName=$applicatorDetails->branchname;
+						$this->instrumentOfPayment=$applicatorDetails->mode;
+						$this->numberOfInstrument=$applicatorDetails->uniquenumber;
+					}
+
+
+				}
+				if($this->paymentStatus=='Partial'){
+
+					$this->paymentMode=$applicatorDetails->mode;
+					$this->amountPaid=$applicatorDetails->amountpaid;
+					$this->amountPaidTo=$applicatorDetails->paidto;
+
+					$date1=new DateTime($applicatorDetails->paymentDate);
+					$this->dateOfPayment=$date1->format('Y-m-d');
+
+					$date2=new DateTime($applicatorDetails->followupdate);
+					$this->followupDate=$date2->format('Y-m-d');
+
+					$this->followupEmployeeId=$applicatorDetails->followupemployeeId;
+
+					if($this->paymentMode!="cash"){
+
+						$this->bankName=$applicatorDetails->bankname;
+						$this->branchName=$applicatorDetails->branchname;
+						$this->instrumentOfPayment=$applicatorDetails->mode;
+						$this->numberOfInstrument=$applicatorDetails->uniquenumber;
+					}
+
+				}
+
+			}
 
  		}
 
@@ -387,7 +439,164 @@
 			
 			return false;
 		}
+		public function getApplicatorPaymentDetails(){
 
+			global $connect;
+			$response_array=array();
+			$stmt1=$connect->prepare("SELECT * FROM applicator_enrollment
+							JOIN applicator_master ON
+							applicator_enrollment.applicator_master_id=applicator_master.applicator_master_id
+							WHERE applicator_enrollment.payment_status='No' OR applicator_enrollment.payment_status='Partial'");
+
+			if($stmt1->execute()) {
+
+				while ($result1 = $stmt1->fetch()) {
+
+					$applicator=array();
+					$applicator['enrollment_id']=$result1['enrollment_id'];
+					$applicator['applicator_name']=$result1['applicator_name'];
+					$applicator['package_total_amount']=0;
+					$applicator['total_paid_amount']=0;
+
+					$payment_package_id=$result1['payment_package_id'];
+					$stmt2=$connect->prepare("SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id");
+					$stmt2->bindParam(':payment_package_id',$payment_package_id);
+					$stmt2->execute();
+					while ($result2 =$stmt2->fetch(PDO::FETCH_ASSOC))
+					{
+//						        $applicator['elementType'][] = array(
+//								'element_name' => $result2['package_element_name'],
+//								'element_quantity' => $result2['package_element_quantity'],
+//								'element_rate' => $result2['package_element_rate'],
+//								'element_amount' => $result2['package_element_amount']
+//						         );
+						$applicator['package_total_amount']+=$result2['package_element_amount'];
+
+					}
+					$enrollment_id=$result1['enrollment_id'];
+					$stmt3=$connect->prepare("SELECT * FROM applicator_payment_info WHERE enrollment_id=:enrollment_id");
+					$stmt3->bindParam(':enrollment_id',$enrollment_id);
+					$stmt3->execute();
+
+					$affectedRow = $stmt3->rowCount();
+
+					if($affectedRow!=0){
+					while($result3=$stmt3->fetch(PDO::FETCH_ASSOC)){
+
+
+							$applicator['paymentDetails'][] = array(
+								'amount_paid' => $result3['amount_paid'],
+								'date_of_payment' => $result3['date_of_payment'],
+								'paid_to' => $result3['paid_to'],
+								'payment_mode' => $result3['payment_mode']
+						         );
+
+
+						 $applicator['total_paid_amount']+=$result3['amount_paid'];
+
+						}
+					}
+					else{
+
+						$applicator['paymentDetails'][] = array(
+								'amount_paid' => 0,
+								'date_of_payment' => 'Not Available',
+								'paid_to' => 'Not Available',
+								'payment_mode' => 'Not Available'
+						);
+					}
+
+					array_push($response_array, $applicator);
+				}
+				echo json_encode($response_array);
+
+				return true;
+			}
+			return false;
+		}
+
+		public function savePaymentDetails(){
+
+			global $connect;
+
+			$stmt1 = $connect->prepare("UPDATE applicator_enrollment SET payment_status=:paymentStatus WHERE enrollment_id=:enrollment_id");
+			$stmt1->bindParam(':enrollment_id', $this->enrollment_id);
+			$stmt1->bindParam(':paymentStatus', $this->paymentStatus);
+
+
+			$stmt2=$connect->prepare("INSERT INTO applicator_payment_info(enrollment_id,amount_paid,date_of_payment,paid_to,payment_mode,created_by,creation_date)
+	       								VALUES (:enrollment_id,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,'Atul', NOW())");
+
+			$stmt2->bindParam(':enrollment_id',$this->enrollment_id);
+			$stmt2->bindParam(':amountPaid',$this->amountPaid);
+			$stmt2->bindParam(':dateOfPayment', $this->dateOfPayment);
+			$stmt2->bindParam(':amountPaidTo', $this->amountPaidTo);
+			$stmt2->bindParam(':paymentMode', $this->paymentMode);
+
+
+			$stmt3=$connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
+									  VALUES (:followupDate,NOW(),'Ajit','Namdev',NOW(),:enrollment_id)");
+
+			$stmt3->bindParam(':followupDate', $this->followupDate);
+			$stmt3->bindParam(':enrollment_id', $this->enrollment_id);
+
+			$stmt4=$connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
+									  VALUES (:followupDate,NOW(),'Ajit','Namdev',NOW(),:enrollment_id)");
+
+			$stmt4->bindParam(':followupDate', $this->followupDate);
+			$stmt4->bindParam(':enrollment_id', $this->enrollment_id);
+
+			if($this->paymentStatus=='Full') {
+
+                  if($stmt1->execute()){
+
+					  if($stmt2->execute()){
+
+						  $this->lastPaymentId=$connect->lastInsertId();
+
+						  	if($this->paymentMode!='cash'){
+
+								if($this->insertPaymentModeDetails()){
+
+									echo "Updated Successfully";
+
+								}
+							}
+					  }
+				  }
+
+			}
+
+			if($this->paymentStatus=='Partial'){
+
+				if($stmt1->execute()){
+
+					if($stmt2->execute()){
+
+						$this->lastPaymentId=$connect->lastInsertId();
+
+						if($this->paymentMode!='cash'){
+
+							if($this->insertPaymentModeDetails()){
+
+
+							}
+
+						}
+
+						if($stmt4->execute()){
+
+							$this->lastFollowupId=$connect->lastInsertId();
+
+							if($this->insertFollowupEmployeeDetails()){
+
+									echo "Updated Successfully";
+							}
+						}
+					}
+				}
+			}
+		}
 
  	}	
 ?>

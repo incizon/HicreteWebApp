@@ -42,6 +42,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Applicator/html/ViewPermanentApplicator.html',
             controller: 'ViewPermanentApplicatorController'
         })
+        .state('Applicator.updateApplicatorPayment', {
+            url: '/updateApplicator',
+            templateUrl: 'Applicator/html/ApplicatorPayment.html',
+            controller: 'ApplicatorPaymentController'
+        })
         .state('Inventory', {
             url: '/Inventory',
             templateUrl: 'Inventory/html/inventoryWidgets.html',

@@ -54,6 +54,53 @@ myApp.service('ApplicatorService',function(){
 
 		};
 
+	this.getApplicatorPaymentDetails=function($scope,$http,applicatorDetails){
+
+		applicatorDetails.operation='getPaymentDetails';
+		var config = {
+					 params: {
+								applicatorDetails: applicatorDetails
+							}
+					};
+
+		        $http.post("Applicator/php/Applicator.php", null,config)
+
+				.success(function (data, status, headers, config){
+					console.log(data);
+					$scope.Applicators=data;
+
+				})
+
+				.error(function (data, status, headers){
+					console.log(data);
+
+				});
+
+	};
+
+	this.savePaymentDetails=function($scope,$http,applicatorDetails){
+
+		applicatorDetails.operation='savePaymentDetails';
+		var config = {
+			params: {
+				applicatorDetails: applicatorDetails
+			}
+		};
+
+		$http.post("Applicator/php/Applicator.php", null,config)
+
+				.success(function (data, status, headers, config){
+					console.log(data);
+
+
+				})
+
+				.error(function (data, status, headers){
+					console.log(data);
+
+				});
+	}
+
 
 });
 myApp.service('PackageService',function(){
