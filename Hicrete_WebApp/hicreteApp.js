@@ -270,6 +270,27 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
             
         }
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
+
+  $scope.open1 = function() {
+      $scope.popup1.opened = true;
+  };
+
+    $scope.popup1 = {
+        opened: false
+    };
+});
+
+
+myApp.controller('TabController', function () {
+    this.tab = 1;
+
+    this.setTab = function (tabId) {
+        this.tab = tabId;
+    };
+
+    this.isSet = function (tabId) {
+        return this.tab === tabId;
+    };
 });
 
 
