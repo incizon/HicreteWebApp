@@ -928,6 +928,9 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     $scope.getViewDataObject = function (product) {
         $scope.viewProduct = product;
     }
+    $scope.getMaterialObject = function (product) {
+        $scope.viewMaterials = product;
+    }
 
     $scope.getDataObjectToModify = function (product) {
         $scope.modifyInwardData - product;
@@ -942,6 +945,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     /*************************************************
      * START of GETTING INWARD DATA
      **************************************************/
+        $scope.materialDetails=[];
     var data = {
         module: 'inward',
         operation: 'search'
@@ -958,6 +962,20 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
             console.log("IN INWARD Search");
             $scope.InwardSearchData = data;
             $scope.totalInwardItems = $scope.InwardSearchData.length;
+            //for(var index=0;index<$scope.InwardSearchData.length;index++){
+            //    for(var index1=0;index1<$scope.InwardSearchData[index].materialDetails.length;index1++){
+            //
+            //        $scope.materialDetails.push({
+            //            productname:$scope.InwardSearchData[index].materialDetails[index1].productname,
+            //            quantity:$scope.InwardSearchData[index].materialDetails[index1].quantity,
+            //            packagedunits:$scope.InwardSearchData[index].materialDetails[index1].packagedunits,
+            //            suppliername:$scope.InwardSearchData[index].materialDetails[index1].suppliername,
+            //            supplierid:$scope.InwardSearchData[index].materialDetails[index1].supplierid,
+            //            materialid:$scope.InwardSearchData[index].materialDetails[index1].materialid
+            //
+            //        });
+            //    }
+            //}
             console.log(data);
         })
         .error(function (data, status, headers) {

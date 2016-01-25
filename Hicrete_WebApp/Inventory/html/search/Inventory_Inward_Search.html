@@ -17,11 +17,11 @@
                 <thead>                                            
                     <tr>
                         <th width="4%">Inward.No</th>
-                        <th width="14%">ProductName</th>
+                        <th width="14%">TotalMaterialInwards</th>
                         <!-- <th width="13%">Company</th> -->
                         <th width="16%">Company</th>
-                        <th width="16%">Supplier</th>
-                        <th width="10%">Quantity</th>
+                        <th width="16%">Warehouse</th>
+                        <th width="10%">Date</th>
                         <th width="40%">Actions</th>
 
                     </tr>
@@ -29,10 +29,10 @@
                 <tbody>
                     <tr ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
                         <td width="5%">{{product.inwardno}}</td>
-                        <td width="20%">{{product.productname}}</td>
+                        <td width="20%">{{product.materialDetails.length}}</td>
                         <td width="10%">{{product.companyid}}</td>
-                        <td width="15%">{{product.suppliername}}</td>  
-                        <td width="15%">{{product.quantity}}</td>
+                        <td width="15%">{{product.warehouseid}}</td>
+                        <td width="15%">{{product.dateofentry}}</td>
                         <td width="35%">
                             <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                             <div class="modal fade inventoryDetails" id="viewInwardDetails" role="dialog">
@@ -56,21 +56,23 @@
                                                             </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Material :</label>
+                                                        <label class="col-md-4 control-label text-left">Total Material Inwards :</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.productname}}
+                                                                    {{viewProduct.materialDetails.length}}
+                                                                    <button data-target="#viewMaterialDetails" ng-click="getMaterialObject(product.materialDetails)" data-toggle="modal"
+                                                                            class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                                                                 </div>
                                                             </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Quantity :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.quantity}}
-                                                                </div>                       
-                                                            </div>
-                                                    </div>
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Quantity :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.quantity}}-->
+                                                                <!--</div>                       -->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
                                                     <div class="form-group">
                                                         <label class="col-md-4 control-label text-left">Company :</label>
                                                             <div class="col-md-8">
@@ -79,14 +81,14 @@
                                                                 </div>
                                                             </div>
                                                     </div> 
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Supplier :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.suppliername}}
-                                                                </div>
-                                                            </div>
-                                                    </div>
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Supplier :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.suppliername}}-->
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
                                                     <div class="form-group">
                                                         <label class="col-md-4 control-label text-left">Date :</label>
                                                             <div class="col-md-8">
@@ -95,14 +97,14 @@
                                                                 </div>
                                                             </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Package Unit :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.packagedunits}}
-                                                                </div>
-                                                            </div>
-                                                    </div>
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Package Unit :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.packagedunits}}-->
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
                                                     <div class="form-group">
                                                         <label class="col-md-4 control-label text-left">Warehouse :</label>
                                                             <div class="col-md-8">
@@ -110,17 +112,18 @@
                                                                     {{viewProduct.warehouseid}}
                                                                 </div>
                                                             </div>
-                                                    </div>      
-                                                </div>
-                                                <div class="col-md-6">
+                                                    </div>
                                                     <div class="form-group">
                                                         <label class="col-md-4 control-label text-left">Supervisor :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.supervisorid}}
-                                                                </div>
+                                                        <div class="col-md-8">
+                                                            <div class="input-group pt7">
+                                                                {{viewProduct.supervisorid}}
                                                             </div>
+                                                        </div>
                                                     </div>
+                                                </div>
+                                                <div class="col-md-6">
+
                                                     <div class="form-group">
                                                         <label class="col-md-4 control-label text-left">Transport :</label>
                                                             <div class="col-md-8">
@@ -410,4 +413,52 @@
         </div>
     </div>
     <!-- END SEARCH RESULT -->
+
+       <div class="modal fade inventoryDetails" id="viewMaterialDetails" role="dialog">
+           <div class="modal-dialog">
+               <form class="form-horizontal">
+                   <!-- Modal content-->
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal">&times;</button>
+                           <h4 class="modal-title">Material Details of {{product.inwardno}}</h4>
+                       </div>
+                       <div class="modal-body">
+                           <table class="table table-actions">
+                               <thead>
+                               <tr>
+                                   <th>Material</th>
+                                   <th>Quantity</th>
+                                   <th>Packaging Type</th>
+                                   <th>Supplier</th>
+                               </tr>
+                               </thead>
+                               <tr ng-repeat="materials in viewMaterials">
+                                   <td>
+                                       {{materials.productname}}
+                                   </td>
+                                   <td>
+                                       {{materials.quantity}}
+                                   </td>
+                                   <td>
+                                       {{materials.packagedunits}}
+                                   </td>
+                                   <td>
+                                       {{materials.suppliername}}
+                                   </td>
+                               </tr>
+                           </table>
+                       <div class="modal-footer">
+                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                       </div>
+                       <!--End of modal-footer-->
+                   </div>
+                   <!--End of Modal Content-->
+               </form>
+           </div>
+           <!--End of modal dialog-->
+       </div>
+
+
+
 </div>
