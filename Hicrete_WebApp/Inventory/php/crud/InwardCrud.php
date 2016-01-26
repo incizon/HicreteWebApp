@@ -77,7 +77,6 @@ class InwardData extends CommonMethods
             //push it into array
 
             $json_array=array();
-//            array_push($json_array,$stmt->fetchAll());
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $inwardData = array();
                 $inwardID = $result2['inwardid'];
@@ -92,13 +91,22 @@ class InwardData extends CommonMethods
                 $stmtTransport=$dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
                 $stmtTransport->bindParam(':inwardID', $inwardID);
                 if($stmtTransport->execute()){
-                    while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)){
-                        $inwardData['transportationmode']=$resultTransport['transportationmode'];
-                        $inwardData['vehicleno']=$resultTransport['vehicleno'];
-                        $inwardData['drivername']=$resultTransport['drivername'];
-                        $inwardData['transportagency']=$resultTransport['transportagency'];
-                        $inwardData['cost']=$resultTransport['cost'];
-                        $inwardData['remark']=$resultTransport['remark'];
+                    if($stmtTransport->rowCount()==0){
+                        $outwardData['transportationmode']="--";
+                        $outwardData['vehicleno']="--";
+                        $outwardData['drivername']="--";
+                        $outwardData['transportagency']="--";
+                        $outwardData['cost']="--";
+                        $outwardData['remark']="--";
+                    }else {
+                        while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)) {
+                            $inwardData['transportationmode'] = $resultTransport['transportationmode'];
+                            $inwardData['vehicleno'] = $resultTransport['vehicleno'];
+                            $inwardData['drivername'] = $resultTransport['drivername'];
+                            $inwardData['transportagency'] = $resultTransport['transportagency'];
+                            $inwardData['cost'] = $resultTransport['cost'];
+                            $inwardData['remark'] = $resultTransport['remark'];
+                        }
                     }
 
                 }

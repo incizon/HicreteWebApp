@@ -10,12 +10,12 @@
             <table class="table table-actions table-striped">
                 <thead>                                            
                   <tr>
-                        <th width="4%">Sr.No</th>
-                        <th width="14%">ProductName</th>
+                        <th width="4%">Outward .No</th>
+                        <th width="14%">TotalMaterialOutwards</th>
                         <!-- <th width="13%">Company</th> -->
                         <th width="16%">Company</th>
                         <th width="16%">Warehouse</th>
-                        <th width="10%">Quantity</th>
+                        <th width="10%">Date</th>
                         <th width="40%">Actions</th>
 
                     </tr>
@@ -23,10 +23,10 @@
                 <tbody>
                     <tr ng-repeat="product in OutwardSearchData |filter:paginateOutward | filter:keywords | orderBy:'productname'">
                         <td width="5%">{{product.outwardno}}</td>
-                        <td width="20%">{{product.productname}}</td>
+                        <td width="20%">{{product.materialDetails.length}}</td>
                         <td width="10%">{{product.companyid}}</td>
                         <td width="15%">{{product.warehouseid}}</td>  
-                        <td width="15%">{{product.quantity}}</td>
+                        <td width="15%">{{product.dateofentry}}</td>
                         <td width="35%">
                             <button data-target="#viewOutwardDetails" ng-click="getProduct(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                             <div class="modal fade inventoryDetails" id="viewOutwardDetails" role="dialog">
@@ -43,25 +43,27 @@
                                             <div class="row">
                                                 <div class="col-md-6 padRight">
                                                     <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Product Name :</label>
+                                                        <label class="col-md-4 control-label text-left">Outward Number :</label>
                                                             <div class="col-md-8">                       
                                                                 <label class="col-md-4 control-label text-left">
-                                                                    {{selectedProduct.productname}}
+                                                                    {{selectedProduct.outwardno}}
                                                                 </label>                                         
                                                             </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Unit Of Measure :</label>
-                                                            <div class="col-md-8">                       
-                                                                <label class="col-md-4 control-label text-left">{{selectedProduct.unitofmeasure}}
-                                                                </label>                                            
-                                                            </div>
-                                                    </div>
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Unit Of Measure :</label>-->
+                                                            <!--<div class="col-md-8">                       -->
+                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.unitofmeasure}}-->
+                                                                <!--</label>                                            -->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Quantity :</label>
-                                                            <div class="col-md-8">                       
-                                                                <label class="col-md-4 control-label text-left">{{selectedProduct.quantity}}
-                                                                </label>                                            
+                                                        <label class="col-md-4 control-label text-left">Total Materials Outward :</label>
+                                                            <div class="col-md-8">
+                                                                <label class="col-md-4 control-label text-left">{{selectedProduct.materialDetails.length}}
+                                                                </label>
+                                                                <button data-target="#viewOutwardMaterialDetails" ng-click="getMaterialObject(selectedProduct.materialDetails)" data-toggle="modal"
+                                                                        class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                                                             </div>
                                                     </div>
                                                     <div class="form-group">
@@ -78,13 +80,20 @@
                                                                 </label>                                            
                                                             </div>
                                                     </div>
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Packaging :</label>-->
+                                                            <!--<div class="col-md-8">                       -->
+                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.packagedunits}}-->
+                                                                <!--</label>                                            -->
+                                                            <!--</div>-->
+                                                    <!--</div>    -->
                                                     <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Packaging :</label>
-                                                            <div class="col-md-8">                       
-                                                                <label class="col-md-4 control-label text-left">{{selectedProduct.packagedunits}}
-                                                                </label>                                            
-                                                            </div>
-                                                    </div>    
+                                                        <label class="col-md-4 control-label text-left">Remark :</label>
+                                                        <div class="col-md-8">
+                                                            <label class="col-md-4 control-label text-left">{{selectedProduct.remark}}
+                                                            </label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -122,13 +131,7 @@
                                                                 </label>                                            
                                                             </div>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Remark :</label>
-                                                            <div class="col-md-8">                       
-                                                                <label class="col-md-4 control-label text-left">{{selectedProduct.remark}}
-                                                                </label>                                            
-                                                            </div>
-                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
@@ -370,4 +373,46 @@
         </div>
     </div>
     <!-- END SEARCH RESULT -->
+       <div class="modal fade inventoryDetails" id="viewOutwardMaterialDetails" role="dialog">
+           <div class="modal-dialog">
+               <form class="form-horizontal">
+                   <!-- Modal content-->
+                   <div class="modal-content">
+                       <div class="modal-header">
+                           <button type="button" class="close" data-dismiss="modal">&times;</button>
+                           <h4 class="modal-title">Material Details of {{viewMaterials.outwardno}}</h4>
+                       </div>
+                       <div class="modal-body">
+                           <table class="table table-actions">
+                               <thead>
+                               <tr>
+                                   <th>Material</th>
+                                   <th>Quantity</th>
+                                   <th>Packaging Type</th>
+                               </tr>
+                               </thead>
+                               <tr ng-repeat="materials in viewMaterials">
+                                   <td>
+                                       {{materials.productname}}
+                                   </td>
+                                   <td>
+                                       {{materials.quantity}}
+                                   </td>
+                                   <td>
+                                       {{materials.packagedunits}}
+                                   </td>
+
+                               </tr>
+                           </table>
+                           <div class="modal-footer">
+                               <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                           </div>
+                           <!--End of modal-footer-->
+                       </div>
+                       <!--End of Modal Content-->
+                       </div>
+               </form>
+           </div>
+           <!--End of modal dialog-->
+       </div>
 </div>
