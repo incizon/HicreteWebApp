@@ -926,10 +926,12 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
         });
     $scope.getViewDataObject = function (product) {
+        console.log(product);
         $scope.viewProduct = product;
     }
     $scope.getMaterialObject = function (product) {
         $scope.viewMaterials = product;
+        console.log($scope.viewMaterials);
     }
 
     $scope.getDataObjectToModify = function (product) {
@@ -962,20 +964,6 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
             console.log("IN INWARD Search");
             $scope.InwardSearchData = data;
             $scope.totalInwardItems = $scope.InwardSearchData.length;
-            //for(var index=0;index<$scope.InwardSearchData.length;index++){
-            //    for(var index1=0;index1<$scope.InwardSearchData[index].materialDetails.length;index1++){
-            //
-            //        $scope.materialDetails.push({
-            //            productname:$scope.InwardSearchData[index].materialDetails[index1].productname,
-            //            quantity:$scope.InwardSearchData[index].materialDetails[index1].quantity,
-            //            packagedunits:$scope.InwardSearchData[index].materialDetails[index1].packagedunits,
-            //            suppliername:$scope.InwardSearchData[index].materialDetails[index1].suppliername,
-            //            supplierid:$scope.InwardSearchData[index].materialDetails[index1].supplierid,
-            //            materialid:$scope.InwardSearchData[index].materialDetails[index1].materialid
-            //
-            //        });
-            //    }
-            //}
             console.log(data);
         })
         .error(function (data, status, headers) {

@@ -42,7 +42,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Inward Details of {{product.inwardno}}</h4>
+                                            <h4 class="modal-title">Inward Details of {{viewProduct.inwardno}}</h4>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
@@ -60,7 +60,7 @@
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
                                                                     {{viewProduct.materialDetails.length}}
-                                                                    <button data-target="#viewMaterialDetails" ng-click="getMaterialObject(product.materialDetails)" data-toggle="modal"
+                                                                    <button data-target="#viewMaterialDetails" ng-click="getMaterialObject(viewProduct.materialDetails)" data-toggle="modal"
                                                                             class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                                                                 </div>
                                                             </div>
@@ -421,7 +421,7 @@
                    <div class="modal-content">
                        <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                           <h4 class="modal-title">Material Details of {{product.inwardno}}</h4>
+                           <h4 class="modal-title">Material Details of {{viewMaterials.inwardno}}</h4>
                        </div>
                        <div class="modal-body">
                            <table class="table table-actions">
