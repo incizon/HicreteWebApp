@@ -250,53 +250,16 @@ if(!$userObj->init($userId)){
             <li class="xn-icon-button pull-right">
                 <a href="#" class="notify1"></span>Request for access</a>
                 <div class="informer informer-warning">3</div>
-                <!--<div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><span class="fa fa-comments"></span> Messages</h3>
-                        <div class="pull-right">
-                            <span class="label label-danger">4 new</span>
-                        </div>
-                    </div>
-                    <div class="panel-body list-group list-group-contacts scroll" style="height: 200px;">
-                        <a href="#" class="list-group-item">
-                            <div class="list-group-status status-online"></div>
-                            <img src="assets/images/users/user2.jpg" class="pull-left" alt="John Doe"/>
-                            <span class="contacts-title">John Doe</span>
-                            <p>Praesent placerat tellus id augue condimentum</p>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class="list-group-status status-away"></div>
-                            <img src="assets/images/users/user.jpg" class="pull-left" alt="Dmitry Ivaniuk"/>
-                            <span class="contacts-title">Dmitry Ivaniuk</span>
-                            <p>Donec risus sapien, sagittis et magna quis</p>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class="list-group-status status-away"></div>
-                            <img src="assets/images/users/user3.jpg" class="pull-left" alt="Nadia Ali"/>
-                            <span class="contacts-title">Nadia Ali</span>
-                            <p>Mauris vel eros ut nunc rhoncus cursus sed</p>
-                        </a>
-                        <a href="#" class="list-group-item">
-                            <div class="list-group-status status-offline"></div>
-                            <img src="assets/images/users/user6.jpg" class="pull-left" alt="Darth Vader"/>
-                            <span class="contacts-title">Darth Vader</span>
-                            <p>I want my money back!</p>
-                        </a>
-                    </div>
-                    <div class="panel-footer text-center">
-                        <a href="pages-messages.html">Show all messages</a>
-                    </div>
-                </div>-->
             </li>
             <!-- END REQUEST FOR ACCESS -->
 
-            <!-- REQUEST FOR ACCESS -->
+            <!-- GENERAL NOTIFICATIONS -->
             <li class="xn-icon-button pull-right">
                 <a href="#" class="notify1"></span>General Notifications</a>
                 <div class="informer informer-warning">4</div>
             </li>
-            <!-- END REQUEST FOR ACCESS -->
-            <!-- TASKS -->
+            <!-- END GENERAL NOTIFICATIONS -->
+            <!-- FOLLOW UPS -->
             <li class="xn-icon-button pull-right">
                 <a href="#" class="notify2"></span>Follow ups</a>
                 <div class="informer informer-warning">7</div>
@@ -311,7 +274,7 @@ if(!$userObj->init($userId)){
                     </div>
                 </div>
             </li>
-            <!-- END TASKS -->
+            <!-- END FOLLOW UPS-->
 
         </ul>
         <!-- END X-NAVIGATION VERTICAL -->
