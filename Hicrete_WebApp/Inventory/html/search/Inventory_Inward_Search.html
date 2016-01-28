@@ -30,8 +30,8 @@
                     <tr ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
                         <td width="5%">{{product.inwardno}}</td>
                         <td width="20%">{{product.materialDetails.length}}</td>
-                        <td width="10%">{{product.companyid}}</td>
-                        <td width="15%">{{product.warehouseid}}</td>
+                        <td width="10%">{{product.companyName}}</td>
+                        <td width="15%">{{product.warehouseName}}</td>
                         <td width="15%">{{product.dateofentry}}</td>
                         <td width="35%">
                             <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
@@ -77,7 +77,7 @@
                                                         <label class="col-md-4 control-label text-left">Company :</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.companyid}}
+                                                                    {{viewProduct.companyName}}
                                                                 </div>
                                                             </div>
                                                     </div> 
@@ -109,7 +109,7 @@
                                                         <label class="col-md-4 control-label text-left">Warehouse :</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.warehouseid}}
+                                                                    {{viewProduct.warehouseName}}
                                                                 </div>
                                                             </div>
                                                     </div>

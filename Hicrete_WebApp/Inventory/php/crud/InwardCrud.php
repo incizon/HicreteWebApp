@@ -1,5 +1,6 @@
 <?php
 require_once 'utils/Common_Methods.php';
+require_once 'utils/DatabaseCommonOperations.php';
 
 /*
 *Inward Data class- CRUD operation on inward entry
@@ -69,7 +70,7 @@ class InwardData extends CommonMethods
      * @param1- $dbh connection object
      * Returns- inward entries
      ***********************************************************************************/
-    public function getInwardEntries($dbh)
+    public function getInwardEntries($dbh,$dbhHicrete)
     {
         $stmt = $dbh->prepare("SELECT * FROM inward");
         if ($stmt->execute()) {
@@ -86,11 +87,15 @@ class InwardData extends CommonMethods
                 $inwardData['companyid']=$result2['companyid'];
                 $inwardData['supervisorid']=$result2['supervisorid'];
                 $inwardData['dateofentry']=$result2['dateofentry'];
+                $warehouseId=$result2['warehouseid'];
+                $companyId=$result2['companyid'];
+                $inwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                $inwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 
-//                $stmtCompany=$dbh->prepare("SELECT * FROM inward");
                 $stmtTransport=$dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
                 $stmtTransport->bindParam(':inwardID', $inwardID);
                 if($stmtTransport->execute()){
+
                     if($stmtTransport->rowCount()==0){
                         $outwardData['transportationmode']="--";
                         $outwardData['vehicleno']="--";

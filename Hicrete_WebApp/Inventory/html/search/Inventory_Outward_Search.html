@@ -24,8 +24,8 @@
                     <tr ng-repeat="product in OutwardSearchData |filter:paginateOutward | filter:keywords | orderBy:'productname'">
                         <td width="5%">{{product.outwardno}}</td>
                         <td width="20%">{{product.materialDetails.length}}</td>
-                        <td width="10%">{{product.companyid}}</td>
-                        <td width="15%">{{product.warehouseid}}</td>  
+                        <td width="10%">{{product.companyName}}</td>
+                        <td width="15%">{{product.warehouseName}}</td>
                         <td width="15%">{{product.dateofentry}}</td>
                         <td width="35%">
                             <button data-target="#viewOutwardDetails" ng-click="getProduct(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>

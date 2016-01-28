@@ -229,9 +229,9 @@ myApp.service('inwardService', function () {
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     $scope.clearFields(inwardData);
-                    //setTimeout(function(){
-                    //  window.location.reload(true);
-                    //},1000);
+                    setTimeout(function(){
+                        window.location.reload(true);
+                    },1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
             })

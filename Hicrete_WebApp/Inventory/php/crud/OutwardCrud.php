@@ -1,5 +1,6 @@
 <?php
 require_once 'utils/Common_Methods.php';
+require_once 'utils/DatabaseCommonOperations.php';
 
 class OutwardData extends CommonMethods
 {
@@ -63,23 +64,6 @@ class OutwardData extends CommonMethods
 
     public function getOutwardEntries($dbh)
     {
-//        $stmt = $dbh->prepare("SELECT * FROM Outward
-//            JOIN Outward_details ON
-//            Outward.outwardid=Outward_details.outwardid
-//            JOIN Outward_transportation_details ON
-//            Outward_details.outwardid=Outward_transportation_details.outwardid
-//            JOIN material ON
-//            material.materialid=Outward_details.materialid
-//            JOIN product_master ON
-//            material.productmasterid=product_master.productmasterid
-//            ");
-//
-//        if ($stmt->execute()) {
-//            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-//            $result = $stmt->fetchAll();
-//            $json = json_encode($result);
-//            echo $json;
-//        }
 
 
         $stmt = $dbh->prepare("SELECT * FROM Outward");
@@ -95,6 +79,11 @@ class OutwardData extends CommonMethods
                 $outwardData['companyid']=$result2['companyid'];
                 $outwardData['supervisorid']=$result2['supervisorid'];
                 $outwardData['dateofentry']=$result2['dateofentry'];
+
+                $companyId=$result2['companyid'];
+                $warehouseId=$result2['warehouseid'];;
+                $outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 
                 $stmtTransport=$dbh->prepare("SELECT * FROM Outward_transportation_details WHERE outwardid=:outwardID");
                 $stmtTransport->bindParam(':outwardID', $outwardID);
