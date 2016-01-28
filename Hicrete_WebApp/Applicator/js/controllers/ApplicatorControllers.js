@@ -1,3 +1,16 @@
+/*
+
+    ApplicatorController:
+                          1. Create applicator.
+                             Methods
+                             1.viewPackages() :- To view Package details while creation of applicator.
+                             2.getPackageDetails :-Get Details of selected package.
+                             3.getPendingAmount :-Return pending amount of applicator.
+                             4.checkPaymentStatus :- return true or false depending on payment status i.e full/partial/no
+                             5.processForm :- Process the applicatorDetails and call service to submit details to server.
+                             6.processFollowUp :- Process the applicator follow up details  and call service to submit details to server.
+ */
+
 myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,PackageService){
 
 $scope.step=1;
@@ -118,46 +131,47 @@ $scope.elementDetails=[{
         			
         			console.log("Full Amount Paid ");
         			applicatorDetails.operation='createApplicator';
-        			applicatorDetails.paymentStatus='Full';
-        			//console.log(applicatorDetails);
+        			applicatorDetails.paymentStatus='Yes';
+        			console.log(applicatorDetails);
 					   
-              ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);	
+                    //applicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         		}
-        		if($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes'){
+        		if(($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes')||($scope.applicatorDetails.received=='No')){
         			 $scope.showModal = true;
         			 console.log("Half Amount Paid");
         			 
         		}
-        		if($scope.applicatorDetails.received=='No'){
-        			$scope.showModal = true;
-        			console.log("No Amount paid");
-        			
-        		}
+        		//if($scope.applicatorDetails.received=='No'){
+        		//	$scope.showModal = true;
+        		//	console.log("No Amount paid");
+        		//
+        		//}
 
 
         };
     $scope.processFollowup=function(applicatorDetails){
       
-        	
-        	if($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes'){
-        		console.log("in pending amount function call");	
-        		applicatorDetails.operation='createApplicator';
-        		applicatorDetails.paymentStatus="Partial";
-        		ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
-        	   
-          }
-        	if($scope.applicatorDetails.received=='No'){
 
         		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="No";
-        		 
-            ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
-        	}	
-        } 		
+                console.log(applicatorDetails);
+        //applicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
+
+        };
 
 
 
 });
+/*
+    PackageController :-
+                        1.Create Package
+                        Methods
+                        1.add :- to add no of element in package.
+                        2.remove :- to remove particular element from package details.
+                        3.clearFields :-To clear fields form.
+                        4.addField :- Push the element in elementType array in packageDetails.
+                        5.processPackage :- Process The package Details.and call service to submit package details to create it.
+ */
 myApp.controller('PackageController',function($scope,$http,PackageService){
 
     $scope.packageDetails={
@@ -229,22 +243,55 @@ myApp.controller('PackageController',function($scope,$http,PackageService){
     };
 
 });
+/*
+      View PackageController :-
+                            1. View Available Packages
+                            Methods
+                            1.paginatePackage :-Do pagination of total packages.
+                            2.ViewPackages    :-View Total available packages.
+
+
+ */
 myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
   
-  $scope.oneAtATime = true;
-  $scope.packages = [];
+    $scope.oneAtATime = true;
+    $scope.packages = [];
 
-   $scope.packageDetails={
+    $scope.totalPackages =0;
+    $scope.packagePerPage=5;
+    $scope.currentPackagePage = 1;
+
+
+    $scope.packageDetails={
     operation :""
    };
-  
-    
+
+
    PackageService.viewPackages($scope,$http,$scope.packageDetails);
-    
-  
-  
+
+    $scope.paginatePackage = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPackagePage - 1) * $scope.packagePerPage;
+        end = begin + $scope.packagePerPage;
+        index = $scope.packages.indexOf(value);
+       
+        return (begin <= index && index < end);
+    };
+
+
+
 });
 
+/*
+    ViewTentetiveApplicatorController :
+                                         View Tentative Applicators
+                                           Methods
+                                          1. ViewApplicatorDetails :- View all tentative applicators details.
+                                          2. ApplicatorSelected :- View Details of selected applicator in modal.
+                                          3. applicatorToModify  :- To modify applicator general information.
+
+ */
 myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,ApplicatorService){
 
 
@@ -293,6 +340,15 @@ myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,Appli
         };
 
 });
+/*
+    ViewPermanentApplicatorController :
+                                View Permanent Applicators
+                                Methods
+                                1. ViewApplicatorDetails :- View all permanent applicators details.
+                                2. ApplicatorSelected :- View Details of selected applicator in modal.
+                                3. applicatorToModify  :- To modify applicator general information.
+
+ */
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,ApplicatorService){
 
     $scope.Applicators=[];
@@ -346,6 +402,17 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,Appli
 
 });
 
+/*
+            ApplicatorPaymentController:
+                                        To Update Payment of tentative applicators.
+                                        Methods
+                                        1.getApplicatorPaymentDetails :- get details of applicator previous payment details.
+                                        2.applicatorPaymentDetails :-calculate remaining amount and view payment details of particular applicator.
+                                        3.getPendingAmount :- calculate pending amount if payment is partial done.
+                                        4.submitPaymentDetails :- Process payment details and call service to submit details to server.
+                                        5.processFollowup :- Process follow up if partial payment is done and call service to submit details to server.
+
+ */
 myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService){
 
     $scope.applicatorDetails={
@@ -396,11 +463,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
 
     }
 
-    $scope.viewPaymentDetails=function(){
 
-
-
-    };
     $scope.getPendingAmount=function(){
         console.log("In Pending amount function");
         $scope.applicatorDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.applicatorDetails.amountpaid)-$scope.previousAmountPaid;
@@ -426,44 +489,3 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
         ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
     }
 });
-// myApp.directive('modal', function () {
-//     return {
-//       template: '<div class="modal fade">' + 
-//           '<div class="modal-dialog">' + 
-//             '<div class="modal-content">' + 
-//               '<div class="modal-header">' + 
-//                 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-//                 '<h4 class="modal-title">Schedule Followup</h4>' + 
-//               '</div>' + 
-//               '<div class="modal-body" ng-transclude></div>' +
-//             '</div>' + 
-//           '</div>' + 
-//         '</div>',
-//       restrict: 'E',
-//       transclude: true,
-//       replace:true,
-//       scope:true,
-//       link: function postLink(scope, element, attrs) {
-//         scope.title = attrs.title;
-
-//         scope.$watch(attrs.visible, function(value){
-//           if(value == true)
-//             $(element).modal('show');
-//           else
-//             $(element).modal('hide');
-//         });
-
-//         $(element).on('shown.bs.modal', function(){
-//           scope.$apply(function(){
-//             scope.$parent[attrs.visible] = true;
-//           });
-//         });
-
-//         $(element).on('hidden.bs.modal', function(){
-//           scope.$apply(function(){
-//             scope.$parent[attrs.visible] = false;
-//           });
-//         });
-//       }
-//     };
-//   });

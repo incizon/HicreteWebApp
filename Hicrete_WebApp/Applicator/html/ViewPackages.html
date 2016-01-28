@@ -2,7 +2,7 @@
              <div class="col-md-12">
 			 
 		<uib-accordion>
-			<uib-accordion-group heading="Package Name :{{package.package_name}} Package Description:{{package.package_description}}" ng-repeat="package in packages">
+			<uib-accordion-group heading="Package Name :{{package.package_name}} Package Description:{{package.package_description}}" ng-repeat="package in packages |  filter :paginatePackage">
 				<table class="table table-actions table-striped">
 					<thead>                                            
                             <tr>
@@ -23,19 +23,16 @@
 						<td width="10%">{{Element['element_amount']}}</td>
 						
 					</tr>
-					<b>	Package Total Amount :{{package.package_total_amount}}</b>					
+					<b>	Package Total Amount :{{package.package_total_amount}}</b>
+
 					</tbody>
-					<ul class="pagination pagination-sm pull-right push-down-20">
-										<li class="disabled"><a href="#">«</a></li>
-										<li class="active"><a href="#">1</a></li>
-										<li><a href="#">2</a></li>
-										<li><a href="#">3</a></li>
-										<li><a href="#">4</a></li>                                    
-										<li><a href="#">»</a></li>
-				 </ul>
+
 				</table>
 			</uib-accordion-group>   
 		</uib-accordion>
-				 
-		</div>                        
-</div>		 
+				 <uib-pagination total-items="totalPackages" ng-model="currentPackagePage"
+								 max-size="5" boundary-links="true"
+								 items-per-page="packagePerPage" class="pagination-sm">
+				 </uib-pagination>
+			 </div>
+</div>

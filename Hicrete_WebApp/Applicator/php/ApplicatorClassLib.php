@@ -392,8 +392,9 @@
 						$applicator['enrollment_id']=$result1['enrollment_id'];
 						$applicator['company_id']=$result1['company_id'];
 					    $applicator['package_total_amount']=0;
+						$applicator['total_paid_amount']=0;
 
-					$payment_package_id=$result1['payment_package_id'];
+						$payment_package_id=$result1['payment_package_id'];
 					$stmt2=$connect->prepare("SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id");
 					$stmt2->bindParam(':payment_package_id',$payment_package_id);
 					$stmt2->execute();
@@ -414,11 +415,33 @@
 					$stmt3->bindParam(':enrollment_id',$enrollment_id);
 					$stmt3->execute();
 
-					$result3=$stmt3->fetch(PDO::FETCH_ASSOC);
-					$applicator['amount_paid']=$result3['amount_paid'];
-					$applicator['date_of_payment']=$result3['date_of_payment'];
-					$applicator['paid_to']=$result3['paid_to'];
-					$applicator['payment_mode']=$result3['payment_mode'];
+					$affectedRow = $stmt3->rowCount();
+
+					if($affectedRow!=0){
+						while($result3=$stmt3->fetch(PDO::FETCH_ASSOC)){
+
+
+							$applicator['paymentDetails'][] = array(
+									'amount_paid' => $result3['amount_paid'],
+									'date_of_payment' => $result3['date_of_payment'],
+									'paid_to' => $result3['paid_to'],
+									'payment_mode' => $result3['payment_mode']
+							);
+
+
+							$applicator['total_paid_amount']+=$result3['amount_paid'];
+
+						}
+					}
+					else{
+
+						$applicator['paymentDetails'][] = array(
+								'amount_paid' => 0,
+								'date_of_payment' => 'Not Available',
+								'paid_to' => 'Not Available',
+								'payment_mode' => 'Not Available'
+						);
+					}
 
 					if($toSearch=='tentetive'){
 			        	$stmt4=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");

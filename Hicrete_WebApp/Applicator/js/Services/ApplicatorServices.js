@@ -91,7 +91,9 @@ myApp.service('ApplicatorService',function(){
 
 				.success(function (data, status, headers, config){
 					console.log(data);
-
+					setTimeout(function(){
+						window.location.reload(true);
+					},2000);
 
 				})
 
@@ -148,7 +150,7 @@ myApp.service('PackageService',function(){
 
 							console.log(data);
 							$scope.packages=data;
-							
+							$scope.totalPackages = $scope.packages.length;
 						
 						})
 
