@@ -73,14 +73,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     $scope.data = {};
     //Init product object
     $scope.product = {
-        productDescription: "",
-        productColor: "",
-        productAlertQty: "",
-        productPackaging: "",
-        productUnitOfMeasure: "",
-        productType: "",
-        productAbbrevations: "",
-        productName: ""
+        description: "",
+        color: "",
+        alertquantity: "",
+        packaging: "",
+        unitofmeasure: "",
+        materialtypeid: "",
+        abbrevation: " ",
+        productname: ""
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
@@ -125,13 +125,13 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 product: product
             }
         };
-
+        console.log(product);
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
                 console.log("IN POST OF add product success");
                 console.log(data);
-                $scope.clearFields(product);
+                //$scope.clearFields(product);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
                     window.location.reload(true);
@@ -332,7 +332,14 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         transportAgency: "",
         driver: "",
         transportPayable: "",
-        inwardMaterials: []
+        inwardMaterials: [
+            {
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            }
+        ]
     };
     // $scope.inventoryData={};
     $scope.material = {};
@@ -340,6 +347,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.showModal = false;
     $scope.submitted = false;
 
+    inventoryService.getProductsForInwardandOutward($scope,$http);
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 
@@ -392,11 +400,10 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             // $scope.showModal=false;
+            $scope.step = 2;
+            console.log($scope.step);
             $scope.submitted = false;
             alert("else");
-            $scope.step = 2;
-
-
         }
     }
 
@@ -535,7 +542,15 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
 
 myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService) {
     $scope.OutwardData = {
-        outwardMaterials: []
+
+        outwardMaterials: [
+            {
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            }
+        ]
     };
     $scope.material = {};
     $scope.step = 1;
@@ -547,6 +562,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
+    inventoryService.getProductsForInwardandOutward($scope,$http);
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 

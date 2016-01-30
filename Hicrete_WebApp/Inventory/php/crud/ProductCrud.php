@@ -143,7 +143,7 @@
 
             } catch (Exception $e) {
                 echo $e->getMessage();
-                $dbh->rollBack();
+//                $dbh->rollBack();
             }
         }
 
