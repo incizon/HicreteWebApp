@@ -217,9 +217,13 @@ class InwardData extends CommonMethods
                         $count = $stmtAvailabiltyCheck->rowcount();
                         if ($count != 0) {
                             //UPDATE
-                            $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity
+                            $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
+                                        warehouseid=:warehouseid,companyid=:companyid
                             WHERE materialid = :materialid");
+
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
 
                             if ($stmtInventory->execute()) {

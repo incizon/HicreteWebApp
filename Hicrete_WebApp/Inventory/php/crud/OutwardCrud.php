@@ -81,7 +81,7 @@ class OutwardData extends CommonMethods
                 $outwardData['dateofentry']=$result2['dateofentry'];
 
                 $companyId=$result2['companyid'];
-                $warehouseId=$result2['warehouseid'];;
+                $warehouseId=$result2['warehouseid'];
                 $outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
                 $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 

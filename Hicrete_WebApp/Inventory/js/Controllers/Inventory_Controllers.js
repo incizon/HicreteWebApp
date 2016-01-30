@@ -1,45 +1,3 @@
-// //MODAL DIRECTIVE
-// myApp.directive('modal', function () {
-//  return {
-//    template: '<div class="modal fade">' + 
-//    '<div class="modal-dialog">' + 
-//    '<div class="modal-content">' + 
-//    '<div class="modal-header">' + 
-//    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-//    '<h4 class="modal-title">Please Confirm all the Details</h4>' + 
-//    '</div>' + 
-//    '<div class="modal-body" ng-transclude></div>' +
-//    '</div>' + 1
-//    '</div>' + 
-//    '</div>',
-//    restrict: 'E',
-//    transclude: true,
-//    replace:true,
-//    scope:true,
-//    link: function postLink(scope, element, attrs) {
-//      scope.title = attrs.title;
-//      scope.$watch(attrs.visible, function(value){
-//        if(value == true)
-//          $(element).modal('show');
-//        else
-//          $(element).modal('hide');
-//      });
-//      $(element).on('shown.bs.modal', function(){
-//        scope.$apply(function(){
-//          scope.$parent[attrs.visible] = true;
-//        });
-//      });
-//      $(element).on('hidden.bs.modal', function(){
-//        scope.$apply(function(){
-//          scope.$parent[attrs.visible] = false;
-//        });
-//      });
-//    }
-//  };
-// });
-
-//END OF MODAL DIRECTIVE
-
 
 myApp.controller('inventoryCommonController', function ($scope, $http, inventoryService) {
 
@@ -575,7 +533,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 //Get Material from DB
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-    //inventoryService.getProducts($scope, $http);
+    inventoryService.getProducts($scope, $http);
     inventoryService.getSavedProducts($scope);
 
     $scope.getProduct = function (product) {
@@ -585,11 +543,12 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 
     $scope.getAvailableQty = function (pMaterialId) {
         var qty;
-        for (var i = 0; i < $scope.productsToModify.length; i++) {
 
+        for (var i = 0; i < $scope.productsToModify.length; i++) {
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
                 $scope.availableTotalquantity=qty;
+                console.log(qty);
             }
         }
         ;
