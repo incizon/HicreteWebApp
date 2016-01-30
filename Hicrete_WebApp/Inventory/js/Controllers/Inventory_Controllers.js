@@ -1053,10 +1053,10 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
 myApp.controller('productionBatchController', function ($scope, $filter, $http, ProductionBatchService) {
 
-    $(function () {
+    /*$(function () {
 
         $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
-    })
+    })*/
 
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
