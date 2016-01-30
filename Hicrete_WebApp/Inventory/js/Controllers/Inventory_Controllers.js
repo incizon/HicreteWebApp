@@ -1,16 +1,16 @@
-+// //MODAL DIRECTIVE
+// //MODAL DIRECTIVE
 // myApp.directive('modal', function () {
 //  return {
-//    template: '<div class="modal fade">' + 
-//    '<div class="modal-dialog">' + 
-//    '<div class="modal-content">' + 
-//    '<div class="modal-header">' + 
-//    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-//    '<h4 class="modal-title">Please Confirm all the Details</h4>' + 
-//    '</div>' + 
+//    template: '<div class="modal fade">' +
+//    '<div class="modal-dialog">' +
+//    '<div class="modal-content">' +
+//    '<div class="modal-header">' +
+//    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+//    '<h4 class="modal-title">Please Confirm all the Details</h4>' +
+//    '</div>' +
 //    '<div class="modal-body" ng-transclude></div>' +
 //    '</div>' + 1
-//    '</div>' + 
+//    '</div>' +
 //    '</div>',
 //    restrict: 'E',
 //    transclude: true,
@@ -49,11 +49,7 @@ myApp.controller('inventoryCommonController', function ($scope, $http, inventory
     //Available Products
     inventoryService.getProducts($scope, $http);
 
-    //Get Warehouses
-    inventoryService.getWarehouses($scope,$http);
-    // Get Company
-    inventoryService.getCompanys($scope,$http);
-
+    //Supplier
 
 
 });
@@ -93,8 +89,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 // inventoryService.getProductsForInwardandOutward($scope,$http);
 
     //Available Products
-    //inventoryService.getProducts($scope, $http);
-    inventoryService.getSavedProducts($scope);
+    inventoryService.getProducts($scope, $http);
     /*
      Start of Pagination Function
      */
@@ -340,9 +335,17 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.showModal = false;
     $scope.submitted = false;
 
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
+    $scope.Company = [
+        {companyName: 'Hi-Crete Systems', companyId: 1},
+        {companyName: 'Hi-Tech Flooring', companyId: 2},
+        {companyName: 'Hi-Tech Engineering', companyId: 3}
+    ];
 
+    $scope.warehouses = [
+        {warehouseName: 'Shindewadi', warehouseId: 1},
+        {warehouseName: 'Mangdewadi', warehouseId: 2},
+        {warehouseName: 'Bhilarwadi', warehouseId: 3}
+    ];
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -388,13 +391,13 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            alert("if");
+            //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             // $scope.showModal=false;
-            $scope.submitted = false;
-            alert("else");
             $scope.step = 2;
+            $scope.submitted = false;
+            //alert("else");
 
 
         }
@@ -457,8 +460,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         // inventoryService.getProductsForInwardandOutward($scope,$http);
 
         //Available Products
-    //inventoryService.getProducts($scope, $http);
-    inventoryService.getSavedProducts($scope);
+    inventoryService.getProducts($scope, $http);
+
     /**********************************************************************************
      *Setters to set true/false for tables to modify
      **********************************************************************************/
@@ -508,7 +511,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
      **************************************************/
 
 // inventoryService.getProducts($scope,$http);
-// Get Suppliers From DB 
+// Get Suppliers From DB
     $http.post("Inventory/php/supplierSearch.php", null)
         .success(function (data) {
             console.log(data);
@@ -547,9 +550,16 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
-
+    $scope.Company = [
+        {companyName: 'Hi-Crete Systems', companyId: 1},
+        {companyName: 'Hi-Tech Flooring', companyId: 2},
+        {companyName: 'Hi-Tech Engineering', companyId: 3}
+    ];
+    $scope.warehouses = [
+        {warehouseName: 'Shindewadi', warehouseId: 1},
+        {warehouseName: 'Mangdewadi', warehouseId: 2},
+        {warehouseName: 'Bhilarwadi', warehouseId: 3}
+    ];
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -559,8 +569,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 //Get Material from DB
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-    //inventoryService.getProducts($scope, $http);
-    inventoryService.getSavedProducts($scope);
+    inventoryService.getProducts($scope, $http);
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
@@ -573,7 +582,6 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
-                $scope.availableTotalquantity=qty;
             }
         }
         ;
@@ -597,7 +605,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
      End of Add material fields
      *******************************/
     $scope.remove = function (index) {
-        $scope.OutwardData.outwardMaterials.splice(index, 1); //remove item by index
+        $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
     };
 
 
@@ -926,12 +934,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
         });
     $scope.getViewDataObject = function (product) {
-        console.log(product);
         $scope.viewProduct = product;
-    }
-    $scope.getMaterialObject = function (product) {
-        $scope.viewMaterials = product;
-        console.log($scope.viewMaterials);
     }
 
     $scope.getDataObjectToModify = function (product) {
@@ -947,7 +950,6 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     /*************************************************
      * START of GETTING INWARD DATA
      **************************************************/
-        $scope.materialDetails=[];
     var data = {
         module: 'inward',
         operation: 'search'
@@ -1059,6 +1061,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
+    $scope.submitted = false;
     $scope.prodBatchInfo = {};
 
     $scope.goBack = function () {
@@ -1216,7 +1219,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
         }
 
-
+        $scope.submitted = false;
     };
 
 
