@@ -1065,13 +1065,14 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
  * Start of of PRODUCTION BATCH
  *********************************************************************************************/
 
-myApp.controller('productionBatchController', function ($scope, $filter, $http, ProductionBatchService) {
+myApp.controller('productionBatchController', function ($scope, $filter, $http,inventoryService, ProductionBatchService) {
 
     /*$(function () {
 
         $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
     })*/
-
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
