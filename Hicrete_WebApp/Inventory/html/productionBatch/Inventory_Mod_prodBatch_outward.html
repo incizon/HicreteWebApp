@@ -64,6 +64,58 @@
                                             </div>
 
                                             <div class="form-group">
+                                                <label class="col-md-3 control-label"> Company</label>
+
+                                                <div class="col-md-9" >
+                                                    <div class="input-group">
+                                                        <select class="form-control" ng-model="prodBatchInfo.company" name="companyName"
+                                                                required>
+                                                            <option value="" disabled selected>Select Company</option>
+                                                            <option ng-repeat="x in Company"
+                                                                    value={{x.companyId}}>{{x.companyName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.company.$error"
+                                                         ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select company name.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Warehouse</label>
+
+                                                <div class="col-md-9">
+                                                    <div class="input-group" >
+                                                        <select class="form-control" ng-model="prodBatchInfo.wareHouse"
+                                                                name="warehouseName" required>
+                                                            <option value="" disabled selected>Select Warehouse</option>
+                                                            <option ng-repeat="x in warehouses"
+                                                                    value={{x.warehouseId}}>{{x.wareHouseName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.wareHouse.$error"
+                                                         ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select warehouse.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+
+
+                                           <!-- <div class="form-group">
                                                 <label class="col-md-3 control-label">Company</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
@@ -87,7 +139,7 @@
                                                         <p style="color:red" ng-message="required">Please enter warehouse name</p>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
 
                                             <div class="form-group">
                                                 <label class="col-md-3  control-label">Date of Entry </label>
