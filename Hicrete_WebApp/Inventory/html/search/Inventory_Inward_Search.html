@@ -14,8 +14,8 @@
 
         <div class="table-responsive push-up-10">
             <table class="table table-actions table-striped">
-                <thead>                                            
-                    <tr>
+                <thead >
+                    <tr style="text-align: center;">
                         <th width="4%">Inward.No</th>
                         <th width="14%">TotalMaterialInwards</th>
                         <!-- <th width="13%">Company</th> -->
@@ -27,7 +27,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
+                    <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
                         <td width="5%">{{product.inwardno}}</td>
                         <td width="20%">{{product.materialDetails.length}}</td>
                         <td width="10%">{{product.companyName}}</td>
@@ -186,7 +186,7 @@
                                 </div>
                                 <!--End of modal dialog-->
                             </div>
-                            <button class="btn btn-info btn-sm" data-target="#modifyInwardDetails" data-toggle="modal" ng-click="getViewDataObject(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>
+                            <button class="btn btn-info btn-sm" disabled data-target="#modifyInwardDetails" data-toggle="modal" ng-click="getViewDataObject(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>
                             <!-- START OF MODIFY MODAL-->
                             <div class="modal fade inventoryDetails" id="modifyInwardDetails" role="dialog">
                                 <div class="modal-dialog">                                 

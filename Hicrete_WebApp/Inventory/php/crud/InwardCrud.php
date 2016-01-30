@@ -74,7 +74,6 @@ class InwardData extends CommonMethods
     {
         $stmt = $dbh->prepare("SELECT * FROM inward");
         if ($stmt->execute()) {
-
             //push it into array
 
             $json_array=array();
