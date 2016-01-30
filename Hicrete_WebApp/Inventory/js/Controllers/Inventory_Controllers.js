@@ -1,4 +1,4 @@
-+// //MODAL DIRECTIVE
+// //MODAL DIRECTIVE
 // myApp.directive('modal', function () {
 //  return {
 //    template: '<div class="modal fade">' + 
@@ -125,13 +125,13 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 product: product
             }
         };
-        console.log(product);
+
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
                 console.log("IN POST OF add product success");
                 console.log(data);
-                //$scope.clearFields(product);
+                $scope.clearFields(product);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
                     window.location.reload(true);
@@ -1075,6 +1075,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
+    $scope.submitted = false;
     $scope.prodBatchInfo = {};
 
     $scope.goBack = function () {
@@ -1232,7 +1233,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
         }
 
-
+        $scope.submitted = false;
     };
 
 
