@@ -1,8 +1,8 @@
 <?php
 require_once('ProdBatch.php');
 
-/*include('../../Logger/Logger.php');
-Logger::configure('../config.xml');*/
+include('../../Logger/Logger.php');
+Logger::configure('../config.xml');
 
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
 
@@ -19,9 +19,9 @@ $opt = array(
 );
 error_reporting(E_ERROR | E_PARSE);
 $prodBatchObj = new ProdBatch($prodBatchinfo);
-/*$log=Logger::getLogger("Inventory");*/
+$log=Logger::getLogger("Inventory");
 
-// $log->error(" [".$userId."] :"."Production Batch Php start");
+$log->error(" [".$userId."] :"."Production Batch Php start");
 
 switch($prodBatchinfo->option)
 {
@@ -33,7 +33,7 @@ switch($prodBatchinfo->option)
 						{
 								if($prodBatchObj->addToProdBatchMaster($dbh,$userId))
 								{	
-									//$log->debug(" [".$userId."] :"."Production Batch Initiated successfully");
+									$log->debug(" [".$userId."] :"."Production Batch Initiated successfully");
 									$message = "Initial details of Production batch Added successfully";	
 									$arr = array('msg' => $message, 'error' => '');
 						    		$jsn = json_encode($arr);
@@ -41,7 +41,7 @@ switch($prodBatchinfo->option)
 					    		}
 					    		else
 					    		{
-					    			//$log->error(" [".$userId."] :"."Problems in initiating Production Batch");
+					    			$log->error(" [".$userId."] :"."Problems in initiating Production Batch");
 					    			$message = "Error while Initiating production batch";	
 									$arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -52,7 +52,7 @@ switch($prodBatchinfo->option)
 						}
 						else
 						{
-							//$log->error(" [".$userId."] :"."Production Batch no already exists");
+							$log->error(" [".$userId."] :"."Production Batch no already exists");
 							 $message="Production Batch no already exists Please Insert new BatchNo";
 						     		$arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -69,7 +69,7 @@ switch($prodBatchinfo->option)
 								//echo ("Check1");
 											if($prodBatchObj->addToProducedGood($dbh,$userId))
 											{
-												//$log->info(" [".$userId."] :"."Production Batch Added successfully");
+												$log->info(" [".$userId."] :"."Production Batch Added successfully");
 												$message="Data inserted successfully";
 									     		//echo json_encode($message);
 									     		$arr = array('msg' => $message, 'error' => "");
@@ -81,7 +81,7 @@ switch($prodBatchinfo->option)
 											}
 											else
 											{
-												//$log->error(" [".$userId."] :"."Error while inserting production batch");
+												$log->error(" [".$userId."] :"."Error while inserting production batch");
 												$message="Error While adding Produced good ";
 									     		//echo json_encode($message);
 									     		$arr = array('msg' => '', 'error' => $message);
@@ -92,7 +92,7 @@ switch($prodBatchinfo->option)
 								}
 								else
 								{
-									//$log->error(" [".$userId."] :"."Error while inserting production batch");
+									$log->error(" [".$userId."] :"."Error while inserting production batch");
 									$message = "Error while Initiating production batch";	
 									$arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -102,7 +102,7 @@ switch($prodBatchinfo->option)
 						}
 						else
 						{
-							//$log->error(" [".$userId."] :"."Error while inserting production batch");
+							$log->error(" [".$userId."] :"."Error while inserting production batch");
 							 $message="Production Batch no already exists Please Insert new BatchNo";
 						     $arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -120,7 +120,7 @@ switch($prodBatchinfo->option)
 					
 					if($prodBatchObj->modifyPartDetails($dbh,$userId))
 					{
-							//$log->info(" [".$userId."] :"."Production Batch Modified successfully");
+							$log->info(" [".$userId."] :"."Production Batch Modified successfully");
 
 							$message = "Production Batch Modified successfully";	
 									$arr = array('msg' => $message, 'error' => '');
@@ -140,7 +140,7 @@ switch($prodBatchinfo->option)
 
 	    	break;			
 		case "Modify":
-
+					//echo "m here";
 					$prodBatchObj->prodMasterId=$prodBatchinfo->productionbatchmasterid;
 					$prodBatchObj->inhouseInwardId=$prodBatchinfo->inhouseinwardid;
 					
@@ -217,9 +217,18 @@ switch($prodBatchinfo->option)
 						 $stmt3->bindParam(':materialid',$result2['materialid']);
 						 $stmt3->execute();
 							$result3 =$stmt3->fetch(PDO::FETCH_ASSOC);
+				/*			$stmt4=$dbh->prepare("select totalquantity from inventory where materialid=:materialid");
+						 $stmt4->bindParam(':materialid',$result2['materialid']);
+						 $stmt4->execute();
+						 $result4 =$stmt4->fetch(PDO::FETCH_ASSOC);
+						 if($result4 == "")
+						 {
+						 	$result4['totalquantity']="";
+						 }*/
 			            $result1_array['rawMaterial'][] = array(
 			            	'material'=>$result2['materialid'],
 			                'materialName' => $result3['productname'],
+			                'prevQuantity' => $result2['quantity'],
 			                'quantity' => $result2['quantity']
 							
 			            );
@@ -301,9 +310,17 @@ switch($prodBatchinfo->option)
 			        	 $stmt3=$dbh->prepare("select a.productname from product_master a,material b where a.productmasterid=b.productmasterid and b.materialid=:materialid");
 						 $stmt3->bindParam(':materialid',$result2['materialid']);
 						 $stmt3->execute();
-							$result3 =$stmt3->fetch(PDO::FETCH_ASSOC);
+
+
+						$result3 =$stmt3->fetch(PDO::FETCH_ASSOC);
+
+					/*	$stmt4=$dbh->prepare("select totalquantity from inventory where materialid=:materialid");
+						 $stmt4->bindParam(':materialid',$result2['materialid']);
+						 $stmt4->execute();
+						 $result4 =$stmt4->fetch(PDO::FETCH_ASSOC);*/
 			            $result1_array['rawMaterial'][] = array(
 			            	'material'=>$result2['materialid'],
+			            	'prevQuantity' => $result2['quantity'],
 			                'materialId' => $result3['productname'],
 			                'quantity' => $result2['quantity']
 			                
