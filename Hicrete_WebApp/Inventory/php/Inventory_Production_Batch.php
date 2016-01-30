@@ -1,8 +1,8 @@
 <?php
 require_once('ProdBatch.php');
 
-include('../../Logger/Logger.php');
-Logger::configure('../config.xml');
+//include('../../Logger/Logger.php');
+//Logger::configure('../config.xml');
 
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
 
@@ -19,9 +19,9 @@ $opt = array(
 );
 error_reporting(E_ERROR | E_PARSE);
 $prodBatchObj = new ProdBatch($prodBatchinfo);
-$log=Logger::getLogger("Inventory");
+//$log=Logger::getLogger("Inventory");
 
-$log->error(" [".$userId."] :"."Production Batch Php start");
+//$log->error(" [".$userId."] :"."Production Batch Php start");
 
 switch($prodBatchinfo->option)
 {
@@ -33,7 +33,7 @@ switch($prodBatchinfo->option)
 						{
 								if($prodBatchObj->addToProdBatchMaster($dbh,$userId))
 								{	
-									$log->debug(" [".$userId."] :"."Production Batch Initiated successfully");
+									//$log->debug(" [".$userId."] :"."Production Batch Initiated successfully");
 									$message = "Initial details of Production batch Added successfully";	
 									$arr = array('msg' => $message, 'error' => '');
 						    		$jsn = json_encode($arr);
@@ -41,7 +41,7 @@ switch($prodBatchinfo->option)
 					    		}
 					    		else
 					    		{
-					    			$log->error(" [".$userId."] :"."Problems in initiating Production Batch");
+					    			//$log->error(" [".$userId."] :"."Problems in initiating Production Batch");
 					    			$message = "Error while Initiating production batch";	
 									$arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -52,7 +52,7 @@ switch($prodBatchinfo->option)
 						}
 						else
 						{
-							$log->error(" [".$userId."] :"."Production Batch no already exists");
+							//$log->error(" [".$userId."] :"."Production Batch no already exists");
 							 $message="Production Batch no already exists Please Insert new BatchNo";
 						     		$arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -69,7 +69,7 @@ switch($prodBatchinfo->option)
 								//echo ("Check1");
 											if($prodBatchObj->addToProducedGood($dbh,$userId))
 											{
-												$log->info(" [".$userId."] :"."Production Batch Added successfully");
+												//$log->info(" [".$userId."] :"."Production Batch Added successfully");
 												$message="Data inserted successfully";
 									     		//echo json_encode($message);
 									     		$arr = array('msg' => $message, 'error' => "");
@@ -81,7 +81,7 @@ switch($prodBatchinfo->option)
 											}
 											else
 											{
-												$log->error(" [".$userId."] :"."Error while inserting production batch");
+												//$log->error(" [".$userId."] :"."Error while inserting production batch");
 												$message="Error While adding Produced good ";
 									     		//echo json_encode($message);
 									     		$arr = array('msg' => '', 'error' => $message);
@@ -92,7 +92,7 @@ switch($prodBatchinfo->option)
 								}
 								else
 								{
-									$log->error(" [".$userId."] :"."Error while inserting production batch");
+									//$log->error(" [".$userId."] :"."Error while inserting production batch");
 									$message = "Error while Initiating production batch";	
 									$arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -102,7 +102,7 @@ switch($prodBatchinfo->option)
 						}
 						else
 						{
-							$log->error(" [".$userId."] :"."Error while inserting production batch");
+							//$log->error(" [".$userId."] :"."Error while inserting production batch");
 							 $message="Production Batch no already exists Please Insert new BatchNo";
 						     $arr = array('msg' => '', 'error' => $message);
 					    			$jsn = json_encode($arr);
@@ -120,7 +120,7 @@ switch($prodBatchinfo->option)
 					
 					if($prodBatchObj->modifyPartDetails($dbh,$userId))
 					{
-							$log->info(" [".$userId."] :"."Production Batch Modified successfully");
+							//$log->info(" [".$userId."] :"."Production Batch Modified successfully");
 
 							$message = "Production Batch Modified successfully";	
 									$arr = array('msg' => $message, 'error' => '');
