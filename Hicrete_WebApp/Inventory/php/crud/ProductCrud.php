@@ -105,18 +105,21 @@
                             $stmtProductProductMaster->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
                             if ($stmtProductProductMaster->execute()) {
                                 $lastMaterialId = $dbh->lastInsertId();
-                                if ($dbh->commit()) {
-                                    $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid)
+
+                                $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid)
                                                       values (:materialid,:warehouseid,:companyid)");
-                                    $stmtInventory->bindParam(':materialid', $lastMaterialId, PDO::PARAM_STR, 10);
-                                    $stmtInventory->bindParam(':warehouseid', $userId, PDO::PARAM_STR, 10);
-                                    $stmtInventory->bindParam(':companyid', $userId, PDO::PARAM_STR, 10);
-                                    if ($stmtInventory->execute()) {
-                                        $this->showAlert("success", "Product added Successfully!!!");
-                                    } else {
-                                        $this->showAlert('Failure', "Error while adding 5");
-                                        $dbh->rollBack();
-                                    }
+                                $stmtInventory->bindParam(':materialid', $lastMaterialId, PDO::PARAM_STR, 10);
+                                $stmtInventory->bindParam(':warehouseid', $userId, PDO::PARAM_STR, 10);
+                                $stmtInventory->bindParam(':companyid', $userId, PDO::PARAM_STR, 10);
+
+                                if ($stmtInventory->execute()) {
+                                    $this->showAlert("success", "Product added Successfully!!!");
+                                } else {
+                                    $this->showAlert('Failure', "Error while adding 5");
+                                    $dbh->rollBack();
+                                }
+                                if ($dbh->commit()) {
+
                                     // $this->showAlert('success',"Product added Successfully!!!");
                                 } else {
                                     $this->showAlert('success', "Commit failed!!");
