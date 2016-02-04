@@ -283,6 +283,8 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
     $scope.popup1 = {
         opened: false
     };
+
+
 });
 
 

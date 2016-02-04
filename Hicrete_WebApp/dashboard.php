@@ -41,31 +41,31 @@
        ::-webkit-resizer {display: none;}
 
        /*-----------------------------------CSS FOR DATEPICKER-----------------------------------------------------*/
-        /*ul.dropdown-menu table thead{*/
-            /*background:#1caf9a !important;*/
-            /*color:#fff !important;*/
-        /*}*/
+        ul.dropdown-menu table thead{
+            background:#1caf9a !important;
+            color:#fff !important;
+        }
 
-        /*ul.dropdown-menu table thead th .btn-default,ul.dropdown-menu table thead th .btn-default:hover, ul.dropdown-menu table thead th .btn-default:focus,*/
-        /*ul.dropdown-menu table thead th .btn-default:active,ul.dropdown-menu table thead th  .btn-default.active, .open > ul.dropdown-menu table thead th .dropdown-toggle .btn-default {*/
-            /*background-color: transparent;*/
-            /*border-color: transparent;*/
-            /*color:#fff;*/
-        /*}*/
+        ul.dropdown-menu table thead th .btn-default,ul.dropdown-menu table thead th .btn-default:hover, ul.dropdown-menu table thead th .btn-default:focus,
+        ul.dropdown-menu table thead th .btn-default:active,ul.dropdown-menu table thead th  .btn-default.active, .open > ul.dropdown-menu table thead th .dropdown-toggle .btn-default {
+            background-color: transparent;
+            border-color: transparent;
+            color:#fff;
+        }
 
-        /*ul.dropdown-menu:after{*/
-            /*border-bottom-color: #1caf9a;*/
-        /*}*/
+        ul.dropdown-menu:after{
+            border-bottom-color: #1caf9a;
+        }
 
-        /*ul.dropdown-menu table tbody td .btn-info:hover,ul.dropdown-menu table tbody td .btn-info:focus,ul.dropdown-menu table tbody td .btn-info:active,ul.dropdown-menu table tbody td .btn-info.active, .open >ul.dropdown-menu table tbody td .dropdown-toggle.btn-info{*/
-            /*background-color: #f5f5f5;*/
-            /*border-color: #E5E5E5;*/
-            /*color:#333;*/
-        /*}*/
+        ul.dropdown-menu table tbody td .btn-info:hover,ul.dropdown-menu table tbody td .btn-info:focus,ul.dropdown-menu table tbody td .btn-info:active,ul.dropdown-menu table tbody td .btn-info.active, .open >ul.dropdown-menu table tbody td .dropdown-toggle.btn-info{
+            background-color: #f5f5f5;
+            border-color: #E5E5E5;
+            color:#333;
+        }
 
-        /*ul.dropdown-menu table tbody td .btn.btn-sm,ul.dropdown-menu table tbody td .btn-group-sm > .btn{*/
-            /*padding: 2px 9px;*/
-        /*}*/
+        ul.dropdown-menu table tbody td .btn.btn-sm,ul.dropdown-menu table tbody td .btn-group-sm > .btn{
+            padding: 2px 9px;
+        }
         /*----------------------------------------------CSS FOR MODAL--------------------------------*/
         .modal-header{
             background:rgba(28,175,154,0.69);
@@ -107,12 +107,13 @@
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
 
     <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
+<!--    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>-->
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
 
     <script type="text/javascript" src="Assets/js/plugins.js"></script>
     <script type="text/javascript" src="Assets/js/actions.js"></script>
 
+    <script src="Assets/js/angular-animate.js"></script>
     <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
     <script type="text/javascript" src="hicreteApp.js"></script>

@@ -45,9 +45,10 @@
                                     <td width="15%">{{applicator.applicator_state}}</td>
                                     <td width="35%">
                                     
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
-                                        
-                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
+                                        <button class="btn btn-primary btn-sm" ng-click="open(applicator,'viewDetails.html')"><span class="fa fa-eye"></span>View</button>
+                                        <!--ng-click="ApplicatorSelected(applicator)"-->
+                                        <!--ng-click="ApplicatorSelected(applicator)"-->
+                                        <button class="btn btn-info btn-sm"  ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
 
 
                                         <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
@@ -68,13 +69,216 @@
     </div>                        
 </div>
 
+
+
 <!-- Modal -->
-<div class="modal fade" id="viewDetails" role="dialog" data-backdrop="static" keyboard="false">
-    <div class="modal-dialog1">                                 
-            <!-- Modal content-->
-            <div class="modal-content">
+<!--<div class="modal fade" id="viewDetails"  role="dialog" data-backdrop="static" keyboard="false">-->
+    <!--<div class="modal-dialog1">-->
+            <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+            <!--<div class="modal-content">-->
+                <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                    <!--<h4 class="modal-title">Tentetive Applicator Details</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
+                    <!--<div class="row form-horizontal">-->
+                        <!--<div class="col-md-6">-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Firm Name :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-8">-->
+                                    <!--{{selectedTentetiveApplicator.applicator_name}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Address :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                    <!--{{selectedTentetiveApplicator.applicator_address_line1}}-->
+                                   <!--{{selectedTentetiveApplicator.applicator_address_line2}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Contact No :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.applicator_contact}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Country :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.applicator_country}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">State :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.applicator_state}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">City :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.applicator_city}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                         <!--</div>-->
+                         <!--<div class="col-md-6">-->
+                             <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">VAT Number :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-4">-->
+                                    <!--{{selectedTentetiveApplicator.applicator_vat_number}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">CST Number :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                    <!--{{selectedTentetiveApplicator.applicator_cst_number}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Service Tax Number :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                  <!--{{selectedTentetiveApplicator.applicator_stax_number}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">PAN Number :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.applicator_pan_number}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Point Of Contact :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.point_of_contact}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Source Contact No :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.point_of_contact_no}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                         <!--</div>-->
+
+                      <!--</div>-->
+                <!--</div>-->
+                <!--<div class="modal-header">-->
+                    <!--<h4 class="modal-title">Package , Payment  And Follow-Up Details</h4>-->
+                <!--</div>-->
+                <!--<div class="modal-body">-->
+                      <!--<div class="row form-horizontal">-->
+                        <!--<div class="col-md-6">-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Package Name :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.package_name}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Package Description :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                    <!--{{selectedTentetiveApplicator.package_description}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Follow-Up Date :</label>-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                    <!--{{selectedTentetiveApplicator.date_of_follow_up}}-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                 <!--<div class="col-md-4">-->
+                                    <!--&lt;!&ndash; <label class="control-label">Package Description :</label> &ndash;&gt;-->
+                                <!--</div>-->
+                                 <!--<div class="col-md-8">-->
+                                     <!--<button data-toggle="modal"  data-target="#viewPackageDetails" class="btn btn-primary">View Details</button>-->
+                                 <!--</div>-->
+                            <!--</div>-->
+                         <!--</div>-->
+                         <!--<div class="col-md-6">-->
+
+                              <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Amount Paid :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.amount_paid}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Payment Mode :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.payment_mode}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Date of Payment :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.date_of_payment}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<div class="col-md-4">-->
+                                    <!--<label class="control-label">Amount Receiver :</label>-->
+                                 <!--</div>-->
+                                <!--<div class="col-md-8">-->
+                                   <!--{{selectedTentetiveApplicator.paid_to}}-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="modal-footer">-->
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;End of modal-footer&ndash;&gt;-->
+            <!--</div>-->
+            <!--&lt;!&ndash;End of Modal Content&ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash;End of modal dialog&ndash;&gt;-->
+<!--</div>-->
+<!--End of modal-->
+<!--Modal using UI Bootstrap-->
+<script type="text/ng-template" id="viewDetails.html">
+
                 <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close" ng-click="cancel()">&times;</button>
                     <h4 class="modal-title">Tentetive Applicator Details</h4>
                 </div>
                 <div class="modal-body">
@@ -83,198 +287,193 @@
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Firm Name :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-8">
                                     {{selectedTentetiveApplicator.applicator_name}}
                                 </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Address :</label>
                                 </div>
-                                 <div class="col-md-8">
+                                <div class="col-md-8">
                                     {{selectedTentetiveApplicator.applicator_address_line1}}
-                                   {{selectedTentetiveApplicator.applicator_address_line2}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                                    {{selectedTentetiveApplicator.applicator_address_line2}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Contact No :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_contact}}
-                                 </div>
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.applicator_contact}}
+                                </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Country :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_country}}
-                                 </div>
-                            </div>        
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.applicator_country}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">State :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_state}}
-                                 </div>
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.applicator_state}}
+                                </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">City :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_city}}
-                                 </div>
-                            </div>        
-                         </div>
-                         <div class="col-md-6">
-                             <div class="form-group">
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.applicator_city}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">VAT Number :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-4">
                                     {{selectedTentetiveApplicator.applicator_vat_number}}
                                 </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">CST Number :</label>
                                 </div>
-                                 <div class="col-md-8">
+                                <div class="col-md-8">
                                     {{selectedTentetiveApplicator.applicator_cst_number}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Service Tax Number :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                  {{selectedTentetiveApplicator.applicator_stax_number}}
-                                 </div>
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.applicator_stax_number}}
+                                </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">PAN Number :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_pan_number}}
-                                 </div>
-                            </div>        
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.applicator_pan_number}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Point Of Contact :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.point_of_contact}}
-                                 </div>
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.point_of_contact}}
+                                </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Source Contact No :</label>
                                 </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.point_of_contact_no}}
-                                 </div>
-                            </div>        
-                         </div>
-                          
-                      </div>  
+                                <div class="col-md-8">
+                                    {{selectedTentetiveApplicator.point_of_contact_no}}
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
                 <div class="modal-header">
                     <h4 class="modal-title">Package , Payment  And Follow-Up Details</h4>
                 </div>
                 <div class="modal-body">
-                      <div class="row form-horizontal">
+                    <div class="row form-horizontal">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Package Name :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.package_name}}
+                                    {{selectedTentetiveApplicator.package_name}}
                                 </div>
                             </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Package Description :</label>
                                 </div>
-                                 <div class="col-md-8">
+                                <div class="col-md-8">
                                     {{selectedTentetiveApplicator.package_description}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <label class="control-label">Follow-Up Date :</label>
                                 </div>
-                                 <div class="col-md-8">
+                                <div class="col-md-8">
                                     {{selectedTentetiveApplicator.date_of_follow_up}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
                                     <!-- <label class="control-label">Package Description :</label> -->
                                 </div>
-                                 <div class="col-md-8">
-                                     <button data-toggle="modal"  data-target="#viewPackageDetails" class="btn btn-primary">View Details</button>      
-                                 </div>
-                            </div>                                  
-                         </div>
-                         <div class="col-md-6">
-                             
-                              <div class="form-group">
+                                <div class="col-md-8">
+                                    <button class="btn btn-primary" ng-click="open(applicator,'viewPackageDetails.html')" >View Details</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Amount Paid :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.amount_paid}}
+                                    {{selectedTentetiveApplicator.amount_paid}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Payment Mode :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.payment_mode}}
+                                    {{selectedTentetiveApplicator.payment_mode}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Date of Payment :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.date_of_payment}}
+                                    {{selectedTentetiveApplicator.date_of_payment}}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Amount Receiver :</label>
-                                 </div>
+                                </div>
                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.paid_to}}
+                                    {{selectedTentetiveApplicator.paid_to}}
                                 </div>
                             </div>
-                             
-                          
-                        </div>  
-                    </div>                                     
-                </div>   
+
+
+                        </div>
+                    </div>
+                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default" ng-click="cancel()">Close</button>
                 </div>
                 <!--End of modal-footer-->
-            </div>
-            <!--End of Modal Content-->           
-    </div>
-    <!--End of modal dialog-->
-</div>
-<!--End of modal-->
-<div class="modal fade" id="modifyDetails" role="dialog" data-backdrop="static" keyboard="false">
-    <div class="modal-dialog1">                   
-        <!-- Modal content-->
-        <div class="modal-content">
+
+</script>
+
+<!--Modal-->
+<script type="text/ng-template" id="modifyDetails.html">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Tentetive Applicator Details</h4>
@@ -484,19 +683,12 @@
                  <button class="btn  btn-default pull-right">Clear Form</button>
             </div>
              <!--End of modal-footer-->
-        </div>
-        <!--End of Modal Content-->           
-    </div>
-    <!--End of modal dialog-->
-</div>
+</script>
 <!--End of modal-->
 
-<div class="modal fade" id="viewPackageDetails" role="dialog" data-backdrop="static" keyboard="false">
-    <div class="modal-dialog">                                 
-            <!-- Modal content-->
-            <div class="modal-content">
+<script type="text/ng-template" id="viewPackageDetails.html">
                 <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" ng-click="cancel()">&times;</button>
                     <h4 class="modal-title">Package Details</h4>
                 </div>
                 <div class="modal-body">
@@ -539,10 +731,6 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
                 <!--End of modal-footer-->
-            </div>
-            <!--End of Modal Content-->           
-    </div>
-    <!--End of modal dialog-->
-</div>
+</script>
 
 
