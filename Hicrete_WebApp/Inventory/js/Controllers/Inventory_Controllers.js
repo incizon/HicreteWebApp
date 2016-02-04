@@ -1,45 +1,3 @@
-+// //MODAL DIRECTIVE
-// myApp.directive('modal', function () {
-//  return {
-//    template: '<div class="modal fade">' + 
-//    '<div class="modal-dialog">' + 
-//    '<div class="modal-content">' + 
-//    '<div class="modal-header">' + 
-//    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-//    '<h4 class="modal-title">Please Confirm all the Details</h4>' + 
-//    '</div>' + 
-//    '<div class="modal-body" ng-transclude></div>' +
-//    '</div>' + 1
-//    '</div>' + 
-//    '</div>',
-//    restrict: 'E',
-//    transclude: true,
-//    replace:true,
-//    scope:true,
-//    link: function postLink(scope, element, attrs) {
-//      scope.title = attrs.title;
-//      scope.$watch(attrs.visible, function(value){
-//        if(value == true)
-//          $(element).modal('show');
-//        else
-//          $(element).modal('hide');
-//      });
-//      $(element).on('shown.bs.modal', function(){
-//        scope.$apply(function(){
-//          scope.$parent[attrs.visible] = true;
-//        });
-//      });
-//      $(element).on('hidden.bs.modal', function(){
-//        scope.$apply(function(){
-//          scope.$parent[attrs.visible] = false;
-//        });
-//      });
-//    }
-//  };
-// });
-
-//END OF MODAL DIRECTIVE
-
 
 myApp.controller('inventoryCommonController', function ($scope, $http, inventoryService) {
 
@@ -73,14 +31,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     $scope.data = {};
     //Init product object
     $scope.product = {
-        productDescription: "",
-        productColor: "",
-        productAlertQty: "",
-        productPackaging: "",
-        productUnitOfMeasure: "",
-        productType: "",
-        productAbbrevations: "",
-        productName: ""
+        description: "",
+        color: "",
+        alertquantity: "",
+        packaging: "",
+        unitofmeasure: "",
+        materialtypeid: "",
+        abbrevation: " ",
+        productname: ""
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
@@ -332,7 +290,14 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         transportAgency: "",
         driver: "",
         transportPayable: "",
-        inwardMaterials: []
+        inwardMaterials: [
+            {
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            }
+        ]
     };
     // $scope.inventoryData={};
     $scope.material = {};
@@ -340,6 +305,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.showModal = false;
     $scope.submitted = false;
 
+    inventoryService.getProductsForInwardandOutward($scope,$http);
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 
@@ -388,15 +354,14 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            //alert("if");
+            alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             // $scope.showModal=false;
             $scope.step = 2;
+            console.log($scope.step);
             $scope.submitted = false;
-            //alert("else");
-
-
+            alert("else");
         }
     }
 
@@ -535,7 +500,15 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
 
 myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService) {
     $scope.OutwardData = {
-        outwardMaterials: []
+
+        outwardMaterials: [
+            {
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            }
+        ]
     };
     $scope.material = {};
     $scope.step = 1;
@@ -547,6 +520,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
+    inventoryService.getProductsForInwardandOutward($scope,$http);
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 
@@ -559,7 +533,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 //Get Material from DB
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-    //inventoryService.getProducts($scope, $http);
+    inventoryService.getProducts($scope, $http);
     inventoryService.getSavedProducts($scope);
 
     $scope.getProduct = function (product) {
@@ -569,11 +543,12 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 
     $scope.getAvailableQty = function (pMaterialId) {
         var qty;
-        for (var i = 0; i < $scope.productsToModify.length; i++) {
 
+        for (var i = 0; i < $scope.productsToModify.length; i++) {
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
                 $scope.availableTotalquantity=qty;
+                console.log(qty);
             }
         }
         ;
@@ -926,10 +901,12 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
         });
     $scope.getViewDataObject = function (product) {
+        console.log(product);
         $scope.viewProduct = product;
     }
     $scope.getMaterialObject = function (product) {
         $scope.viewMaterials = product;
+        console.log($scope.viewMaterials);
     }
 
     $scope.getDataObjectToModify = function (product) {
@@ -962,20 +939,6 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
             console.log("IN INWARD Search");
             $scope.InwardSearchData = data;
             $scope.totalInwardItems = $scope.InwardSearchData.length;
-            //for(var index=0;index<$scope.InwardSearchData.length;index++){
-            //    for(var index1=0;index1<$scope.InwardSearchData[index].materialDetails.length;index1++){
-            //
-            //        $scope.materialDetails.push({
-            //            productname:$scope.InwardSearchData[index].materialDetails[index1].productname,
-            //            quantity:$scope.InwardSearchData[index].materialDetails[index1].quantity,
-            //            packagedunits:$scope.InwardSearchData[index].materialDetails[index1].packagedunits,
-            //            suppliername:$scope.InwardSearchData[index].materialDetails[index1].suppliername,
-            //            supplierid:$scope.InwardSearchData[index].materialDetails[index1].supplierid,
-            //            materialid:$scope.InwardSearchData[index].materialDetails[index1].materialid
-            //
-            //        });
-            //    }
-            //}
             console.log(data);
         })
         .error(function (data, status, headers) {
@@ -1061,16 +1024,18 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
  * Start of of PRODUCTION BATCH
  *********************************************************************************************/
 
-myApp.controller('productionBatchController', function ($scope, $filter, $http, ProductionBatchService) {
+myApp.controller('productionBatchController', function ($scope, $filter, $http,inventoryService, ProductionBatchService) {
 
-    $(function () {
+    /*$(function () {
 
         $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
-    })
-
+    })*/
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
+    $scope.submitted = false;
     $scope.prodBatchInfo = {};
 
     $scope.goBack = function () {
@@ -1228,7 +1193,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
         }
 
-
+        $scope.submitted = false;
     };
 
 

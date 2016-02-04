@@ -1,5 +1,6 @@
 <?php
 require_once 'utils/Common_Methods.php';
+require_once 'utils/DatabaseCommonOperations.php';
 
 /*
 *Inward Data class- CRUD operation on inward entry
@@ -69,15 +70,13 @@ class InwardData extends CommonMethods
      * @param1- $dbh connection object
      * Returns- inward entries
      ***********************************************************************************/
-    public function getInwardEntries($dbh)
+    public function getInwardEntries($dbh,$dbhHicrete)
     {
         $stmt = $dbh->prepare("SELECT * FROM inward");
         if ($stmt->execute()) {
-
             //push it into array
 
             $json_array=array();
-//            array_push($json_array,$stmt->fetchAll());
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $inwardData = array();
                 $inwardID = $result2['inwardid'];
@@ -87,18 +86,31 @@ class InwardData extends CommonMethods
                 $inwardData['companyid']=$result2['companyid'];
                 $inwardData['supervisorid']=$result2['supervisorid'];
                 $inwardData['dateofentry']=$result2['dateofentry'];
+                $warehouseId=$result2['warehouseid'];
+                $companyId=$result2['companyid'];
+                $inwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                $inwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 
-//                $stmtCompany=$dbh->prepare("SELECT * FROM inward");
                 $stmtTransport=$dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
                 $stmtTransport->bindParam(':inwardID', $inwardID);
                 if($stmtTransport->execute()){
-                    while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)){
-                        $inwardData['transportationmode']=$resultTransport['transportationmode'];
-                        $inwardData['vehicleno']=$resultTransport['vehicleno'];
-                        $inwardData['drivername']=$resultTransport['drivername'];
-                        $inwardData['transportagency']=$resultTransport['transportagency'];
-                        $inwardData['cost']=$resultTransport['cost'];
-                        $inwardData['remark']=$resultTransport['remark'];
+
+                    if($stmtTransport->rowCount()==0){
+                        $outwardData['transportationmode']="--";
+                        $outwardData['vehicleno']="--";
+                        $outwardData['drivername']="--";
+                        $outwardData['transportagency']="--";
+                        $outwardData['cost']="--";
+                        $outwardData['remark']="--";
+                    }else {
+                        while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)) {
+                            $inwardData['transportationmode'] = $resultTransport['transportationmode'];
+                            $inwardData['vehicleno'] = $resultTransport['vehicleno'];
+                            $inwardData['drivername'] = $resultTransport['drivername'];
+                            $inwardData['transportagency'] = $resultTransport['transportagency'];
+                            $inwardData['cost'] = $resultTransport['cost'];
+                            $inwardData['remark'] = $resultTransport['remark'];
+                        }
                     }
 
                 }
@@ -205,9 +217,13 @@ class InwardData extends CommonMethods
                         $count = $stmtAvailabiltyCheck->rowcount();
                         if ($count != 0) {
                             //UPDATE
-                            $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity
+                            $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
+                                        warehouseid=:warehouseid,companyid=:companyid
                             WHERE materialid = :materialid");
+
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
 
                             if ($stmtInventory->execute()) {

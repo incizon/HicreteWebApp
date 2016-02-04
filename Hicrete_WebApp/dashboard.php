@@ -40,61 +40,6 @@
        ::-webkit-scrollbar-corner { display: none;}
        ::-webkit-resizer {display: none;}
 
-       /*-----------------------------------CSS FOR DATEPICKER-----------------------------------------------------*/
-        ul.dropdown-menu table thead{
-            background:#1caf9a !important;
-            color:#fff !important;
-        }
-
-        ul.dropdown-menu table thead th .btn-default,ul.dropdown-menu table thead th .btn-default:hover, ul.dropdown-menu table thead th .btn-default:focus,
-        ul.dropdown-menu table thead th .btn-default:active,ul.dropdown-menu table thead th  .btn-default.active, .open > ul.dropdown-menu table thead th .dropdown-toggle .btn-default {
-            background-color: transparent;
-            border-color: transparent;
-            color:#fff;
-        }
-
-        ul.dropdown-menu:after{
-            border-bottom-color: #1caf9a;
-        }
-
-        ul.dropdown-menu table tbody td .btn-info:hover,ul.dropdown-menu table tbody td .btn-info:focus,ul.dropdown-menu table tbody td .btn-info:active,ul.dropdown-menu table tbody td .btn-info.active, .open >ul.dropdown-menu table tbody td .dropdown-toggle.btn-info{
-            background-color: #f5f5f5;
-            border-color: #E5E5E5;
-            color:#333;
-        }
-
-        ul.dropdown-menu table tbody td .btn.btn-sm,ul.dropdown-menu table tbody td .btn-group-sm > .btn{
-            padding: 2px 9px;
-        }
-        /*----------------------------------------------CSS FOR MODAL--------------------------------*/
-        .modal-header{
-            background:rgba(28,175,154,0.69);
-            border-radius:0;
-        }
-
-        h4.modal-title{
-            color:#fff;
-            font-weight:600;
-        }
-
-        .close:hover, .close:focus{
-            color:#fff !important;
-            opacity:1 !important;
-        }
-
-        .modal-header .close{
-            color:#fff !important;
-            opacity:1 !important;
-        }
-
-        .modal-footer{
-            background:#fff !important;
-        }
-        .modal-dialog1 {
-            width: 85%;
-            margin: 5% auto;
-        }
-
     </style>
 
     <!-- START SCRIPTS -->
@@ -107,13 +52,15 @@
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
 
     <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
-<!--    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>-->
+    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
+
 
     <script type="text/javascript" src="Assets/js/plugins.js"></script>
     <script type="text/javascript" src="Assets/js/actions.js"></script>
 
-    <script src="Assets/js/angular-animate.js"></script>
+
     <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
     <script type="text/javascript" src="hicreteApp.js"></script>
@@ -158,7 +105,7 @@ if(!$userObj->init($userId)){
 <div class="page-container page-navigation-top-fixed">
 
     <!-- START PAGE SIDEBAR -->
-    <div class="page-sidebar page-sidebar-fixed" ng-controller="TabController as tab">
+    <div class="page-sidebar page-sidebar-fixed">
 
         <!-- START X-NAVIGATION -->
         <ul class="x-navigation">
@@ -184,52 +131,52 @@ if(!$userObj->init($userId)){
                     </div>
                 </div>
             </li>
-            <li ng-class="{active:tab.isSet(1)}">
-                <a ui-sref="MainPage" ng-click="tab.setTab(1)"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
+            <li class="active">
+                <a ui-sref="MainPage"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
             </li>
 
 
             <?php
 
                 if($userObj->isInventory){
-                    echo "<li ng-class=\"{active:tab.isSet(2)}\">
-                            <a ng-click=\"tab.setTab(2)\" ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
+                    echo "<li class=\"\">
+                            <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
                     </li>";
                 }
 
                 if($userObj->isBusinessProcess){
-                    echo "<li ng-class=\"{active:tab.isSet(3)}\">
-                            <a ng-click=\"tab.setTab(3)\" href=\"#\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+                    echo "<li class=\"\">
+                            <a href=\"#\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
                 }
 
                 if($userObj->isExpense){
-                    echo "<li ng-class=\"{active:tab.isSet(4)}\">
-                            <a ng-click=\"tab.setTab(4)\" ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
+                    echo "<li class=\"\">
+                            <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
                     </li>";
                 }
 
                 if($userObj->isApplicator){
-                    echo "<li ng-class=\"{active:tab.isSet(5)}\">
-                            <a ng-click=\"tab.setTab(5)\" ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
+                    echo "<li class=\"\">
+                            <a ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
                     </li>";
                 }
 
-                if($userObj->isPayroll){
-                    echo "<li ng-class=\"{active:tab.isSet(6)}\">
-                            <a ng-click=\"tab.setTab(6)\" href=\"#Payroll\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
+                if($userObj->isApplicator){
+                    echo "<li class=\"\">
+                            <a href=\"Payroll\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
                     </li>";
                 }
 
                 if($userObj->isReporting){
-                    echo "<li ng-class=\"{active:tab.isSet(7)}\">
-                            <a ng-click=\"tab.setTab(7)\" href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
+                    echo "<li class=\"\">
+                            <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
                     </li>";
                 }
 
                 if($userObj->isAdmin){
-                    echo "<li ng-class=\"{active:tab.isSet(8)}\">
-                            <a ng-click=\"tab.setTab(8)\" ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
+                    echo "<li class=\"\">
+                            <a ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
                     </li>";
                 }
 

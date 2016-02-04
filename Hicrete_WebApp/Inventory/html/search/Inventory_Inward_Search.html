@@ -14,8 +14,8 @@
 
         <div class="table-responsive push-up-10">
             <table class="table table-actions table-striped">
-                <thead>                                            
-                    <tr>
+                <thead >
+                    <tr style="text-align: center;">
                         <th width="4%">Inward.No</th>
                         <th width="14%">TotalMaterialInwards</th>
                         <!-- <th width="13%">Company</th> -->
@@ -27,11 +27,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
+                    <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
                         <td width="5%">{{product.inwardno}}</td>
                         <td width="20%">{{product.materialDetails.length}}</td>
-                        <td width="10%">{{product.companyid}}</td>
-                        <td width="15%">{{product.warehouseid}}</td>
+                        <td width="10%">{{product.companyName}}</td>
+                        <td width="15%">{{product.warehouseName}}</td>
                         <td width="15%">{{product.dateofentry}}</td>
                         <td width="35%">
                             <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
@@ -42,7 +42,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Inward Details of {{product.inwardno}}</h4>
+                                            <h4 class="modal-title">Inward Details of {{viewProduct.inwardno}}</h4>
                                         </div>
                                         <div class="modal-body">
                                             <div class="row">
@@ -60,7 +60,7 @@
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
                                                                     {{viewProduct.materialDetails.length}}
-                                                                    <button data-target="#viewMaterialDetails" ng-click="getMaterialObject(product.materialDetails)" data-toggle="modal"
+                                                                    <button data-target="#viewMaterialDetails" ng-click="getMaterialObject(viewProduct.materialDetails)" data-toggle="modal"
                                                                             class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                                                                 </div>
                                                             </div>
@@ -77,7 +77,7 @@
                                                         <label class="col-md-4 control-label text-left">Company :</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.companyid}}
+                                                                    {{viewProduct.companyName}}
                                                                 </div>
                                                             </div>
                                                     </div> 
@@ -109,7 +109,7 @@
                                                         <label class="col-md-4 control-label text-left">Warehouse :</label>
                                                             <div class="col-md-8">
                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.warehouseid}}
+                                                                    {{viewProduct.warehouseName}}
                                                                 </div>
                                                             </div>
                                                     </div>
@@ -186,7 +186,7 @@
                                 </div>
                                 <!--End of modal dialog-->
                             </div>
-                            <button class="btn btn-info btn-sm" data-target="#modifyInwardDetails" data-toggle="modal" ng-click="getViewDataObject(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>
+                            <button class="btn btn-info btn-sm" disabled data-target="#modifyInwardDetails" data-toggle="modal" ng-click="getViewDataObject(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>
                             <!-- START OF MODIFY MODAL-->
                             <div class="modal fade inventoryDetails" id="modifyInwardDetails" role="dialog">
                                 <div class="modal-dialog">                                 
@@ -421,7 +421,7 @@
                    <div class="modal-content">
                        <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                           <h4 class="modal-title">Material Details of {{product.inwardno}}</h4>
+                           <h4 class="modal-title">Material Details of {{viewMaterials.inwardno}}</h4>
                        </div>
                        <div class="modal-body">
                            <table class="table table-actions">

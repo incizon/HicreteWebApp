@@ -229,9 +229,9 @@ myApp.service('inwardService', function () {
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     $scope.clearFields(inwardData);
-                    //setTimeout(function(){
-                    //  window.location.reload(true);
-                    //},1000);
+                    setTimeout(function(){
+                        window.location.reload(true);
+                    },1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
             })
@@ -338,10 +338,11 @@ myApp.service('ProductionBatchService', function () {
                     $scope.prodInq = data;
                 }
                 //$scope.clear();
-                if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll')
-                    doShowAlert("Success", data.msg);
+                if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
+                    //doShowAlert("Success", data.msg);
+                }
                 else if (data.error != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll')
-                    doShowAlertFailure("Failure", data.error);
+                    //doShowAlertFailure("Failure", data.error);
 
 
                 $scope.step = 1;

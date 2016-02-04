@@ -189,7 +189,7 @@
                                     <select class="form-control select"
                                             ng-model="materials.material" ng-value="Select" name="material" required>
                                         <option value="" disabled selected>Select Material</option>
-                                        <option ng-repeat="x in products" value={{x.materialid}}>{{x.productname}}</option>
+                                        <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}</option>
 
                                     </select>
                                     <div class="help-block" ng-messages="outwardMaterialForm.material.$error" ng-show="submitted">
