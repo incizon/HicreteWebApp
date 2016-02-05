@@ -32,7 +32,7 @@
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
                                                         <!-- try -->
-                                                           <select style="width: 211%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material">
+                                                           <select ng-change="getAvailableQty(rawMat.material)" style="width: 211%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material">
                                                                    <option value="" disabled selected>Select</option>
                                                                    <option ng-repeat="x in existingMaterials" 
                                                                       value={{x.materialid}}>{{x.productname}}
@@ -57,8 +57,8 @@
                                                                       <ul class="panel-controls">
                                         <li><a ng-click="addField('Add')" class="panel-remove"><span class="fa fa-plus"></span></a></li>
                                         </ul>
-
-                                        <ul class="panel-controls">
+                                                        <label >{{getAvailableQty(rawMat.material)}}</label>
+                                                        <ul class="panel-controls">
                                         <li><a ng-click="remove($index,'Add')" class="panel-remove"><span class="fa fa-times"></span></a></li>
                                         </ul>                                          
                                                     </div>
