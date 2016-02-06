@@ -1032,6 +1032,51 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
 
         $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
     })*/
+    //check for fetching inventory details START
+    var data = {
+        module: 'inventorySearch'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log("IN SERVICE OF Inventory Search=");
+            console.log(data);
+            $scope.inventoryData = data;
+            $scope.paginateItemsPerPage = data;
+            $scope.totalItems = $scope.inventoryData.length;
+            console.log($scope.inventoryData);
+        })
+        .error(function (data, status, headers) {
+            console.log("IN SERVICE OF Inventory Search Failure=");
+            console.log(data);
+
+        });
+
+    $scope.getAvailableQty = function (pMaterialId) {
+        var qty;
+        console.log("New function here");
+        for (var i = 0; i < $scope.inventoryData.length; i++) {
+            if (pMaterialId == $scope.inventoryData[i].materialid) {
+                qty = $scope.inventoryData[i].totalquantity;
+                $scope.availableTotalquantity=qty;
+                console.log(qty);
+            }
+        }
+        ;
+        return qty;
+    }
+
+
+
+
+    // check for fetching inventory details END
+
+
+
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
@@ -1043,6 +1088,36 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
     $scope.goBack = function () {
 
         $scope.step--;
+    };
+
+    $scope.getInventoryQty = function(material){
+        //prodBatchInfo.option = "getQuantity";
+        console.log("Getting the quantity ");
+        console.log(material);
+      $scope.prodBatchInfo.option ="getQuantity";
+       $scope.prodBatchInfo.MtrialFrQty= material;
+        console.log($scope.prodBatchInfo.MtrialFrQty);
+        var config = {
+            params: {
+                prodBatchInfo: $scope.prodBatchInfo
+            }
+        };
+        $http.post("Inventory/php/Inventory_Production_Batch.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                        $scope.prodBatchInfo.mtrlQty=data.qty;
+                console.log($scope.prodBatchInfo.mtrlQty);
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+
+
+
+
+
     };
 
     $http.post("Inventory/php/fetch_materials.php", null)

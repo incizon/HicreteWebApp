@@ -30,13 +30,7 @@ $scope.elementDetails=[{
         $scope.applicatorDetails.paymentDate = null;
     };
 
-    $scope.open1 = function() {
-        $scope.popup1.opened = true;
-    };
 
-    $scope.popup1 = {
-        opened: false
-    };
 
 	PackageService.viewPackages($scope,$http,$scope.packageDetails);
 
@@ -90,25 +84,6 @@ $scope.elementDetails=[{
 				}
 			}
 
-    $scope.today = function() {
-        $scope.paymentDate = new Date();
-    };
-    $scope.today();
-
-    $scope.clear = function() {
-        $scope.paymentDate = null;
-    };
-
-
-    $scope.maxDate = new Date(2020, 5, 22);
-
-    $scope.open1 = function() {
-        $scope.popup1.opened = true;
-    };
-
-    $scope.popup1 = {
-        opened: false
-    };
 
 	$scope.processForm = function(applicatorDetails) {
         		
@@ -245,7 +220,7 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
   
 });
 
-myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,ApplicatorService){
+myApp.controller('ViewTentetiveApplicatorController',function($scope,$uibModal,$log,$http,ApplicatorService){
 
 
     $scope.Applicators=[];
@@ -271,28 +246,101 @@ myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,Appli
           
         $scope.ApplicatorSelected = function (tentetiveApplicator) {
           $scope.selectedTentetiveApplicator = tentetiveApplicator;
-          
       };
 
-        $scope.applicatorToModify=function(tentetiveApplicator){
-          $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
-          $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
-          $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
-          $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
-          $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
-          $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
-          $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
-          $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
-          $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
-          $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
-          $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
-          $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
-          $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact; 
-          $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
+    $scope.animationsEnabled = true;
+    $scope.open = function (tentetiveApplicator, modalId) {
+    console.log("inside open");
+        $scope.selectedTentetiveApplicator = tentetiveApplicator;
+        $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
+        $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
+        $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
+        $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
+        $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
+        $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
+        $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
+        $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
+        $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
+        $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
+        $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
+        $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
+        $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
+        $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
+        console.log( $scope.applicatorDetails.applicator_id);
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: modalId ,
+            controller: 'ModalInstanceCtrl',
+            backdrop : 'static',
+            resolve: {
+                selectedTentetiveApplicator: function () {
+                    return $scope.selectedTentetiveApplicator;
+                },
+                applicatorToModify: function(){
+                    $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
+                    $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
+                    $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
+                    $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
+                    $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
+                    $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
+                    $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
+                    $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
+                    $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
+                    $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
+                    $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
+                    $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
+                    $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
+                    $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
 
+                }
+            }
+        });
+        modalInstance.result.then(function (selectedTentetiveApplicator,applicatorToModify) {
+            $scope.selectedTentetiveApplicator = selectedTentetiveApplicator;
+            $scope.applicatorToModify = applicatorToModify;
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+
+
+        $scope.applicatorToModify=function(tentetiveApplicator){
+          return $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
+            return $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
+            return $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
+            return $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
+            return $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
+            return $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
+            return $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
+            return $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
+            return $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
+            return  $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
+            return $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
+            return $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
+            return $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
+            return $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
         };
 
 });
+
+myApp.controller('ModalInstanceCtrl',function($scope, $uibModalInstance, selectedTentetiveApplicator,applicatorToModify){
+
+    $scope.selectedTentetiveApplicator = selectedTentetiveApplicator;
+    $scope.applicatorToModify = applicatorToModify;
+    $scope.ok = function () {
+        $uibModalInstance.close($scope.selectedTentetiveApplicator);
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+});
+
+
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,ApplicatorService){
 
     $scope.Applicators=[];
