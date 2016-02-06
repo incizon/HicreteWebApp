@@ -406,9 +406,10 @@
 
                     </tbody>
             </table>
-                        <uib-pagination total-items="totalInwardItems" ng-model="currentInwardPage"
-                max-size="5" boundary-links="true"
+            <uib-pagination total-items="totalInwardItems" ng-model="currentInwardPage"
+                 boundary-links="true"
                 items-per-page="InventoryInwardItemsPerPage" class="pagination-sm">
+
             </uib-pagination>  
         </div>
     </div>
@@ -421,7 +422,7 @@
                    <div class="modal-content">
                        <div class="modal-header">
                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                           <h4 class="modal-title">Material Details of {{viewMaterials.inwardno}}</h4>
+                           <h4 class="modal-title">Material Details of {{viewProduct.inwardno}}</h4>
                        </div>
                        <div class="modal-body">
                            <table class="table table-actions">

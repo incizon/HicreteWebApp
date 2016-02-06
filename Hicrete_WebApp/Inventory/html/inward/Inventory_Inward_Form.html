@@ -1,0 +1,240 @@
+<div ng-show="stepa==1">
+    <!--<div ng-include="'Inventory/html/inward/Inventory_Inward_Item.html'"></div>-->
+    <!--<button class="btn btn-primary"-->
+            <!--data-ng-click=" nextForm()">Submit-->
+    <!--</button>-->
+    <div class="row">
+        <div class="col-md-12">
+
+            <form class="form-horizontal" name="inwardEntryForm" novalidate>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><strong>Inward Details</strong></h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <h5>Material</h5>
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Inward Number</label>
+
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" class="form-control" ng-model="InwardData.inwardNumber"
+                                                   name="inwardNumber" required pattern="[a-zA-Z0-9]+"/>
+                                        </div>
+                                        <div class="help-block" ng-messages="inwardEntryForm.inwardNumber.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter inward number.</p>
+
+                                            <p style="color:red" ng-message="pattern">Only alphanumeric characters are
+                                                allowed</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"> Company</label>
+
+                                    <div class="col-md-9">
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.companyName" name="companyName"
+                                                required>
+                                            <option value="" disabled selected>Select Company</option>
+                                            <option ng-repeat="x in Company"
+                                                    value={{x.companyId}}>{{x.companyName}}
+                                            </option>
+                                        </select>
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.companyName.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select company name.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Suppervisor</label>
+
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" class="form-control" ng-model="InwardData.suppervisor"
+                                                   name="suppervisor" required/>
+                                        </div>
+                                        <div class="help-block" ng-messages="inwardEntryForm.suppervisor.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter suppervisor name.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Number of Materials</label>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" name="noOfElement" ng-model="noOfElement"
+                                                   class="form-control" pattern="[0-9]+">
+                                        </div>
+                                        <div class="help-block" ng-messages="inwardEntryForm.noOfElement.$error"
+                                             ng-show="submitted">
+                                        <span style="color:red"
+                                              ng-message="pattern">Only numeric value is allowed</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary" ng-click="addFields()">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Date</label>
+
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                            <input type="date" class="form-control datepicker" ng-model="InwardData.date"
+                                                   name="date" required>
+                                        </div>
+                                        <div class="help-block" ng-messages="inwardEntryForm.date.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter a date.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Warehouse</label>
+
+                                    <div class="col-md-9">
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.warehouseName"
+                                                name="warehouseName" required>
+                                            <option value="" disabled selected>Select Warehouse</option>
+                                            <option ng-repeat="x in warehouses"
+                                                    value={{x.warehouseId}}>{{x.wareHouseName}}
+                                            </option>
+                                        </select>
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.warehouseName.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select warehouse.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Has Transport?</label>
+
+                                    <div class="col-md-9 col-xs-12">
+                                        <select class=" btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.hasTransportDetails"
+                                                name="hasTransportDetails" ng-value="Select" required>
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.hasTransportDetails.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select a value.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="row" style="margin-top: 3%">
+                            <p style="color:red" ng-if="getNoOfMaterials()==0">Please add atleast one material</p>
+                            <table class="table table-actions">
+                                <thead>
+                                <tr>
+                                    <th>Material</th>
+                                    <th>Quantity</th>
+                                    <th>Packaging Type</th>
+                                    <th>Supplier</th>
+                                    <th>Remove</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="materials in InwardData.inwardMaterials">
+                                    <td>
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.material" name="material"
+                                                ng-value="Select" required>
+                                            <option value="" disabled selected>Select Material</option>
+                                            <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
+                                            </option>
+                                        </select>
+                                        <div class="help-block" ng-show="getNoOfMaterials()<=0"
+                                             ng-show="submitted">
+                                            <p style="color:red">Please add atleast one material.</p>
+                                        </div>
+                                        <div class="help-block" ng-messages="inwardEntryForm.material.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter material.</p>
+                                        </div>
+                                    </td>
+                                    <td>
+
+
+                                        <input type="number" class="form-control" ng-model="materials.materialQuantity"
+                                               name="materialQuantity" min="0" required/>
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter material quantity.</p>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" class="form-control" ng-model="materials.packageUnit"
+                                               name="packageUnit" required/>
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.packageUnit.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select packaging unit.</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.suppplierName"
+                                                ng-value="Select" name="supplierName" required>
+                                            <option value="" disabled selected>Select Supplier</option>
+                                            <option ng-repeat="x in suppliers " value={{x.supplierid}}>{{x.suppliername}}
+                                            </option>
+                                        </select>
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.supplierName.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select supplier name.</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a ng-click="remove($index)" class="panel-remove">
+                                            <span class="fa fa-times"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <div class="panel-footer" style="text-align:center">
+                        <button class="btn btn-default" ng-click="clearFields(InwardData)">Clear Form</button>
+                        <button class="btn btn-primary"
+                                data-ng-click="(submitted=true) && getNoOfMaterials()>0 && inwardEntryForm.$valid && nextForm()">Submit
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<div ng-show="stepa==2">
+
+    <div ng-include="'Inventory/html/inward/Inventory_Inward_Transport_Details.html'"></div>
+</div>
