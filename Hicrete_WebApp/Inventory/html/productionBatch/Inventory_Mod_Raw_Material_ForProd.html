@@ -1,4 +1,4 @@
- <div class="page-content-wrap" ng-controller="productionBatchController">
+ <div class="page-content-wrap">
                 
                     <div class="row">
                         <div class="col-md-12">
@@ -38,7 +38,7 @@
                                                            <select style="width: 101%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material">
                                                                    
                                                                    <option ng-repeat="x in existingMaterials"
-                                                                      value={{x.material}}>{{x.materialName}}
+                                                                      value={{x.materialid}}>{{x.productname}}
                                                                    </option>
                                                             </select>
 
