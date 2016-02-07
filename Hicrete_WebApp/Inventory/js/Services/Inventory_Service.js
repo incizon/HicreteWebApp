@@ -227,13 +227,12 @@ myApp.service('inwardService', function () {
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
                 setTimeout(function(){
-                    window.location.reload(true);
+                    //window.location.reload(true);
+                    window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 },1000);
-
             })
             .error(function (data, status, headers) {
                 console.log(data);
-
             });
     };
 

@@ -161,8 +161,19 @@ class InwardData extends CommonMethods
     /**********************************************************************************
      * End of get Inward function
      ***********************************************************************************/
-    public function isAvailable($dbh,$data){
+    public function isAvailable($dbh){
+        $stmt = $dbh->prepare("SELECT inward FROM product_master WHERE inwardno =:inwardno");
 
+        $stmt->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
+//            $stmt->bindParam(':materialtypeid', $this->productType, PDO::PARAM_STR, 10);
+//            $stmt->bindParam(':unitofmeasure', $this->productUnitOfMeasure, PDO::PARAM_STR, 10);
+        $stmt->execute();
+
+        $count=$stmt->rowcount();
+        if($count!=0)
+        {return 1;}
+        else
+        {return 0;}
     }
     /**********************************************************************************
      * Purpose- This function will insert inward data into DB

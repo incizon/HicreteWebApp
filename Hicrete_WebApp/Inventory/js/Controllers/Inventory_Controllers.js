@@ -342,9 +342,9 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.stepa=2;
-            console.log("Step Value:" + $scope.stepa);
+            //console.log("Step Value:" + $scope.stepa);
             $scope.submitted = false;
-            console.log("in nest form function");
+            //console.log("in nest form function");
         }
 
     }
@@ -366,7 +366,6 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
     }
 
     $scope.addInwardDetails = function () {
-        console.log($scope.InwardData);
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }
@@ -401,7 +400,8 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
-                        window.location.reload(true);
+                        //window.location.reload(true);
+                        window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -553,7 +553,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
                 $scope.availableTotalquantity=qty;
-                console.log(qty);
+                //console.log(qty);
             }
         }
         ;
@@ -629,9 +629,10 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
-                // setTimeout(function(){
-                //  window.location.reload(true);
-                //},1000);
+                 setTimeout(function(){
+                  //window.location.reload(true);
+                     window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                },1000);
                 $scope.outwardData = data;
                 $scope.clearFields($scope.OutwardData);
                     $scope.submitted = false;
@@ -681,8 +682,10 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log(data);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    window.location.reload(true);
+                    //window.location.reload(true);
+                    window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 }, 1000);
+
 
             })
             .error(function (data, status, headers, config) {

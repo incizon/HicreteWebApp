@@ -174,11 +174,12 @@
 
 
                                     <input type="number" class="form-control" ng-model="materials.materialQuantity"
-                                           name="materialQuantity" min="0" required/>
+                                           name="materialQuantity" min="1" required/>
 
                                     <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"
                                          ng-show="submitted">
                                         <p style="color:red" ng-message="required">Please enter material quantity.</p>
+                                        <!--<p style="color:red" ng-message="materials.materialQuantity<=0">Please add valid quantity.</p>-->
                                     </div>
                                 </td>
 
