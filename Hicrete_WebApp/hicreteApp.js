@@ -79,7 +79,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         //production batch entries end
         .state('Inventory.inwardItem', {
             url: '/inwardItem',
-            templateUrl: 'Inventory/html/inward/Inventory_Inward_steps.html',
+            templateUrl: 'Inventory/html/inward/Inventory_Inward_Form.html',
             controller: 'inwardController'
         })
         .state('Inventory.inwardSearch', {

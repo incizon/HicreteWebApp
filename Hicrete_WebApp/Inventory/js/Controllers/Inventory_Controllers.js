@@ -7,10 +7,10 @@ myApp.controller('inventoryCommonController', function ($scope, $http, inventory
     //Available Products
     inventoryService.getProducts($scope, $http);
 
-    //Get Warehouses
-    inventoryService.getWarehouses($scope,$http);
-    // Get Company
-    inventoryService.getCompanys($scope,$http);
+    ////Get Warehouses
+    //inventoryService.getWarehouses($scope,$http);
+    //// Get Company
+    //inventoryService.getCompanys($scope,$http);
 
 
 
@@ -225,31 +225,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
 
 
-    // /***************************************************************************
-    // * Purpose- This function will retrieve the product details from database
-    // * @param1- $scope and $http
-    // * Return- Items available in database
-    // ****************************************************************************/
-    // // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-    // // $scope.productSearch=function($scope,$http){
-    //   $http.post("Inventory/php/ProductSearch.php", null)
-    //   .success(function (data)
-    //   {
-    //    console.log("Items Present in database");
-    //    console.log(data);
-    //    $scope.products=data;
-    //   })
-    //   .error(function (data, status, headers)
-    //   {
-    //     console.log(data);
-
-    //   });
-    // // };
-    // /***************************************************************************
-    // * End of Get Product Details
-    // ****************************************************************************/
-
-
     /***************************************************************************
      * Start of Get Material Types
      ****************************************************************************/
@@ -275,13 +250,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
+myApp.controller('inwardController', function ($scope, $http,$location, inwardService, inventoryService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
         companyName: "",
         warehouseName: "",
         suppervisor: "",
+        hasTransportDetails:"",
 
         transportMode: "",
         vehicleNumber: "",
@@ -305,7 +281,16 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.showModal = false;
     $scope.submitted = false;
 
+    $scope.getNoOfMaterials=function(){
+        //console.log($scope.InwardData.inwardMaterials.length);
+        return $scope.InwardData.inwardMaterials.length;
+    }
     inventoryService.getProductsForInwardandOutward($scope,$http);
+    //Get Warehouses
+    inventoryService.getWarehouses($scope,$http);
+    // Get Company
+    inventoryService.getCompanys($scope,$http);
+
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 
@@ -326,14 +311,13 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     var isInwardTable = false;
     var isInwardDetailsTable = false;
     var isInwardTransportTable = false;
-
+    $scope.stepa=1;
     /**********************************
      Add material fields
      *******************************/
     $scope.addFields = function () {
         for (var i = 0; i < $scope.noOfElement; i++) {
             $scope.InwardData.inwardMaterials.push({
-
                 material: "",
                 materialQuantity: "",
                 packageUnit: "",
@@ -350,6 +334,20 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
     };
 
+    $scope.nextForm=function(){
+
+        if ($scope.InwardData.hasTransportDetails == 'No') {
+            // $scope.showModal=true;
+            alert("if");
+            $scope.addInwardDetails();
+        } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
+            $scope.stepa=2;
+            console.log("Step Value:" + $scope.stepa);
+            $scope.submitted = false;
+            console.log("in nest form function");
+        }
+
+    }
     $scope.nextStep = function () {
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
         if ($scope.InwardData.hasTransportDetails == 'No') {
@@ -357,16 +355,14 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
             alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
-            // $scope.showModal=false;
-            $scope.step = 2;
-            console.log($scope.step);
+            $scope.step++;
+            console.log("Step Value:" + $scope.step);
             $scope.submitted = false;
-            alert("else");
         }
     }
 
     $scope.prevStep = function () {
-        $scope.step--;
+        $scope.stepa--;
     }
 
     $scope.addInwardDetails = function () {
@@ -514,13 +510,22 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     $scope.step = 1;
     $scope.submitted = false;
     // $scope.availableMaterials = [];
-
+    $scope.getNoOfMaterials=function(){
+        //console.log($scope.InwardData.inwardMaterials.length);
+        return $scope.OutwardData.outwardMaterials.length;
+    }
     var isOutwardTable = false;
     var isOutwardDetailsTable = false;
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
     inventoryService.getProductsForInwardandOutward($scope,$http);
+
+    //Get Warehouses
+    inventoryService.getWarehouses($scope,$http);
+    // Get Company
+    inventoryService.getCompanys($scope,$http);
+
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 
@@ -588,9 +593,9 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             $scope.addOutwardDetails();
         } else if ($scope.OutwardData.hasTransportDetails == 'Yes') {
             // $scope.showModal=false;
-            $scope.submitted = false;
             //alert("else");
             $scope.step = 2;
+            $scope.submitted = false;
 
         }
     }
@@ -624,16 +629,13 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
+                // setTimeout(function(){
+                //  window.location.reload(true);
+                //},1000);
                 $scope.outwardData = data;
-                if (data.msg != "") {
-                    doShowAlert("Success", data.msg);
-                    $scope.clearFields($scope.OutwardData);
+                $scope.clearFields($scope.OutwardData);
                     $scope.submitted = false;
-                    // setTimeout(function(){
-                    //  window.location.reload(true);
-                    //},1000);
-                } else if (data.error != "")
-                    doShowAlert("Failure", data.error);
+
             })
             .error(function (data, status, headers) {
                 console.log(data);

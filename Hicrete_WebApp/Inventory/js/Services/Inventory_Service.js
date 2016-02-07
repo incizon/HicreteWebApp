@@ -110,6 +110,7 @@ myApp.service('inventoryService', function () {
                 data: data
             }
         };
+
         $http.post("Config/php/configFacade.php", null, config)
             .success(function (data) {
                 warehouses = data
@@ -225,15 +226,10 @@ myApp.service('inwardService', function () {
             .success(function (data) {
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
-                //$scope.inwardData=data;
-                if (data.msg != "") {
-                    doShowAlert("Success", data.msg);
-                    $scope.clearFields(inwardData);
-                    setTimeout(function(){
-                        window.location.reload(true);
-                    },1000);
-                } else if (data.error != "")
-                    doShowAlert("Failure", data.error);
+                setTimeout(function(){
+                    window.location.reload(true);
+                },1000);
+
             })
             .error(function (data, status, headers) {
                 console.log(data);
