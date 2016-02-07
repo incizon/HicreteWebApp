@@ -65,7 +65,7 @@
 
                                                 <div class="col-md-9" >
                                                     <div class="input-group">
-                                                    <select class="form-control" ng-model="prodBatchInfo.company" name="companyName"
+                                                    <select class="btn dropdown-toggle selectpicker btn-default" style="width: 165%;"ng-model="prodBatchInfo.company" name="companyName"
                                                             required>
                                                         <option value="" disabled selected>Select Company</option>
                                                         <option ng-repeat="x in Company"
@@ -89,7 +89,7 @@
 
                                                 <div class="col-md-9">
                                                     <div class="input-group" >
-                                                            <select class="form-control" ng-model="prodBatchInfo.wareHouse"
+                                                            <select style="width: 155%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.wareHouse"
                                                                     name="warehouseName" required>
                                                                 <option value="" disabled selected>Select Warehouse</option>
                                                                 <option ng-repeat="x in warehouses"

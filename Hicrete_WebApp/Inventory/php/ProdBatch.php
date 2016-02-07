@@ -250,7 +250,7 @@ class ProdBatch
                                             //echo "m ithe aloy";
                                               if($this->addToInhouseTransport($dbh,$userId)){
 
-                                                        if($this->insertToInventory($dbh,$userId))
+                                                       /* if($this->insertToInventory($dbh,$userId))
                                                         {
                                                                 //echo "inventory mdhe zala bgh";
                                                                       $dbh->commit();
@@ -259,14 +259,15 @@ class ProdBatch
                                                         else {
                                                             //echo "inventory mdhe nai zala bgh";
 
-                                                                            $dbh->rollBack();
-                                                                        return 0;    
-                                                        }    
+                                                            $dbh->rollBack();
+                                                            return 0;
+                                                        }    */
 
 
                                                 
                                               }      
                                               else{
+                                                  //echo "transport mdhe error ahe re";
                                                 $dbh->rollBack();
                                                     return 0;
                                                 }
@@ -390,6 +391,8 @@ class ProdBatch
                  //$dbh->beginTransaction();
         $stmt = $dbh->prepare("INSERT INTO inhouse_transportation_details (inhouseinwardid,transportationmode,vehicleno,drivername,transportagency,cost,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME) 
               values (:inhouseinwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchngUserId,now(),:creUserId,now())");
+
+
 
         $stmt->bindParam(':inhouseinwardid', $this->inhouseInwardId, PDO::PARAM_STR,10);
         $stmt->bindParam(':transportationmode', $this->modeOfTransport, PDO::PARAM_STR, 10);
