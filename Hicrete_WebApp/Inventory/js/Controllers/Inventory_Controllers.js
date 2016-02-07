@@ -1026,11 +1026,8 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
 myApp.controller('productionBatchController', function ($scope, $filter, $http,inventoryService, ProductionBatchService) {
 
-    /*$(function () {
+    $scope.qtyError=0;
 
-        $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
-    })*/
-    //check for fetching inventory details START
     var data = {
         module: 'inventorySearch'
     }
@@ -1062,12 +1059,29 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
                 qty = $scope.inventoryData[i].totalquantity;
                 $scope.availableTotalquantity=qty;
                 console.log(qty);
+                break;
             }
         }
-        ;
-        return qty;
-    }
 
+        return qty;
+    };
+
+    $scope.check= function(quantity)
+    {
+        console.log(quantity);
+        console.log($scope.availableTotalquantity);
+
+        if($scope.availableTotalquantity<quantity)
+        {
+            //console.log("m alo nighalo");
+            $scope.qtyError= 1;
+        }
+        else
+        {
+            //console.log("kai prob ahe rao");
+            $scope.qtyError= 0;
+        }
+    };
 
 
 
@@ -1088,35 +1102,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         $scope.step--;
     };
 
-    $scope.getInventoryQty = function(material){
-        //prodBatchInfo.option = "getQuantity";
-        console.log("Getting the quantity ");
-        console.log(material);
-      $scope.prodBatchInfo.option ="getQuantity";
-       $scope.prodBatchInfo.MtrialFrQty= material;
-        console.log($scope.prodBatchInfo.MtrialFrQty);
-        var config = {
-            params: {
-                prodBatchInfo: $scope.prodBatchInfo
-            }
-        };
-        $http.post("Inventory/php/Inventory_Production_Batch.php", null, config)
-            .success(function (data) {
-                console.log(data);
-                        $scope.prodBatchInfo.mtrlQty=data.qty;
-                console.log($scope.prodBatchInfo.mtrlQty);
-            })
-            .error(function (data, status, headers, config) {
-                console.log("Error calling php");
-                //$scope.messages=data.error;
-                //$scope.messages.push(data.error);
-            });
 
-
-
-
-
-    };
 
     $http.post("Inventory/php/fetch_materials.php", null)
         .success(function (data) {
@@ -1274,7 +1260,10 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
 
     $scope.getProdInfo = function (prodInfo) {
         console.log(prodInfo);
+        console.log("Inside this function");
         $scope.modProdBatchInfo = prodInfo;
+
+        console.log($scope.modProdBatchInfo.rawMaterial);
         //console.log($scope.selectedProdBatchInfo);
     };
 

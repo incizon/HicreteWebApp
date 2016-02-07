@@ -32,7 +32,7 @@
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
                                                         <!-- try -->
-                                                           <select ng-change="getAvailableQty(rawMat.material)" style="width: 211%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material">
+                                                           <select   class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material">
                                                                    <option value="" disabled selected>Select</option>
                                                                    <option ng-repeat="x in existingMaterials" 
                                                                       value={{x.materialid}}>{{x.productname}}
@@ -41,7 +41,7 @@
 
                                               <!--           <!-- try end -->
                                                        <!--  <input style="width: 66%;" type="text" ng-model="rawMat.material"class="form-control"/> --> 
-                                                    </div>                                            
+                                                    </div>
                                                 </div>
                                             </div>
                                              
@@ -53,12 +53,19 @@
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="rawMat.quantity" class="form-control" >  
+                                                        <input ng-change="check(rawMat.quantity)" style="width: 66%;" type="number" ng-model="rawMat.quantity" class="form-control" >
                                                                       <ul class="panel-controls">
                                         <li><a ng-click="addField('Add')" class="panel-remove"><span class="fa fa-plus"></span></a></li>
                                         </ul>
                                                         <label >{{getAvailableQty(rawMat.material)}}</label>
                                                         <ul class="panel-controls">
+
+                                                            <div class="help-block" ng-show="qtyError">
+                                                                <span style="color:red" >Don't have sufficient quantity available in stock. Current available quantity is {{availableTotalquantity}}</span>
+                                                            </div>
+                                                            <div class="help-block" ng-show="qtyError1">
+                                                                <span style="color:red" >Material not available in stock Please contact your manager</span>
+                                                            </div>
                                         <li><a ng-click="remove($index,'Add')" class="panel-remove"><span class="fa fa-times"></span></a></li>
                                         </ul>                                          
                                                     </div>
