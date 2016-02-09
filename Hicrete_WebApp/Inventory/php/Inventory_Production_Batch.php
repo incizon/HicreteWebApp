@@ -1,18 +1,24 @@
 <?php
 require_once('ProdBatch.php');
-
+require_once 'Database/Database.php';
 //include('../../Logger/Logger.php');
 //Logger::configure('../config.xml');
 
+$db = Database::getInstance();
+$dbh = $db->getConnection();
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
-
-$hostname = 'localhost';
+session_start();
+/*$hostname = 'localhost';
 $dbname='inventory';
 $username = 'admin';
-$password = 'admin';
-$userId="Pranav";
+$password = 'admin';*/
+//$userId="Pranav";
 
-$dbh= new PDO("mysql:host=$hostname;dbname=$dbname" , $username ,$password);
+$userId = $_SESSION['token'];
+/*echo $userId;
+echo $dbh;*/
+
+//$dbh= new PDO("mysql:host=$hostname;dbname=$dbname" , $username ,$password);
 $opt = array(
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC

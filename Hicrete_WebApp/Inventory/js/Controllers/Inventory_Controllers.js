@@ -1231,6 +1231,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             prodBatchInfo.step = $scope.step;
             prodBatchInfo.option = message;
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            setTimeout(function () {
+                window.location.reload(true);
+            }, 1000);
         }
         else if (message == 'Modify') {
             console.log(prodBatchInfo);
@@ -1238,6 +1241,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
                 prodBatchInfo.step = $scope.step;
                 prodBatchInfo.option = message;
                 ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
             }
             else {
                 $scope.step++;
@@ -1257,6 +1263,12 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             prodBatchInfo.option = message;
             prodBatchInfo.step = 0;
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            if(page =='Complete')
+            {
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
+            }
         }
 
         $scope.submitted = false;
