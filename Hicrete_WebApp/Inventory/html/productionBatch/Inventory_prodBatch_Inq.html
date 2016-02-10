@@ -347,7 +347,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group">
+                                            <!--<div class="form-group">
                                                 <label class="col-md-3 control-label">Company</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
@@ -358,9 +358,30 @@
                                                         <p style="color:red" ng-message="required">Please enter company name</p>
                                                     </div>
                                                 </div>
+                                            </div>-->
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label"> Company</label>
+
+                                                <div class="col-md-9" >
+                                                    <div class="input-group">
+                                                        <select class="btn dropdown-toggle selectpicker btn-default" style="width: 165%;"ng-model="prodBatchInfo.company" name="companyName"
+                                                                required>
+                                                            <option value="" disabled selected>Select Company</option>
+                                                            <option ng-repeat="x in Company"
+                                                                    value={{x.companyId}}>{{x.companyName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.company.$error"
+                                                         ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select company name.</p>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div class="form-group">
+                                            <!--<div class="form-group">
                                                 <label class="col-md-3 control-label">Warehouse</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
@@ -369,6 +390,26 @@
                                                     </div>
                                                     <div class="help-block" ng-messages="prodBatchOutwardForm.wareHouse.$error" ng-show="submitted">
                                                         <p style="color:red" ng-message="required">Please enter warehouse name</p>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Warehouse</label>
+
+                                                <div class="col-md-9">
+                                                    <div class="input-group" >
+                                                        <select style="width: 155%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.wareHouse"
+                                                                name="warehouseName" required>
+                                                            <option value="" disabled selected>Select Warehouse</option>
+                                                            <option ng-repeat="x in warehouses"
+                                                                    value={{x.warehouseId}}>{{x.wareHouseName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.wareHouse.$error"
+                                                         ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select warehouse.</p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -486,7 +527,7 @@
                                 </div>
                                 <div class="panel-footer">
                                     <button class="btn btn-default" ng-click="(submitted=false) && clear('final')">Clear Form</button>
-                                    <button class="btn btn-primary pull-right" ng-click="(submitted=true) && prodBatchOutwardForm.$valid && initProd(modProdBatchInfo,'Complete','complete')">Submit</button>
+                                    <button data-dismiss="modal" class="btn btn-primary pull-right" ng-click="(submitted=true) && prodBatchOutwardForm.$valid && initProd(modProdBatchInfo,'Complete','complete')">Submit</button>
 
                                      <button data-target="#viewProductInfo" data-toggle="modal"  class="btn btn-primary pull-right"  style="margin-right: 1%;"><span class="fa fa-eye"></span> View Previous Details</button>
                                 </div>
@@ -502,119 +543,6 @@
                                                             
             </div>
 
-
-            <!-- ithe navin view ahe  -->
-   <!--          <modal  class="inventoryDetails" id="viewProductInfo">
-                <div class="modal-body">
-                   <div class="row">
-                        <div class="col-md-6 padRight">
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Inward Number :</label>
-                                    <div class="col-md-8 pt7">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" name="inwardNumber" ng-model="InwardData.inwardNumber" value="{{InwardData.inwardNumber}}"/>
-                                        </div>                                          
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Material :</label>
-                                    <div class="col-md-8 pt7">
-                                        <select class="form-control" disabled ng-model="InwardData.material">
-                                            <option ng-repeat="x in productsToModify" value={{x.materialid}}>{{x.productname}}
-                                            </option>
-                                        </select>                                          
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Packaging :</label>
-                                    <div class="col-md-8 pt7">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" disabled ng-model="InwardData.packageUnit" value="{{InwardData.packageUnit}}"/>
-                                        </div>                       
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Company :</label>
-                                    <div class="col-md-8 pt7">
-                                        <select class="form-control" disabled ng-model="InwardData.companyName">
-                                        <option ng-repeat="x in Company" value={{x.companyId}}>
-                                            {{x.companyName}}
-                                        </option>
-                                    </select>                       
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Supplier :</label>
-                                    <div class="col-md-8 pt7">
-                                        <select class="form-control select" disabled ng-model="InwardData.suppplierName" ng-value="Select">
-                                            <option ng-repeat="x in suppliers " value={{x.supplierid}}>
-                                                {{x.suppliername}}
-                                            </option>  
-                                        </select>                       
-                                    </div>
-                            </div>
-
-                        </div>
-                        <div class="col-md-6">
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Date :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" disabled ng-model="InwardData.date" value="{{InwardData.date}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Quantity :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="InwardData.materialQuantity" value="{{InwardData.materialQuantity}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Warehouse :</label>
-                                    <div class="col-md-8 pt7">
-                                         <select class="form-control" disabled ng-model="InwardData.warehouseName">
-                                            <option ng-repeat="x in warehouses" value={{x.warehouseId}}>
-                                                {{x.warehouseName}}
-                                            </option>
-                                        </select>                      
-                                    </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Supervisor :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="InwardData.suppervisor" value="{{InwardData.suppervisor}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" ng-click="showModal=false" data-dismiss="modal">Close</button>
-                    <button type="button" data-ng-click="addInwardDetails(InwardData)" data-dismiss="modal" class="btn btn-default">Submit</button>
-                    
-                </div>
-</modal> -->
 
 
 
