@@ -21,7 +21,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Applicator.addPayment', {
-            url: '/addApplicator',
+            url: '/addPayment',
             templateUrl: 'Applicator/html/ApplicatorPayment.html',
             controller: 'ApplicatorPaymentController'
         })
@@ -48,16 +48,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Applicator/html/ViewPermanentApplicator.html',
             controller: 'ViewPermanentApplicatorController'
         })
-        .state('Applicator.updateApplicatorPayment', {
-            url: '/updateApplicatorPayment',
-            templateUrl: 'Applicator/html/ApplicatorPayment.html',
-            controller: 'ApplicatorPaymentController'
-        })
-        .state('Applicator.updateProjectPayment', {
-            url: '/updateProjectPayment',
-            templateUrl: 'Process/html/ProjectPayment.html',
-            controller: 'ProjectPaymentController'
-        })
+
+
         .state('Inventory', {
             url: '/Inventory',
             templateUrl: 'Inventory/html/inventoryWidgets.html',
@@ -312,7 +304,7 @@ myApp.run(function($rootScope,$http) {
 
 // create the controller and inject Angular's $scope
 // set for Route Controller
-myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
+myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log) {
   /** create $scope.template **/
 
  $scope.logout=function(){
@@ -346,6 +338,49 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
     $scope.popup1 = {
         opened: false
     };
+
+
+
+
+        $scope.saveFollowupDetails=function(size,followupDetails){
+
+
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'FollowupForm.html',
+                controller:  function ($scope, $uibModalInstance,followupDetails) {
+
+
+                    $scope.followupDetails = followupDetails;
+
+                    $scope.Save = function () {
+                        $uibModalInstance.close();
+                    };
+
+                    $scope.Cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
+                size: size,
+                resolve: {
+                    followupDetails: function () {
+                        return $scope.followupDetails;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (followupDetails) {
+                $scope.followupDetails = followupDetails;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+        }
+
+
+
 
 
 });
