@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label"> Company</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" ng-disabled="availableTotalquantity==0"
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-disabled="availableTotalquantity==0"
                                             ng-model="OutwardData.companyName" name="companyName" required>
                                         <option value="" disabled selected>Select Company</option>
                                         <option ng-repeat="x in Company"
@@ -61,11 +61,10 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" name="noOfElement" ng-model="noOfElement"
-                                               class="form-control" pattern="[0-9]+" required>
+                                               class="form-control" pattern="[0-9]+">
                                     </div>
                                     <div class="help-block" ng-messages="outwardMaterialForm.noOfElement.$error"
                                          ng-show="submitted">
-                                        <span style="color:red" ng-message="required">Please enter no of element </span>
                                         <span style="color:red"
                                               ng-message="pattern">Only numeric value is allowed</span>
                                     </div>
@@ -74,30 +73,6 @@
                                     <button class="btn btn-primary" ng-click="addFields()">Add</button>
                                 </div>
                             </div>
-                            <!--<div class="form-group">                                        -->
-                                <!--<label class="col-md-3 control-label">Material</label>-->
-                                <!--<div class="col-md-9 col-xs-12">-->
-                                    <!--<select class="form-control select" ng-change="setAvailableQty(OutwardData.material)" ng-model="OutwardData.material" ng-value="Select" name="material" required>-->
-                                        <!--<option value="" disabled selected>Select Material</option>-->
-                                        <!--<option ng-repeat="x in products" value={{x.materialid}}>{{x.productname}}</option>-->
-                                        <!---->
-                                    <!--</select>-->
-                                    <!--<div class="help-block" ng-messages="outwardMaterialForm.material.$error" ng-show="submitted">-->
-                                        <!--<p style="color:red" ng-message="required">Please select material</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-                            <!--<div class="form-group">-->
-                                <!--<label class="col-md-3 control-label">Packaging</label>-->
-                                <!--<div class="col-md-9">                                            -->
-                                    <!--<div class="input-group">-->
-                                        <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-                                        <!--<input type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.packageUnit" name="packageUnit" required/>-->
-                                    <!--</div>                                            -->
-                                    <!---->
-                                <!--</div>-->
-                            <!--</div>-->
 
 
                         </div>
@@ -119,7 +94,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Warehouse</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" ng-disabled="availableTotalquantity==0"
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-disabled="availableTotalquantity==0"
                                             ng-model="OutwardData.warehouseName" name="warehouseName" required>
                                         <option value="" disabled selected>Select Warehouse</option>
                                         <option ng-repeat="x in warehouses"
@@ -134,7 +109,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Has Transport?</label>
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control select" ng- ng-disabled="availableTotalquantity==0" ng-model="OutwardData.hasTransportDetails" ng-value="Select" name="hasTransportDetails" required>
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng- ng-disabled="availableTotalquantity==0" ng-model="OutwardData.hasTransportDetails" ng-value="Select" name="hasTransportDetails" required>
                                         <option value="" disabled selected>Select</option>
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
@@ -144,35 +119,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="form-group">-->
-                                <!--<label class="col-md-3 control-label">Quantity</label>-->
-                                <!--<div class="col-md-9">                                            -->
-                                    <!--<div class="input-group">-->
-                                        <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-                                        <!--<input type="number" min="0" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.materialQuantity" name="materialQuantity" required/>-->
-                                    <!--</div>-->
-                                    <!--<div class="help-block" ng-messages="outwardMaterialForm.materialQuantity.$error" ng-show="submitted">-->
-                                        <!--<p style="color:red" ng-message="required">Please enter material quantity</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-
-                            <!--<div class="form-group">-->
-                                <!--<label class="col-md-3 control-label">Availbale Quantity :</label>-->
-                                <!--<div class="col-md-9">                                            -->
-                                    <!--<div class="input-group">-->
-                                        <!---->
-                                        <!--<label class="col-md-4 control-label text-left pt12">{{availableTotalquantity}}</label>-->
-                                    <!--</div>                                            -->
-                                    <!---->
-                                <!--</div>-->
-                            <!--</div>-->
 
 
                         </div>
                     </div>
                     <div class="row" style="margin-top: 3%">
-
+                        <p style="color:red" ng-if="getNoOfMaterials()==0">Please add atleast one material</p>
                         <table class="table table-actions">
                             <thead>
                             <tr>
@@ -186,7 +138,7 @@
                             <tr ng-repeat="materials in OutwardData.outwardMaterials">
 
                                 <td>
-                                    <select class="form-control select"
+                                    <select class="btn dropdown-toggle selectpicker btn-default"
                                             ng-model="materials.material" ng-value="Select" name="material" required>
                                         <option value="" disabled selected>Select Material</option>
                                         <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}</option>
@@ -198,7 +150,7 @@
                                 </td>
                                 <td>
                                     <input type="number" min="0" ng-disabled="availableTotalquantity==0" class="form-control"
-                                           ng-model="materials.materialQuantity" name="materialQuantity" required/>
+                                           ng-model="materials.materialQuantity" min="1" name="materialQuantity" required/>
                                     <div class="help-block" ng-messages="outwardMaterialForm.materialQuantity.$error" ng-show="submitted">
                                         <p style="color:red" ng-message="required">Please enter material quantity</p>
                                     </div>
@@ -235,7 +187,7 @@
                 <div class="panel-footer" style="text-align:center">
                     <button class="btn btn-default" ng-disabled="availableTotalquantity==0" ng-click="clearFields(OutwardData)">Clear Form</button>                                    
                     <button class="btn btn-primary" ng-disabled="availableTotalquantity==0"
-                            data-ng-click="(submitted=true) && outwardMaterialForm.$valid && nextStep()">Submit</button>
+                            data-ng-click="(submitted=true) && getNoOfMaterials()>0 && outwardMaterialForm.$valid && nextStep()">Submit</button>
                 </div>
             </div>
         </form>

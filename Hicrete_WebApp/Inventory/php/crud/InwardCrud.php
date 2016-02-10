@@ -154,23 +154,27 @@ class InwardData extends CommonMethods
             echo $json;
 
         } else {
-            //Rollback
+
         }
 
-        /*
-         * inward
-         * inwardtranspost
-         *
-         * inward details
-         * material
-         * supplier
-         * product master
-         * */
     }
     /**********************************************************************************
      * End of get Inward function
      ***********************************************************************************/
+    public function isAvailable($dbh){
+        $stmt = $dbh->prepare("SELECT inward FROM product_master WHERE inwardno =:inwardno");
 
+        $stmt->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
+//            $stmt->bindParam(':materialtypeid', $this->productType, PDO::PARAM_STR, 10);
+//            $stmt->bindParam(':unitofmeasure', $this->productUnitOfMeasure, PDO::PARAM_STR, 10);
+        $stmt->execute();
+
+        $count=$stmt->rowcount();
+        if($count!=0)
+        {return 1;}
+        else
+        {return 0;}
+    }
     /**********************************************************************************
      * Purpose- This function will insert inward data into DB
      * @param1- $dbh connection object
@@ -220,6 +224,21 @@ class InwardData extends CommonMethods
                             $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
                                         warehouseid=:warehouseid,companyid=:companyid
                             WHERE materialid = :materialid");
+
+                            $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+
+                            if ($stmtInventory->execute()) {
+                                $isSuccess = true;
+                            } else {
+                                $isSuccess = false;
+                            }
+                        }else{
+                            //Insert
+                            $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
+                                                      values (:materialid,:companyid,:warehouseid,:totalquantity)");
 
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);

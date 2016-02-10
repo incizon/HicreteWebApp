@@ -1,4 +1,4 @@
- <div class="page-content-wrap" ng-controller="productionBatchController">
+ <div class="page-content-wrap">
                 
                     <div class="row">
                         <div class="col-md-12">
@@ -78,7 +78,8 @@
 
                                 </div>
                                 <div class="panel-footer">
-                                    <button class="btn btn-default" ng-click="clear('Raw')">Clear Form</button>                                    
+                                    <button class="btn btn-default" ng-click="clear('Raw')">Clear Form</button>
+                                    <button class="btn btn-primary pull-right"  ng-click="goBack()">Back</button>
                                     <button class="btn btn-primary pull-right" ng-click="initProd(modProdBatchInfo,'Raw','Modify')">Next</button>
                                 </div>
                             </div>

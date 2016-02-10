@@ -146,14 +146,17 @@ class OutwardData extends CommonMethods
             //Rollback
             echo "Error";
         }
+    }
+    public function isAvailable($dbh){
+        $stmt = $dbh->prepare("SELECT outwardno FROM Outward WHERE outwardno =:outwardno");
+        $stmt->bindParam(':outwardno', $this->OutwardNumber, PDO::PARAM_STR, 10);
 
-
-
-
-
-
-
-
+        $stmt->execute();
+        $count=$stmt->rowcount();
+        if($count!=0)
+        {return 1;}
+        else
+        {return 0;}
     }
 
     public function insertOutwardInToDb($dbh, $userId, $data)
