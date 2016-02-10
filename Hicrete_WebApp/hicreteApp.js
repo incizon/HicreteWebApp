@@ -204,9 +204,52 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
            controller: 'requestTempAccessController'
 
         })
+
+        .state('Process', {
+            url: '/Process',
+            templateUrl: 'Process/html/processWidgets.html'
+        })
+
+        .state('Process.addCustomer', {
+            url: '/addCustomer',
+            templateUrl: 'Process/html/CreateApplicator.html',
+
+        })
+
+        .state('Process.addProject', {
+            url: '/addProject',
+            templateUrl: 'Process/html/CreatePackage.html',
+
+        })
+
+        .state('Process.addQuotation', {
+            url: '/addQuotation',
+            templateUrl: 'Process/html/ViewPackages.html',
+
+        })
+
+        .state('Process.addInvoice', {
+            url: '/addInvoice',
+            templateUrl: 'Process/html/ViewTentetiveApplicator.html',
+
+        })
+
+        .state('Process.addPayment', {
+            url: '/addPayment',
+            templateUrl: 'Process/html/ViewTentetiveApplicator.html',
+
+        })
+
         .state('MainPage', {
             url: '',
-            templateUrl: 'mainPage.html',
+            templateUrl: 'MainPage.html'
+
+
+        })
+
+        .state('SuperDashboard', {
+            url: '',
+            templateUrl: 'SuperMainPage.html',
             controller: 'mainPageController'
             
         });
