@@ -21,7 +21,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Applicator.addPayment', {
-            url: '/addApplicator',
+            url: '/addApplicatorPayment',
             templateUrl: 'Applicator/html/ApplicatorPayment.html',
             controller: 'ApplicatorPaymentController'
         })
@@ -214,10 +214,16 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
            
         })
 
-        .state('Config.requestAccess', {
+        .state('RequestAccess', {
             url: '/requestAccess',
             templateUrl: 'Config/html/RequestTemporaryAccess.html',
            controller: 'requestTempAccessController'
+
+        })
+
+        .state('ChangePassword', {
+            url: '/search',
+            templateUrl: 'Config/html/ChangePassword.html'
 
         })
 
