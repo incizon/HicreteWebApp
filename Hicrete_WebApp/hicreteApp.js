@@ -20,6 +20,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ApplicatorController'
         })
 
+        .state('Applicator.addPayment', {
+            url: '/addApplicator',
+            templateUrl: 'Applicator/html/ApplicatorPayment.html',
+            controller: 'ApplicatorPaymentController'
+        })
+
         .state('Applicator.addPackage', {
             url: '/addPackage',
             templateUrl: 'Applicator/html/CreatePackage.html',
