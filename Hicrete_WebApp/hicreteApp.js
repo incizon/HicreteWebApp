@@ -43,9 +43,14 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ViewPermanentApplicatorController'
         })
         .state('Applicator.updateApplicatorPayment', {
-            url: '/updateApplicator',
+            url: '/updateApplicatorPayment',
             templateUrl: 'Applicator/html/ApplicatorPayment.html',
             controller: 'ApplicatorPaymentController'
+        })
+        .state('Applicator.updateProjectPayment', {
+            url: '/updateProjectPayment',
+            templateUrl: 'Applicator/html/ProjectPayment.html',
+            controller: 'ProjectPaymentController'
         })
         .state('Inventory', {
             url: '/Inventory',
@@ -118,7 +123,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/searchSupplier',
             templateUrl: 'Inventory/html/inventory_supplierSearch.html',
             controller: 'supplierFetchController'
-        }) 
+        })
+        .state('Inventory.scheduleFollowup', {
+            url: '/scheduleFollowup',
+            templateUrl: 'Inventory/html/scheduleFollowup.html',
+            controller: 'FollowUpController'
+        })
         .state('Expense', {
             url: '/Expense',
             templateUrl: 'Expense/html/ExpenseWidgets.html'
@@ -275,6 +285,10 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
             
         }
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
+
+
+
+
 });
 
 
