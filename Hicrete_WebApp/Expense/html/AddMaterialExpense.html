@@ -17,11 +17,26 @@
                 
                                         <!--start-->
                                         <div class="form-group">
+                                            <label class="col-md-2 control-label">Select cost center</label>
+                                            <div class="col-md-7">
+
+                                                <select class="form-control" name="costCenterName" required  ng-model="expenseDetails.costCenter">
+                                                    <option value="" disabled>Select</option>
+                                                    <option  ng-repeat="costCenterEntry in costCenterList" value="{{costCenterEntry.id}}">{{costCenterEntry.name}}</option>
+
+                                                </select>
+                                            </div>
+                                            <div class="help-block" ng-messages="materialExpenseForm.costCenterName.$error" ng-show="otherExpenseClicked">
+                                                <p style="color:red" ng-message="required">Select Cost Center Name</p>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
                                             <label class="col-md-2 control-label">Material</label>
                                             <div class="col-md-7">                   
                                                 
                                                     <select class="form-control" name="material" required  ng-model="expenseDetails.material">
-                                                        <option  ng-repeat="materialEntry in materialEntryList" value="{{materialEntry.id}}">{{materialEntry.name}}</option>
+                                                        <option value="" disabled>Select</option>
+                                                        <option  ng-repeat="materialEntry in materialEntryList" value="{{materialEntry.materialid}}">{{materialEntry.productname}}</option>
                                                     </select>
                                                     <div class="help-block"
                                                          ng-messages="materialExpenseForm.material.$error"

@@ -87,18 +87,12 @@ class Expense
         $stmt = $conn->prepare("INSERT INTO `expense_details`(`expensedetailsid`, `costcenterid`, `budgetsegmentid`, `amount`, `description`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
             VALUES (:expensedetailsid,:costcenterid,:budgetsegmentid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
             $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
-            echo json_encode("EXPENSEDETAILSID-".$expenseDetailsId);
             $stmt->bindParam(':costcenterid', $data->costCenter, PDO::PARAM_STR);
-            echo json_encode("    costcenterid-".$data->costCenter);
             $stmt->bindParam(':budgetsegmentid', $data->segmentName, PDO::PARAM_STR);
-            echo json_encode("    budgetsegmentid-".$budget);
             $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
-            echo json_encode("    amount-".$data->amount);
             $stmt->bindParam(':description', $data->desc, PDO::PARAM_STR);
-            echo json_encode("    description-".$data->desc);
             $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-
             $rollback=false;
         if($stmt->execute()){
             
@@ -133,9 +127,63 @@ class Expense
             echo "0";
          }   
     }
-    public static function addMaterialExpense($data,$userId){
+    public static function addMaterialExpense($data,$billData,$userId){
         $db = Database::getInstance();
         $conn = $db->getConnection();
+        $expenseDetailsId=uniqid();
+        $budget='56b6e4bcf125c';
+        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `costcenterid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+        VALUES (:expensedetailsid,:costcenterid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
+        $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
+        $stmt->bindParam(':costcenterid', $data->costCenter, PDO::PARAM_STR);
+        //GET SEGMENTNAME FROM BUDGET SEGMENT TABLE WITH RESPECT TO THE MATERIAL SEGMENT
+//        $stmtBudgetSegment=$conn->prepare("SELECT segmentname FROM material_segment");
+//        if($stmtBudgetSegment->execute()){
+//            $result2 = $stmt->fetch(PDO::FETCH_ASSOC)
+//              $budget= $result2['segmentname'];
+//        }
+//        $stmt->bindParam(':budgetsegmentid', $budget, PDO::PARAM_STR);
+
+        $stmt->bindParam(':materialid', $data->material, PDO::PARAM_STR);
+        $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
+        $stmt->bindParam(':description', $data->desc, PDO::PARAM_STR);
+        $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+        $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+        $rollback=false;
+        if($stmt->execute()){
+
+            if($data->isBillApplicable){
+                $billId=uniqid();
+                echo "Added material expense";
+                //Add billing  info here
+                $stmt = $conn->prepare("INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                    VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)");
+                $stmt->bindParam(':billid', $billId, PDO::PARAM_STR);
+                $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
+                $stmt->bindParam(':billno', $billData->billNo, PDO::PARAM_STR);
+                $stmt->bindParam(':billissueingentity', $billData->firmName, PDO::PARAM_INT);
+                $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
+                $stmt->bindParam(':dateofbill', $billData->dateOfBill, PDO::PARAM_STR);
+                $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+
+                if($stmt->execute()){
+                    echo "0";
+                }else{
+                    echo "fail";
+                }
+            }
+        }else{
+            $rollback=true;
+            echo "1";
+            return;
+        }
+
+        if($rollback){
+            echo "1";
+        }else{
+            echo "0";
+        }
     }
 
 }

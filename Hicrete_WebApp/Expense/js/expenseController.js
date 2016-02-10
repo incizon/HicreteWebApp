@@ -10,9 +10,7 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
 
         for (var i = 0; i < $scope.noOfElement; i++) {
             $scope.addField();
-        }
-        ;
-
+        };
         $scope.noOfElement = "";
         $scope.addClicked = false;
     };
@@ -38,9 +36,10 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
 
     $scope.initializeMaterialSegment = function () {
         $scope.submitClicked = false;
-        $scope.materialSegment = $scope.segments[0].name;
-        $scope.showModal = true;
-        console.log(showModal);
+        //$scope.materialSegment = $scope.segments[0].name;
+        //$scope.showModal = true;
+        console.log($scope.showModal);
+        $scope.addSegment();
     };
 
 
@@ -73,18 +72,13 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
 
             });
     };
-
-
     $scope.clearSegmentFields = function () {
         console.log("remove");
         angular.forEach($scope.segments, function (segment) {
             console.log(segment.name);
             segment.name = "";
         });
-
     };
-
-
 });
 
 
@@ -198,6 +192,27 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
     // $scope.segmentList.push({name:"Transport",id:"1"});
     // $scope.segmentList.push({name:"Other",id:"2"});
 
+    var data = {
+        module: 'getProducts'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log("Items For expense");
+            console.log(data);
+            $scope.materialEntryList = data;
+        })
+        .error(function (data, status, headers) {
+            console.log("IN SERVICE OF Inventory Search Failure=");
+            console.log(data);
+
+        });
+
+
     /*
      START of getting segment list
      */
@@ -300,8 +315,8 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
                 data: data
             }
         };
-        console.log("config");
-        console.log(config);
+        console.log("config add material expense: ");
+        console.log($scope.expenseDetails);
         console.log($scope.billDetails);
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
