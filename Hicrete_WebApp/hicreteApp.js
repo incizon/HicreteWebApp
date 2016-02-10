@@ -256,22 +256,22 @@ myApp.run(function($rootScope,$http) {
 // set for Route Controller
 myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
   /** create $scope.template **/
-  
+
  $scope.logout=function(){
-    
+
 
 
       $http.post("logout.php", null)
            .success(function (data)
            {
-              window.location="index.html";              
-            
+              window.location="index.html";
+
            })
            .error(function (data, status, headers, config)
            {
              console.log(data.error);
-             
-           });            
+
+           });
             
         }
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
