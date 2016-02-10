@@ -105,6 +105,7 @@
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
 
     <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>

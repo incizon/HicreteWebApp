@@ -64,7 +64,7 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
                 console.log(data);
                 if (data == "0")
                     doShowAlert("Success", "Added Successfully");
-                window.location = "http://localhost/Hicrete_webapp/dashboard.php#/Expense";
+                window.location = "dashboard.php#/Expense";
 
             })
             .error(function (data, status, headers, config) {
@@ -150,7 +150,7 @@ myApp.controller('costCenterController', function ($scope, $http) {
                 console.log(data);
                 if (data == "0") {
                     doShowAlert("Success", "Costcenter created Successfully");
-                    window.location = "http://localhost/Hicrete_webapp/dashboard.php#/Expense";
+                    window.location = "dashboard.php#/Expense";
                 } else {
                     doShowAlert("Failure", "Cannot connect to database");
                 }
@@ -287,7 +287,7 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                window.location = "http://localhost/Hicrete_webapp/dashboard.php#/Expense";
+                window.location = "dashboard.php#/Expense";
                 if (data == "0") {
                     doShowAlert("Success", "Other Expense Details Added successfully");
                 } else {

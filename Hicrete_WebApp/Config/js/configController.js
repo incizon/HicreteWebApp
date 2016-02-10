@@ -68,9 +68,9 @@ configService.getAllAccessPermission($http,$scope);
         	 clearRoleForm();
            if($scope.isFromUser){
               $scope.isFromUser=false;
-              window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser"; 
+              window.location="dashboard.php#/Config/addUser";
            }else
-            window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+            window.location="dashboard.php#/Config";
         }
 });
 

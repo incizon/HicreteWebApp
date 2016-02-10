@@ -338,7 +338,7 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
 
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            alert("if");
+            //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.stepa=2;
@@ -1257,6 +1257,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            setTimeout(function () {
+                window.location.reload(true);
+            }, 1000);
 
         }
         else if (page == "Search" || page == 'Complete') {
