@@ -280,6 +280,11 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
       $scope.popup1.opened = true;
   };
 
+    $scope.open2 = function() {
+        $scope.popup1.opened = true;
+    };
+
+
     $scope.popup1 = {
         opened: false
     };
