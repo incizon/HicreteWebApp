@@ -28,7 +28,7 @@
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
 
                                     <input type="text" class="form-control" name="packageName"
-                                           ng-model="packageDetails.packagename" pattern="[a-zA-Z0-9 ]+" required/>
+                                           ng-model="packageDetails.package_name" pattern="[a-zA-Z0-9 ]+" required/>
 
                                 </div>
 
@@ -53,7 +53,7 @@
                             <div class="col-md-8">
 
                                     <textarea class="form-control" name="packageDescription"
-                                              ng-model="packageDetails.packagedescription" rows="2"
+                                              ng-model="packageDetails.package_description" rows="2"
                                               pattern="[a-zA-Z0-9 ]+" required minlength="20">
                                         
                                     </textarea>
@@ -131,20 +131,20 @@
                         <th>Remove</th>
                     </tr>
                     </thead>
-                    <tr ng-repeat="element in packageDetails.elementType">
+                    <tr ng-repeat="element in packageDetails.elementDetails">
                         <td>
-                            <input type="text" name="elementQuantity" placeholder="Element Name" ng-model="element.type"
+                            <input type="text" name="elementName" placeholder="Element Name" ng-model="element.element_name"
                                    class="form-control"/>
                         </td>
                         <td>
-                            <input type="text" name="elementQuantity" placeholder="Quantity" ng-model="element.quantity"
+                            <input type="text" name="elementQuantity" placeholder="Quantity" ng-model="element.element_quantity"
                                    class="form-control"/>
                         </td>
                         <td>
-                            <input type="text" name="elementRate" placeholder="Rate" ng-model="element.rate"
+                            <input type="text" name="elementRate" placeholder="Rate" ng-model="element.element_rate"
                                    class="form-control"/>
                         </td>
-                        <td>{{element.quantity * element.rate}}</td>
+                        <td>{{element.element_quantity * element.element_rate}}</td>
                         <td>
                             <a ng-click="remove($index)" class="panel-remove">
                                 <span class="fa fa-times"></span>

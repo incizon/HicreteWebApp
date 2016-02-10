@@ -1,225 +1,83 @@
 <?php
-	
-	  include_once("ApplicatorClassLib.php");	
-	 
-	  $applicatorDetails = json_decode($_GET["applicatorDetails"]);
-	  $applicator= new Applicator($applicatorDetails);
-	  $operation=$applicatorDetails->operation;
-	 
 
-	  switch ($operation) {
-	   	case 'createApplicator':
-	   		          
-	   		           if($applicatorDetails->received=='Yes'){
+		include_once ("ApplicatorClassLib.php");
 
-	   		           		paymentReceived($applicatorDetails);
-	   		           } 
-	   		           else if ($applicatorDetails->received=='No') {
-	   		            	
-	   		            	noPaymentReceived($applicatorDetails);
-	   		            } 
-	   		break;
-	   	
-	   	case 'viewApplicator':
-	   				
-	   				 	if(!$applicator->viewApplicator($applicatorDetails->applicator)){
+		$data=json_decode($_GET["data"]);
+		$operationObject=new Applicator($data);
 
-	   				 		echo "No Applicator Details to show";
-	   				 	}
-             break;
+        $operation=$data->operation;
 
-		  case 'getPaymentDetails':
+		switch($operation){
 
-			        if(!$applicator->getApplicatorPaymentDetails()){
-						echo "Not Applicator Payment Details to Display";
+			case 'createPackage' :
+
+				if($operationObject->createPackage($data))
+					{
+						echo "Package Created Successfully";
 					}
-					else{}
+				else
+					{
+						echo "Could not create package";
+					}
+				break;
 
-              break;
+			case 'viewPackages'	:
 
-		  case 'savePaymentDetails':
+				if(!$operationObject->viewPackages())
+					{
+						echo "Could not view package details";
+					}
+				break;
 
-                   $applicator->savePaymentDetails();
+			case 'createApplicator':
 
-			  break;
+				       if($data->packageEdited=="true") {
 
-	   	default:
-	   		
-	   		#code...
-	   		break;
-	   } 
+						   if($operationObject->createPackage($data)) {
 
-	   function paymentReceived($applicatorDetails){
+							    if ($operationObject->createApplicator($data)) {
 
-	   		global $applicator;
-	   		$paymentStatus=$applicatorDetails->paymentStatus;
-	   		switch ($paymentStatus) {
-	   			case 'Full':
+								   echo "Created successfully";
 
+							   }
+						   }
+					   }
+					   if($data->packageEdited=="false"){
 
-	   					if($applicator->createApplicator()){
-	 									
-				 			if($applicator->createPointOfContact()){
+						   if ($operationObject->createApplicator($data)) {
 
-				 				if($applicator->enrollApplicator()){
+							   echo "Created successfully";
+						   }
+						}
+				break;
 
-				 					if($applicator->insertApplicatorPaymentInfo()){
+			case 'viewApplicators':
 
-				 						if($applicatorDetails->mode !="cash"){	
-				 													
-				 							if($applicator->insertPaymentModeDetails()){
-				 														
-				 								echo "Applicator Created Successfully..!!";
-				 							}
-				 							else{
-				 									
-				 								echo "Something went wrong..!!";
-				 							}
-				 						}
-				 						else{
-													
-											echo "Applicator Created Successfully..!!";
-				 						}			
-				 					}
-				 					else{
-												
-											echo "Something went wrong while payment info";
-				 					}
-				 				}
-				 				else{
+					if(!$operationObject->viewApplicator($data->applicator)){
 
-				 						echo "Something went wrong while enrollment";	
-				 				}
+						echo "No Applicator Details to show";
+					}
+				break;
 
-					 		}
-				 			else{
-									echo "Something Went wrong while point of contact";
-				 				}
-				 			}
-				 		else{
-				 					
-				 				echo "Applicator could not created";
-				 		}
-	   						 
-	   				break;
-	   			
-	   			case 'Partial':
-	   				
-	   					if($applicator->createApplicator()){
+			case 'getPaymentDetails':
 
-	 						if($applicator->createPointOfContact()){
+                        if(!$operationObject->getApplicatorPaymentDetails()){
+                            echo "Not Applicator Payment Details to Display";
+                        }
+                        else{}
+				break;
 
-	 							if($applicator->enrollApplicator()){
+			case 'savePaymentDetails' :
 
-	 								if($applicator->insertApplicatorPaymentInfo()){
+                            if($operationObject->savePaymentDetails($data))
+                             {
+                                echo "Payment Updated Successfully";
+                            }
+				break;
+			default :
 
-	 									if($applicatorDetails->mode!="cash"){
+				   echo "Please provide correct operation  to do .";
+				break;
+		}
 
-	 										if($applicator->insertPaymentModeDetails()){
-
-	 											}
-	 										else{
-
-	 												echo "Something went wrong while payMode";
-	 											
-	 											}
-	 									}
-
-	 									if($applicator->insertFollowUpDetails()){
-
-	 										if($applicator->insertFollowupEmployeeDetails()){
-
-	 											echo "Applicator Created Successfully...!!!";
-
-	 										}
-	 										else{
-
-	 											echo "Something went wrong while followupEmp";
-	 										
-	 										}
-	 																	
-	 									}
-	 									else{
-
-	 											echo "Something went wrong while followup";
-	 									}
-
-	 								}
-	 								else{
-
-	 										echo "Something went wrong while paymentInfo ";
-	 								}
-
-	 							}
-	 							else{
-
-	 									echo "Something went wrong while enrollment";
-	 							}
-
-	 						}
-	 						else{
-
-	 								echo "Something went wrong while point of contact";
-	 						}
-	 					}
-	 					else{
-
-	 							echo "Could not create applicator";
-	 					}
-
-	   				break;
-	   			
-	   			default:
-	   				
-
-	   			break;
-	   		}
-
-	   }
-	   function noPaymentReceived($applicatorDetails){
-	   		global $applicator;
-	   		 if($applicator->createApplicator()){
-	 									
-	 			if($applicator->createPointOfContact()){
-
-	 				if($applicator->enrollApplicator()){
-
-	 					if($applicator->insertFollowUpDetails()){
-
-	 						if($applicator->insertFollowupEmployeeDetails()){
-
-	 								echo "Applicator created Successfully..!!";
-	 						}
-	 						else{
-
-	 								echo "Something went wrong Followup Employee";
-	 						}
-	 					}
-	 					else{
-
-	 							echo "Something went wrong followup";
-	 					}
-	 				
-	 				}
-	 				else{
-
-	 						echo "Something went wrong while enrollment";
-	 				}
-	 			
-	 			}
-	 			else{
-
-	 					echo "Something Went Wrong while point of contact";
-	 			
-	 			}
-	 		
-	 		}
-	 		else{
-
-	 				echo "Could not create Applicator";
-	 		}		
-
-
-	   }
-	   
 ?>

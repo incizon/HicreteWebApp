@@ -63,8 +63,8 @@
                                                    <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th class="col-md-4">Segment name</th>
-                                                                <th class="col-md-2">Allocated Budget</th>
+                                                                <th class="col-md-3">Segment name</th>
+                                                                <th class="col-md-3">Allocated Budget</th>
                                                                 <th class="col-md-2">Alert level</th>
                                                                 <th class="col-md-2">Remove</th>
                                                             </tr>
@@ -74,7 +74,7 @@
                                                                 <td>{{segmentEntry.name}}</td>
                                                                 <td><input name="allocatedBudget" ng-model="segmentEntry.allocatedBudget" type="text" placeholder="" class="form-control" required pattern="[0-9]+"></td>
                                                                 <td><input ng-model="segmentEntry.alertLevel" name="alertLevel" type="text" placeholder="" class="form-control" required pattern="[0-9]*[.]?[0-9]*"></td>
-                                                                <td>
+                                                                <td style="text-align: center;">
                                                                     <a ng-click="remove($index)" class="panel-remove">
                                                                         <span class="fa fa-times"></span>
                                                                     </a>
