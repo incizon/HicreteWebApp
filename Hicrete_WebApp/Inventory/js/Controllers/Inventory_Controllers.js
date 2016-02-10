@@ -400,8 +400,8 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
-                        //window.location.reload(true);
-                        window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                        window.location.reload(true);
+                        //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -630,8 +630,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log("In Post of outward entry success:");
                 console.log(data);
                  setTimeout(function(){
-                  //window.location.reload(true);
-                     window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                  window.location.reload(true);
+                     //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 },1000);
                 $scope.outwardData = data;
                 $scope.clearFields($scope.OutwardData);
@@ -682,8 +682,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log(data);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    //window.location.reload(true);
-                    window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                    window.location.reload(true);
+                    //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 }, 1000);
 
 
