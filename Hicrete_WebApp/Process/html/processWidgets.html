@@ -1,6 +1,3 @@
-<!-- START WIDGETS -->
-<div class="row" ng-controller="inventoryCommonController">
-
 <style>
     #primary_nav_wrap
     {
@@ -83,31 +80,39 @@
 <div>
     <nav id="primary_nav_wrap">
         <ul>
-            <li>Add
+            <li><a>Create</a>
                 <ul>
-                    <li><a ui-sref="Inventory.addProduct">Product</a></li>
-                    <li><a ui-sref="Inventory.addMaterialType">Material Type</a></li>
-                    <li><a ui-sref="Inventory.addSupplier">Supplier</a></li>
+                    <li><a ui-sref="Process.addCustomer">Customer</a></li>
+                    <li><a ui-sref="Process.addProject">Project</a></li>
+                    <li><a>Schedule</a></li>
+                    <li><a ui-sref="Process.addQuotation">Quotation</a></li>
+                    <li><a ui-sref="Process.addInvoice">Invoice</a></li>
                 </ul>
             </li>
-            <li>Create
+            <li><a>Search</a>
                 <ul>
-                    <li><a ui-sref="Inventory.inwardItem">Inward</a></li>
-                    <li><a ui-sref="Inventory.outwardItem">Outward</a></li>
-                    <li><a ui-sref="Inventory.prodInit">Production Batch</a></li>
+                    <li><a>Customer</a></li>
+                    <li><a>Project</a></li>
+                    <li><a>Schedule</a></li>
                     </li>
                 </ul>
             </li>
-            <li>Search
+            <li><a>Payment</a>
                 <ul>
-                    <li><a ui-sref="Inventory.searchInventory">Product</a></li>
-                    <li><a ui-sref="Inventory.searchSupplier">Supplier</a></li>
-                    <li><a ui-sref="Inventory.searchInventory">Inward</a></li>
-                    <li><a ui-sref="Applicator.searchInventory">Outward</a></li>
-                    <li><a ui-sref="Inventory.prodSearch">Production Batch</a></li>
+                    <li><a ui-sref="Process.addPayment">Add Payment</a></li>
+                    <li><a>Payment History</a></li>
+                    <li><a>Schedule Payment Followup</a></li>
+
                 </ul>
             </li>
-            <li><a ui-sref="Inventory.searchInventory">Show Inventory</a></li>
+            <li><a>Followup History</a>
+                <ul>
+                    <li><a>Quotation Followup History</a></li>
+                    <li><a>Payment Followup</a></li>
+                    <li><a>SiteTracking Followup</a></li>
+
+                </ul>
+            </li>
 
         </ul>
     </nav>

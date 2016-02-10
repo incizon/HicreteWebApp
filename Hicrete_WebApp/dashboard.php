@@ -76,7 +76,7 @@
     <script type="text/javascript" src="Config/js/configService.js"></script>
     <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
     <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
-
+    <script type="text/javascript" src="Process/js/ProcessControllers.js"></script>
 
 
 
@@ -146,7 +146,7 @@ if(!$userObj->init($userId)){
 
                 if($userObj->isBusinessProcess){
                     echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+                            <a ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
                 }
 
@@ -164,13 +164,13 @@ if(!$userObj->init($userId)){
 
                 if($userObj->isApplicator){
                     echo "<li class=\"\">
-                            <a href=\"Payroll\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
+                            <a href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
                     </li>";
                 }
 
                 if($userObj->isReporting){
                     echo "<li class=\"\">
-                            <a ui-sref=\"Process\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
+                            <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
                     </li>";
                 }
 
