@@ -41,40 +41,40 @@ $scope.elementDetails=[{
 	PackageService.viewPackages($scope,$http,$scope.packageDetails);
 
 	$scope.nextStep = function() {
-				
+
 					$scope.formSubmitted=false;
-					
+
 					$scope.step++;
 
 				}
- 
+
 	$scope.prevStep = function() {
 					$scope.step--;
-				
+
 				}
 
-	
+
 	$scope.getPackageDetails=function(packageID){
 				packageID=packageID-1;
-				$scope.packageDetailsShow='Yes';				
+				$scope.packageDetailsShow='Yes';
 				$scope.package_description=$scope.packages[packageID].package_description;
                 $scope.package_total_amount=$scope.packages[packageID].package_total_amount;
 				$scope.packageTotalAmount=0;
 				$scope.elementDetails=[];
 				for(var index=0;index<$scope.packages[packageID].elementType.length;index++){
 						console.log("in for");
-					$scope.elementDetails.push({ 
+					$scope.elementDetails.push({
 							element_name:$scope.packages[packageID].elementType[index].element_name,
 							element_quantity:$scope.packages[packageID].elementType[index].element_quantity,
 							element_rate:$scope.packages[packageID].elementType[index].element_rate,
 							element_amount:$scope.packages[packageID].elementType[index].element_amount
-						
+
 						});
-						
-						
+
+
 				}
-				
-				
+
+
 		}
 	$scope.getPendingAmount=function(){
 				console.log("In Pending amount function");
@@ -111,49 +111,49 @@ $scope.elementDetails=[{
     };
 
 	$scope.processForm = function(applicatorDetails) {
-        		
+
         		$scope.formSubmitted=false;
-        		
+
         		if($scope.applicatorDetails.pendingAmount==0 && $scope.applicatorDetails.received=='Yes'){
-        			
+
         			console.log("Full Amount Paid ");
         			applicatorDetails.operation='createApplicator';
         			applicatorDetails.paymentStatus='Full';
         			//console.log(applicatorDetails);
-					   
-              ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);	
+
+              ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         		}
         		if($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes'){
         			 $scope.showModal = true;
         			 console.log("Half Amount Paid");
-        			 
+
         		}
         		if($scope.applicatorDetails.received=='No'){
         			$scope.showModal = true;
         			console.log("No Amount paid");
-        			
+
         		}
 
 
         };
     $scope.processFollowup=function(applicatorDetails){
-      
-        	
+
+
         	if($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes'){
-        		console.log("in pending amount function call");	
+        		console.log("in pending amount function call");
         		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="Partial";
         		ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
-        	   
+
           }
         	if($scope.applicatorDetails.received=='No'){
 
         		applicatorDetails.operation='createApplicator';
         		applicatorDetails.paymentStatus="No";
-        		 
+
             ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
-        	}	
-        } 		
+        	}
+        }
 
 
 
@@ -161,88 +161,88 @@ $scope.elementDetails=[{
 myApp.controller('PackageController',function($scope,$http,PackageService){
 
     $scope.packageDetails={
-      
+
               elementType:[]
-                    
+
             };
-           
-    $scope.showElementField=false;        
+
+    $scope.showElementField=false;
     //Clear form Fields
-    
-    
+
+
     $scope.clearFields=function(packageDetails){
 
             packageDetails.packagedescription="";
             packageDetails.packagename="";
             packageDetails.elementType=[];
- 
+
           };
-          
+
        //Adding Number of Fields
         $scope.add = function () {
-          
-         
+
+
           $scope.showElementField=true;
-         
+
           console.log($scope.noOfElement);
           for (var i = 0; i < $scope.noOfElement; i++) {
-      
+
                         //console.log("Inside For Loop of Add fields");
                         $scope.addField();
                   };
-          
-          //$scope.noOfElement=""; 
+
+          //$scope.noOfElement="";
         };
 
-        
+
     $scope.clear =function() {
-              
+
               $scope.packageDetails.elementType.splice(0,$scope.packageDetails.elementType.length);//Remove items in array elementType
-          
+
             };
-            
+
     //Removing field selected
         $scope.remove= function(index){
-    
-              $scope.packageDetails.elementType.splice(index,1); //remove item by index 
+
+              $scope.packageDetails.elementType.splice(index,1); //remove item by index
             };
-    
-    //Adding fields to packageDetails     
-        
+
+    //Adding fields to packageDetails
+
     $scope.addField= function(){
 
-          $scope.packageDetails.elementType.push({ 
-            
+          $scope.packageDetails.elementType.push({
+
             type:"",
             quantity:"",
             rate:""
-            
+
           });
         };
-    
+
     //Submitting packageDetails to create package.
-    
+
     $scope.processPackage = function(packageDetails) {
         $scope.packageFormSubmitted=false;
-        PackageService.createPackage($scope,$http,packageDetails);      
+        PackageService.createPackage($scope,$http,packageDetails);
 
     };
 
 });
 myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
-  
+
   $scope.oneAtATime = true;
   $scope.packages = [];
 
    $scope.packageDetails={
     operation :""
    };
-  
-    
+
+
    PackageService.viewPackages($scope,$http,$scope.packageDetails);
-    
-  
-  
+
+
+
 });
 
 myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,ApplicatorService){
@@ -267,11 +267,11 @@ myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,Appli
             index = $scope.Applicators.indexOf(value);
                 //console.log(index);
               return (begin <= index && index < end);
-          };  
-          
+          };
+
         $scope.ApplicatorSelected = function (tentetiveApplicator) {
           $scope.selectedTentetiveApplicator = tentetiveApplicator;
-          
+
       };
 
         $scope.applicatorToModify=function(tentetiveApplicator){
@@ -287,7 +287,7 @@ myApp.controller('ViewTentetiveApplicatorController',function($scope,$http,Appli
           $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
           $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
           $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
-          $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact; 
+          $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
           $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
 
         };
@@ -316,14 +316,14 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,Appli
             index = $scope.Applicators.indexOf(value);
                 //console.log(index);
               return (begin <= index && index < end);
-          };  
-          
+          };
+
         $scope.ApplicatorSelected = function (permanentApplicator) {
           $scope.selectedPermanentApplicator = permanentApplicator;
           console.log(permanentApplicator);
       };
 
-      
+
         $scope.applicatorToModify=function(permanentApplicator){
           $scope.applicatorDetails.applicator_id=permanentApplicator.applicator_master_id;
           $scope.applicatorDetails.firmname=permanentApplicator.applicator_name;
@@ -337,7 +337,7 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,Appli
           $scope.applicatorDetails.pannumber=permanentApplicator.applicator_pan_number;
           $scope.applicatorDetails.servicetaxnumber=permanentApplicator.applicator_stax_number;
           $scope.applicatorDetails.vatnumber=permanentApplicator.applicator_vat_number;
-          $scope.applicatorDetails.pointofcontact=permanentApplicator.point_of_contact; 
+          $scope.applicatorDetails.pointofcontact=permanentApplicator.point_of_contact;
           $scope.applicatorDetails.pointcontactno=permanentApplicator.point_of_contact_no;
 
         };
@@ -346,88 +346,18 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,Appli
 
 });
 
-myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService){
+/*
+ ApplicatorPaymentController:
+ To Update Payment of tentative applicators.
+ Methods
+ 1.getApplicatorPaymentDetails :- get details of applicator previous payment details.
+ 2.applicatorPaymentDetails :-calculate remaining amount and view payment details of particular applicator.
+ 3.getPendingAmount :- calculate pending amount if payment is partial done.
+ 4.submitPaymentDetails :- Process payment details and call service to submit details to server.
+ 5.processFollowup :- Process follow up if partial payment is done and call service to submit details to server.
 
-    $scope.applicatorDetails={
-        operation:""
-    };
-   $scope.formSubmitted=false;
-    $scope.showPaymentDetails=false;
-    $scope.Applicators=[];
-    $scope.paymentDetails=[];
-
-    ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
-
-
-    $scope.applicatorPaymentDetails=function(enrollmentId){
-
-        $scope.paymentDetails=[];
-        for(var index=0;index<$scope.Applicators.length;index++){
-
-               if($scope.Applicators[index].enrollment_id==enrollmentId) {
-
-                   $scope.showPaymentDetails = true;
-                    if ($scope.Applicators[index].total_paid_amount == null){
-
-                        $scope.previousAmountPaid =0;
-                    }
-                    else{
-
-                        $scope.previousAmountPaid=$scope.Applicators[index].total_paid_amount;
-                    }
-                         $scope.packageAmount=$scope.Applicators[index].package_total_amount;
-                         $scope.remainingAmount=$scope.packageAmount-$scope.previousAmountPaid;
-
-
-                   for(var index1=0;index1<$scope.Applicators[index].paymentDetails.length;index1++){
-
-                       $scope.paymentDetails.push({
-                           amount_paid:$scope.Applicators[index].paymentDetails[index1].amount_paid,
-                           date_of_payment:$scope.Applicators[index].paymentDetails[index1].date_of_payment,
-                           paid_to:$scope.Applicators[index].paymentDetails[index1].paid_to,
-                           payment_mode:$scope.Applicators[index].paymentDetails[index1].payment_mode
-
-                       });
-
-                   }
-                     break;
-               }
-        }
-
-    }
-
-    $scope.viewPaymentDetails=function(){
-
-
-
-    };
-    $scope.getPendingAmount=function(){
-        console.log("In Pending amount function");
-        $scope.applicatorDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.applicatorDetails.amountpaid)-$scope.previousAmountPaid;
-
-    }
-    $scope.submitPaymentDetails=function(applicatorDetails){
-
-        $scope.formSubmitted=false;
-
-       if($scope.applicatorDetails.pendingAmount==0) {
-
-           applicatorDetails.paymentStatus='Full';
-           ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
-       }
-        else if($scope.applicatorDetails.pendingAmount!=0){
-           $scope.showModal = true;
-           applicatorDetails.paymentStatus='Partial';
-
-       }
-    }
-    $scope.processFollowup=function(applicatorDetails){
-
-        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
-    }
-});
-
-myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
+ */
+myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
 
 
     $scope.paymentDetails={
@@ -435,69 +365,8 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
     };
     $scope.formSubmitted=false;
     $scope.showPaymentDetails=false;
-    $scope.Projects=[
-        {
-            "project_id": "1",
-            project_name: "project1",
-            total_project_amount:"100000",
-            total_paid_amount:"8000",
-            paymentDetails:[
-                {
-                    amount_paid:"4000",
-                    date_of_payment:"10-02-2000",
-                    paid_to :"Namdev",
-                    payment_mode :"cash"
-                },
-                {
-                    amount_paid:"4000",
-                    date_of_payment:"15-02-2000",
-                    paid_to :"Namdev",
-                    payment_mode :"cash"
-                }
-            ]
-        },
-        {
-            "project_id": "2",
-            project_name: "project2",
-            total_project_amount:"111111",
-            total_paid_amount:"70000",
-            paymentDetails:[
-                {
-                    amount_paid:"20000",
-                    date_of_payment:"10-02-2000",
-                    paid_to :"Namdev",
-                    payment_mode :"cash"
-                },
-                {
-                    amount_paid:"50000",
-                    date_of_payment:"15-02-2000",
-                    paid_to :"Namdev",
-                    payment_mode :"cash"
-                }
-            ]
-        },
-        {
-            "project_id": "3",
-            project_name: "project3",
-            total_project_amount:"110000",
-            total_paid_amount:"60000",
-            paymentDetails:[
-                {
-                    amount_paid:"40000",
-                    date_of_payment:"10-02-2000",
-                    paid_to :"Namdev",
-                    payment_mode :"cash"
-                },
-                {
-                    amount_paid:"20000",
-                    date_of_payment:"15-02-2000",
-                    paid_to :"Namdev",
-                    payment_mode :"cash"
-                }
-            ]
-        }
-    ];
-    $scope.projectPayment=[];
+    $scope.Applicators=[];
+    $scope.applicatorPayment=[];
     $scope.animationsEnabled=true;
     $scope.paymentReceivedFor=undefined;
 
@@ -509,33 +378,33 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
     ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.paymentDetails);
 
 
-    $scope.viewProjectPaymentDetails=function(project_id){
+    $scope.applicatorPaymentDetails=function(enrollmentId){
 
-        $scope.projectPayment=[];
-        for(var index=0;index<$scope.Projects.length;index++){
+        $scope.applicatorPayment=[];
+        for(var index=0;index<$scope.Applicators.length;index++){
 
-            if($scope.Projects[index].project_id==project_id) {
+            if($scope.Applicators[index].enrollment_id==enrollmentId) {
 
                 $scope.showPaymentDetails = true;
-                if ($scope.Projects[index].total_paid_amount == null){
+                if ($scope.Applicators[index].total_paid_amount == null){
 
                     $scope.previousAmountPaid =0;
                 }
                 else{
 
-                    $scope.previousAmountPaid=$scope.Projects[index].total_paid_amount;
+                    $scope.previousAmountPaid=$scope.Applicators[index].total_paid_amount;
                 }
-                $scope.packageAmount=$scope.Projects[index].total_project_amount;
+                $scope.packageAmount=$scope.Applicators[index].package_total_amount;
                 $scope.remainingAmount=$scope.packageAmount-$scope.previousAmountPaid;
 
 
-                for(var index1=0;index1<$scope.Projects[index].paymentDetails.length;index1++){
+                for(var index1=0;index1<$scope.Applicators[index].paymentDetails.length;index1++){
 
-                    $scope.projectPayment.push({
-                        amount_paid:$scope.Projects[index].paymentDetails[index1].amount_paid,
-                        date_of_payment:$scope.Projects[index].paymentDetails[index1].date_of_payment,
-                        paid_to:$scope.Projects[index].paymentDetails[index1].paid_to,
-                        payment_mode:$scope.Projects[index].paymentDetails[index1].payment_mode
+                    $scope.applicatorPayment.push({
+                        amount_paid:$scope.Applicators[index].paymentDetails[index1].amount_paid,
+                        date_of_payment:$scope.Applicators[index].paymentDetails[index1].date_of_payment,
+                        paid_to:$scope.Applicators[index].paymentDetails[index1].paid_to,
+                        payment_mode:$scope.Applicators[index].paymentDetails[index1].payment_mode
 
                     });
 
@@ -550,7 +419,7 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
 
     $scope.getPendingAmount=function(){
         console.log("In Pending amount function");
-        $scope.paymentDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.paymentDetails.amountPaid)-$scope.previousAmountPaid;
+        $scope.paymentDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.paymentDetails.amountpaid)-$scope.previousAmountPaid;
 
     }
     $scope.submitPaymentDetails=function(size,paymentDetails){
@@ -562,7 +431,7 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
 
             paymentDetails.paymentStatus='Yes';
             console.log(paymentDetails);
-            // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+            ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
         }
         else if($scope.paymentDetails.pendingAmount!=0){
             //$scope.showModal = true;
@@ -579,8 +448,7 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
 
                     $scope.ok = function () {
 
-                        console.log($scope.paymentDetails);
-                        // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+                        ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
                         $uibModalInstance.close();
                     };
 
@@ -611,46 +479,3 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
     //  ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
     //}
 });
-
-
-// myApp.directive('modal', function () {
-//     return {
-//       template: '<div class="modal fade">' + 
-//           '<div class="modal-dialog">' + 
-//             '<div class="modal-content">' + 
-//               '<div class="modal-header">' + 
-//                 '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-//                 '<h4 class="modal-title">Schedule Followup</h4>' + 
-//               '</div>' + 
-//               '<div class="modal-body" ng-transclude></div>' +
-//             '</div>' + 
-//           '</div>' + 
-//         '</div>',
-//       restrict: 'E',
-//       transclude: true,
-//       replace:true,
-//       scope:true,
-//       link: function postLink(scope, element, attrs) {
-//         scope.title = attrs.title;
-
-//         scope.$watch(attrs.visible, function(value){
-//           if(value == true)
-//             $(element).modal('show');
-//           else
-//             $(element).modal('hide');
-//         });
-
-//         $(element).on('shown.bs.modal', function(){
-//           scope.$apply(function(){
-//             scope.$parent[attrs.visible] = true;
-//           });
-//         });
-
-//         $(element).on('hidden.bs.modal', function(){
-//           scope.$apply(function(){
-//             scope.$parent[attrs.visible] = false;
-//           });
-//         });
-//       }
-//     };
-//   });
