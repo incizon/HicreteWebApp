@@ -98,6 +98,11 @@ myApp.controller('costCenterController', function ($scope, $http) {
         segments: null
     }
 
+    $scope.remove = function (index) {
+
+        $scope.segmentList.splice(index, 1);
+        //remove item by index
+    };
 
     var data = {
         operation: "getSegments",
@@ -341,5 +346,12 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
 
 myApp.controller('costCenterSearchController', function ($scope, $http) {
 
-
+    $scope.costCenterData=[
+        {costCenterName: 'costCenter1', projectName: "project 10", budgetAllocated:270000,totalExpenditure:10000,status:"good"},
+        {costCenterName: 'costCenter2', projectName: "project 14", budgetAllocated:7700000,totalExpenditure:7878000,status:"Worst"},
+        {costCenterName: 'costCenter4', projectName: "project 16", budgetAllocated:780000,totalExpenditure:17000,status:"Average"},
+        {costCenterName: 'costCenter7', projectName: "project 123", budgetAllocated:900000,totalExpenditure:17800,status:"Average"},
+        {costCenterName: 'costCenter10', projectName: "project 561", budgetAllocated:20000,totalExpenditure:18900,status:"Worst"},
+        {costCenterName: 'costCenter15', projectName: "project 1g", budgetAllocated:670000,totalExpenditure:17800,status:"Good"},
+    ]
 });
