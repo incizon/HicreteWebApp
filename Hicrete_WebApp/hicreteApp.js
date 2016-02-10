@@ -20,6 +20,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ApplicatorController'
         })
 
+        .state('Applicator.addPayment', {
+            url: '/addApplicator',
+            templateUrl: 'Applicator/html/ApplicatorPayment.html',
+            controller: 'ApplicatorPaymentController'
+        })
+
         .state('Applicator.addPackage', {
             url: '/addPackage',
             templateUrl: 'Applicator/html/CreatePackage.html',
@@ -43,9 +49,14 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ViewPermanentApplicatorController'
         })
         .state('Applicator.updateApplicatorPayment', {
-            url: '/updateApplicator',
+            url: '/updateApplicatorPayment',
             templateUrl: 'Applicator/html/ApplicatorPayment.html',
             controller: 'ApplicatorPaymentController'
+        })
+        .state('Applicator.updateProjectPayment', {
+            url: '/updateProjectPayment',
+            templateUrl: 'Process/html/ProjectPayment.html',
+            controller: 'ProjectPaymentController'
         })
         .state('Inventory', {
             url: '/Inventory',
@@ -118,7 +129,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/searchSupplier',
             templateUrl: 'Inventory/html/inventory_supplierSearch.html',
             controller: 'supplierFetchController'
-        }) 
+        })
+        .state('Inventory.scheduleFollowup', {
+            url: '/scheduleFollowup',
+            templateUrl: 'Inventory/html/scheduleFollowup.html',
+            controller: 'FollowUpController'
+        })
         .state('Expense', {
             url: '/Expense',
             templateUrl: 'Expense/html/ExpenseWidgets.html'
@@ -204,9 +220,51 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
            controller: 'requestTempAccessController'
 
         })
+
+        .state('Process', {
+            url: '/Process',
+            templateUrl: 'Process/html/processWidgets.html'
+        })
+
+        .state('Process.addCustomer', {
+            url: '/addCustomer',
+            templateUrl: 'Process/html/CreateApplicator.html'
+
+        })
+
+        .state('Process.addProject', {
+            url: '/addProject',
+            templateUrl: 'Process/html/CreatePackage.html'
+
+        })
+
+        .state('Process.addQuotation', {
+            url: '/addQuotation',
+            templateUrl: 'Process/html/ViewPackages.html'
+
+        })
+
+        .state('Process.addInvoice', {
+            url: '/addInvoice',
+            templateUrl: 'Process/html/ViewTentetiveApplicator.html'
+
+        })
+
+        .state('Process.addPayment', {
+            url: '/addPayment',
+            templateUrl: 'Process/html/ProjectPayment.html',
+            controller: 'ProjectPaymentController'
+        })
         .state('MainPage', {
             url: '',
-            templateUrl: 'mainPage.html',
+            templateUrl: 'MainPage.html'
+
+
+        })
+
+        .state('SuperDashboard', {
+            url: '',
+            templateUrl: 'SuperMainPage.html',
             controller: 'mainPageController'
             
         });
@@ -303,6 +361,10 @@ myApp.controller('TabController', function () {
     this.isSet = function (tabId) {
         return this.tab === tabId;
     };
+
+
+
+
 });
 
 

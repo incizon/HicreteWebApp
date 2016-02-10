@@ -80,36 +80,37 @@
 <div>
     <nav id="primary_nav_wrap">
         <ul>
-            <li><a>Add</a>
+            <li><a>Create</a>
                 <ul>
-                    <li><a ui-sref="Applicator.addDealer">Applicator</a></li>
-                    <li><a ui-sref="Applicator.addPackage">Package</a></li>
-
-                </ul>
-            </li>
-            <li><a>Payment</a>
-                <ul>
-                    <li><a ui-sref="Applicator.addPayment">Add Payment</a></li>
-                    <li><a>Show Payment History</a></li>
-                    <!--<ul>-->
-                    <!--<li><a href="#">Deep Menu 1</a>-->
-                    <!--<ul>-->
-                    <!--<li><a href="#">Sub Deep 1</a></li>-->
-                    <!--<li><a href="#">Sub Deep 2</a></li>-->
-                    <!--<li><a href="#">Sub Deep 3</a></li>-->
-                    <!--<li><a href="#">Sub Deep 4</a></li>-->
-                    <!--</ul>-->
-                    <!--</li>-->
-                    <!--<li><a href="#">Deep Menu 2</a></li>-->
-                    <!--</ul>-->
-                    </li>
+                    <li><a ui-sref="Process.addCustomer">Customer</a></li>
+                    <li><a ui-sref="Process.addProject">Project</a></li>
+                    <li><a>Schedule</a></li>
+                    <li><a ui-sref="Process.addQuotation">Quotation</a></li>
+                    <li><a ui-sref="Process.addInvoice">Invoice</a></li>
                 </ul>
             </li>
             <li><a>Search</a>
                 <ul>
-                    <li><a ui-sref="Applicator.tentetiveApplicator">Tentative Applicator</a></li>
-                    <li><a ui-sref="Applicator.permanentApplicator">Permanent Applicator</a></li>
-                    <li><a ui-sref="Applicator.viewPackages">Packages</a></li>
+                    <li><a>Customer</a></li>
+                    <li><a>Project</a></li>
+                    <li><a>Schedule</a></li>
+                    </li>
+                </ul>
+            </li>
+            <li><a>Payment</a>
+                <ul>
+                    <li><a ui-sref="Process.addPayment">Add Payment</a></li>
+                    <li><a>Payment History</a></li>
+                    <li><a>Schedule Payment Followup</a></li>
+
+                </ul>
+            </li>
+            <li><a>Followup History</a>
+                <ul>
+                    <li><a>Quotation Followup History</a></li>
+                    <li><a>Payment Followup</a></li>
+                    <li><a>SiteTracking Followup</a></li>
+
                 </ul>
             </li>
 
@@ -117,18 +118,7 @@
     </nav>
 </div>
 
-<!-- PAGE CONTENT WRAPPER -->
 
 
-            <div ui-view></div>
-		
-
-        <!-- END PAGE CONTENT WRAPPER -->
-
-
-
-
-
-
-
-
+<div ui-view></div>
+<!-- END WIDGETS -->

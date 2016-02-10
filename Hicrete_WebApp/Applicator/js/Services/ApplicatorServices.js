@@ -4,7 +4,7 @@ myApp.service('ApplicatorService',function(){
 
 		 var config = {
 						params: {
-									applicatorDetails: applicatorDetails
+									data: applicatorDetails
 								}
 						  	 
 					};
@@ -13,28 +13,27 @@ myApp.service('ApplicatorService',function(){
 								
 					.success(function (data, status, headers, config){	
 							console.log(data);
-							doShowAlert("Success",data);
 
-							//window.location="http://localhost/Hicrete_Web1-1-2016/dashboard.html#/Applicator";
-							
 							setTimeout(function(){
 									window.location.reload(true);
 							},2000);
 							
-							// $scope.clearFields(applicatorDetails,'Success');					
+
 
 						})
 						.error(function (data, status, headers, config){
-                        		console.log(data);
-								doShowAlert("Failure",data);
+
+                        			console.log(data);
+
 						});			
-	}
+	};
+
 	this.viewApplicatorDetails=function($scope,$http,applicatorDetails){
 
-				applicatorDetails.operation='viewApplicator';
+				applicatorDetails.operation='viewApplicators';
 				var config = {
 								params: {
-										applicatorDetails: applicatorDetails
+										data: applicatorDetails
 									}
 						  	 
 								};
@@ -54,12 +53,12 @@ myApp.service('ApplicatorService',function(){
 
 		};
 
-	this.getApplicatorPaymentDetails=function($scope,$http,applicatorDetails){
+	this.getApplicatorPaymentDetails=function($scope,$http,paymentDetails){
 
-		applicatorDetails.operation='getPaymentDetails';
+		paymentDetails.operation='getPaymentDetails';
 		var config = {
 					 params: {
-								applicatorDetails: applicatorDetails
+								data: paymentDetails
 							}
 					};
 
@@ -78,12 +77,12 @@ myApp.service('ApplicatorService',function(){
 
 	};
 
-	this.savePaymentDetails=function($scope,$http,applicatorDetails){
+	this.savePaymentDetails=function($scope,$http,paymentDetails){
 
-		applicatorDetails.operation='savePaymentDetails';
+		paymentDetails.operation='savePaymentDetails';
 		var config = {
 			params: {
-				applicatorDetails: applicatorDetails
+				data: paymentDetails
 			}
 		};
 
@@ -91,7 +90,9 @@ myApp.service('ApplicatorService',function(){
 
 				.success(function (data, status, headers, config){
 					console.log(data);
-
+					setTimeout(function(){
+						window.location.reload(true);
+					},2000);
 
 				})
 
@@ -99,56 +100,56 @@ myApp.service('ApplicatorService',function(){
 					console.log(data);
 
 				});
-	}
+	};
 
 
 });
 myApp.service('PackageService',function(){
 
 		this.createPackage=function($scope,$http,packageDetails){
-				packageDetails.operation='create';
+				packageDetails.operation='createPackage';
 				var config = {
 								params: {
-										packageDetails: packageDetails
+										data: packageDetails
 									}
 						  	 
 								};
 
-			   		$http.post("Applicator/php/Package.php",null,config)
+			   		$http.post("Applicator/php/Applicator.php",null,config)
                 
 					.success(function (data, status, headers, config){
 						            
 						            console.log(data);
-									doShowAlert("Success",data);
-									setTimeout(function(){
-										window.location.reload(true);
-									},2000);
+
+									//setTimeout(function(){
+									//	window.location.reload(true);
+									//},2000);
 					})
 					.error(function (data, status, headers, config){
 									
 									console.log(data);
-									doShowAlert("Failure",data);
+
                     });
 		};
 
 
 		this.viewPackages=function($scope,$http,packageDetails){
 
-			packageDetails.operation="view";
+			packageDetails.operation="viewPackages";
 			var config={
 
 						params:{
 
-							packageDetails:packageDetails
+							data:packageDetails
 						}
 				};		
-					$http.post("Applicator/php/Package.php", null,config)
+					$http.post("Applicator/php/Applicator.php", null,config)
 					
 					.success(function (data, status, headers, config){
 
 							console.log(data);
 							$scope.packages=data;
-							
+							$scope.totalPackages = $scope.packages.length;
 						
 						})
 

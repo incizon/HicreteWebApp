@@ -1,103 +1,119 @@
 <!-- START WIDGETS -->
 <div class="row" ng-controller="inventoryCommonController">
 
-    <div class="col-md-3" >
+<style>
+    #primary_nav_wrap
+    {
+        margin-top:15px
+    }
+    #primary_nav_wrap ul {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #fff;
+        border-color: #ccc -moz-use-text-color;
+        border-image: none;
+        border-style: solid none;
+        border-width: 1px medium;
+        float: left;
+        list-style: outside none none;
+        margin: 0 0 -14px;
+        padding: 0;
+        position: relative;
+        top: -25px;
+        width: 100%;
+    }
+    #primary_nav_wrap ul a
+    {
+        display:block;
+        color:#333;
+        text-decoration:none;
+        font-size:12px;
+        line-height:32px;
+        padding:0 15px;
+    }
+    #primary_nav_wrap ul li
+    {
+        position:relative;
+        float:left;
+        margin:0;
+        padding:0
+    }
+    #primary_nav_wrap ul li.current-menu-item
+    {
+        background:#ddd
+    }
+    #primary_nav_wrap ul li:hover
+    {
+        background:#f6f6f6
+    }
+    #primary_nav_wrap ul ul
+    {
+        display:none;
+        position:absolute;
+        top:100%;
+        left:0;
+        background:#fff;
+        padding:0;
+        width: 200px;
+        z-index: 9999;
+    }
+    #primary_nav_wrap ul ul li
+    {
+        float:none;
+        width:200px
+    }
+    #primary_nav_wrap ul ul a
+    {
+        line-height:120%;
+        padding:10px 15px
+    }
+    #primary_nav_wrap ul ul ul
+    {
+        top:0;
+        left:100%
+    }
+    #primary_nav_wrap ul li:hover > ul
+    {
+        display:block
+    }
+</style>
 
-        <!-- START WIDGET CLOCK -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:white !important">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-cubes" style="color:#278C7D !important"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278C7D !important">Material</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col">
-                    <a ui-sref="Inventory.addProduct" title="Add Product"><span class="fa fa-plus"  style="color:#278C7D !important" title="Add Product"></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.addMaterialType"><span class="fa fa-cube" style="color:#278C7D !important" title="Add Material Type"></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.addSupplier"><span class="fa fa-user-plus" style="color:#278C7D !important" title="Add Supplier"></span></a>
-                </div>
-            </div>
-        </div>
-        <!-- END WIDGET CLOCK -->
+<div>
+    <nav id="primary_nav_wrap">
+        <ul>
+            <li><a>Add</a>
+                <ul>
+                    <li><a ui-sref="Inventory.addProduct">Product</a></li>
+                    <li><a ui-sref="Inventory.addMaterialType">Material Type</a></li>
+                    <li><a ui-sref="Inventory.addSupplier">Supplier</a></li>
+                </ul>
+            </li>
+            <li><a>Create</a>
+                <ul>
+                    <li><a ui-sref="Inventory.inwardItem">Inward</a></li>
+                    <li><a ui-sref="Inventory.outwardItem">Outward</a></li>
+                    <li><a ui-sref="Inventory.prodInit">Production Batch</a></li>
+                    </li>
+                </ul>
+            </li>
+            <li><a>Search</a>
+                <ul>
+                    <li><a ui-sref="Inventory.searchInventory">Product</a></li>
+                    <li><a ui-sref="Inventory.searchSupplier">Supplier</a></li>
+                    <li><a ui-sref="Inventory.searchInventory">Inward</a></li>
+                    <li><a ui-sref="Applicator.searchInventory">Outward</a></li>
+                    <li><a ui-sref="Inventory.prodSearch">Production Batch</a></li>
+                </ul>
+            </li>
+            <li><a ui-sref="Inventory.searchInventory">Show Inventory</a></li>
 
-    </div>
-
-    <div class="col-md-3">
-
-        <!-- START WIDGET CLOCK -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:white !important">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-wrench" style="color:#278C7D !important"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278C7D !important">Operations</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col">
-                    <a ui-sref="Inventory.inwardItem"><span class="fa fa-cube" style="color:#278C7D !important" title="Inward Details"></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.outwardItem"><span class="fa fa-cube" style="color:#278C7D !important" title="Outward Details"></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.searchInventory"><span class="fa fa-search" style="color:#278C7D !important" title="Search Product"></span></a>
-                </div>
-            </div>
-        </div>
-        <!-- END WIDGET CLOCK -->
-
-    </div>
-
-  <div class="col-md-3">
-
-        <!-- START WIDGET CLOCK -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:white !important">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-recycle" style="color:#278C7D !important"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278C7D !important">Production Batch</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col">
-                    <a ui-sref="Inventory.prodInit" data-toggle="tooltip" data-placement="bottom" data-original-title="Start Production batch"><span class="fa fa-clock-o" style="color:#278C7D !important"></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.prodSearch" data-toggle="tooltip" data-placement="bottom" data-original-title="Search Production Batches"><span class="fa fa-bell" style="color:#278C7D !important"></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.prodInq" data-toggle="tooltip" data-placement="bottom" data-original-title="Search All Production Batches"><span class="fa fa-calendar" style="color:#278C7D !important"></span></a>
-                </div>
-            </div>
-        </div>
-        <!-- END WIDGET CLOCK -->
-
-    </div>
-
-    <div class="col-md-3">
-
-        <!-- START WIDGET CLOCK -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:white !important">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-file-pdf-o" style="color:#278C7D !important"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278C7D !important">Summary</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col">
-                    <a ui-sref="Inventory.searchProduct"><span class="fa fa-search" style="color:#278C7D !important" title="Search Product "></span></a>
-                </div>
-                <div class="col">
-                    <a ui-sref="Inventory.searchSupplier"><span class="fa fa-search" style="color:#278C7D !important" title="Search Supplier"></span></a>
-                </div>
-                <div class="col">
-                    <a href="#"><span class="fa fa-history" style="color:#278C7D !important"></span></a>
-                </div>
-            </div>
-        </div>
-        <!-- END WIDGET CLOCK -->
-
-    </div>
-
-
+        </ul>
+    </nav>
 </div>
+
+
+
 <div ui-view></div>
 <!-- END WIDGETS -->

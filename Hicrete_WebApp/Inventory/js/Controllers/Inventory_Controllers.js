@@ -1390,3 +1390,46 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
 /*********************************************************************************************
  * END of PRODUCTION BATCH
  *********************************************************************************************/
+
+/*Temporary Followup Form ********/
+myApp.controller('FollowUpController',function($scope,$http,ApplicatorService,$uibModal, $log){
+
+    $scope.saveFollowupDetails=function(size,followupDetails){
+
+
+                var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Inventory/html/FollowupForm.html',
+                controller:  function ($scope, $uibModalInstance,followupDetails) {
+
+
+                    $scope.followupDetails = followupDetails;
+
+                    $scope.Save = function () {
+                        $uibModalInstance.close();
+                    };
+
+                    $scope.Cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
+                size: size,
+                resolve: {
+                    followupDetails: function () {
+                        return $scope.followupDetails;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (followupDetails) {
+                $scope.followupDetails = followupDetails;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+        }
+
+
+});
