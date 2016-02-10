@@ -338,7 +338,7 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
 
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            alert("if");
+            //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.stepa=2;
@@ -400,8 +400,8 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
-                        //window.location.reload(true);
-                        window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                        window.location.reload(true);
+                        //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -630,8 +630,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log("In Post of outward entry success:");
                 console.log(data);
                  setTimeout(function(){
-                  //window.location.reload(true);
-                     window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                  window.location.reload(true);
+                     //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 },1000);
                 $scope.outwardData = data;
                 $scope.clearFields($scope.OutwardData);
@@ -682,8 +682,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log(data);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    //window.location.reload(true);
-                    window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                    window.location.reload(true);
+                    //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 }, 1000);
 
 
@@ -1257,6 +1257,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            setTimeout(function () {
+                window.location.reload(true);
+            }, 1000);
 
         }
         else if (page == "Search" || page == 'Complete') {
