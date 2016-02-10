@@ -3,7 +3,7 @@
 	  include("PackageClassLib.php");
 
 	 
-	 $packageDetails=json_decode($_GET["packageDetails"]);
+	 $packageDetails=json_decode($_GET["data"]);
 
 	 $operation=$packageDetails->operation;
      

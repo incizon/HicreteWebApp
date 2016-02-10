@@ -117,7 +117,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-calendar" ng-click="open1()"></span></span>
-                                    <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  ng-required="true" close-text="Close"/>
+                                    <input type="date" class="form-control" ng-model="applicatorDetails.paymentDate"/>
                                 </div>
                                  
                             </div>
@@ -259,7 +259,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="pendingAmount" ng-model="applicatorDetails.pendingAmount">
+                                    <input type="text" class="form-control" name="pendingAmount" ng-model="applicatorDetails.pendingAmount" readonly>
                                 </div>            
                             </div>
                         </div>
@@ -274,7 +274,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-calendar" ng-click="open1()"></span></span>
 
-                                    <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  ng-required="true" close-text="Close"/>
+                                    <input type="date" class="form-control" ng-model="applicatorDetails.paymentDate"/>
                                 </div>
                                 
                             </div>
@@ -318,7 +318,7 @@
                  <div class="col-md-8">                        
                     <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-calendar" ng-click="open1()"></span></span>
-                        <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="applicatorDetails.followupdate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  ng-required="true" close-text="Close"/>
+                        <input type="date" class="form-control" ng-model="applicatorDetails.followupdate"/>
 
                     </div>                                  
                 </div>

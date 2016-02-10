@@ -37,20 +37,20 @@
                             </div>        
                         
                         </div>
-                        <div class="form-group" ng-show="packageDetailsShow=='Yes'">
-                            
-                            <div class="col-md-3">
-                                
-                                <label class="control-label">Package Description</label>
-                            
-                            </div> 
-                            <div class="col-md-9">                                        
-                            
-                                <textarea class="form-control field-margin" name="packageDescription" rows="2" disabled>{{package_description}}
-                                </textarea>
-                            </div>
-                       
-                        </div>
+                        <!--<div class="form-group" ng-show="packageDetailsShow=='Yes'">-->
+                            <!---->
+                            <!--<div class="col-md-3">-->
+                                <!---->
+                                <!--<label class="control-label">Package Description</label>-->
+                            <!---->
+                            <!--</div> -->
+                            <!--<div class="col-md-9">                                        -->
+                            <!---->
+                                <!--<textarea class="form-control field-margin" name="packageDescription" rows="2" disabled>{{applicatorDetails.package_description}}-->
+                                <!--</textarea>-->
+                            <!--</div>-->
+                       <!---->
+                        <!--</div>-->
 
                 </div>
 
@@ -75,12 +75,12 @@
                     
                             <tbody>
                     
-                                <tr ng-repeat="elementData in elementDetails">
+                                <tr ng-repeat="elementData in applicatorDetails.elementDetails">
                     
                                     <td>{{elementData.element_name}}</td>
                                     <td>{{elementData.element_quantity}}</td>
                                     <td>{{elementData.element_rate}}</td>
-                                    <td>{{elementData.element_amount}}</td>
+                                    <td>{{elementData.element_quantity * elementData.element_rate}}</td>
                     
                                 </tr>                                               
                            
@@ -98,10 +98,15 @@
                     
                         </div>
                     
-                        <div class="col-md-6">                                        
+                        <div class="col-md-3">
                     
                             <b> {{package_total_amount}} </b>
                     
+                        </div>
+                        <div class="col-md-3">
+
+                            <button class="btn btn-primary" ng-click="editPackageDetails()">Edit Package</button>
+
                         </div>
                     
                      </div>      
@@ -109,7 +114,160 @@
                 </div>
 
             </form>
+
     
+        </div>
+        <br>
+        <div class="row" ng-if="editPackage">
+
+            <form class="form-horizontal" name="packageForm" novalidate>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <div class="col-md-3">
+
+                                <label class="control-label">Package Name</label>
+
+                            </div>
+
+                            <div class="col-md-9">
+
+                                <div class="input-group">
+
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+
+                                    <input type="text" class="form-control" name="packageName"
+                                           ng-model="applicatorDetails.package_name" pattern="[a-zA-Z0-9 ]+" required/>
+
+                                </div>
+
+                                <div class="help-block" ng-messages="packageForm.packageName.$error"
+                                     ng-show="packageFormSubmitted">
+                                    <span style="color:red" ng-message="required">Package name is required</span>
+                                    <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <div class="col-md-3">
+
+                                <label class="control-label">Package Description</label>
+
+                            </div>
+
+                            <div class="col-md-9">
+
+                                    <textarea class="form-control" name="packageDescription"
+                                              ng-model="applicatorDetails.package_description" rows="2"
+                                              pattern="[a-zA-Z0-9 ]+" required minlength="20">
+
+                                    </textarea>
+
+                                <div class="help-block"
+                                     ng-messages="packageForm.packageDescription.$error"
+                                     ng-show="packageFormSubmitted">
+                                    <span style="color:red" ng-message="required">Package description is required</span>
+                                    <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+                                    <span style="color:red" ng-message="minlength">Please provide atleast 20 char description</span>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-md-3">
+
+                                <label class="control-label">Number of Element</label>
+
+                            </div>
+                            <div class="col-md-9">
+
+                                <div class="col-md-10">
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+
+                                        <input type="text" name="noOfElement" ng-model="noOfElement"
+                                               class="form-control" pattern="[0-9]+" required>
+
+                                    </div>
+
+                                    <div class="help-block" ng-messages="packageForm.noOfElement.$error"
+                                         ng-show="packageFormSubmitted">
+                                        <span style="color:red" ng-message="required">Please enter no of element </span>
+                                        <span style="color:red"
+                                              ng-message="pattern">Only numeric value is allowed</span>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <button class="btn btn-primary" ng-click="add(noOfElement)">Add</button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+
+
+                    </div>
+
+                </div>
+                <br><br>
+
+                <div class="row">
+                    <table class="table table-actions">
+                        <thead>
+                        <tr>
+                            <th>Element Name</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Total Cost</th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="element in applicatorDetails.elementDetails">
+                            <td>
+                                <input type="text" name="elementName" placeholder="Element Name" ng-model="element.element_name"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" name="elementQuantity" placeholder="Quantity" ng-model="element.element_quantity"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" name="elementRate" placeholder="Rate" ng-model="element.element_rate"
+                                       class="form-control"/>
+                            </td>
+                            <td>{{element.element_quantity * element.element_rate}}</td>
+                            <td>
+                                <a ng-click="remove($index)" class="panel-remove">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
         </div>
     
     </div>
@@ -121,7 +279,7 @@
                     && applicatorPackageForm.$valid 
                     && nextStep()"  class="btn  btn-primary pull-right">Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
         </button>
-        <button ng-click="clearFields(applicatorDetails,'secondForm')" class="btn  btn-default pull-right">Clear Form</button>                
+        <button ng-click="clearFields(applicatorDetails)" class="btn  btn-default pull-right">Clear Form</button>
     </div>
 
 </div>                 
