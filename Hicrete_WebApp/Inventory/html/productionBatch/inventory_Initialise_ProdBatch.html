@@ -8,82 +8,87 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title"><strong>Production Batch Initialisation</strong></h3>
-                                    <!-- <ul class="panel-controls">
-                                        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                                    </ul> -->
                                 </div>
                               
                                 <div class="panel-body">                                                                        
                                     
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Production Batch Number</label>
-                                        <div class="col-md-6 col-xs-12">                                            
+                                        <label class="col-md-4 col-xs-12 control-label">Production Batch Number</label>
+                                        <div class="col-md-4 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                                 <input name="prodBatchNo" type="text" ng-model="prodBatchInfo.batchNo"  class="form-control" required/>
-                                            </div>                                            
-                                         <!--    <span class="help-block" ng-show="prodBatchInitForm.prodBatchNo.$error" ng-if="submitted" >this field is mandatory</span>  -->
+                                            </div>
+                                            <div class="help-block" ng-messages="prodBatchInitForm.prodBatchNo.$error" ng-show="submitted">
+                                                <p style="color:red" ng-message="required">Please enter production batch number</p>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Production Code Name</label>
-                                        <div class="col-md-6 col-xs-12">                                            
+                                        <label class="col-md-4 col-xs-12 control-label">Production Code Name</label>
+                                        <div class="col-md-4 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" ng-model="prodBatchInfo.batchCodeName" class="form-control"/>
-                                            </div>                                            
-                                           <!-- <span class="help-block">This is sample of text field</span>-->
+                                                <input type="text" name="batchCodeName" ng-model="prodBatchInfo.batchCodeName" class="form-control" required/>
+                                            </div>
+                                            <div class="help-block" ng-messages="prodBatchInitForm.batchCodeName.$error" ng-show="submitted">
+                                                <p style="color:red" ng-message="required">Please enter production code name</p>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">                                        
-                                        <label class="col-md-3 col-xs-12 control-label">Date of Entry </label>
-                                        <div class="col-md-6 col-xs-12">
+                                        <label class="col-md-4 col-xs-12 control-label">Date of Entry </label>
+                                        <div class="col-md-4 col-xs-12">
                                             <div class="input-group" >
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                                                 <input type="text" id="dateOfEntry" 
                                                  name="dateOfEntry" class="form-control date"  ng-model="prodBatchInfo.dateOfEntry" required 
                                                  data-date-format="dd-mm-yyyy">  
-                                                 <!-- data-provide="datepicker" data-date-format="dd-mm-yyyy"                                          -->
                                             </div>
-                                            <!-- <span class="help-block" ng-show="prodBatchInitForm.">Click on input field to get datepicker</span>  -->
+                                            <div class="help-block" ng-messages="prodBatchInitForm.dateOfEntry.$error" ng-show="submitted">
+                                                <p style="color:red" ng-message="required">Please enter date of entry</p>
+                                            </div>
                                         </div>
                                     </div> 
 
                                     <div class="form-group">                                        
-                                        <label class="col-md-3 col-xs-12 control-label">Production start date</label>
-                                        <div class="col-md-6 col-xs-12">
+                                        <label class="col-md-4 col-xs-12 control-label">Production start date</label>
+                                        <div class="col-md-4 col-xs-12">
                                             <div class="input-group" >
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="text"  class="form-control datepicker" ng-model="prodBatchInfo.startDate" required  data-date-format="dd-mm-yyyy">   
-                                                <!-- data-provide="datepicker"                                          -->
+                                                <input type="text" name="productionStartDate"  class="form-control datepicker" ng-model="prodBatchInfo.startDate" required  data-date-format="dd-mm-yyyy">
                                             </div>
-                                            <!-- <span class="help-block">Click on input field to get datepicker</span> -->
+                                            <div class="help-block" ng-messages="prodBatchInitForm.productionStartDate.$error" ng-show="submitted">
+                                                <p style="color:red" ng-message="required">Please enter production start date</p>
+                                            </div>
                                         </div>
                                     </div> 
 
                                     <div class="form-group">                                        
-                                        <label class="col-md-3 col-xs-12 control-label">Production End date </label>
-                                        <div class="col-md-6 col-xs-12">
+                                        <label class="col-md-4 col-xs-12 control-label">Production End date </label>
+                                        <div class="col-md-4 col-xs-12">
                                             <div class="input-group" >
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="text"  class="form-control date" ng-model="prodBatchInfo.endDate" required data-date-format="dd-mm-yyyy">
-                                                <!-- data-provide="datepicker"                                              -->
+                                                <input type="text" name="productionEndDate"  class="form-control date" ng-model="prodBatchInfo.endDate" required data-date-format="dd-mm-yyyy">
                                             </div>
-                                            <!-- <span class="help-block">Click on input field to get datepicker</span> -->
+                                            <div class="help-block" ng-messages="prodBatchInitForm.productionEndDate.$error" ng-show="submitted">
+                                                <p style="color:red" ng-message="required">Please enter production end date</p>
+                                            </div>
                                         </div>
                                     </div>        
 
-
                                     <div class="form-group">
-                                        <label class="col-md-3 col-xs-12 control-label">Production Supervisor</label>
-                                        <div class="col-md-6 col-xs-12">                                            
+                                        <label class="col-md-4 col-xs-12 control-label">Production Supervisor</label>
+                                        <div class="col-md-4 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" ng-model="prodBatchInfo.supervisor" class="form-control"/>
-                                            </div>                                            
-                                           <!-- <span class="help-block">This is sample of text field</span>-->
+                                                <input type="text" name="productionSupervisor" ng-model="prodBatchInfo.supervisor" class="form-control" required/>
+                                            </div>
+                                            <div class="help-block" ng-messages="prodBatchInitForm.productionSupervisor.$error" ng-show="submitted">
+                                                <p style="color:red" ng-message="required">Please enter production supervisor name</p>
+                                            </div>
                                         </div>
                                     </div>
                                  
@@ -92,8 +97,8 @@
                                     </ul> 
                                 </div>
                                 <div class="panel-footer">
-                                    <button class="btn btn-default" type="Clear" ng-click="clear('Init')">Clear Form</button>
-                                    <button class="btn btn-primary pull-right"  ng-click="initProd(prodBatchInfo,'Init')">Next</button>
+                                    <button class="btn btn-default" type="Clear" ng-click="(submitted = false) && clear('Init')">Clear Form</button>
+                                    <button class="btn btn-primary pull-right"  ng-click="(submitted = true) && prodBatchInitForm.$valid && initProd(prodBatchInfo,'Init')">Next</button>
                                 </div>
                             </div>
                             </form>
@@ -101,4 +106,4 @@
                         </div>
                     </div>                    
                     
-                </div>
+</div>

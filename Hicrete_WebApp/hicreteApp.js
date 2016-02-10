@@ -84,7 +84,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         //production batch entries end
         .state('Inventory.inwardItem', {
             url: '/inwardItem',
-            templateUrl: 'Inventory/html/inward/Inventory_Inward_steps.html',
+            templateUrl: 'Inventory/html/inward/Inventory_Inward_Form.html',
             controller: 'inwardController'
         })
         .state('Inventory.inwardSearch', {
@@ -285,6 +285,34 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore) {
             
         }
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
+
+  $scope.open1 = function() {
+      $scope.popup1.opened = true;
+  };
+
+    $scope.open2 = function() {
+        $scope.popup1.opened = true;
+    };
+
+
+    $scope.popup1 = {
+        opened: false
+    };
+
+
+});
+
+
+myApp.controller('TabController', function () {
+    this.tab = 1;
+
+    this.setTab = function (tabId) {
+        this.tab = tabId;
+    };
+
+    this.isSet = function (tabId) {
+        return this.tab === tabId;
+    };
 
 
 

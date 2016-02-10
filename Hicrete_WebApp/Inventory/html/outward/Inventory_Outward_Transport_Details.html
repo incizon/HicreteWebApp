@@ -16,7 +16,7 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Mode of Transport</label>
                                 <div class="col-md-9">
-                                    <select class="form-control" ng-model="OutwardData.transportMode" name="transportMode" required>
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-model="OutwardData.transportMode" name="transportMode" required>
                                         <option value="" disabled selected>Select</option>
                                         <option ng-repeat="x in transportMode"
                                                 value={{x.transportId}}>{{x.transport}}
@@ -92,22 +92,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label class="col-md-3 control-label">Paid By</label>
-                                <div class="col-md-9">
-                                    <select class="form-control select" ng-model="OutwardData.transportPayable" name="transportPayable" required>
-
-                                        <option>buyer</option>
-                                        <option>seller</option>
-
-                                    </select>
-                                    <div class="help-block" ng-messages="outwardTransportDetailsForm.transportPayable.$error" ng-show="submitted">
-                                        <p style="color:red" ng-message="required">Please the value.</p>
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
@@ -117,7 +101,7 @@
                 <div class="panel-footer" style="text-align:center">
                     <button class="btn btn-default" ng-click="prevStep()">Previous</button>
                     <button class="btn btn-primary" value="clear" data-ng-click="clearFields(OutwardData)">Clear Form</button>
-                    <button class="btn btn-primary" value="submit" data-ng-click="(submitted=true) && outwardTransportDetailsForm.$valid" data-target="#viewoutwardDetails" data-toggle="modal">Submit</button>
+                    <button class="btn btn-primary" value="submit" data-ng-click="(submitted=true) && outwardTransportDetailsForm.$valid && addOutwardDetails(OutwardData)" >Submit</button>
                 </div>
            
             </div>
@@ -134,159 +118,159 @@
      }
  </style>
 
- <div class="modal fade inventoryDetails" id="viewoutwardDetails" role="dialog">
-    <div class="modal-dialog">                                 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Please confirm all the  Outward Details</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                        <div class="col-md-6 padRight">
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Outward No:</label>
-                                    <div class="col-md-8 pt7">                       
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.OutwardNumber" value="{{OutwardData.OutwardNumber}}"/>
-                                        </div>                                          
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Material :</label>
-                                    <div class="col-md-8 pt7">                       
-                                        <select class="form-control " disabled ng-model="OutwardData.material">
-                                            <option ng-repeat="x in productsToModify " value={{x.materialid}}>
-                                            {{x.productname}}</option>
-                                        </select>                                          
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Package Qty :</label>
-                                    <div class="col-md-8 pt7">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.packageUnit" value="{{OutwardData.packageUnit}}"/>
-                                        </div>                       
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Company :</label>
-                                    <div class="col-md-8 pt7">
-                                        <select class="form-control" disabled ng-model="OutwardData.companyName">
-                                            <option ng-repeat="x in Company" value={{x.companyId}}>
-                                                {{x.companyName}}
-                                            </option>
-                                        </select>                       
-                                    </div>
-                            </div> 
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Date :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.date" value="{{OutwardData.date}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Quantity :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.materialQuantity" value="{{OutwardData.materialQuantity}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Warehouse :</label>
-                                    <div class="col-md-8 pt7">
-                                        <select class="form-control" disabled ng-model="OutwardData.warehouseName">
-                                            <option ng-repeat="x in warehouses" value={{x.warehouseId}}>
-                                                {{x.warehouseName}}
-                                            </option>
-                                        </select>                      
-                                    </div>
-                            </div>      
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Supervisor :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.suppervisor" value="{{OutwardData.supervisor}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Transport :</label>
-                                    <div class="col-md-8 pt7">
-                                        <select class="form-control" disabled ng-model="OutwardData.transportMode">
-                                            <option ng-repeat="x in transportMode" value={{x.transportId}}>
-                                                {{x.transport}}
-                                            </option>
-                                        </select>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Vehicle Number :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.vehicleNumber" value="{{OutwardData.vehicleNumber}}" />
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Transport Cost :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.transportCost" value="{{OutwardData.transportCost}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Remark :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.transportRemark" value="{{OutwardData.transportRemark}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Transport Agency :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.transportAgency" value="{{OutwardData.transportAgency}}"/>
-                                        </div>                      
-                                    </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-4 control-label text-left pt12">Driver :</label>
-                                    <div class="col-md-8 pt7">
-                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" disabled class="form-control" ng-model="OutwardData.driver" value="{{OutwardData.driver}}"/>
-                                        </div>                      
-                                    </div>
-                            </div> 
-                        </div>
-                </div>
-            </div>
+ <!--<div class="modal fade inventoryDetails" id="viewoutwardDetails" role="dialog">-->
+    <!--<div class="modal-dialog">                                 -->
+        <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <!--<h4 class="modal-title">Please confirm all the  Outward Details</h4>-->
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+                <!--<div class="row">-->
+                        <!--<div class="col-md-6 padRight">-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Outward No:</label>-->
+                                    <!--<div class="col-md-8 pt7">                       -->
+                                        <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.OutwardNumber" value="{{OutwardData.OutwardNumber}}"/>-->
+                                        <!--</div>                                          -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Material :</label>-->
+                                    <!--<div class="col-md-8 pt7">                       -->
+                                        <!--<select class="form-control " disabled ng-model="OutwardData.material">-->
+                                            <!--<option ng-repeat="x in productsToModify " value={{x.materialid}}>-->
+                                            <!--{{x.productname}}</option>-->
+                                        <!--</select>                                          -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Package Qty :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                        <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.packageUnit" value="{{OutwardData.packageUnit}}"/>-->
+                                        <!--</div>                       -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Company :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                        <!--<select class="form-control" disabled ng-model="OutwardData.companyName">-->
+                                            <!--<option ng-repeat="x in Company" value={{x.companyId}}>-->
+                                                <!--{{x.companyName}}-->
+                                            <!--</option>-->
+                                        <!--</select>                       -->
+                                    <!--</div>-->
+                            <!--</div> -->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Date :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.date" value="{{OutwardData.date}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Quantity :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.materialQuantity" value="{{OutwardData.materialQuantity}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Warehouse :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                        <!--<select class="form-control" disabled ng-model="OutwardData.warehouseName">-->
+                                            <!--<option ng-repeat="x in warehouses" value={{x.warehouseId}}>-->
+                                                <!--{{x.warehouseName}}-->
+                                            <!--</option>-->
+                                        <!--</select>                      -->
+                                    <!--</div>-->
+                            <!--</div>      -->
+                        <!--</div>-->
+                        <!--<div class="col-md-6">-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Supervisor :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.suppervisor" value="{{OutwardData.supervisor}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Transport :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                        <!--<select class="form-control" disabled ng-model="OutwardData.transportMode">-->
+                                            <!--<option ng-repeat="x in transportMode" value={{x.transportId}}>-->
+                                                <!--{{x.transport}}-->
+                                            <!--</option>-->
+                                        <!--</select>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Vehicle Number :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.vehicleNumber" value="{{OutwardData.vehicleNumber}}" />-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Transport Cost :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.transportCost" value="{{OutwardData.transportCost}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Remark :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.transportRemark" value="{{OutwardData.transportRemark}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Transport Agency :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.transportAgency" value="{{OutwardData.transportAgency}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="form-group">-->
+                                <!--<label class="col-md-4 control-label text-left pt12">Driver :</label>-->
+                                    <!--<div class="col-md-8 pt7">-->
+                                         <!--<div class="input-group">-->
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input type="text" disabled class="form-control" ng-model="OutwardData.driver" value="{{OutwardData.driver}}"/>-->
+                                        <!--</div>                      -->
+                                    <!--</div>-->
+                            <!--</div> -->
+                        <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" data-ng-click="addOutwardDetails(OutwardData)" data-dismiss="modal" class="btn btn-default">Submit</button>
-            
-            </div>
-        <!--End of modal-footer-->
-    </div>
-    <!--End of Modal Content-->           
-</div>
-</div>
+            <!--<div class="modal-footer">-->
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                <!--<button type="button" data-ng-click="addOutwardDetails(OutwardData)" data-dismiss="modal" class="btn btn-default">Submit</button>-->
+            <!---->
+            <!--</div>-->
+        <!--&lt;!&ndash;End of modal-footer&ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash;End of Modal Content&ndash;&gt;           -->
+<!--</div>-->
+<!--</div>-->

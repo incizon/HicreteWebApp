@@ -21,6 +21,7 @@
                                             <div class="col-md-7">                   
                                                 
                                                     <select class="form-control" name="costCenterName" required  ng-model="expenseDetails.costCenter">
+                                                        <option value="" disabled>Select</option>
                                                         <option  ng-repeat="costCenterEntry in costCenterList" value="{{costCenterEntry.id}}">{{costCenterEntry.name}}</option>
                                                         
                                                     </select> 
@@ -34,6 +35,7 @@
                                                 <label class="col-md-2 control-label">Select Budget segment</label>
                                                 <div class="col-md-7">                                                                                            
                                                 <select class="form-control" name="segmentName" ng-model="expenseDetails.segmentName" required>
+                                                    <option value="" disabled>Select</option>
                                                        <option  ng-repeat="segmentEntry in segmentList" value="{{segmentEntry.id}}">{{segmentEntry.name}}</option>
                                                 </select>
                                                 </div>
@@ -159,3 +161,4 @@
                             
                         </div>
                     </div>
+    </div>

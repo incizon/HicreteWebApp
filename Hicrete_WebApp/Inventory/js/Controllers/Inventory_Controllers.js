@@ -1,45 +1,3 @@
-+// //MODAL DIRECTIVE
-// myApp.directive('modal', function () {
-//  return {
-//    template: '<div class="modal fade">' + 
-//    '<div class="modal-dialog">' + 
-//    '<div class="modal-content">' + 
-//    '<div class="modal-header">' + 
-//    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' + 
-//    '<h4 class="modal-title">Please Confirm all the Details</h4>' + 
-//    '</div>' + 
-//    '<div class="modal-body" ng-transclude></div>' +
-//    '</div>' + 1
-//    '</div>' + 
-//    '</div>',
-//    restrict: 'E',
-//    transclude: true,
-//    replace:true,
-//    scope:true,
-//    link: function postLink(scope, element, attrs) {
-//      scope.title = attrs.title;
-//      scope.$watch(attrs.visible, function(value){
-//        if(value == true)
-//          $(element).modal('show');
-//        else
-//          $(element).modal('hide');
-//      });
-//      $(element).on('shown.bs.modal', function(){
-//        scope.$apply(function(){
-//          scope.$parent[attrs.visible] = true;
-//        });
-//      });
-//      $(element).on('hidden.bs.modal', function(){
-//        scope.$apply(function(){
-//          scope.$parent[attrs.visible] = false;
-//        });
-//      });
-//    }
-//  };
-// });
-
-//END OF MODAL DIRECTIVE
-
 
 myApp.controller('inventoryCommonController', function ($scope, $http, inventoryService) {
 
@@ -49,10 +7,10 @@ myApp.controller('inventoryCommonController', function ($scope, $http, inventory
     //Available Products
     inventoryService.getProducts($scope, $http);
 
-    //Get Warehouses
-    inventoryService.getWarehouses($scope,$http);
-    // Get Company
-    inventoryService.getCompanys($scope,$http);
+    ////Get Warehouses
+    //inventoryService.getWarehouses($scope,$http);
+    //// Get Company
+    //inventoryService.getCompanys($scope,$http);
 
 
 
@@ -73,14 +31,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     $scope.data = {};
     //Init product object
     $scope.product = {
-        productDescription: "",
-        productColor: "",
-        productAlertQty: "",
-        productPackaging: "",
-        productUnitOfMeasure: "",
-        productType: "",
-        productAbbrevations: "",
-        productName: ""
+        description: "",
+        color: "",
+        alertquantity: "",
+        packaging: "",
+        unitofmeasure: "",
+        materialtypeid: "",
+        abbrevation: " ",
+        productname: ""
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
@@ -267,31 +225,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
 
 
-    // /***************************************************************************
-    // * Purpose- This function will retrieve the product details from database
-    // * @param1- $scope and $http
-    // * Return- Items available in database
-    // ****************************************************************************/
-    // // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-    // // $scope.productSearch=function($scope,$http){
-    //   $http.post("Inventory/php/ProductSearch.php", null)
-    //   .success(function (data)
-    //   {
-    //    console.log("Items Present in database");
-    //    console.log(data);
-    //    $scope.products=data;
-    //   })
-    //   .error(function (data, status, headers)
-    //   {
-    //     console.log(data);
-
-    //   });
-    // // };
-    // /***************************************************************************
-    // * End of Get Product Details
-    // ****************************************************************************/
-
-
     /***************************************************************************
      * Start of Get Material Types
      ****************************************************************************/
@@ -317,13 +250,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
+myApp.controller('inwardController', function ($scope, $http,$location, inwardService, inventoryService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
         companyName: "",
         warehouseName: "",
         suppervisor: "",
+        hasTransportDetails:"",
 
         transportMode: "",
         vehicleNumber: "",
@@ -332,13 +266,30 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         transportAgency: "",
         driver: "",
         transportPayable: "",
-        inwardMaterials: []
+        inwardMaterials: [
+            {
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            }
+        ]
     };
     // $scope.inventoryData={};
     $scope.material = {};
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
+
+    $scope.getNoOfMaterials=function(){
+        //console.log($scope.InwardData.inwardMaterials.length);
+        return $scope.InwardData.inwardMaterials.length;
+    }
+    inventoryService.getProductsForInwardandOutward($scope,$http);
+    //Get Warehouses
+    inventoryService.getWarehouses($scope,$http);
+    // Get Company
+    inventoryService.getCompanys($scope,$http);
 
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
@@ -360,14 +311,13 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     var isInwardTable = false;
     var isInwardDetailsTable = false;
     var isInwardTransportTable = false;
-
+    $scope.stepa=1;
     /**********************************
      Add material fields
      *******************************/
     $scope.addFields = function () {
         for (var i = 0; i < $scope.noOfElement; i++) {
             $scope.InwardData.inwardMaterials.push({
-
                 material: "",
                 materialQuantity: "",
                 packageUnit: "",
@@ -384,28 +334,38 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
     };
 
-    $scope.nextStep = function () {
-        //alert("next step:"+$scope.InwardData.hasTransportDetails);
+    $scope.nextForm=function(){
+
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
             //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
-            // $scope.showModal=false;
-            $scope.step = 2;
+            $scope.stepa=2;
+            //console.log("Step Value:" + $scope.stepa);
             $scope.submitted = false;
-            //alert("else");
+            //console.log("in nest form function");
+        }
 
-
+    }
+    $scope.nextStep = function () {
+        //alert("next step:"+$scope.InwardData.hasTransportDetails);
+        if ($scope.InwardData.hasTransportDetails == 'No') {
+            // $scope.showModal=true;
+            alert("if");
+            $scope.addInwardDetails();
+        } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
+            $scope.step++;
+            console.log("Step Value:" + $scope.step);
+            $scope.submitted = false;
         }
     }
 
     $scope.prevStep = function () {
-        $scope.step--;
+        $scope.stepa--;
     }
 
     $scope.addInwardDetails = function () {
-        console.log($scope.InwardData);
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }
@@ -441,6 +401,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
                         window.location.reload(true);
+                        //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -535,18 +496,36 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
 
 myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService) {
     $scope.OutwardData = {
-        outwardMaterials: []
+
+        outwardMaterials: [
+            {
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            }
+        ]
     };
     $scope.material = {};
     $scope.step = 1;
     $scope.submitted = false;
     // $scope.availableMaterials = [];
-
+    $scope.getNoOfMaterials=function(){
+        //console.log($scope.InwardData.inwardMaterials.length);
+        return $scope.OutwardData.outwardMaterials.length;
+    }
     var isOutwardTable = false;
     var isOutwardDetailsTable = false;
     var isOutwardTransportTable = false;
 
     $scope.productsToModify = [];
+    inventoryService.getProductsForInwardandOutward($scope,$http);
+
+    //Get Warehouses
+    inventoryService.getWarehouses($scope,$http);
+    // Get Company
+    inventoryService.getCompanys($scope,$http);
+
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
 
@@ -559,7 +538,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 //Get Material from DB
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
-    //inventoryService.getProducts($scope, $http);
+    inventoryService.getProducts($scope, $http);
     inventoryService.getSavedProducts($scope);
 
     $scope.getProduct = function (product) {
@@ -569,11 +548,12 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 
     $scope.getAvailableQty = function (pMaterialId) {
         var qty;
-        for (var i = 0; i < $scope.productsToModify.length; i++) {
 
+        for (var i = 0; i < $scope.productsToModify.length; i++) {
             if (pMaterialId == $scope.productsToModify[i].materialid) {
                 qty = $scope.productsToModify[i].totalquantity;
                 $scope.availableTotalquantity=qty;
+                //console.log(qty);
             }
         }
         ;
@@ -613,9 +593,9 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             $scope.addOutwardDetails();
         } else if ($scope.OutwardData.hasTransportDetails == 'Yes') {
             // $scope.showModal=false;
-            $scope.submitted = false;
             //alert("else");
             $scope.step = 2;
+            $scope.submitted = false;
 
         }
     }
@@ -649,16 +629,14 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
+                 setTimeout(function(){
+                  window.location.reload(true);
+                     //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                },1000);
                 $scope.outwardData = data;
-                if (data.msg != "") {
-                    doShowAlert("Success", data.msg);
-                    $scope.clearFields($scope.OutwardData);
+                $scope.clearFields($scope.OutwardData);
                     $scope.submitted = false;
-                    // setTimeout(function(){
-                    //  window.location.reload(true);
-                    //},1000);
-                } else if (data.error != "")
-                    doShowAlert("Failure", data.error);
+
             })
             .error(function (data, status, headers) {
                 console.log(data);
@@ -705,7 +683,9 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
                     window.location.reload(true);
+                    //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 }, 1000);
+
 
             })
             .error(function (data, status, headers, config) {
@@ -926,7 +906,12 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
         });
     $scope.getViewDataObject = function (product) {
+        console.log(product);
         $scope.viewProduct = product;
+    }
+    $scope.getMaterialObject = function (product) {
+        $scope.viewMaterials = product;
+        console.log($scope.viewMaterials);
     }
 
     $scope.getDataObjectToModify = function (product) {
@@ -942,6 +927,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     /*************************************************
      * START of GETTING INWARD DATA
      **************************************************/
+        $scope.materialDetails=[];
     var data = {
         module: 'inward',
         operation: 'search'
@@ -1043,22 +1029,85 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
  * Start of of PRODUCTION BATCH
  *********************************************************************************************/
 
-myApp.controller('productionBatchController', function ($scope, $filter, $http, ProductionBatchService) {
+myApp.controller('productionBatchController', function ($scope, $filter, $http,inventoryService, ProductionBatchService) {
 
-    $(function () {
+    $scope.qtyError=0;
 
-        $(".date").datepicker({format: "dd-mm-yyyy", autoclose: true});
-    })
+    var data = {
+        module: 'inventorySearch'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log("IN SERVICE OF Inventory Search=");
+            console.log(data);
+            $scope.inventoryData = data;
+            $scope.paginateItemsPerPage = data;
+            $scope.totalItems = $scope.inventoryData.length;
+            console.log($scope.inventoryData);
+        })
+        .error(function (data, status, headers) {
+            console.log("IN SERVICE OF Inventory Search Failure=");
+            console.log(data);
 
+        });
+
+    $scope.getAvailableQty = function (pMaterialId) {
+        var qty;
+        console.log("New function here");
+        for (var i = 0; i < $scope.inventoryData.length; i++) {
+            if (pMaterialId == $scope.inventoryData[i].materialid) {
+                qty = $scope.inventoryData[i].totalquantity;
+                $scope.availableTotalquantity=qty;
+                console.log(qty);
+                break;
+            }
+        }
+
+        return qty;
+    };
+
+    $scope.check= function(quantity)
+    {
+        console.log(quantity);
+        console.log($scope.availableTotalquantity);
+
+        if($scope.availableTotalquantity<quantity)
+        {
+            //console.log("m alo nighalo");
+            $scope.qtyError= 1;
+        }
+        else
+        {
+            //console.log("kai prob ahe rao");
+            $scope.qtyError= 0;
+        }
+    };
+
+
+
+    // check for fetching inventory details END
+
+
+
+    inventoryService.getSavedCompanys($scope);
+    inventoryService.getSavedWarehouses($scope);
     $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
+    $scope.submitted = false;
     $scope.prodBatchInfo = {};
 
     $scope.goBack = function () {
 
         $scope.step--;
     };
+
+
 
     $http.post("Inventory/php/fetch_materials.php", null)
         .success(function (data) {
@@ -1182,6 +1231,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
             prodBatchInfo.step = $scope.step;
             prodBatchInfo.option = message;
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            setTimeout(function () {
+                window.location.reload(true);
+            }, 1000);
         }
         else if (message == 'Modify') {
             console.log(prodBatchInfo);
@@ -1189,6 +1241,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
                 prodBatchInfo.step = $scope.step;
                 prodBatchInfo.option = message;
                 ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
             }
             else {
                 $scope.step++;
@@ -1202,21 +1257,33 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http, 
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            setTimeout(function () {
+                window.location.reload(true);
+            }, 1000);
 
         }
         else if (page == "Search" || page == 'Complete') {
             prodBatchInfo.option = message;
             prodBatchInfo.step = 0;
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            if(page =='Complete')
+            {
+                setTimeout(function () {
+                    window.location.reload(true);
+                }, 1000);
+            }
         }
 
-
+        $scope.submitted = false;
     };
 
 
     $scope.getProdInfo = function (prodInfo) {
         console.log(prodInfo);
+        console.log("Inside this function");
         $scope.modProdBatchInfo = prodInfo;
+
+        console.log($scope.modProdBatchInfo.rawMaterial);
         //console.log($scope.selectedProdBatchInfo);
     };
 

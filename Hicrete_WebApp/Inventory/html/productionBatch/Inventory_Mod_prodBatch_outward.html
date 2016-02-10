@@ -3,7 +3,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             
-                            <form class="form-horizontal" >
+                            <form class="form-horizontal" name="prodBatchOutwardForm" novalidate >
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title"><strong>Material Produced</strong></h3>
@@ -16,171 +16,245 @@
                                                                
                                     
                                     <div class="row" >
-                                        
+
                                         <div class="col-md-6">
-                                            
+
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">Material Produced</label>
-                                                <div class="col-md-9">                                            
+                                                <div class="col-md-9">
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
-                                                        <select style="width: 211%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="modProdBatchInfo.prodcdMaterial">
+                                                        <select style="width: 133%;" class="btn dropdown-toggle selectpicker btn-default" name="materialProduced" ng-model="modProdBatchInfo.prodcdMaterial" required>
                                                             <option value="" disabled selected>Select</option>
-                                                            <option ng-repeat="x in existingMaterials" 
-                                                                      value={{x.materialid}}>{{x.productname}}
-                                                                   </option>
+                                                            <option ng-repeat="x in existingMaterials"
+                                                                    value={{x.materialid}}>{{x.productname}}
+                                                            </option>
                                                         </select>
-                                                    </div>                                            
-                                              
+                                                    </div>
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.materialProduced.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select material produced</p>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">Quantity</label>
-                                                <div class="col-md-9">                                            
+                                                <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.quantityProdMat"class="form-control"/>
-                                                    </div>                                            
-                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                        <input style="width: 66%;" type="text" name="quantity" ng-model="modProdBatchInfo.quantityProdMat" class="form-control" required/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.quantity.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter quantity</p>
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">Packaged Unit</label>
-                                                <div class="col-md-9">                                            
+                                                <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.pckgdUnits"class="form-control"/>
-                                                    </div>                                            
-                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                        <input style="width: 66%;" type="text" name="packagedUnit" ng-model="modProdBatchInfo.pckgdUnits"class="form-control" required/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.packagedUnit.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter packaged unit</p>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">Company</label>
-                                                <div class="col-md-9">                                            
+                                                <label class="col-md-3 control-label"> Company</label>
+
+                                                <div class="col-md-9" >
                                                     <div class="input-group">
-                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.company"class="form-control"/>
-                                                    </div>                                            
-                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+                                                        <select class="form-control" ng-model="prodBatchInfo.company" name="companyName"
+                                                                required>
+                                                            <option value="" disabled selected>Select Company</option>
+                                                            <option ng-repeat="x in Company"
+                                                                    value={{x.companyId}}>{{x.companyName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.company.$error"
+                                                         ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select company name.</p>
+                                                    </div>
                                                 </div>
                                             </div>
+
+
+
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">Warehouse</label>
-                                                <div class="col-md-9">                                            
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.wareHouse"class="form-control"/>
-                                                    </div>                                            
-                                                    <!-- <span class="help-block">This is sample of text field</span> -->
+
+                                                <div class="col-md-9">
+                                                    <div class="input-group" >
+                                                        <select class="form-control" ng-model="prodBatchInfo.wareHouse"
+                                                                name="warehouseName" required>
+                                                            <option value="" disabled selected>Select Warehouse</option>
+                                                            <option ng-repeat="x in warehouses"
+                                                                    value={{x.warehouseId}}>{{x.wareHouseName}}
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.wareHouse.$error"
+                                                         ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please select warehouse.</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                          
-                                            <div class="form-group">                                        
-                                            <label class="col-md-3  control-label">Date of Entry </label>
+
+
+
+
+
+
+
+
+                                           <!-- <div class="form-group">
+                                                <label class="col-md-3 control-label">Company</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" type="text" name="company" ng-model="modProdBatchInfo.company" class="form-control" required/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.company.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter company name</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-3 control-label">Warehouse</label>
+                                                <div class="col-md-9">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input style="width: 66%;" name="wareHouse" type="text" ng-model="modProdBatchInfo.wareHouse" class="form-control" required/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.wareHouse.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter warehouse name</p>
+                                                    </div>
+                                                </div>
+                                            </div>-->
+
+                                            <div class="form-group">
+                                                <label class="col-md-3  control-label">Date of Entry </label>
                                                 <div class="col-md-9">
                                                     <div class="input-group" >
                                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                        <input style="width: 66%;" type="text"  
-                                                        name="dateOfEntry" class="form-control date"  ng-model="modProdBatchInfo.dateOfEntryAftrProd" required data-date-format="dd-mm-yyyy">   
-                                                        <!-- data-provide="datepicker"                                          -->
+                                                        <input style="width: 66%;" type="text" name="dateOfEntry" class="form-control date"  ng-model="modProdBatchInfo.dateOfEntryAftrProd" required data-date-format="dd-mm-yyyy">
                                                     </div>
-                                                <!-- <span class="help-block" ng-show="prodBatchInitForm.">Click on input field to get datepicker</span>  -->
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.dateOfEntry.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter date</p>
+                                                    </div>
                                                 </div>
-                                                </div>
+                                            </div>
 
-                                                <div class="form-group">                                        
-                                           <label class="col-md-3  control-label">Transportation Required ?</label> 
+                                            <div class="form-group">
+                                                <label class="col-md-3  control-label">Transportation Required ?</label>
                                                 <div class="col-md-9">
-                                                                                        
-                                                        <label class="check"><input type="checkbox" class="icheckbox" name="tranReq" ng-model="modProdBatchInfo.tranReq"  /> </label>
-                                             
+
+                                                    <label class="check"><input type="checkbox" class="icheckbox" name="tranReq" ng-model="modProdBatchInfo.tranReq"  /> </label>
+
                                                 </div>
-                                                </div>
-                                             
+                                            </div>
+
                                         </div>
 
 
                                         <div class="col-md-6" ng-show="modProdBatchInfo.tranReq == true">
-                                            
-                                            <div class="form-group">                                        
+
+                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">Mode of Transportation</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.modeOfTransport" class="form-control" >  
-                                                                                                            
+                                                        <input style="width: 66%;" type="text" name="modeOfTransport" ng-model="modProdBatchInfo.modeOfTransport" class="form-control" required/>
                                                     </div>
-                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.modeOfTransport.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter mode of transport</p>
+                                                    </div>
                                                 </div>
 
                                             </div>
 
-                                            <div class="form-group">                                        
+                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">Vehicle Number</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.vehicleNo" class="form-control" >  
-                                                                                                            
+                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.vehicleNo" name="vehicleNumber" class="form-control" required/>
+
                                                     </div>
-                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.vehicleNumber.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter vehicle number</p>
+                                                    </div>
                                                 </div>
 
                                             </div>
 
-                                            <div class="form-group">                                        
+                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">Driver Name</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.driver" class="form-control" >  
-                                                                                                            
+                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.driver" class="form-control" name="driver" required/>
+
                                                     </div>
-                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.driver.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter driver name</p>
+                                                    </div>
                                                 </div>
 
                                             </div>
 
-                                            <div class="form-group">                                        
+                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">Transport Agency</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.TranspAgency" class="form-control" >  
-                                                                                                            
+                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.TranspAgency" class="form-control" name="transportAgency" required />
+
                                                     </div>
-                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.transportAgency.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter transport agency</p>
+                                                    </div>
                                                 </div>
 
                                             </div>
 
-                                            <div class="form-group">                                        
+                                            <div class="form-group">
                                                 <label class="col-md-3 control-label">Cost</label>
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.cost" class="form-control" >  
-                                                                                                            
+                                                        <input style="width: 66%;" type="text" ng-model="modProdBatchInfo.cost" class="form-control" name="cost" required />
+
                                                     </div>
-                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.cost.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Please enter cost</p>
+                                                    </div>
                                                 </div>
 
                                             </div>
 
-                                            
+
                                         </div>
-                                            
-                                       
+
+
 
 
                                     </div>
 
                                 </div>
                                 <div class="panel-footer">
-                                    <button class="btn btn-default" ng-click="clear('final')">Clear Form</button>                                    
-                                    <button class="btn btn-primary pull-right" ng-click="initProd(modProdBatchInfo,'final','Modify')">Submit</button>
+                                    <button class="btn btn-default" ng-click="(submitted=false) && clear('final')">Clear Form</button>
+
+                                    <button class="btn btn-primary pull-right" ng-click="(submitted=true) && prodBatchOutwardForm.$valid && initProd(modProdBatchInfo,'final','Modify')">Submit</button>
                                 </div>
                             </div>
                             </form>

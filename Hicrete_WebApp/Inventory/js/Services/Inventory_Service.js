@@ -110,6 +110,7 @@ myApp.service('inventoryService', function () {
                 data: data
             }
         };
+
         $http.post("Config/php/configFacade.php", null, config)
             .success(function (data) {
                 warehouses = data
@@ -220,24 +221,19 @@ myApp.service('inwardService', function () {
                 data: data
             }
         };
+        console.log(inwardData);
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
-                console.log(data);
-                //$scope.inwardData=data;
-                if (data.msg != "") {
-                    doShowAlert("Success", data.msg);
-                    $scope.clearFields(inwardData);
-                    //setTimeout(function(){
-                    //  window.location.reload(true);
-                    //},1000);
-                } else if (data.error != "")
-                    doShowAlert("Failure", data.error);
+                setTimeout(function(){
+                    window.location.reload(true);
+                    //
+                    // window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                },1000);
             })
             .error(function (data, status, headers) {
                 console.log(data);
-
             });
     };
 
@@ -338,10 +334,11 @@ myApp.service('ProductionBatchService', function () {
                     $scope.prodInq = data;
                 }
                 //$scope.clear();
-                if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll')
-                    doShowAlert("Success", data.msg);
+                if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
+                    //doShowAlert("Success", data.msg);
+                }
                 else if (data.error != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll')
-                    doShowAlertFailure("Failure", data.error);
+                    //doShowAlertFailure("Failure", data.error);
 
 
                 $scope.step = 1;

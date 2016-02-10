@@ -1,5 +1,6 @@
 <?php
 require_once 'utils/Common_Methods.php';
+require_once 'utils/DatabaseCommonOperations.php';
 
 class OutwardData extends CommonMethods
 {
@@ -63,23 +64,99 @@ class OutwardData extends CommonMethods
 
     public function getOutwardEntries($dbh)
     {
-        $stmt = $dbh->prepare("SELECT * FROM Outward
-            JOIN Outward_details ON 
-            Outward.outwardid=Outward_details.outwardid
-            JOIN Outward_transportation_details ON
-            Outward_details.outwardid=Outward_transportation_details.outwardid
-            JOIN material ON 
-            material.materialid=Outward_details.materialid
-            JOIN product_master ON
-            material.productmasterid=product_master.productmasterid
-            ");
 
+
+        $stmt = $dbh->prepare("SELECT * FROM Outward");
         if ($stmt->execute()) {
-            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $result = $stmt->fetchAll();
-            $json = json_encode($result);
+
+            //push it into array
+            $json_array=array();
+            while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $outwardData = array();
+                $outwardID = $result2['outwardid'];
+                $outwardData['outwardno']=$result2['outwardno'];
+                $outwardData['warehouseid']=$result2['warehouseid'];
+                $outwardData['companyid']=$result2['companyid'];
+                $outwardData['supervisorid']=$result2['supervisorid'];
+                $outwardData['dateofentry']=$result2['dateofentry'];
+
+                $companyId=$result2['companyid'];
+                $warehouseId=$result2['warehouseid'];
+                $outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
+
+                $stmtTransport=$dbh->prepare("SELECT * FROM Outward_transportation_details WHERE outwardid=:outwardID");
+                $stmtTransport->bindParam(':outwardID', $outwardID);
+                if($stmtTransport->execute()){
+                    if($stmtTransport->rowCount()==0){
+                        $outwardData['transportationmode']="--";
+                        $outwardData['vehicleno']="--";
+                        $outwardData['drivername']="--";
+                        $outwardData['transportagency']="--";
+                        $outwardData['cost']="--";
+                        $outwardData['remark']="--";
+                    }else{
+                        while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)){
+                            $outwardData['transportationmode']=$resultTransport['transportationmode'];
+                            $outwardData['vehicleno']=$resultTransport['vehicleno'];
+                            $outwardData['drivername']=$resultTransport['drivername'];
+                            $outwardData['transportagency']=$resultTransport['transportagency'];
+                            $outwardData['cost']=$resultTransport['cost'];
+                            $outwardData['remark']=$resultTransport['remark'];
+                        }
+                    }
+                }
+                //push inward data into array
+
+                //push inward transport details data into array
+
+                // Join
+                $stmt1 = $dbh->prepare("SELECT * FROM Outward_details
+                        JOIN material ON
+                        material.materialid=Outward_details.materialid
+                        JOIN product_master ON
+                        material.productmasterid=product_master.productmasterid
+                        WHERE outwardid=:outwardID");
+
+                $stmt1->bindParam(':outwardID', $outwardID);
+
+                if ($stmt1->execute()) {
+//                    array_push($inwardData,$stmt1->fetchAll());
+                    while ($resultMaterials = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+
+                        $outwardData['materialDetails'][] = array(
+                            'outwardid' => $resultMaterials['outwardid'],
+                            'materialid' => $resultMaterials['materialid'],
+                            'quantity' => $resultMaterials['quantity'],
+                            'productname' => $resultMaterials['productname'],
+                            'packagedunits' => $resultMaterials['packagedunits']
+                        );
+                    }
+
+                    array_push($json_array,$outwardData);
+                } else {
+                    //Rollback
+                    echo "Error2 ";
+                }
+            }
+            $json = json_encode($json_array);
             echo $json;
+
+        } else {
+            //Rollback
+            echo "Error";
         }
+    }
+    public function isAvailable($dbh){
+        $stmt = $dbh->prepare("SELECT outwardno FROM Outward WHERE outwardno =:outwardno");
+        $stmt->bindParam(':outwardno', $this->OutwardNumber, PDO::PARAM_STR, 10);
+
+        $stmt->execute();
+        $count=$stmt->rowcount();
+        if($count!=0)
+        {return 1;}
+        else
+        {return 0;}
     }
 
     public function insertOutwardInToDb($dbh, $userId, $data)
@@ -89,7 +166,7 @@ class OutwardData extends CommonMethods
             $dbh->beginTransaction();
 
             $stmtOutward = $dbh->prepare("INSERT INTO Outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
-       values (:warehouseid,:companyid,:supervisorid,now(),:Outwardno,:lchnguserid,now(),:creuserid,now())");
+                           values (:warehouseid,:companyid,:supervisorid,now(),:Outwardno,:lchnguserid,now(),:creuserid,now())");
             $stmtOutward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':supervisorid',  $this->suppervisor, PDO::PARAM_STR, 10);

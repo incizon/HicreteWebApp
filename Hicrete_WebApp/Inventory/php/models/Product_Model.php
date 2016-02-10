@@ -3,7 +3,7 @@
 class ProductModel{
 
 	public $productName="";
-    public $productAbbrevations=""; //The single instance
+    public $productAbbrevations=" "; //The single instance
     public $productUnitOfMeasure="";
     public $productAlertQty="";
     public $productColor="";
@@ -41,11 +41,16 @@ class ProductModel{
     }
     public function getProductAbbrevations()
     {
+
         return $this->productAbbrevations;
     }
     public function _setProductAbbrevations($Abbrevations)
     {
-        $this->productAbbrevations = $Abbrevations;
+        if($Abbrevations!=null)
+            $this->productAbbrevations = $Abbrevations;
+        else{
+            $this->productAbbrevations = " ";
+        }
 
         return $this;
     }
