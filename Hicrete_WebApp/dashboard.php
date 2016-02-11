@@ -27,18 +27,18 @@
             padding-top: 10px;
         }
         .logoBackground{
-          background-color:   #1caf9a !important;
+            background-color:   #1caf9a !important;
         }
         .hicreteLogo{
             padding: 10px 10px 0px 5px;
         }
         ::-webkit-scrollbar { background: white;width: 5px; height: 5px;}
-       ::-webkit-scrollbar-button { display: none;}
-       ::-webkit-scrollbar-track { background: transparent;}
-       ::-webkit-scrollbar-track-piece { background: transparent;}
-       ::-webkit-scrollbar-thumb { background: #9E9E9E; border-radius: 4px;}
-       ::-webkit-scrollbar-corner { display: none;}
-       ::-webkit-resizer {display: none;}
+        ::-webkit-scrollbar-button { display: none;}
+        ::-webkit-scrollbar-track { background: transparent;}
+        ::-webkit-scrollbar-track-piece { background: transparent;}
+        ::-webkit-scrollbar-thumb { background: #9E9E9E; border-radius: 4px;}
+        ::-webkit-scrollbar-corner { display: none;}
+        ::-webkit-resizer {display: none;}
 
     </style>
 
@@ -119,8 +119,8 @@ if(!$userObj->init($userId)){
 
                         <?php
 
-                            echo "<div class=\"profile-data-name\">".$userObj->username."</div>";
-                            echo "<div class=\"profile-data-name\">".$userObj->designation."</div>";
+                        echo "<div class=\"profile-data-name\">".$userObj->username."</div>";
+                        echo "<div class=\"profile-data-name\">".$userObj->designation."</div>";
                         ?>
 
                     </div>
@@ -133,47 +133,47 @@ if(!$userObj->init($userId)){
 
             <?php
 
-                if($userObj->isInventory){
-                    echo "<li class=\"\">
+            if($userObj->isInventory){
+                echo "<li class=\"\">
                             <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
                     </li>";
-                }
+            }
 
-                if($userObj->isBusinessProcess){
-                    echo "<li class=\"\">
+            if($userObj->isBusinessProcess){
+                echo "<li class=\"\">
                             <a ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
-                }
+            }
 
-                if($userObj->isExpense){
-                    echo "<li class=\"\">
+            if($userObj->isExpense){
+                echo "<li class=\"\">
                             <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
                     </li>";
-                }
+            }
 
-                if($userObj->isApplicator){
-                    echo "<li class=\"\">
+            if($userObj->isApplicator){
+                echo "<li class=\"\">
                             <a ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
                     </li>";
-                }
+            }
 
-                if($userObj->isApplicator){
-                    echo "<li class=\"\">
+            if($userObj->isApplicator){
+                echo "<li class=\"\">
                             <a href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
                     </li>";
-                }
+            }
 
-                if($userObj->isReporting){
-                    echo "<li class=\"\">
+            if($userObj->isReporting){
+                echo "<li class=\"\">
                             <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
                     </li>";
-                }
+            }
 
-                if($userObj->isAdmin){
-                    echo "<li class=\"\">
+            if($userObj->isAdmin){
+                echo "<li class=\"\">
                             <a ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
                     </li>";
-                }
+            }
 
             // <li class="">
             //     <a href="#"><span class="fa fa-refresh"></span> <span class="xn-text">Process</span></a>
@@ -219,9 +219,9 @@ if(!$userObj->init($userId)){
             </li>
             <!-- END SEARCH -->
             <!-- SIGN OUT -->
-<!--            <li class="xn-icon-button pull-right">-->
-<!--<!--                <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->-->
-<!--            </li>-->
+            <!--            <li class="xn-icon-button pull-right">-->
+            <!--<!--                <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->-->
+            <!--            </li>-->
             <li class="xn-icon-button pull-right">
                 <a ng-click=""><span class="fa fa-sign-out"></span></a>
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging" style="width: 230px;">
