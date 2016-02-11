@@ -76,6 +76,8 @@
     <script type="text/javascript" src="Config/js/configService.js"></script>
     <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
     <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
+    <script type="text/javascript" src="Process/js/ProcessControllers.js"></script>
+
 </head>
 
 <?php
@@ -229,7 +231,7 @@ if(!$userObj->init($userId)){
                         <a href="#" class="list-group-item">
                             <span class="contacts-title">Profile Setting</span>
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a ui-sref="RequestAccess" class="list-group-item">
                             <span class="contacts-title">Request for access</span>
                         </a>
                         <a href="#" class="list-group-item">
@@ -255,36 +257,25 @@ if(!$userObj->init($userId)){
                     </div>
                 </div>
             </li>
-            <!-- END SIGN OUT -->
-            <!-- REQUEST FOR ACCESS -->
-            <li class="xn-icon-button pull-right">
-                <a href="#" class="notify1"></span>Request for access</a>
-                <div class="informer informer-warning">3</div>
-            </li>
-            <!-- END REQUEST FOR ACCESS -->
 
-            <!-- GENERAL NOTIFICATIONS -->
+
             <li class="xn-icon-button pull-right">
-                <a href="#" class="notify1"></span>Bill approval</a>
-                <div class="informer informer-warning">4</div>
-            </li>
-            <!-- END GENERAL NOTIFICATIONS -->
-            <!-- FOLLOW UPS -->
-            <li class="xn-icon-button pull-right">
-                <a href="#" class="notify2"></span>Follow ups</a>
-                <div class="informer informer-warning">7</div>
+                <a href="#"><span class="fa fa-tasks"></span></a>
+                <div class="informer informer-warning">3</div>
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                    <div class="panel-body list-group" style="height:80px;">
-                        <a class="list-group-item" href="#">
-                            <strong>Quotation</strong>
-                        </a>
-                        <a class="list-group-item" href="#">
-                            <strong>Payment</strong>
-                        </a>
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><span class="fa fa-tasks"></span> Tasks</h3>
+                        <div class="pull-right">
+                            <span class="label label-warning">3 active</span>
+                        </div>
                     </div>
-                </div>
+                 </div>
             </li>
-            <!-- END FOLLOW UPS-->
+
+
+
+                    <!-- END SIGN OUT -->
+
 
         </ul>
         <!-- END X-NAVIGATION VERTICAL -->
