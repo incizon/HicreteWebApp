@@ -226,25 +226,25 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addCustomer', {
             url: '/addCustomer',
-            templateUrl: 'Process/html/CreateApplicator.html'
+
 
         })
 
         .state('Process.addProject', {
             url: '/addProject',
-            templateUrl: 'Process/html/CreatePackage.html'
+            templateUrl: 'Process/html/ProjectCreation.html'
 
         })
 
         .state('Process.addQuotation', {
             url: '/addQuotation',
-            templateUrl: 'Process/html/ViewPackages.html'
+
 
         })
 
         .state('Process.addInvoice', {
             url: '/addInvoice',
-            templateUrl: 'Process/html/ViewTentetiveApplicator.html'
+
 
         })
 

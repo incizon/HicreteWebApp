@@ -76,6 +76,8 @@
     <script type="text/javascript" src="Config/js/configService.js"></script>
     <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
     <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
+    <script type="text/javascript" src="Process/js/ProcessControllers.js"></script>
+
 </head>
 
 <?php
