@@ -1,7 +1,28 @@
 /**
  * Created by Atul on 11-02-2016.
  */
-myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
+
+myApp.controller('ProjectDetailsController',function($scope,$http){
+
+
+    console.log("IN");
+
+});
+
+myApp.controller('QuotationController',function($scope,$http){
+
+
+    console.log("IN");
+
+});
+
+myApp.controller('InvoiceController',function($scope,$http){
+
+
+    console.log("IN");
+
+});
+myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $log){
 
 
     $scope.paymentDetails={
@@ -80,7 +101,7 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
 
 
 
-    ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.paymentDetails);
+
 
 
     $scope.viewProjectPaymentDetails=function(project_id){
@@ -180,3 +201,59 @@ myApp.controller('ProjectPaymentController',function($scope,$http,ApplicatorServ
             };
         }
     }});
+
+myApp.controller('viewProjectController',function($scope,$http){
+
+
+    $scope.Projects=[
+        {
+            "project_id": "1",
+            project_name: "Dream city",
+            project_manager:"Namdev",
+            project_status:"incomplete",
+            payment_status:"no",
+            project_quotation:'yes',
+
+        },
+        {
+            "project_id": "2",
+            project_name: "Prayeja city",
+            project_manager:"Atul",
+            project_status:"complete",
+            payment_status:"yes",
+            project_quotation:"yes",
+
+        },
+        {
+            "project_id": "4",
+            project_name: "dsk",
+            project_manager:"Ajit",
+            project_status:"incomplete",
+            payment_status:"no",
+            project_quotation:"yes",
+
+        },
+        {
+            "project_id": "3",
+            project_name: "Ghokhale Constructions",
+            project_manager:"Pranav",
+            project_status:"complete",
+            payment_status:"yes",
+            project_quotation:"yes",
+
+        },
+        {
+            "project_id": "5",
+            project_name: "ABI",
+            project_manager:"Pranav",
+            project_status:"incomplete",
+            payment_status:"no",
+            project_quotation:"no",
+
+        }
+
+    ];
+
+
+
+});
