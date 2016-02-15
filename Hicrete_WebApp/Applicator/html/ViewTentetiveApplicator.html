@@ -4,7 +4,7 @@
             <div class="row">
                 <div class="col-md-4">
 
-                    <select class="form-control select" name="firmCity" ng-model="sortExpression"/>
+                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
                     <option value="" disabled selected>Search by </option>>
                     <option value="applicator_name">Name</option>
                     <option value="applicator_city">City</option>
@@ -79,12 +79,11 @@
                 </table>
             </div>
         </div>
-        <uib-pagination total-items="totalItems" ng-model="currentPage"
-                        max-size="5" boundary-links="true"
-                        items-per-page="ApplicatorPerPage" class="pagination-sm">
-        </uib-pagination>
-
     </div>
+    <uib-pagination total-items="totalItems" ng-model="currentPage"
+                    max-size="5" boundary-links="true"
+                    items-per-page="ApplicatorPerPage" class="pagination-sm">
+    </uib-pagination>
 </div>
 
 <!-- Modal -->
