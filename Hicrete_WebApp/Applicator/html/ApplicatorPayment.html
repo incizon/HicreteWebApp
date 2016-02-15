@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-md-9">
 
-                                <select class="form-control" name="applicatorName" ng-model="paymentDetails.enrollmentID" ng-change="applicatorPaymentDetails(paymentDetails.enrollmentID)" required/>
+                                <select class="form-control" name="applicatorName" ng-model="applicatorDetails.enrollmentID" ng-change="applicatorPaymentDetails(applicatorDetails.enrollmentID)" required/>
 
                                 <option value="" disabled selected>Choose Applicator</option>
                                 <option ng-repeat="applicator in Applicators" value="{{applicator.enrollment_id }}">{{applicator.applicator_name}}</option>
@@ -44,7 +44,7 @@
                                 <label class="control-label">Payment Mode</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="paymentMode" ng-model="paymentDetails.mode" required />
+                                <select class="form-control select" name="paymentMode" ng-model="applicatorDetails.mode" required />
                                 <option value="" disabled selected>Choose Payment Mode</option>
                                 <option value="cash">Cash</option>
                                 <option value="cheque">Cheque</option>
@@ -58,7 +58,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="cash" ng-if="paymentDetails.mode=='cash'">
+                        <div id="cash" ng-if="applicatorDetails.mode=='cash'">
                             <!--Start of amount paid field-->
                             <div class="form-group">
                                 <div class="col-md-3">
@@ -69,7 +69,7 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" ng-blur = "getPendingAmount()" class="form-control"
                                                name="cashAmountPaid"
-                                               ng-model="paymentDetails.amountpaid" pattern="[0-9]+" required />
+                                               ng-model="applicatorDetails.amountpaid" pattern="[0-9]+" required />
                                     </div>
                                     <div class="help-block"
                                          ng-messages="applicatorPaymentDetailsForm.cashAmountPaid.$error"
@@ -91,7 +91,7 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control"
                                                name="cashAmountReceiver"
-                                               ng-model="paymentDetails.paidto"  pattern="[a-zA-Z]+" minlength=2 required />
+                                               ng-model="applicatorDetails.paidto"  pattern="[a-zA-Z]+" minlength=2 required />
                                     </div>
                                     <div class="help-block"
                                          ng-messages="applicatorPaymentDetailsForm.cashAmountReceiver.$error"
@@ -114,7 +114,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="date" class="form-control" ng-model="paymentDetails.paymentDate" />
+                                        <input type="date" class="form-control" ng-model="applicatorDetails.paymentDate" />
                                     </div>
 
                                 </div>
@@ -129,14 +129,14 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control"
-                                               name="cashPendingAmount"  ng-model="paymentDetails.pendingAmount" readonly>
+                                               name="cashPendingAmount"  ng-model="applicatorDetails.pendingAmount" readonly>
                                     </div>
                                 </div>
                             </div>
                             <!--End of pending amount field-->
                         </div>
                         <!--End of amount paid section for cash mode-->
-                        <div id="cheque" ng-if="paymentDetails.mode=='cheque' || paymentDetails.mode=='dd' || paymentDetails.mode=='netBanking'">
+                        <div id="cheque" ng-if="applicatorDetails.mode=='cheque' || applicatorDetails.mode=='dd' || applicatorDetails.mode=='netBanking'">
                             <!--Start of amount paid field-->
                             <div class="form-group">
                                 <div class="col-md-3">
@@ -146,7 +146,7 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" ng-blur = "getPendingAmount()" class="form-control" name="chequeAmountPaid"
-                                               ng-model="paymentDetails.amountpaid" pattern="[0-9]+" required/>
+                                               ng-model="applicatorDetails.amountpaid" pattern="[0-9]+" required/>
                                     </div>
                                     <div class="help-block"
                                          ng-messages="applicatorPaymentDetailsForm.chequeAmountPaid.$error"
@@ -165,7 +165,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="chequeBankName" ng-model="paymentDetails.bankname"  pattern="[a-zA-Z]+" required/>
+                                        <input type="text" class="form-control" name="chequeBankName" ng-model="applicatorDetails.bankname"  pattern="[a-zA-Z]+" required/>
                                     </div>
                                     <div class="help-block"
                                          ng-messages="applicatorPaymentDetailsForm.chequeBankName.$error"
@@ -186,7 +186,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="chequeBranchName" ng-model="paymentDetails.branchname" pattern="[a-zA-Z]+"  required />
+                                        <input type="text" class="form-control" name="chequeBranchName" ng-model="applicatorDetails.branchname" pattern="[a-zA-Z]+"  required />
                                     </div>
                                     <div class="help-block"
                                          ng-messages="applicatorPaymentDetailsForm.chequeBranchName.$error"
@@ -208,7 +208,7 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="chequeUniqueNumber"
-                                               ng-model="paymentDetails.uniquenumber"
+                                               ng-model="applicatorDetails.uniquenumber"
                                                pattern="[0-9]+" required/>
                                     </div>
                                     <div class="help-block"
@@ -231,7 +231,7 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control"
                                                name="chequeReceiver"
-                                               ng-model="paymentDetails.paidto"
+                                               ng-model="applicatorDetails.paidto"
                                                pattern="[a-zA-Z]+" minlength=2 required />
                                     </div>
                                     <div class="help-block"
@@ -253,7 +253,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="pendingAmount" ng-model="paymentDetails.pendingAmount" readonly>
+                                        <input type="text" class="form-control" name="pendingAmount" ng-model="applicatorDetails.pendingAmount" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +267,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="date" class="form-control" ng-model="paymentDetails.paymentDate" value=""
+                                        <input type="date" class="form-control" ng-model="applicatorDetails.paymentDate" value=""
                                         />
                                     </div>
 
@@ -319,7 +319,7 @@
 
             <button ng-click="(formSubmitted=true)
                     && applicatorPaymentDetailsForm.$valid
-                    && submitPaymentDetails('lg',paymentDetails)"  class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+                    && submitPaymentDetails('lg',applicatorDetails)"  class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
             <button ng-click="clearFields(paymentDetails)" class="btn  btn-default pull-right">Clear Form</button>
         </div>

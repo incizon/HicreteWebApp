@@ -1,7 +1,7 @@
 myApp.service('ApplicatorService',function(){
 
 	this.submitApplicatorDetails=function($scope,$http,applicatorDetails){
-
+		applicatorDetails.operation='createApplicator';
 		 var config = {
 						params: {
 									data: applicatorDetails
@@ -17,7 +17,7 @@ myApp.service('ApplicatorService',function(){
 							setTimeout(function(){
 									window.location.reload(true);
 							},2000);
-							
+
 
 
 						})
@@ -53,12 +53,12 @@ myApp.service('ApplicatorService',function(){
 
 		};
 
-	this.getApplicatorPaymentDetails=function($scope,$http,paymentDetails){
+	this.getApplicatorPaymentDetails=function($scope,$http,applicatorDetails){
 
-		paymentDetails.operation='getPaymentDetails';
+		applicatorDetails.operation='getPaymentDetails';
 		var config = {
 					 params: {
-								data: paymentDetails
+								data: applicatorDetails
 							}
 					};
 
@@ -77,12 +77,12 @@ myApp.service('ApplicatorService',function(){
 
 	};
 
-	this.savePaymentDetails=function($scope,$http,paymentDetails){
+	this.savePaymentDetails=function($scope,$http,applicatorDetails){
 
-		paymentDetails.operation='savePaymentDetails';
+		applicatorDetails.operation='savePaymentDetails';
 		var config = {
 			params: {
-				data: paymentDetails
+				data: applicatorDetails
 			}
 		};
 
@@ -121,9 +121,9 @@ myApp.service('PackageService',function(){
 						            
 						            console.log(data);
 
-									//setTimeout(function(){
-									//	window.location.reload(true);
-									//},2000);
+									setTimeout(function(){
+										window.location.reload(true);
+									},2000);
 					})
 					.error(function (data, status, headers, config){
 									

@@ -1,4 +1,4 @@
-myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,PackageService) {
+myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,PackageService,$uibModal, $log) {
 
     $scope.step=1;
     $scope.editPackage=false;
@@ -7,6 +7,9 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     $scope.editPackage=false;
     $scope.package_total_amount=0;
     $scope.packageDetailsShow='No';
+
+    /* applicator details object */
+
     $scope.applicatorDetails={
 
         operation:"",
@@ -14,16 +17,22 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         elementDetails:[]
     };
 
+    /*package details object */
 
     $scope.packageDetails={
         operation :""
 
     };
 
+    /*to store all packages from return from  server */
+
     $scope.packages=[];
 
+    /* call to package service to get packages */
 
     PackageService.viewPackages($scope,$http,$scope.packageDetails);
+
+    /*Multistep form */
 
     $scope.nextStep = function() {
 
@@ -37,6 +46,8 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         $scope.step--;
 
     }
+
+    /* to show package details while creating applicator */
 
     $scope.getPackageDetails=function(packageID){
         console.log(packageID);
@@ -73,11 +84,9 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
         }
 
+    }
 
-
-
-    };
-
+    /* if package edited then set packageEdited to true and editPackage to true adn hide package details*/
     $scope.editPackageDetails=function(){
 
         $scope.applicatorDetails.packageEdited="true";
@@ -86,6 +95,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     };
 
+    /*number of package element if want to edit package(customized) */
     $scope.add = function (noOfMaterials) {
 
         console.log(noOfMaterials);
@@ -109,42 +119,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         $scope.applicatorDetails.elementDetails.splice(index,1); //remove item by index
     };
 
-
-
-        PackageService.viewPackages($scope,$http,$scope.packageDetails);
-
-    $scope.nextStep = function() {
-
-        $scope.formSubmitted=false;
-
-        $scope.step++;
-
-    }
-
-    $scope.prevStep = function() {
-        $scope.step--;
-
-    }
-
-
-
-    $scope.getPendingAmount=function(){
-        console.log("In Pending amount function");
-        $scope.applicatorDetails.pendingAmount=parseInt($scope.package_total_amount)-parseInt($scope.applicatorDetails.amountpaid);
-    }
-    $scope.checkPaymentStatus=function(){
-            if($scope.applicatorDetails.received=='Yes'){
-
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-
-
-
-    //Adding fields to packageDetails
+    //Adding fields to if package edited
 
     $scope.addField= function(){
 
@@ -157,6 +132,8 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
         });
     };
+
+    /*calculate pending amount if package edited or selected standard package */
 
     $scope.getPendingAmount=function(){
         console.log("In Pending amount function");
@@ -174,6 +151,9 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             $scope.applicatorDetails.pendingAmount = parseInt($scope.package_total_amount) - parseInt($scope.applicatorDetails.amountpaid);
         }
     }
+
+    /*Check payment received or not for form submit*/
+
     $scope.checkPaymentStatus=function(){
         if($scope.applicatorDetails.received=='Yes'){
 
@@ -183,10 +163,13 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             return true;
         }
     }
-    $scope.processForm = function(applicatorDetails) {
+
+        /* to check payment status and according call to service to submit data */
+
+    $scope.processForm = function(size,applicatorDetails) {
 
         $scope.formSubmitted=false;
-
+         console.log("In process form");
         if($scope.applicatorDetails.pendingAmount==0 && $scope.applicatorDetails.received=='Yes' ){
 
             console.log("Full Amount Paid ");
@@ -197,20 +180,96 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         }
         if(($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes')){
+
+
+            //$scope.showModal = true;
             console.log("Half Amount Paid");
-            $scope.showModal = true;
             applicatorDetails.paymentStatus="No";
+
+
+
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Applicator/html/paymentFollowup.html',
+                controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+
+
+                    $scope.applicatorDetails = applicatorDetails;
+
+                    $scope.ok = function () {
+
+                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                        $uibModalInstance.close();
+                    };
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
+                size: size,
+                resolve: {
+                    applicatorDetails: function () {
+                        return $scope.applicatorDetails;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (applicatorDetails) {
+                $scope.applicatorDetails = applicatorDetails;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
 
 
         }
         if($scope.applicatorDetails.received=='No'){
-            $scope.showModal = true;
+            //$scope.showModal = true;
             console.log("No Amount paid");
             applicatorDetails.paymentStatus="No";
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Applicator/html/paymentFollowup.html',
+                controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+
+
+                    $scope.applicatorDetails = applicatorDetails;
+
+                    $scope.ok = function () {
+
+                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                        $uibModalInstance.close();
+                    };
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
+                size: size,
+                resolve: {
+                    applicatorDetails: function () {
+                        return $scope.applicatorDetails;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (applicatorDetails) {
+                $scope.applicatorDetails = applicatorDetails;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
         }
 
 
     };
+
+    /* if not amount is paid or half amount is paid */
+
     $scope.processFollowup=function(applicatorDetails){
 
         applicatorDetails.operation='createApplicator';
@@ -222,6 +281,258 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
 });
 
+/* End of Applicator Controller */
+
+
+/*Start of view tentative applicator controller */
+
+myApp.controller('ViewTentetiveApplicatorController',function($scope,$uibModal,$log,$http,ApplicatorService){
+
+
+
+    $scope.Applicators=[];
+    $scope.totalItems =0;
+    $scope.currentPage = 1;
+
+    $scope.ApplicatorPerPage = 5;
+    $scope.applicatorDetails={
+
+        applicator:"tentetive",
+        operation:""
+
+    };
+
+    /* call to service to get tentative applicator */
+    ApplicatorService.viewApplicatorDetails($scope,$http,$scope.applicatorDetails);
+
+
+    /* Pagination */
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
+        end = begin + $scope.ApplicatorPerPage;
+        index = $scope.Applicators.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+    /* Show details of seleted applicator on modal */
+
+    $scope.ApplicatorSelected = function (tentetiveApplicator) {
+
+        $scope.selectedTentetiveApplicator = tentetiveApplicator;
+
+    }
+
+    $scope.applicatorToModify=function(tentetiveApplicator){
+
+
+            $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
+            $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
+            $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
+            $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
+            $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
+            $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
+            $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
+            $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
+            $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
+            $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
+            $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
+            $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
+            $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
+            $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
+
+    }
+});
+
+/*End of view tentative applicator controller */
+
+
+/*Start of view permanent applicator */
+
+myApp.controller('ViewPermanentApplicatorController',function($scope,$http,ApplicatorService){
+
+    $scope.Applicators=[];
+    $scope.totalItems =0;
+    $scope.currentPage = 1;
+
+    $scope.ApplicatorPerPage = 5;
+    $scope.applicatorDetails={
+
+        applicator:"permanent",
+        operation:""
+    };
+
+    /* call to service to get all permanent */
+
+    ApplicatorService.viewApplicatorDetails($scope,$http,$scope.applicatorDetails);
+
+    /* start of pagination */
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
+        end = begin + $scope.ApplicatorPerPage;
+        index = $scope.Applicators.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+    /* selected applicator to view on modal */
+
+    $scope.ApplicatorSelected = function (permanentApplicator) {
+        $scope.selectedPermanentApplicator = permanentApplicator;
+        console.log(permanentApplicator);
+    };
+
+
+    $scope.applicatorToModify=function(permanentApplicator){
+        $scope.applicatorDetails.applicator_id=permanentApplicator.applicator_master_id;
+        $scope.applicatorDetails.firmname=permanentApplicator.applicator_name;
+        $scope.applicatorDetails.addressline1=permanentApplicator.applicator_address_line1;
+        $scope.applicatorDetails.addressline2=permanentApplicator.applicator_address_line2;
+        $scope.applicatorDetails.contactno=permanentApplicator.applicator_contact;
+        $scope.applicatorDetails.city=permanentApplicator.applicator_city;
+        $scope.applicatorDetails.state=permanentApplicator.applicator_state;
+        $scope.applicatorDetails.country=permanentApplicator.applicator_country;
+        $scope.applicatorDetails.cstnumber=permanentApplicator.applicator_cst_number;
+        $scope.applicatorDetails.pannumber=permanentApplicator.applicator_pan_number;
+        $scope.applicatorDetails.servicetaxnumber=permanentApplicator.applicator_stax_number;
+        $scope.applicatorDetails.vatnumber=permanentApplicator.applicator_vat_number;
+        $scope.applicatorDetails.pointofcontact=permanentApplicator.point_of_contact;
+        $scope.applicatorDetails.pointcontactno=permanentApplicator.point_of_contact_no;
+
+    };
+
+
+
+});
+/*End of view permanent applicator */
+
+/* start of applicator payment controller*/
+
+myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
+
+
+    $scope.applicatorDetails={
+        operation:""
+    };
+    $scope.formSubmitted=false;
+    $scope.showPaymentDetails=false;
+    $scope.Applicators=[];
+    $scope.applicatorPayment=[];
+    $scope.animationsEnabled=true;
+    $scope.paymentReceivedFor=undefined;
+
+    ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
+
+
+    $scope.applicatorPaymentDetails=function(enrollmentId){
+
+        $scope.applicatorPayment=[];
+        for(var index=0;index<$scope.Applicators.length;index++){
+
+            if($scope.Applicators[index].enrollment_id==enrollmentId) {
+
+                $scope.showPaymentDetails = true;
+                if ($scope.Applicators[index].total_paid_amount == null){
+
+                    $scope.previousAmountPaid =0;
+                }
+                else{
+
+                    $scope.previousAmountPaid=$scope.Applicators[index].total_paid_amount;
+                }
+                $scope.packageAmount=$scope.Applicators[index].package_total_amount;
+                $scope.remainingAmount=$scope.packageAmount-$scope.previousAmountPaid;
+
+
+                for(var index1=0;index1<$scope.Applicators[index].paymentDetails.length;index1++){
+
+                    $scope.applicatorPayment.push({
+                        amount_paid:$scope.Applicators[index].paymentDetails[index1].amount_paid,
+                        date_of_payment:$scope.Applicators[index].paymentDetails[index1].date_of_payment,
+                        paid_to:$scope.Applicators[index].paymentDetails[index1].paid_to,
+                        payment_mode:$scope.Applicators[index].paymentDetails[index1].payment_mode
+
+                    });
+
+                }
+                break;
+            }
+        }
+
+    }
+
+
+
+    $scope.getPendingAmount=function(){
+        console.log("In Pending amount function");
+        $scope.applicatorDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.applicatorDetails.amountpaid)-$scope.previousAmountPaid;
+
+    }
+    $scope.submitPaymentDetails=function(size,applicatorDetails){
+
+        console.log("In");
+        $scope.formSubmitted=false;
+
+        if($scope.applicatorDetails.pendingAmount==0) {
+
+            applicatorDetails.paymentStatus='Yes';
+            console.log(applicatorDetails);
+            ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+        }
+        else if($scope.applicatorDetails.pendingAmount!=0){
+            //$scope.showModal = true;
+
+            applicatorDetails.paymentStatus='No';
+
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Applicator/html/paymentFollowup.html',
+                controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+
+
+                    $scope.applicatorDetails = applicatorDetails;
+
+                    $scope.ok = function () {
+
+                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+                        $uibModalInstance.close();
+                    };
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+                },
+                size: size,
+                resolve: {
+                    applicatorDetails: function () {
+                        return $scope.applicatorDetails;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (applicatorDetails) {
+                $scope.applicatorDetails = applicatorDetails;
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+        }
+    }
+
+});
+
+/*
+start of package controller
+
+ */
 myApp.controller('PackageController',function($scope,$http,PackageService){
 
     $scope.packageDetails={
@@ -294,434 +605,45 @@ myApp.controller('PackageController',function($scope,$http,PackageService){
     };
 
 });
-
-
 /*
- ViewTentetiveApplicatorController :
- View Tentative Applicators
- Methods
- 1. ViewApplicatorDetails :- View all tentative applicators details.
- 2. ApplicatorSelected :- View Details of selected applicator in modal.
- 3. applicatorToModify  :- To modify applicator general information.
-
+End of package controller
  */
 
+/*
+start of view package controller
+ */
 
-    myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
+myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
 
-        $scope.oneAtATime = true;
-        $scope.packages = [];
+    $scope.oneAtATime = true;
+    $scope.packages = [];
 
-        $scope.packageDetails={
-            operation :""
-        };
+    $scope.totalPackages =0;
+    $scope.packagePerPage=5;
+    $scope.currentPackagePage = 1;
 
 
-        PackageService.viewPackages($scope,$http,$scope.packageDetails);
+    $scope.packageDetails={
+        operation :""
+    };
 
 
+    PackageService.viewPackages($scope,$http,$scope.packageDetails);
 
-    });
+    $scope.paginatePackage = function(value) {
 
+        var begin, end, index;
+        begin = ($scope.currentPackagePage - 1) * $scope.packagePerPage;
+        end = begin + $scope.packagePerPage;
+        index = $scope.packages.indexOf(value);
 
+        return (begin <= index && index < end);
+    };
 
 
 
-    myApp.controller('ViewTentetiveApplicatorController',function($scope,$uibModal,$log,$http,ApplicatorService){
+});
 
-
-
-        $scope.Applicators=[];
-        $scope.totalItems =0;
-        $scope.currentPage = 1;
-
-        $scope.ApplicatorPerPage = 5;
-        $scope.applicatorDetails={
-
-            applicator:"tentetive",
-            operation:""
-
-        };
-
-        ApplicatorService.viewApplicatorDetails($scope,$http,$scope.applicatorDetails);
-
-
-        $scope.paginate = function(value) {
-            //console.log("In Paginate");
-            var begin, end, index;
-            begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
-            end = begin + $scope.ApplicatorPerPage;
-            index = $scope.Applicators.indexOf(value);
-            //console.log(index);
-            return (begin <= index && index < end);
-        };
-
-        $scope.ApplicatorSelected = function (tentetiveApplicator) {
-
-            $scope.selectedTentetiveApplicator = tentetiveApplicator;
-
-        };
-
-        $scope.applicatorToModify=function(tentetiveApplicator){
-
-            $scope.paginate = function(value) {
-                //console.log("In Paginate");
-                var begin, end, index;
-                begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
-                end = begin + $scope.ApplicatorPerPage;
-                index = $scope.Applicators.indexOf(value);
-                //console.log(index);
-                return (begin <= index && index < end);
-            };
-
-            $scope.ApplicatorSelected = function (tentetiveApplicator) {
-                $scope.selectedTentetiveApplicator = tentetiveApplicator;
-            };
-
-            $scope.animationsEnabled = true;
-            $scope.open = function (tentetiveApplicator, modalId) {
-                console.log("inside open");
-                $scope.selectedTentetiveApplicator = tentetiveApplicator;
-
-                $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
-                $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
-                $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
-                $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
-                $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
-                $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
-                $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
-                $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
-                $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
-                $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
-                $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
-                $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
-                $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
-                $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
-
-
-            };
-
-        }});
-
-
-    /*
-     View PackageController :-
-     1. View Available Packages
-     Methods
-     1.paginatePackage :-Do pagination of total packages.
-     2.ViewPackages    :-View Total available packages.
-
-
-     */
-    myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
-
-        $scope.oneAtATime = true;
-        $scope.packages = [];
-
-        $scope.totalPackages =0;
-        $scope.packagePerPage=5;
-        $scope.currentPackagePage = 1;
-
-
-        $scope.packageDetails={
-            operation :""
-        };
-
-
-        PackageService.viewPackages($scope,$http,$scope.packageDetails);
-
-        $scope.paginatePackage = function(value) {
-
-            var begin, end, index;
-            begin = ($scope.currentPackagePage - 1) * $scope.packagePerPage;
-            end = begin + $scope.packagePerPage;
-            index = $scope.packages.indexOf(value);
-
-            return (begin <= index && index < end);
-        };
-
-
-
-    });
-
-
-    /*
-     ViewPermanentApplicatorController :
-     View Permanent Applicators
-     Methods
-     1. ViewApplicatorDetails :- View all permanent applicators details.
-     2. ApplicatorSelected :- View Details of selected applicator in modal.
-     3. applicatorToModify  :- To modify applicator general information.
-
-     */
-//    =======
-//        console.log( $scope.applicatorDetails.applicator_id);
-//    var modalInstance = $uibModal.open({
-//        animation: $scope.animationsEnabled,
-//        templateUrl: modalId ,
-//        controller: 'ModalInstanceCtrl',
-//        backdrop : 'static',
-//        resolve: {
-//            selectedTentetiveApplicator: function () {
-//                return $scope.selectedTentetiveApplicator;
-//            },
-//            applicatorToModify: function(){
-//                $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
-//                $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
-//                $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
-//                $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
-//                $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
-//                $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
-//                $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
-//                $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
-//                $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
-//                $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
-//                $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
-//                $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
-//                $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
-//                $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
-//
-//            }
-//        }
-//    });
-//    modalInstance.result.then(function (selectedTentetiveApplicator,applicatorToModify) {
-//        $scope.selectedTentetiveApplicator = selectedTentetiveApplicator;
-//        $scope.applicatorToModify = applicatorToModify;
-//    }, function () {
-//        $log.info('Modal dismissed at: ' + new Date());
-//    });
-//};
-//
-//$scope.toggleAnimation = function () {
-//    $scope.animationsEnabled = !$scope.animationsEnabled;
-//};
-//
-//
-//$scope.applicatorToModify=function(tentetiveApplicator){
-//    return $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
-//    return $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
-//    return $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
-//    return $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
-//    return $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
-//    return $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
-//    return $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
-//    return $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
-//    return $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
-//    return  $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
-//    return $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
-//    return $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
-//    return $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
-//    return $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
-//};
-//
-//});
-
-//myApp.controller('ModalInstanceCtrl',function($scope, $uibModalInstance, selectedTentetiveApplicator,applicatorToModify){
-//
-//    $scope.selectedTentetiveApplicator = selectedTentetiveApplicator;
-//    $scope.applicatorToModify = applicatorToModify;
-//    $scope.ok = function () {
-//        $uibModalInstance.close($scope.selectedTentetiveApplicator);
-//    };
-//
-//    $scope.cancel = function () {
-//        $uibModalInstance.dismiss('cancel');
-//    };
-//});
-
-
-
-
-    myApp.controller('ViewPermanentApplicatorController',function($scope,$http,ApplicatorService){
-
-        $scope.Applicators=[];
-        $scope.totalItems =0;
-        $scope.currentPage = 1;
-
-        $scope.ApplicatorPerPage = 5;
-        $scope.applicatorDetails={
-
-            applicator:"permanent",
-            operation:""
-        };
-
-        ApplicatorService.viewApplicatorDetails($scope,$http,$scope.applicatorDetails);
-
-        $scope.paginate = function(value) {
-            //console.log("In Paginate");
-            var begin, end, index;
-            begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
-            end = begin + $scope.ApplicatorPerPage;
-            index = $scope.Applicators.indexOf(value);
-            //console.log(index);
-            return (begin <= index && index < end);
-        };
-
-        $scope.ApplicatorSelected = function (permanentApplicator) {
-            $scope.selectedPermanentApplicator = permanentApplicator;
-            console.log(permanentApplicator);
-        };
-
-
-        $scope.applicatorToModify=function(permanentApplicator){
-            $scope.applicatorDetails.applicator_id=permanentApplicator.applicator_master_id;
-            $scope.applicatorDetails.firmname=permanentApplicator.applicator_name;
-            $scope.applicatorDetails.addressline1=permanentApplicator.applicator_address_line1;
-            $scope.applicatorDetails.addressline2=permanentApplicator.applicator_address_line2;
-            $scope.applicatorDetails.contactno=permanentApplicator.applicator_contact;
-            $scope.applicatorDetails.city=permanentApplicator.applicator_city;
-            $scope.applicatorDetails.state=permanentApplicator.applicator_state;
-            $scope.applicatorDetails.country=permanentApplicator.applicator_country;
-            $scope.applicatorDetails.cstnumber=permanentApplicator.applicator_cst_number;
-            $scope.applicatorDetails.pannumber=permanentApplicator.applicator_pan_number;
-            $scope.applicatorDetails.servicetaxnumber=permanentApplicator.applicator_stax_number;
-            $scope.applicatorDetails.vatnumber=permanentApplicator.applicator_vat_number;
-            $scope.applicatorDetails.pointofcontact=permanentApplicator.point_of_contact;
-            $scope.applicatorDetails.pointcontactno=permanentApplicator.point_of_contact_no;
-
-        };
-
-
-
-    });
-
-
-
-
-
-    /*
-     ApplicatorPaymentController:
-     To Update Payment of tentative applicators.
-     Methods
-     1.getApplicatorPaymentDetails :- get details of applicator previous payment details.
-     2.applicatorPaymentDetails :-calculate remaining amount and view payment details of particular applicator.
-     3.getPendingAmount :- calculate pending amount if payment is partial done.
-     4.submitPaymentDetails :- Process payment details and call service to submit details to server.
-     5.processFollowup :- Process follow up if partial payment is done and call service to submit details to server.
-
-     */
-    myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
-
-
-        $scope.paymentDetails={
-            operation:""
-        };
-        $scope.formSubmitted=false;
-        $scope.showPaymentDetails=false;
-        $scope.Applicators=[];
-        $scope.applicatorPayment=[];
-        $scope.animationsEnabled=true;
-        $scope.paymentReceivedFor=undefined;
-
-
-
-
-
-
-        ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.paymentDetails);
-
-
-        $scope.applicatorPaymentDetails=function(enrollmentId){
-
-            $scope.applicatorPayment=[];
-            for(var index=0;index<$scope.Applicators.length;index++){
-
-                if($scope.Applicators[index].enrollment_id==enrollmentId) {
-
-                    $scope.showPaymentDetails = true;
-                    if ($scope.Applicators[index].total_paid_amount == null){
-
-                        $scope.previousAmountPaid =0;
-                    }
-                    else{
-
-                        $scope.previousAmountPaid=$scope.Applicators[index].total_paid_amount;
-                    }
-                    $scope.packageAmount=$scope.Applicators[index].package_total_amount;
-                    $scope.remainingAmount=$scope.packageAmount-$scope.previousAmountPaid;
-
-
-                    for(var index1=0;index1<$scope.Applicators[index].paymentDetails.length;index1++){
-
-                        $scope.applicatorPayment.push({
-                            amount_paid:$scope.Applicators[index].paymentDetails[index1].amount_paid,
-                            date_of_payment:$scope.Applicators[index].paymentDetails[index1].date_of_payment,
-                            paid_to:$scope.Applicators[index].paymentDetails[index1].paid_to,
-                            payment_mode:$scope.Applicators[index].paymentDetails[index1].payment_mode
-
-                        });
-
-                    }
-                    break;
-                }
-            }
-
-        }
-
-
-
-        $scope.getPendingAmount=function(){
-            console.log("In Pending amount function");
-            $scope.paymentDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.paymentDetails.amountpaid)-$scope.previousAmountPaid;
-
-        }
-        $scope.submitPaymentDetails=function(size,paymentDetails){
-
-            console.log("In");
-            $scope.formSubmitted=false;
-
-            if($scope.paymentDetails.pendingAmount==0) {
-
-                paymentDetails.paymentStatus='Yes';
-                console.log(paymentDetails);
-                ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
-            }
-            else if($scope.paymentDetails.pendingAmount!=0){
-                //$scope.showModal = true;
-
-                paymentDetails.paymentStatus='No';
-
-                var modalInstance = $uibModal.open({
-                    animation: $scope.animationsEnabled,
-                    templateUrl: 'Applicator/html/paymentFollowup.html',
-                    controller:  function ($scope, $uibModalInstance,paymentDetails) {
-
-
-                        $scope.paymentDetails = paymentDetails;
-
-                        $scope.ok = function () {
-
-                            ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
-                            $uibModalInstance.close();
-                        };
-
-                        $scope.cancel = function () {
-                            $uibModalInstance.dismiss('cancel');
-                        };
-                    },
-                    size: size,
-                    resolve: {
-                        paymentDetails: function () {
-                            return $scope.paymentDetails;
-                        }
-                    }
-                });
-
-                modalInstance.result.then(function (paymentDetails) {
-                    $scope.paymentDetails = paymentDetails;
-                }, function () {
-                    $log.info('Modal dismissed at: ' + new Date());
-                });
-                $scope.toggleAnimation = function () {
-                    $scope.animationsEnabled = !$scope.animationsEnabled;
-                };
-            }
-        }
-        //$scope.processFollowup=function(paymentDetails){
-        //
-        //  ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
-        //}
-    });
-
-
-
+/*
+End of view package controller
+ */

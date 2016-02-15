@@ -1,311 +1,319 @@
-<div class="row">
-    <div class="col-md-12">                  
-         <!-- START SEARCH -->                            
-            <div class="panel panel-default">
-                <div class="panel-body">                                    
-                    <div class="row stacked">
-                       <div class="col-md-6">
-                           <div class="input-group push-down-10" >
-                                <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                        
-                                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keyword"/>
-                                
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-primary">Search</button>
-                                        </div>
-                            </div>                                                       
+<div class="col-md-12">
+    <div class="panel panel-default">
+        <div class="panel-body form-horizontal">
+            <div class="row">
+                <div class="col-md-4">
+
+                    <select class="form-control select" name="firmCity" ng-model="sortExpression"/>
+                    <option value="" disabled selected>Search by </option>>
+                    <option value="applicator_name">Name</option>
+                    <option value="applicator_city">City</option>
+                    <option value="applicator_state">State</option>
+                    </select>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group" >
+                        <span class="input-group-addon"><span class="fa fa-search"></span></span>
+
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary">Search</button>
                         </div>
                     </div>
-                </div>                                                                
-            </div>
-        <!-- END SEARCH -->
-                            
-        <!-- START SEARCH RESULT -->
-        <div class="search-results">
-            <div class="sr-item">
-                <div class="sr-item-title">Tentetive Applicators</div>
-                    <div class="table-responsive push-up-10">
-                        <table class="table table-actions table-striped">
-                            <thead>                                            
-                                <tr>
-                                    <th width="5%">Sr.No</th>
-                                    <th width="10%">Applicator Name</th>
-                                    <th width="10%">Contact No</th>
-                                    <th width="10%">City</th>
-                                    <th width="15%">State</th>
-                                    <th width="40%">Actions</th>           
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="applicator in Applicators | filter :paginate    | filter :keyword">
-                                    <td width="5%">{{$index + 1}}</td>
-                                    <td width="20%">{{applicator.applicator_name}}</td>
-                                    <td width="10%">{{applicator.applicator_contact}}</td>
-                                    <td width="15%">{{applicator.applicator_city}}</td>  
-                                    <td width="15%">{{applicator.applicator_state}}</td>
-                                    <td width="35%">
-                                    
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
-                                        
-                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
-
-
-                                        <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
-                <uib-pagination total-items="totalItems" ng-model="currentPage"
-                    max-size="5" boundary-links="true"
-                    items-per-page="ApplicatorPerPage" class="pagination-sm">
-                </uib-pagination>    
-                                
+            </div><br>
+            <!--<div class="row">-->
+
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" ng-model="sortByPayment" name="sort" value="true"> Payment-->
+                <!--</div>-->
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" ng-model="sortByQuotation" name="sort" value="true" >  Quotation-->
+                <!--</div>-->
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" ng-model="sortByCurrentWorking" name="sort" value="true">  Currently Working-->
+                <!--</div>-->
+            <!--</div>-->
         </div>
-        <!-- END SEARCH RESULT -->
-    </div>                        
+    </div>
+    <!-- END SEARCH -->
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Tentative</strong>Applicators</h3>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive push-up-10">
+                <table class="table table-bordered table-bordered">
+                    <thead>
+                    <tr>
+                        <th width="5%">Sr.No</th>
+                        <th width="10%">Applicator Name</th>
+                        <th width="10%">Contact No</th>
+                        <th width="10%">City</th>
+                        <th width="15%">State</th>
+                        <th width="40%">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="applicator in Applicators | filter :paginate | filter :searchKeyword | orderBy :sortExpression ">
+                        <td width="5%">{{$index + 1}}</td>
+                        <td width="20%">{{applicator.applicator_name}}</td>
+                        <td width="10%">{{applicator.applicator_contact}}</td>
+                        <td width="15%">{{applicator.applicator_city}}</td>
+                        <td width="15%">{{applicator.applicator_state}}</td>
+                        <td width="35%">
+
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
+
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
+
+
+                            <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="ApplicatorPerPage" class="pagination-sm">
+        </uib-pagination>
+
+    </div>
 </div>
 
 <!-- Modal -->
 <div class="modal fade" id="viewDetails" role="dialog" data-backdrop="static" keyboard="false">
-    <div class="modal-dialog1">                                 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Tentetive Applicator Details</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row form-horizontal">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Firm Name :</label>
-                                 </div>
-                                <div class="col-md-8">
-                                    {{selectedTentetiveApplicator.applicator_name}}
-                                </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Address :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                    {{selectedTentetiveApplicator.applicator_address_line1}}
-                                   {{selectedTentetiveApplicator.applicator_address_line2}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Contact No :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_contact}}
-                                 </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Country :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_country}}
-                                 </div>
-                            </div>        
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">State :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_state}}
-                                 </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">City :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_city}}
-                                 </div>
-                            </div>        
-                         </div>
-                         <div class="col-md-6">
-                             <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">VAT Number :</label>
-                                 </div>
-                                <div class="col-md-4">
-                                    {{selectedTentetiveApplicator.applicator_vat_number}}
-                                </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">CST Number :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                    {{selectedTentetiveApplicator.applicator_cst_number}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Service Tax Number :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                  {{selectedTentetiveApplicator.applicator_stax_number}}
-                                 </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">PAN Number :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.applicator_pan_number}}
-                                 </div>
-                            </div>        
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Point Of Contact :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.point_of_contact}}
-                                 </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Source Contact No :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.point_of_contact_no}}
-                                 </div>
-                            </div>        
-                         </div>
-                          
-                      </div>  
-                </div>
-                <div class="modal-header">
-                    <h4 class="modal-title">Package , Payment  And Follow-Up Details</h4>
-                </div>
-                <div class="modal-body">
-                      <div class="row form-horizontal">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Package Name :</label>
-                                 </div>
-                                <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.package_name}}
-                                </div>
-                            </div>
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Package Description :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                    {{selectedTentetiveApplicator.package_description}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <label class="control-label">Follow-Up Date :</label>
-                                </div>
-                                 <div class="col-md-8">
-                                    {{selectedTentetiveApplicator.date_of_follow_up}}
-                                 </div>
-                            </div>   
-                            <div class="form-group">    
-                                 <div class="col-md-4">
-                                    <!-- <label class="control-label">Package Description :</label> -->
-                                </div>
-                                 <div class="col-md-8">
-                                     <button data-toggle="modal"  data-target="#viewPackageDetails" class="btn btn-primary">View Details</button>      
-                                 </div>
-                            </div>                                  
-                         </div>
-                         <div class="col-md-6">
-                             
-                              <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Amount Paid :</label>
-                                 </div>
-                                <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.amount_paid}}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Payment Mode :</label>
-                                 </div>
-                                <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.payment_mode}}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Date of Payment :</label>
-                                 </div>
-                                <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.date_of_payment}}
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Amount Receiver :</label>
-                                 </div>
-                                <div class="col-md-8">
-                                   {{selectedTentetiveApplicator.paid_to}}
-                                </div>
-                            </div>
-                             
-                          
-                        </div>  
-                    </div>                                     
-                </div>   
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-                <!--End of modal-footer-->
-            </div>
-            <!--End of Modal Content-->           
-    </div>
-    <!--End of modal dialog-->
-</div>
-<!--End of modal-->
-<div class="modal fade" id="modifyDetails" role="dialog" data-backdrop="static" keyboard="false">
-    <div class="modal-dialog1">                   
+    <div class="modal-dialog1">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">Tentetive Applicator Details</h4>
             </div>
-            <div class="modal-body">                
+            <div class="modal-body">
+                <div class="row form-horizontal">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Firm Name :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_name}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Address :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_address_line1}}
+                                {{selectedTentetiveApplicator.applicator_address_line2}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Contact No :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_contact}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Country :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_country}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">State :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_state}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">City :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_city}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">VAT Number :</label>
+                            </div>
+                            <div class="col-md-4">
+                                {{selectedTentetiveApplicator.applicator_vat_number}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">CST Number :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_cst_number}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Service Tax Number :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_stax_number}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">PAN Number :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.applicator_pan_number}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Point Of Contact :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.point_of_contact}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Source Contact No :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.point_of_contact_no}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-header">
+                <h4 class="modal-title">Package , Payment  And Follow-Up Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row form-horizontal">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Package Name :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.package_name}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Package Description :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.package_description}}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <!-- <label class="control-label">Package Description :</label> -->
+                            </div>
+                            <div class="col-md-8">
+                                <button data-toggle="modal"  data-target="#viewPackageDetails" class="btn btn-primary">View Details</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Total Amount Paid :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                {{selectedTentetiveApplicator.total_paid_amount}}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Follow-Up Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{selectedTentetiveApplicator.date_of_follow_up}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <!-- <label class="control-label">Package Description :</label> -->
+                            </div>
+                            <div class="col-md-8">
+                                <button data-toggle="modal"  data-target="#viewPaymentDetails" class="btn btn-primary">View Details</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
+</div>
+<!--End of modal-->
+
+
+<div class="modal fade" id="modifyDetails" role="dialog" data-backdrop="static" keyboard="false">
+    <div class="modal-dialog1">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Tentetive Applicator Details</h4>
+            </div>
+            <div class="modal-body">
                 <div class="row">
                     <form class="form-horizontal">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">Applicator Id</label>
-                                </div> 
-                                <div class="col-md-9">      
+                                </div>
+                                <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="firmName" ng-model="applicatorDetails.applicator_id" readonly="readonly">
-                                    </div>                                            
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">Firm Name</label>
                                 </div>
-                                <div class="col-md-9">      
+                                <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="firmName" ng-model="applicatorDetails.firmname" readonly="readonly">
-                                    </div>                                            
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-group">       
+                            <div class="form-group">
                                 <div class="col-md-3 ">
                                     <label class="control-label">Address Line1</label>
                                 </div>
@@ -313,33 +321,33 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="firmAddressline1" ng-model="applicatorDetails.addressline1">
-                                    </div>            
+                                    </div>
                                 </div>
                             </div>
                             <!--End of Address line 1 feild-->
                             <!--Start of Address Line 2 feild-->
                             <div class="form-group">
-                                <div class="col-md-3 ">        
-                                     <label class="control-label">Address Line2</label>
+                                <div class="col-md-3 ">
+                                    <label class="control-label">Address Line2</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                          <input type="text" class="form-control" name="firmAddressline2" ng-model="applicatorDetails.addressline2">
-                                    </div>            
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="firmAddressline2" ng-model="applicatorDetails.addressline2">
+                                    </div>
                                 </div>
                             </div>
                             <!--End of Address line 2 feild-->
                             <!--Start of contact number feild-->
-                             <div class="form-group"> 
+                            <div class="form-group">
                                 <div class="col-md-3">
-                                 <label class="control-label">Contact No</label>
+                                    <label class="control-label">Contact No</label>
                                 </div>
                                 <div class="col-md-9 ">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-phone"></span></span>
                                         <input type="text" class="form-control" name="firmContactNo" ng-model="applicatorDetails.contactno">
-                                    </div>            
+                                    </div>
                                 </div>
                             </div>
                             <!--End of contact number feild-->
@@ -348,7 +356,7 @@
                                 <div class="col-md-3">
                                     <label class=" control-label">Country</label>
                                 </div>
-                                <div class="col-md-9">               
+                                <div class="col-md-9">
                                     <select class="form-control select" ng-model="applicatorDetails.country">
                                         <option value="">Choose Country..</option>
                                         <option value="India">India</option>
@@ -362,7 +370,7 @@
                             <!--End of Country Field-->
                             <!--Start of State Field-->
                             <div class="form-group">
-                               <div class="col-md-3">
+                                <div class="col-md-3">
                                     <label class=" control-label">State</label>
                                 </div>
                                 <div class="col-md-9">
@@ -373,7 +381,7 @@
                                         <option value="Benglore">Benglore</option>
                                         <option value="Karnataka">Karnataka</option>
                                         <option value="Culcatta">Culcatta</option>
-                                     </select>
+                                    </select>
                                 </div>
                             </div>
                             <!--End of State Field-->
@@ -382,7 +390,7 @@
                                 <div class="col-md-3">
                                     <label class="control-label">City</label>
                                 </div>
-                                <div class="col-md-9">  
+                                <div class="col-md-9">
                                     <select class="form-control select"ng-model="applicatorDetails.city">
                                         <option value="">Choose City..</option>
                                         <option value="Pune">Pune</option>
@@ -393,38 +401,38 @@
                                     </select>
                                 </div>
                             </div>
-                            <!--End of City Field-->       
-                         </div>
+                            <!--End of City Field-->
+                        </div>
                         <div class="col-md-6">
                             <!--Start of VAT No. feild-->
-                            <div class="form-group">   
-                                 <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="col-md-3">
                                     <label class="control-label">VAT Number</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                         <input type="text" class="form-control" name="vatNumber" ng-model="applicatorDetails.vatnumber"
-                                         readonly="readonly">
-                                    </div>            
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="vatNumber" ng-model="applicatorDetails.vatnumber"
+                                               readonly="readonly">
+                                    </div>
                                 </div>
                             </div>
                             <!--End of VAT No. feild-->
                             <!--Start of CST No. feild-->
-                            <div class="form-group">    
+                            <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">CST Number</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                         <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber" readonly="readonly">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber" readonly="readonly">
                                     </div>
-                                </div>             
+                                </div>
                             </div>
                             <!--End of CST No. Field-->
                             <!--Start of Service Tax No. feild-->
-                            <div class="form-group">         
+                            <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">Service Tax Number</label>
                                 </div>
@@ -432,12 +440,12 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="seviceTaxNumber"ng-model="applicatorDetails.servicetaxnumber" readonly="readonly">
-                                    </div>            
+                                    </div>
                                 </div>
                             </div>
                             <!--End of Service Tax No. feild-->
                             <!--Start of PAN No. feild-->
-                            <div class="form-group">     
+                            <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">PAN Number</label>
                                 </div>
@@ -445,104 +453,151 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="panNumber" ng-model="applicatorDetails.pannumber" readonly="readonly">
-                                    </div>            
+                                    </div>
                                 </div>
                             </div>
                             <!--End of PAN No. feild-->
                             <!--Start of Point of contact feild-->
-                            <div class="form-group">       
-                               <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="col-md-3">
                                     <label class="control-label">Point of contact</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="pointOfContact" ng-model="applicatorDetails.pointofcontact">
-                                    </div>            
+                                    </div>
                                 </div>
                             </div>
                             <!--End of Point of contact feild-->
                             <!--Start of source contact number Field-->
-                            <div class="form-group">          
-                                 <div class="col-md-3">
+                            <div class="form-group">
+                                <div class="col-md-3">
                                     <label class="control-label">Source Contact No</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                         <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno">
-                                    </div>            
+                                        <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno">
+                                    </div>
                                 </div>
                             </div>
                             <!--End of source contact number Field-->
-                        </div>    
+                        </div>
                     </form>
                 </div>
-            </div>  
-            <div class="modal-footer">
-                 <button ng-click="modifyApplicatorDetails(applicatorDetails)"class="btn btn-danger pull-right">Submit <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
-                 <button class="btn  btn-default pull-right">Clear Form</button>
             </div>
-             <!--End of modal-footer-->
+            <div class="modal-footer">
+                <button ng-click="modifyApplicatorDetails(applicatorDetails)"class="btn btn-danger pull-right">Submit <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+                <button class="btn  btn-default pull-right">Clear Form</button>
+            </div>
+            <!--End of modal-footer-->
         </div>
-        <!--End of Modal Content-->           
+        <!--End of Modal Content-->
     </div>
     <!--End of modal dialog-->
 </div>
 <!--End of modal-->
 
-<div class="modal fade" id="viewPackageDetails" role="dialog" data-backdrop="static" keyboard="false">
-    <div class="modal-dialog">                                 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Package Details</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
 
-                            <div class="table-responsive">
-                                      <table class="table table-actions table-striped">
-                                          <thead>                                            
-                                              <tr>
-                                    <th width="15%">Package Element</th>
-                                                  <th width="15%">Element Quantity</th>
-                                    <th width="15%">Element Rate</th>
-                                                  <th width="15%">Element Amount</th>
-                                  </tr>
-                                          </thead>
-                                          <tbody>
-                                              <tr ng-repeat="elementData in selectedTentetiveApplicator.elementType">
-                                                  <td>{{elementData.element_name}}</td>
-                                                  <td>{{elementData.element_quantity}}</td>
-                                                  <td>{{elementData.element_rate}}</td>
-                                                  <td>{{elementData.element_amount}}</td>
-                                               </tr>                                               
-                                          </tbody>
-                                       </table>
-                                  </div>
-                                  <div class="form-group">
-                                      <div class="col-md-4">
-                                          <label class="control-label"><b>Package Total Amount</b></label>
-                                      </div>
-                                      <div class="col-md-6">                                        
-                                          <b> {{selectedTentetiveApplicator.package_total_amount}} </b>
-                                      </div>
-                                   </div>      
-                       
-                            </div>
-                        
-                      </div>  
-                
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-                <!--End of modal-footer-->
+<div class="modal fade" id="viewPackageDetails" role="dialog" data-backdrop="static" keyboard="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Package Details</h4>
             </div>
-            <!--End of Modal Content-->           
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="15%">Package Element</th>
+                                <th width="15%">Element Quantity</th>
+                                <th width="15%">Element Rate</th>
+                                <th width="15%">Element Amount</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="elementData in selectedTentetiveApplicator.elementDetails">
+                                <td>{{elementData.element_name}}</td>
+                                <td>{{elementData.element_quantity}}</td>
+                                <td>{{elementData.element_rate}}</td>
+                                <td>{{elementData.element_amount}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="control-label"><b>Package Total Amount</b></label>
+                        </div>
+                        <div class="col-md-6">
+                            <b> {{selectedTentetiveApplicator.package_total_amount}} </b>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
     </div>
     <!--End of modal dialog-->
 </div>
 
+
+<div class="modal fade" id="viewPaymentDetails" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Payment Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="15%">Amount Paid</th>
+                                <th width="15%">Date of payment</th>
+                                <th width="15%">Paid to</th>
+                                <th width="15%">Payment Mode</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="paymentDetail in selectedTentetiveApplicator.paymentDetails">
+                                <td>{{paymentDetail.amount_paid}}</td>
+                                <td>{{paymentDetail.date_of_payment}}</td>
+                                <td>{{paymentDetail.paid_to}}</td>
+                                <td>{{paymentDetail.payment_mode}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
+</div>
 
