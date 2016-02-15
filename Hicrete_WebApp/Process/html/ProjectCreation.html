@@ -7,7 +7,7 @@
                     <h3 class="panel-title"><strong>Basic </strong>Information</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="col-md-6">
+
                     <div class="form-group">
                         <label class="col-md-1 col-sm-2 col-xs-12 control-label">Project Name</label>
                         <div class="col-md-3 col-xs-12 col-sm-4">
@@ -39,7 +39,7 @@
 
                     <div class="form-group">
                         <label class="col-md-1 col-xs-12 control-label col-sm-2">Address</label>
-                        <div class="col-md-12 col-xs-12 col-sm-12">
+                        <div class="col-md-7 col-xs-12 col-sm-12">
                             <textarea ng-model="userInfo.address" name="address"class="form-control" rows="5" required minlength=10></textarea>
                         </div>
                         <div class="help-block" ng-messages="userInfoForm.address.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.address.$touched">
@@ -89,14 +89,10 @@
                     </div>
 
 
-                </div>
+
                 </div>
 
             </div>
-
-
-
-
         </form>
         <!--BASIC INFORAMATION SECTION END-->
 
@@ -104,7 +100,7 @@
         <form>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><strong>Point of</strong>Contact</h3>
+                    <h3 class="panel-title"><strong>Point of  </strong>Contact</h3>
                 </div>
                 <div class="panel-body">
 
@@ -157,9 +153,9 @@
                             <p style="color:red" ng-message="minlength">Mobile number should be of 10 character</p>
                             <p style="color:red" ng-message="pattern">Invalid Mobile number</p>
                         </div>
-        </div>
                     </div>
                 </div>
+            </div>
         </form>
         <!--POINT OF CONTACT SECTION-->
 
@@ -168,7 +164,7 @@
         <form>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"><strong>Companies</strong>Involved</h3>
+                    <h3 class="panel-title"><strong>Companies  </strong>Involved</h3>
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
@@ -206,11 +202,38 @@
         </form>
         <!--COMPANIES INVOLVED END-->
 
-
+        <!--SOURCE OF CONTACT-->
+        <form>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Source</strong></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <input type="checkbox" class="col-md-1 col-xs-12 col-sm-2">
+                        <label class="">Is it a site tracking project ?</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 col-xs-1">Select the source of contact .</label>
+                        <div class="col-md-3 col-xs-6col-sm-4">
+                            <select class="form-control select">
+                                <option>Option 1</option>
+                                <option>Option 2</option>
+                                <option>Option 3</option>
+                                <option>Option 4</option>
+                                <option>Option 5</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!--SOURCE OF CONTACT-->
 
         <div class="panel-footer">
-            <button ng-click="(userInfoSubmitted=true) && userInfoForm.$valid && nextStep()" class="btn btn-primary pull-right">Next</button>
-            <button class="btn btn-default pull-right">Clear Form</button>
+            <button ng-click="" class="btn btn-primary pull-right">Create</button>
+            <button ng-click="" class="btn btn-default pull-right">Cancel</button>
+            <button class="btn btn-default pull-left">Clear Form</button>
         </div>
     </div>
 </div>
