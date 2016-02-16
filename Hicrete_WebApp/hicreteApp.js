@@ -277,6 +277,32 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController'
         })
+
+        .state('Process.QuotationFollowupHistory', {
+            url: '/QuotationFollowupHistory',
+            templateUrl: 'Process/html/QuotationFollowupHistory.html',
+            controller: 'QuotationFollowupHistoryController'
+        })
+        .state('Process.PaymentFollowupHistory', {
+            url: '/PaymentFollowupHistory',
+            templateUrl:'Process/html/PaymentFollowupHistory.html',
+            controller:'PaymentFollowupHistoryController'
+        })
+        .state('Process.SiteTrackingFollowupHistory', {
+            url: '/SiteTrackingFollowupHistory',
+            templateUrl:'Process/html/SiteTrackingFollowupHistory.html',
+            controller:'SiteTrackingFollowupHistoryController'
+        })
+        .state('Process.AttachWorkorder', {
+            url: '/AttachWorkorder',
+            templateUrl:'Process/html/CreateWorkOrder.html',
+
+        })
+        .state('Process.ViewInvoice', {
+            url: '/ViewInvoice',
+            templateUrl:'Process/html/ViewInvoice.html',
+            controller:'ViewInvoiceDetails'
+        })
         .state('MainPage', {
             url: '',
             templateUrl: 'MainPage.html'

@@ -83,7 +83,7 @@
                          <!--<label class="control-label"> :</label>-->
                      </div>
                      <div class="col-md-8">
-                     <a ui-sref="Process.ProjectQuotation"><input type="button" class="btn btn-info" value="Add Quotation"/></a>
+                     <a ui-sref="Process.addQuotation"><input type="button" class="btn btn-info" value="Add Quotation"/></a>
                     </div>
                  </div>
              </div>
@@ -158,7 +158,7 @@
                              <!--<label class="control-label"> :</label>-->
                          </div>
                          <div class="col-md-8">
-                             <a ui-sref="Process.ProjectWorkorder"><input type="button" class="btn btn-info" value="Attach Workorder"/></a>
+                             <a ui-sref="Process.AttachWorkorder"><input type="button" class="btn btn-info" value="Attach Workorder"/></a>
                          </div>
                      </div>
                  </div>
@@ -168,44 +168,44 @@
                      <table class="table  table-bordered">
                          <thead>
                          <tr>
-                             <th width="5%">Sr.No</th>
-                             <th width="10%">Work Order</th>
-                             <th width="10%">Quotation</th>
-                             <th width="10%">Date</th>
-                             <th width="40%">Actions</th>
+                             <th>Sr.No</th>
+                             <th>Work Order</th>
+                             <th>Quotation</th>
+                             <th>Date</th>
+                             <th>Actions</th>
                          </tr>
                          </thead>
                          <tbody>
                          <tr>
-                             <td width="5%">1</td>
-                             <td width="10%">Work order 1</td>
-                             <td width="10%">Quotation1</td>
-                             <td width="10%">10-02-2016</td>
+                             <td>1</td>
+                             <td>Work order 1</td>
+                             <td>Quotation1</td>
+                             <td>10-02-2016</td>
 
-                             <td width="40%">
+                             <td>
 
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
 
                              </td>
                          </tr>
                          <tr>
-                             <td width="5%">2</td>
-                             <td width="10%">Quotation2</td>
-                             <td width="10%">Company2</td>
-                             <td width="10%">10-02-2016</td>
+                             <td>2</td>
+                             <td>Quotation2</td>
+                             <td>Company2</td>
+                             <td>10-02-2016</td>
 
-                             <td width="40%">
+                             <td>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
 
                              </td>
                          </tr>
                          <tr>
-                             <td width="5%">2</td>
-                             <td width="10%">Work order 2</td>
-                             <td width="10%">Quotation 2</td>
-                             <td width="10%">10-02-2016</td>
+                             <td>2</td>
+                             <td>Work order 2</td>
+                             <td>Quotation 2</td>
+                             <td>10-02-2016</td>
 
-                             <td width="40%">
+                             <td>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                              </td>
                          </tr>
@@ -228,7 +228,7 @@
                              <!--<label class="control-label"> :</label>-->
                          </div>
                          <div class="col-md-8">
-                             <a ui-sref="Process.ProjectInvoice"><input type="button" class="btn btn-info" value="Create Invoice"/></a>
+                             <a ui-sref="Process.addInvoice"><input type="button" class="btn btn-info" value="Create Invoice"/></a>
                          </div>
                      </div>
                  </div>
@@ -238,45 +238,45 @@
                      <table class="table  table-bordered">
                          <thead>
                          <tr>
-                             <th width="5%">Sr.No</th>
-                             <th width="10%">Invoice Name</th>
-                             <th width="10%">Quotation</th>
-                             <th width="10%">Date</th>
-                             <th width="40%">Actions</th>
+                             <th>Sr.No</th>
+                             <th>Invoice Name</th>
+                             <th>Quotation</th>
+                             <th>Date</th>
+                             <th>Actions</th>
                          </tr>
                          </thead>
                          <tbody>
                          <tr>
-                             <td width="5%">1</td>
-                             <td width="10%">Invoice 1</td>
-                             <td width="10%">Quotation 1</td>
-                             <td width="10%">10-02-2016</td>
+                             <td>1</td>
+                             <td>Invoice 1</td>
+                             <td>Quotation 1</td>
+                             <td>10-02-2016</td>
 
-                             <td width="40%">
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                             <td>
+                                 <a ui-sref="Process.ViewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
                          <tr>
-                             <td width="5%">3</td>
-                             <td width="10%">Invoice 2</td>
-                             <td width="10%">Quotation 2</td>
-                             <td width="10%">10-02-2016</td>
+                             <td>3</td>
+                             <td>Invoice 2</td>
+                             <td>Quotation 2</td>
+                             <td>10-02-2016</td>
 
-                             <td width="40%">
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                             <td>
+                                 <a ui-sref="Process.ViewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
                          <tr>
-                             <td width="5%">3</td>
-                             <td width="10%">Invoice 3</td>
-                             <td width="10%">Quotation 3</td>
-                             <td width="10%">10-02-2016</td>
-                             <td width="40%">
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                             <td >3</td>
+                             <td >Invoice 3</td>
+                             <td>Quotation 3</td>
+                             <td >10-02-2016</td>
+                             <td >
+                                 <a ui-sref="Process.ViewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
@@ -297,10 +297,10 @@
                      </div>
                      <div class="col-md-6">
                          <div class="col-md-4">
-                             <a ui-sref="Process.ProjectPayment"><input type="button" class="btn btn-info" value="Add Payment"/></a>
+                             <a ui-sref="Process.addPayment"><input type="button" class="btn btn-info" value="Add Payment"/></a>
                          </div>
                          <div class="col-md-4">
-                           <button class="btn btn-info">View Payment History</button>
+                           <a ui-sref="Process.PaymentHistory"><button class="btn btn-info">View Payment History</button>
                          </div>
                      </div>
                  </div>
@@ -310,35 +310,35 @@
                      <table class="table  table-bordered">
                          <thead>
                          <tr>
-                             <th width="5%">Sr.No</th>
-                             <th width="20%">Invoice Name</th>
-                             <th width="20%">Payment Received</th>
-                             <th width="20%">Payment Remaining</th>
+                             <th>Sr.No</th>
+                             <th>Invoice Name</th>
+                             <th>Payment Received</th>
+                             <th>Payment Remaining</th>
 
                          </tr>
                          </thead>
                          <tbody>
                          <tr>
-                             <td width="5%">1</td>
-                             <td width="20%">Invoice 1</td>
-                             <td width="20%">10000</td>
-                             <td width="20%">20000</td>
+                             <td>1</td>
+                             <td>Invoice 1</td>
+                             <td>10000</td>
+                             <td>20000</td>
 
 
                          </tr>
                          <tr>
-                             <td width="5%">2</td>
-                             <td width="20%">Invoice 2</td>
-                             <td width="20%">50000</td>
-                             <td width="20%">10000</td>
+                             <td>2</td>
+                             <td>Invoice 2</td>
+                             <td>50000</td>
+                             <td>10000</td>
 
 
                          </tr>
                          <tr>
-                             <td width="5%">2</td>
-                             <td width="20%">Invoice 3</td>
-                             <td width="20%">100000</td>
-                             <td width="20%">150000</td>
+                             <td>2</td>
+                             <td>Invoice 3</td>
+                             <td>100000</td>
+                             <td>150000</td>
 
 
                          </tr>
@@ -349,12 +349,6 @@
                  </div>
 
              </div><br>
-
-
-
-
-
-
 
 
          </div>

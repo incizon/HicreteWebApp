@@ -253,7 +253,34 @@ myApp.controller('viewProjectController',function($scope,$http){
         }
 
     ];
+});
 
+myApp.controller('ViewInvoiceDetails',function($scope,$http){
+
+    $scope.invoiceNumber="Invoice-123";
+    $scope.quotationNumber="Quotation-123";
+    $scope.workorderNumber="Workorder-123";
+    $scope.contactPerson="Namdev devmare";
+    $scope.invoiceDate="22-01-2016";
+    $scope.quotationDate="22-01-2016";
+    $scope.workorderDate="22-01-2016";
+
+    $scope.roundingOff="10";
+    $scope.grandTotal="15000";
+    console.log("IN");
+
+});
+myApp.controller('QuotationFollowupHistoryController',function($scope,$http){
+
+
+
+});
+
+myApp.controller('PaymentFollowupHistoryController',function($scope,$http){
+
+
+});
+myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 
 });

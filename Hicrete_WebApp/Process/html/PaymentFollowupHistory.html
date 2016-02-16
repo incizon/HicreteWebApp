@@ -1,0 +1,134 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Payment Followup</strong>History</h3>
+        </div>
+        <div class="panel-body form-horizontal">
+            <div class="row">
+
+                <div class="col-md-5">
+
+                    <div class="col-md-3">
+                        <label class="control-label">Project  :</label>
+                    </div>
+                    <div class="col-md-9">
+
+                        <select class="form-control select" name="projects" ng-model="projectID"/>
+                        <option value="" disabled selected>Choose project </option>>
+                        <option value="project1">Project 1</option>
+                        <option value="project2">Project 2</option>
+                        <option value="project3">Project 3</option>
+                        <option value="project4">Project 4</option>
+                        </select>
+
+                    </div>
+
+                </div>
+                <div class="col-md-5">
+
+                    <div class="col-md-3">
+                        <label class="control-label">Invoice No :</label>
+                    </div>
+                    <div class="col-md-9">
+
+                        <select class="form-control select" name="quotation" ng-model="invoiceID"/>
+                        <option value="" disabled selected>Choose invoice no </option>>
+                        <option value="invoice1">101010</option>
+                        <option value="invoice2">202020</option>
+                        <option value="invoice3">303030</option>
+                        <option value="invoice4">404040</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-2">
+                    <div class="input-group" >
+
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary">Show</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div><br>
+            <div class="row">
+
+                <div class="col-md-5">
+
+                    <div class="col-md-3">
+                        <label class="control-label">Sort By :</label>
+                    </div>
+                    <div class="col-md-9">
+                        <select class="form-control select" name="sortBy" ng-model="sortExpression"/>
+                        <option value="" disabled selected>Sort by </option>
+                        <option value="afollowupDate">Actual Followup date</option>
+                        <option value="sfollowupDate">Scheduled Followup date</option>
+                        </select>
+                    </div>
+                </div>
+            </div><br>
+
+            <div class="table-responsive push-up-10">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Followup Description</th>
+                        <th>Actual Followup Date</th>
+                        <th>Scheduled Followup Date</th>
+                        <th>Followup By</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td> Description demo</td>
+                        <td>11-02-2016</td>
+                        <td>05-02-2016</td>
+                        <td>Pranav</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td> Description demo</td>
+                        <td>15-03-2016</td>
+                        <td>05-03-2016</td>
+                        <td>Atul</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td> Description demo</td>
+                        <td>11-04-2016</td>
+                        <td>05-04-2016</td>
+                        <td>Ajit</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td> Description demo</td>
+                        <td>10-01-2016</td>
+                        <td>05-01-2016</td>
+                        <td>Ajit</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td> Description demo</td>
+                        <td>10-06-2016</td>
+                        <td>05-06-2016</td>
+                        <td>Namdev</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+    <uib-pagination total-items="totalItems" ng-model="currentPage"
+                    max-size="5" boundary-links="true"
+                    items-per-page="PaymentHistoryPerPage" class="pagination-sm">
+    </uib-pagination>
+
+</div>
