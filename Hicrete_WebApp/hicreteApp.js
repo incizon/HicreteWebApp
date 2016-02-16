@@ -171,7 +171,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Expense/html/Hi_crete_costCenterSearchNew.html',
             controller: 'costCenterSearchController'  
         })
-        
+        .state('Expense.searchSegment', {
+            url: '/searchSegment',
+            templateUrl: 'Expense/html/SegmentSearch.html',
+            controller: 'costCenterSearchController'
+        })
         
         .state('Config', {
             url: '/Config',
