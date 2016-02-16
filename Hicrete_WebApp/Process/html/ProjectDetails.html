@@ -83,7 +83,7 @@
                          <!--<label class="control-label"> :</label>-->
                      </div>
                      <div class="col-md-8">
-                     <a ui-sref="Process.ProjectQuotation"><input type="button" class="btn btn-info" value="Add Quotation"/></a>
+                     <a ui-sref="Process.addQuotation"><input type="button" class="btn btn-info" value="Add Quotation"/></a>
                     </div>
                  </div>
              </div>
@@ -158,9 +158,9 @@
                              <!--<label class="control-label"> :</label>-->
                          </div>
                          <div class="col-md-8">
-                             <a ui-sref="Process.ProjectWorkorder"><input type="button" class="btn btn-info" value="Attach Workorder"/></a>
+                             <a ui-sref="Process.AttachWorkorder"><input type="button" class="btn btn-info" value="Attach Workorder"/></a>
                          </div>
-                     </div>
+                     </div>1
                  </div>
                  <br>
                  <div class="row">
@@ -228,7 +228,7 @@
                              <!--<label class="control-label"> :</label>-->
                          </div>
                          <div class="col-md-8">
-                             <a ui-sref="Process.ProjectInvoice"><input type="button" class="btn btn-info" value="Create Invoice"/></a>
+                             <a ui-sref="Process.addInvoice"><input type="button" class="btn btn-info" value="Create Invoice"/></a>
                          </div>
                      </div>
                  </div>
@@ -253,7 +253,7 @@
                              <td width="10%">10-02-2016</td>
 
                              <td width="40%">
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                                 <a ui-sref="Process.ViewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
@@ -265,7 +265,7 @@
                              <td width="10%">10-02-2016</td>
 
                              <td width="40%">
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                                 <a ui-sref="Process.ViewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
@@ -276,7 +276,7 @@
                              <td width="10%">Quotation 3</td>
                              <td width="10%">10-02-2016</td>
                              <td width="40%">
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                                 <a ui-sref="Process.ViewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                                  <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
@@ -297,10 +297,10 @@
                      </div>
                      <div class="col-md-6">
                          <div class="col-md-4">
-                             <a ui-sref="Process.ProjectPayment"><input type="button" class="btn btn-info" value="Add Payment"/></a>
+                             <a ui-sref="Process.addPayment"><input type="button" class="btn btn-info" value="Add Payment"/></a>
                          </div>
                          <div class="col-md-4">
-                           <button class="btn btn-info">View Payment History</button>
+                           <a ui-sref="Process.PaymentHistory"><button class="btn btn-info">View Payment History</button>
                          </div>
                      </div>
                  </div>
