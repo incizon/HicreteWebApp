@@ -1,0 +1,66 @@
+<!--WORK ORDER-->
+<div class="row">
+    <div class="col-md-12">
+        <form name="userInfoForm" class="form-horizontal" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Add </strong>Work Order</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">Select Project</label>
+                        <div class="col-md-3 col-xs-6col-sm-4">
+                            <select class="form-control select">
+                                <option>Project 1</option>
+                                <option>Project 2</option>
+                                <option>Project 3</option>
+                                <option>Project 4</option>
+                                <option>Project 5</option>
+                            </select>
+                        </div>
+                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">Select Company     </label>
+                        <div class="col-md-3 col-xs-6col-sm-4">
+                            <select class="form-control select">
+                                <option>Company 1</option>
+                                <option>Company 2</option>
+                                <option>Company 3</option>
+                                <option>Company 4</option>
+                                <option>Company 5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">Name of work order</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input ng-model="userInfo.mobile" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-1 col-xs-12 control-label col-sm-2">Date of Workorder</label>
+                            <div class="col-md-3 col-xs-12 col-sm-4">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                    <input type="text" value="2015-12-01" class="form-control datepicker">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-1 col-xs-12 control-label">Attach work order</label>
+                            <div class="col-md-6 col-xs-12">
+                                <a class="file-input-wrapper btn btn-default  fileinput btn-primary"><span>Browse file</span><input type="file" title="Browse file" id="filename" name="filename" class="fileinput btn-primary" style="left: -162.75px; top: 15.6667px;"></a>
+                                <span class="help-block">Input type file</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </form>
+
+        <div class="panel-footer">
+            <button ng-click="" class="btn btn-primary pull-right">Add work order</button>
+            <button ng-click="" class="btn btn-default pull-right">Cancel</button>
+        </div>
+    </div>
+</div>
+<!--WORK ORDER END-->
