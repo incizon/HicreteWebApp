@@ -242,26 +242,36 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addProject', {
             url: '/addProject',
-            templateUrl: 'Process/html/ProjectCreation.html'
+            templateUrl: 'Process/html/ProjectCreation.html',
 
         })
 
         .state('Process.addQuotation', {
             url: '/addQuotation',
-
-
+            templateUrl:'Process/html/QuotationCreation.html',
+            controller:"QuotationController"
         })
 
         .state('Process.addInvoice', {
             url: '/addInvoice',
-
-
+            templateUrl:"Process/html/InvoiceCreation.html",
+            controller:"InvoiceController"
         })
 
         .state('Process.addPayment', {
             url: '/addPayment',
             templateUrl: 'Process/html/ProjectPayment.html',
             controller: 'ProjectPaymentController'
+        })
+        .state('Process.viewProject', {
+            url: '/viewProjects',
+            templateUrl:'Process/html/ViewProjects.html',
+            controller:'viewProjectController'
+        })
+        .state('Process.ProjectDetails', {
+            url: '/ProjectDetails',
+            templateUrl:'Process/html/ProjectDetails.html',
+            controller:'ProjectDetailsController'
         })
         .state('MainPage', {
             url: '',

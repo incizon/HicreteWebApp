@@ -1,0 +1,371 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Project</strong>Details</h3>
+        </div>
+         <div class="panel-body">
+
+
+             <div id="basic-details">
+                 <div class="row">
+                     <h3 class="panel-title"><strong>General Details</strong></h3>
+                  </div>
+
+                 <div class="row form-horizontal">
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                 <div class="col-md-4">
+                                     <label class="control-label">Project Name :</label>
+                                 </div>
+                                 <div class="col-md-8">
+                                        {{"Project 1"}}
+                                 </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Address  :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{"Lane no 1 ,Jadhav Nagar ,Vadgaon (bk) ,Pune"}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">City  :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{"Pune"}}
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">State :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{"Maharashtra"}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Country  :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{"India"}}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <!--<label class="control-label"> :</label>-->
+                                </div>
+                                <div class="col-md-8">
+                                    <button class="btn btn-info">View other Details</button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                 </div>
+              </div><br>
+
+            <div id="quotation-details">
+             <div class="row">
+                 <div class="col-md-6">
+                    <h3 class="panel-title"><strong>Quotation Details</strong></h3>
+                 </div>
+                 <div class="col-md-6">
+                     <div class="col-md-4">
+                         <!--<label class="control-label"> :</label>-->
+                     </div>
+                     <div class="col-md-8">
+                     <a ui-sref="Process.ProjectQuotation"><input type="button" class="btn btn-info" value="Add Quotation"/></a>
+                    </div>
+                 </div>
+             </div>
+             <br>
+             <div class="row">
+
+                 <table class="table table-bordered">
+                     <thead>
+                     <tr>
+                         <th width="5%">Sr.No</th>
+                         <th width="10%">Quotation</th>
+                         <th width="10%">Company</th>
+                         <th width="10%">Date</th>
+                         <th width="40%">Actions</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr>
+                         <td width="5%">1</td>
+                         <td width="10%">Quotation1</td>
+                         <td width="10%">Company1</td>
+                         <td width="10%">10-02-2016</td>
+
+                         <td width="40%">
+                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td width="5%">2</td>
+                         <td width="10%">Quotation2</td>
+                         <td width="10%">Company2</td>
+                         <td width="10%">10-02-2016</td>
+
+                         <td width="40%">
+                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td width="5%">2</td>
+                         <td width="10%">Quotation3</td>
+                         <td width="10%">Company2</td>
+                         <td width="10%">10-02-2016</td>
+
+                         <td width="40%">
+                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                             <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                         </td>
+                     </tr>
+
+                     </tbody>
+                 </table>
+
+             </div>
+
+         </div><br>
+
+             <div id="workorder-details">
+                 <div class="row">
+                     <div class="col-md-6">
+                         <h3 class="panel-title"><strong>Workorder Details</strong></h3>
+                     </div>
+                     <div class="col-md-6">
+                         <div class="col-md-4">
+                             <!--<label class="control-label"> :</label>-->
+                         </div>
+                         <div class="col-md-8">
+                             <a ui-sref="Process.ProjectWorkorder"><input type="button" class="btn btn-info" value="Attach Workorder"/></a>
+                         </div>
+                     </div>
+                 </div>
+                 <br>
+                 <div class="row">
+
+                     <table class="table  table-bordered">
+                         <thead>
+                         <tr>
+                             <th width="5%">Sr.No</th>
+                             <th width="10%">Work Order</th>
+                             <th width="10%">Quotation</th>
+                             <th width="10%">Date</th>
+                             <th width="40%">Actions</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <tr>
+                             <td width="5%">1</td>
+                             <td width="10%">Work order 1</td>
+                             <td width="10%">Quotation1</td>
+                             <td width="10%">10-02-2016</td>
+
+                             <td width="40%">
+
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+
+                             </td>
+                         </tr>
+                         <tr>
+                             <td width="5%">2</td>
+                             <td width="10%">Quotation2</td>
+                             <td width="10%">Company2</td>
+                             <td width="10%">10-02-2016</td>
+
+                             <td width="40%">
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+
+                             </td>
+                         </tr>
+                         <tr>
+                             <td width="5%">2</td>
+                             <td width="10%">Work order 2</td>
+                             <td width="10%">Quotation 2</td>
+                             <td width="10%">10-02-2016</td>
+
+                             <td width="40%">
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                             </td>
+                         </tr>
+
+                         </tbody>
+                     </table>
+
+                 </div>
+
+             </div><br>
+
+
+             <div id="invoice-details">
+                 <div class="row">
+                     <div class="col-md-6">
+                         <h3 class="panel-title"><strong>Invoice Details</strong></h3>
+                     </div>
+                     <div class="col-md-6">
+                         <div class="col-md-4">
+                             <!--<label class="control-label"> :</label>-->
+                         </div>
+                         <div class="col-md-8">
+                             <a ui-sref="Process.ProjectInvoice"><input type="button" class="btn btn-info" value="Create Invoice"/></a>
+                         </div>
+                     </div>
+                 </div>
+                 <br>
+                 <div class="row">
+
+                     <table class="table  table-bordered">
+                         <thead>
+                         <tr>
+                             <th width="5%">Sr.No</th>
+                             <th width="10%">Invoice Name</th>
+                             <th width="10%">Quotation</th>
+                             <th width="10%">Date</th>
+                             <th width="40%">Actions</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <tr>
+                             <td width="5%">1</td>
+                             <td width="10%">Invoice 1</td>
+                             <td width="10%">Quotation 1</td>
+                             <td width="10%">10-02-2016</td>
+
+                             <td width="40%">
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td width="5%">3</td>
+                             <td width="10%">Invoice 2</td>
+                             <td width="10%">Quotation 2</td>
+                             <td width="10%">10-02-2016</td>
+
+                             <td width="40%">
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td width="5%">3</td>
+                             <td width="10%">Invoice 3</td>
+                             <td width="10%">Quotation 3</td>
+                             <td width="10%">10-02-2016</td>
+                             <td width="40%">
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                                 <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                             </td>
+                         </tr>
+
+                         </tbody>
+                     </table>
+
+                 </div>
+
+             </div><br>
+
+
+             <div id="payment-details">
+                 <div class="row">
+                     <div class="col-md-6">
+                         <h3 class="panel-title"><strong>Payment Details</strong></h3>
+                     </div>
+                     <div class="col-md-6">
+                         <div class="col-md-4">
+                             <a ui-sref="Process.ProjectPayment"><input type="button" class="btn btn-info" value="Add Payment"/></a>
+                         </div>
+                         <div class="col-md-4">
+                           <button class="btn btn-info">View Payment History</button>
+                         </div>
+                     </div>
+                 </div>
+                 <br>
+                 <div class="row">
+
+                     <table class="table  table-bordered">
+                         <thead>
+                         <tr>
+                             <th width="5%">Sr.No</th>
+                             <th width="20%">Invoice Name</th>
+                             <th width="20%">Payment Received</th>
+                             <th width="20%">Payment Remaining</th>
+
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <tr>
+                             <td width="5%">1</td>
+                             <td width="20%">Invoice 1</td>
+                             <td width="20%">10000</td>
+                             <td width="20%">20000</td>
+
+
+                         </tr>
+                         <tr>
+                             <td width="5%">2</td>
+                             <td width="20%">Invoice 2</td>
+                             <td width="20%">50000</td>
+                             <td width="20%">10000</td>
+
+
+                         </tr>
+                         <tr>
+                             <td width="5%">2</td>
+                             <td width="20%">Invoice 3</td>
+                             <td width="20%">100000</td>
+                             <td width="20%">150000</td>
+
+
+                         </tr>
+
+                         </tbody>
+                     </table>
+
+                 </div>
+
+             </div><br>
+
+
+
+
+
+
+
+
+         </div>
+        <div class="panel-footer">
+
+            <button  ng-click="closeProject()" class="btn  btn-danger pull-right">Close Project <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+
+            <button ng-click="clearFields()" class="btn  btn-default pull-right">Cancel</button>
+
+        </div>
+
+    </div>
+
+</div>

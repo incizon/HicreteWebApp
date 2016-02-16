@@ -1,69 +1,91 @@
-<div class="row">
-    <div class="col-md-12">                  
-         <!-- START SEARCH -->                            
-            <div class="panel panel-default">
-                <div class="panel-body">                                    
-                    <div class="row stacked">
-                       <div class="col-md-6">
-                           <div class="input-group push-down-10" >
-                                <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                        
-                                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keyword"/>
-                                
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-primary">Search</button>
-                                        </div>
-                            </div>                                                       
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-body form-horizontal">
+            <div class="row">
+                <div class="col-md-4">
+
+                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
+                    <option value="" disabled selected>Search by </option>>
+                    <option value="project_name">Name</option>
+                    <option value="project_city">City</option>
+                    <option value="applicator_state">State</option>
+                    </select>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group" >
+                        <span class="input-group-addon"><span class="fa fa-search"></span></span>
+
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary">Search</button>
                         </div>
                     </div>
-                </div>                                                                
-            </div>
-        <!-- END SEARCH -->
-                            
-        <!-- START SEARCH RESULT -->
-        <div class="search-results">
-            <div class="sr-item">
-                <div class="sr-item-title">Permanent Applicators</div>
-                    <div class="table-responsive push-up-10">
-                        <table class="table table-actions table-striped">
-                            <thead>                                            
-                                <tr>
-                                    <th width="5%">Sr.No</th>
-                                    <th width="10%">Applicator Name</th>
-                                    <th width="10%">Contact No</th>
-                                    <th width="10%">City</th>
-                                    <th width="15%">State</th>
-                                    <th width="40%">Actions</th>           
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="applicator in Applicators | filter :paginate    | filter :keyword">
-                                    <td width="5%">{{$index + 1}}</td>
-                                    <td width="20%">{{applicator.applicator_name}}</td>
-                                    <td width="10%">{{applicator.applicator_contact}}</td>
-                                    <td width="15%">{{applicator.applicator_city}}</td>  
-                                    <td width="15%">{{applicator.applicator_state}}</td>
-                                    <td width="35%">
-                                    
-                                        <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
-                                        
-                                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
-                                                 
-                                        <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
-                <uib-pagination total-items="totalItems" ng-model="currentPage"
+            </div><br>
+            <!--<div class="row">-->
+
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" ng-model="sortByPayment" name="sort" value="true"> Payment-->
+                <!--</div>-->
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" ng-model="sortByQuotation" name="sort" value="true" >  Quotation-->
+                <!--</div>-->
+                <!--<div class="col-md-4">-->
+                    <!--<input type="checkbox" ng-model="sortByCurrentWorking" name="sort" value="true">  Currently Working-->
+                <!--</div>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Permanent</strong>Applicators</h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="table-responsive push-up-10">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th width="5%">Sr.No</th>
+                        <th width="10%">Applicator Name</th>
+                        <th width="10%">Contact No</th>
+                        <th width="10%">City</th>
+                        <th width="15%">State</th>
+                        <th width="40%">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="applicator in Applicators | filter :paginate | filter :searchKeyword | orderBy :sortExpression">
+                        <td width="5%">{{$index + 1}}</td>
+                        <td width="20%">{{applicator.applicator_name}}</td>
+                        <td width="10%">{{applicator.applicator_contact}}</td>
+                        <td width="15%">{{applicator.applicator_city}}</td>
+                        <td width="15%">{{applicator.applicator_state}}</td>
+                        <td width="35%">
+
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" ng-click="ApplicatorSelected(applicator)" data-target="#viewDetails"><span class="fa fa-eye"></span>View</button>
+
+                            <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#modifyDetails" ng-click="applicatorToModify(applicator)"><span class="fa fa-pencil-square-o"></span>Modify</button>
+
+                            <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    <uib-pagination total-items="totalItems" ng-model="currentPage"
                     max-size="5" boundary-links="true"
                     items-per-page="ApplicatorPerPage" class="pagination-sm">
-                </uib-pagination>    
-                                
-        </div>
-        <!-- END SEARCH RESULT -->
-    </div>                        
+    </uib-pagination>
 </div>
 
 <!-- Modal -->
@@ -520,7 +542,7 @@
                     <div class="row">
 
                             <div class="table-responsive">
-                                      <table class="table table-actions table-striped">
+                                      <table class="table table-bordered">
                                           <thead>                                            
                                               <tr>
                                     <th width="15%">Package Element</th>
@@ -574,7 +596,7 @@
                 <div class="row">
 
                     <div class="table-responsive">
-                        <table class="table table-actions table-striped">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th width="15%">Amount Paid</th>
