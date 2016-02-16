@@ -3,7 +3,22 @@
         padding-top: 7px;
     }
 </style>
-
+<!-- START SEARCH -->
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row stacked">
+            <div class="col-md-8">
+                <div class="input-group push-down-10" >
+                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary" ng-click="getInventory()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
    <!-- START SEARCH RESULT -->
    <div class="search-results" ng-controller="SearchController">
 

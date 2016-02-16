@@ -109,9 +109,19 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Inventory.searchProduct', {
             url: '/searchProduct',
-            templateUrl: 'Inventory/html/Inventory_Product_Search.html',
+            templateUrl: 'Inventory/html/search/Inventory_Items_Search.html',
             controller: 'productController'
-        })    
+        })
+        .state('Inventory.searchInward', {
+            url: '/searchInward',
+            templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
+
+        })
+        .state('Inventory.searchOutward', {
+            url: '/searchOutward',
+            templateUrl: 'Inventory/html/search/Inventory_Outward_Search.html',
+
+        })
         .state('Inventory.searchInventory', {
             url: '/searchInventory',
             templateUrl: 'Inventory/html/search/Inventory_Search.html',
