@@ -257,3 +257,17 @@ myApp.controller('viewProjectController',function($scope,$http){
 
 
 });
+myApp.controller('QuotationFollowupHistoryController',function($scope,$http){
+
+
+
+});
+
+myApp.controller('PaymentFollowupHistoryController',function($scope,$http){
+
+
+});
+myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
+
+
+});
