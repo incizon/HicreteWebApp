@@ -288,3 +288,8 @@ myApp.controller('ViewCustomerController',function($scope,$http){
 
 
 });
+
+myApp.controller('ViewQuotationDetailsController',function($scope,$http){
+
+
+});
