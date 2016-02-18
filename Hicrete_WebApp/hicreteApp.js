@@ -240,8 +240,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addCustomer', {
             url: '/addCustomer',
-
-
+            templateUrl: 'Process/html/AddCustomer.html',
+            controller:'CustomerController'
         })
 
         .state('Process.addProject', {

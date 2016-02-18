@@ -297,3 +297,7 @@ myApp.controller('PaymentHistoryController',function($scope,$http){
         $scope.viewHistory=pPaymentHistory;
     }
 });
+myApp.controller('CustomerController',function($scope,$http){
+
+    $scope.submitted=false;
+});
