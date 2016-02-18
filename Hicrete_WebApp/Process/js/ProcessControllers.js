@@ -284,6 +284,16 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 
 });
+myApp.controller('ViewCustomerController',function($scope,$http){
+
+
+});
+
+myApp.controller('ViewQuotationDetailsController',function($scope,$http){
+
+
+});
+
 myApp.controller('PaymentHistoryController',function($scope,$http){
 
     $scope.paymentHistoryData=[

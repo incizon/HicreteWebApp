@@ -64,7 +64,7 @@
                                     <!--<label class="control-label"> :</label>-->
                                 </div>
                                 <div class="col-md-8">
-                                    <button class="btn btn-info">View other Details</button>
+                                    <button class="btn btn-info"  data-toggle="modal" data-target="#viewContactDetails">View Point of Contact</button>
                                 </div>
                             </div>
 
@@ -93,48 +93,49 @@
                  <table class="table table-bordered">
                      <thead>
                      <tr>
-                         <th width="5%">Sr.No</th>
-                         <th width="10%">Quotation</th>
-                         <th width="10%">Company</th>
-                         <th width="10%">Date</th>
-                         <th width="40%">Actions</th>
+                         <th>Sr.No</th>
+                         <th>Quotation</th>
+                         <th>Company</th>
+                         <th>Date</th>
+                         <th>Actions</th>
                      </tr>
                      </thead>
                      <tbody>
                      <tr>
-                         <td width="5%">1</td>
-                         <td width="10%">Quotation1</td>
-                         <td width="10%">Company1</td>
-                         <td width="10%">10-02-2016</td>
+                         <td>1</td>
+                         <td>Quotation1</td>
+                         <td>Company1</td>
+                         <td>10-02-2016</td>
 
-                         <td width="40%">
-                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                         <td>
+                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                              <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
                              <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                              <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                          </td>
                      </tr>
                      <tr>
-                         <td width="5%">2</td>
-                         <td width="10%">Quotation2</td>
-                         <td width="10%">Company2</td>
-                         <td width="10%">10-02-2016</td>
+                         <td>2</td>
+                         <td>Quotation2</td>
+                         <td>Company2</td>
+                         <td>10-02-2016</td>
 
-                         <td width="40%">
-                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                         <td>
+                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                              <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
                              <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                              <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
                          </td>
                      </tr>
                      <tr>
-                         <td width="5%">2</td>
-                         <td width="10%">Quotation3</td>
-                         <td width="10%">Company2</td>
-                         <td width="10%">10-02-2016</td>
+                         <td >2</td>
+                         <td >Quotation3</td>
+                         <td >Company2</td>
+                         <td >10-02-2016</td>
 
-                         <td width="40%">
-                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
+                         <td>
+
+                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
                              <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
                              <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
                              <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
@@ -362,4 +363,71 @@
 
     </div>
 
+</div>
+
+
+<!--Modal To view Contact details-->
+<div class="modal fade" id="viewContactDetails" role="dialog" data-backdrop="static" keyboard="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Point of Conatct Details</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                     <div class="form-horizontal">
+
+                            <div class="col-md-12">
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Name :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{"Namdev Devmare"}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Email Id :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{"namdev@gmail.com"}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Landline No :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{"020-202021"}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Mobile No :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{"9090220707"}}
+                                    </div>
+                                </div>
+
+                            </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
 </div>
