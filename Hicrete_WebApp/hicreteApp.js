@@ -109,9 +109,19 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Inventory.searchProduct', {
             url: '/searchProduct',
-            templateUrl: 'Inventory/html/Inventory_Product_Search.html',
+            templateUrl: 'Inventory/html/search/Inventory_Items_Search.html',
             controller: 'productController'
-        })    
+        })
+        .state('Inventory.searchInward', {
+            url: '/searchInward',
+            templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
+
+        })
+        .state('Inventory.searchOutward', {
+            url: '/searchOutward',
+            templateUrl: 'Inventory/html/search/Inventory_Outward_Search.html',
+
+        })
         .state('Inventory.searchInventory', {
             url: '/searchInventory',
             templateUrl: 'Inventory/html/search/Inventory_Search.html',
@@ -161,7 +171,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Expense/html/Hi_crete_costCenterSearchNew.html',
             controller: 'costCenterSearchController'  
         })
-        
+        .state('Expense.searchSegment', {
+            url: '/searchSegment',
+            templateUrl: 'Expense/html/SegmentSearch.html',
+            controller: 'costCenterSearchController'
+        })
         
         .state('Config', {
             url: '/Config',
@@ -226,8 +240,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addCustomer', {
             url: '/addCustomer',
-
-
+            templateUrl: 'Process/html/AddCustomer.html',
+            controller:'CustomerController'
         })
 
         .state('Process.addProject', {
@@ -302,7 +316,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.paymentHistory', {
             url: '/PaymentHistory',
-            templateUrl:'Process/html/PaymentHistory.html'
+            templateUrl:'Process/html/PaymentHistory.html',
+            controller:'PaymentHistoryController'
         })
 
         .state('MainPage', {
