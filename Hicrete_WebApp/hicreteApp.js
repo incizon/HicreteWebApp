@@ -264,17 +264,17 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ProjectDetailsController'
         })
 
-        .state('Process.QuotationFollowupHistory', {
+        .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
             controller: 'QuotationFollowupHistoryController'
         })
-        .state('Process.PaymentFollowupHistory', {
+        .state('Process.paymentFollowupHistory', {
             url: '/PaymentFollowupHistory',
             templateUrl:'Process/html/PaymentFollowupHistory.html',
             controller:'PaymentFollowupHistoryController'
         })
-        .state('Process.SiteTrackingFollowupHistory', {
+        .state('Process.siteTrackingFollowupHistory', {
             url: '/SiteTrackingFollowupHistory',
             templateUrl:'Process/html/SiteTrackingFollowupHistory.html',
             controller:'SiteTrackingFollowupHistoryController'
@@ -284,11 +284,21 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/CreateWorkOrder.html',
 
         })
-        .state('Process.ViewInvoice', {
+        .state('Process.viewInvoice', {
             url: '/ViewInvoice',
             templateUrl:'Process/html/ViewInvoice.html',
             controller:'ViewInvoiceDetails'
         })
+        .state('Process.viewCustomers', {
+            url: '/ViewCustomers',
+            templateUrl:'Process/html/ViewCustomers.html'
+        })
+
+        .state('Process.paymentHistory', {
+            url: '/PaymentHistory',
+            templateUrl:'Process/html/PaymentHistory.html'
+        })
+
         .state('MainPage', {
             url: '',
             templateUrl: 'MainPage.html'
