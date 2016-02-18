@@ -299,6 +299,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/PaymentHistory.html'
         })
 
+        .state('Process.reviseQuotation', {
+            url: '/ReviseQuotation',
+            templateUrl:'Process/html/ReviseQuotation.html',
+            controller:'ReviseQuotation'
+        })
+
         .state('MainPage', {
             url: '',
             templateUrl: 'MainPage.html'
