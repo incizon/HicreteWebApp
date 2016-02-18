@@ -353,5 +353,10 @@ myApp.controller('costCenterSearchController', function ($scope, $http) {
         {costCenterName: 'costCenter7', projectName: "project 123", budgetAllocated:900000,totalExpenditure:17800,status:"Average"},
         {costCenterName: 'costCenter10', projectName: "project 561", budgetAllocated:20000,totalExpenditure:18900,status:"Worst"},
         {costCenterName: 'costCenter15', projectName: "project 1g", budgetAllocated:670000,totalExpenditure:17800,status:"Good"},
+    ],
+
+    $scope.Segments=[
+        {segmentName:'segment1'},
+        {segmentName:'segment2'}
     ]
 });

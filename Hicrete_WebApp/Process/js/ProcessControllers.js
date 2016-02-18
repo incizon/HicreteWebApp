@@ -284,3 +284,20 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 
 });
+myApp.controller('PaymentHistoryController',function($scope,$http){
+
+    $scope.paymentHistoryData=[
+        {amountPaid:10000,paymentDate:'10-FEB-2016',recievedBy:'Shankar',amountRemaining:5000,paymentMode:'Cheque',bankName:'SBI',branchName:'Kothrud',unqiueNo:179801},
+        {amountPaid:20000,paymentDate:'13-DEC-2015',recievedBy:'Ajit',amountRemaining:25500,paymentMode:'Cash',bankName:'Bank of India',branchName:'Vadgaon',unqiueNo:101546},
+        {amountPaid:100000,paymentDate:'16-JUL-2016',recievedBy:'Atul',amountRemaining:55600,paymentMode:'Cheque',bankName:'ICICI',branchName:'Balaji Nagar',unqiueNo:568343},
+        {amountPaid:457000,paymentDate:'10-FEB-2016',recievedBy:'Shankar',amountRemaining:58700,paymentMode:'Netbanking',bankName:'SBI',branchName:'Indira Nagar',unqiueNo:678935},
+    ];
+
+    $scope.getPaymentHistoryData=function(pPaymentHistory){
+        $scope.viewHistory=pPaymentHistory;
+    }
+});
+myApp.controller('CustomerController',function($scope,$http){
+
+    $scope.submitted=false;
+});
