@@ -310,7 +310,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.paymentHistory', {
             url: '/PaymentHistory',
-            templateUrl:'Process/html/PaymentHistory.html'
+            templateUrl:'Process/html/PaymentHistory.html',
+            controller:'PaymentHistoryController'
         })
 
         .state('MainPage', {
