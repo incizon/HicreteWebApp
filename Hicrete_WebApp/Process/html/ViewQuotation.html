@@ -4,15 +4,15 @@
 
         <div class="panel-heading">
 
-            <h3 class="panel-title"><strong>Create Project</strong> Quotation </h3>
+            <h3 class="panel-title"><strong>Project Quotation</strong>Details </h3>
 
         </div>
         <div class="panel-body">
 
-            <form name="QuotationForm" class="form-horizontal">
+            <form name="ViewQuotationForm" class="form-horizontal">
 
                 <div class="row">
-                    <h3 class="panel-title"><strong>View</strong> Quotation </h3>
+                    <h3 class="panel-title"><strong>Basic</strong> Details </h3>
                 </div><br>
                 <div class="row">
 
@@ -23,7 +23,7 @@
                                 <label class="control-label">Project Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{{ProjectName}}</label>
+                                <label class="control-label">{{"Project 1"}}</label>
 
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <label class="control-label">{{quotationTitle}}</label>
+                                    <label class="control-label">{{"Quotation 1"}}</label>
 
                                 </div>
 
@@ -46,8 +46,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <label class="control-label">{{quotationDate}}</label>
-
+                                    <label class="control-label">{{"10-02-2016"}}</label>
                                 </div>
 
                             </div>
@@ -57,7 +56,7 @@
                                 <label class="control-label">Quotation Subject :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{{quotationSubject}}</label>
+                                <label class="control-label">{{"Demo Quotation"}}</label>
 
                             </div>
                         </div>
@@ -71,7 +70,7 @@
                                 <label class="control-label">Company Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{companyName}}</label>
+                                <label class="control-label">{{"Company 1"}}</label>
 
                             </div>
                         </div>
@@ -81,7 +80,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <label class="control-label">{referenceNo}}</label>
+                                    <label class="control-label">{{"HE/Namdev/20202/02-02-2016"}}</label>
 
                                 </div>
 
@@ -108,50 +107,109 @@
                             <th>Title</th>
                             <th>Description</th>
                             <th>Quantity</th>
-                            <th>Unit</th>
+                            <th>Unit Of Measure</th>
                             <th>Unit rate</th>
                             <th>Amount</th>
-                            <th>Remove</th>
+
                         </tr>
                         </thead>
                         <tr>
-                            <td>{{$index+1}}</td>
+                            <td>1</td>
                             <td>
-                                <input type="text" name="Title" placeholder="Title"
-                                       class="form-control"/>
-                            </td>
-                            <td>
-                                <input type="text" name="Decription" placeholder="Description"
-                                       class="form-control"/>
+                                {{"Quotation For Material"}}
                             </td>
                             <td>
-                                <input type="text" name="Quantity" placeholder="Quantity"
-                                       class="form-control"/>
-                            </td>
-                            <td><input type="text" name="Unit" placeholder="Unit"
-                                       class="form-control"/>
-                            </td>
-                            <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control"/>
+                                {{"Quotation Description demo"}}
                             </td>
                             <td>
-                                {{"0"}}
+                               {{"100"}}
                             </td>
                             <td>
-                                <a ng-click="remove($index)" class="panel-remove">
-                                    <span class="fa fa-times"></span>
-                                </a>
+                                {{"sqft"}}
                             </td>
+                            <td>
+                                {{"100 Rs"}}
+                            </td>
+                            <td>
+                                {{"10000"}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                {{"Quotation For Material 1"}}
+                            </td>
+                            <td>
+                                {{"Quotation Description demo"}}
+                            </td>
+                            <td>
+                                {{"100"}}
+                            </td>
+                            <td>
+                                {{"sqft"}}
+                            </td>
+                            <td>
+                                {{"100 Rs"}}
+                            </td>
+                            <td>
+                                {{"10000"}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                {{"Quotation For Material 3"}}
+                            </td>
+                            <td>
+                                {{"Quotation Description demo 3"}}
+                            </td>
+                            <td>
+                                {{"10"}}
+                            </td>
+                            <td>
+                                {{"sqft"}}
+                            </td>
+                            <td>
+                                {{"100 Rs"}}
+                            </td>
+                            <td>
+                                {{"1000"}}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>
+                                {{"Quotation For Material 4"}}
+                            </td>
+                            <td>
+                                {{"Quotation Description demo 4"}}
+                            </td>
+                            <td>
+                                {{"10"}}
+                            </td>
+                            <td>
+                                {{"inch"}}
+                            </td>
+                            <td>
+                                {{"10 Rs"}}
+                            </td>
+                            <td>
+                                {{"100"}}
+                            </td>
+
                         </tr>
                     </table>
 
                     <div class="col-md-offset-7 col-md-5">
 
-                        <div class="col-md-4">
+                        <div class="col-md-7">
                             <label class="control-label">Total Amount :</label>
                         </div>
-                        <div class="col-md-8">
-                            {{"0"}}
+                        <div class="col-md-5">
+                            <label class="control-label">{{"21100"}}</label>
                         </div>
                     </div>
                 </div><br>
@@ -159,49 +217,6 @@
 
                 <div class="row">
                     <h3 class="panel-title"><strong>Tax </strong>Details </h3>
-                </div><br>
-                <div class="row">
-
-                    <div class="col-md-6">
-
-                        <div class="form-group">
-
-                            <div class="col-md-4">
-
-                                <label class="control-label">Number of Taxes</label>
-
-                            </div>
-                            <div class="col-md-8">
-
-                                <div class="col-md-10">
-
-                                    <div class="input-group">
-
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-
-                                        <input type="text" name="noOfTaxes" ng-model="noOfTaxes"
-                                               class="form-control">
-
-                                    </div>
-
-
-
-                                </div>
-
-                                <div class="col-md-2">
-
-                                    <button class="btn btn-primary" ng-click="addTaxes()">Add</button>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                    </div>
-
-
                 </div><br>
 
                 <div class="row">
@@ -216,51 +231,40 @@
                         </tr>
                         </thead>
                         <tr>
-                            <td>{{$index+1}}</td>
+                            <td>1</td>
+                            <td>{{"VAT"}}</td>
                             <td>
-                                <input type="text" name="TaxTitle" placeholder="Title"
-                                       class="form-control"/>
+                                {{"1%"}}
                             </td>
                             <td>
-                                <input type="text" name="TaxPercentage" placeholder="Percentage"
-                                       class="form-control"/>
-                            </td>
-                            <td>
-                                <input type="text" name="TaxAmount" placeholder="Tax Amount"
-                                       class="form-control"/>
+                                {{"210"}}
                             </td>
 
-                            <td>
-                                <a ng-click="remove($index)" class="panel-remove">
-                                    <span class="fa fa-times"></span>
-                                </a>
-                            </td>
                         </tr>
                     </table>
 
                     <div class="col-md-offset-7 col-md-5">
 
-                        <div class="col-md-4">
+                        <div class="col-md-7">
                             <label class="control-label">Total Tax :</label>
                         </div>
-                        <div class="col-md-8">
-                            {{"0"}}
+                        <div class="col-md-5">
+                            <label class="control-label"> {{"210"}}</label>
                         </div>
                     </div>
                 </div>
                 <br>
                 <div class="row">
                     <div class="col-md-offset-7 col-md-5">
-                        <div class="col-md-4">
-                            <label class="control-label"><strong>Total Amount :</strong></label>
+                        <div class="col-md-7">
+                            <label class="control-label"><strong>GRAND AMOUNT(Amount + Tax) :</strong></label>
                         </div>
-                        <div class="col-md-8">
-                            {{"0"}}
+                        <div class="col-md-5">
+                            <label class="control-label">{{"21310"}}</label>
                         </div>
                     </div>
                 </div>
             </form>
-
         </div>
         <div class="panel-footer">
 
