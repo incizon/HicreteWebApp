@@ -294,9 +294,10 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/ViewInvoice.html',
             controller:'ViewInvoiceDetails'
         })
-        .state('Process.viewCustomers', {
-            url: '/ViewCustomers',
-            templateUrl:'Process/html/ViewCustomers.html'
+        .state('Process.viewQuotation', {
+            url: '/ViewQuotation',
+            templateUrl:'Process/html/ViewQuotation.html',
+            controller:'ViewQuotationDetailsController'
         })
 
         .state('Process.paymentHistory', {
