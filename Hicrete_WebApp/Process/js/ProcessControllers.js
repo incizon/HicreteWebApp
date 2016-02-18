@@ -284,3 +284,7 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 
 });
+myApp.controller('ViewCustomerController',function($scope,$http){
+
+
+});
