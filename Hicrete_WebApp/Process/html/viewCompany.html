@@ -1,0 +1,85 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Company</strong> Details</h3>
+        </div>
+        <div class="panel-body form-horizontal">
+
+            <div class="row">
+                <div class="col-md-2">
+
+                </div>
+
+                <div class="col-md-6">
+                    <div class="input-group" >
+                        <span class="input-group-addon"><span class="fa fa-search"></span></span>
+
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+
+
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary">Search</button>
+                    </div>
+
+                </div>
+            </div><br>
+            <div class="table-responsive push-up-10">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Company Name</th>
+                        <th>Start Date</th>
+                        <th>Address</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Country</th>
+                        <th>Email Id</th>
+                        <th>Contact no</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Hicrete</td>
+                        <td>10-10-1990</td>
+                        <td>K K Market</td>
+                        <td>Pune</td>
+                        <td>Maharashtra</td>
+                        <td>India</td>
+                        <td>abc@gmail.com</td>
+                        <td>124567890</td>
+
+                        <td>
+                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
+                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Modify</button>
+                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
+                        </td>
+                    </tr>
+
+
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </div>
+    <uib-pagination total-items="totalItems" ng-model="currentPage"
+                    max-size="5" boundary-links="true"
+                    items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+    </uib-pagination>
+
+
+</div>
+
+
+
