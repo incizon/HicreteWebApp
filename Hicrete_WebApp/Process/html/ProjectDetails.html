@@ -107,11 +107,11 @@
                          <td>Company1</td>
                          <td>10-02-2016</td>
 
-                         <td width="40%">
-                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                         <td>
+                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
+                             <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button></a>
+                             <a href="Assets/document/Quotation.docx"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                          </td>
                      </tr>
                      <tr>
@@ -120,11 +120,11 @@
                          <td>Company2</td>
                          <td>10-02-2016</td>
 
-                         <td width="40%">
-                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                         <td >
+                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
+                                 <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button></a>
+                             <a href="Assets/document/Quotation.docx"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                          </td>
                      </tr>
                      <tr>
@@ -133,11 +133,11 @@
                          <td >Company2</td>
                          <td >10-02-2016</td>
 
-                         <td width="40%">
-                             <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
-                             <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                         <td>
+                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
+                                 <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button></a>
+                             <a href="Assets/document/Quotation.docx"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                          </td>
                      </tr>
 
@@ -184,7 +184,7 @@
 
                              <td>
 
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                                 <a href="Assets/document/Workorder.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
 
                              </td>
                          </tr>
@@ -195,7 +195,7 @@
                              <td>10-02-2016</td>
 
                              <td>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                                 <a href="Assets/document/Workorder.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
 
                              </td>
                          </tr>
@@ -206,7 +206,7 @@
                              <td>10-02-2016</td>
 
                              <td>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
+                                 <a href="Assets/document/Workorder.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
                              </td>
                          </tr>
 
@@ -254,8 +254,8 @@
 
                              <td>
                                  <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                                 <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
                          <tr>
@@ -266,8 +266,8 @@
 
                              <td>
                                  <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                                 <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
                          <tr>
@@ -277,8 +277,8 @@
                              <td >10-02-2016</td>
                              <td >
                                  <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button>
-                                 <button class="btn btn-default btn-sm"><span class="fa fa-edit"></span>Schedule Followup</button>
+                                 <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
 
@@ -300,7 +300,7 @@
                              <a ui-sref="Process.addPayment"><input type="button" class="btn btn-info" value="Add Payment"/></a>
                          </div>
                          <div class="col-md-4">
-                           <a ui-sref="Process.PaymentHistory"><button class="btn btn-info">View Payment History</button></a>
+                           <a ui-sref="Process.paymentHistory"><button class="btn btn-info">View Payment History</button></a>
                          </div>
                      </div>
                  </div>
@@ -372,7 +372,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Point of Conatct Details</h4>
+                <h4 class="modal-title">Point of Contact Details</h4>
             </div>
             <div class="modal-body">
                 <div class="row">

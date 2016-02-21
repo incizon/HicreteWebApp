@@ -229,17 +229,22 @@ if(!$userObj->init($userId)){
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging" style="width: 230px;">
                     <div class="panel-body list-group list-group-contacts">
                         <a href="#" class="list-group-item">
-                            <span class="contacts-title">Profile Setting</span>
+                            <span class="contacts-title">My Profile</span>
+                        </a>
+                        <a href="#" data-ng-click="logout()" class="list-group-item">
+                            <span class="contacts-title">Create Super User</span>
                         </a>
                         <a ui-sref="RequestAccess" class="list-group-item">
                             <span class="contacts-title">Request for access</span>
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a ui-sref="ChangePassword" class="list-group-item">
                             <span class="contacts-title">Change Password</span>
                         </a>
                         <a href="#" data-ng-click="logout()" class="list-group-item">
                             <span class="contacts-title">Log out</span>
                         </a>
+
+
                     </div>
                 </div>
             </li>

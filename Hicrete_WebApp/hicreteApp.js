@@ -227,15 +227,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         })
 
-        .state('ChangePassword', {
-            url: '/search',
-            templateUrl: 'Config/html/ChangePassword.html'
-
-        })
 
         .state('Process', {
             url: '/Process',
-            templateUrl: 'Process/html/processWidgets.html'
+            templateUrl: 'Process/html/processWidgets.html',
+            controller:'ProcessWidgetController'
         })
 
         .state('Process.addCustomer', {
@@ -324,6 +320,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ReviseQuotation',
             templateUrl:'Process/html/ReviseQuotation.html',
             controller:'ReviseQuotation'
+        })
+
+        .state('ChangePassword', {
+            url: '/ChangePassword',
+            templateUrl:'Config/html/ChangePassword.html'
+
         })
 
         .state('MainPage', {
