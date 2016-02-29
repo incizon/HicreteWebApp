@@ -1,0 +1,160 @@
+<!-- ADD USER FORM START-->
+<div class="row">
+    <div class="col-md-12">
+
+        <form name="customerForm" class="form-horizontal" role="customerForm" novalidate>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>My profile </strong></h3>
+                </div>
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">Customer Name</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input name="companyName" pattern="[a-zA-Z0-9]+" ng-model="company.name" type="text" class="form-control" placeholder="Enter Customer Name"  required minlength=2/>
+                            </div>
+                            <div class="help-block" ng-messages="customerForm.companyName.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Your name is too short.</p>
+                                <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
+                                <p style="color:red" ng-message="minlength">Customer name must have length > 2 </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">Date Of Birth</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input name="dateOfBirth"  ng-model="company.dateOfBirth" type="date" class="form-control" placeholder="Enter Date Of Birth"  required minlength=2/>
+                            </div>
+                            <!--<div class="help-block" ng-messages="customerForm.companyName.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Your name is too short.</p>
+                                <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
+                                <p style="color:red" ng-message="minlength">Customer name must have length > 2 </p>
+                            </div>-->
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Address</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <textarea ng-model="company.address" name="address" placeholder="Enter Customer Address" class="form-control" rows="5" required minlength=10></textarea>
+                        </div>
+                        <div class="help-block" ng-messages="customerForm.address.$error" ng-show="submitted">
+                            <p style="color:red" ng-message="required">Address Cannot be blank</p>
+                            <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">City</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group ">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" name="city" ng-model="company.city" placeholder="Enter Customer City" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                            </div>
+                            <div class="help-block" ng-messages="customerForm.city.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">City Cannot be blank</p>
+                                <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                <p style="color:red" ng-message="minlength">City must have more than 2 character</p>
+                            </div>
+                        </div>
+
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">State</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input ng-model="company.state" name="state" type="text" placeholder="Enter Customer State" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                            </div>
+                            <div class="help-block" ng-messages="customerForm.state.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">State Cannot be blank</p>
+                                <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                <p style="color:red" ng-message="minlength">State must have more than 2 character</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Country</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input ng-model="company.country" name="country" placeholder="Enter Customer Country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
+                            </div>
+                            <div class="help-block" ng-messages="customerForm.country.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Country Cannot be blank</p>
+                                <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                <p style="color:red" ng-message="minlength">Country must have more than 2 character</p>
+                            </div>
+
+                        </div>
+
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Pin code</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input ng-model="company.pincode" name="pincode" type="text" placeholder="Enter Pincode" class="form-control" required minlength=2/>
+                            </div>
+                            <div class="help-block" ng-messages="customerForm.pincode.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Pincode Cannot be blank</p>                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Email Id</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                                <input type="email" class="form-control" placeholder="Enter Customer Email Id" ng-model="company.email" name="emailId"/>
+                            </div>
+                            <div class="help-block" ng-messages="customerForm.emailId.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="email">Invalid email address</p>
+                            </div>
+
+                        </div>
+
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Phone number</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
+                                <input ng-model="company.phone" placeholder="Enter Phone Number" name="phone" type="text" class="form-control"/>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Profile Picture</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="file" class="form-control"  ng-model="" name=""/>
+                            </div>
+
+                        </div>
+
+
+
+
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <!--<button class="btn btn-default pull-left">Clear Form</button>-->
+                    <button class="btn btn-primary pull-right" ng-click="">Finish</button>
+                    <button class="btn btn-default pull-right" ng-click="(submitted=true) && customerForm.$valid && addCompany()">Submit</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<!--ADD COMPANY FORM START

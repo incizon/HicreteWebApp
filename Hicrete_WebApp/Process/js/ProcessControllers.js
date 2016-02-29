@@ -284,6 +284,16 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 
 });
+myApp.controller('ViewCustomerController',function($scope,$http){
+
+
+});
+
+myApp.controller('ViewQuotationDetailsController',function($scope,$http){
+
+
+});
+
 myApp.controller('PaymentHistoryController',function($scope,$http){
 
     $scope.paymentHistoryData=[
@@ -300,4 +310,31 @@ myApp.controller('PaymentHistoryController',function($scope,$http){
 myApp.controller('CustomerController',function($scope,$http){
 
     $scope.submitted=false;
+});
+
+
+myApp.controller('ReviseQuotation',function($scope,$http){
+
+    $scope.Quotation={ProjectName:"Project1",
+        CompanyName:"Hicrete Engineers",
+        Title:"Demo Quotation",
+        Date:"20-01-2016",
+        Subject:"Quotation for flooring work",
+        ReferenceNo:"HE/20-1-2016/A",
+        totalAmount:20000,
+        taxAmount:1000,
+        grandTotal:21000
+};
+
+    $scope.QuotationDetails=[];
+    $scope.QuotationDetails.push({title:"Material A",
+        description:"Flooring",quantity:10,unit:"sqft",unitrate:1000});
+    $scope.QuotationDetails.push({title:"Material B",
+        description:"Flooring",quantity:10,unit:"sqft",unitrate:1000});
+
+    $scope.TaxDetails=[];
+    $scope.TaxDetails.push({name:"VAT",
+        percentage:"5",amount:1000});
+
+
 });
