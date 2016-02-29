@@ -1,9 +1,8 @@
 
-                
     <div class="row">
             <div class="col-md-12" ng-controller="addSupplierController">
 
-                <form class="form-horizontal" name="supplierAdd"  novalidate>
+                <form class="form-horizontal" name="supplierAdd" ng-submit="submitData(supplier,'message1')">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Add Supplier</strong></h3>
@@ -16,11 +15,7 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" required pattern="[a-zA-Z]+" ng-model="supplier.supplierName" name="supplierName" class="form-control"/>
-                                </div>
-                                <div class="help-block" ng-messages="supplierAdd.supplierName.$error" ng-show="submitted">
-                                    <p style="color:red" ng-message="required">Please enter supplier name.</p>
-                                    <p style="color:red" ng-message="pattern">Only alphabets are allowed</p>
+                                    <input type="text" required pattern="[a-zA-Z]+" ng-model="supplier.supplierName" class="form-control"/>
                                 </div>
                                  <!--<span style="color:RED" class="help-block" ng-show="supplierAdd.supplierName.$invalid
                                 && supplierAdd.supplierName.$dirty && submitted">Please only characters in Supplier name</span>-->
@@ -28,28 +23,69 @@
                             </div>
                         </div>
 
+
+
                         <div class="form-group">
                             <label class="col-md-4 col-xs-12 control-label">Contact No</label>
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                    <input type="number" required ng-model="supplier.contactNo" name="contactNo" class="form-control"/>
-                                </div>
-                                <div class="help-block" ng-messages="supplierAdd.contactNo.$error" ng-show="submitted">
-                                    <p style="color:red" ng-message="required">Please enter contact number</p>
+                                    <input type="number" required ng-model="supplier.contactNo" class="form-control"/>
                                 </div>
                                <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
                             </div>
                         </div>
 
+                          <div class="form-group">
+                            <label class="col-md-4 col-xs-12 control-label">Point of contact</label>
+                            <div class="col-md-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <input type="text" required ng-model="supplier.pointOfContact" class="form-control"/>
+                                </div>
+                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 col-xs-12 control-label">Office Number</label>
+                            <div class="col-md-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <input type="number" required ng-model="supplier.officeNo" class="form-control"/>
+                                </div>
+                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 col-xs-12 control-label">VAT number</label>
+                            <div class="col-md-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <input type="text" required ng-model="supplier.VATNo" class="form-control"/>
+                                </div>
+                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 col-xs-12 control-label">CST number</label>
+                            <div class="col-md-4 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <input type="text" required ng-model="supplier.CSTNo" class="form-control"/>
+                                </div>
+                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                            </div>
+                        </div>
+
+                      
 
                         <div class="form-group">
                             <label class="col-md-4 col-xs-12 control-label">Address</label>
                             <div class="col-md-4 col-xs-12">
-                                <textarea class="form-control"  ng-model="supplier.address" rows="5" name="address" required></textarea>
-                                <div class="help-block" ng-messages="supplierAdd.address.$error" ng-show="submitted">
-                                    <p style="color:red" ng-message="required">Please enter address</p>
-                                </div>
+                                <textarea class="form-control"  ng-model="supplier.address" rows="5"></textarea>
                                 <!--<span class="help-block">Default textarea field</span>-->
                             </div>
                         </div>
@@ -59,10 +95,7 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-building-o"></span></span>
-                                    <input type="text" ng-model="supplier.city" name="city" class="form-control" required/>
-                                </div>
-                                <div class="help-block" ng-messages="supplierAdd.city.$error" ng-show="submitted">
-                                    <p style="color:red" ng-message="required">Please enter city</p>
+                                    <input type="text" ng-model="supplier.city"class="form-control"/>
                                 </div>
                                <!-- <span class="help-block">This is sample of text field</span>-->
                             </div>
@@ -73,10 +106,7 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" ng-model="supplier.country" name="country" class="form-control" required/>
-                                </div>
-                                <div class="help-block" ng-messages="supplierAdd.country.$error" ng-show="submitted">
-                                    <p style="color:red" ng-message="required">Please enter country</p>
+                                    <input type="text" ng-model="supplier.country" class="form-control"/>
                                 </div>
                                <!-- <span class="help-block">This is sample of text field</span>-->
                             </div>
@@ -87,22 +117,19 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" ng-model="supplier.pinCode" class="form-control" name="pinCode" required/>
-                                </div>
-                                <div class="help-block" ng-messages="supplierAdd.pinCode.$error" ng-show="submitted">
-                                    <p style="color:red" ng-message="required">Please enter pincode</p>
+                                    <input type="text" ng-model="supplier.pinCode" class="form-control"/>
                                 </div>
                                <!-- <span class="help-block">This is sample of text field</span>-->
                             </div>
                         </div>
-                        <!--<span class="help-block" ng-repeat="msg in messages">{{msg}} </span>-->
+                        <!-- <span class="help-block" ng-repeat="msg in messages">{{msg}} </span> -->
                        <!--  <ul>
                                 <li ng-repeat="msg in messages"> {{msg}} </li>
                         </ul>  -->
                     </div>
                     <div class="panel-footer" style="text-align: center;">
                         <button class="btn btn-default" type="Clear" ng-click="clearData(supplier,'clear')">Clear Form</button>
-                        <button class="btn btn-primary" type="button" data-ng-click="(submitted=true) && supplierAdd.$valid && submitData(supplier,'message1')" >Submit</button>
+                        <button class="btn btn-primary" type="submit"  >Submit</button>
                     </div>
                 </div>
                 </form>
