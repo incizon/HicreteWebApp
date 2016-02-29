@@ -51,14 +51,33 @@
 						}
 				break;
 
-			case 'viewApplicators':
+			case 'viewTentativeApplicators':
 
-					if(!$operationObject->viewApplicator($data->applicator)){
+					if(!$operationObject->viewTentativeApplicators($data)){
 
 						echo "No Applicator Details to show";
 					}
 				break;
 
+
+			case 'viewPermanentApplicators':
+
+				if(!$operationObject->viewPermanentApplicators($data)){
+
+					echo "No Applicator Details to show";
+				}
+				break;
+
+			case 'getTentativeApplicatorDetails':
+
+                      $operationObject->getApplicatorDetails($data);
+                break;
+
+			case 'getPermanentApplicatorDetails':
+
+				$operationObject->getApplicatorDetails($data);
+
+				break;
 			case 'getPaymentDetails':
 
                         if(!$operationObject->getApplicatorPaymentDetails()){

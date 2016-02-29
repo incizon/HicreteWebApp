@@ -286,131 +286,290 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
 /*Start of view tentative applicator controller */
 
-myApp.controller('ViewTentetiveApplicatorController',function($scope,$uibModal,$log,$http,ApplicatorService){
+myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
 
-
-
-    $scope.Applicators=[];
-    $scope.totalItems =0;
     $scope.currentPage = 1;
-
     $scope.ApplicatorPerPage = 5;
+    $scope.searchExpression=undefined;
+    $scope.searchKeyword=undefined;
+
     $scope.applicatorDetails={
-
-        applicator:"tentetive",
+        searchExpression:"",
+        searchKeyword:"",
         operation:""
-
     };
 
-    /* call to service to get tentative applicator */
-    ApplicatorService.viewApplicatorDetails($scope,$http,$scope.applicatorDetails);
+    $scope.searchApplicator=function(){
+
+             $scope.applicatorDetails.searchExpression=$scope.searchExpression;
+             $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
+             $scope.applicatorDetails.operation='viewTentativeApplicators';
+                var config = {
+                    params: {
+                        data: $scope.applicatorDetails
+                    }
+
+                };
+
+             if($rootScope.tentativeApplicators.length==0) {
 
 
-    /* Pagination */
+                 $http.post("Applicator/php/Applicator.php", null, config)
+
+                     .success(function (data, status, headers, config) {
+
+                         $rootScope.tentativeApplicators = data;
+                         $scope.totalItems = $rootScope.tentativeApplicators.length;
+                         console.log($rootScope.tentativeApplicators);
+                     })
+
+                     .error(function (data, status, headers) {
+                         console.log(data);
+
+                     });
+
+             }
+
+    }
 
     $scope.paginate = function(value) {
         //console.log("In Paginate");
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
         end = begin + $scope.ApplicatorPerPage;
-        index = $scope.Applicators.indexOf(value);
+        index = $rootScope.tentativeApplicators.indexOf(value);
         //console.log(index);
         return (begin <= index && index < end);
     };
 
-    /* Show details of seleted applicator on modal */
-
-    $scope.ApplicatorSelected = function (tentetiveApplicator) {
-
-        $scope.selectedTentetiveApplicator = tentetiveApplicator;
-
-    }
-
-    $scope.applicatorToModify=function(tentetiveApplicator){
-
-
-            $scope.applicatorDetails.applicator_id=tentetiveApplicator.applicator_master_id;
-            $scope.applicatorDetails.firmname=tentetiveApplicator.applicator_name;
-            $scope.applicatorDetails.addressline1=tentetiveApplicator.applicator_address_line1;
-            $scope.applicatorDetails.addressline2=tentetiveApplicator.applicator_address_line2;
-            $scope.applicatorDetails.contactno=tentetiveApplicator.applicator_contact;
-            $scope.applicatorDetails.city=tentetiveApplicator.applicator_city;
-            $scope.applicatorDetails.state=tentetiveApplicator.applicator_state;
-            $scope.applicatorDetails.country=tentetiveApplicator.applicator_country;
-            $scope.applicatorDetails.cstnumber=tentetiveApplicator.applicator_cst_number;
-            $scope.applicatorDetails.pannumber=tentetiveApplicator.applicator_pan_number;
-            $scope.applicatorDetails.servicetaxnumber=tentetiveApplicator.applicator_stax_number;
-            $scope.applicatorDetails.vatnumber=tentetiveApplicator.applicator_vat_number;
-            $scope.applicatorDetails.pointofcontact=tentetiveApplicator.point_of_contact;
-            $scope.applicatorDetails.pointcontactno=tentetiveApplicator.point_of_contact_no;
-
-    }
 });
+
+myApp.controller('ViewTentativeApplicatorController',function($scope,$http,$stateParams){
+
+
+
+    $scope.applicatorDetails={
+        applicator_master_id:"",
+        operation:"",
+        purpose:"toView"
+    }
+
+    $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
+    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+
+    var config = {
+        params: {
+            data: $scope.applicatorDetails
+        }
+
+    };
+
+    $http.post("Applicator/php/Applicator.php", null, config)
+
+        .success(function (data, status, headers, config) {
+
+            $scope.tentativeApplicatorsDetails = data;
+            console.log(data);
+
+        })
+
+        .error(function (data, status, headers) {
+            console.log(data);
+
+        });
+
+
+
+
+});
+
+myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$stateParams){
+
+
+    $scope.applicatorDetails={
+        applicator_master_id:"",
+        operation:"",
+        purpose:"toModify"
+    }
+
+    $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
+    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+
+    var config = {
+        params: {
+            data: $scope.applicatorDetails
+        }
+
+    };
+
+        $http.post("Applicator/php/Applicator.php", null, config)
+
+        .success(function (data, status, headers, config) {
+
+            $scope.tentativeApplicatorsDetails = data;
+            console.log($scope.tentativeApplicatorsDetails);
+
+        })
+
+        .error(function (data, status, headers) {
+            console.log(data);
+
+        });
+
+
+    $scope.modifyApplicatorDetails=function(){
+
+         console.log($scope.tentativeApplicatorsDetails);
+    }
+
+});
+
 
 /*End of view tentative applicator controller */
 
 
 /*Start of view permanent applicator */
 
-myApp.controller('ViewPermanentApplicatorController',function($scope,$http,ApplicatorService){
+myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
 
-    $scope.Applicators=[];
-    $scope.totalItems =0;
     $scope.currentPage = 1;
-
     $scope.ApplicatorPerPage = 5;
-    $scope.applicatorDetails={
+    $scope.searchExpression=undefined;
+    $scope.searchKeyword=undefined;
 
-        applicator:"permanent",
+    $scope.applicatorDetails={
+        searchExpression:"",
+        searchKeyword:"",
         operation:""
     };
 
-    /* call to service to get all permanent */
+    $scope.searchApplicator=function(){
 
-    ApplicatorService.viewApplicatorDetails($scope,$http,$scope.applicatorDetails);
+        $scope.applicatorDetails.searchExpression=$scope.searchExpression;
+        $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
+        $scope.applicatorDetails.operation='viewPermanentApplicators';
+        var config = {
+            params: {
+                data: $scope.applicatorDetails
+            }
 
-    /* start of pagination */
+        };
+
+        if($rootScope.permanentApplicators.length==0) {
+
+
+            $http.post("Applicator/php/Applicator.php", null, config)
+
+                .success(function (data, status, headers, config) {
+
+                    $rootScope.permanentApplicators = data;
+                    $scope.totalItems =$rootScope.permanentApplicators.length;
+                    console.log($rootScope.permanentApplicators);
+                })
+
+                .error(function (data, status, headers) {
+                    console.log(data);
+
+                });
+
+        }
+
+    }
 
     $scope.paginate = function(value) {
         //console.log("In Paginate");
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.ApplicatorPerPage;
         end = begin + $scope.ApplicatorPerPage;
-        index = $scope.Applicators.indexOf(value);
+        index = $rootScope.permanentApplicators.indexOf(value);
         //console.log(index);
         return (begin <= index && index < end);
     };
 
-    /* selected applicator to view on modal */
-
-    $scope.ApplicatorSelected = function (permanentApplicator) {
-        $scope.selectedPermanentApplicator = permanentApplicator;
-        console.log(permanentApplicator);
-    };
+});
+myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stateParams){
 
 
-    $scope.applicatorToModify=function(permanentApplicator){
-        $scope.applicatorDetails.applicator_id=permanentApplicator.applicator_master_id;
-        $scope.applicatorDetails.firmname=permanentApplicator.applicator_name;
-        $scope.applicatorDetails.addressline1=permanentApplicator.applicator_address_line1;
-        $scope.applicatorDetails.addressline2=permanentApplicator.applicator_address_line2;
-        $scope.applicatorDetails.contactno=permanentApplicator.applicator_contact;
-        $scope.applicatorDetails.city=permanentApplicator.applicator_city;
-        $scope.applicatorDetails.state=permanentApplicator.applicator_state;
-        $scope.applicatorDetails.country=permanentApplicator.applicator_country;
-        $scope.applicatorDetails.cstnumber=permanentApplicator.applicator_cst_number;
-        $scope.applicatorDetails.pannumber=permanentApplicator.applicator_pan_number;
-        $scope.applicatorDetails.servicetaxnumber=permanentApplicator.applicator_stax_number;
-        $scope.applicatorDetails.vatnumber=permanentApplicator.applicator_vat_number;
-        $scope.applicatorDetails.pointofcontact=permanentApplicator.point_of_contact;
-        $scope.applicatorDetails.pointcontactno=permanentApplicator.point_of_contact_no;
+
+    $scope.applicatorDetails={
+        applicator_master_id:"",
+        operation:"",
+        purpose:"toView"
+    }
+
+    $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
+    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+
+    var config = {
+        params: {
+            data: $scope.applicatorDetails
+        }
 
     };
+
+    $http.post("Applicator/php/Applicator.php", null, config)
+
+        .success(function (data, status, headers, config) {
+
+            $scope.permanentApplicatorsDetails = data;
+            console.log(data);
+
+        })
+
+        .error(function (data, status, headers) {
+            console.log(data);
+
+        });
+
 
 
 
 });
+
+myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$stateParams){
+
+
+    $scope.applicatorDetails={
+        applicator_master_id:"",
+        operation:"",
+        purpose:"toModify"
+    }
+
+    $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
+    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+
+    var config = {
+        params: {
+            data: $scope.applicatorDetails
+        }
+
+    };
+
+    $http.post("Applicator/php/Applicator.php", null, config)
+
+        .success(function (data, status, headers, config) {
+
+            $scope.permanentApplicatorsDetails = data;
+            console.log($scope.permanentApplicatorsDetails);
+
+        })
+
+        .error(function (data, status, headers) {
+            console.log(data);
+
+        });
+
+
+    $scope.modifyApplicatorDetails=function(){
+
+        console.log($scope.permanentApplicatorsDetails);
+    }
+
+});
+
+
 /*End of view permanent applicator */
+
 
 /* start of applicator payment controller*/
 
@@ -430,7 +589,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
     ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
 
 
-    $scope.applicatorPaymentDetails=function(enrollmentId){
+    $scope.viewApplicatorPaymentDetails=function(enrollmentId){
 
         $scope.applicatorPayment=[];
         for(var index=0;index<$scope.Applicators.length;index++){
@@ -486,7 +645,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
             ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
         }
         else if($scope.applicatorDetails.pendingAmount!=0){
-            //$scope.showModal = true;
+
 
             applicatorDetails.paymentStatus='No';
 

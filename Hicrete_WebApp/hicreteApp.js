@@ -39,17 +39,41 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Applicator.tentetiveApplicator', {
-            url: '/tentetiveApplicators',
-            templateUrl: 'Applicator/html/ViewTentetiveApplicator.html',
-            controller: 'ViewTentetiveApplicatorController'
+            url: '/searchTentativeApplicators',
+            templateUrl: 'Applicator/html/SearchTentativeApplicator.html',
+            controller: 'SearchTentativeApplicatorController'
+        })
+        .state('Applicator.tentativeApplicatorDetails', {
+            url: '/ViewTentativeApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ViewTentativeApplicatorDetails.html',
+            controller: 'ViewTentativeApplicatorController'
+
+        })
+
+        .state('Applicator.modifyTentativeApplicatorDetails',{
+            url: '/ModifyTentativeApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ModifyTentativeApplicatorDetails.html',
+            controller: 'ModifyTentativeApplicatorController'
+
         })
         .state('Applicator.permanentApplicator', {
-            url: '/permanentApplicators',
-            templateUrl: 'Applicator/html/ViewPermanentApplicator.html',
+            url: '/SearchPermanentApplicators',
+            templateUrl: 'Applicator/html/SearchPermanentApplicator.html',
+            controller: 'SearchPermanentApplicatorController'
+        })
+        .state('Applicator.permanentApplicatorDetails', {
+            url: '/ViewPermanentApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ViewPermanentApplicatorDetails.html',
             controller: 'ViewPermanentApplicatorController'
+
         })
 
+        .state('Applicator.modifyPermanentApplicatorDetails',{
+            url: '/ModifyPermanentApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ModifyPermanentApplicatorDetails.html',
+            controller: 'ModifyPermanentApplicatorController'
 
+        })
         .state('Inventory', {
             url: '/Inventory',
             templateUrl: 'Inventory/html/inventoryWidgets.html',
@@ -358,7 +382,7 @@ myApp.run(function($rootScope,$http) {
            {
             if(data.status=="Successful"){
                 $rootScope.accessPermission=data.message;
-                console.log($rootScope.accessPermission);
+                //console.log($rootScope.accessPermission);
              }else{
                   doShowAlert("Failure",data.message);
              }         
@@ -368,7 +392,12 @@ myApp.run(function($rootScope,$http) {
            {
              doShowAlert("Failure",data.error);     
            });            
-            
+
+    //Applicator variables
+    $rootScope.tentativeApplicators=[];
+    console.log($rootScope.tentativeApplicators);
+    $rootScope.permanentApplicators=[];
+
 });
 
 
