@@ -22,17 +22,17 @@
                         <thead style="text-align: center;">
                         <tr style="text-align: center;">
                             <th width="20%" style="text-align: center;">Sr. No</th>
-                            <th width="30%" style="text-align: center;">Cost centre name</th>
+                            <th width="30%" style="text-align: center;">Segment name</th>
                             <th width="50%" style="text-align: center;">Actions</th>
 
                         </tr>
                         </thead>
                         <tbody style="text-align: center;">
-                        <tr style="text-align: center;" ng-repeat="segment in Segments |filter:keywords" >
+                        <tr style="text-align: center;" ng-repeat="segment in Segments  |filter:keywords">
                             <td width="20%">{{$index+1}}</td>
-                            <td width="30%">{{segment.segmentName}}</td>
+                            <td width="30%">{{segment.name}}</td>
                             <td width="50%">
-                                <button class="btn btn-info btn-sm" disabled data-target="#modify" data-toggle="modal"
+                                <button class="btn btn-info btn-sm" data-target="#modify" data-toggle="modal"
                                         ng-click=""><span class="fa fa-pencil-square-o"></span>Modify
                                 </button>
                                 <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
@@ -40,6 +40,11 @@
                         </tr>
                         </tbody>
                     </table>
+                    <uib-pagination total-items="totalInwardItems" ng-model="currentInwardPage"
+                                    boundary-links="true"
+                                    items-per-page="InventoryInwardItemsPerPage" class="pagination-sm">
+
+                    </uib-pagination>
                 </div>
                 <!--table end-->
 
@@ -48,3 +53,4 @@
 
         </div>
     </div>
+</div>
