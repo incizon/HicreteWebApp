@@ -1,0 +1,218 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Modify </strong>Applicator Details</h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="row">
+                <form class="form-horizontal">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Applicator Id</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmName" ng-model="permanentApplicatorsDetails.applicator_master_id" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Firm Name</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmName" ng-model="permanentApplicatorsDetails.applicator_name" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3 ">
+                                <label class="control-label">Address Line1</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmAddressline1" ng-model="permanentApplicatorsDetails.applicator_address_line1">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of Address line 1 feild-->
+                        <!--Start of Address Line 2 feild-->
+                        <div class="form-group">
+                            <div class="col-md-3 ">
+                                <label class="control-label">Address Line2</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmAddressline2" ng-model="permanentApplicatorsDetails.applicator_address_line1">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of Address line 2 feild-->
+                        <!--Start of contact number feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Contact No</label>
+                            </div>
+                            <div class="col-md-9 ">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <input type="text" class="form-control" name="firmContactNo" ng-model="permanentApplicatorsDetails.applicator_contact">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of contact number feild-->
+                        <!--Start of Country Field-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class=" control-label">Country</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" ng-model="permanentApplicatorsDetails.applicator_country">
+                                    <option value="">Choose Country..</option>
+                                    <option value="India">India</option>
+                                    <option value="America">America</option>
+                                    <option value="South Africa">South Africa</option>
+                                    <option value="Japan">Japan</option>
+                                    <option value="Italy">Italy</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--End of Country Field-->
+                        <!--Start of State Field-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class=" control-label">State</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select"ng-model="permanentApplicatorsDetails.applicator_state">
+                                    <option value="">Choose State..</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Maharashtra">Maharashtra</option>
+                                    <option value="Benglore">Benglore</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Culcatta">Culcatta</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--End of State Field-->
+                        <!--Start of City Field-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">City</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select"ng-model="permanentApplicatorsDetails.applicator_city">
+                                    <option value="">Choose City..</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Nagar">Nagar</option>
+                                    <option value="Nasik">Nasik</option>
+                                    <option value="Pandharpur">Pandharpur</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--End of City Field-->
+                    </div>
+                    <div class="col-md-6">
+                        <!--Start of VAT No. feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">VAT Number</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="vatNumber" ng-model="permanentApplicatorsDetails.applicator_vat_number"
+                                           readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of VAT No. feild-->
+                        <!--Start of CST No. feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">CST Number</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="cstNumber" ng-model="permanentApplicatorsDetails.applicator_cst_number" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of CST No. Field-->
+                        <!--Start of Service Tax No. feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Service Tax Number</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="seviceTaxNumber"ng-model="permanentApplicatorsDetails.applicator_stax_number" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of Service Tax No. feild-->
+                        <!--Start of PAN No. feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">PAN Number</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="panNumber" ng-model="permanentApplicatorsDetails.applicator_pan_number" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of PAN No. feild-->
+                        <!--Start of Point of contact feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Point of contact</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="pointOfContact" ng-model="permanentApplicatorsDetails.point_of_contact">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of Point of contact feild-->
+                        <!--Start of source contact number Field-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Source Contact No</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <input type="text" class="form-control" name="pointContactNo" ng-model="permanentApplicatorsDetails.point_of_contact_no">
+                                </div>
+                            </div>
+                        </div>
+                        <!--End of source contact number Field-->
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+        <div class="panel-footer">
+            <button ng-click="modifyApplicatorDetails()"class="btn btn-danger pull-right">Submit <span class="glyphicon glyphicon-circle-arrow-right"></span></button>
+            <button class="btn  btn-default pull-right">Clear Form</button>
+        </div>
+
+    </div>
+
+</div>

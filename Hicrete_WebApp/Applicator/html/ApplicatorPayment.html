@@ -24,7 +24,7 @@
                             </div>
                             <div class="col-md-9">
 
-                                <select class="form-control" name="applicatorName" ng-model="applicatorDetails.enrollmentID" ng-change="applicatorPaymentDetails(applicatorDetails.enrollmentID)" required/>
+                                <select class="form-control" name="applicatorName" ng-model="applicatorDetails.enrollmentID" ng-change="viewApplicatorPaymentDetails(applicatorDetails.enrollmentID)" required/>
 
                                 <option value="" disabled selected>Choose Applicator</option>
                                 <option ng-repeat="applicator in Applicators" value="{{applicator.enrollment_id }}">{{applicator.applicator_name}}</option>
@@ -327,41 +327,6 @@
     </div>
 </div>
 
-<!--<hicretemodal visible="showModal" title="Schedule Followup">-->
-    <!--<div class="modal-body">-->
-        <!--<div class="row">-->
-            <!--<form  name="applicatorAmountFollowUpForm" class="form-horizontal" novalidate>-->
-                <!--<div class="form-group">-->
-                    <!--<div class="col-md-4">-->
-                        <!--<label class="control-label">Followup Date</label>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-8">-->
-                        <!--<div class="input-group">-->
-                            <!--<span class="input-group-addon"><span class="fa fa-calendar"></span></span>-->
-                            <!--<input type="date" class="form-control" ng-model="applicatorDetails.followupdate">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<div class="col-md-4">-->
-                        <!--<label class="control-label">Followup Employee Id</label>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-8">-->
-                        <!--<div class="input-group">-->
-                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-                            <!--<input type="text" class="form-control" name="followupEmployeeId" ng-model="applicatorDetails.followupemployeeId">-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="modal-footer">-->
-        <!--<button type="button" class="btn btn-default"-->
-                <!--ng-click="processFollowup(applicatorDetails)">Submit</button>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;End of modal-footer&ndash;&gt;-->
-<!--</hicretemodal>-->
 
 <div class="modal fade" id="viewPaymentDetails" role="dialog">
     <div class="modal-dialog">
@@ -394,14 +359,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <!--<div class="form-group">-->
-                    <!--<div class="col-md-4">-->
-                    <!--<label class="control-label"><b>Package Total Amount</b></label>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-6">-->
-                    <!--<b> {{selectedTentetiveApplicator.package_total_amount}} </b>-->
-                    <!--</div>-->
-                    <!--</div>-->
+
 
                 </div>
 

@@ -28,28 +28,9 @@ myApp.service('ApplicatorService',function(){
 						});			
 	};
 
-	this.viewApplicatorDetails=function($scope,$http,applicatorDetails){
+	this.getApplicatorDetails=function($scope,$http,applicatorDetails){
 
-				applicatorDetails.operation='viewApplicators';
-				var config = {
-								params: {
-										data: applicatorDetails
-									}
-						  	 
-								};
 
-				$http.post("Applicator/php/Applicator.php", null,config)
-					
-					.success(function (data, status, headers, config){
-							console.log(data);
-							$scope.Applicators=data;
-							$scope.totalItems = $scope.Applicators.length;
-						})
-
-					.error(function (data, status, headers){
-							console.log(data);
-          
-						});
 
 		};
 

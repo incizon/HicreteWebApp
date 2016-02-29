@@ -2,8 +2,111 @@
  * Created by Atul on 11-02-2016.
  */
 
-myApp.controller('ProjectDetailsController',function($scope,$http){
+myApp.controller('ProcessWidgetController',function($scope,$http){
 
+    $scope.hasRead=true;
+    $scope.hasWrite=true;
+
+    var data={
+        operation :"CheckAccess",
+        moduleName:"Process",
+        accessType: "Read"
+    };
+
+    var config = {
+        params: {
+            data: data
+
+        }
+    };
+
+
+    //$http.post("Config/php/configFacade.php",null, config)
+    //    .success(function (data)
+    //    {
+    //        if(data.status=="Successful"){
+    //            $scope.hasRead=true;
+    //        }else if(data.status=="Unsuccessful"){
+    //            $scope.hasRead=false;
+    //        }else {
+    //            doShowAlert("Failure", data.message);
+    //        }
+    //    })
+    //    .error(function (data, status, headers, config)
+    //    {
+    //        doShowAlert("Failure","Error Occurred");
+    //
+    //    });
+
+
+    var data={
+        operation :"CheckAccess",
+        moduleName:"Process",
+        accessType: "Write"
+    };
+
+    var config = {
+        params: {
+            data: data
+
+        }
+    };
+
+
+    //$http.post("Config/php/configFacade.php",null, config)
+    //    .success(function (data)
+    //    {
+    //        if(data.status=="Successful"){
+    //            $scope.hasWrite=true;
+    //        }else if(data.status=="Unsuccessful"){
+    //            $scope.hasWrite=false;
+    //        }else {
+    //            doShowAlert("Failure", data.message);
+    //        }
+    //    })
+    //    .error(function (data, status, headers, config)
+    //    {
+    //        doShowAlert("Failure","Error Occurred");
+    //
+    //    });
+
+
+});
+
+
+
+
+myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log){
+    $scope.animationsEnabled=true;
+
+   $scope.scheduleFollowup=function(size) {
+       var modalInstance = $uibModal.open({
+           animation: $scope.animationsEnabled,
+           templateUrl: 'Applicator/html/paymentFollowup.html',
+           controller: function ($scope, $uibModalInstance) {
+               $scope.ok = function () {
+                   // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+                   $uibModalInstance.close();
+               };
+
+               $scope.cancel = function () {
+                   $uibModalInstance.dismiss('cancel');
+               };
+           },
+           size: size,
+
+       });
+
+       modalInstance.result.then(function () {
+
+       }, function () {
+           $log.info('Modal dismissed at: ' + new Date());
+       });
+       $scope.toggleAnimation = function () {
+           $scope.animationsEnabled = !$scope.animationsEnabled;
+       };
+
+   }
 
     console.log("IN");
 
@@ -95,13 +198,6 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
     $scope.projectPayment=[];
     $scope.animationsEnabled=true;
     $scope.paymentReceivedFor=undefined;
-
-
-
-
-
-
-
 
 
     $scope.viewProjectPaymentDetails=function(project_id){
@@ -212,7 +308,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Namdev",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:'yes',
+            project_quotation:'yes'
 
         },
         {
@@ -221,7 +317,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Atul",
             project_status:"complete",
             payment_status:"yes",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -230,7 +326,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Ajit",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -239,7 +335,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Pranav",
             project_status:"complete",
             payment_status:"yes",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -248,7 +344,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Pranav",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:"no",
+            project_quotation:"no"
 
         }
 

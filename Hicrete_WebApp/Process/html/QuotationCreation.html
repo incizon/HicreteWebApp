@@ -162,7 +162,9 @@
 
 
                     </div>
+                    <div class="col-md-6">
 
+                    </div>
 
                 </div><br>
 
@@ -170,18 +172,76 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Sr.No</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Unit rate</th>
-                            <th>Amount</th>
-                            <th>Remove</th>
+                            <th width=7%>Item No</th>
+                            <th width=20%>Title</th>
+                            <th width=20%>Description</th>
+                            <th width=20%>Quantity</th>
+                            <th width=20%>Unit</th>
+                            <th width=20%>Unit rate</th>
+                            <th width=11%>Amount</th>
+                            <th width=2%>Remove</th>
                         </tr>
                         </thead>
                         <tr>
-                            <td>{{$index+1}}</td>
+                            <td>1</td>
+                            <td>
+                                <input type="text" name="Title" placeholder="Title"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" name="Decription" placeholder="Description"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" name="Quantity" placeholder="Quantity"
+                                       class="form-control"/>
+                            </td>
+                            <td><input type="text" name="Unit" placeholder="Unit"
+                                       class="form-control"/>
+                            </td>
+                            <td><input type="text" name="UnitRate" placeholder="Unit Rate"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                {{"0"}}
+                            </td>
+                            <td>
+                                <a ng-click="remove($index)" class="panel-remove">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                <input type="text" name="Title" placeholder="Title"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" name="Decription" placeholder="Description"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" name="Quantity" placeholder="Quantity"
+                                       class="form-control"/>
+                            </td>
+                            <td><input type="text" name="Unit" placeholder="Unit"
+                                       class="form-control"/>
+                            </td>
+                            <td><input type="text" name="UnitRate" placeholder="Unit Rate"
+                                       class="form-control"/>
+                            </td>
+                            <td>
+                                {{"0"}}
+                            </td>
+                            <td>
+                                <a ng-click="remove($index)" class="panel-remove">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
                             <td>
                                 <input type="text" name="Title" placeholder="Title"
                                        class="form-control"/>
@@ -226,49 +286,49 @@
                 <div class="row">
                     <h3 class="panel-title"><strong>Tax </strong>Details </h3>
                 </div><br>
-                <div class="row">
+                <!--<div class="row">-->
 
-                    <div class="col-md-6">
+                    <!--<div class="col-md-6">-->
 
-                        <div class="form-group">
+                        <!--<div class="form-group">-->
 
-                            <div class="col-md-4">
+                            <!--<div class="col-md-4">-->
 
-                                <label class="control-label">Number of Taxes</label>
+                                <!--<label class="control-label">Number of Taxes</label>-->
 
-                            </div>
-                            <div class="col-md-8">
+                            <!--</div>-->
+                            <!--<div class="col-md-8">-->
 
-                                <div class="col-md-10">
+                                <!--<div class="col-md-10">-->
 
-                                    <div class="input-group">
+                                    <!--<div class="input-group">-->
 
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
 
-                                        <input type="text" name="noOfTaxes" ng-model="noOfTaxes"
-                                               class="form-control">
+                                        <!--<input type="text" name="noOfTaxes" ng-model="noOfTaxes"-->
+                                               <!--class="form-control">-->
 
-                                    </div>
-
-
-
-                                </div>
-
-                                <div class="col-md-2">
-
-                                    <button class="btn btn-primary" ng-click="addTaxes()">Add</button>
-
-                                </div>
-
-                            </div>
-
-                        </div>
+                                    <!--</div>-->
 
 
-                    </div>
+
+                                <!--</div>-->
+
+                                <!--<div class="col-md-2">-->
+
+                                    <!--<button class="btn btn-primary" ng-click="addTaxes()">Add</button>-->
+
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        <!--</div>-->
 
 
-                </div><br>
+                    <!--</div>-->
+
+
+                <!--</div><br>-->
 
                 <div class="row">
                     <table class="table table-bordered">
