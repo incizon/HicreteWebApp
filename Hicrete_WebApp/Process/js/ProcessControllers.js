@@ -4,8 +4,8 @@
 
 myApp.controller('ProcessWidgetController',function($scope,$http){
 
-    $scope.hasRead=false;
-    $scope.hasWrite=false;
+    $scope.hasRead=true;
+    $scope.hasWrite=true;
 
     var data={
         operation :"CheckAccess",
@@ -21,22 +21,22 @@ myApp.controller('ProcessWidgetController',function($scope,$http){
     };
 
 
-    $http.post("Config/php/configFacade.php",null, config)
-        .success(function (data)
-        {
-            if(data.status=="Successful"){
-                $scope.hasRead=true;
-            }else if(data.status=="Unsuccessful"){
-                $scope.hasRead=false;
-            }else {
-                doShowAlert("Failure", data.message);
-            }
-        })
-        .error(function (data, status, headers, config)
-        {
-            doShowAlert("Failure","Error Occurred");
-
-        });
+    //$http.post("Config/php/configFacade.php",null, config)
+    //    .success(function (data)
+    //    {
+    //        if(data.status=="Successful"){
+    //            $scope.hasRead=true;
+    //        }else if(data.status=="Unsuccessful"){
+    //            $scope.hasRead=false;
+    //        }else {
+    //            doShowAlert("Failure", data.message);
+    //        }
+    //    })
+    //    .error(function (data, status, headers, config)
+    //    {
+    //        doShowAlert("Failure","Error Occurred");
+    //
+    //    });
 
 
     var data={
@@ -53,22 +53,22 @@ myApp.controller('ProcessWidgetController',function($scope,$http){
     };
 
 
-    $http.post("Config/php/configFacade.php",null, config)
-        .success(function (data)
-        {
-            if(data.status=="Successful"){
-                $scope.hasWrite=true;
-            }else if(data.status=="Unsuccessful"){
-                $scope.hasWrite=false;
-            }else {
-                doShowAlert("Failure", data.message);
-            }
-        })
-        .error(function (data, status, headers, config)
-        {
-            doShowAlert("Failure","Error Occurred");
-
-        });
+    //$http.post("Config/php/configFacade.php",null, config)
+    //    .success(function (data)
+    //    {
+    //        if(data.status=="Successful"){
+    //            $scope.hasWrite=true;
+    //        }else if(data.status=="Unsuccessful"){
+    //            $scope.hasWrite=false;
+    //        }else {
+    //            doShowAlert("Failure", data.message);
+    //        }
+    //    })
+    //    .error(function (data, status, headers, config)
+    //    {
+    //        doShowAlert("Failure","Error Occurred");
+    //
+    //    });
 
 
 });
@@ -200,13 +200,6 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
     $scope.paymentReceivedFor=undefined;
 
 
-
-
-
-
-
-
-
     $scope.viewProjectPaymentDetails=function(project_id){
 
         $scope.projectPayment=[];
@@ -315,7 +308,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Namdev",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:'yes',
+            project_quotation:'yes'
 
         },
         {
@@ -324,7 +317,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Atul",
             project_status:"complete",
             payment_status:"yes",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -333,7 +326,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Ajit",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -342,7 +335,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Pranav",
             project_status:"complete",
             payment_status:"yes",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -351,7 +344,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Pranav",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:"no",
+            project_quotation:"no"
 
         }
 

@@ -15,31 +15,31 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Applicator.addDealer', {
-            url: '/addApplicator',
+            url: '/AddApplicator',
             templateUrl: 'Applicator/html/CreateApplicator.html',
             controller: 'ApplicatorController'
         })
 
         .state('Applicator.addPayment', {
-            url: '/addApplicatorPayment',
+            url: '/AddApplicatorPayment',
             templateUrl: 'Applicator/html/ApplicatorPayment.html',
             controller: 'ApplicatorPaymentController'
         })
 
         .state('Applicator.addPackage', {
-            url: '/addPackage',
+            url: '/AddPackage',
             templateUrl: 'Applicator/html/CreatePackage.html',
             controller: 'PackageController'
         })
 
         .state('Applicator.viewPackages', {
-            url: '/viewPackages',
+            url: '/ViewPackages',
             templateUrl: 'Applicator/html/ViewPackages.html',
             controller: 'ViewPackageController'
         })
 
         .state('Applicator.tentetiveApplicator', {
-            url: '/searchTentativeApplicators',
+            url: '/SearchTentativeApplicators',
             templateUrl: 'Applicator/html/SearchTentativeApplicator.html',
             controller: 'SearchTentativeApplicatorController'
         })
