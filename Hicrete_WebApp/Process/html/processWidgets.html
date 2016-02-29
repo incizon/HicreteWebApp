@@ -80,32 +80,32 @@
 <div>
     <nav id="primary_nav_wrap">
         <ul>
-            <li><a>Create</a>
+            <li ng-show="hasWrite"><a>Create</a>
                 <ul>
                     <li><a ui-sref="Process.addCustomer">Customer</a></li>
                     <li><a ui-sref="Process.addProject">Project</a></li>
-                    <li><a>Schedule</a></li>
+                    <!--<li><a>Schedule</a></li>-->
                     <li><a ui-sref="Process.addQuotation">Quotation</a></li>
-                    <li><a ui-sref="Process.addInvoice">Invoice</a></li>
+                    <!--<li><a ui-sref="Process.addInvoice">Invoice</a></li>-->
                 </ul>
             </li>
-            <li><a>Search</a>
+            <li ng-show="hasRead"><a>Search</a>
                 <ul>
                     <li><a ui-sref="Process.viewCustomers">Customer</a></li>
                     <li><a ui-sref="Process.viewProject">Project</a></li>
-                    <li><a>Schedule</a></li>
+                    <!--<li><a>Schedule</a></li>-->
                     </li>
                 </ul>
             </li>
             <li><a>Payment</a>
                 <ul>
-                    <li><a ui-sref="Process.addPayment">Add Payment</a></li>
-                    <li><a ui-sref="Process.paymentHistory">Payment History</a></li>
-                    <li><a>Schedule Payment Followup</a></li>
+                    <li ng-show="hasWrite"><a ui-sref="Process.addPayment">Add Payment</a></li>
+                    <li ng-show=="hasRead"><a ui-sref="Process.paymentHistory">Payment History</a></li>
+                    <!--<li><a>Schedule Payment Followup</a></li>-->
 
                 </ul>
             </li>
-            <li><a>Followup History</a>
+            <li ng-show="hasRead"><a>Followup History</a>
                 <ul>
                     <li><a ui-sref="Process.quotationFollowupHistory">Quotation Followup History</a></li>
                     <li><a ui-sref="Process.paymentFollowupHistory">Payment Followup</a></li>

@@ -2,8 +2,111 @@
  * Created by Atul on 11-02-2016.
  */
 
-myApp.controller('ProjectDetailsController',function($scope,$http){
+myApp.controller('ProcessWidgetController',function($scope,$http){
 
+    $scope.hasRead=false;
+    $scope.hasWrite=false;
+
+    var data={
+        operation :"CheckAccess",
+        moduleName:"Process",
+        accessType: "Read"
+    };
+
+    var config = {
+        params: {
+            data: data
+
+        }
+    };
+
+
+    $http.post("Config/php/configFacade.php",null, config)
+        .success(function (data)
+        {
+            if(data.status=="Successful"){
+                $scope.hasRead=true;
+            }else if(data.status=="Unsuccessful"){
+                $scope.hasRead=false;
+            }else {
+                doShowAlert("Failure", data.message);
+            }
+        })
+        .error(function (data, status, headers, config)
+        {
+            doShowAlert("Failure","Error Occurred");
+
+        });
+
+
+    var data={
+        operation :"CheckAccess",
+        moduleName:"Process",
+        accessType: "Write"
+    };
+
+    var config = {
+        params: {
+            data: data
+
+        }
+    };
+
+
+    $http.post("Config/php/configFacade.php",null, config)
+        .success(function (data)
+        {
+            if(data.status=="Successful"){
+                $scope.hasWrite=true;
+            }else if(data.status=="Unsuccessful"){
+                $scope.hasWrite=false;
+            }else {
+                doShowAlert("Failure", data.message);
+            }
+        })
+        .error(function (data, status, headers, config)
+        {
+            doShowAlert("Failure","Error Occurred");
+
+        });
+
+
+});
+
+
+
+
+myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log){
+    $scope.animationsEnabled=true;
+
+   $scope.scheduleFollowup=function(size) {
+       var modalInstance = $uibModal.open({
+           animation: $scope.animationsEnabled,
+           templateUrl: 'Applicator/html/paymentFollowup.html',
+           controller: function ($scope, $uibModalInstance) {
+               $scope.ok = function () {
+                   // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+                   $uibModalInstance.close();
+               };
+
+               $scope.cancel = function () {
+                   $uibModalInstance.dismiss('cancel');
+               };
+           },
+           size: size,
+
+       });
+
+       modalInstance.result.then(function () {
+
+       }, function () {
+           $log.info('Modal dismissed at: ' + new Date());
+       });
+       $scope.toggleAnimation = function () {
+           $scope.animationsEnabled = !$scope.animationsEnabled;
+       };
+
+   }
 
     console.log("IN");
 
@@ -310,4 +413,31 @@ myApp.controller('PaymentHistoryController',function($scope,$http){
 myApp.controller('CustomerController',function($scope,$http){
 
     $scope.submitted=false;
+});
+
+
+myApp.controller('ReviseQuotation',function($scope,$http){
+
+    $scope.Quotation={ProjectName:"Project1",
+        CompanyName:"Hicrete Engineers",
+        Title:"Demo Quotation",
+        Date:"20-01-2016",
+        Subject:"Quotation for flooring work",
+        ReferenceNo:"HE/20-1-2016/A",
+        totalAmount:20000,
+        taxAmount:1000,
+        grandTotal:21000
+};
+
+    $scope.QuotationDetails=[];
+    $scope.QuotationDetails.push({title:"Material A",
+        description:"Flooring",quantity:10,unit:"sqft",unitrate:1000});
+    $scope.QuotationDetails.push({title:"Material B",
+        description:"Flooring",quantity:10,unit:"sqft",unitrate:1000});
+
+    $scope.TaxDetails=[];
+    $scope.TaxDetails.push({name:"VAT",
+        percentage:"5",amount:1000});
+
+
 });

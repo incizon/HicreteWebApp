@@ -825,6 +825,11 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         supplier.city = "";
         supplier.country = "";
         supplier.pinCode = "";
+        supplier.pointOfContact = "";
+        supplier.officeNo = "";
+        supplier.VATNo = "";
+        supplier.CSTNo = "";
+
         console.log(msg);
         if (msg == 'clear') {
             $scope.messages[0] = "";

@@ -7,6 +7,10 @@ class Supplier
     public $city;
     public $country;
     public $pinCode;
+    public $pointOfContact;
+    public $officeNo;
+    public $vatNo;
+    public $cstNo;
 
     /*
     Get an instance of the Database
@@ -29,6 +33,10 @@ class Supplier
         $this->city=$supplier->city;
         $this->country=$supplier->country;
         $this->pinCode=$supplier->pinCode;
+        $this->pointOfContact=$supplier->pointOfContact;
+        $this->officeNo=$supplier->officeNo;
+        $this->vatNo=$supplier->VATNo;
+        $this->cstNo=$supplier->CSTNo;
 
     }
     public function isAvailable($dbh)
@@ -49,11 +57,15 @@ class Supplier
         $delFlgDflt='N';
         try{
 
-        $stmt = $dbh->prepare("INSERT INTO supplier (SUPPLIERNAME,CONTACTNO,ADDRESS,CITY,COUNTRY,PINCODE,DELFLG,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME) 
-              values (:supplierName,:contactNo,:address,:city,:country,:pincode,:delflg,:lchngUserId,now(),:creUserId,now())");
+        $stmt = $dbh->prepare("INSERT INTO supplier (SUPPLIERNAME,CONTACTNO,POINTOFCONTACT,OFFICENO,CSTNO,VATNO,ADDRESS,CITY,COUNTRY,PINCODE,DELFLG,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
+              values (:supplierName,:contactNo,:pointofcontact,:officeno,:cstno,:vatno,:address,:city,:country,:pincode,:delflg,:lchngUserId,now(),:creUserId,now())");
 
         $stmt->bindParam(':supplierName', $this->supplierName, PDO::PARAM_STR,10);
         $stmt->bindParam(':contactNo', $this->contactNo, PDO::PARAM_STR, 10);
+        $stmt->bindParam(':pointofcontact', $this->pointOfContact, PDO::PARAM_STR, 10);
+        $stmt->bindParam(':officeno', $this->officeNo, PDO::PARAM_STR, 10);
+        $stmt->bindParam(':vatno', $this->vatNo, PDO::PARAM_STR, 10);
+        $stmt->bindParam(':cstno', $this->cstNo, PDO::PARAM_STR, 10);
         $stmt->bindParam(':address', $this->address, PDO::PARAM_STR, 10);
         $stmt->bindParam(':city', $this->city, PDO::PARAM_STR, 10);
         $stmt->bindParam(':country', $this->country, PDO::PARAM_STR, 10);
