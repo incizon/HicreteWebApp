@@ -189,9 +189,9 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
         dateOfBill: ""
     };
 
-    // $scope.costCenterList=[];
-    // $scope.costCenterList.push({name:"CostCenter1",id:"1"});
-    // $scope.costCenterList.push({name:"CostCenter2",id:"2"});
+     $scope.projectList=[];
+     $scope.projectList.push({name:"project1",id:"1"});
+     $scope.projectList.push({name:"project2",id:"2"});
 
     // $scope.segmentList=[];
     // $scope.segmentList.push({name:"Transport",id:"1"});
