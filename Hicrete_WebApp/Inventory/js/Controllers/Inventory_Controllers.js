@@ -388,13 +388,13 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            //alert("if");
+            alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             // $scope.showModal=false;
-            $scope.step = 2;
             $scope.submitted = false;
-            //alert("else");
+            alert("else");
+            $scope.step = 2;
 
 
         }
@@ -926,7 +926,12 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
         });
     $scope.getViewDataObject = function (product) {
+        console.log(product);
         $scope.viewProduct = product;
+    }
+    $scope.getMaterialObject = function (product) {
+        $scope.viewMaterials = product;
+        console.log($scope.viewMaterials);
     }
 
     $scope.getDataObjectToModify = function (product) {
@@ -942,6 +947,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     /*************************************************
      * START of GETTING INWARD DATA
      **************************************************/
+        $scope.materialDetails=[];
     var data = {
         module: 'inward',
         operation: 'search'

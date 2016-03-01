@@ -31,7 +31,6 @@ class Database
     {
         try {
             $this->_connection  = new PDO("mysql:host=$this->_host;dbname=$this->_database", $this->_username, $this->_password);
-           
            // echo 'Connected to database';
         } catch (PDOException $e) {
            
