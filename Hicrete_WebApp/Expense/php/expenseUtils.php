@@ -26,18 +26,11 @@
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT `projectid`, `costcentername` FROM `cost_center_master` WHERE costcentername LIKE  ");
+        $stmt = $conn->prepare("SELECT `projectid`,  FROM `cost_center_master` WHERE costcentername LIKE '%$pSearchData%' ");
         if ($stmt->execute()) {
-            $noOfRows = 0;
-            $json_response = array();
-            while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $result_array = array();
-                $result_array['name'] = $result['costcentername'];
-                $result_array['id'] = $result['costcenterid'];
-                array_push($json_response, $result_array); //push the values in the array
-                $noOfRows++;
-            }
-            echo json_encode($json_response);
+            $result = $stmt->fetchAll();
+            $json= json_encode($result);
+            echo $json;
 
         } else {
             echo "0";

@@ -1,7 +1,7 @@
 myApp.controller('budgetSegmentController', function ($scope, $http) {
 
     $scope.segments = [];
-    $scope.materialSegment;
+    $scope.materialSegment=false;
     $scope.addClicked = false;
     $scope.submitClicked = false;
     $scope.showDialog = false;
@@ -140,7 +140,7 @@ myApp.controller('costCenterController', function ($scope, $http) {
         var data = {
             operation: "createCostCenter",
             costCenterData: $scope.costCenterDetails,
-            segments: $scope.segmentList
+            segments:$scope.segmentList
 
         };
         console.log(data);
