@@ -15,41 +15,65 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Applicator.addDealer', {
-            url: '/addApplicator',
+            url: '/AddApplicator',
             templateUrl: 'Applicator/html/CreateApplicator.html',
             controller: 'ApplicatorController'
         })
 
         .state('Applicator.addPayment', {
-            url: '/addApplicatorPayment',
+            url: '/AddApplicatorPayment',
             templateUrl: 'Applicator/html/ApplicatorPayment.html',
             controller: 'ApplicatorPaymentController'
         })
 
         .state('Applicator.addPackage', {
-            url: '/addPackage',
+            url: '/AddPackage',
             templateUrl: 'Applicator/html/CreatePackage.html',
             controller: 'PackageController'
         })
 
         .state('Applicator.viewPackages', {
-            url: '/viewPackages',
+            url: '/ViewPackages',
             templateUrl: 'Applicator/html/ViewPackages.html',
             controller: 'ViewPackageController'
         })
 
         .state('Applicator.tentetiveApplicator', {
-            url: '/tentetiveApplicators',
-            templateUrl: 'Applicator/html/ViewTentetiveApplicator.html',
-            controller: 'ViewTentetiveApplicatorController'
+            url: '/SearchTentativeApplicators',
+            templateUrl: 'Applicator/html/SearchTentativeApplicator.html',
+            controller: 'SearchTentativeApplicatorController'
+        })
+        .state('Applicator.tentativeApplicatorDetails', {
+            url: '/ViewTentativeApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ViewTentativeApplicatorDetails.html',
+            controller: 'ViewTentativeApplicatorController'
+
+        })
+
+        .state('Applicator.modifyTentativeApplicatorDetails',{
+            url: '/ModifyTentativeApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ModifyTentativeApplicatorDetails.html',
+            controller: 'ModifyTentativeApplicatorController'
+
         })
         .state('Applicator.permanentApplicator', {
-            url: '/permanentApplicators',
-            templateUrl: 'Applicator/html/ViewPermanentApplicator.html',
+            url: '/SearchPermanentApplicators',
+            templateUrl: 'Applicator/html/SearchPermanentApplicator.html',
+            controller: 'SearchPermanentApplicatorController'
+        })
+        .state('Applicator.permanentApplicatorDetails', {
+            url: '/ViewPermanentApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ViewPermanentApplicatorDetails.html',
             controller: 'ViewPermanentApplicatorController'
+
         })
 
+        .state('Applicator.modifyPermanentApplicatorDetails',{
+            url: '/ModifyPermanentApplicatorDetails?applicator_id',
+            templateUrl: 'Applicator/html/ModifyPermanentApplicatorDetails.html',
+            controller: 'ModifyPermanentApplicatorController'
 
+        })
         .state('Inventory', {
             url: '/Inventory',
             templateUrl: 'Inventory/html/inventoryWidgets.html',
@@ -143,35 +167,35 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             
         })
 
-        .state('Expense.createCostCenter', {
+        .state('Process.createCostCenter', {
             url: '/createCostCenter',
             templateUrl: 'Expense/html/CreateCostCenter.html',
             controller: 'costCenterController'
         })
 
-        .state('Expense.addSegment', {
+        .state('Process.addSegment', {
             url: '/addSegment',
             templateUrl: 'Expense/html/AddBudgetSegment.html',
             controller: 'budgetSegmentController'
         })
 
-        .state('Expense.otherExpense', {
+        .state('Process.otherExpense', {
             url: '/otherExpense',
             templateUrl: 'Expense/html/AddOtherExpenses.html',
             controller: 'expenseEntryController'  
         })
 
-        .state('Expense.materialExpense', {
+        .state('Process.materialExpense', {
             url: '/materialExpense',
             templateUrl: 'Expense/html/AddMaterialExpense.html',
             controller: 'expenseEntryController'  
         })
-        .state('Expense.searchExpense', {
+        .state('Process.searchExpense', {
             url: '/searchExpense',
-            templateUrl: 'Expense/html/Hi_crete_costCenterSearchNew.html',
+            templateUrl: 'Expense/html/ExpensesSearch.html',
             controller: 'costCenterSearchController'  
         })
-        .state('Expense.searchSegment', {
+        .state('Process.searchSegment', {
             url: '/searchSegment',
             templateUrl: 'Expense/html/SegmentSearch.html',
             controller: 'costCenterSearchController'
@@ -366,7 +390,7 @@ myApp.run(function($rootScope,$http) {
            {
             if(data.status=="Successful"){
                 $rootScope.accessPermission=data.message;
-                console.log($rootScope.accessPermission);
+                //console.log($rootScope.accessPermission);
              }else{
                   doShowAlert("Failure",data.message);
              }         
@@ -376,7 +400,12 @@ myApp.run(function($rootScope,$http) {
            {
              doShowAlert("Failure",data.error);     
            });            
-            
+
+    //Applicator variables
+    $rootScope.tentativeApplicators=[];
+    console.log($rootScope.tentativeApplicators);
+    $rootScope.permanentApplicators=[];
+
 });
 
 

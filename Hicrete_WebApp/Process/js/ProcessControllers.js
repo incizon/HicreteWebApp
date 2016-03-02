@@ -21,22 +21,22 @@ myApp.controller('ProcessWidgetController',function($scope,$http){
     };
 
 
-    $http.post("Config/php/configFacade.php",null, config)
-        .success(function (data)
-        {
-            if(data.status=="Successful"){
-                $scope.hasRead=true;
-            }else if(data.status=="Unsuccessful"){
-                $scope.hasRead=false;
-            }else {
-                doShowAlert("Failure", data.message);
-            }
-        })
-        .error(function (data, status, headers, config)
-        {
-            doShowAlert("Failure","Error Occurred");
-
-        });
+    //$http.post("Config/php/configFacade.php",null, config)
+    //    .success(function (data)
+    //    {
+    //        if(data.status=="Successful"){
+    //            $scope.hasRead=true;
+    //        }else if(data.status=="Unsuccessful"){
+    //            $scope.hasRead=false;
+    //        }else {
+    //            doShowAlert("Failure", data.message);
+    //        }
+    //    })
+    //    .error(function (data, status, headers, config)
+    //    {
+    //        doShowAlert("Failure","Error Occurred");
+    //
+    //    });
 
 
     var data={
@@ -53,22 +53,22 @@ myApp.controller('ProcessWidgetController',function($scope,$http){
     };
 
 
-    $http.post("Config/php/configFacade.php",null, config)
-        .success(function (data)
-        {
-            if(data.status=="Successful"){
-                $scope.hasWrite=true;
-            }else if(data.status=="Unsuccessful"){
-                $scope.hasWrite=false;
-            }else {
-                doShowAlert("Failure", data.message);
-            }
-        })
-        .error(function (data, status, headers, config)
-        {
-            doShowAlert("Failure","Error Occurred");
-
-        });
+    //$http.post("Config/php/configFacade.php",null, config)
+    //    .success(function (data)
+    //    {
+    //        if(data.status=="Successful"){
+    //            $scope.hasWrite=true;
+    //        }else if(data.status=="Unsuccessful"){
+    //            $scope.hasWrite=false;
+    //        }else {
+    //            doShowAlert("Failure", data.message);
+    //        }
+    //    })
+    //    .error(function (data, status, headers, config)
+    //    {
+    //        doShowAlert("Failure","Error Occurred");
+    //
+    //    });
 
 
 });
@@ -112,17 +112,273 @@ myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $lo
 
 });
 
-myApp.controller('QuotationController',function($scope,$http){
+myApp.controller('QuotationController',function($scope,$http,$uibModal, $log){
+
+    $scope.taxSelected=0;
+    $scope.taxableAmount=0;
+    $scope.noOfRows=0;
+    $scope.taxDetails=[];
+    $scope.currentItemList=[];
+
+    $scope.QuotationDetails={
+
+        quotationItemDetails:[]
+    };
+
+    $scope.addRows=function(){
+
+        for(var index=0;index<$scope.noOfRows;index++) {
+            $scope.QuotationDetails.quotationItemDetails.push({
+
+                quotationItem: "",
+                quotationDescription: "",
+                quotationQuantity: 0,
+                quotationUnit: "",
+                quotationUnitRate: 0,
+                amount:0,
+                isTaxAplicable:false
+            });
+        }
+    }
+
+    $scope.calculateTaxableAmount=function(index){
+
+            if($scope.QuotationDetails.quotationItemDetails[index].isTaxAplicable){
+                $scope.taxableAmount=$scope.taxableAmount + $scope.QuotationDetails.quotationItemDetails[index].amount;
+                $scope.taxSelected++;
+                $scope.currentItemList.push(index+1);
+            }else{
+                $scope.taxableAmount=$scope.taxableAmount - $scope.QuotationDetails.quotationItemDetails[index].amount;
+                $scope.taxSelected--;
+                $scope.currentItemList.splice($scope.currentItemList.indexOf(index+1),1);
+            }
+    }
+
+    $scope.calculateAmount=function(index){
+
+        $scope.QuotationDetails.quotationItemDetails[index].amount=$scope.QuotationDetails.quotationItemDetails[index].quotationQuantity* $scope.QuotationDetails.quotationItemDetails[index].quotationUnitRate;
+    }
+
+    $scope.removeQuotationItem= function(index){
+
+        $scope.QuotationDetails.quotationItemDetails.splice(index,1); //remove item by index
+
+    };
+    $scope.removeTaxItem= function(index){
+
+        $scope.taxDetails.splice(index,1); //remove item by index
+
+    };
 
 
-    console.log("IN");
+    $scope.addTax=function(size) {
 
+
+        if ($scope.taxSelected>0) {
+
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Process/html/addTax.html',
+                controller: function ($scope, $uibModalInstance,amount) {
+                    $scope.tax={taxTitle:"",taxApplicableTo:"",taxPercentage:0,amount:0};
+                    $scope.amount=amount;
+                    console.log($scope.amount);
+                    $scope.ok = function () {
+
+                        console.log($scope.tax);
+                        $uibModalInstance.close($scope.tax);
+                    };
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                    $scope.calculateTaxAmount=function(){
+                        $scope.tax.amount=$scope.amount*($scope.tax.taxPercentage/100);
+                    }
+                },
+                size: size,
+                resolve: {
+                    amount: function () {
+                        return $scope.taxableAmount;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (tax) {
+                var itemString=" (Item ";
+                for(var i=0;i<$scope.currentItemList.length-1;i++){
+                    itemString+=$scope.currentItemList[i]+" ,";
+                }
+                itemString+=$scope.currentItemList[$scope.currentItemList.length-1]+" )";
+                $scope.taxDetails.push({taxTitle:tax.taxTitle,taxApplicableTo:itemString,taxPercentage:tax.taxPercentage,amount:tax.amount ,itemList:$scope.currentItemList});
+                console.log($scope.currentItemList);
+                console.log($scope.taxDetails);
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+            //$scope.taxableAmount=0;
+
+        }
+        else{
+            alert("Please Select Checkbox");
+        }
+
+    }
 });
 
-myApp.controller('InvoiceController',function($scope,$http){
+myApp.controller('InvoiceController',function($scope,$http,$uibModal, $log){
+
+    $scope.taxSelected=0;
+    $scope.taxableAmount=0;
+    $scope.noOfRows=0;
+    $scope.taxDetails=[];
+    $scope.currentItemList=[];
+
+    $scope.InvoiceDetails={
+
+        invoiceItemDetails:[]
+    }
+
+    $scope.InvoiceDetails.invoiceItemDetails.push({
+
+        quotationItem: "Material 1",
+        quotationDescription: "Supply Material 1",
+        quotationQuantity: 10,
+        quotationUnit: "kg",
+        quotationUnitRate: 200,
+        amount:2000,
+        isTaxAplicable:false
+    });
+    $scope.InvoiceDetails.invoiceItemDetails.push({
+
+        quotationItem: "Material 2",
+        quotationDescription: "Supply Material 1",
+        quotationQuantity: 5,
+        quotationUnit: "kg",
+        quotationUnitRate: 100,
+        amount:500,
+        isTaxAplicable:false
+    });
+    $scope.InvoiceDetails.invoiceItemDetails.push({
+
+        quotationItem: "Material 3",
+        quotationDescription: "Supply Material 3",
+        quotationQuantity: 15,
+        quotationUnit: "kg",
+        quotationUnitRate: 100,
+        amount:1500,
+        isTaxAplicable:false
+    });
+
+    var currentList1=[1,2];
+    $scope.taxDetails.push({taxTitle:"VAT",taxApplicableTo:"(Item 1,2)",taxPercentage:10,amount:250 ,itemList:currentList1});
+    $scope.taxDetails.push({taxTitle:"CST",taxApplicableTo:"(Item 3)",taxPercentage:10,amount:150 ,itemList:[3]});
+
+    $scope.addRows=function(){
+
+        for(var index=0;index<$scope.noOfRows;index++) {
+            $scope.InvoiceDetails.invoiceItemDetails.push({
+
+                quotationItem: "",
+                quotationDescription: "",
+                quotationQuantity: 0,
+                quotationUnit: "",
+                quotationUnitRate: 0,
+                amount:0,
+                isTaxAplicable:false
+            });
+        }
+    }
+    $scope.removeInvoiceItem= function(index){
+
+        $scope.InvoiceDetails.invoiceItemDetails.splice(index,1); //remove item by index
+
+    };
+    $scope.removeInvoiceTaxItem= function(index){
+
+        $scope.taxDetails.splice(index,1); //remove item by index
+
+    };
+
+    $scope.calculateTaxableAmount=function(index){
+
+        if($scope.InvoiceDetails.invoiceItemDetails[index].isTaxAplicable){
+            $scope.taxableAmount=$scope.taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+            $scope.taxSelected++;
+            $scope.currentItemList.push(index+1);
+        }else{
+            $scope.taxableAmount=$scope.taxableAmount - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+            $scope.taxSelected--;
+            $scope.currentItemList.splice($scope.currentItemList.indexOf(index+1),1);
+        }
+    }
+
+    $scope.calculateAmount=function(index){
+
+        $scope.InvoiceDetails.invoiceItemDetails[index].amount=$scope.InvoiceDetails.invoiceItemDetails[index].quotationQuantity* $scope.InvoiceDetails.invoiceItemDetails[index].quotationUnitRate;
+    }
+
+    $scope.addTax=function(size) {
 
 
-    console.log("IN");
+        if ($scope.taxSelected>0) {
+
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Process/html/addTax.html',
+                controller: function ($scope, $uibModalInstance,amount) {
+                    $scope.tax={taxTitle:"",taxApplicableTo:"",taxPercentage:0,amount:0};
+                    $scope.amount=amount;
+                    console.log($scope.amount);
+                    $scope.ok = function () {
+
+                        console.log($scope.tax);
+                        $uibModalInstance.close($scope.tax);
+                    };
+
+                    $scope.cancel = function () {
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                    $scope.calculateTaxAmount=function(){
+                        $scope.tax.amount=$scope.amount*($scope.tax.taxPercentage/100);
+                    }
+                },
+                size: size,
+                resolve: {
+                    amount: function () {
+                        return $scope.taxableAmount;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (tax) {
+                var itemString=" (Item ";
+                for(var i=0;i<$scope.currentItemList.length-1;i++){
+                    itemString+=$scope.currentItemList[i]+" ,";
+                }
+                itemString+=$scope.currentItemList[$scope.currentItemList.length-1]+" )";
+                $scope.taxDetails.push({taxTitle:tax.taxTitle,taxApplicableTo:itemString,taxPercentage:tax.taxPercentage,amount:tax.amount ,itemList:$scope.currentItemList});
+                console.log($scope.currentItemList);
+                console.log($scope.taxDetails);
+            }, function () {
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+            //$scope.taxableAmount=0;
+
+        }
+        else{
+            alert("Please Select Checkbox");
+        }
+
+    }
 
 });
 myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $log){
@@ -130,6 +386,7 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
 
     $scope.paymentDetails={
         operation:""
+
     };
     $scope.formSubmitted=false;
     $scope.showPaymentDetails=false;
@@ -200,13 +457,6 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
     $scope.paymentReceivedFor=undefined;
 
 
-
-
-
-
-
-
-
     $scope.viewProjectPaymentDetails=function(project_id){
 
         $scope.projectPayment=[];
@@ -260,10 +510,10 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
 
             paymentDetails.paymentStatus='Yes';
             console.log(paymentDetails);
-            // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+
         }
         else if($scope.paymentDetails.pendingAmount!=0){
-            //$scope.showModal = true;
+
 
             paymentDetails.paymentStatus='No';
 
@@ -278,7 +528,7 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
                     $scope.ok = function () {
 
                         console.log($scope.paymentDetails);
-                        // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+                       
                         $uibModalInstance.close();
                     };
 
@@ -303,7 +553,8 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
-    }});
+    }
+});
 
 myApp.controller('viewProjectController',function($scope,$http){
 
@@ -315,7 +566,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Namdev",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:'yes',
+            project_quotation:'yes'
 
         },
         {
@@ -324,7 +575,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Atul",
             project_status:"complete",
             payment_status:"yes",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -333,7 +584,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Ajit",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -342,7 +593,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Pranav",
             project_status:"complete",
             payment_status:"yes",
-            project_quotation:"yes",
+            project_quotation:"yes"
 
         },
         {
@@ -351,7 +602,7 @@ myApp.controller('viewProjectController',function($scope,$http){
             project_manager:"Pranav",
             project_status:"incomplete",
             payment_status:"no",
-            project_quotation:"no",
+            project_quotation:"no"
 
         }
 

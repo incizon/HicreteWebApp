@@ -100,7 +100,7 @@
             <li><a>Payment</a>
                 <ul>
                     <li ng-show="hasWrite"><a ui-sref="Process.addPayment">Add Payment</a></li>
-                    <li ng-show=="hasRead"><a ui-sref="Process.paymentHistory">Payment History</a></li>
+                    <li ng-show="hasRead"><a ui-sref="Process.paymentHistory">Payment History</a></li>
                     <!--<li><a>Schedule Payment Followup</a></li>-->
 
                 </ul>
@@ -111,6 +111,14 @@
                     <li><a ui-sref="Process.paymentFollowupHistory">Payment Followup</a></li>
                     <li><a ui-sref="Process.siteTrackingFollowupHistory">SiteTracking Followup</a></li>
 
+                </ul>
+            </li>
+            <li><a>Project Expense</a>
+                <ul>
+                    <li><a ui-sref="Process.addSegment">Create Budget Segment</a></li>
+                    <li><a ui-sref="Process.materialExpense">Add Material Expenses</a></li>
+                    <li><a ui-sref="Process.otherExpense">Add Other Expenses</a></li>
+                    <li><a ui-sref="Process.searchSegment">Search Budget Segment</a></li>
                 </ul>
             </li>
 

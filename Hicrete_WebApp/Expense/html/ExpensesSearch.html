@@ -1,0 +1,84 @@
+<div class="row" ng-controller="costCenterSearchController">
+
+    <div class="col-md-12">
+
+        <!-- START DATATABLE EXPORT -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="form-group col-md-12">
+                    <div class="btn-group col-md-2">
+                        <select class="form-control select" ng-model="Searchfilter" name="filter" ng-value="Select"
+                                required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="costCenter">Cost center name</option>
+                            <option value="projectName">Project Name</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 col-xs-12" style="padding-right:0px;">
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                            <input type="text" class="form-control" ng-model="searchKewords" placeholder="Enter keyword"/>
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="padding-left:0px;">
+                        <button type="button" class="btn btn-primary" data-ng-click="getExpenseDetails()" data-dismiss="modal">Search</button>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-md-4">
+                        <input type="checkbox" ng-model="budgetSort" name="sortType" value="true"> Budget Overflow
+                    </div>
+
+                </div>
+                <!--table start-->
+                <div class="col-md-12" style="padding-left:0px;">
+                    <table id="customers2" class="table datatable">
+                        <thead style="text-align: center;">
+                        <tr style="text-align: center;">
+                            <th width="3%" style="text-align: center;">Sr. No</th>
+                            <th width="14%" style="text-align: center;">Cost centre name</th>
+                            <!-- <th width="13%">Company</th> -->
+                            <th width="15%" style="text-align: center;">Project name</th>
+                            <th width="15%" style="text-align: center;">Budget Allocated</th>
+                            <th width="8%" style="text-align: center;">Total expenditure</th>
+                            <th width="5%" style="text-align: center;">Status</th>
+                            <th width="40%" style="text-align: center;">Actions</th>
+
+                        </tr>
+                        </thead>
+                        <tbody style="text-align: center;">
+                        <tr style="text-align: center;" ng-repeat="costCenter in costCenterData">
+                            <td width="5%">{{$index+1}}</td>
+                            <td width="12%">{{costCenter.costCenterName}}</td>
+                            <td width="10%">{{costCenter.projectName}}</td>
+                            <td width="10%">{{costCenter.budgetAllocated}}</td>
+                            <td width="13%">{{costCenter.totalExpenditure}}</td>
+                            <td width="10%">{{costCenter.status}}</td>
+                            <td width="40%">
+                                <button data-target="#viewInwardDetails" ng-click=""
+                                        data-toggle="modal" class="btn btn-primary btn-sm"><span
+                                        class="fa fa-eye"></span>View
+                                </button>
+
+                                <button class="btn btn-info btn-sm" disabled data-target="#modify" data-toggle="modal"
+                                        ng-click=""><span class="fa fa-pencil-square-o"></span>Modify
+                                </button>
+                                <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <uib-pagination total-items="totalInwardItems" ng-model="currentInwardPage"
+                                    boundary-links="true"
+                                    items-per-page="InventoryInwardItemsPerPage" class="pagination-sm">
+
+                    </uib-pagination>
+                </div>
+                <!--table end-->
+
+            </div>
+            <!-- END DATATABLE EXPORT -->
+
+        </div>
+    </div>
