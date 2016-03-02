@@ -4,8 +4,8 @@
 
 myApp.controller('ProcessWidgetController',function($scope,$http){
 
-    $scope.hasRead=false;
-    $scope.hasWrite=false;
+    $scope.hasRead=true;
+    $scope.hasWrite=true;
 
     var data={
         operation :"CheckAccess",
