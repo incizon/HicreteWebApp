@@ -26,7 +26,8 @@
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT `projectid`,  FROM `cost_center_master` WHERE costcentername LIKE '%$pSearchData%' ");
+        $projectID='2';
+        $stmt = $conn->prepare("SELECT `projectid`,SUM(allocatedbudget) FROM `budget_details` WHERE projectid='2' ");
         if ($stmt->execute()) {
             $result = $stmt->fetchAll();
             $json= json_encode($result);
