@@ -1,7 +1,7 @@
 myApp.controller('budgetSegmentController', function ($scope, $http) {
 
     $scope.segments = [];
-    $scope.materialSegment;
+    $scope.materialSegment=false;
     $scope.addClicked = false;
     $scope.submitClicked = false;
     $scope.showDialog = false;
@@ -140,7 +140,7 @@ myApp.controller('costCenterController', function ($scope, $http) {
         var data = {
             operation: "createCostCenter",
             costCenterData: $scope.costCenterDetails,
-            segments: $scope.segmentList
+            segments:$scope.segmentList
 
         };
         console.log(data);
@@ -189,9 +189,9 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
         dateOfBill: ""
     };
 
-    // $scope.costCenterList=[];
-    // $scope.costCenterList.push({name:"CostCenter1",id:"1"});
-    // $scope.costCenterList.push({name:"CostCenter2",id:"2"});
+     $scope.projectList=[];
+     $scope.projectList.push({name:"project1",id:"1"});
+     $scope.projectList.push({name:"project2",id:"2"});
 
     // $scope.segmentList=[];
     // $scope.segmentList.push({name:"Transport",id:"1"});
@@ -344,8 +344,9 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
 });
 
 
-myApp.controller('costCenterSearchController', function ($scope, $http) {
+myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http) {
 
+    $scope.searchKewords=null;
     $scope.costCenterData=[
         {costCenterName: 'costCenter1', projectName: "project 10", budgetAllocated:270000,totalExpenditure:10000,status:"good"},
         {costCenterName: 'costCenter2', projectName: "project 14", budgetAllocated:7700000,totalExpenditure:7878000,status:"Worst"},
@@ -353,10 +354,88 @@ myApp.controller('costCenterSearchController', function ($scope, $http) {
         {costCenterName: 'costCenter7', projectName: "project 123", budgetAllocated:900000,totalExpenditure:17800,status:"Average"},
         {costCenterName: 'costCenter10', projectName: "project 561", budgetAllocated:20000,totalExpenditure:18900,status:"Worst"},
         {costCenterName: 'costCenter15', projectName: "project 1g", budgetAllocated:670000,totalExpenditure:17800,status:"Good"},
-    ],
-
-    $scope.Segments=[
-        {segmentName:'segment1'},
-        {segmentName:'segment2'}
     ]
+
+    $scope.totalInwardItems = 0;
+    $scope.currentInwardPage = 1;
+    $scope.InventoryInwardItemsPerPage = 10;
+    $scope.InwardSearchData = [];
+
+    /*
+     START of getting segment list
+     */
+    var data = {
+        operation: "getSegments",
+    };
+
+    var config = {
+        params: {
+            data: data
+        }
+    };
+
+    $http.post("Expense/php/expenseUtils.php", null, config)
+        .success(function (data) {
+            console.log(data);
+            //if (data == "1") {
+            //
+            //} else {
+                $scope.Segments = data;
+                $scope.totalInwardItems= $scope.Segments.length;
+            //}
+
+        })
+        .error(function (data, status, headers, config) {
+            doShowAlert("Failure", "Error Occurred");
+
+        });
+    /*
+     End of getting segment list
+     */
+
+    $scope.getExpenseDetails=function(){
+
+        var keyword=$scope.searchKewords;
+        console.log(keyword);
+        var data = {
+            operation: "getExpenseDetails",
+            searchData:keyword,
+            searchOn:$scope.Searchfilter
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Expense/php/expenseUtils.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                if (data == "1") {
+
+                } else {
+                    $rootScope.expenseDetails = data;
+                    console.log($rootScope.expenseDetails);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                doShowAlert("Failure", "Error Occurred");
+
+            });
+
+    }
+
+
+    $scope.paginateSegment = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
+        end = begin + $scope.InventoryInwardItemsPerPage;
+        index = $scope.InwardSearchData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
 });

@@ -167,35 +167,35 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             
         })
 
-        .state('Expense.createCostCenter', {
+        .state('Process.createCostCenter', {
             url: '/createCostCenter',
             templateUrl: 'Expense/html/CreateCostCenter.html',
             controller: 'costCenterController'
         })
 
-        .state('Expense.addSegment', {
+        .state('Process.addSegment', {
             url: '/addSegment',
             templateUrl: 'Expense/html/AddBudgetSegment.html',
             controller: 'budgetSegmentController'
         })
 
-        .state('Expense.otherExpense', {
+        .state('Process.otherExpense', {
             url: '/otherExpense',
             templateUrl: 'Expense/html/AddOtherExpenses.html',
             controller: 'expenseEntryController'  
         })
 
-        .state('Expense.materialExpense', {
+        .state('Process.materialExpense', {
             url: '/materialExpense',
             templateUrl: 'Expense/html/AddMaterialExpense.html',
             controller: 'expenseEntryController'  
         })
-        .state('Expense.searchExpense', {
+        .state('Process.searchExpense', {
             url: '/searchExpense',
-            templateUrl: 'Expense/html/Hi_crete_costCenterSearchNew.html',
+            templateUrl: 'Expense/html/ExpensesSearch.html',
             controller: 'costCenterSearchController'  
         })
-        .state('Expense.searchSegment', {
+        .state('Process.searchSegment', {
             url: '/searchSegment',
             templateUrl: 'Expense/html/SegmentSearch.html',
             controller: 'costCenterSearchController'

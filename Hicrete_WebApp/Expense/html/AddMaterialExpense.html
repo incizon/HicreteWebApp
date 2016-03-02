@@ -17,12 +17,12 @@
                 
                                         <!--start-->
                                         <div class="form-group">
-                                            <label class="col-md-2 control-label">Select cost center</label>
+                                            <label class="col-md-2 control-label">Select Project</label>
                                             <div class="col-md-7">
 
-                                                <select class="form-control" name="costCenterName" required  ng-model="expenseDetails.costCenter">
+                                                <select class="form-control" name="projectName" required  ng-model="expenseDetails.project">
                                                     <option value="" disabled>Select</option>
-                                                    <option  ng-repeat="costCenterEntry in costCenterList" value="{{costCenterEntry.id}}">{{costCenterEntry.name}}</option>
+                                                    <option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>
 
                                                 </select>
                                             </div>

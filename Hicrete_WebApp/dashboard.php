@@ -148,9 +148,9 @@ if(!$userObj->init($userId)){
             }
 
             if($userObj->isExpense){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
-                    </li>";
+//                echo "<li class=\"\">
+//                            <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
+//                    </li>";
             }
 
             if($userObj->isApplicator){
