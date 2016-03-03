@@ -271,8 +271,13 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addProject', {
             url: '/addProject',
-            templateUrl: 'Process/html/ProjectCreation.html',
+            templateUrl: 'Process/html/ProjectCreation.html'
 
+        })
+        .state('Process.modifyProject', {
+            url: '/ModifyProject',
+            templateUrl: 'Process/html/ProjectModification.html',
+            controller:'ModifyProjectController'
         })
 
         .state('Process.addQuotation', {
@@ -302,6 +307,16 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController'
         })
+
+
+        .state('Process.addTask', {
+            url: '/AddTask',
+            templateUrl:'Process/html/schedule/AddTask.html',
+            controller:'CreateTaxController'
+        })
+
+
+
 
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
