@@ -1,0 +1,49 @@
+<div class="modal-header">
+
+    <h4 class="modal-title">Tax Details </h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <form  name="applicatorPaymentFollowUpForm" class="form-horizontal" novalidate>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <label class="control-label">Tax Title</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                        <input type="text" class="form-control" ng-model="tax.taxTitle">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <label class="control-label">Tax Percentage</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                        <input type="text" class="form-control" ng-model="tax.taxPercentage" ng-change="calculateTaxAmount()">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <label class="control-label">Tax Amount</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                        <input type="text" class="form-control" ng-model="tax.amount">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default"
+            ng-click="ok()">Submit</button>
+    <button type="button" class="btn btn-default"
+            ng-click="cancel()">Cancel</button>
+</div>

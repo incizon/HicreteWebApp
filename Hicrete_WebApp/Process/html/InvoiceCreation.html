@@ -26,7 +26,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="invoiceNumber"/>
+                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="InvoiceDetails.invoiceNumber"/>
                                         </div>
 
                                     </div>
@@ -38,7 +38,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="quotationNumber"/>
+                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="InvoiceDetails.quotationNumber"/>
                                         </div>
 
                                     </div>
@@ -50,7 +50,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="WorkorderNumber" ng-model="workorderNumber"/>
+                                            <input type="text" class="form-control" name="WorkorderNumber" ng-model="InvoiceDetails.workOrderNumber"/>
                                         </div>
 
                                     </div>
@@ -62,7 +62,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="contactPerson" ng-model="contactPerson"/>
+                                            <input type="text" class="form-control" name="contactPerson" ng-model="InvoiceDetails.contactPerson"/>
                                         </div>
 
                                     </div>
@@ -77,7 +77,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="date" class="form-control" name="InvoiceDate" ng-model="invoiceDate"/>
+                                            <input type="date" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.invoiceDate"/>
                                         </div>
 
                                     </div>
@@ -89,7 +89,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="date" class="form-control" name="InvoiceDate" ng-model="quotationDate"/>
+                                            <input type="date" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.quotationDate"/>
                                         </div>
 
                                     </div>
@@ -101,7 +101,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="date" class="form-control" name="WorkorderDate" ng-model="workorderDate"/>
+                                            <input type="date" class="form-control" name="WorkorderDate" ng-model="InvoiceDetails.workOrderDate"/>
                                         </div>
 
                                     </div>
@@ -109,45 +109,173 @@
                             </div>
 
                     </div><br>
+
                     <div class="row">
 
-                        <h3 class="panel-title"><strong>Quotation</strong> Abstract </h3>
+                        <h3 class="panel-title"><strong>Invoice</strong> Abstract </h3>
 
                     </div><br>
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <div class="col-md-4">
+
+                                <label class="control-label">Number of Rows</label>
+
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="col-md-10">
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+
+                                        <input type="text" name="noOfRows" ng-model="noOfRows"
+                                               class="form-control">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <button class="btn btn-primary" ng-click="addRows()">Add</button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+
+                            <button class="btn btn-primary" ng-click="addTax('md')">Add Tax</button>
+
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+                <div class="row">
+
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th width=7%>Item No</th>
+                                    <th width=20%>Title</th>
+                                    <th width=23%>Description</th>
+                                    <th width=15%>Quantity</th>
+                                    <th width=15%>Unit</th>
+                                    <th width=15%>Unit rate</th>
+                                    <th width=12%>Amount</th>
+                                    <th width=2%>Tax</th>
+                                    <th width=2%>Remove</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="quotation in InvoiceDetails.invoiceItemDetails">
+                                    <td>{{$index+1}}</td>
+                                    <td>
+                                        <input type="text" name="Title" placeholder="Title"
+                                               class="form-control" ng-model="quotation.quotationItem"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="Decription" placeholder="Description"
+                                               class="form-control" ng-model="quotation.quotationDescription"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="Quantity" placeholder="Quantity"
+                                               class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)"/>
+                                    </td>
+                                    <td><input type="text" name="Unit" placeholder="Unit"
+                                               class="form-control" ng-model="quotation.quotationUnit"/>
+                                    </td>
+                                    <td><input type="text" name="UnitRate" placeholder="Unit Rate"
+                                               class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)"/>
+                                    </td>
+                                    <td>
+                                        {{quotation.amount}}
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" name="addTax" ng-model="quotation.isTaxAplicable" ng-click="calculateTaxableAmount($index)"/>
+                                    </td>
+                                    <td>
+                                        <a ng-click="removeInvoiceItem($index)" class="panel-remove">
+                                            <span class="fa fa-times"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                    </div><br>
+
+
+                    <div class="row">
+                        <h3 class="panel-title"><strong>Tax </strong>Details </h3>
+                    </div><br>
+
                     <div class="row">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th>Sr.No</th>
-                                <th>Title</th>
-                                <th>Description</th>
-                                <th>Quantity</th>
-                                <th>Unit rate</th>
-                                <th>Amount</th>
+                                <th>Tax Title</th>
+                                <th>Applicable To</th>
+                                <th>Percentage</th>
+                                <th>Tax Amount</th>
+                                <th>Remove</th>
 
                             </tr>
                             </thead>
-                            <tr>
+                            <tr ng-repeat="tax in taxDetails">
                                 <td>{{$index+1}}</td>
                                 <td>
-                                   {{"Quotation 1"}}
+                                    <input type="text" name="TaxTitle" placeholder="Title"
+                                           class="form-control" ng-model="tax.taxTitle"/>
                                 </td>
                                 <td>
-                                    {{"Demo Quotation"}}
+                                    <input type="text" name="TaxTitle" placeholder="Title"
+                                           class="form-control" ng-model="tax.taxApplicableTo"/>
                                 </td>
                                 <td>
-                                    {{"10"}}
+                                    <input type="text" name="TaxPercentage" placeholder="Percentage"
+                                           class="form-control" ng-model="tax.taxPercentage"/>
                                 </td>
                                 <td>
-                                    {{"100"}}
-                                </td>
-                                <td>
-                                    {{"1000"}}
+                                    <input type="text" name="TaxAmount" placeholder="Tax Amount"
+                                           class="form-control" ng-model="tax.amount"/>
                                 </td>
 
+                                <td>
+                                    <a ng-click="removeInvoiceTaxItem($index)" class="panel-remove">
+                                        <span class="fa fa-times"></span>
+                                    </a>
+                                </td>
                             </tr>
                         </table>
 
+
+                    </div><br>
+                    <div class="row form-horizontal">
+
+                        <div class="col-md-offset-6 col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label"><strong>Total Tax Amount :</strong></label>
+                                </div>
+                                <div class="col-md-8">
+                                    {{"1000"}}
+                                </div>
+                            </div>
+                        </div>
                     </div><br>
 
                     <div class="row form-horizontal">
@@ -158,7 +286,7 @@
                                     <label class="control-label"><strong>Total Amount :</strong></label>
                                 </div>
                                 <div class="col-md-8">
-                                    {{"1000"}}
+                                    {{"10000"}}
                                 </div>
                             </div>
                         </div>
@@ -193,54 +321,7 @@
                             </div>
                         </div>
                     </div><br>
-                    <div class="row">
 
-
-                        <h3 class="panel-title"><strong>Payment</strong> Retention </h3>
-
-                    </div><br>
-                    <div class="row">
-
-                        <div class="col-md-6">
-                            <input type="checkbox" ng-model="IsPaymentRetention" name="isPaymentRetention" value="true">  Is Payment Retention
-                        </div>
-
-                    </div><br>
-                    <!--If Payment retention show following div-->
-                    <div class="row form-horizontal">
-
-                            <div class="col-md-6">
-
-                                <div class="form-group">
-                                    <div class="col-md-4">
-                                        <label class="control-label">Retention Factor :</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="RetentionFactor" ng-model="retentionFactor"/>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-4">
-                                        <label class="control-label">Retention Period (in days)  :</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="RetentionPeriod" ng-model="retentionPeriod"/>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div>
-                                    <input type="checkbox" ng-model="retentionFollowup" name="RetentionFollowup" > Retention Follow-up
-                                </div>
-
-                            </div>
-                    </div>
 
 
             </form>
@@ -250,7 +331,8 @@
 
             <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
-            <button class="btn  btn-default pull-right">Clear Form</button>
+            <button class="btn  btn-info pull-right">Create Doc</button>
+            <button class="btn  btn-default">Clear Form</button>
         </div>
 
     </div>
