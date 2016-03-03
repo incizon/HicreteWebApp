@@ -2,7 +2,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title"><strong>Project Creation </strong>Details</h3>
+            <h3 class="panel-title"><strong>Project</strong>Modification</h3>
         </div>
         <div class="panel-body">
 
@@ -24,7 +24,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="ProjectName" ng-model="projectName"/>
+                                    <input type="text" class="form-control" name="ProjectName" ng-model="projectDetails.projectName"/>
                                 </div>
 
                             </div>
@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-md-8">
                                     <textarea class="form-control" name="Project"
-                                              ng-model="projectAddress" rows="2">
+                                              ng-model="projectDetails.projectAddress" rows="2">
                                     </textarea>
                             </div>
                         </div>
@@ -44,11 +44,11 @@
                                 <label class="control-label">City :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="ProjectCity" ng-model="projectCity">
+                                <select class="form-control select" name="ProjectCity" ng-model="projectDetails.projectCity">
                                     <option value="" disabled selected>Choose City..</option>
-                                    <option value="pune">Pune</option>
-                                    <option value="mumbai">Mumbai</option>
-                                    <option value="pandharpur">Pandharpur</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Pandharpur">Pandharpur</option>
 
                                 </select>
 
@@ -62,7 +62,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="PicCode" ng-model="pinCode"/>
+                                    <input type="text" class="form-control" name="PicCode" ng-model="projectDetails.pinCode"/>
                                 </div>
 
                             </div>
@@ -78,11 +78,11 @@
                                 <label class="control-label">State :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="projectState" ng-model="projectState">
+                                <select class="form-control select" name="projectState" ng-model="projectDetails.projectState">
                                     <option value="" disabled selected>Choose State..</option>
-                                    <option value="maharashtra">Maharashatra</option>
-                                    <option value="delhi">Delhi</option>
-                                    <option value="gujrat">Gujrat</option>
+                                    <option value="Maharashtra">Maharashatra</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Gujrat">Gujrat</option>
 
                                 </select>
 
@@ -93,11 +93,11 @@
                                 <label class="control-label">Country :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="projectCountry" ng-model="projectCountry">
+                                <select class="form-control select" name="projectCountry" ng-model="projectDetails.projectCountry">
                                     <option value="" disabled selected>Choose Country..</option>
-                                    <option value="india">India</option>
-                                    <option value="america">America</option>
-                                    <option value="japan">Japan</option>
+                                    <option value="India">India</option>
+                                    <option value="America">America</option>
+                                    <option value="Japan">Japan</option>
 
                                 </select>
 
@@ -109,6 +109,29 @@
 
 
 
+                </div><br>
+                <div class="row">
+                    <h3 class="panel-title"><strong>Project</strong> Manager </h3>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Manager :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control select" name="projectManager" ng-model="projectDetails.projectManager">
+                                    <option value="" disabled selected>Choose Manager..</option>
+                                    <option value="Namdev Devmare">Namdev Devmare</option>
+                                    <option value="Atul Dhatrak">Atul Dhatrak</option>
+                                    <option value="Ajit Zagade">Ajit Zagade</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
                 </div><br>
                 <div class="row">
                     <h3 class="panel-title"><strong>Point Of Contact </strong>Details </h3>
@@ -125,7 +148,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="PointOfName" ng-model="pointOfConatcName"/>
+                                    <input type="text" class="form-control" name="PointOfName" ng-model="projectDetails.pointOfConatcName"/>
                                 </div>
 
                             </div>
@@ -138,7 +161,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="PointOfLandlineNo" ng-model="pointOfLandlineNo"/>
+                                    <input type="text" class="form-control" name="PointOfLandlineNo" ng-model="projectDetails.pointOfLandlineNo"/>
                                 </div>
 
                             </div>
@@ -160,7 +183,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="pointofConactEmailID" ng-model="pointofConactEmailID"/>
+                                    <input type="text" class="form-control" name="pointofConactEmailID" ng-model="projectDetails.pointofConactEmailID"/>
                                 </div>
 
                             </div>
@@ -174,7 +197,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="PointofConactMobileNo" ng-model="pointofConactMobileNo"/>
+                                    <input type="text" class="form-control" name="PointofConactMobileNo" ng-model="projectDetails.pointofConactMobileNo"/>
                                 </div>
 
                             </div>
@@ -183,29 +206,7 @@
                     </div>
 
                 </div><br>
-                <div class="row">
-                    <h3 class="panel-title"><strong>Project</strong> Manager </h3>
-                </div><br>
-                <div class="row">
-                    <div class="col-md-6">
 
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Manager :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <select class="form-control select" name="projectManager" ng-model="projectManager">
-                                    <option value="" disabled selected>Choose Manager..</option>
-                                    <option value="maharashtra">Namdev Devmare</option>
-                                    <option value="delhi">Atul Dhatrak</option>
-                                    <option value="gujrat">Ajit Zagade</option>
-
-                                </select>
-
-                            </div>
-                        </div>
-                    </div>
-                </div><br>
                 <div class="row">
                     <h3 class="panel-title"><strong>Companies </strong>Involved </h3>
                 </div><br>
@@ -223,11 +224,11 @@
                             <td>1</td>
 
                             <td>
-                               {{"Hi-Tech Engineering"}}
+                                {{"Hi-Tech Engineering"}}
                             </td>
                             <td>
                                 <div>
-                                    <input type="checkbox" ng-model="company1" name="toselect1" >
+                                    <input type="checkbox" ng-model="projectDetails.company1" name="toselect1" disabled >
                                 </div>
                             </td>
 
@@ -241,7 +242,7 @@
 
                             <td>
                                 <div>
-                                    <input type="checkbox" ng-model="company2" name="toselect2" >
+                                    <input type="checkbox" ng-model="projectDetails.company2" name="toselect2" >
                                 </div>
                             </td>
 
@@ -250,12 +251,12 @@
                         <tr>
                             <td>3</td>
                             <td>
-                               {{"Hi-Tech System"}}
+                                {{"Hi-Tech System"}}
                             </td>
 
                             <td>
                                 <div>
-                                    <input type="checkbox" ng-model="company3" name="toselect3" >
+                                    <input type="checkbox" ng-model="projectDetails.company3" name="toselect3" >
                                 </div>
                             </td>
 
@@ -265,38 +266,38 @@
 
 
                 </div>
-                <div class="row">
-                    <h3 class="panel-title"><strong>Source </strong></h3>
-                </div><br>
-                <div class="row">
+                <!--<div class="row">-->
+                    <!--<h3 class="panel-title"><strong>Source </strong></h3>-->
+                <!--</div><br>-->
+                <!--<div class="row">-->
 
-                        <div class="col-md-6">
+                    <!--<div class="col-md-6">-->
 
-                            <div class="form-group">
-                                <div class="col-md-offset-4 col-md-8">
-                                <div class="input-group">
-                                    <input type="checkbox" ng-model="isSiteTracking" name="isSiteTracking" >  is it a Site Tracking Project ?
-                                </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-md-4">
-                                    <label class="control-label">Source :</label>
-                                </div>
-                                <div class="col-md-8">
-                                    <select class="form-control select" name="Source" ng-model="source">
-                                        <option value="" disabled selected>Choose source..</option>
-                                        <option value="telephone">Telephone</option>
-                                        <option value="email">Email</option>
-                                        <option value="visit">Visit</option>
-                                        <option value="website">Website</option>
+                        <!--<div class="form-group">-->
+                            <!--<div class="col-md-offset-4 col-md-8">-->
+                                <!--<div class="input-group">-->
+                                    <!--<input type="checkbox" ng-model="isSiteTracking" name="isSiteTracking" >  is it a Site Tracking Project ?-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="col-md-4">-->
+                                <!--<label class="control-label">Source :</label>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-8">-->
+                                <!--<select class="form-control select" name="Source" ng-model="source">-->
+                                    <!--<option value="" disabled selected>Choose source..</option>-->
+                                    <!--<option value="telephone">Telephone</option>-->
+                                    <!--<option value="email">Email</option>-->
+                                    <!--<option value="visit">Visit</option>-->
+                                    <!--<option value="website">Website</option>-->
 
-                                    </select>
+                                <!--</select>-->
 
-                                </div>
-                            </div>
-                        </div>
-                </div>
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
             </form>
 
