@@ -134,8 +134,8 @@ class Expense
         $conn = $db->getConnection();
         $expenseDetailsId=uniqid();
         $budget='56b6e4bcf125c';
-        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`,'budgetsegmentid', `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
-        VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
+        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`,budgetsegmentid, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+        VALUES (:expensedetailsid,:projectid,:budgetsegmentid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
         $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
         $stmt->bindParam(':projectid', $data->project, PDO::PARAM_STR);
         //GET SEGMENTNAME FROM BUDGET SEGMENT TABLE WITH RESPECT TO THE MATERIAL SEGMENT
@@ -144,7 +144,7 @@ class Expense
 //            $result2 = $stmt->fetch(PDO::FETCH_ASSOC)
 //              $budget= $result2['segmentname'];
 //        }
-//        $stmt->bindParam(':budgetsegmentid', $budget, PDO::PARAM_STR);
+        $stmt->bindParam(':budgetsegmentid', $budget, PDO::PARAM_STR);
 
         $stmt->bindParam(':materialid', $data->material, PDO::PARAM_STR);
         $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
