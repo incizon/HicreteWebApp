@@ -666,6 +666,30 @@ myApp.controller('CustomerController',function($scope,$http){
     $scope.submitted=false;
 });
 
+myApp.controller('ModifyCustomerController',function($scope,$http){
+
+
+    $scope.customerDetails={
+
+        customer_name:"Namdev",
+        customer_address:"Old Mali Lane ,Pandharpur",
+        customer_pincode:"413304",
+        customer_city:"Pandharpur",
+        customer_country:"India",
+        customer_state:"Maharashtra",
+        customer_emailId:"namdev@gmail.com",
+        customer_landline:"020-220202",
+        customer_phone:"9090989898",
+        customer_faxNo:"020-220202",
+        customer_vatNo:"V12345678901",
+        customer_cstNo:"C12345678901",
+        customer_panNo:"ABCDE123A",
+        customer_serviceTaxNo:"ABCDE1234ABC123"
+
+    };
+
+
+});
 
 myApp.controller('ReviseQuotation',function($scope,$http){
 
