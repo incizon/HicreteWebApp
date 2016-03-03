@@ -1,0 +1,46 @@
+<div class="row" ng-controller="costCenterSearchController">
+
+    <div class="col-md-12">
+
+        <!-- START DATATABLE EXPORT -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <h3>Project Cost Center</h3>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <!--table start-->
+                    <div class="col-md-12" style="padding-left:0px;">
+                        <table id="customers2" class="table datatable">
+                            <thead style="text-align: center;">
+                            <tr style="text-align: center;">
+                                <th width="10%" style="text-align: center;">Project name</th>
+                                <th width="10%" style="text-align: center;">Budget Allocated</th>
+                                <th width="10%" style="text-align: center;">Material Expense</th>
+                                <th width="10%" style="text-align: center;">Other Expense</th>
+                                <th width="8%" style="text-align: center;">Total expenditure</th>
+                                <!--<th width="5%" style="text-align: center;">Status</th>-->
+
+
+                            </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                            <tr style="text-align: center;" ng-repeat="costCenter in costCenterData">
+                                <td width="10%">{{costCenter.projectName}}</td>
+                                <td width="10%">{{costCenter.budgetAllocated}}</td>
+                                <td width="10%">{{costCenter.materialExpense}}</td>
+                                <td width="10%">{{costCenter.otherExpense}}</td>
+                                <td width="8%">{{costCenter.totalExpenditure}}</td>
+                                <!--<td width="10%">{{costCenter.status}}</td>-->
+                            </tr>
+                            </tbody>
+                        </table>
+                          </div>
+                    <!--table end-->
+
+                </div>
+                <!-- END DATATABLE EXPORT -->
+
+            </div>
+        </div>
