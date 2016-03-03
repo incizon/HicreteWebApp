@@ -716,3 +716,10 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
+
+myApp.controller('SearchTaskController',function($scope,$http){
+
+
+});
+
+
