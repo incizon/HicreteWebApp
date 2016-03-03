@@ -134,7 +134,7 @@ class Expense
         $conn = $db->getConnection();
         $expenseDetailsId=uniqid();
         $budget='56b6e4bcf125c';
-        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`,'budgetsegmentid', `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
         VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
         $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
         $stmt->bindParam(':projectid', $data->project, PDO::PARAM_STR);
