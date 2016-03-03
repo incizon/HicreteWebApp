@@ -263,6 +263,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Process/html/AddCustomer.html',
             controller:'CustomerController'
         })
+        .state('Process.modifyCustomer', {
+            url: '/ModifyCustomer',
+            templateUrl: 'Process/html/ModifyCustomer.html',
+            controller:'ModifyCustomerController'
+        })
 
         .state('Process.addProject', {
             url: '/addProject',
