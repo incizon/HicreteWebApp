@@ -28,7 +28,7 @@
                         </tr>
                         </thead>
                         <tbody style="text-align: center;">
-                        <tr style="text-align: center;" ng-repeat="segment in Segments  |filter:keywords">
+                        <tr style="text-align: center;" ng-repeat="segment in Segments  |filter:keywords | filter:paginateSegment">
                             <td width="20%">{{$index+1}}</td>
                             <td width="30%">{{segment.name}}</td>
                             <td width="50%">
@@ -40,9 +40,9 @@
                         </tr>
                         </tbody>
                     </table>
-                    <uib-pagination total-items="totalInwardItems" ng-model="currentInwardPage"
+                    <uib-pagination total-items="totalItems" ng-model="currentPage"
                                     boundary-links="true"
-                                    items-per-page="InventoryInwardItemsPerPage" class="pagination-sm">
+                                    items-per-page="ItemsPerPage" class="pagination-sm">
 
                     </uib-pagination>
                 </div>

@@ -347,19 +347,12 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
 myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http) {
 
     $scope.searchKewords=null;
-    $scope.costCenterData=[
-        {costCenterName: 'costCenter1', projectName: "project 10", budgetAllocated:270000,totalExpenditure:10000,status:"good"},
-        {costCenterName: 'costCenter2', projectName: "project 14", budgetAllocated:7700000,totalExpenditure:7878000,status:"Worst"},
-        {costCenterName: 'costCenter4', projectName: "project 16", budgetAllocated:780000,totalExpenditure:17000,status:"Average"},
-        {costCenterName: 'costCenter7', projectName: "project 123", budgetAllocated:900000,totalExpenditure:17800,status:"Average"},
-        {costCenterName: 'costCenter10', projectName: "project 561", budgetAllocated:20000,totalExpenditure:18900,status:"Worst"},
-        {costCenterName: 'costCenter15', projectName: "project 1g", budgetAllocated:670000,totalExpenditure:17800,status:"Good"},
-    ]
+    $scope.costCenterData={};
 
-    $scope.totalInwardItems = 0;
-    $scope.currentInwardPage = 1;
-    $scope.InventoryInwardItemsPerPage = 10;
-    $scope.InwardSearchData = [];
+    $scope.totalItems = 0;
+    $scope.currentPage = 1;
+    $scope.ItemsPerPage = 5;
+    $scope.Segments = [];
 
     /*
      START of getting segment list
@@ -381,7 +374,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
             //
             //} else {
                 $scope.Segments = data;
-                $scope.totalInwardItems= $scope.Segments.length;
+                $scope.totalItems= $scope.Segments.length;
             //}
 
         })
@@ -393,14 +386,14 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
      End of getting segment list
      */
 
-    $scope.getExpenseDetails=function(){
+    //$scope.getExpenseDetails=function(){
 
         var keyword=$scope.searchKewords;
-        console.log(keyword);
+        //console.log(keyword);
         var data = {
             operation: "getExpenseDetails",
-            searchData:keyword,
-            searchOn:$scope.Searchfilter
+            //searchData:keyword,
+            //searchOn:$scope.Searchfilter
         };
 
         var config = {
@@ -416,6 +409,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
                 } else {
                     $rootScope.expenseDetails = data;
+                    $scope.costCenterData=data;
                     console.log($rootScope.expenseDetails);
                 }
 
@@ -425,16 +419,16 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
             });
 
-    }
+    //}
 
 
     $scope.paginateSegment = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
-        begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
-        end = begin + $scope.InventoryInwardItemsPerPage;
-        index = $scope.InwardSearchData.indexOf(value);
-        //console.log(index);
+        begin = ($scope.currentPage - 1) * $scope.ItemsPerPage;
+        end = begin + $scope.ItemsPerPage;
+        index = $scope.Segments.indexOf(value);
+
         return (begin <= index && index < end);
     };
 

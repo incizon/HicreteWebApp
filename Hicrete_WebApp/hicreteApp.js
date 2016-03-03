@@ -192,8 +192,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.searchExpense', {
             url: '/searchExpense',
-            templateUrl: 'Expense/html/ExpensesSearch.html',
-            controller: 'costCenterSearchController'  
+            templateUrl: 'Expense/html/ViewCostCenter.html',
+            controller: 'costCenterSearchController'
         })
         .state('Process.searchSegment', {
             url: '/searchSegment',
@@ -262,6 +262,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/addCustomer',
             templateUrl: 'Process/html/AddCustomer.html',
             controller:'CustomerController'
+        })
+        .state('Process.modifyCustomer', {
+            url: '/ModifyCustomer',
+            templateUrl: 'Process/html/ModifyCustomer.html',
+            controller:'ModifyCustomerController'
         })
 
         .state('Process.addProject', {
