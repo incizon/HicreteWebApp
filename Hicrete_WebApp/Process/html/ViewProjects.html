@@ -1,7 +1,6 @@
 <div class="col-md-12">
 <!-- START SEARCH -->
 <div class="panel panel-default">
-
     <div class="panel-body form-horizontal">
         <div class="row">
             <div class="col-md-4">
@@ -53,22 +52,31 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th width="10%">Sr.No</th>
-                    <th width="20%">Project Name</th>
-                    <th width="20%">Current Status</th>
-                    <th width="20%">Project Manager</th>
-                    <th width="30%">Actions</th>
+                    <th>Sr.No</th>
+                    <th>Project Name</th>
+                    <th>Current Status</th>
+                    <th>Project Manager</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr ng-repeat="project  in Projects | filter :paginate | filter :searchKeyword | orderBy :sortExpression | orderBy:'payment_status':sortByPayment | orderBy:'project_quotation':sortByQuotation | orderBy:'project_status':sortByCurrentWorking">
-                    <td width="10%">{{$index + 1}}</td>
-                    <td width="20%">{{project.project_name}}</td>
-                    <td width="20%">{{project.project_status}}</td>
-                    <td width="20%">{{project.project_manager}}</td>
+                    <td>{{$index + 1}}</td>
+                    <td>{{project.project_name}}</td>
+                    <td>{{project.project_status}}</td>
+                    <td>{{project.project_manager}}</td>
 
-                    <td width="30%">
-                       <a ui-sref="Process.ProjectDetails"><input type="button" class="btn btn-primary" value="View"/></a>
+                    <td>
+                        <a ui-sref="Process.ProjectDetails"><input type="button" class="btn btn-default" value="View"/></a>
+                        <a ui-sref="Process.modifyProject"><input type="button" class="btn btn-default" value="Modify"/></a>
+                        <a href=""><input type="button" class="btn btn-danger" value="Delete"/></a>
+
+                        <!--<div class="col-md-4">-->
+                            <!--<a ui-sref="Process.createCostCenter"><input type="button" class="btn btn-info" value="Create Cost Center"/></a>-->
+                        <!--</div>-->
+                        <!--<div class="col-md-6">-->
+                            <!--<a ui-sref="Process.searchExpense"><input type="button" class="btn btn-info"  value="View Cost Center"/></a>-->
+                        <!--</div>-->
                     </td>
                 </tr>
                 </tbody>
@@ -79,7 +87,7 @@
     </div>
     <uib-pagination total-items="totalItems" ng-model="currentPage"
                     max-size="5" boundary-links="true"
-                    items-per-page="ApplicatorPerPage" class="pagination-sm">
+                    items-per-page="ProjectPerPage" class="pagination-sm">
     </uib-pagination>
 </div>
 

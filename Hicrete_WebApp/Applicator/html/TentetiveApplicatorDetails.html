@@ -197,15 +197,15 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber" pattern="[0-9]{11}(C)" maxlength=12  required />
+                                <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber"  maxlength=12  required />
                             </div>
-                            <div class="help-block"
-                                 ng-messages="applicatorForm.cstNumber.$error"
-                                 ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">CST No is required</span> 
-                                <span style="color:red" ng-message="pattern">Only 11 digits and one charcter are allowed</span>
-                                <span style="color:red" ng-message="maxlength">Max 12 characters VST No. is allowed</span>
-                            </div>              
+                            <!--<div class="help-block"-->
+                                 <!--ng-messages="applicatorForm.cstNumber.$error"-->
+                                 <!--ng-show="formSubmitted"> -->
+                                 <!--<span style="color:red" ng-message="required">CST No is required</span> -->
+                                <!--<span style="color:red" ng-message="pattern">Only 11 digits and one charcter are allowed</span>-->
+                                <!--<span style="color:red" ng-message="maxlength">Max 12 characters VST No. is allowed</span>-->
+                            <!--</div>              -->
                         </div>
                         
                     </div>
@@ -218,15 +218,15 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="seviceTaxNumber" ng-model="applicatorDetails.servicetaxnumber" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}[A-Z]{2}[0-9]{3}" maxlength=15   required />
+                                <input type="text" class="form-control" name="seviceTaxNumber" ng-model="applicatorDetails.servicetaxnumber"  maxlength=15   required />
                             </div>            
-                            <div class="help-block"
-                                 ng-messages="applicatorForm.seviceTaxNumber.$error"
-                                 ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">Service Tax No is required</span> 
-                                <span style="color:red" ng-message="pattern">Enter a valid service tax number</span>
-                                <span style="color:red" ng-message="maxlength">Max 15 charcters Service Tax No. is allowed</span>
-                            </div>  
+                            <!--<div class="help-block"-->
+                                 <!--ng-messages="applicatorForm.seviceTaxNumber.$error"-->
+                                 <!--ng-show="formSubmitted"> -->
+                                 <!--<span style="color:red" ng-message="required">Service Tax No is required</span> -->
+                                <!--<span style="color:red" ng-message="pattern">Enter a valid service tax number</span>-->
+                                <!--<span style="color:red" ng-message="maxlength">Max 15 charcters Service Tax No. is allowed</span>-->
+                            <!--</div>  -->
 
                         </div>
 
@@ -241,15 +241,15 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                 <input type="text" class="form-control" name="panNumber" ng-model="applicatorDetails.pannumber"
-                                       pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" maxlength=10  required />
+                                       maxlength=10  required />
                             </div>
-                            <div class="help-block"
-                                 ng-messages="applicatorForm.panNumber.$error"
-                                 ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">PAN No is required</span> 
-                                <span style="color:red" ng-message="pattern">Please enter valid PAN no.</span>
-                                <span style="color:red" ng-message="maxlength">Max 10 digits PAN No allowed</span>
-                            </div>              
+                            <!--<div class="help-block"-->
+                                 <!--ng-messages="applicatorForm.panNumber.$error"-->
+                                 <!--ng-show="formSubmitted"> -->
+                                 <!--<span style="color:red" ng-message="required">PAN No is required</span> -->
+                                <!--<span style="color:red" ng-message="pattern">Please enter valid PAN no.</span>-->
+                                <!--<span style="color:red" ng-message="maxlength">Max 10 digits PAN No allowed</span>-->
+                            <!--</div>              -->
                         </div>
                     </div>
                     <!--End of PAN No. feild-->
@@ -279,7 +279,7 @@
                         <div class="col-md-3">                                        
                             <label class="control-label">Source Contact No</label>
                         </div>
-                        <div class="col-md-9">
+                        <div class="col-md-9"><gf></gf>
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-phone"></span></span>
                                 <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno" pattern="[0-9]+" maxlength=10  minlength=10 required />

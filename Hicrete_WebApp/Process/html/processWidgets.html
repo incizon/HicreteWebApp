@@ -80,37 +80,51 @@
 <div>
     <nav id="primary_nav_wrap">
         <ul>
-            <li><a>Create</a>
+            <li ng-show="hasWrite"><a>Create</a>
                 <ul>
                     <li><a ui-sref="Process.addCustomer">Customer</a></li>
                     <li><a ui-sref="Process.addProject">Project</a></li>
-                    <li><a>Schedule</a></li>
+                    <!--<li><a>Schedule</a></li>-->
                     <li><a ui-sref="Process.addQuotation">Quotation</a></li>
-                    <li><a ui-sref="Process.addInvoice">Invoice</a></li>
+                    <!--<li><a ui-sref="Process.addInvoice">Invoice</a></li>-->
                 </ul>
             </li>
-            <li><a>Search</a>
+            <li ng-show="hasRead"><a>Search</a>
                 <ul>
-                    <li><a>Customer</a></li>
+                    <li><a ui-sref="Process.viewCustomers">Customer</a></li>
                     <li><a ui-sref="Process.viewProject">Project</a></li>
-                    <li><a>Schedule</a></li>
+                    <!--<li><a>Schedule</a></li>-->
                     </li>
                 </ul>
             </li>
             <li><a>Payment</a>
                 <ul>
-                    <li><a ui-sref="Process.addPayment">Add Payment</a></li>
-                    <li><a>Payment History</a></li>
-                    <li><a>Schedule Payment Followup</a></li>
+                    <li ng-show="hasWrite"><a ui-sref="Process.addPayment">Add Payment</a></li>
+                    <li ng-show="hasRead"><a ui-sref="Process.paymentHistory">Payment History</a></li>
+                    <!--<li><a>Schedule Payment Followup</a></li>-->
 
                 </ul>
             </li>
-            <li><a>Followup History</a>
+            <li ng-show="hasRead"><a>Task</a>
                 <ul>
-                    <li><a>Quotation Followup History</a></li>
-                    <li><a>Payment Followup</a></li>
-                    <li><a>SiteTracking Followup</a></li>
+                    <li><a ui-sref="Process.addTask">Add Task</a></li>
+                    <li><a ui-sref="Process.searchTask">Search Task</a></li>
+                </ul>
+            </li>
+            <li ng-show="hasRead"><a>Followup History</a>
+                <ul>
+                    <li><a ui-sref="Process.quotationFollowupHistory">Quotation Followup History</a></li>
+                    <li><a ui-sref="Process.paymentFollowupHistory">Payment Followup</a></li>
+                    <li><a ui-sref="Process.siteTrackingFollowupHistory">SiteTracking Followup</a></li>
 
+                </ul>
+            </li>
+            <li><a>Project Expense</a>
+                <ul>
+                    <li><a ui-sref="Process.addSegment">Create Budget Segment</a></li>
+                    <li><a ui-sref="Process.materialExpense">Add Material Expenses</a></li>
+                    <li><a ui-sref="Process.otherExpense">Add Other Expenses</a></li>
+                    <li><a ui-sref="Process.searchSegment">Search Budget Segment</a></li>
                 </ul>
             </li>
 

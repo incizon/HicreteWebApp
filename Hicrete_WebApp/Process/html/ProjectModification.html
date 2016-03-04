@@ -1,0 +1,313 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Project</strong>Modification</h3>
+        </div>
+        <div class="panel-body">
+
+            <form name="ProjectInfoForm" class="form-horizontal">
+
+                <div class="row">
+                    <h3 class="panel-title"><strong>Basic</strong> Information </h3>
+                </div><br>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Project Name :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="ProjectName" ng-model="projectDetails.projectName"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Address :</label>
+                            </div>
+                            <div class="col-md-8">
+                                    <textarea class="form-control" name="Project"
+                                              ng-model="projectDetails.projectAddress" rows="2">
+                                    </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">City :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control select" name="ProjectCity" ng-model="projectDetails.projectCity">
+                                    <option value="" disabled selected>Choose City..</option>
+                                    <option value="Pune">Pune</option>
+                                    <option value="Mumbai">Mumbai</option>
+                                    <option value="Pandharpur">Pandharpur</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Pin code :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="PicCode" ng-model="projectDetails.pinCode"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">State :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control select" name="projectState" ng-model="projectDetails.projectState">
+                                    <option value="" disabled selected>Choose State..</option>
+                                    <option value="Maharashtra">Maharashatra</option>
+                                    <option value="Delhi">Delhi</option>
+                                    <option value="Gujrat">Gujrat</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Country :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control select" name="projectCountry" ng-model="projectDetails.projectCountry">
+                                    <option value="" disabled selected>Choose Country..</option>
+                                    <option value="India">India</option>
+                                    <option value="America">America</option>
+                                    <option value="Japan">Japan</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div><br>
+                <div class="row">
+                    <h3 class="panel-title"><strong>Project</strong> Manager </h3>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Manager :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <select class="form-control select" name="projectManager" ng-model="projectDetails.projectManager">
+                                    <option value="" disabled selected>Choose Manager..</option>
+                                    <option value="Namdev Devmare">Namdev Devmare</option>
+                                    <option value="Atul Dhatrak">Atul Dhatrak</option>
+                                    <option value="Ajit Zagade">Ajit Zagade</option>
+
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <h3 class="panel-title"><strong>Point Of Contact </strong>Details </h3>
+                </div><br>
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Name :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="PointOfName" ng-model="projectDetails.pointOfConatcName"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Land-line No :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="PointOfLandlineNo" ng-model="projectDetails.pointOfLandlineNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Email Id :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="pointofConactEmailID" ng-model="projectDetails.pointofConactEmailID"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Mobile No :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="PointofConactMobileNo" ng-model="projectDetails.pointofConactMobileNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+                <div class="row">
+                    <h3 class="panel-title"><strong>Companies </strong>Involved </h3>
+                </div><br>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Company Name</th>
+                            <th>Mark</th>
+
+                        </tr>
+                        </thead>
+                        <tr>
+                            <td>1</td>
+
+                            <td>
+                                {{"Hi-Tech Engineering"}}
+                            </td>
+                            <td>
+                                <div>
+                                    <input type="checkbox" ng-model="projectDetails.company1" name="toselect1" disabled >
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                {{"Hi-Tech Flooring"}}
+                            </td>
+
+                            <td>
+                                <div>
+                                    <input type="checkbox" ng-model="projectDetails.company2" name="toselect2" >
+                                </div>
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                {{"Hi-Tech System"}}
+                            </td>
+
+                            <td>
+                                <div>
+                                    <input type="checkbox" ng-model="projectDetails.company3" name="toselect3" >
+                                </div>
+                            </td>
+
+
+                        </tr>
+                    </table>
+
+
+                </div>
+                <!--<div class="row">-->
+                    <!--<h3 class="panel-title"><strong>Source </strong></h3>-->
+                <!--</div><br>-->
+                <!--<div class="row">-->
+
+                    <!--<div class="col-md-6">-->
+
+                        <!--<div class="form-group">-->
+                            <!--<div class="col-md-offset-4 col-md-8">-->
+                                <!--<div class="input-group">-->
+                                    <!--<input type="checkbox" ng-model="isSiteTracking" name="isSiteTracking" >  is it a Site Tracking Project ?-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                            <!--<div class="col-md-4">-->
+                                <!--<label class="control-label">Source :</label>-->
+                            <!--</div>-->
+                            <!--<div class="col-md-8">-->
+                                <!--<select class="form-control select" name="Source" ng-model="source">-->
+                                    <!--<option value="" disabled selected>Choose source..</option>-->
+                                    <!--<option value="telephone">Telephone</option>-->
+                                    <!--<option value="email">Email</option>-->
+                                    <!--<option value="visit">Visit</option>-->
+                                    <!--<option value="website">Website</option>-->
+
+                                <!--</select>-->
+
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            </form>
+
+        </div>
+        <div class="panel-footer">
+
+            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            </button>
+            <button class="btn  btn-default pull-right">Clear Form</button>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,198 @@
+<div class="col-md-12">
+
+    <form name="customerModifyForm" class="form-horizontal" novalidate>
+
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Customer</strong> Details</h3>
+            </div>
+            <div class="panel-body">
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Name :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerName" ng-model="customerDetails.customer_name"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Address :</label>
+                            </div>
+                            <div class="col-md-9">
+                              <textarea class="form-control" name="customerAddress"
+                                        ng-model="customerDetails.customer_address" rows="2">
+                              </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">City :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" name="customerCity" ng-model="customerDetails.customer_city" required />
+                                <option value="" disabled selected>Choose City..</option>
+                                <option value="Pune">Pune</option>
+                                <option value="Mumbai">Mumbai</option>
+                                <option value="Nagar">Nagar</option>
+                                <option value="Nasik">Nasik</option>
+                                <option value="Pandharpur">Pandharpur</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">State :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" name="firmState"ng-model="customerDetails.customer_state" />
+                                <option value="" disabled selected>Choose State..</option>
+                                <option value="Delhi">Delhi</option>
+                                <option value="Maharashtra">Maharashtra</option>
+                                <option value="Karnataka">Karnataka</option>
+                                <option value="Culcatta">Culcatta</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Country :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" name="customerCountry" ng-model="customerDetails.customer_country" >
+                                    <option value="" disabled selected>Choose Country..</option>
+                                    <option value="India">India</option>
+                                    <option value="America">America</option>
+                                    <option value="South Africa">South Africa</option>
+                                    <option value="Japan">Japan</option>
+                                    <option value="Italy">Italy</option>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Email Id :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerEmailId" ng-model="customerDetails.customer_emailId"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Land-line No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Phone No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Fax No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerFaxNo" ng-model="customerDetails.customer_faxNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">VAT No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">CST No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Service Tax No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">PAN No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="panel-footer">
+                <button class="btn btn-default pull-left">Clear Form</button>
+                <button class="btn btn-danger pull-right" ng-click="">Submit</button>
+
+            </div>
+        </div>
+    </form>
+
+</div>

@@ -255,6 +255,9 @@
                     $stmt7->bindParam(':lastFollowupId', $this->lastInsertedFollowupId);
 
 
+                    /* Update status of applicator */
+                    $stmt8=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
+                    $stmt8->bindParam(':lastCreatedApplicator',$this->lastInsertedApplicatorId);
 
                     if($stmt1->execute()){
 
@@ -275,15 +278,29 @@
                                             $this->lastInsertedPaymentId=$connect->lastInsertId();
                                             if($stmt5->execute()){
 
-                                                return true;
+                                                if($stmt8->execute()){
+
+                                                    return true;
+                                                }
+                                                else{
+
+                                                     echo "Roll Back";
+                                                }
                                             }
                                             else{
 
                                                 echo "Roll Back";
                                             }
                                         }
+                                        if($stmt8->execute()){
 
-                                        return true;
+                                            return true;
+                                        }
+                                        else{
+
+                                            echo "Roll Back";
+                                        }
+
                                     }
                                     else{
 
@@ -395,41 +412,39 @@
 
                 }
 
-                /**
-                 * @param $toSearch
-                 * @return bool
-                 */
-                public function viewApplicator($toSearch){
+
+                public function viewTentativeApplicators($data){
 
                     $json_response=array();
                     global $connect;
 
-                    if($toSearch=='tentetive'){
-                        $stmt1=$connect->prepare("SELECT * FROM applicator_enrollment
-							JOIN applicator_master ON
-							applicator_enrollment.applicator_master_id=applicator_master.applicator_master_id
-							JOIN applicator_pointof_contact ON
-							applicator_master.applicator_master_id=applicator_pointof_contact.applicator_master_id
-							JOIN payment_package_master ON
-							applicator_enrollment.payment_package_id=payment_package_master.payment_package_id
+                    $searchExpression=$data->searchExpression;
+                    $searchKeyword='%'.$data->searchKeyword.'%';
 
-							WHERE applicator_enrollment.payment_status='No'");
 
-                    }
-                    else if ($toSearch=='permanent') {
+                    if($searchExpression=='applicator_name'){
 
-                        $stmt1=$connect->prepare("SELECT * FROM applicator_enrollment
-							JOIN applicator_master ON
-							applicator_enrollment.applicator_master_id=applicator_master.applicator_master_id
-							JOIN applicator_pointof_contact ON
-							applicator_master.applicator_master_id=applicator_pointof_contact.applicator_master_id
-							JOIN payment_package_master ON
-							applicator_enrollment.payment_package_id=payment_package_master.payment_package_id
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='tentative' AND  applicator_name LIKE :searchKeyword");
 
-							WHERE applicator_enrollment.payment_status='Yes'");
+                        $stmt1->bindParam(':searchKeyword',$searchKeyword);
+
 
                     }
+                    else if ($searchExpression==='applicator_city'){
 
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='tentative' AND  applicator_city LIKE :searchKeyword");
+
+                        $stmt1->bindParam(':searchKeyword',$searchKeyword);
+                    }
+                    else if($searchExpression=='applicator_state'){
+
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='tentative' AND  applicator_state LIKE :searchKeyword");
+
+                        $stmt1->bindParam(':searchKeyword',$searchKeyword);
+                    }
 
 
                     if($stmt1->execute()){
@@ -440,85 +455,8 @@
                             $applicator['applicator_master_id']=$result1['applicator_master_id'];
                             $applicator['applicator_name']=$result1['applicator_name'];
                             $applicator['applicator_contact']=$result1['applicator_contact'];
-                            $applicator['applicator_address_line1']=$result1['applicator_address_line1'];
-                            $applicator['applicator_address_line2']=$result1['applicator_address_line2'];
                             $applicator['applicator_city']=$result1['applicator_city'];
                             $applicator['applicator_state']=$result1['applicator_state'];
-                            $applicator['applicator_country']=$result1['applicator_country'];
-                            $applicator['applicator_vat_number']=$result1['applicator_vat_number'];
-                            $applicator['applicator_cst_number']=$result1['applicator_cst_number'];
-                            $applicator['applicator_stax_number']=$result1['applicator_stax_number'];
-                            $applicator['applicator_pan_number']=$result1['applicator_pan_number'];
-                            $applicator['point_of_contact']=$result1['point_of_contact'];
-                            $applicator['point_of_contact_no']=$result1['point_of_contact_no'];
-                            $applicator['payment_package_id']=$result1['payment_package_id'];
-                            $applicator['package_name']=$result1['package_name'];
-                            $applicator['package_description']=$result1['package_description'];
-                            $applicator['enrollment_id']=$result1['enrollment_id'];
-                            $applicator['company_id']=$result1['company_id'];
-                            $applicator['package_total_amount']=0;
-                            $applicator['total_paid_amount']=0;
-
-                            $payment_package_id=$result1['payment_package_id'];
-                            $stmt2=$connect->prepare("SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id");
-                            $stmt2->bindParam(':payment_package_id',$payment_package_id);
-                            $stmt2->execute();
-                            while ($result2 =$stmt2->fetch(PDO::FETCH_ASSOC))
-                            {
-                                $applicator['elementDetails'][] = array(
-                                    'element_name' => $result2['package_element_name'],
-                                    'element_quantity' => $result2['package_element_quantity'],
-                                    'element_rate' => $result2['package_element_rate'],
-                                    'element_amount' => $result2['package_element_amount']
-                                );
-                                $applicator['package_total_amount']+=$result2['package_element_amount'];
-
-                            }
-
-                            $enrollment_id=$result1['enrollment_id'];
-                            $stmt3=$connect->prepare("SELECT * FROM applicator_payment_info WHERE enrollment_id=:enrollment_id");
-                            $stmt3->bindParam(':enrollment_id',$enrollment_id);
-                            $stmt3->execute();
-
-                            $affectedRow = $stmt3->rowCount();
-
-                            if($affectedRow!=0){
-                                while($result3=$stmt3->fetch(PDO::FETCH_ASSOC)){
-
-
-                                    $applicator['paymentDetails'][] = array(
-                                        'amount_paid' => $result3['amount_paid'],
-                                        'date_of_payment' => $result3['date_of_payment'],
-                                        'paid_to' => $result3['paid_to'],
-                                        'payment_mode' => $result3['payment_mode']
-                                    );
-
-
-                                    $applicator['total_paid_amount']+=$result3['amount_paid'];
-
-                                }
-                            }
-                            else{
-
-                                $applicator['paymentDetails'][] = array(
-                                    'amount_paid' => 0,
-                                    'date_of_payment' => 'Not Available',
-                                    'paid_to' => 'Not Available',
-                                    'payment_mode' => 'Not Available'
-                                );
-                            }
-
-                            if($toSearch=='tentetive'){
-                                $stmt4=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");
-                                $stmt4->bindParam(':enrollment_id',$enrollment_id);
-                                $stmt4->execute();
-
-                                $result4=$stmt4->fetch(PDO::FETCH_ASSOC);
-                                $applicator['date_of_follow_up']=$result4['date_of_follow_up'];
-                            }
-                            else{
-                                $applicator['date_of_follow_up']='NA';
-                            }
 
                             array_push($json_response, $applicator);
                         }
@@ -531,14 +469,214 @@
                     return false;
                 }
 
+                function getApplicatorDetails($data){
+
+
+                    global $connect;
+
+                    $applicator_master_id=$data->applicator_master_id;
+                    $purpose=$data->purpose;
+
+                    $applicator=array();
+
+
+                    $stmt1=$connect->prepare("SELECT * FROM applicator_master JOIN applicator_pointof_contact ON
+							applicator_master.applicator_master_id=applicator_pointof_contact.applicator_master_id
+							WHERE applicator_master.applicator_master_id=:applicator_id");
+
+                    $stmt1->bindParam(':applicator_id',$applicator_master_id);
+
+                    if($stmt1->execute()){
+
+                            $result1=$stmt1->fetch();
+
+                            if($purpose==='toView'){
+
+                                        $applicator['applicator_master_id']=$result1['applicator_master_id'];
+                                        $applicator['applicator_name']=$result1['applicator_name'];
+                                        $applicator['applicator_contact']=$result1['applicator_contact'];
+
+                                        $applicator['applicator_address_line1']=$result1['applicator_address_line1'];
+                                        $applicator['applicator_address_line2']=$result1['applicator_address_line2'];
+                                        $applicator['applicator_city']=$result1['applicator_city'];
+                                        $applicator['applicator_state']=$result1['applicator_state'];
+                                        $applicator['applicator_country']=$result1['applicator_country'];
+                                        $applicator['applicator_vat_number']=$result1['applicator_vat_number'];
+                                        $applicator['applicator_cst_number']=$result1['applicator_cst_number'];
+                                        $applicator['applicator_stax_number']=$result1['applicator_stax_number'];
+                                        $applicator['applicator_pan_number']=$result1['applicator_pan_number'];
+                                        $applicator['point_of_contact']=$result1['point_of_contact'];
+                                        $applicator['point_of_contact_no']=$result1['point_of_contact_no'];
+                                        $applicator['package_total_amount']=0;
+                                        $applicator['total_paid_amount']=0;
+
+
+                                        $stmt2=$connect->prepare("SELECT * FROM applicator_enrollment WHERE applicator_master_id=:applicator_id");
+                                        $stmt2->bindParam(':applicator_id',$applicator_master_id);
+                                        $stmt2->execute();
+                                        $result2=$stmt2->fetch();
+
+                                        $enrollment_id=$result2['enrollment_id'];
+                                        $payment_package_id=$result2['payment_package_id'];
+
+
+                                        $stmt3=$connect->prepare("SELECT * FROM payment_package_master WHERE payment_package_id=:payment_package_id");
+                                        $stmt3->bindParam(':payment_package_id',$payment_package_id);
+                                        $stmt3->execute();
+                                        $result3 = $stmt3->fetch();
+
+                                        $applicator['package_name'] = $result3['package_name'];
+                                        $applicator['package_description'] = $result3['package_description'];
+
+                                        $stmt4 = $connect->prepare("SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id");
+                                        $stmt4->bindParam(':payment_package_id', $payment_package_id);
+                                        $stmt4->execute();
+
+                                            while ($result4 = $stmt4->fetch(PDO::FETCH_ASSOC)) {
+
+                                                    $applicator['elementDetails'][] = array(
+                                                                                            'element_name' => $result4['package_element_name'],
+                                                                                            'element_quantity' => $result4['package_element_quantity'],
+                                                                                            'element_rate' => $result4['package_element_rate'],
+                                                                                            'element_amount' => $result4['package_element_amount']
+                                                                                         );
+                                                $applicator['package_total_amount'] += $result4['package_element_amount'];
+
+                                            }
+
+                                        $stmt5=$connect->prepare("SELECT * FROM applicator_payment_info WHERE enrollment_id=:enrollment_id");
+                                        $stmt5->bindParam(':enrollment_id',$enrollment_id);
+                                        $stmt5->execute();
+
+                                        $affectedRow = $stmt5->rowCount();
+
+                                        if($affectedRow!=0){
+
+                                            while($result5=$stmt5->fetch(PDO::FETCH_ASSOC)){
+
+                                                $applicator['paymentDetails'][] = array(
+                                                                                'amount_paid' => $result5['amount_paid'],
+                                                                                'date_of_payment' => $result5['date_of_payment'],
+                                                                                'paid_to' => $result5['paid_to'],
+                                                                                'payment_mode' => $result5['payment_mode']
+                                                                            );
+
+                                                 $applicator['total_paid_amount']+=$result5['amount_paid'];
+                                            }
+                                        }
+                                        else{
+
+                                            $applicator['paymentDetails'][] = array(
+                                                                            'amount_paid' => 0,
+                                                                            'date_of_payment' => 'Not Available',
+                                                                            'paid_to' => 'Not Available',
+                                                                            'payment_mode' => 'Not Available'
+                                                                        );
+                                        }
+
+
+                                    $stmt6=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");
+                                    $stmt6->bindParam(':enrollment_id',$enrollment_id);
+                                    $stmt6->execute();
+                                    $result6=$stmt6->fetch(PDO::FETCH_ASSOC);
+                                    $applicator['date_of_follow_up']=$result6['date_of_follow_up'];
+
+                                echo json_encode($applicator);
+
+
+                            }
+                          else if($purpose==='toModify'){
+
+                              $applicator['applicator_master_id']=$result1['applicator_master_id'];
+                              $applicator['applicator_name']=$result1['applicator_name'];
+                              $applicator['applicator_contact']=$result1['applicator_contact'];
+
+                              $applicator['applicator_address_line1']=$result1['applicator_address_line1'];
+                              $applicator['applicator_address_line2']=$result1['applicator_address_line2'];
+                              $applicator['applicator_city']=$result1['applicator_city'];
+                              $applicator['applicator_state']=$result1['applicator_state'];
+                              $applicator['applicator_country']=$result1['applicator_country'];
+                              $applicator['applicator_vat_number']=$result1['applicator_vat_number'];
+                              $applicator['applicator_cst_number']=$result1['applicator_cst_number'];
+                              $applicator['applicator_stax_number']=$result1['applicator_stax_number'];
+                              $applicator['applicator_pan_number']=$result1['applicator_pan_number'];
+                              $applicator['point_of_contact']=$result1['point_of_contact'];
+                              $applicator['point_of_contact_no']=$result1['point_of_contact_no'];
+
+                              echo json_encode($applicator);
+
+                          }
+
+                    }
+
+
+
+                }
+                public function viewPermanentApplicators($data){
+
+                    $json_response=array();
+                    global $connect;
+
+                    $searchExpression=$data->searchExpression;
+                    $searchKeyword='%'.$data->searchKeyword.'%';
+
+
+                    if($searchExpression=='applicator_name'){
+
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='permanent' AND  applicator_name LIKE :searchKeyword");
+
+                        $stmt1->bindParam(':searchKeyword',$searchKeyword);
+
+
+                    }
+                    else if ($searchExpression==='applicator_city'){
+
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='permanent' AND  applicator_city LIKE :searchKeyword");
+
+                        $stmt1->bindParam(':searchKeyword',$searchKeyword);
+                    }
+                    else if($searchExpression=='applicator_state'){
+
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='permanent' AND  applicator_state LIKE :searchKeyword");
+
+                        $stmt1->bindParam(':searchKeyword',$searchKeyword);
+                    }
+
+
+                    if($stmt1->execute()){
+
+                        while($result1=$stmt1->fetch()){
+
+                            $applicator=array();
+                            $applicator['applicator_master_id']=$result1['applicator_master_id'];
+                            $applicator['applicator_name']=$result1['applicator_name'];
+                            $applicator['applicator_contact']=$result1['applicator_contact'];
+                            $applicator['applicator_city']=$result1['applicator_city'];
+                            $applicator['applicator_state']=$result1['applicator_state'];
+
+                            array_push($json_response, $applicator);
+                        }
+
+                        echo json_encode($json_response);
+
+                        return true;
+                    }
+
+                    return false;
+
+                }
                 public function getApplicatorPaymentDetails(){
 
                     global $connect;
                     $response_array=array();
+
                     $stmt1=$connect->prepare("SELECT * FROM applicator_enrollment
 							JOIN applicator_master ON
 							applicator_enrollment.applicator_master_id=applicator_master.applicator_master_id
-							WHERE applicator_enrollment.payment_status='No'");
+							WHERE applicator_enrollment.payment_status='No' AND applicator_master.applicator_status='tentative'");
 
                     if($stmt1->execute()) {
 
@@ -556,12 +694,7 @@
                             $stmt2->execute();
                             while ($result2 =$stmt2->fetch(PDO::FETCH_ASSOC))
                             {
-//						        $applicator['elementType'][] = array(
-//								'element_name' => $result2['package_element_name'],
-//								'element_quantity' => $result2['package_element_quantity'],
-//								'element_rate' => $result2['package_element_rate'],
-//								'element_amount' => $result2['package_element_amount']
-//						         );
+
                                 $applicator['package_total_amount']+=$result2['package_element_amount'];
 
                             }
@@ -671,6 +804,18 @@
                     $stmt5->bindParam(':followupEmployeeId',$followupEmployeeId);
                     $stmt5->bindParam(':lastFollowupId', $this->lastInsertedFollowupId);
 
+                    $stmt6=$connect->prepare("SELECT  applicator_master_id FROM applicator_enrollment WHERE enrollment_id=:enrollmentID ");
+                    $stmt6->bindParam(':enrollmentID',$enrollment_id);
+
+                    $stmt6->execute();
+                    $result=$stmt6->fetch();
+                    $applicator_master_id=$result['applicator_master_id'];
+
+                    /* Update status of applicator */
+                    $stmt7=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:applicator_id");
+                    $stmt7->bindParam(':applicator_id',$applicator_master_id);
+
+
                     if($paymentStatus=='Yes') {
 
                         if($stmt1->execute()){
@@ -683,7 +828,16 @@
 
                                     if($stmt3->execute()){
 
-                                       return true;
+
+                                        if($stmt7->execute()){
+
+                                            return true;
+                                        }
+                                        else{
+
+                                            echo "Roll Back";
+                                        }
+
 
                                     }
                                     else{
@@ -694,7 +848,14 @@
                                 }
                                 else{
 
-                                     return true;
+                                    if($stmt7->execute()){
+
+                                        return true;
+                                    }
+                                    else{
+
+                                        echo "Roll Back";
+                                    }
                                 }
 
                             }

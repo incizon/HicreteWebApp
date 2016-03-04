@@ -1,0 +1,212 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title"><strong>View Invoice</strong> Details </h3>
+
+        </div>
+        <div class="panel-body">
+
+            <!--Form Starts here-->
+            <form class="form-horizontal">
+
+                <div class="row">
+                    <h3 class="panel-title"><strong>Invoice</strong> Details </h3>
+                </div><br>
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Invoice Number :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+
+                                    <label class="control-label">{{invoiceNumber}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Quotation Number :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{quotationNumber}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">WorkOrder Number :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{workorderNumber}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Contact Person :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{contactPerson}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Invoice Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{invoiceDate}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Quotation Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{quotationDate}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Workorder Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{workorderDate}}</label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div><br>
+                <div class="row">
+
+                    <h3 class="panel-title"><strong>Quotation</strong> Abstract </h3>
+
+                </div><br>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit rate</th>
+                            <th>Amount</th>
+
+                        </tr>
+                        </thead>
+                        <tr>
+                            <td>{{$index+1}}</td>
+                            <td>
+                                {{"Quotation 1"}}
+                            </td>
+                            <td>
+                                {{"Demo Quotation"}}
+                            </td>
+                            <td>
+                                {{"10"}}
+                            </td>
+                            <td>
+                                {{"1449"}}
+                            </td>
+                            <td>
+                                {{"14490"}}
+                            </td>
+
+                        </tr>
+                    </table>
+
+                </div><br>
+
+                <div class="row form-horizontal">
+
+                    <div class="col-md-offset-6 col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label"><strong>Total Amount :</strong></label>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="control-label">{{"14490"}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label"><strong>Rounding Off :</strong></label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{roundingOff}}</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-md-offset-6 col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label"><strong>Grand  Total :</strong></label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{grandTotal}}</label>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><br>
+
+
+
+            </form>
+            <!--End of Form-->
+        </div>
+        <div class="panel-footer">
+
+            <button class="btn  btn-danger pull-right">Cancel<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
