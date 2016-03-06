@@ -750,5 +750,3 @@ myApp.controller('SearchTaskController',function($scope,$http){
 
 
 });
-
-

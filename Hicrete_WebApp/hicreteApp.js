@@ -313,7 +313,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/schedule/AddTask.html',
             controller:'CreateTaxController'
         })
-
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
