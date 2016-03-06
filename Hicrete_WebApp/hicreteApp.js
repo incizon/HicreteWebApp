@@ -458,6 +458,9 @@ myApp.run(function($rootScope,$http) {
     $rootScope.tentativeApplicators=[];
     console.log($rootScope.tentativeApplicators);
     $rootScope.permanentApplicators=[];
+    $rootScope.Companies=[];
+    $rootScope.warehouses=[];
+    $rootScope.Users=[];
 
 });
 

@@ -372,7 +372,7 @@ configService.getRoleList($http,$scope);
 
 
 
-myApp.controller('companyController',function($scope,$http){
+myApp.controller('companyController',function($scope,$rootScope,$http){
  $scope.company={
  	name:"",
   abbrevation:"",
@@ -397,17 +397,13 @@ $scope.warehouse={
   pincode:"",
   phone:""
  };
-
-
- $scope.submitted=false;
- $scope.warehouseSubmitted=false;
 /////////////////////////////////////////////////////////////////////////////////
-// Function to get comapny details
+// Function to get Ware house details
 /////////////////////////////////////////////////////////////////////////////////
-    $scope.getCompanyData = function(){
-
+    $scope.getWareHouseDetails = function()
+    {
         var data={
-            operation:"getCompanyDetails"
+            operation:"getWareHouseDetails"
         };
         var config = {
             params: {
@@ -423,7 +419,7 @@ $scope.warehouse={
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
-                    $scope.Companies=data.message;
+                    $scope.warehouses=data.message;
 
                     console.log($scope.Companies);
                 }
@@ -434,10 +430,48 @@ $scope.warehouse={
                 doShowAlert("Failure","Error Occured");
             });
 
+    };
+    $scope.getWareHouseDetails();
 
+ $scope.submitted=false;
+ $scope.warehouseSubmitted=false;
+/////////////////////////////////////////////////////////////////////////////////
+// Function to get comapny details
+/////////////////////////////////////////////////////////////////////////////////
+    $scope.getCompanyData = function(){
+        console.log("Inside company fetch data ");
+        var data={
+            operation:"getCompanyDetails"
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        if($rootScope.Companies.length==0) {
+            $http.post("Config/php/configFacade.php", null, config)
+                .success(function (data) {
+
+                    if (data.status != "Successful") {
+                        console.log(data);
+                        //doShowAlert("Failure",data.message);
+                    } else {
+                        console.log(data);
+                        $rootScope.Companies = data.message;
+                        console.log($rootScope.Companies);
+
+                       // console.log($scope.Companies);
+                    }
+
+                })
+                .error(function (data, status, headers, config) {
+                    doShowAlert("Failure", "Error Occured");
+                });
+
+        }
 
     };
-    $scope.getCompanyData();
+   // $scope.getCompanyData();
 
 
 

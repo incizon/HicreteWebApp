@@ -24,6 +24,8 @@ switch ($data->operation) {
                         break;
     case "getUserDetails" : ConfigUtils:: getUserDetails();
                         break;
+    case "getWareHouseDetails" :ConfigUtils:: getWareHouseDetails();
+                        break;
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
     case "addUser" :Config::addUser($data,"admin");
