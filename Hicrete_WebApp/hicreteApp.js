@@ -241,7 +241,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Config.userSearch', {
             url: '/SearchUser',
             templateUrl: 'Config/html/ViewUser.html'
-           
+
         })
 
         .state('Config.companySearch', {
@@ -330,6 +330,17 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController'
         })
+
+
+        .state('Process.addTask', {
+            url: '/AddTask',
+            templateUrl:'Process/html/schedule/AddTask.html',
+            controller:'CreateTaxController'
+        })
+
+
+
+
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
