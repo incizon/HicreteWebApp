@@ -105,6 +105,12 @@
 
                 </ul>
             </li>
+            <li ng-show="hasRead"><a>Task</a>
+                <ul>
+                    <li><a ui-sref="Process.addTask">Add Task</a></li>
+                    <li><a ui-sref="Process.searchTask">Search Task</a></li>
+                </ul>
+            </li>
             <li ng-show="hasRead"><a>Followup History</a>
                 <ul>
                     <li><a ui-sref="Process.quotationFollowupHistory">Quotation Followup History</a></li>

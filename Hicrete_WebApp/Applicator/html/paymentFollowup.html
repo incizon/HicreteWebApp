@@ -6,22 +6,36 @@
     <div class="row">
         <form  name="applicatorPaymentFollowUpForm" class="form-horizontal" novalidate>
             <div class="form-group">
-                <div class="col-md-4">
-                    <label class="control-label">Followup Date</label>
-                </div>
+                <label class="col-md-4  control-label">Followup Title : </label>
                 <div class="col-md-8">
-                    <div class="input-group">
+                    <div class="input-group col-md-8">
+                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                        <input type="text"  name="title" class="form-control" required/>
+                    </div>
+                    <!--<div class="help-block" ng-messages="rescheduleFollowup.title.$error"">-->
+                    <!--<p style="color:red" ng-message="required">Title cannot be blank</p>-->
+
+                    <!--</div>-->
+                </div>
+
+            </div>
+            <div class="form-group">
+
+                    <label class="control-label col-md-4">Followup Date : </label>
+
+                <div class="col-md-8">
+                    <div class="input-group col-md-8">
                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                         <input type="date" class="form-control" ng-model="applicatorDetails.followupdate">
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <div class="col-md-4">
-                    <label class="control-label">Followup Employee Id</label>
-                </div>
+
+                    <label class="control-label col-md-4">Followup Employee Id : </label>
+
                 <div class="col-md-8">
-                    <div class="input-group">
+                    <div class="input-group col-md-8">
                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                         <input type="text" class="form-control" name="followupEmployeeId" ng-model="applicatorDetails.followupemployeeId">
                     </div>

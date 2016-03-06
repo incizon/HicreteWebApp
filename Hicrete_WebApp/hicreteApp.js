@@ -192,8 +192,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.searchExpense', {
             url: '/searchExpense',
-            templateUrl: 'Expense/html/ExpensesSearch.html',
-            controller: 'costCenterSearchController'  
+            templateUrl: 'Expense/html/ViewCostCenter.html',
+            controller: 'costCenterSearchController'
         })
         .state('Process.searchSegment', {
             url: '/searchSegment',
@@ -263,11 +263,21 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Process/html/AddCustomer.html',
             controller:'CustomerController'
         })
+        .state('Process.modifyCustomer', {
+            url: '/ModifyCustomer',
+            templateUrl: 'Process/html/ModifyCustomer.html',
+            controller:'ModifyCustomerController'
+        })
 
         .state('Process.addProject', {
             url: '/addProject',
-            templateUrl: 'Process/html/ProjectCreation.html',
+            templateUrl: 'Process/html/ProjectCreation.html'
 
+        })
+        .state('Process.modifyProject', {
+            url: '/ModifyProject',
+            templateUrl: 'Process/html/ProjectModification.html',
+            controller:'ModifyProjectController'
         })
 
         .state('Process.addQuotation', {
@@ -296,6 +306,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ProjectDetails',
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController'
+        })
+
+        .state('Process.addTask', {
+            url: '/AddTask',
+            templateUrl:'Process/html/schedule/AddTask.html',
+            controller:'CreateTaxController'
         })
 
         .state('Process.quotationFollowupHistory', {
@@ -344,6 +360,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ReviseQuotation',
             templateUrl:'Process/html/ReviseQuotation.html',
             controller:'ReviseQuotation'
+        })
+
+        .state('Process.searchTask', {
+            url: '/ViewTask',
+            templateUrl:'Process/html/schedule/SearchTasks.html',
+            controller:'SearchTaskController'
         })
 
         .state('ChangePassword', {
