@@ -91,14 +91,17 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
                 setTimeout(function() {
                     $scope.$apply(function() {
                         if(data.msg!=""){
-                            $scope.warningMessage=data.msg;
-                            $('#warning').css("display","block");
+                            $('#warning').css("display","none");
                         }
                     });
-                }, 2000);
+                }, 3000);
 
                 $scope.loading=false;
                 $('#loader').css("display","none");
