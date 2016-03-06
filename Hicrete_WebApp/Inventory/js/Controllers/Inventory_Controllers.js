@@ -78,6 +78,9 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         product.opertaion = "insert";
         $scope.submitted = false;
         $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+
         $('#loader').css("display","block");
         var config = {
             params: {
@@ -90,24 +93,26 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .success(function (data) {
                 setTimeout(function() {
                     $scope.$apply(function() {
-                      $scope.loading=false;
-                        $('#loader').css("display","none");
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","block");
                     });
                 }, 2000);
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $('#error').css("display","block");
+
+                $scope.errorMessage=data.msg;
 
                 console.log("IN POST OF add product success");
                 console.log(data);
                 console.log("Loader"+$scope.loading);
                 $scope.clearFields(product);
-                doShowAlert("Success", data.msg);
-                setTimeout(function () {
-                    //window.location.reload(true);
-                }, 1000);
+
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
-                doShowAlert("Failure", data.msg);
-                //Error Message
+                //doShowAlert("Failure", data.msg);
+                $scope.errorMessage=data.msg;
             });
 
     };
