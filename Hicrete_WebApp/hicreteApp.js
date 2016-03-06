@@ -362,6 +362,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ReviseQuotation'
         })
 
+        .state('Process.searchTask', {
+            url: '/ViewTask',
+            templateUrl:'Process/html/schedule/SearchTasks.html',
+            controller:'SearchTaskController'
+        })
+
         .state('ChangePassword', {
             url: '/ChangePassword',
             templateUrl:'Config/html/ChangePassword.html'

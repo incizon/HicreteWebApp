@@ -740,11 +740,15 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
-
-
-
-myApp.controller('CreateTaxController',function($scope,$http){
+myApp.controller('CreateTaskController',function($scope,$http){
 
     console.log("In");
 
 });
+
+myApp.controller('SearchTaskController',function($scope,$http){
+
+
+});
+
+
