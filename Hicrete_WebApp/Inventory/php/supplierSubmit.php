@@ -24,10 +24,8 @@
 
     if(!$supplierVar->isAvailable($dbh))
     {
-        $messge = $supplierVar->addSupplierToDb($dbh,$userId);
-        $arr = array('msg' => $messge, 'error' => '');
-        $jsn = json_encode($arr);
-        echo($jsn);
+        $supplierVar->addSupplierToDb($dbh,$userId);
+
     }
     else
     {

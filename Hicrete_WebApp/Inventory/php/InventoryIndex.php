@@ -89,7 +89,7 @@
             case 'insert':
                 # code...
                 $productObj = new OutwardData($pData);
-                if($productObj->isAvailable($dbh)){
+                if(!$productObj->isAvailable($dbh)){
                     $productObj->insertOutwardInToDb($dbh, $userId, $pData);
                 }else{
                     echo "Outward number that you are trying to insert is already present";

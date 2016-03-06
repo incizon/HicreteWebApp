@@ -684,7 +684,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log("In Post of outward entry success:");
                 console.log(data);
                  setTimeout(function(){
-                  window.location.reload(true);
+                  //window.location.reload(true);
                      //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
                 },1000);
                 $scope.outwardData = data;

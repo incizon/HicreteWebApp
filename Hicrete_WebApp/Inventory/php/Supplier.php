@@ -79,12 +79,18 @@ class Supplier
             if($stmt)
             {
                 $message="User Created successfully";
-                return $message;
+                $arr = array('msg' => $message, 'error' => '');
+                $jsn = json_encode($arr);
+                echo($jsn);
+             //   return $message;
             }
             else
             {
                 $message="Issues while adding supplier.Please contact administrator :P";
-                return $message;
+                $arr = array('msg' => $message, 'error' => '');
+                $jsn = json_encode($arr);
+                echo($jsn);
+               // return $message;
             }
         }catch(Exception $e)
         {
