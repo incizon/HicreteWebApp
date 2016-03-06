@@ -240,13 +240,14 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.userSearch', {
             url: '/SearchUser',
-            templateUrl: 'Config/html/ViewUser.html'
-
+            templateUrl: 'Config/html/ViewUser.html',
+            controller:'userController'
         })
 
         .state('Config.companySearch', {
             url: '/SearchCompany',
-            templateUrl: 'Config/html/ViewCompany.html'
+            templateUrl: 'Config/html/ViewCompany.html',
+            controller:'companyController'
 
         })
 

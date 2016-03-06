@@ -153,14 +153,13 @@ myApp.service('addSupplierService', function () {
         };
         $http.post("Inventory/php/supplierSubmit.php", null, config)
             .success(function (data) {
-                console.log(data);
+                console.log("Supplier Data="+data);
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");
                 }
                 setTimeout(function () {
                     if (data.msg != ""){
-                        $scope.warningMessage=data.msg;
                         $('#warning').css("display","none");
                     }
                 }, 3000);
@@ -255,10 +254,10 @@ myApp.service('inwardService', function () {
                 $('#loader').css("display","none");
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
+                $scope.inwardData=[];
                 setTimeout(function(){
                     window.location.reload(true);
-                    //
-                    // window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                    // window.location="Hicrete_WebApp/dashboard.php#/Inventory";
                 },1000);
             })
             .error(function (data, status, headers) {
