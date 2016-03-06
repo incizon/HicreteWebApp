@@ -740,7 +740,7 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
-myApp.controller('CreateTaskController',function($scope,$http){
+myApp.controller('ViewTaskController',function($scope,$http){
 
     console.log("In");
 
@@ -750,5 +750,8 @@ myApp.controller('SearchTaskController',function($scope,$http){
 
 
 });
+myApp.controller('AssignTaskController',function($scope,$http){
 
+
+});
 
