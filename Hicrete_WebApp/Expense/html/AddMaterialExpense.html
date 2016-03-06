@@ -121,14 +121,14 @@
 
                                         <!--start-->
                                         <div class="form-group">
-                                                <label class="col-md-2  control-label">Firm name</label>
+                                                <label class="col-md-2  control-label">Bill Issueing Entity</label>
                                                     <div class="col-md-7">                                       
                                                     <div class="input-group col-md-8">
                                                      <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input type="text"  name="firmName"  ng-model="billDetails.firmName" class="form-control" pattern="[a-zA-Z0-9 ]+" required/>
+                                                        <input type="text"  name="Issueing"  ng-model="billDetails.Issueing" class="form-control" pattern="[a-zA-Z0-9 ]+" required/>
                                                     
                                                     </div>  
-                                                    <div class="help-block" ng-messages="materialBillForm.firmName.$error" ng-show="materialExpenseClicked">
+                                                    <div class="help-block" ng-messages="materialBillForm.Issueing.$error" ng-show="materialExpenseClicked">
                                                             <p style="color:red" ng-message="required">Firm Name cannot be blank</p>
                                                             <p style="color:red" ng-message="pattern">Should have only alphanumeric value</p>          
                                                     </div>
@@ -173,3 +173,4 @@
                             
                         </div>
                     </div>
+            </div>
