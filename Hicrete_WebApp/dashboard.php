@@ -222,7 +222,7 @@ if(!$userObj->init($userId)){
             <!-- END SEARCH -->
             <!-- SIGN OUT -->
             <!--            <li class="xn-icon-button pull-right">-->
-            <!--<!--                <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->-->
+            <!--            <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->
             <!--            </li>-->
             <li class="xn-icon-button pull-right">
                 <a ng-click=""><span class="fa fa-sign-out"></span></a>
