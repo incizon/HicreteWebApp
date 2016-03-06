@@ -448,6 +448,7 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
         $scope.applicatorDetails.searchExpression=$scope.searchExpression;
         $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
         $scope.applicatorDetails.operation='viewPermanentApplicators';
+        $("#wait").css("display", "block");
         var config = {
             params: {
                 data: $scope.applicatorDetails
@@ -461,7 +462,7 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
             $http.post("Applicator/php/Applicator.php", null, config)
 
                 .success(function (data, status, headers, config) {
-
+                    $("#wait").css("display", "block");
                     $rootScope.permanentApplicators = data;
                     $scope.totalItems =$rootScope.permanentApplicators.length;
                     console.log($rootScope.permanentApplicators);

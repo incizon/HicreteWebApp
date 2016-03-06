@@ -77,6 +77,118 @@ class ConfigUtils
            
     }
 
+    public static function getUserDetails()
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster`");
+
+            if($stmt->execute()){
+
+                $noOfRows=0;
+                $json_response = array();
+                while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
+                {
+                    $result_array = array();
+                    $result_array['userId'] = $result['userId'];
+                    $result_array['firstName'] = $result['firstName'];
+                    $result_array['lastName'] =$result['lastName'];
+                    $result_array['dateOfBirth'] =$result['dateOfBirth'];
+                    $result_array['address'] =$result['address'];
+                    $result_array['city'] =$result['city'];
+                    $result_array['state'] =$result['state'];
+                    $result_array['country'] =$result['country'];
+                    $result_array['pincode'] =$result['pincode'];
+                    $result_array['emailId'] =$result['emailId'];
+                    $result_array['mobileNumber'] =$result['mobileNumber'];
+
+                    $stmt1 = $conn->prepare("SELECT a.designation ,b.rolename  from userroleinfo a,rolemaster b where a.userid=:userid and a.roleid=b.roleid");
+                    $stmt1->bindParam(':userid', $result['userId'], PDO::PARAM_STR);
+                    if($stmt1->execute()) {
+                        while($result1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                            $result_array['designation'] = $result1['designation'];
+                            $result_array['role'] = $result1['rolename'];
+                        }
+
+                    }
+                    else
+                        echo "fail";
+
+                    array_push($json_response, $result_array); //push the values in the array
+                    $noOfRows++;
+
+                }
+                if($noOfRows>0){
+
+                    echo AppUtil::getReturnStatus("Successful",$json_response);}
+                else {
+
+                    echo AppUtil::getReturnStatus("NoRows", "No User found");
+                }
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching User details");
+        }
+
+
+    }
+
+    public static function getCompanyDetails()
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster`");
+
+            if($stmt->execute()){
+
+                $noOfRows=0;
+                $json_response = array();
+                while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
+                {
+                    $result_array = array();
+                    $result_array['companyId'] = $result['companyId'];
+                    $result_array['companyName'] = $result['companyName'];
+                    $result_array['companyAbbrevation'] =$result['companyAbbrevation'];
+                    $result_array['startDate'] =$result['startDate'];
+                    $result_array['address'] =$result['address'];
+                    $result_array['city'] =$result['city'];
+                    $result_array['state'] =$result['state'];
+                    $result_array['country'] =$result['country'];
+                    $result_array['pincode'] =$result['pincode'];
+                    $result_array['emailId'] =$result['emailId'];
+                    $result_array['phoneNumber'] =$result['phoneNumber'];
+                    array_push($json_response, $result_array); //push the values in the array
+                    $noOfRows++;
+
+                }
+                if($noOfRows>0){
+
+                    echo AppUtil::getReturnStatus("Successful",$json_response);}
+                else {
+
+                    echo AppUtil::getReturnStatus("NoRows", "No companies found");
+                }
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+
+
+
+
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+    }
+
     public static function getAccessForRole($roleId){
   
         try{

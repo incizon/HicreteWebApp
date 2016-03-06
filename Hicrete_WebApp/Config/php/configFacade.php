@@ -20,7 +20,11 @@ switch ($data->operation) {
     				    break;
     case "getRoles":  ConfigUtils::getAllRoles();
     				    break;
-    case "getAccessForRole" :ConfigUtils::getAccessForRole($data->roleId);
+    case "getCompanyDetails": ConfigUtils::getCompanyDetails();
+                        break;
+    case "getUserDetails" : ConfigUtils:: getUserDetails();
+                        break;
+    case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
     case "addUser" :Config::addUser($data,"admin");
     				    break;
