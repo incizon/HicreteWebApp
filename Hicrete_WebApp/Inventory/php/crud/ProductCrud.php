@@ -132,25 +132,25 @@
 
                                     // $this->showAlert('success',"Product added Successfully!!!");
                                 } else {
-                                    $this->showAlert('success', "Commit failed!!");
+                                    $this->showAlert('Failure', "Error while adding.Please check information you entered");
                                     $dbh->rollBack();
                                 }
                             } else {
-                                $this->showAlert('Failure', "Error while adding 4");
+                                $this->showAlert('Failure', "Error while adding.Please check information you entered");
                                 $dbh->rollBack();
                             }
                         } else {
-                            $this->showAlert('Failure', "Error while adding 3");
+                            $this->showAlert('Failure', "Error while adding.Please check information you entered");
                             $dbh->rollBack();
                         }
 
                     } else {
-                        $this->showAlert('Failure', "Error while adding 2");
+                        $this->showAlert('Failure', "Error while adding.Please check information you entered");
                         $dbh->rollBack();
                     }
 
                 } else {
-                    $this->showAlert('Failure', "Error while adding 1");
+                    $this->showAlert('Failure', "Error while adding.Please check information you entered");
                     $dbh->rollBack();
                 }
 

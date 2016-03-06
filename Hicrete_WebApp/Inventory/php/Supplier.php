@@ -88,7 +88,8 @@ class Supplier
             }
         }catch(Exception $e)
         {
-
+            $message="Exception thrown";
+            return $message;
 
         }
 
