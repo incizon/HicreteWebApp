@@ -39,7 +39,40 @@
         ::-webkit-scrollbar-thumb { background: #9E9E9E; border-radius: 4px;}
         ::-webkit-scrollbar-corner { display: none;}
         ::-webkit-resizer {display: none;}
+        /*-----------------------------------CSS FOR DATEPICKER-----------------------------------------------------*/
+        ul.dropdown-menu table thead{
+            background:#1caf9a !important;
+            color:#fff !important;
+        }
 
+        ul.dropdown-menu table thead th .btn-default,ul.dropdown-menu table thead th .btn-default:hover, ul.dropdown-menu table thead th .btn-default:focus,
+        ul.dropdown-menu table thead th .btn-default:active,ul.dropdown-menu table thead th  .btn-default.active, .open > ul.dropdown-menu table thead th .dropdown-toggle .btn-default {
+            background-color: transparent;
+            border-color: transparent;
+            color:#fff;
+            margin-right: 0;
+        }
+
+        ul.dropdown-menu:after{
+            border-bottom-color: #1caf9a;
+        }
+
+        ul.dropdown-menu table tbody td .btn-info:hover,ul.dropdown-menu table tbody td .btn-info:focus,ul.dropdown-menu table tbody td .btn-info:active,ul.dropdown-menu table tbody td .btn-info.active, .open >ul.dropdown-menu table tbody td .dropdown-toggle.btn-info{
+            background-color: #f5f5f5;
+            border-color: #E5E5E5;
+            color:#333;
+        }
+
+        ul.dropdown-menu table tbody td .btn.btn-sm,ul.dropdown-menu table tbody td .btn-group-sm > .btn{
+            padding: 2px 5px;
+        }
+        /*--------- Select Box --------*/
+        select.btn.dropdown-toggle.selectpicker {
+            border: 1px solid #D5D5D5;
+            background: #F9F9F9;
+            border-radius: 4px;
+            height: 30px;
+        }
     </style>
 
     <!-- START SCRIPTS -->

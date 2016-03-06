@@ -365,6 +365,21 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
         $scope.stepa--;
     }
 
+    $scope.today = function() {
+        $scope.InwardData.date = new Date();
+    };
+    $scope.today();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openDate = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
     $scope.addInwardDetails = function () {
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
