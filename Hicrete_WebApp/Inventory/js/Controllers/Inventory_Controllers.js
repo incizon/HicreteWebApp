@@ -117,6 +117,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
+                $('#loader').css("display","none");
                 $scope.errorMessage=data.msg;
                 $('#error').css("display","block");
             });
@@ -161,7 +162,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         product.isProductDetailsTable = isPrductDetailsTable;
         product.isProductPackagingTable = isProductPkgingTable;
         product.isProductMaterialTable = isMaterialTable;
-
+        $('#loader').css("display","block");
         // Create json object
         var config = {
             params: {
@@ -177,6 +178,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 setTimeout(function () {
                     window.location.reload(true);
                 }, 1000);
+                $('#loader').css("display","none");
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
@@ -271,7 +273,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http,$location, inwardService, inventoryService) {
+myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
@@ -322,9 +324,9 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
     ];
 
     $scope.filters = [
-        {filterName: 'Items', id: 1},
-        {filterName: 'Inward', id: 2},
-        {filterName: 'Outward', id: 3},
+        {filterName: 'Product Name', id: 1},
+        {filterName: 'Company Name', id: 2},
+        {filterName: 'Warehouse Name', id: 3},
         {filterName: 'Available Inventory', id: 4}
     ];
     $scope.SearchTerm = $scope.filters[3].filterName;
