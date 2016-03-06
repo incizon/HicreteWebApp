@@ -117,6 +117,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
+                $('#loader').css("display","none");
                 $scope.errorMessage=data.msg;
                 $('#error').css("display","block");
             });
@@ -161,7 +162,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         product.isProductDetailsTable = isPrductDetailsTable;
         product.isProductPackagingTable = isProductPkgingTable;
         product.isProductMaterialTable = isMaterialTable;
-
+        $('#loader').css("display","block");
         // Create json object
         var config = {
             params: {
@@ -177,6 +178,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 setTimeout(function () {
                     window.location.reload(true);
                 }, 1000);
+                $('#loader').css("display","none");
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
@@ -271,7 +273,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http,$location, inwardService, inventoryService) {
+myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
@@ -301,6 +303,8 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
+    $scope.errorMessage="";
+    $scope.warningMessage="";
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -322,9 +326,9 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
     ];
 
     $scope.filters = [
-        {filterName: 'Items', id: 1},
-        {filterName: 'Inward', id: 2},
-        {filterName: 'Outward', id: 3},
+        {filterName: 'Product Name', id: 1},
+        {filterName: 'Company Name', id: 2},
+        {filterName: 'Warehouse Name', id: 3},
         {filterName: 'Available Inventory', id: 4}
     ];
     $scope.SearchTerm = $scope.filters[3].filterName;
@@ -386,7 +390,24 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
         $scope.stepa--;
     }
 
+    $scope.today = function() {
+        $scope.InwardData.date = new Date();
+    };
+    $scope.today();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openDate = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
     $scope.addInwardDetails = function () {
+        $scope.errorMessage="";
+        $scope.warningMessage="";
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }
@@ -421,8 +442,7 @@ myApp.controller('inwardController', function ($scope, $http,$location, inwardSe
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
-                        window.location.reload(true);
-                        //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                        window.location="dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -539,6 +559,22 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardDetailsTable = false;
     var isOutwardTransportTable = false;
 
+    $scope.todayDate = function() {
+        $scope.OutwardData.date = new Date();
+    };
+    $scope.todayDate();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.open1 = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
+
     $scope.productsToModify = [];
     inventoryService.getProductsForInwardandOutward($scope,$http);
 
@@ -651,8 +687,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log("In Post of outward entry success:");
                 console.log(data);
                  setTimeout(function(){
-                  window.location.reload(true);
-                     //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                     window.location="dashboard.php#/Inventory";
                 },1000);
                 $scope.outwardData = data;
                 $scope.clearFields($scope.OutwardData);
@@ -703,8 +738,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log(data);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    window.location.reload(true);
-                    //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                    window.location="dashboard.php#/Inventory";
                 }, 1000);
 
 
@@ -866,7 +900,8 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         console.log(supplier.city);
         console.log(supplier.country);
         console.log(supplier.pinCode);
-
+        $scope.errorMessage="";
+        $scope.warningMessage="";
         addSupplierService.addSupplier($scope, $http, supplier);
     };
 
@@ -1258,7 +1293,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             prodBatchInfo.option = message;
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
             setTimeout(function () {
-                window.location.reload(true);
+                window.location="dashboard.php#/Inventory";
             }, 1000);
         }
         else if (message == 'Modify') {
@@ -1268,7 +1303,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
                 prodBatchInfo.option = message;
                 ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
                 setTimeout(function () {
-                    window.location.reload(true);
+                    window.location="dashboard.php#/Inventory";
                 }, 1000);
             }
             else {
@@ -1284,7 +1319,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
             setTimeout(function () {
-                window.location.reload(true);
+                window.location="dashboard.php#/Inventory";
             }, 1000);
 
         }
@@ -1295,7 +1330,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             if(page =='Complete')
             {
                 setTimeout(function () {
-                    window.location.reload(true);
+                    window.location="dashboard.php#/Inventory";
                 }, 1000);
             }
         }

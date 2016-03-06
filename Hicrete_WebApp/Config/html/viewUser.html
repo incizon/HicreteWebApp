@@ -45,14 +45,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Namdev</td>
-                        <td>123345556</td>
-                        <td>Manager</td>
-                        <td>Super</td>
+                    <tr ng-repeat="user in Users">
+                        <td>{{$index+1}}</td>
+                        <td>{{user.firstName}} {{user.lastName}}</td>
+                        <td>{{user.mobileNumber}}</td>
+                        <td>{{user.designation}}</td>
+                        <td>{{user.role}}</td>
                         <td>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>
+                            <button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails" ng-click="selectUser(user);">View</button>
                             <button class="btn btn-primary"  data-toggle="modal" data-target="">Modify</button>
                             <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
                         </td>
@@ -91,33 +91,66 @@
 
                         <div class="col-md-3">
 
-                            <label class="control-label">Contact No  :</label>
+                            <label class="control-label">First Name:</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{"020-2020221"}}
+                            {{selectedUser.firstName}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
                         <div class="col-md-3">
 
-                            <label class="control-label">Mobiile No  :</label>
+                            <label class="control-label">Last Name  :</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{"9180919090"}}
+                            {{selectedUser.lastName}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
                         <div class="col-md-3">
 
-                            <label class="control-label">Fax No  :</label>
+                            <label class="control-label">Mobile No  :</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{"020-202021"}}
+                            {{selectedUser.mobileNumber}}
                         </div>
                     </div><br>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">Date of Birth  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.dateOfBirth}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">Designation :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.designation}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">Role :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.role}}
+                        </div>
+
+                    </div>
                     <div class="col-md-12">
                         <div class="col-md-3">
 
@@ -125,7 +158,51 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"namdev07@gmail.com"}}
+                            {{selectedUser.emailId}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">City  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.city}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">State  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.state}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">Country  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.country}}
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">PinCode  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{selectedUser.pincode}}
                         </div>
 
                     </div>

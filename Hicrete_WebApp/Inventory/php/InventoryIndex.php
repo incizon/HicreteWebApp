@@ -53,11 +53,11 @@
             case 'insert':
                 # code...
                 $productObj = new InwardData($pData);
-//                if($productObj->isAvailable($dbh)){
-                $productObj->insertInwardInToDb($dbh, $userId, $pData);
-//                }else{
-//                    echo "Inward number that you are trying to insert is already present";
-//                }
+                if(!$productObj->isAvailable($dbh)){
+                    $productObj->insertInwardInToDb($dbh, $userId, $pData);
+                }else{
+                    echo "Inward number that you are trying to insert is already present";
+                }
 
                 break;
             case 'delete':
@@ -89,7 +89,7 @@
             case 'insert':
                 # code...
                 $productObj = new OutwardData($pData);
-                if($productObj->isAvailable($dbh)){
+                if(!$productObj->isAvailable($dbh)){
                     $productObj->insertOutwardInToDb($dbh, $userId, $pData);
                 }else{
                     echo "Outward number that you are trying to insert is already present";

@@ -240,13 +240,14 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.userSearch', {
             url: '/SearchUser',
-            templateUrl: 'Config/html/ViewUser.html'
-
+            templateUrl: 'Config/html/ViewUser.html',
+            controller:'userController'
         })
 
         .state('Config.companySearch', {
             url: '/SearchCompany',
-            templateUrl: 'Config/html/ViewCompany.html'
+            templateUrl: 'Config/html/ViewCompany.html',
+            controller:'companyController'
 
         })
 
@@ -561,6 +562,18 @@ myApp.controller('TabController', function () {
 
 
 
+});
+
+myApp.controller('TabController', function () {
+    this.tab = 1;
+
+    this.setTab = function (tabId) {
+        this.tab = tabId;
+    };
+
+    this.isSet = function (tabId) {
+        return this.tab === tabId;
+    };
 });
 
 

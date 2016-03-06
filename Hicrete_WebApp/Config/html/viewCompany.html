@@ -45,16 +45,16 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>10-10-1990</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
+                    <tr ng-repeat="Comp in Companies">
+                        <td>{{$index+1}}</td>
+                        <td>{{Comp.companyName}}</td>
+                        <td>{{Comp.startDate}}</td>
+                        <td>{{Comp.address}}</td>
+                        <td>{{Comp.city}}</td>
+                        <td>{{Comp.state}}</td>
+                        <td>{{Comp.country}}</td>
+                        <td>{{Comp.emailId}}</td>
+                        <td>{{Comp.phoneNumber}}</td>
 
                         <td>
                             <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
