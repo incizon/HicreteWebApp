@@ -88,7 +88,7 @@
                                                 <div class="col-md-9">
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                        <input type="date" ng-disabled="availableTotalquantity==0" class="form-control datepicker" ng-model="OutwardData.date" name="date" required/>
+                                                        <input type="text" ng-disabled="availableTotalquantity==0" class="form-control datepicker" ng-model="OutwardData.date" name="date" ng-click="open1()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
                                                     </div>
                                                     <div class="help-block" ng-messages="outwardMaterialForm.date.$error" ng-show="submitted">
                                                         <p style="color:red" ng-message="required">Please enter date</p>

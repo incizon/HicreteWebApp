@@ -554,6 +554,22 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     var isOutwardDetailsTable = false;
     var isOutwardTransportTable = false;
 
+    $scope.todayDate = function() {
+        $scope.OutwardData.date = new Date();
+    };
+    $scope.todayDate();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.open1 = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
+
     $scope.productsToModify = [];
     inventoryService.getProductsForInwardandOutward($scope,$http);
 

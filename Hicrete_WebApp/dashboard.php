@@ -135,7 +135,7 @@ if(!$userObj->init($userId)){
 <div class="page-container page-navigation-top-fixed">
 
     <!-- START PAGE SIDEBAR -->
-    <div class="page-sidebar page-sidebar-fixed">
+    <div class="page-sidebar page-sidebar-fixed" ng-controller="TabController as tab">
 
         <!-- START X-NAVIGATION -->
         <ul class="x-navigation">
@@ -161,22 +161,22 @@ if(!$userObj->init($userId)){
                     </div>
                 </div>
             </li>
-            <li class="active">
-                <a ui-sref="MainPage"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
+            <li ng-class="{active:tab.isSet(1)}">
+                <a ui-sref="MainPage" ng-click="tab.setTab(1)"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
             </li>
 
 
             <?php
 
             if($userObj->isInventory){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(2)}\">
+                            <a ng-click=\"tab.setTab(2)\" ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
                     </li>";
             }
 
             if($userObj->isBusinessProcess){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(3)}\">
+                            <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
             }
 
@@ -187,26 +187,26 @@ if(!$userObj->init($userId)){
             }
 
             if($userObj->isApplicator){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(4)}\">
+                            <a ng-click=\"tab.setTab(4)\" ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
                     </li>";
             }
 
             if($userObj->isApplicator){
-                echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(5)}\">
+                            <a ng-click=\"tab.setTab(5)\" href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
                     </li>";
             }
 
             if($userObj->isReporting){
-                echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(6)}\">
+                            <a ng-click=\"tab.setTab(6)\" href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
                     </li>";
             }
 
             if($userObj->isAdmin){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(7)}\">
+                            <a ng-click=\"tab.setTab(7)\" ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
                     </li>";
             }
 
