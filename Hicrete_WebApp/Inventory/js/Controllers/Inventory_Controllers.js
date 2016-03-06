@@ -1101,6 +1101,23 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             data: data
         }
     };
+
+    $scope.todayDateOfEntry = function() {
+        $scope.prodBatchInfo.dateOfEntry = new Date();
+    };
+    $scope.todayDateOfEntry();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openPicker = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
+
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");

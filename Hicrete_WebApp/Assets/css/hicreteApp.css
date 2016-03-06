@@ -1,60 +1,58 @@
 .x-navigation.x-navigation-horizontal > li.active > a{
-	background-color: #e04b4a !important;
-	border:1px #e04b4a solid !important;
+    background-color: #e04b4a !important;
+    border:1px #e04b4a solid !important;
 }
 
 
 a.notify1{
-width: 163px !important;
-color: #fff !important;
-border:1px #000 solid !important;
-padding: 7px !important;
-margin: 5px 10px 0px 10px;
-background-color: #1b1e24 !important;
+    width: 163px !important;
+    color: #fff !important;
+    border:1px #000 solid !important;
+    padding: 7px !important;
+    margin: 5px 10px 0px 10px;
+    background-color: #1b1e24 !important;
 }
 a.notify1:hover{
-background-color: #1b1e24 !important;
-text-decoration: underline !important;
+    background-color: #1b1e24 !important;
+    text-decoration: underline !important;
 }
 .x-navigation.x-navigation-horizontal > li.active > a.notify1{
-	background-color:#1b1e24 !important;
-	border:1px #1b1e24 solid !important;
+    background-color:#1b1e24 !important;
+    border:1px #1b1e24 solid !important;
 }
 
 a.notify2{
-width: 114px !important;
-color: #fff !important;
-border:1px #000 solid !important;
-padding: 7px !important;
-margin: 5px 10px 0px 10px;
-background-color: #1b1e24 !important;
+    width: 114px !important;
+    color: #fff !important;
+    border:1px #000 solid !important;
+    padding: 7px !important;
+    margin: 5px 10px 0px 10px;
+    background-color: #1b1e24 !important;
 }
 a.notify2:hover{
-background-color: #1b1e24 !important;
-text-decoration: underline !important;
+    background-color: #1b1e24 !important;
+    text-decoration: underline !important;
 }
 .x-navigation.x-navigation-horizontal > li.active > a.notify2{
-	background-color:#1b1e24 !important;
-	border:1px #1b1e24 solid !important;
+    background-color:#1b1e24 !important;
+    border:1px #1b1e24 solid !important;
 }
 
 
 
 a.log_out{
-background-color: #e04b4a;
-width: 36px !important;
-color: #fff !important;
-border:1px #e04b4a solid !important;
-padding: 7px !important;
-margin: 5px 10px 0px 10px;
+    background-color: #e04b4a;
+    width: 36px !important;
+    color: #fff !important;
+    border:1px #e04b4a solid !important;
+    padding: 7px !important;
+    margin: 5px 10px 0px 10px;
 }
 
 a.log_out:hover span{ color: #fff !important;}
 
 .x-navigation.x-navigation-horizontal > li > a:hover{
-background-color: #e04b4a;
-	border:1px transparent solid !important;
-
+    background-color:#e5e5e5;
 }
 
 /*Loader css*/
@@ -64,3 +62,14 @@ background-color: #e04b4a;
 
 /*Warning message css*/
 .alert{bottom: 10%;display: none;position: absolute;right: 1.5%;width: 30%;z-index: 10;}
+
+/*----Dashboard top bar and left navigation icons-------*/
+.x-navigation li > a .fa, .x-navigation li > a .glyphicon{
+    color: #3e4a61 !important;
+}
+
+.x-navigation .xn-icon-button .informer {
+    left: auto;
+    right: 0px;
+    top: 0px;
+}

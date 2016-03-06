@@ -25,16 +25,13 @@
 
                         <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
 
-                        <div class="input-group-btn">
-
-                        </div>
+                    <div class="input-group-btn">
+                        <button class="btn btn-primary">Search</button>
                     </div>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-primary">Search</button>
-                </div>
-            </div><br>
-            <div class="row">
+            </div>
+        </div><br>
+        <div class="row">
 
                 <div class="col-md-4">
                     <input type="checkbox" ng-model="sortByPayment" name="sort" value="true"> Payment
@@ -48,62 +45,62 @@
             </div><br>
 
             <div class="table-responsive push-up-10">
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>Sr.No</th>
-                    <th>Project Name</th>
-                    <th>Current Status</th>
-                    <th>Project Manager</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="project  in Projects | filter :paginate | filter :searchKeyword | orderBy :sortExpression | orderBy:'payment_status':sortByPayment | orderBy:'project_quotation':sortByQuotation | orderBy:'project_status':sortByCurrentWorking">
-                    <td>{{$index + 1}}</td>
-                    <td>{{project.project_name}}</td>
-                    <td>{{project.project_status}}</td>
-                    <td>{{project.project_manager}}</td>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Sr.No</th>
+                        <th>Project Name</th>
+                        <th>Current Status</th>
+                        <th>Project Manager</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="project  in Projects | filter :paginate | filter :searchKeyword | orderBy :sortExpression | orderBy:'payment_status':sortByPayment | orderBy:'project_quotation':sortByQuotation | orderBy:'project_status':sortByCurrentWorking">
+                        <td>{{$index + 1}}</td>
+                        <td>{{project.project_name}}</td>
+                        <td>{{project.project_status}}</td>
+                        <td>{{project.project_manager}}</td>
 
-                    <td>
-                        <a ui-sref="Process.ProjectDetails">
-                            <button class="btn btn-info" title="View project details">
-                                <span class="fa fa-eye"></span>
-                            </button>
-                        </a>
-                        <a ui-sref="Process.modifyProject">
-                            <button class="btn btn-info" title="Modify project details">
-                                <span class="fa fa-pencil-square-o"></span>
-                            </button>
-                        </a>
-                        <a href="">
-                            <button class="btn btn-danger" title="Delete">
-                                <span class="fa fa-times"></span>
-                            </button>
-                        </a>
-                        <a href="">
-                            <button class="btn btn-primary" title="View cost center">
-                                <span class="fa fa-eye"></span>
-                                Cost center
-                            </button>
-                        </a>
-                        <a href="">
-                            <button class="btn btn-primary" title="Add cost center">
-                                <span class="fa fa-plus"></span>
-                                Cost center
-                            </button>
-                        </a>
-                        <!--<div class="col-md-4">-->
+                        <td>
+                            <a ui-sref="Process.ProjectDetails">
+                                <button class="btn btn-info" title="View project details">
+                                    <span class="fa fa-eye"></span>
+                                </button>
+                            </a>
+                            <a ui-sref="Process.modifyProject">
+                                <button class="btn btn-info" title="Modify project details">
+                                    <span class="fa fa-pencil-square-o"></span>
+                                </button>
+                            </a>
+                            <a href="">
+                                <button class="btn btn-danger" title="Delete">
+                                    <span class="fa fa-times"></span>
+                                </button>
+                            </a>
+                            <a href="">
+                                <button class="btn btn-primary" title="View cost center">
+                                    <span class="fa fa-eye"></span>
+                                    Cost center
+                                </button>
+                            </a>
+                            <a href="">
+                                <button class="btn btn-primary" title="Add cost center">
+                                    <span class="fa fa-plus"></span>
+                                    Cost center
+                                </button>
+                            </a>
+                            <!--<div class="col-md-4">-->
                             <!--<a ui-sref="Process.createCostCenter"><input type="button" class="btn btn-info" value="Create Cost Center"/></a>-->
-                        <!--</div>-->
-                        <!--<div class="col-md-6">-->
+                            <!--</div>-->
+                            <!--<div class="col-md-6">-->
                             <!--<a ui-sref="Process.searchExpense"><input type="button" class="btn btn-info"  value="View Cost Center"/></a>-->
-                        <!--</div>-->
-                    </td>
-                </tr>
-                </tbody>
-             </table>
-             </div>
+                            <!--</div>-->
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     </div>

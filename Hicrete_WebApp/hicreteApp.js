@@ -258,7 +258,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.warehouseSearch', {
             url: '/SearchWarehouse',
-            templateUrl: 'Config/html/ViewWarehouse.html'
+            templateUrl: 'Config/html/ViewWarehouse.html',
+            controller:'companyController'
 
         })
 
@@ -359,11 +360,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ProjectDetailsController'
         })
 
-        .state('Process.addTask', {
-            url: '/AddTask',
-            templateUrl:'Process/html/schedule/AddTask.html',
-            controller:'CreateTaxController'
-        })
+
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
@@ -489,6 +486,9 @@ myApp.run(function($rootScope,$http) {
     $rootScope.tentativeApplicators=[];
     console.log($rootScope.tentativeApplicators);
     $rootScope.permanentApplicators=[];
+    $rootScope.Companies=[];
+    $rootScope.warehouses=[];
+    $rootScope.Users=[];
 
 });
 
