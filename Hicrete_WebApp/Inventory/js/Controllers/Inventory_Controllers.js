@@ -42,7 +42,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
-
+    $scope.loading=false;
     var isProductMasterTable = false;
     var isMaterialTable = false;
     var isPrductDetailsTable = false;
@@ -77,27 +77,37 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         //Set Extra attribute in object to identify operation to be performed
         product.opertaion = "insert";
         $scope.submitted = false;
-
+        $scope.loading=true;
+        $('#loader').css("display","block");
         var config = {
             params: {
                 product: product
             }
         };
-
+        console.log("Loader"+$scope.loading);
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                      $scope.loading=false;
+                        $('#loader').css("display","none");
+                    });
+                }, 2000);
+
                 console.log("IN POST OF add product success");
                 console.log(data);
+                console.log("Loader"+$scope.loading);
                 $scope.clearFields(product);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    window.location.reload(true);
+                    //window.location.reload(true);
                 }, 1000);
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 doShowAlert("Failure", data.msg);
+                //Error Message
             });
 
     };
