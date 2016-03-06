@@ -145,6 +145,7 @@ myApp.service('inventoryService', function () {
 myApp.service('addSupplierService', function () {
 
     this.addSupplier = function ($scope, $http, supplier) {
+
         $('#loader').css("display","block");
         var config = {
             params: {
@@ -254,10 +255,28 @@ myApp.service('inwardService', function () {
                 $('#loader').css("display","none");
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
+                $scope.warningMessage=data.msg;
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function () {
+                    if (data.msg != ""){
+                        $('#warning').css("display","none");
+                    }
+                }, 3000);
+                $('#loader').css("display","none");
+                if (data.error != ""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+
+
+
                 $scope.inwardData=[];
                 setTimeout(function(){
-                    window.location.reload(true);
-                    // window.location="Hicrete_WebApp/dashboard.php#/Inventory";
+                    //window.location.reload(true);
+                     window.location="dashboard.php#/Inventory";
                 },1000);
             })
             .error(function (data, status, headers) {
@@ -276,6 +295,8 @@ myApp.service('inwardService', function () {
 myApp.service('outwardService', function () {
 
     this.outwardEntry = function ($scope, $http, outwardData) {
+        $scope.errorMessage="";
+        $scope.warningMessage="";
         var data = {
             outwardData: outwardData,
             module: 'outward',

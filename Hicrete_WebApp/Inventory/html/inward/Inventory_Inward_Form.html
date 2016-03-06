@@ -1,4 +1,13 @@
-<div ng-show="stepa==1">
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+<div ng-show="stepa==1" ng-controller="inwardController">
     <!--<div ng-include="'Inventory/html/inward/Inventory_Inward_Item.html'"></div>-->
     <!--<button class="btn btn-primary"-->
             <!--data-ng-click=" nextForm()">Submit-->
