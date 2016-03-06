@@ -440,6 +440,22 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         })
 
+        .state('billApproval', {
+            url: '/BillApproval',
+            templateUrl:'BillApproval/BillApproval.html'
+        })
+        .state('leaveApproval', {
+            url: '/LeaveApproval',
+            templateUrl:'BillApproval/LeaveApp.html'
+        })
+        .state('accessApproval', {
+            url: '/AccessApproval',
+            templateUrl:'BillApproval/AccessApproval.html'
+
+        })
+
+
+
         .state('SuperDashboard', {
             url: '',
             templateUrl: 'SuperMainPage.html',
@@ -448,7 +464,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         });
         // Package State =================================
         
-        
+
+
 });
 
 myApp.run(function($rootScope,$http) {
