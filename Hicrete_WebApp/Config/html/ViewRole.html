@@ -3,29 +3,26 @@
     <div class="panel panel-default">
 
         <div class="panel-heading">
-            <h3 class="panel-title"><strong>User</strong>Details</h3>
+            <h3 class="panel-title"><strong>Role</strong>Details</h3>
         </div>
         <div class="panel-body form-horizontal">
 
             <div class="row">
-                <div class="col-md-4">
+                <!--<div class="col-md-4">-->
 
-                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
+                    <!--<select class="form-control select" name="searchBy" ng-model="sortExpression"/>-->
+                    <!--<option value="" disabled selected>Search by </option>>-->
 
-                    <option value="" disabled selected>Search by </option>
-                    <option value="state">Name</option>
-                    <option value="state">Designation</option>
-                    <option value="state">User Type</option>
-                    <option value="city">City</option>
+                    <!--<option value="city">Role</option>-->
 
-                    </select>
+                    <!--</select>-->
 
-                </div>
+                <!--</div>-->
                 <div class="col-md-8">
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Enter Role" value="" ng-model="searchKeyword.$"/>
 
                         <div class="input-group-btn">
                             <button class="btn btn-primary">Search</button>
@@ -38,28 +35,44 @@
                     <thead>
                     <tr>
                         <th>Sr.No</th>
-                        <th>User Name</th>
-                        <th>Contact Number</th>
-                        <th>Designation</th>
-                        <th>Role</th>
+                        <th>Role Name</th>
+                        <th>Created By</th>
+                        <th>Creation Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in Users">
-                        <td>{{$index+1}}</td>
-                        <td>{{user.firstName}} {{user.lastName}}</td>
-                        <td>{{user.mobileNumber}}</td>
-                        <td>{{user.designation}}</td>
-                        <td>{{user.role}}</td>
+                    <tr>
+                        <td>1</td>
+                        <td>Admin</td>
+                        <td>Namdev</td>
+                        <td>10-02-2016</td>
                         <td>
-                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" ng-click="selectUser(user)">View Details</button>
-                            <a ui-sref="Config.modifyUser"> <button class="btn btn-primary">Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
+                            <a ui-sref="Config.modifyRole"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
+                            <button class="btn btn-danger"><span class="fa fa-times"></span> Delete</button>
                         </td>
                     </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>User 1</td>
+                        <td>Atul</td>
+                        <td>20-02-2016</td>
+                        <td>
+                            <a ui-sref="Config.modifyRole"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
+                            <button class="btn btn-danger"><span class="fa fa-times"></span> Delete</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>User 3</td>
+                        <td>Ajit</td>
+                        <td>01-01-2016</td>
+                        <td>
 
-
+                            <a ui-sref="Config.modifyRole"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
+                            <button class="btn btn-danger"><span class="fa fa-times"></span> Delete</button>
+                        </td>
+                    </tr>
 
                     </tbody>
                 </table>
@@ -92,21 +105,11 @@
 
                         <div class="col-md-3">
 
-                            <label class="control-label">First Name:</label>
+                            <label class="control-label">Contact No  :</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{selectedUser.firstName}}
-                        </div>
-                    </div><br>
-                    <div class="col-md-12">
-                        <div class="col-md-3">
-
-                            <label class="control-label">Last Name  :</label>
-
-                        </div>
-                        <div class="col-md-9">
-                            {{selectedUser.lastName}}
+                            {{"020-2020221"}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
@@ -116,42 +119,19 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{selectedUser.mobileNumber}}
+                            {{"9180919090"}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
                         <div class="col-md-3">
 
-                            <label class="control-label">Date of Birth  :</label>
+                            <label class="control-label">Fax No  :</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{selectedUser.dateOfBirth}}
+                            {{"020-202021"}}
                         </div>
-
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-3">
-
-                            <label class="control-label">Designation :</label>
-
-                        </div>
-                        <div class="col-md-9">
-                            {{selectedUser.designation}}
-                        </div>
-
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-3">
-
-                            <label class="control-label">Role :</label>
-
-                        </div>
-                        <div class="col-md-9">
-                            {{selectedUser.role}}
-                        </div>
-
-                    </div>
+                    </div><br>
                     <div class="col-md-12">
                         <div class="col-md-3">
 
@@ -159,51 +139,52 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{selectedUser.emailId}}
+                            {{"namdev07@gmail.com"}}
                         </div>
 
                     </div>
+
                     <div class="col-md-12">
                         <div class="col-md-3">
 
-                            <label class="control-label">City  :</label>
+                            <label class="control-label">PAN  :</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{selectedUser.city}}
+                            {{"ABCD1234"}}
+                        </div>
+                    </div><br>
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">CST No  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{"CST12345"}}
+                        </div>
+                    </div><br>
+
+                    <div class="col-md-12">
+                        <div class="col-md-3">
+
+                            <label class="control-label">VAT No  :</label>
+
+                        </div>
+                        <div class="col-md-9">
+                            {{"Vat-12345"}}
                         </div>
 
                     </div>
+
                     <div class="col-md-12">
                         <div class="col-md-3">
 
-                            <label class="control-label">State  :</label>
+                            <label class="control-label">Service Tax No  :</label>
 
                         </div>
                         <div class="col-md-9">
-                            {{selectedUser.state}}
-                        </div>
-
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-3">
-
-                            <label class="control-label">Country  :</label>
-
-                        </div>
-                        <div class="col-md-9">
-                            {{selectedUser.country}}
-                        </div>
-
-                    </div>
-                    <div class="col-md-12">
-                        <div class="col-md-3">
-
-                            <label class="control-label">PinCode  :</label>
-
-                        </div>
-                        <div class="col-md-9">
-                            {{selectedUser.pincode}}
+                            {{"ST-12345"}}
                         </div>
 
                     </div>
