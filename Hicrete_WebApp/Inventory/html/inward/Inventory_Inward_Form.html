@@ -41,7 +41,7 @@
                                     <label class="col-md-3 control-label"> Company</label>
 
                                     <div class="col-md-9">
-                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.companyName" name="companyName"
+                                        <select class="select btn dropdown-toggle selectpicker" ng-model="InwardData.companyName" name="companyName"
                                                 required>
                                             <option value="" disabled selected>Select Company</option>
                                             <option ng-repeat="x in Company"
@@ -98,8 +98,8 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                            <input type="date" class="form-control datepicker" ng-model="InwardData.date"
-                                                   name="date" required>
+                                            <input type="text" class="form-control datepicker" ng-model="InwardData.date"
+                                                   name="date" ng-click="openDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true">
                                         </div>
                                         <div class="help-block" ng-messages="inwardEntryForm.date.$error"
                                              ng-show="submitted">
