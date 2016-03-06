@@ -52,9 +52,7 @@ margin: 5px 10px 0px 10px;
 a.log_out:hover span{ color: #fff !important;}
 
 .x-navigation.x-navigation-horizontal > li > a:hover{
-background-color: #e04b4a;
-	border:1px transparent solid !important;
-
+	background-color:#e5e5e5;
 }
 
 /*Loader css*/
@@ -64,3 +62,14 @@ background-color: #e04b4a;
 
 /*Warning message css*/
 .alert{bottom: 10%;display: none;position: absolute;right: 1.5%;width: 30%;z-index: 10;}
+
+/*----Dashboard top bar and left navigation icons-------*/
+.x-navigation li > a .fa, .x-navigation li > a .glyphicon{
+	color: #3e4a61 !important;
+}
+
+.x-navigation .xn-icon-button .informer {
+	left: auto;
+	right: 0px;
+	top: 0px;
+}
