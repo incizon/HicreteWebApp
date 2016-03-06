@@ -88,6 +88,7 @@ $scope.selectedRole={"roleId":""};
 $scope.otherAccessList=[];
 $scope.isFromUser=true;
 
+
 $scope.userInfo={
 firstName:"",
 lastName:"",
@@ -103,7 +104,47 @@ designation:"",
 userType:""
 };
 
+    $scope.selectUser = function(user)
+    {
+        $scope.selectedUser=user;
+    }
+/////////////////////////////////////////////////////////////////////////////////
+// Function to get User details
+/////////////////////////////////////////////////////////////////////////////////
+    $scope.getUserData = function(){
 
+        var data={
+            operation:"getUserDetails"
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+                    $scope.Users=data.message;
+
+                    console.log($scope.Companies);
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+
+
+    };
+    $scope.getUserData();
 configService.getRoleList($http,$scope);
 
 		    $scope.nextStep = function() {
@@ -344,6 +385,7 @@ myApp.controller('companyController',function($scope,$http){
   email:"",
   phone:""
  };
+    console.log("Inside company controller");
 
 $scope.warehouse={
   name:"",
@@ -356,9 +398,51 @@ $scope.warehouse={
   phone:""
  };
 
+
  $scope.submitted=false;
  $scope.warehouseSubmitted=false;
-       
+/////////////////////////////////////////////////////////////////////////////////
+// Function to get comapny details
+/////////////////////////////////////////////////////////////////////////////////
+    $scope.getCompanyData = function(){
+
+        var data={
+            operation:"getCompanyDetails"
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+                    $scope.Companies=data.message;
+
+                    console.log($scope.Companies);
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+
+
+    };
+    $scope.getCompanyData();
+
+
+
+
+
 $scope.addCompany=function(){
     var data={
             operation :"addCompany",
