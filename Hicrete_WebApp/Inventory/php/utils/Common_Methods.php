@@ -6,7 +6,7 @@ class CommonMethods
 
    public function showAlert($messageType,$message) { 
       if($messageType=='success'){
-          $arr = array('msg' => $message, 'error' => '');
+          $arr = array('msg' => '', 'error' => $message);
           $jsn = json_encode($arr);
           echo($jsn);
       }else{

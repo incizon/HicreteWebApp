@@ -93,19 +93,21 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .success(function (data) {
                 setTimeout(function() {
                     $scope.$apply(function() {
-                        $scope.warningMessage=data.msg;
-                        $('#warning').css("display","block");
+                        if(data.msg!=""){
+                            $scope.warningMessage=data.msg;
+                            $('#warning').css("display","block");
+                        }
                     });
                 }, 2000);
+
                 $scope.loading=false;
                 $('#loader').css("display","none");
-                $('#error').css("display","block");
-
-                $scope.errorMessage=data.msg;
-
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
                 console.log("IN POST OF add product success");
                 console.log(data);
-                console.log("Loader"+$scope.loading);
                 $scope.clearFields(product);
 
             })
@@ -113,6 +115,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
                 $scope.errorMessage=data.msg;
+                $('#error').css("display","block");
             });
 
     };
