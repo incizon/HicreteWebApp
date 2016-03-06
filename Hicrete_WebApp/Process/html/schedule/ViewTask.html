@@ -1,0 +1,202 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title"><strong>Task</strong> Details </h3>
+
+        </div>
+        <div class="panel-body">
+
+            <!--Form Starts here-->
+            <form class="form-horizontal">
+
+
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Task Name :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    {{"Task Name"}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Description :</label>
+                            </div>
+                            <div class="col-md-8">
+                                {{"Task Description Demo"}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Actual Start Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="date" class="form-control" name="actualStartDate" ng-model="actualStartDate"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Actual End Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="date" class="form-control" name="actualEndDate" ng-model="actualEndDate"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Completion Percentage :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="taskName" ng-model="taskName"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                            <div class="form-group">
+                                <div class="col-md-offset-4 col-md-6">
+                                    <div class="input-group">
+                                        <input type="checkbox" ng-model="completed" name="completed" >  Mark This Task As Completed
+                                    </div>
+                                </div>
+                            </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Note :</label>
+                            </div>
+                            <div class="col-md-8">
+
+                                      <textarea class="form-control" name="note"
+                                                ng-model="note" rows="2">
+                                    </textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+
+                            <div class="col-md-offset-4 col-md-8">
+
+                                      <button class="btn btn-primary"> Add</button>
+                                      <button class="btn btn-primary"> Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Scheduled Start Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    {{"10-02-2016"}}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Scheduled End Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    {{"10-03-2016"}}
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+
+                <div class="row">
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th width=7%>Sr No</th>
+                            <th width=20%>Note</th>
+                            <th width=23%>Addded By</th>
+                            <th width=15%>Date</th>
+                        </tr>
+                        </thead>
+                        <tr>
+                            <td>1</td>
+                            <td>
+                                {{"Demo Note 1"}}
+                            </td>
+                            <td>
+                                {{"Namdev Devmare"}}
+                            </td>
+
+                            <td>
+                                   {{"10-02-2016"}}
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>
+                                {{"Demo Note 2"}}
+                            </td>
+                            <td>
+                                {{"Ajit Zagade"}}
+                            </td>
+
+                            <td>
+                                {{"10-02-2016"}}
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>
+                                {{"Demo Note 3"}}
+                            </td>
+                            <td>
+                                {{"Atul Dhatrak"}}
+                            </td>
+
+                            <td>
+                                {{"10-01-2016"}}
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div><br>
+
+            </form>
+            <!--End of Form-->
+        </div>
+
+
+    </div>
+
+</div>

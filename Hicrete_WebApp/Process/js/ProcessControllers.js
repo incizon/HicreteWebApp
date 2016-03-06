@@ -609,6 +609,30 @@ myApp.controller('viewProjectController',function($scope,$http){
     ];
 });
 
+myApp.controller('ModifyProjectController',function($scope,$http) {
+
+        console.log("IN");
+        $scope.projectDetails={
+
+            projectName:"Prayeja City",
+            projectAddress:"Katraj",
+            projectCity:"Pune",
+            projectState:"Maharashtra",
+            projectCountry:"India",
+            pinCode:"411051",
+
+            pointOfConatcName:"Namdev Devmare",
+            pointofConactEmailID:"namdev@gmail.com",
+            pointOfLandlineNo:"020-202020",
+            pointofConactMobileNo:"9090989897",
+            projectManager:"Namdev Devmare",
+
+            company1:true
+
+
+
+        };
+});
 myApp.controller('ViewInvoiceDetails',function($scope,$http){
 
     $scope.invoiceNumber="Invoice-123";
@@ -716,3 +740,15 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
+myApp.controller('CreateTaskController',function($scope,$http){
+
+    console.log("In");
+
+});
+
+myApp.controller('SearchTaskController',function($scope,$http){
+
+
+});
+
+
