@@ -473,14 +473,14 @@ color:#fff;
 }
 .x-navigation.x-navigation-horizontal > li > a .fa,
 .x-navigation.x-navigation-horizontal > li > a .glyphicon {
-  color: #6c7177;
+  color: #fff;
 }
 .x-navigation.x-navigation-horizontal > li.active > a {
   background: #26344e;
 }
 .x-navigation.x-navigation-horizontal > li.active > a .fa,
 .x-navigation.x-navigation-horizontal > li.active > a .glyphicon {
-  color: #1caf9a;
+  color: #fff;
 }
 .x-navigation.x-navigation-horizontal > li ul {
   width: 220px;
@@ -641,7 +641,6 @@ color:#fff;
 }
 .x-navigation.x-navigation-horizontal .xn-icon-button > a {
   padding: 15px 10px;
-  text-align: center;
   width: 50px;
 }
 .x-navigation.x-navigation-horizontal .xn-icon-button > a .fa,
@@ -979,9 +978,8 @@ color:#fff;
 }
 .x-navigation .xn-icon-button .informer {
   left: auto;
-  bottom: auto;
-  right: 1px;
-  top: 5px;
+  right: 17px;
+  top: 13px;
 }
 .page-container.page-mode-rtl .x-navigation.x-navigation-minimized li ul {
   top: 0px;
@@ -1834,7 +1832,7 @@ ul.panel-controls > li > .dropdown-menu:before {
   position: absolute;
   left: 0px;
   top: 56px;
-  width: 400px;
+  width: 200px;
   z-index: 3;
   border-top-width: 1px;
   -moz-border-radius: 3px;
