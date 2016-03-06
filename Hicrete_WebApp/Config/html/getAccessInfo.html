@@ -42,7 +42,7 @@
                                          </div> 
                                         <label class="col-md-2 col-xs-12 control-label col-sm-2">Role</label>
                                         <div class="col-md-6 col-xs-12 col-sm-4">
-                                            <select class="form-control select" ng-model="selectedRole.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
+                                            <select class="form-control select" ng-model="userInfo.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
                                                 
                                                 <option ng-repeat="role in roleList" value={{role.roleId}}>{{role.roleName}}</option>                                              
                                             </select>

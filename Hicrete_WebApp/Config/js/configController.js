@@ -107,6 +107,7 @@ userType:""
     $scope.selectUser = function(user)
     {
         $scope.selectedUser=user;
+        console.log($scope.selectedUser);
     }
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get User details
@@ -760,4 +761,325 @@ $scope.exemptedAccessList=[];
               $scope.accessRequestSubmitted=false;
 
           }      
+});
+myApp.controller('ModifyCompanyController',function($scope,$http) {
+
+        console.log("IN");
+
+        $scope.companyDetails={
+
+            name:"Hicrete",
+            abbrevation:"HS",
+            startdate:"10-10-1990",
+            address:"K K Market",
+            city:"Pune",
+            state:"Maharashtra",
+            country:"India",
+            pincode:"411051",
+            email:"abc@gmail.com",
+            phone:"1234567890"
+
+        };
+
+});
+
+myApp.controller('ModifyRoleController',function($scope,$http) {
+
+     console.log("In");
+
+    $scope.roleDetails={
+
+        roleName:"Admin",
+        accessList:[
+            {
+                moduleName: "Inventory",
+                read:true,
+                write:false
+            },
+            {
+                moduleName: "Applicator",
+                read:true,
+                write:false
+            },
+            {
+                moduleName: "Expense",
+                read:false,
+                write:true
+            },
+            {
+                moduleName: "Payroll",
+                read:true,
+                write:false
+            },
+            {
+                moduleName: "Business",
+                read:false,
+                write:true
+            },
+        ]
+    }
+
+
+});
+
+myApp.controller('ModifyWarehouseController',function($scope,$http) {
+
+    console.log("In");
+
+
+    $scope.warehouseDetails={
+
+        name:"Hicrete",
+        abbrevation:"HS",
+        address:"K K Market",
+        city:"Pune",
+        state:"Maharashtra",
+        country:"India",
+        pincode:"411051",
+        phone:"1234567890"
+
+    };
+});
+
+
+myApp.controller('ModifyUserController',function($scope,$http,configService){
+
+    $scope.refreshRoleList=true;
+    //$scope.step=1;
+    $scope.userInfoSubmitted=false;
+    $scope.accessInfoSubmitted=false;
+    $scope.showCompanyError=false;
+
+    $scope.roleAccessList=[];
+    $scope.selectedRole={"roleId":""};
+    $scope.otherAccessList=[];
+    $scope.isFromUser=true;
+
+    $scope.userInfo={
+        name:"Atul Dhatrak"
+    };
+
+
+    configService.getRoleList($http,$scope);
+
+    //$scope.nextStep = function() {
+    //    $scope.step++;
+    //}
+    //
+    //$scope.prevStep = function() {
+    //    $scope.step--;
+    //}
+
+
+    //$scope.clearUserForm=function(){
+    //    $scope.step=1;
+    //    $scope.userInfo={
+    //        firstName:"",
+    //        lastName:"",
+    //        dob:"",
+    //        address:"",
+    //        city:"",
+    //        state:"",
+    //        country:"",
+    //        pincode:"",
+    //        email:"",
+    //        mobile:"",
+    //        designation:"",
+    //        userType:""
+    //    };
+    //    $scope.roleAccessList=[];
+    //    $scope.otherAccessList=[];
+    //    $scope.selectedRole={"roleId":""};
+    //    //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser";
+    //
+    //}
+
+
+
+    $scope.addUser=function(){
+        // var companySelected=false;
+        // angular.forEach($scope.companyList, function(company) {
+        //       companySelected=companySelected || company.value;
+        //    });
+        // if(!companySelected){
+        // 	$scope.showCompanyError=true;
+        // 	return;
+        // }
+
+
+        var data={
+            operation :"addUser",
+            userInfo:$scope.userInfo,
+            roleId: $scope.selectedRole.roleId,
+            accessPermissions:$scope.roleAccessList
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                console.log(data.status);
+                console.log(data.message);
+                if(data.status=="Successful"){
+                    alert("Password is :"+data.message);
+                    doShowAlert("Success","User created successfully");
+                    window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+                }else if(data.status=="Unsuccessful"){
+                    doShowAlert("Failure",data.message);
+                }else{
+                    doShowAlert("Failure",data.message);
+                }
+                $scope.clearUserForm();
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occurred");
+                $scope.clearUserForm();
+
+            });
+
+        $scope.userInfoSubmitted=false;
+        $scope.accessInfoSubmitted=false;
+        $scope.showCompanyError=false;
+    }
+
+
+
+
+
+    $scope.loadAccessPermission=function(){
+
+        var data={
+            operation :"getAccessForRole",
+            roleId: $scope.selectedRole.roleId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    doShowAlert("Failure",data.message);
+                }else{
+                    configService.marshalledAccessList(data.message,$scope.roleAccessList);
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+    }
+
+
+    var populateOtherAccessList=function(){
+
+        console.log($scope.accessList);
+        console.log($scope.roleAccessList);
+        angular.forEach($scope.accessList, function(accessEntry) {
+            var addThisEntry=true;
+            angular.forEach($scope.roleAccessList, function(roleAccessEntry) {
+                if(accessEntry.moduleName===roleAccessEntry.moduleName){
+                    addThisEntry=false;
+                    if(!roleAccessEntry.read.ispresent){
+                        accessEntry.write.ispresent=false;
+                        $scope.otherAccessList.push(accessEntry);
+
+                    }else if(!roleAccessEntry.write.ispresent){
+                        accessEntry.read.ispresent=false;
+                        $scope.otherAccessList.push(accessEntry);
+
+                    }
+                }
+            });
+            if(addThisEntry){
+                $scope.otherAccessList.push(accessEntry);
+            }
+        });
+        console.log($scope.otherAccessList);
+    }
+
+
+    $scope.loadExtraAccessPermission=function(){
+
+        $scope.accessList=[];
+        var data={
+            operation :"getAccessPermission"
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function(data){
+                if(data.status!="Successful"){
+                    //doShowAlert("Failure",data.message);
+                }else{
+
+                    configService.marshalledAccessList(data.message,$scope.accessList);
+                    populateOtherAccessList();
+                }
+            })
+            .error(function(data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+                $scope.loaded=true;
+            });
+    }
+
+
+
+
+
+
+    $scope.addExtraAccessPermission=function(){
+        angular.forEach($scope.otherAccessList, function(otherAccessEntry) {
+            var addThisEntry=true;
+            angular.forEach($scope.roleAccessList, function(roleAccessEntry) {
+                if(roleAccessEntry.moduleName===otherAccessEntry.moduleName){
+                    addThisEntry=false;
+                    if(otherAccessEntry.read.val){
+                        roleAccessEntry.read.ispresent=	true;
+                        roleAccessEntry.read.val= true;
+                        roleAccessEntry.read.accessId=otherAccessEntry.read.accessId ;
+
+                    }else if(otherAccessEntry.write.val){
+
+                        roleAccessEntry.write.ispresent= true;
+                        roleAccessEntry.write.val= true;
+                        roleAccessEntry.write.accessId=otherAccessEntry.write.accessId ;
+
+                    }
+                }
+            });
+            if(addThisEntry){
+
+                if(otherAccessEntry.read.val)
+                    otherAccessEntry.read.ispresent=otherAccessEntry.read.val;
+
+                if(otherAccessEntry.write.val)
+                    otherAccessEntry.write.ispresent=otherAccessEntry.write.val;
+
+                $scope.roleAccessList.push(otherAccessEntry);
+            }
+        });
+    }
+
+
 });

@@ -80,14 +80,12 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         $scope.loading=true;
         $scope.errorMessage="";
         $scope.warningMessage="";
-
         $('#loader').css("display","block");
         var config = {
             params: {
                 product: product
             }
         };
-        console.log("Loader"+$scope.loading);
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
@@ -118,7 +116,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.msg;
+                $scope.errorMessage=data.error;
                 $('#error').css("display","block");
             });
 
@@ -303,6 +301,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
+    $scope.errorMessage="";
+    $scope.warningMessage="";
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -404,6 +404,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     };
 
     $scope.addInwardDetails = function () {
+        $scope.errorMessage="";
+        $scope.warningMessage="";
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }
@@ -438,8 +440,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
-                        window.location.reload(true);
-                        //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                        window.location="dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -684,8 +685,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log("In Post of outward entry success:");
                 console.log(data);
                  setTimeout(function(){
-                  //window.location.reload(true);
-                     //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                     window.location="dashboard.php#/Inventory";
                 },1000);
                 $scope.outwardData = data;
                 $scope.clearFields($scope.OutwardData);
@@ -736,8 +736,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 console.log(data);
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    window.location.reload(true);
-                    //window.location="http://localhost/Hicrete_WebAppGitRepo/Hicrete_WebApp/dashboard.php#/Inventory";
+                    window.location="dashboard.php#/Inventory";
                 }, 1000);
 
 
@@ -811,7 +810,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
     $scope.materialType = [];
     $scope.submitted = false;
-
+    $scope.errorMessage="";
+    $scope.warningMessage="";
     $scope.materialType.push({
         type: ""
     });
@@ -899,7 +899,8 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         console.log(supplier.city);
         console.log(supplier.country);
         console.log(supplier.pinCode);
-
+        $scope.errorMessage="";
+        $scope.warningMessage="";
         addSupplierService.addSupplier($scope, $http, supplier);
     };
 
@@ -1100,6 +1101,23 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             data: data
         }
     };
+
+    $scope.todayDateOfEntry = function() {
+        $scope.prodBatchInfo.dateOfEntry = new Date();
+    };
+    $scope.todayDateOfEntry();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openPicker = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
+
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");
@@ -1291,7 +1309,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             prodBatchInfo.option = message;
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
             setTimeout(function () {
-                window.location.reload(true);
+                window.location="dashboard.php#/Inventory";
             }, 1000);
         }
         else if (message == 'Modify') {
@@ -1301,7 +1319,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
                 prodBatchInfo.option = message;
                 ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
                 setTimeout(function () {
-                    window.location.reload(true);
+                    window.location="dashboard.php#/Inventory";
                 }, 1000);
             }
             else {
@@ -1317,7 +1335,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
             setTimeout(function () {
-                window.location.reload(true);
+                window.location="dashboard.php#/Inventory";
             }, 1000);
 
         }
@@ -1328,11 +1346,10 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             if(page =='Complete')
             {
                 setTimeout(function () {
-                    window.location.reload(true);
+                    window.location="dashboard.php#/Inventory";
                 }, 1000);
             }
         }
-
         $scope.submitted = false;
     };
 

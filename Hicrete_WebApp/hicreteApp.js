@@ -238,6 +238,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'tempAccessController'    
         })
 
+        .state('Config.viewRole', {
+            url: '/SearchRole',
+            templateUrl: 'Config/html/ViewRole.html'
+
+        })
         .state('Config.userSearch', {
             url: '/SearchUser',
             templateUrl: 'Config/html/ViewUser.html',
@@ -258,6 +263,28 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         })
 
+        .state('Config.modifyCompany', {
+            url: '/ModifyCompany',
+            templateUrl: 'Config/html/ModifyCompany.html',
+            controller:'ModifyCompanyController'
+        })
+
+        .state('Config.modifyRole', {
+            url: '/ModifyRole',
+            templateUrl: 'Config/html/ModifyRole.html',
+            controller:'ModifyRoleController'
+        })
+
+        .state('Config.modifyWarehouse', {
+            url: '/ModifyWarehouse',
+            templateUrl: 'Config/html/ModifyWarehouse.html',
+            controller:'ModifyWarehouseController'
+        })
+        .state('Config.modifyUser', {
+            url: '/ModifyUser',
+            templateUrl: 'Config/html/ModifyUser.html',
+            controller:'ModifyUserController'
+        })
         .state('myProfile', {
             url: '/myProfile',
             templateUrl: 'Config/html/MyProfile.html'
@@ -333,6 +360,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ProjectDetailsController'
         })
 
+        .state('Process.addTask', {
+            url: '/AddTask',
+            templateUrl:'Process/html/schedule/AddTask.html',
+            controller:'CreateTaxController'
+        })
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',

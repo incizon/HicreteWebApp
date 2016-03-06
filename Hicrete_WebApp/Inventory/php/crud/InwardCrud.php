@@ -165,8 +165,6 @@ class InwardData extends CommonMethods
         $stmt = $dbh->prepare("SELECT inward FROM product_master WHERE inwardno =:inwardno");
 
         $stmt->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
-//            $stmt->bindParam(':materialtypeid', $this->productType, PDO::PARAM_STR, 10);
-//            $stmt->bindParam(':unitofmeasure', $this->productUnitOfMeasure, PDO::PARAM_STR, 10);
         $stmt->execute();
 
         $count=$stmt->rowcount();
