@@ -33,19 +33,19 @@
                                             <!--End of project Field-->
                                         <div ><!--main start division select tag-->
                                             <!--Start Firm name feild-->
-                                            <div class="form-group adjust-padding">
-                                                <label class="col-md-2 control-label">Cost Center Name</label>
-                                                <div class="col-md-7">                                            
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input name="costCenterName" type="text" ng-model="costCenterDetails.costCenterName" class="form-control" required pattern="[a-zA-Z0-9]+">
-                                                    </div>  
-                                                    <div class="help-block" ng-messages="costCenterForm.costCenterName.$error" ng-show="createCostCenterClicked">
-                                                        <p style="color:red" ng-message="required">CostCenter Name Cannot be blank</p>    
-                                                        <p style="color:red" ng-message="pattern">Invalid CostCenter Name.Only Alphanumeric characters allowed</p>   
-                                                    </div>                         
-                                                </div>
-                                            </div>
+                                            <!--<div class="form-group adjust-padding">-->
+                                                <!--<label class="col-md-2 control-label">Cost Center Name</label>-->
+                                                <!--<div class="col-md-7">                                            -->
+                                                    <!--<div class="input-group">-->
+                                                        <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                                        <!--<input name="costCenterName" type="text" ng-model="costCenterDetails.costCenterName" class="form-control" required pattern="[a-zA-Z0-9]+">-->
+                                                    <!--</div>  -->
+                                                    <!--<div class="help-block" ng-messages="costCenterForm.costCenterName.$error" ng-show="createCostCenterClicked">-->
+                                                        <!--<p style="color:red" ng-message="required">CostCenter Name Cannot be blank</p>    -->
+                                                        <!--<p style="color:red" ng-message="pattern">Invalid CostCenter Name.Only Alphanumeric characters allowed</p>   -->
+                                                    <!--</div>                         -->
+                                                <!--</div>-->
+                                            <!--</div>-->
                                             <!--End of Firm name feild-->
                                          
                                             <!--Start of project Field-->
@@ -63,10 +63,10 @@
                                                    <table class="table">
                                                         <thead>
                                                             <tr>
-                                                                <th class="col-md-4">Segment name</th>
-                                                                <th class="col-md-2">Allocated Budget</th>
+                                                                <th class="col-md-3">Segment name</th>
+                                                                <th class="col-md-3">Allocated Budget</th>
                                                                 <th class="col-md-2">Alert level</th>
-                                                                
+                                                                <th class="col-md-2">Remove</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -74,7 +74,11 @@
                                                                 <td>{{segmentEntry.name}}</td>
                                                                 <td><input name="allocatedBudget" ng-model="segmentEntry.allocatedBudget" type="text" placeholder="" class="form-control" required pattern="[0-9]+"></td>
                                                                 <td><input ng-model="segmentEntry.alertLevel" name="alertLevel" type="text" placeholder="" class="form-control" required pattern="[0-9]*[.]?[0-9]*"></td>
-                                                               
+                                                                <td style="text-align: center;">
+                                                                    <a ng-click="remove($index)" class="panel-remove">
+                                                                        <span class="fa fa-times"></span>
+                                                                    </a>
+                                                                </td>
                                                             </tr>                                          
                                                         </tbody>
                                                     </table>
@@ -97,7 +101,8 @@
                                 <!--End of buttons section-->
                             </div>
                             <!--End of form section-->
-                             </form>
-                            
+                            </div>
+                            </form>
+
                         </div>
                     </div> 

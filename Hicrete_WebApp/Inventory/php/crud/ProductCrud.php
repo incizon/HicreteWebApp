@@ -37,11 +37,23 @@
 
             } else {
 
-
             }
-
         }
+        public function isAvailable($dbh){
 
+            $stmt = $dbh->prepare("SELECT productname FROM product_master WHERE productname =:productname");
+
+            $stmt->bindParam(':productname', $this->productName, PDO::PARAM_STR, 10);
+//            $stmt->bindParam(':materialtypeid', $this->productType, PDO::PARAM_STR, 10);
+//            $stmt->bindParam(':unitofmeasure', $this->productUnitOfMeasure, PDO::PARAM_STR, 10);
+            $stmt->execute();
+
+            $count=$stmt->rowcount();
+            if($count!=0)
+            {return 1;}
+            else
+            {return 0;}
+        }
         public function select()
         {
         }
@@ -105,18 +117,19 @@
                             $stmtProductProductMaster->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
                             if ($stmtProductProductMaster->execute()) {
                                 $lastMaterialId = $dbh->lastInsertId();
+
+//                                $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid)
+//                                                      values (:materialid)");
+
+//                                $stmtInventory->bindParam(':materialid', $lastMaterialId);
+//                                if ($stmtInventory->execute()) {
+                                    $this->showAlert("success", "Product added Successfully!!!");
+//                                } else {
+//                                    $this->showAlert('Failure', "Error while adding 5");
+////                                    $dbh->rollBack();
+//                                }
                                 if ($dbh->commit()) {
-                                    $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid)
-                                                      values (:materialid,:warehouseid,:companyid)");
-                                    $stmtInventory->bindParam(':materialid', $lastMaterialId, PDO::PARAM_STR, 10);
-                                    $stmtInventory->bindParam(':warehouseid', $userId, PDO::PARAM_STR, 10);
-                                    $stmtInventory->bindParam(':companyid', $userId, PDO::PARAM_STR, 10);
-                                    if ($stmtInventory->execute()) {
-                                        $this->showAlert("success", "Product added Successfully!!!");
-                                    } else {
-                                        $this->showAlert('Failure', "Error while adding 5");
-                                        $dbh->rollBack();
-                                    }
+
                                     // $this->showAlert('success',"Product added Successfully!!!");
                                 } else {
                                     $this->showAlert('success', "Commit failed!!");
@@ -143,7 +156,7 @@
 
             } catch (Exception $e) {
                 echo $e->getMessage();
-                $dbh->rollBack();
+//                $dbh->rollBack();
             }
         }
 

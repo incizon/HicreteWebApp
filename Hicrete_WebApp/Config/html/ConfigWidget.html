@@ -1,99 +1,115 @@
-<div class="row">
 
+    <style>
+        #primary_nav_wrap
+        {
+            margin-top:15px
+        }
+        #primary_nav_wrap ul {
+            -moz-border-bottom-colors: none;
+            -moz-border-left-colors: none;
+            -moz-border-right-colors: none;
+            -moz-border-top-colors: none;
+            background-color: #fff;
+            border-color: #ccc -moz-use-text-color;
+            border-image: none;
+            border-style: solid none;
+            border-width: 1px medium;
+            float: left;
+            list-style: outside none none;
+            margin: 0 0 -14px;
+            padding: 0;
+            position: relative;
+            top: -25px;
+            width: 100%;
+        }
+        #primary_nav_wrap ul a
+        {
+            display:block;
+            color:#333;
+            text-decoration:none;
+            font-size:12px;
+            line-height:32px;
+            padding:0 15px;
+        }
+        #primary_nav_wrap ul li
+        {
+            position:relative;
+            float:left;
+            margin:0;
+            padding:0
+        }
+        #primary_nav_wrap ul li.current-menu-item
+        {
+            background:#ddd
+        }
+        #primary_nav_wrap ul li:hover
+        {
+            background:#f6f6f6
+        }
+        #primary_nav_wrap ul ul
+        {
+            display:none;
+            position:absolute;
+            top:100%;
+            left:0;
+            background:#fff;
+            padding:0;
+            width: 200px;
+            z-index: 9999;
+        }
+        #primary_nav_wrap ul ul li
+        {
+            float:none;
+            width:200px
+        }
+        #primary_nav_wrap ul ul a
+        {
+            line-height:120%;
+            padding:10px 15px
+        }
+        #primary_nav_wrap ul ul ul
+        {
+            top:0;
+            left:100%
+        }
+        #primary_nav_wrap ul li:hover > ul
+        {
+            display:block
+        }
+    </style>
 
-    <div class="col-md-3">
+    <div>
+        <nav id="primary_nav_wrap">
+            <ul>
+                <li><a>Create</a>
+                    <ul>
+                        <li><a ui-sref="Config.addUser">User</a></li>
+                        <li><a ui-sref="Config.addRole">Role</a></li>
+                        <li><a ui-sref="Config.addCompany">Company</a></li>
+                        <li><a ui-sref="Config.addWarehouse">Warehouse</a></li>
+                    </ul>
+                </li>
+                <li><a>Search</a>
+                    <ul>
+                        <li><a ui-sref="Config.search">User</a></li>
+                        <li><a ui-sref="Config.search">Company</a></li>
+                        <li><a ui-sref="Config.search">Warehouse</a></li>
 
-        <!-- START User -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-user" style="color:#278c7d !important;"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278c7d !important;"> User</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col-md-6">
-                    <a ui-sref="Config.addUser"><span class="fa fa-plus" style="margin-top:5px;color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Add user</p></a>
-                </div>
-                
-                
-            </div>
-        </div>
-        <!-- END User-->
+                        </li>
+                    </ul>
+                </li>
+                <li><a>Properties</a>
+                    <ul>
+                        <li><a>Log Properties</a></li>
+                        <li><a>Payroll Properties</a></li>
 
+                    </ul>
+                </li>
+                <li><a>View Roles</a></li>
+
+            </ul>
+        </nav>
     </div>
 
-    <div class="col-md-3">
-
-        <!-- START Roles -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-group" style="color:#278c7d !important;"></span>
-                <div class="widget-subtitle" style="margin-top: -6px; color:#278c7d !important;">Roles</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col-md-6">
-                    <a ui-sref="Config.addRole"><span class="fa fa-plus" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Add Role</p></a>
-                </div>
-                <div class="col-md-6">
-                    <a ui-sref="Config.scheduleTempAccess"><span class="fa fa-info-circle" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Temp Access</p></a>
-                </div>
-            </div>
-        </div>
-        <!-- END Roles-->
-
-    </div>
-
-    <div class="col-md-3">
-
-        <!-- START Company -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
-            
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-building-o" style="color:#278c7d !important;"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278c7d !important;">Enterprise</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col-md-6" style=" display:block;text-align:center"> 
-                    <a ui-sref="Config.addCompany"><span class="fa fa-plus" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Company</p></a>
-
-                </div>
-
-                <div class="col-md-6" style=" display:block;text-align:center"> 
-                    <a ui-sref="Config.addWarehouse"><span class="fa fa-plus" style="color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Warehouse</p></a>
-                </div>
-            </div>
-        </div>
-        <!-- END Company-->
-
-    </div>
-
-    <div class="col-md-3">
-
-        <!-- START instance -->
-        <div class="widget widget-info widget-padding-sm" style="padding-top: 0px;background-color:#ffffff !important;">
-            <a href="#" class="tile" style="margin-bottom: 0px;padding: 0px;min-height: 82px; border: 0px;">
-                <span class="fa fa-copy" style="color:#278c7d !important;"></span>
-                <div class="widget-subtitle" style="margin-top: -6px;color:#278c7d !important;">Instance</div>
-            </a>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col-md-6">
-                    <a ui-sref="Config.search"><span class="fa fa-plus" style="margin-top:5px;color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Search</p></a>
-                </div>
-                
-                
-            </div>
-            <div class="widget-buttons widget-c3" style="margin-top: 0px;">
-                <div class="col-md-6">
-                    <a ui-sref="Config.requestAccess"><span class="fa fa-plus" style="margin-top:5px;color:#278c7d !important;"></span><p style="font-size:12px; display:inline; padding-left:10px;color:#278c7d !important;">Request</p></a>
-                </div>
-                
-                
-            </div>
-
-        </div>
-        <!-- END Instance-->
-
-    </div>
-
-</div>
-
-<div ui-view></div>
+    <div ui-view></div>
+    <!-- END WIDGETS -->

@@ -1,0 +1,38 @@
+<div class="modal-header">
+
+    <h4 class="modal-title">Follow Up </h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <form  name="FollowUpForm" class="form-horizontal" novalidate>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <label class="control-label">Followup Date</label>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                        <input type="date" class="form-control" ng-model="followupDetails.followupDate">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4">
+                    <label class="control-label">Followup Description</label>
+                </div>
+                <div class="col-md-8">
+
+                        <textarea class="form-control" row="3" name="followupDescription" ng-model="followupDetails.followupDescription"></textarea>
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default"
+            ng-click="Save()">Submit</button>
+    <button type="button" class="btn btn-default"
+            ng-click="Cancel()">Cancel</button>
+</div>

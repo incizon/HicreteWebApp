@@ -2,29 +2,13 @@
     require_once 'Database/Database.php';
     include_once 'crud/InwardCrud.php';
     include_once 'crud/OutwardCrud.php';
+    require_once 'utils/DatabaseCommonOperations.php';
 
     /********************************************************
      * Get connection to the Database
      **********************************************************/
     $db = Database::getInstance();
     $dbh = $db->getConnection();
-
-//     $_host = "localhost";
-//     $_username = "admin";
-//     $_password = "admin";
-//     $_database = "hicrete";
-//     $connection=null;
-//     $dbhHicret=null;
-//
-//    try {
-//        $connection  = new PDO("mysql:host=$_host;dbname=$_database", $_username, $_password);
-//        // echo 'Connected to database';
-//        $dbhHicret=$connection;
-//    } catch (PDOException $e) {
-//
-//        echo $e->getMessage();
-//    }
-
 
     if (!isset($_SESSION['token'])) {
         session_start();
@@ -69,7 +53,12 @@
             case 'insert':
                 # code...
                 $productObj = new InwardData($pData);
+//                if($productObj->isAvailable($dbh)){
                 $productObj->insertInwardInToDb($dbh, $userId, $pData);
+//                }else{
+//                    echo "Inward number that you are trying to insert is already present";
+//                }
+
                 break;
             case 'delete':
                 # code...
@@ -100,11 +89,15 @@
             case 'insert':
                 # code...
                 $productObj = new OutwardData($pData);
-                $productObj->insertOutwardInToDb($dbh, $userId, $pData);
+                if($productObj->isAvailable($dbh)){
+                    $productObj->insertOutwardInToDb($dbh, $userId, $pData);
+                }else{
+                    echo "Outward number that you are trying to insert is already present";
+                }
+
                 break;
             case 'delete':
                 # code...
-
                 break;
             case 'modify':
                 # code...
@@ -135,12 +128,32 @@
                 JOIN materialtype ON
                 materialtype.materialtypeid=product_master.materialtypeid
                 ");
+        if($stmt->execute()){
+            $json_array=array();
+            while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $inventoryData = array();
+                $inventoryData['abbrevation']=$result2['abbrevation'];
+                $inventoryData['warehouseid']=$result2['warehouseid'];
+                $inventoryData['companyid']=$result2['companyid'];
+                $inventoryData['inventoryid']=$result2['inventoryid'];
+                $inventoryData['materialid']=$result2['materialid'];
+                $inventoryData['materialtype']=$result2['materialtype'];
+                $inventoryData['productname']=$result2['productname'];
+                $inventoryData['totalquantity']=$result2['totalquantity'];
+                $warehouseId=$result2['warehouseid'];
+                $companyId=$result2['companyid'];
+                $inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                $inventoryData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 
-        $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $stmt->fetchAll();
-        $json = json_encode($result);
-        echo $json;
+                array_push($json_array,$inventoryData);
+            }
+            $json = json_encode($json_array);
+            echo $json;
+        }else{
+
+        }
+
+
 
     }
 

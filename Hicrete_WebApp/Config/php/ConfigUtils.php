@@ -383,6 +383,37 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
 
     }
 
+
+    public static function doesUserHasAccess($moduleName,$userId,$accessType){
+        try{
+
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT * FROM `useraccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=:moduleName AND `accessType`=:accessType) AND `userId`=:userId");
+
+            $stmt->bindParam(':moduleName', $moduleName, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':accessType', $accessType, PDO::PARAM_STR);
+            if($stmt->execute()){
+                $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (count($result) > 0) {
+                    echo AppUtil::getReturnStatus("Successful","Has Permission ");
+                }else{
+
+
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
+        }
+
+    }
+
+
 }
 
 ?>

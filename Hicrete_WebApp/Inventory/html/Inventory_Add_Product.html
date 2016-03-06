@@ -13,10 +13,11 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="productName" ng-model="product.productname" class="form-control" required/>
+                                <input type="text" name="productName" ng-model="product.productname" class="form-control" maxlength="100" required/>
                             </div>
                             <div class="help-block" ng-messages="addProductForm.productName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter product name</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 100 character allowed</p>
                             </div>
                             <!--<div ng-messages="addProductForm.product.$error">-->
                                 <!--<div ng-message='required'>* This is a required field</div>-->
@@ -30,7 +31,10 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" ng-model="product.abbrevation" class="form-control"/>
+                                <input type="text" name="abbrevation" maxlength="25" ng-model="product.abbrevation" class="form-control"/>
+                            </div>
+                            <div class="help-block" ng-messages="addProductForm.abbrevation.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="maxlength">Maximum 25 character allowed</p>
                             </div>
                            <!--  <span class="help-block">This is sample of text field</span> -->
                         </div>
@@ -47,6 +51,7 @@
                             </div>
                             <div class="help-block" ng-messages="addProductForm.productType.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please select product type</p>
+
                             </div>
                         <!-- {{product.productType}} -->
 
@@ -61,10 +66,11 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="unit_of_measure" data-ng-model="product.unitofmeasure" class="form-control" required/>
+                                <input type="text" name="unit_of_measure" maxlength="15" data-ng-model="product.unitofmeasure" class="form-control" required/>
                             </div>
                             <div class="help-block" ng-messages="addProductForm.unit_of_measure.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please select unit of measure</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 15 character allowed</p>
                             </div>
                    <!--          <span style="color:red" ng-show="addProductForm.unit_of_measure.$dirty && addProductForm.unit_of_measure.$invalid">
                                 <span ng-show="addProductForm.unit_of_measure.$error.required">Unit Of Measure is required.</span> -->
@@ -75,10 +81,11 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="packaging" data-ng-model="product.packaging" class="form-control" required/>
+                                <input type="text" name="packaging" maxlength="30" data-ng-model="product.packaging" class="form-control" required/>
                             </div>
                             <div class="help-block" ng-messages="addProductForm.packaging.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter value of packaging</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 30 character allowed</p>
                             </div>
                 <!--             <span style="color:red" ng-show="addProductForm.Packaging.$dirty && addProductForm.Packaging.$invalid">
                                 <span ng-show="addProductForm.Packaging.$error.required">Packaging type is required.</span> -->
@@ -89,10 +96,11 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="number" name="alert_qty" min="0" data-ng-model="product.alertquantity" class="form-control" required/>
+                                <input type="number" name="alert_qty" min="0" maxlength="10" data-ng-model="product.alertquantity" class="form-control" required/>
                             </div>
                             <div class="help-block" ng-messages="addProductForm.alert_qty.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter alert quantity for product</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 10 digit's allowed</p>
                             </div>
                <!--             <span style="color:red" ng-show="addProductForm.alert_qty.$dirty && addProductForm.alert_qty.$invalid">
                                 <span ng-show="addProductForm.alert_qty.$error.required">Alert Qty is required.</span> -->
@@ -103,10 +111,11 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="productColor" data-ng-model="product.color" class="form-control" required/>
+                                <input type="text" name="productColor" maxlength="20" data-ng-model="product.color" class="form-control" required/>
                             </div>
                             <div class="help-block" ng-messages="addProductForm.productColor.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter product color</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 20 character allowed</p>
                             </div>
                             <!-- <span class="help-block">This is sample of text field</span> -->
                         </div>
@@ -115,9 +124,10 @@
                     <div class="form-group">
                         <label class="col-md-4 col-xs-12 control-label">Description</label>
                         <div class="col-md-4 col-xs-12">
-                            <textarea class="form-control" ng-model="product.description" name="productDescription" rows="5" required></textarea>
+                            <textarea class="form-control" maxlength="150" ng-model="product.description" name="productDescription" rows="5" required></textarea>
                             <div class="help-block" ng-messages="addProductForm.productDescription.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter product description</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 150 character allowed</p>
                             </div>
                             <!-- <span class="help-block">Default textarea field</span> -->
                         </div>

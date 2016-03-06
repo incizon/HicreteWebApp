@@ -1,0 +1,326 @@
+<div class="col-md-12">
+
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+
+            <h3 class="panel-title"><strong>Modify Project</strong> Quotation </h3>
+
+        </div>
+        <div class="panel-body">
+
+            <form name="QuotationForm" class="form-horizontal">
+
+                <div class="row">
+                    <h3 class="panel-title"><strong>Modify</strong> Quotation </h3>
+                </div><br>
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Project Name :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="control-label">{{Quotation.ProjectName}}</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Quotation Title :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="QuotationTitle" ng-model="Quotation.Title"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Quotation Date :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="date" class="form-control" name="QuotationDate" ng-model="Quotation.Date"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Quotation Subject :</label>
+                            </div>
+                            <div class="col-md-8">
+                                    <textarea class="form-control" name="subject"
+                                              ng-model="Quotation.Subject" rows="2">
+                                    </textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Company Name :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="control-label">{{Quotation.CompanyName}}</label>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Reference No :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="ReferenceNo" ng-model="Quotation.ReferenceNo"/>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Attach Quotation :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="file" class="form-control" name="QuotationBlob" ng-model="Quotation.Blob"/>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+
+                </div><br>
+                <div class="row">
+                    <h3 class="panel-title"><strong>Quotation </strong>Details </h3>
+                </div><br>
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <div class="col-md-4">
+
+                                <label class="control-label">Number of Rows</label>
+
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="col-md-10">
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+
+                                        <input type="text" name="noOfRows" ng-model="noOfRows"
+                                               class="form-control">
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <button class="btn btn-primary" ng-click="addRows()">Add</button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div><br>
+
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit</th>
+                            <th>Unit rate</th>
+                            <th>Amount</th>
+                            <th>Remove</th>
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="quotationEntry in QuotationDetails">
+                            <td>{{$index+1}}</td>
+                            <td>
+                                <input type="text" name="Title" placeholder="Title"
+                                       class="form-control" ng-model="quotationEntry.title"/>
+                            </td>
+                            <td>
+                                <input type="text" name="Decription" placeholder="Description"
+                                       class="form-control" ng-model="quotationEntry.description" />
+                            </td>
+                            <td>
+                                <input type="text" name="Quantity" placeholder="Quantity"
+                                       class="form-control" ng-model="quotationEntry.quantity"/>
+                            </td>
+                            <td><input type="text" name="Unit" placeholder="Unit"
+                                       class="form-control" ng-model="quotationEntry.unit"/>
+                            </td>
+                            <td><input type="text" name="UnitRate" placeholder="Unit Rate"
+                                       class="form-control" ng-model="quotationEntry.unitrate"/>
+                            </td>
+                            <td>
+                                {{quotationEntry.quantity * quotationEntry.unitrate}}
+                            </td>
+                            <td>
+                                <a ng-click="remove($index)" class="panel-remove">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="col-md-offset-7 col-md-5">
+
+                        <div class="col-md-4">
+                            <label class="control-label">Total Amount :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="control-label"><strong>{{Quotation.totalAmount}}</strong></label>
+                        </div>
+                    </div>
+                </div><br>
+
+
+                <div class="row">
+                    <h3 class="panel-title"><strong>Tax </strong>Details </h3>
+                </div><br>
+                <div class="row">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+
+                            <div class="col-md-4">
+
+                                <label class="control-label">Number of Taxes</label>
+
+                            </div>
+                            <div class="col-md-8">
+
+                                <div class="col-md-10">
+
+                                    <div class="input-group">
+
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+
+                                        <input type="text" name="noOfTaxes" ng-model="noOfTaxes"
+                                               class="form-control">
+
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="col-md-2">
+
+                                    <button class="btn btn-primary" ng-click="addTaxes()">Add</button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                </div><br>
+
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Name</th>
+                            <th>Percentage</th>
+                            <th>Tax Amount</th>
+                            <th>Remove</th>
+
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="taxentry in TaxDetails">
+                            <td>{{$index+1}}</td>
+                            <td>
+                                <input type="text" name="TaxTitle" placeholder="Title"
+                                       class="form-control" ng-model="taxentry.name"/>
+                            </td>
+                            <td>
+                                <input type="text" name="TaxPercentage" placeholder="Percentage"
+                                       class="form-control" ng-model="taxentry.percentage"/>
+                            </td>
+                            <td>
+                                <input type="text" name="TaxAmount" placeholder="Tax Amount"
+                                       class="form-control" ng-model="taxentry.amount"/>
+                            </td>
+
+                            <td>
+                                <a ng-click="remove($index)" class="panel-remove">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="col-md-offset-7 col-md-5">
+
+                        <div class="col-md-4">
+                            <label class="control-label">Total Tax :</label>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="control-label"><strong>{{Quotation.taxAmount}}</strong></label>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-md-offset-7 col-md-5">
+                        <div class="col-md-4">
+                            <label class="control-label"><strong>Total Amount :</strong></label>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="control-label"><strong>{{Quotation.grandTotal}}</strong></label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <div class="panel-footer">
+
+            <button class="btn  btn-danger pull-right">Modify<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            </button>
+            <button class="btn  btn-default pull-right">Clear Form</button>
+        </div>
+    </div>
+
+</div>

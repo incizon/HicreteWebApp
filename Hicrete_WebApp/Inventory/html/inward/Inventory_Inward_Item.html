@@ -36,7 +36,7 @@
                                 <label class="col-md-3 control-label"> Company</label>
 
                                 <div class="col-md-9">
-                                    <select class="form-control" ng-model="InwardData.companyName" name="companyName"
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.companyName" name="companyName"
                                             required>
                                         <option value="" disabled selected>Select Company</option>
                                         <option ng-repeat="x in Company"
@@ -72,11 +72,10 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" name="noOfElement" ng-model="noOfElement"
-                                               class="form-control" pattern="[0-9]+" required>
+                                               class="form-control" pattern="[0-9]+">
                                     </div>
                                     <div class="help-block" ng-messages="inwardEntryForm.noOfElement.$error"
                                          ng-show="submitted">
-                                        <span style="color:red" ng-message="required">Please enter no of element </span>
                                         <span style="color:red"
                                               ng-message="pattern">Only numeric value is allowed</span>
                                     </div>
@@ -107,7 +106,7 @@
                                 <label class="col-md-3 control-label">Warehouse</label>
 
                                 <div class="col-md-9">
-                                    <select class="form-control" ng-model="InwardData.warehouseName"
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.warehouseName"
                                             name="warehouseName" required>
                                         <option value="" disabled selected>Select Warehouse</option>
                                         <option ng-repeat="x in warehouses"
@@ -125,7 +124,7 @@
                                 <label class="col-md-3 control-label">Has Transport?</label>
 
                                 <div class="col-md-9 col-xs-12">
-                                    <select class="form-control select" ng-model="InwardData.hasTransportDetails"
+                                    <select class=" btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.hasTransportDetails"
                                             name="hasTransportDetails" ng-value="Select" required>
                                         <option value="" disabled selected>Select</option>
                                         <option value="Yes">Yes</option>
@@ -138,24 +137,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<div class="form-group">-->
-                            <!--<label class="col-md-3 control-label">Quantity</label>-->
-                            <!--<div class="col-md-9">                                            -->
-                            <!--<div class="input-group">-->
-                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-                            <!--<input type="number" class="form-control" ng-model="InwardData.materialQuantity" name="materialQuantity" min="0" required/>-->
-                            <!--</div>-->
-                            <!--<div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error" ng-show="submitted">-->
-                            <!--<p style="color:red" ng-message="required">Please enter material quantity.</p>-->
-                            <!--</div>-->
-                            <!--</div>-->
-                            <!--</div>-->
 
                         </div>
 
                     </div>
                     <div class="row" style="margin-top: 3%">
-
+                        <p style="color:red" ng-if="getNoOfMaterials()==0">Please add atleast one material</p>
                         <table class="table table-actions">
                             <thead>
                             <tr>
@@ -168,13 +155,16 @@
                             </thead>
                             <tr ng-repeat="materials in InwardData.inwardMaterials">
                                 <td>
-                                    <select class="form-control select" ng-model="materials.material" name="material"
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.material" name="material"
                                             ng-value="Select" required>
                                         <option value="" disabled selected>Select Material</option>
-                                        <option ng-repeat="x in products " value={{x.materialid}}>{{x.productname}}
+                                        <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
                                         </option>
                                     </select>
-
+                                    <div class="help-block" ng-show="getNoOfMaterials()<=0"
+                                         ng-show="submitted">
+                                        <p style="color:red">Please add atleast one material.</p>
+                                    </div>
                                     <div class="help-block" ng-messages="inwardEntryForm.material.$error"
                                          ng-show="submitted">
                                         <p style="color:red" ng-message="required">Please enter material.</p>
@@ -184,11 +174,12 @@
 
 
                                     <input type="number" class="form-control" ng-model="materials.materialQuantity"
-                                           name="materialQuantity" min="0" required/>
+                                           name="materialQuantity" min="1" required/>
 
                                     <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"
                                          ng-show="submitted">
                                         <p style="color:red" ng-message="required">Please enter material quantity.</p>
+                                        <!--<p style="color:red" ng-message="materials.materialQuantity<=0">Please add valid quantity.</p>-->
                                     </div>
                                 </td>
 
@@ -202,7 +193,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <select class="form-control select" ng-model="materials.suppplierName"
+                                    <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.suppplierName"
                                             ng-value="Select" name="supplierName" required>
                                         <option value="" disabled selected>Select Supplier</option>
                                         <option ng-repeat="x in suppliers " value={{x.supplierid}}>{{x.suppliername}}
@@ -228,7 +219,7 @@
                 <div class="panel-footer" style="text-align:center">
                     <button class="btn btn-default" ng-click="clearFields(InwardData)">Clear Form</button>
                     <button class="btn btn-primary"
-                            data-ng-click="(submitted=true) && inwardEntryForm.$valid && nextStep()">Submit
+                            data-ng-click="(submitted=true) && getNoOfMaterials()>0 && inwardEntryForm.$valid && nextForm()">Submit
                     </button>
                 </div>
             </div>

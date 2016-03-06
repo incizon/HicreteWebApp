@@ -1,0 +1,132 @@
+<style>
+    #primary_nav_wrap
+    {
+        margin-top:15px
+    }
+    #primary_nav_wrap ul {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #fff;
+        border-color: #ccc -moz-use-text-color;
+        border-image: none;
+        border-style: solid none;
+        border-width: 1px medium;
+        float: left;
+        list-style: outside none none;
+        margin: 0 0 -14px;
+        padding: 0;
+        position: relative;
+        top: -25px;
+        width: 100%;
+    }
+    #primary_nav_wrap ul a
+    {
+        display:block;
+        color:#333;
+        text-decoration:none;
+        font-size:12px;
+        line-height:32px;
+        padding:0 15px;
+    }
+    #primary_nav_wrap ul li
+    {
+        position:relative;
+        float:left;
+        margin:0;
+        padding:0
+    }
+    #primary_nav_wrap ul li.current-menu-item
+    {
+        background:#ddd
+    }
+    #primary_nav_wrap ul li:hover
+    {
+        background:#f6f6f6
+    }
+    #primary_nav_wrap ul ul
+    {
+        display:none;
+        position:absolute;
+        top:100%;
+        left:0;
+        background:#fff;
+        padding:0;
+        width: 200px;
+        z-index: 9999;
+    }
+    #primary_nav_wrap ul ul li
+    {
+        float:none;
+        width:200px
+    }
+    #primary_nav_wrap ul ul a
+    {
+        line-height:120%;
+        padding:10px 15px
+    }
+    #primary_nav_wrap ul ul ul
+    {
+        top:0;
+        left:100%
+    }
+    #primary_nav_wrap ul li:hover > ul
+    {
+        display:block
+    }
+</style>
+
+<div>
+    <nav id="primary_nav_wrap">
+        <ul>
+            <li ng-show="hasWrite"><a>Create</a>
+                <ul>
+                    <li><a ui-sref="Process.addCustomer">Customer</a></li>
+                    <li><a ui-sref="Process.addProject">Project</a></li>
+                    <!--<li><a>Schedule</a></li>-->
+                    <li><a ui-sref="Process.addQuotation">Quotation</a></li>
+                    <!--<li><a ui-sref="Process.addInvoice">Invoice</a></li>-->
+                </ul>
+            </li>
+            <li ng-show="hasRead"><a>Search</a>
+                <ul>
+                    <li><a ui-sref="Process.viewCustomers">Customer</a></li>
+                    <li><a ui-sref="Process.viewProject">Project</a></li>
+                    <!--<li><a>Schedule</a></li>-->
+                    </li>
+                </ul>
+            </li>
+            <li><a>Payment</a>
+                <ul>
+                    <li ng-show="hasWrite"><a ui-sref="Process.addPayment">Add Payment</a></li>
+                    <li ng-show="hasRead"><a ui-sref="Process.paymentHistory">Payment History</a></li>
+                    <!--<li><a>Schedule Payment Followup</a></li>-->
+
+                </ul>
+            </li>
+            <li ng-show="hasRead"><a>Followup History</a>
+                <ul>
+                    <li><a ui-sref="Process.quotationFollowupHistory">Quotation Followup History</a></li>
+                    <li><a ui-sref="Process.paymentFollowupHistory">Payment Followup</a></li>
+                    <li><a ui-sref="Process.siteTrackingFollowupHistory">SiteTracking Followup</a></li>
+
+                </ul>
+            </li>
+            <li><a>Project Expense</a>
+                <ul>
+                    <li><a ui-sref="Process.addSegment">Create Budget Segment</a></li>
+                    <li><a ui-sref="Process.materialExpense">Add Material Expenses</a></li>
+                    <li><a ui-sref="Process.otherExpense">Add Other Expenses</a></li>
+                    <li><a ui-sref="Process.searchSegment">Search Budget Segment</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+
+
+
+<div ui-view></div>
+<!-- END WIDGETS -->
