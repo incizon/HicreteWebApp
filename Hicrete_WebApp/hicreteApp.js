@@ -253,7 +253,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.warehouseSearch', {
             url: '/SearchWarehouse',
-            templateUrl: 'Config/html/ViewWarehouse.html'
+            templateUrl: 'Config/html/ViewWarehouse.html',
+            controller:'companyController'
 
         })
 
