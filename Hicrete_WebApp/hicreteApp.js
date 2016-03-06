@@ -238,24 +238,53 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'tempAccessController'    
         })
 
+        .state('Config.viewRole', {
+            url: '/SearchRole',
+            templateUrl: 'Config/html/ViewRole.html'
+
+        })
         .state('Config.userSearch', {
             url: '/SearchUser',
-            templateUrl: 'Config/html/ViewUser.html'
-
+            templateUrl: 'Config/html/ViewUser.html',
+            controller:'userController'
         })
 
         .state('Config.companySearch', {
             url: '/SearchCompany',
-            templateUrl: 'Config/html/ViewCompany.html'
+            templateUrl: 'Config/html/ViewCompany.html',
+            controller:'companyController'
 
         })
 
         .state('Config.warehouseSearch', {
             url: '/SearchWarehouse',
-            templateUrl: 'Config/html/ViewWarehouse.html'
+            templateUrl: 'Config/html/ViewWarehouse.html',
+            controller:'companyController'
 
         })
 
+        .state('Config.modifyCompany', {
+            url: '/ModifyCompany',
+            templateUrl: 'Config/html/ModifyCompany.html',
+            controller:'ModifyCompanyController'
+        })
+
+        .state('Config.modifyRole', {
+            url: '/ModifyRole',
+            templateUrl: 'Config/html/ModifyRole.html',
+            controller:'ModifyRoleController'
+        })
+
+        .state('Config.modifyWarehouse', {
+            url: '/ModifyWarehouse',
+            templateUrl: 'Config/html/ModifyWarehouse.html',
+            controller:'ModifyWarehouseController'
+        })
+        .state('Config.modifyUser', {
+            url: '/ModifyUser',
+            templateUrl: 'Config/html/ModifyUser.html',
+            controller:'ModifyUserController'
+        })
         .state('myProfile', {
             url: '/myProfile',
             templateUrl: 'Config/html/MyProfile.html'
@@ -331,6 +360,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ProjectDetailsController'
         })
 
+        .state('Process.addTask', {
+            url: '/AddTask',
+            templateUrl:'Process/html/schedule/AddTask.html',
+            controller:'CreateTaxController'
+        })
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
@@ -456,6 +490,9 @@ myApp.run(function($rootScope,$http) {
     $rootScope.tentativeApplicators=[];
     console.log($rootScope.tentativeApplicators);
     $rootScope.permanentApplicators=[];
+    $rootScope.Companies=[];
+    $rootScope.warehouses=[];
+    $rootScope.Users=[];
 
 });
 
@@ -561,6 +598,18 @@ myApp.controller('TabController', function () {
 
 
 
+});
+
+myApp.controller('TabController', function () {
+    this.tab = 1;
+
+    this.setTab = function (tabId) {
+        this.tab = tabId;
+    };
+
+    this.isSet = function (tabId) {
+        return this.tab === tabId;
+    };
 });
 
 

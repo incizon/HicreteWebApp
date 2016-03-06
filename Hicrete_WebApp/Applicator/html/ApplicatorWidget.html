@@ -1,7 +1,13 @@
 <style>
+    .panel.panel-default{
+        margin-top: 40px;
+    }
     #primary_nav_wrap
     {
-        margin-top:15px
+        margin-top:15px;
+        position:fixed;
+        width: 100%;
+        z-index: 20;
     }
     #primary_nav_wrap ul {
         -moz-border-bottom-colors: none;
@@ -9,7 +15,7 @@
         -moz-border-right-colors: none;
         -moz-border-top-colors: none;
         background-color: #fff;
-        border-color: #ccc -moz-use-text-color;
+        border-color: #ccc;
         border-image: none;
         border-style: solid none;
         border-width: 1px medium;
@@ -90,7 +96,7 @@
             <li><a>Payment</a>
                 <ul>
                     <li><a ui-sref="Applicator.addPayment">Add Payment</a></li>
-                    <li><a>Show Payment History</a></li>
+                    <li><a ui-sref="Applicator.paymentHistory">Show Payment History</a></li>
                     <!--<ul>-->
                     <!--<li><a href="#">Deep Menu 1</a>-->
                     <!--<ul>-->
@@ -124,11 +130,3 @@
 		
 
         <!-- END PAGE CONTENT WRAPPER -->
-
-
-
-
-
-
-
-

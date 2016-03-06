@@ -1,7 +1,15 @@
 
     <div class="row">
             <div class="col-md-12" ng-controller="addSupplierController">
-
+                <div>
+                    <div ng-include="'utils/loader.html'"></div>
+                </div>
+                <div>
+                    <div ng-include="'utils/ErrorMessage.html'"></div>
+                </div>
+                <div>
+                    <div ng-include="'utils/WarningMessage.html'"></div>
+                </div>
                 <form class="form-horizontal" name="supplierAdd" ng-submit="submitData(supplier,'message1')">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -40,7 +48,7 @@
                             <label class="col-md-4 col-xs-12 control-label">Point of contact</label>
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <input type="text" required ng-model="supplier.pointOfContact" class="form-control"/>
                                 </div>
                                <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
@@ -62,7 +70,7 @@
                             <label class="col-md-4 col-xs-12 control-label">VAT number</label>
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <input type="text" required ng-model="supplier.VATNo" class="form-control"/>
                                 </div>
                                <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
@@ -73,7 +81,7 @@
                             <label class="col-md-4 col-xs-12 control-label">CST number</label>
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <input type="text" required ng-model="supplier.CSTNo" class="form-control"/>
                                 </div>
                                <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
@@ -94,7 +102,7 @@
                             <label class="col-md-4 col-xs-12 control-label">City</label>
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-building-o"></span></span>
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <input type="text" ng-model="supplier.city"class="form-control"/>
                                 </div>
                                <!-- <span class="help-block">This is sample of text field</span>-->

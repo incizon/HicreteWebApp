@@ -39,7 +39,40 @@
         ::-webkit-scrollbar-thumb { background: #9E9E9E; border-radius: 4px;}
         ::-webkit-scrollbar-corner { display: none;}
         ::-webkit-resizer {display: none;}
+        /*-----------------------------------CSS FOR DATEPICKER-----------------------------------------------------*/
+        ul.dropdown-menu table thead{
+            background:#1caf9a !important;
+            color:#fff !important;
+        }
 
+        ul.dropdown-menu table thead th .btn-default,ul.dropdown-menu table thead th .btn-default:hover, ul.dropdown-menu table thead th .btn-default:focus,
+        ul.dropdown-menu table thead th .btn-default:active,ul.dropdown-menu table thead th  .btn-default.active, .open > ul.dropdown-menu table thead th .dropdown-toggle .btn-default {
+            background-color: transparent;
+            border-color: transparent;
+            color:#fff;
+            margin-right: 0;
+        }
+
+        ul.dropdown-menu:after{
+            border-bottom-color: #1caf9a;
+        }
+
+        ul.dropdown-menu table tbody td .btn-info:hover,ul.dropdown-menu table tbody td .btn-info:focus,ul.dropdown-menu table tbody td .btn-info:active,ul.dropdown-menu table tbody td .btn-info.active, .open >ul.dropdown-menu table tbody td .dropdown-toggle.btn-info{
+            background-color: #f5f5f5;
+            border-color: #E5E5E5;
+            color:#333;
+        }
+
+        ul.dropdown-menu table tbody td .btn.btn-sm,ul.dropdown-menu table tbody td .btn-group-sm > .btn{
+            padding: 2px 5px;
+        }
+        /*--------- Select Box --------*/
+        select.btn.dropdown-toggle.selectpicker {
+            border: 1px solid #D5D5D5;
+            background: #F9F9F9;
+            border-radius: 4px;
+            height: 30px;
+        }
     </style>
 
     <!-- START SCRIPTS -->
@@ -102,7 +135,7 @@ if(!$userObj->init($userId)){
 <div class="page-container page-navigation-top-fixed">
 
     <!-- START PAGE SIDEBAR -->
-    <div class="page-sidebar page-sidebar-fixed">
+    <div class="page-sidebar page-sidebar-fixed" ng-controller="TabController as tab">
 
         <!-- START X-NAVIGATION -->
         <ul class="x-navigation">
@@ -128,22 +161,22 @@ if(!$userObj->init($userId)){
                     </div>
                 </div>
             </li>
-            <li class="active">
-                <a ui-sref="MainPage"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
+            <li ng-class="{active:tab.isSet(1)}">
+                <a ui-sref="MainPage" ng-click="tab.setTab(1)"><span class="fa fa-tachometer"></span> <span class="xn-text">Dashboard</span></a>
             </li>
 
 
             <?php
 
             if($userObj->isInventory){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(2)}\">
+                            <a ng-click=\"tab.setTab(2)\" ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
                     </li>";
             }
 
             if($userObj->isBusinessProcess){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(3)}\">
+                            <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
             }
 
@@ -154,26 +187,26 @@ if(!$userObj->init($userId)){
             }
 
             if($userObj->isApplicator){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(4)}\">
+                            <a ng-click=\"tab.setTab(4)\" ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
                     </li>";
             }
 
             if($userObj->isApplicator){
-                echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(5)}\">
+                            <a ng-click=\"tab.setTab(5)\" href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
                     </li>";
             }
 
             if($userObj->isReporting){
-                echo "<li class=\"\">
-                            <a href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(6)}\">
+                            <a ng-click=\"tab.setTab(6)\" href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
                     </li>";
             }
 
             if($userObj->isAdmin){
-                echo "<li class=\"\">
-                            <a ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
+                echo "<li ng-class=\"{active:tab.isSet(7)}\">
+                            <a ng-click=\"tab.setTab(7)\" ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
                     </li>";
             }
 
@@ -212,17 +245,26 @@ if(!$userObj->init($userId)){
             <li class="xn-icon-button">
                 <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
             </li>
+            <li class="xn-icon-button">
+                <a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>
+            </li>
+            <li class="xn-icon-button">
+                <a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Access Approval"><span class="fa fa-check-square-o"></span></a>
+            </li>
+            <li class="xn-icon-button">
+                <a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Leave Approval"><span class="fa fa-thumbs-o-up"></span></a>
+            </li>
             <!-- END TOGGLE NAVIGATION -->
             <!-- SEARCH -->
-            <li class="xn-search">
-                <form role="form">
-                    <input type="text" name="search" placeholder="Search..."/>
-                </form>
-            </li>
+<!--            <li class="xn-search">-->
+<!--                <form role="form">-->
+<!--                    <input type="text" name="search" placeholder="Search..."/>-->
+<!--                </form>-->
+<!--            </li>-->
             <!-- END SEARCH -->
             <!-- SIGN OUT -->
             <!--            <li class="xn-icon-button pull-right">-->
-            <!--<!--                <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->-->
+            <!--            <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->
             <!--            </li>-->
             <li class="xn-icon-button pull-right">
                 <a ng-click=""><span class="fa fa-sign-out"></span></a>
@@ -251,34 +293,17 @@ if(!$userObj->init($userId)){
             <!-- END SIGN OUT -->
             <!-- MESSAGES -->
             <li class="xn-icon-button pull-right">
-                <a href="#"><span class="fa fa-comments"></span></a>
+                <a href="#"><span class="fa fa-bell"></span></a>
                 <div class="informer informer-danger">4</div>
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><span class="fa fa-comments"></span> Messages</h3>
+                        <h3 class="panel-title"><span class="fa fa-comments"></span>Notifications</h3>
                         <div class="pull-right">
                             <span class="label label-danger">4 new</span>
                         </div>
                     </div>
                 </div>
             </li>
-
-
-            <li class="xn-icon-button pull-right">
-                <a href="#"><span class="fa fa-tasks"></span></a>
-                <div class="informer informer-warning">3</div>
-                <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><span class="fa fa-tasks"></span> Tasks</h3>
-                        <div class="pull-right">
-                            <span class="label label-warning">3 active</span>
-                        </div>
-                    </div>
-                 </div>
-            </li>
-
-
-
                     <!-- END SIGN OUT -->
 
 
