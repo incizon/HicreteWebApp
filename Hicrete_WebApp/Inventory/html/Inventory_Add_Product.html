@@ -1,8 +1,10 @@
-
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <form class="form-horizontal" name="addProductForm" novalidate>
-            <div class="panel panel-default">
+            <div class="panel panel-default pa">
                 <div class="panel-heading">
                     <h3 class="panel-title"><strong>Add Product</strong></h3>
                 </div>
@@ -76,6 +78,11 @@
                                 <span ng-show="addProductForm.unit_of_measure.$error.required">Unit Of Measure is required.</span> -->
                         </div>
                     </div>
+                    <!--<div class="spinner" ng-show="loading">-->
+
+                        <!--<p>Loading......</p>-->
+                        <!--<img src="Hicrete_WebAppGitRepo/Hicrete_WebApp/default.gif">-->
+                    <!--</div>-->
                     <div class="form-group">
                         <label class="col-md-4 col-xs-12 control-label">Packaging</label>
                         <div class="col-md-4 col-xs-12">
@@ -136,7 +143,7 @@
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button class="btn btn-default" data-ng-click="clearFields(product)">Clear Form</button>
-                    <button class="btn btn-primary" name="submit" data-ng-click="(submitted=true) && addProductForm.$valid && addProduct(product)">Submit</button>
+                    <button class="btn btn-primary panel-refresh" name="submit" data-ng-click="(submitted=true) && addProductForm.$valid && addProduct(product)">Submit</button>
                 </div>
             </div>
         </form>
