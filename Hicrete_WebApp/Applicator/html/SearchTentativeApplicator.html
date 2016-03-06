@@ -1,3 +1,14 @@
+<script>
+
+</script>
+
+<div id="wait" style="display:none;position:absolute;top:50%;left:50%;z-index: 10">
+    <img src='Assets/img/loaders/AjaxLoader.gif' width="44" height="44" /><br>
+    Loading..
+</div>
+
+
+
 <div class="col-md-12">
     <div class="panel panel-default">
         <div class="panel-body form-horizontal">
@@ -19,7 +30,7 @@
                         <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword"/>
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary" ng-click="searchApplicator()">Search</button>
+                            <button class="btn btn-primary search" ng-click="searchApplicator()">Search</button>
                         </div>
                     </div>
                 </div>

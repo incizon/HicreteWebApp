@@ -42,7 +42,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
-
+    $scope.loading=false;
     var isProductMasterTable = false;
     var isMaterialTable = false;
     var isPrductDetailsTable = false;
@@ -77,27 +77,48 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         //Set Extra attribute in object to identify operation to be performed
         product.opertaion = "insert";
         $scope.submitted = false;
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
 
+        $('#loader').css("display","block");
         var config = {
             params: {
                 product: product
             }
         };
-
+        console.log("Loader"+$scope.loading);
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if(data.msg!=""){
+                            $('#warning').css("display","none");
+                        }
+                    });
+                }, 3000);
+
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
                 console.log("IN POST OF add product success");
                 console.log(data);
                 $scope.clearFields(product);
-                doShowAlert("Success", data.msg);
-                setTimeout(function () {
-                    window.location.reload(true);
-                }, 1000);
+
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
-                doShowAlert("Failure", data.msg);
+                //doShowAlert("Failure", data.msg);
+                $scope.errorMessage=data.msg;
+                $('#error').css("display","block");
             });
 
     };

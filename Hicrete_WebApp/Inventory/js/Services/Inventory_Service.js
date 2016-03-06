@@ -7,12 +7,13 @@ myApp.service('inventoryService', function () {
      Get Product Details
      ****************************************************************************/
     this.getProducts = function ($scope, $http) {
-
+        $scope.loading=true;
         $http.post("Inventory/php/ProductSearch.php", null)
             .success(function (data) {
                 console.log("Items Present in database");
                 console.log(data);
                 savedData = data;
+                $scope.loading=false;
                 //$scope.getSavedProducts($scope,data);
             })
             .error(function (data, status, headers) {

@@ -255,16 +255,16 @@ if(!$userObj->init($userId)){
             <!-- END SEARCH -->
             <!-- SIGN OUT -->
             <!--            <li class="xn-icon-button pull-right">-->
-            <!--<!--                <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->-->
+            <!--            <a ng-click="logout()" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>-->
             <!--            </li>-->
             <li class="xn-icon-button pull-right">
                 <a ng-click=""><span class="fa fa-sign-out"></span></a>
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging" style="width: 230px;">
                     <div class="panel-body list-group list-group-contacts">
-                        <a href="#" class="list-group-item">
+                        <a ui-sref="myProfile" class="list-group-item">
                             <span class="contacts-title">My Profile</span>
                         </a>
-                        <a href="#" data-ng-click="logout()" class="list-group-item">
+                        <a ui-sref="createSuperUser"  class="list-group-item">
                             <span class="contacts-title">Create Super User</span>
                         </a>
                         <a ui-sref="RequestAccess" class="list-group-item">
