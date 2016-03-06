@@ -93,7 +93,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                       $scope.loading=false;
                         $('#loader').css("display","none");
                     });
-                }, 5000);
+                }, 2000);
 
                 console.log("IN POST OF add product success");
                 console.log(data);
