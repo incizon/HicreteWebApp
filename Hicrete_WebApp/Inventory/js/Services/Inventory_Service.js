@@ -276,7 +276,7 @@ myApp.service('inwardService', function () {
                 $scope.inwardData=[];
                 setTimeout(function(){
                     //window.location.reload(true);
-                     window.location="dashboard.php#/Inventory";
+                    // window.location="dashboard.php#/Inventory";
                 },1000);
             })
             .error(function (data, status, headers) {

@@ -80,14 +80,12 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         $scope.loading=true;
         $scope.errorMessage="";
         $scope.warningMessage="";
-
         $('#loader').css("display","block");
         var config = {
             params: {
                 product: product
             }
         };
-        console.log("Loader"+$scope.loading);
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
@@ -118,7 +116,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.msg;
+                $scope.errorMessage=data.error;
                 $('#error').css("display","block");
             });
 
@@ -812,7 +810,8 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
     $scope.materialType = [];
     $scope.submitted = false;
-
+    $scope.errorMessage="";
+    $scope.warningMessage="";
     $scope.materialType.push({
         type: ""
     });
@@ -1102,6 +1101,23 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             data: data
         }
     };
+
+    $scope.todayDateOfEntry = function() {
+        $scope.prodBatchInfo.dateOfEntry = new Date();
+    };
+    $scope.todayDateOfEntry();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openPicker = function() {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+
+
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");
@@ -1334,7 +1350,6 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
                 }, 1000);
             }
         }
-
         $scope.submitted = false;
     };
 
