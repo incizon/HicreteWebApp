@@ -49,6 +49,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.today = function() {
         $scope.applicatorDetails.paymentDate = new Date();
+        $scope.applicatorDetails.followupdate = new Date();
     };
     $scope.today();
 
@@ -61,6 +62,15 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     $scope.showPopup = {
         opened: false
     };
+
+    $scope.openFollowDate = function() {
+        $scope.followUp.opened = true;
+    };
+
+    $scope.followUp = {
+        opened: false
+    };
+
 
     /* to show package details while creating applicator */
 
