@@ -77,6 +77,58 @@ class ConfigUtils
            
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////
+    //For fetching ware house details
+    ////////////////////////////////////////////////////////////////////////////////////
+   public static function getWareHouseDetails()
+   {
+       try{
+           $db = Database::getInstance();
+           $conn = $db->getConnection();
+           $stmt = $conn->prepare("SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster`");
+
+           if($stmt->execute()){
+
+               $noOfRows=0;
+               $json_response = array();
+               while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
+               {
+                   $result_array = array();
+                   $result_array['warehouseId'] = $result['warehouseId'];
+                   $result_array['wareHouseName'] = $result['wareHouseName'];
+                   $result_array['warehouseAbbrevation'] =$result['warehouseAbbrevation'];
+                   $result_array['address'] =$result['address'];
+                   $result_array['city'] =$result['city'];
+                   $result_array['state'] =$result['state'];
+                   $result_array['country'] =$result['country'];
+                   $result_array['pincode'] =$result['pincode'];
+                   $result_array['phoneNumber'] =$result['phoneNumber'];
+                   array_push($json_response, $result_array); //push the values in the array
+                   $noOfRows++;
+
+               }
+               if($noOfRows>0){
+
+                   echo AppUtil::getReturnStatus("Successful",$json_response);}
+               else {
+
+                   echo AppUtil::getReturnStatus("NoRows", "No companies found");
+               }
+           }else{
+               echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+           }
+
+
+
+
+
+
+       }catch(Exception $e){
+
+           echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+       }
+   }
+
     public static function getUserDetails()
     {
         try{
@@ -113,7 +165,7 @@ class ConfigUtils
 
                     }
                     else
-                        echo "fail";
+                    {}
 
                     array_push($json_response, $result_array); //push the values in the array
                     $noOfRows++;

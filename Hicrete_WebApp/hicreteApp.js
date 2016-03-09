@@ -258,7 +258,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.warehouseSearch', {
             url: '/SearchWarehouse',
-            templateUrl: 'Config/html/ViewWarehouse.html'
+            templateUrl: 'Config/html/ViewWarehouse.html',
+            controller:'companyController'
 
         })
 
@@ -359,11 +360,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ProjectDetailsController'
         })
 
-        .state('Process.addTask', {
-            url: '/AddTask',
-            templateUrl:'Process/html/schedule/AddTask.html',
-            controller:'CreateTaxController'
-        })
+
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
@@ -443,6 +440,22 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         })
 
+        .state('billApproval', {
+            url: '/BillApproval',
+            templateUrl:'BillApproval/BillApproval.html'
+        })
+        .state('leaveApproval', {
+            url: '/LeaveApproval',
+            templateUrl:'BillApproval/LeaveApp.html'
+        })
+        .state('accessApproval', {
+            url: '/AccessApproval',
+            templateUrl:'BillApproval/AccessApproval.html'
+
+        })
+
+
+
         .state('SuperDashboard', {
             url: '',
             templateUrl: 'SuperMainPage.html',
@@ -451,7 +464,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         });
         // Package State =================================
         
-        
+
+
 });
 
 myApp.run(function($rootScope,$http) {
@@ -489,6 +503,9 @@ myApp.run(function($rootScope,$http) {
     $rootScope.tentativeApplicators=[];
     console.log($rootScope.tentativeApplicators);
     $rootScope.permanentApplicators=[];
+    $rootScope.Companies=[];
+    $rootScope.warehouses=[];
+    $rootScope.Users=[];
 
 });
 

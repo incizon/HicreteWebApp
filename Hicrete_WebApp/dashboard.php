@@ -246,13 +246,13 @@ if(!$userObj->init($userId)){
                 <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
             </li>
             <li class="xn-icon-button">
-                <a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>
+                <a ui-sref="billApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>
             </li>
             <li class="xn-icon-button">
-                <a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Access Approval"><span class="fa fa-check-square-o"></span></a>
+                <a ui-sref="accessApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Access Approval"><span class="fa fa-check-square-o"></span></a>
             </li>
             <li class="xn-icon-button">
-                <a href="#" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Leave Approval"><span class="fa fa-thumbs-o-up"></span></a>
+                <a ui-sref="leaveApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Leave Approval"><span class="fa fa-thumbs-o-up"></span></a>
             </li>
             <!-- END TOGGLE NAVIGATION -->
             <!-- SEARCH -->
