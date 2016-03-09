@@ -537,22 +537,6 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
         }
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
 
-  $scope.open1 = function() {
-      $scope.popup1.opened = true;
-  };
-
-    $scope.open2 = function() {
-        $scope.popup1.opened = true;
-    };
-
-
-    $scope.popup1 = {
-        opened: false
-    };
-
-
-
-
         $scope.saveFollowupDetails=function(size,followupDetails){
 
 
