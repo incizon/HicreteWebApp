@@ -32,7 +32,7 @@ switch ($data->operation) {
                         break;
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
-    case "addUser" :Config::addUser($data,"admin");
+    case "addUser" :Config::addUser($data,$userId);
     				    break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;

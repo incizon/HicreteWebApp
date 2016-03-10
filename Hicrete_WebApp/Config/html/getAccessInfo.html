@@ -42,7 +42,7 @@
                                          </div> 
                                         <label class="col-md-2 col-xs-12 control-label col-sm-2">Role</label>
                                         <div class="col-md-6 col-xs-12 col-sm-4">
-                                            <select class="form-control select" ng-model="userInfo.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
+                                            <select class="form-control select" ng-model="selectedRole.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
                                                 
                                                 <option ng-repeat="role in roleList" value={{role.roleId}}>{{role.roleName}}</option>                                              
                                             </select>
@@ -75,37 +75,15 @@
                                               </table>
                                             </div>                                            
                                           </div>
-                                          <div class="col-md-2">
-                                              <!--<button class="btn btn-primary pull-left" data-target="#a" data-toggle="modal">Add more Permissions</button>-->
-                                              <a href="#a" data-toggle="modal" class="btn btn-primary pull-left" ng-click="loadExtraAccessPermission()">Add more Permissions</a>
+                                          <!--<div class="col-md-2">-->
+                                              <!--&lt;!&ndash;<button class="btn btn-primary pull-left" data-target="#a" data-toggle="modal">Add more Permissions</button>&ndash;&gt;-->
+                                              <!--<a href="#a" data-toggle="modal" class="btn btn-primary pull-left" ng-click="loadExtraAccessPermission()">Add more Permissions</a>-->
 
-                                          </div>
+                                          <!--</div>-->
                                     </div>
                         
 
-                                 <!--    <div class="form-group">
-                                        <span style="color:red" ng-show="showCompanyError">Atleast one comapny has to be selected</span>
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Access information of companies</label>
-                                        <div class="col-md-6 col-xs-12 col-sm-4 permission">
-                                            <div class="panel panel-default">
-                                              <table class="table table-fixed">
-                                                <thead>
-                                                  <tr>
-                                                    <th class="col-xs-1 col-md-1">#</th>
-                                                    <th class="col-xs-11 col-md-11">Company name</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody >
-                                                  <tr ng-repeat="company in companyList">
-                                                    <th class="col-xs-1 col-md-1"><input ng-model="company.value" type="checkbox"></th>
-                                                    <th class="col-xs-11 col-md-11">{{company.name}}</th>
-                                                  </tr>
-                                                </tbody>
-                                              </table>
-                                            </div>                                     
-                                        </div>
-                                    </div> -->
-                                  </div>  
+                                  </div>
 
                                    </div>
                                 <div class="panel-footer">
@@ -121,56 +99,49 @@
 <!--ACCESS INFORMATION FORM START-->
 
 
-<!-- ADD role FORM -->
-<div id="b" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-        <div ng-include="'Config/html/AddRole.html'" ng-controller="roleController"></div>
-  </div>
-</div>
-<!-- ADD role FORM END-->  
 
-<!-- ADD PERMISSION FORM -->
-<div id="a" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+<!--&lt;!&ndash; ADD PERMISSION FORM &ndash;&gt;-->
+<!--<div id="a" class="modal fade" role="dialog">-->
+  <!--<div class="modal-dialog modal-lg">-->
 
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Select Access Permission</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-        <div class="form-group">
-            <table class="table table-fixed">
-          <thead>
-            <tr>
-              <th class="col-xs-8">Module name</th>
-              <th class="col-xs-2">Read</th>
-              <th class="col-xs-2">Write</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="accessEntry in otherAccessList">
-              <td ng-model="accessEntry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
-              <td class="col-xs-2 text-center"><input ng-if="accessEntry.read.ispresent"  ng-model="accessEntry.read.val" type="checkbox"></td>
-              <td class="col-xs-2 text-center"><input ng-if="accessEntry.write.ispresent" ng-model="accessEntry.write.val"  type="checkbox"></td>
-            </tr>            
-          </tbody>
-        </table>            
+    <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+    <!--<div class="modal-content">-->
+      <!--<div class="modal-header">-->
+        <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+        <!--<h4 class="modal-title">Select Access Permission</h4>-->
+      <!--</div>-->
+      <!--<div class="modal-body">-->
+        <!--<div class="row">-->
+        <!--<div class="form-group">-->
+            <!--<table class="table table-fixed">-->
+          <!--<thead>-->
+            <!--<tr>-->
+              <!--<th class="col-xs-8">Module name</th>-->
+              <!--<th class="col-xs-2">Read</th>-->
+              <!--<th class="col-xs-2">Write</th>-->
+            <!--</tr>-->
+          <!--</thead>-->
+          <!--<tbody>-->
+            <!--<tr ng-repeat="accessEntry in otherAccessList">-->
+              <!--<td ng-model="accessEntry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>-->
+              <!--<td class="col-xs-2 text-center"><input ng-if="accessEntry.read.ispresent"  ng-model="accessEntry.read.val" type="checkbox"></td>-->
+              <!--<td class="col-xs-2 text-center"><input ng-if="accessEntry.write.ispresent" ng-model="accessEntry.write.val"  type="checkbox"></td>-->
+            <!--</tr>            -->
+          <!--</tbody>-->
+        <!--</table>            -->
 
 
 
-        </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="addExtraAccessPermission()">Add Permissions</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- ADD PERMISSION FORM end-->
+        <!--</div>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="modal-footer">-->
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal" ng-click="addExtraAccessPermission()">Add Permissions</button>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+<!--&lt;!&ndash; ADD PERMISSION FORM end&ndash;&gt;-->
 
 
 

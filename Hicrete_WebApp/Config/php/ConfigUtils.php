@@ -186,25 +186,14 @@ class ConfigUtils
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            //echo $keyword;
+
             $keyword= "%".$keyword."%";
 
             //echo $keyword;
-            $selectStmt="SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where isdeleted!='1'";
+            $selectStmt=self::getSearchQueryForUser($searchBy);
 
-            if($searchBy == 'name')
-            {
-                $selectStmt=  $selectStmt." AND firstname like :keyword or lastname like :keyword";
-
-            }
-            if($searchBy == 'city')
-            {
-                $selectStmt=  $selectStmt." AND city like :keyword";
-            }
             $stmt = $conn->prepare($selectStmt);
-            if($searchBy == 'name' || $searchBy == 'city') {
-                $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-            }
+            $stmt->bindParam(':keyword',$keyword, PDO::PARAM_STR);
             if($stmt->execute()){
 
                 $noOfRows=0;
@@ -224,12 +213,14 @@ class ConfigUtils
                     $result_array['emailId'] =$result['emailId'];
                     $result_array['mobileNumber'] =$result['mobileNumber'];
 
-                    $stmt1 = $conn->prepare("SELECT a.designation ,b.rolename  from userroleinfo a,rolemaster b where a.userid=:userid and a.roleid=b.roleid");
+                    $stmt1 = $conn->prepare("SELECT a.designation ,a.userType,b.rolename,b.roleId  from userroleinfo a,rolemaster b where a.userid=:userid AND a.roleid=b.roleid");
                     $stmt1->bindParam(':userid', $result['userId'], PDO::PARAM_STR);
                     if($stmt1->execute()) {
                         while($result1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
                             $result_array['designation'] = $result1['designation'];
                             $result_array['role'] = $result1['rolename'];
+                            $result_array['userType'] = $result1['userType'];
+                            $result_array['roleId'] = $result1['roleId'];
                         }
 
                     }
@@ -258,6 +249,47 @@ class ConfigUtils
 
 
     }
+
+    private static function getSearchQueryForUser($searchBy){
+        $searchBy=strtolower($searchBy);
+
+        if($searchBy == 'name')
+        {
+            return self::getQueryForSearchUserByName();
+
+        }
+        else if($searchBy == 'city')
+        {
+           return self::getQueryForUserByCity();
+        }
+
+        else if($searchBy == 'designation')
+        {
+            return self::getQueryForSearchUserByDesignation();
+        }
+        else if($searchBy == 'type')
+        {
+           return self::getQueryForUserByUserType();
+        }
+
+    }
+
+    private static function getQueryForSearchUserByName(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND (firstname like :keyword or lastname like :keyword)";
+    }
+
+    private static function getQueryForSearchUserByDesignation(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `designation` like :keyword)";
+    }
+
+    private static function getQueryForUserByUserType(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `userType` like :keyword)";
+    }
+
+    private static function getQueryForUserByCity(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND city like :keyword";
+    }
+
 
     public static function getCompanyDetails()
     {
