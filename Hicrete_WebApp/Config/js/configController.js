@@ -451,6 +451,8 @@ myApp.controller('modifyUserController',function($scope,$http,$stateParams,confi
 
 
 myApp.controller('companyController',function($scope,$rootScope,$http){
+    $scope.keyword="";
+    $scope.searchkeyword="";
  $scope.company={
  	name:"",
   abbrevation:"",
@@ -497,10 +499,12 @@ $scope.warehouse={
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get Ware house details
 /////////////////////////////////////////////////////////////////////////////////
-    $scope.getWareHouseDetails = function()
+    $scope.getWareHouseDetails = function(keyword)
     {
+        console.log(keyword);
         var data={
-            operation:"getWareHouseDetails"
+            operation:"getWareHouseDetails",
+            key:keyword
         };
         var config = {
             params: {
@@ -516,7 +520,7 @@ $scope.warehouse={
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
-                    $scope.warehouses=data.message;
+                    $rootScope.warehouses=data.message;
 
                     console.log($scope.Companies);
                 }
@@ -528,24 +532,25 @@ $scope.warehouse={
             });
 
     };
-    $scope.getWareHouseDetails();
+    //$scope.getWareHouseDetails();
 
  $scope.submitted=false;
  $scope.warehouseSubmitted=false;
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get comapny details
 /////////////////////////////////////////////////////////////////////////////////
-    $scope.getCompanyData = function(){
+    $scope.getCompanyData = function(searchkeyword){
         console.log("Inside company fetch data ");
         var data={
-            operation:"getCompanyDetails"
+            operation:"getCompanyDetails",
+            keyword:searchkeyword
         };
         var config = {
             params: {
                 data: data
             }
         };
-        if($rootScope.Companies.length==0) {
+       //if($rootScope.Companies.length==0) {
             $http.post("Config/php/configFacade.php", null, config)
                 .success(function (data) {
 
@@ -565,7 +570,7 @@ $scope.warehouse={
                     doShowAlert("Failure", "Error Occured");
                 });
 
-        }
+        //}
 
     };
    // $scope.getCompanyData();
@@ -858,24 +863,58 @@ $scope.exemptedAccessList=[];
 
           }      
 });
-myApp.controller('ModifyCompanyController',function($scope,$http) {
+myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $stateParams) {
 
         console.log("IN");
+    console.log($stateParams.companyId);
 
-        $scope.companyDetails={
+    for (var i = 0; i < $rootScope.Companies.length; i++) {
+        if ($stateParams.companyId == $rootScope.Companies[i].companyId) {
+            $scope.selectedCompany=$rootScope.Companies[i];
+            break;
+        }
+    }
+    console.log($scope.selectedCompany);
 
-            name:"Hicrete",
-            abbrevation:"HS",
-            startdate:"10-10-1990",
-            address:"K K Market",
-            city:"Pune",
-            state:"Maharashtra",
-            country:"India",
-            pincode:"411051",
-            email:"abc@gmail.com",
-            phone:"1234567890"
+
+    $scope.modifyCompanyDetails =function()
+    {
+        var data={
+            operation:"modifyCompanyDetails",
+            data:$scope.selectedCompany
 
         };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log($scope.selectedCompany);
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    };
+
+
+
+
 
 });
 
@@ -918,23 +957,55 @@ myApp.controller('ModifyRoleController',function($scope,$http) {
 
 });
 
-myApp.controller('ModifyWarehouseController',function($scope,$http) {
+myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$stateParams) {
 
     console.log("In");
 
+    for (var i = 0; i < $rootScope.warehouses.length; i++) {
+        if ($stateParams.warehouseId == $rootScope.warehouses[i].warehouseId) {
+            $scope.selectedWarehouse=$rootScope.warehouses[i];
+            break;
+        }
+    }
+    console.log($scope.selectedWarehouse);
 
-    $scope.warehouseDetails={
 
-        name:"Hicrete",
-        abbrevation:"HS",
-        address:"K K Market",
-        city:"Pune",
-        state:"Maharashtra",
-        country:"India",
-        pincode:"411051",
-        phone:"1234567890"
+    $scope.modifyWarehouse =function()
+    {
+        var data={
+            operation:"modifyWareHouseDetails",
+            data:$scope.selectedWarehouse
 
-    };
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        //console.log($scope.selectedCompany);
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    }
+
+
 });
 
 
