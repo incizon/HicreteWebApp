@@ -47,6 +47,31 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     }
 
+    $scope.today = function() {
+        $scope.applicatorDetails.paymentDate = new Date();
+        $scope.applicatorDetails.followupdate = new Date();
+    };
+    $scope.today();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openPayDate = function() {
+        $scope.showPopup.opened = true;
+    };
+
+    $scope.showPopup = {
+        opened: false
+    };
+
+    $scope.openFollowDate = function() {
+        $scope.followUp.opened = true;
+    };
+
+    $scope.followUp = {
+        opened: false
+    };
+
+
     /* to show package details while creating applicator */
 
     $scope.getPackageDetails=function(packageID){
