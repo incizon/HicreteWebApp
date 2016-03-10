@@ -1102,10 +1102,10 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         }
     };
 
-    $scope.todayDateOfEntry = function() {
+    /*$scope.todayDateOfEntry = function() {
         $scope.prodBatchInfo.dateOfEntry = new Date();
     };
-    $scope.todayDateOfEntry();
+    $scope.todayDateOfEntry();*/
 
     $scope.maxDate = new Date(2020, 5, 22);
 

@@ -266,7 +266,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Config.modifyCompany', {
             url: '/ModifyCompany',
             templateUrl: 'Config/html/ModifyCompany.html',
-            controller:'ModifyCompanyController'
+            controller:'companyController'
         })
 
         .state('Config.modifyRole', {
