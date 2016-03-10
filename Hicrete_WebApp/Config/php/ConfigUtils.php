@@ -129,13 +129,82 @@ class ConfigUtils
        }
    }
 
-    public static function getUserDetails()
+    public static function modifyUser($data,$userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster`");
+            $stmt = $conn->prepare("UPDATE `userroleinfo` SET `designation`=:designation,`roleId`=:roleId,`userType`=:userType,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE userid=:dataUserId");
 
+            $stmt->bindParam(':designation',$data->designation , PDO::PARAM_STR);
+            $stmt->bindParam(':roleId', $data->roleId, PDO::PARAM_STR);
+            $stmt->bindParam(':userType', $data->userType, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':dataUserId', $data->userId, PDO::PARAM_STR);
+            if($stmt->execute()){
+
+                echo AppUtil::getReturnStatus("Successful","User Deleted successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+    }
+    public static function deleteUser($key,$userId)
+    {
+        $delFlg='1';
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("UPDATE `usermaster` SET `isDeleted`=:flag,`deletedBy`=:deletedBy,`deletionDate`=now() WHERE userid=:key");
+
+            $stmt->bindParam(':flag',$delFlg , PDO::PARAM_STR);
+            $stmt->bindParam(':deletedBy', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':key', $key, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                    echo AppUtil::getReturnStatus("Successful","User Deleted successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+    }
+
+    public static function getUserDetails($keyword,$searchBy)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            //echo $keyword;
+            $keyword= "%".$keyword."%";
+
+            //echo $keyword;
+            $selectStmt="SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where isdeleted!='1'";
+
+            if($searchBy == 'name')
+            {
+                $selectStmt=  $selectStmt." AND firstname like :keyword or lastname like :keyword";
+
+            }
+            if($searchBy == 'city')
+            {
+                $selectStmt=  $selectStmt." AND city like :keyword";
+            }
+            $stmt = $conn->prepare($selectStmt);
+            if($searchBy == 'name' || $searchBy == 'city') {
+                $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+            }
             if($stmt->execute()){
 
                 $noOfRows=0;

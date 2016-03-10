@@ -22,9 +22,13 @@ switch ($data->operation) {
     				    break;
     case "getCompanyDetails": ConfigUtils::getCompanyDetails();
                         break;
-    case "getUserDetails" : ConfigUtils:: getUserDetails();
+    case "getUserDetails" : ConfigUtils:: getUserDetails($data->keyword,$data->searchBy);
                         break;
     case "getWareHouseDetails" :ConfigUtils:: getWareHouseDetails();
+                        break;
+    case "deleteUser" : ConfigUtils::deleteUser($data->key,$userId);
+                        break;
+    case "modifyUser" : ConfigUtils::modifyUser($data,$userId);
                         break;
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
