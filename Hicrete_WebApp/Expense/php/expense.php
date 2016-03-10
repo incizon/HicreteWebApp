@@ -145,7 +145,6 @@ class Expense
 //              $budget= $result2['segmentname'];
 //        }
         $stmt->bindParam(':budgetsegmentid', $budget, PDO::PARAM_STR);
-
         $stmt->bindParam(':materialid', $data->material, PDO::PARAM_STR);
         $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
         $stmt->bindParam(':description', $data->desc, PDO::PARAM_STR);

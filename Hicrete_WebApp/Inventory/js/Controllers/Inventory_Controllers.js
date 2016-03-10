@@ -92,7 +92,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
                 $('#loader').css("display","none");
-
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");

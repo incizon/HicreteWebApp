@@ -22,12 +22,14 @@ switch ($data->operation) {
     				    break;
     case "getCompanyDetails": ConfigUtils::getCompanyDetails();
                         break;
-    case "getUserDetails" : ConfigUtils:: getUserDetails();
+    case "getUserDetails" : ConfigUtils:: getUserDetails("");
                         break;
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
     case "addUser" :Config::addUser($data,"admin");
     				    break;
+    case "addUser" :Config::modifyUser($data,"admin");
+                        break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;
     case "addTempAcccessRequest" :ConfigUtils::addTempAcccessRequest($data,$userId);

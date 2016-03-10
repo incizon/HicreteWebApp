@@ -29,41 +29,57 @@ function getExpenseDetails()
     $conn = $db->getConnection();
     $json_response = array();
     $result_array = array();
-    $projectID = '2';
-    $totalExpense = 0;
     $otherExpense = 0;
     $materialExpense = 0;
     $fail=false;
+//    SELECT `projectid`,SUM(allocatedbudget) AS allocatedbudget,budget_segment.budgetsegmentid,budget_segment.segmentname  FROM `budget_details`
+//            JOIN budget_segment ON budget_segment.budgetsegmentid=budget_details.budgetsegmentid WHERE projectid='2' "
     $stmt = $conn->prepare("SELECT `projectid`,SUM(allocatedbudget)  AS allocatedbudget  FROM `budget_details` WHERE projectid='2' ");
     if ($stmt->execute()) {
-
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
         $result_array['projectName'] = $result['projectid'];
         $result_array['budgetAllocated'] = $result['allocatedbudget'];
-
-
     } else {
         $fail=true;
     }
-    $stmt1 = $conn->prepare("SELECT `projectid`,SUM(amount)  AS totalExpense  FROM `expense_details` WHERE projectid='2' ");
+    $stmt1 = $conn->prepare("SELECT `projectid`,SUM(amount)  AS totalExpense,budgetsegmentid,amount,description  FROM `expense_details` WHERE projectid='2' ");
     if ($stmt1->execute()) {
-        $result = $stmt1->fetch(PDO::FETCH_ASSOC);
-
+//        $result = $stmt1->fetch(PDO::FETCH_ASSOC);
+        while ($expenseResult = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+            $otherExpense = $expenseResult['totalExpense'];
+            $result_array['otherExpenseDetails'][] = array(
+                'budgetsegmentidExpenseDetails' => $expenseResult['budgetsegmentid'],
+                'amountExpenseDetails' => $expenseResult['amount'],
+                'descriptionExpenseDetails' => $expenseResult['description'],
+            );
+        }
 //            $result_array['totalExpenditure'] = $result['totalExpense'];
-        $otherExpense = $result['totalExpense'];
+//        $otherExpense = $result['totalExpense'];
         $result_array['otherExpense'] = $otherExpense;
+//        $result_array['budgetsegmentidExpenseDetails']=$result['budgetsegmentid'];
+//        $result_array['amountExpenseDetails']=$result['amount'];
+//        $result_array['descriptionExpenseDetails']=$result['description'];
 
     }else{
         $fail=true;
     }
-    $stmt2 = $conn->prepare("SELECT SUM(amount)  AS totalMaterialExpense  FROM `material_expense_details` WHERE projectid='2' ");
+    $stmt2 = $conn->prepare("SELECT SUM(amount)  AS totalMaterialExpense,budgetsegmentid,amount,description  FROM `material_expense_details` WHERE projectid='2' ");
     if ($stmt2->execute()) {
-        $result = $stmt2->fetch(PDO::FETCH_ASSOC);
-
+//        $result = $stmt2->fetch(PDO::FETCH_ASSOC);
+        while ($result = $stmt2->fetch(PDO::FETCH_ASSOC)) {
+            $materialExpense = $result['totalMaterialExpense'];
+            $result_array['materialExpenseDetails'][] = array(
+                'budgetsegmentidMaterialExpenseDetails' => $result['budgetsegmentid'],
+                'amountMaterialExpenseDetails' => $result['amount'],
+                'descriptionMaterialExpenseDetails' => $result['description'],
+            );
+        }
 //            $result_array['totalExpenditure'] = $result['totalExpense'];
-        $materialExpense = $result['totalMaterialExpense'];
+//        $materialExpense = $result['totalMaterialExpense'];
         $result_array['materialExpense'] = $materialExpense;
+//        $result_array['budgetsegmentidMaterialExpenseDetails']=$result['budgetsegmentid'];
+//        $result_array['amountMaterialExpenseDetails']=$result['amount'];
+//        $result_array['descriptionMaterialExpenseDetails']=$result['description'];
     } else{
         $fail=true;
     }
@@ -121,11 +137,6 @@ function getSegments($data)
             $noOfRows++;
         }
         echo json_encode($json_response);
-        /*if($noOfRows>0)
-            echo json_encode($json_response);
-        else
-            echo "1";*/
-
     } else {
         echo "0";
     }

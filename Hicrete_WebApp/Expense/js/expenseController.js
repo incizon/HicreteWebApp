@@ -404,7 +404,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
         $http.post("Expense/php/expenseUtils.php", null, config)
             .success(function (data) {
-                console.log(data);
+                console.log("Expense Details= "+data);
                 if (data == "1") {
 
                 } else {

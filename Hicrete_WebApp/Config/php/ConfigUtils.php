@@ -77,12 +77,19 @@ class ConfigUtils
            
     }
 
-    public static function getUserDetails()
+    public static function getUserDetails($userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster`");
+            $userId="568aa06f48c053329";
+            if($userId!=""){
+                $stmt = $conn->prepare("SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster`
+                                        WHERE userId=:userid");
+                $stmt->bindParam(':userid', $userId);
+            }else{
+                $stmt = $conn->prepare("SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster`");
+            }
 
             if($stmt->execute()){
 
@@ -94,7 +101,8 @@ class ConfigUtils
                     $result_array['userId'] = $result['userId'];
                     $result_array['firstName'] = $result['firstName'];
                     $result_array['lastName'] =$result['lastName'];
-                    $result_array['dateOfBirth'] =$result['dateOfBirth'];
+                    $date = date('m-d-Y', strtotime($result['dateOfBirth']));
+                    $result_array['dateOfBirth'] =$date;
                     $result_array['address'] =$result['address'];
                     $result_array['city'] =$result['city'];
                     $result_array['state'] =$result['state'];
@@ -117,8 +125,11 @@ class ConfigUtils
 
                     array_push($json_response, $result_array); //push the values in the array
                     $noOfRows++;
-
+//                    if($userId!=""){
+//                        echo(json_encode($json_response));
+//                    }
                 }
+
                 if($noOfRows>0){
 
                     echo AppUtil::getReturnStatus("Successful",$json_response);}

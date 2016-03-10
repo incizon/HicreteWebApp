@@ -14,7 +14,6 @@ class Config
             $conn = $db->getConnection();
             $companyId = AppUtil::generateId();
 
-
             $stmt = $conn->prepare("INSERT INTO `companymaster`(`companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) 
                 VALUES (:id,:name,:abbrevation,:startDate,:address,:city,:state,:country,:pincode,:email,:phone,:createdBy,now(),:lastModifiedBy,now())");
 
@@ -36,11 +35,8 @@ class Config
             if ($stmt->execute()) {
                 echo AppUtil::getReturnStatus("Successful", "");
 
-
             } else {
-
                 echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
-
             }
 
 
@@ -199,7 +195,7 @@ class Config
 
             $conn->beginTransaction();
 
-            $password;
+            $password="";
             $userId = AppUtil::generateId();
             $date = new DateTime($data->userInfo->dob);
             $dob = $date->format('Y-m-d');
@@ -282,6 +278,10 @@ class Config
 
     }
 
+    public static function modifyUser($data, $requestUserId)
+    {
+
+    }
     public static function getCompanys($userId)
     {
         $db = Database::getInstance();
