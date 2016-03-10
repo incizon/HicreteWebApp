@@ -49,7 +49,6 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.today = function() {
         $scope.applicatorDetails.paymentDate = new Date();
-        $scope.applicatorDetails.followupdate = new Date();
     };
     $scope.today();
 
@@ -63,11 +62,16 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         opened: false
     };
 
+    $scope.todayDate = function() {
+        $scope.applicatorDetails.followupdate = new Date();
+    };
+    $scope.todayDate();
+
     $scope.openFollowDate = function() {
-        $scope.followUp.opened = true;
+        $scope.followup.opened = true;
     };
 
-    $scope.followUp = {
+    $scope.followup = {
         opened: false
     };
 
@@ -192,7 +196,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         /* to check payment status and according call to service to submit data */
 
     $scope.processForm = function(size,applicatorDetails) {
-
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
         $scope.formSubmitted=false;
          console.log("In process form");
         if($scope.applicatorDetails.pendingAmount==0 && $scope.applicatorDetails.received=='Yes' ){
@@ -329,6 +336,10 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
              $scope.applicatorDetails.searchExpression=$scope.searchExpression;
              $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
              $scope.applicatorDetails.operation='viewTentativeApplicators';
+             $scope.loading=true;
+             $scope.errorMessage="";
+             $scope.warningMessage="";
+             $('#loader').css("display","block");
                 var config = {
                     params: {
                         data: $scope.applicatorDetails
@@ -345,12 +356,32 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                          $rootScope.tentativeApplicators = data;
                          $scope.totalItems = $rootScope.tentativeApplicators.length;
+                         if(data.msg!=""){
+                             $scope.warningMessage=data.msg;
+                             $('#warning').css("display","block");
+                         }
+                         setTimeout(function() {
+                             $scope.$apply(function() {
+                                 if(data.msg!=""){
+                                     $('#warning').css("display","none");
+                                 }
+                             });
+                         }, 3000);
+
+                         $scope.loading=false;
+                         $('#loader').css("display","none");
+                         if(data.msg==""){
+                             $scope.errorMessage=data.error;
+                             $('#error').css("display","block");
+                         }
                          console.log($rootScope.tentativeApplicators);
                      })
 
                      .error(function (data, status, headers) {
                          console.log(data);
-
+                         $('#loader').css("display","none");
+                         $scope.errorMessage=data.error;
+                         $('#error').css("display","block");
                      });
 
              }
@@ -391,7 +422,7 @@ myApp.controller('ViewTentativeApplicatorController',function($scope,$http,$stat
 
     $http.post("Applicator/php/Applicator.php", null, config)
 
-        .success(function (data, status, headers, config) {
+        .success(function (data,status,headers,config) {
 
             $scope.tentativeApplicatorsDetails = data;
             console.log(data);
@@ -611,6 +642,21 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
     $scope.applicatorPayment=[];
     $scope.animationsEnabled=true;
     $scope.paymentReceivedFor=undefined;
+
+    $scope.today = function() {
+        $scope.applicatorDetails.paymentDate = new Date();
+    };
+    $scope.today();
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.openAppDate = function() {
+        $scope.appPopup.opened = true;
+    };
+
+    $scope.appPopup = {
+        opened: false
+    };
 
     ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
 
