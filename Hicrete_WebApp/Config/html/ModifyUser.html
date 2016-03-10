@@ -9,10 +9,10 @@
                     <form role="form" class="form-horizontal" novalidate>
 
                         <div class="form-group">
-                            <label class="col-md-2 col-xs-12 control-label">User Name</label>
+                            <label class="col-md-2 col-xs-12 control-label">User Names</label>
                             <div class="col-md-6 col-xs-12">
 
-                                    <label class="control-label">{{userInfo.name}}</label>
+                                    <label class="control-label">{{selectedUserInfo.fistName}} {{selectedUserInfo.lastName}}</label>
 
 
                             </div>
@@ -22,7 +22,7 @@
                             <div class="col-md-6 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input ng-model="userInfo.designation" name="designation" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
+                                    <input ng-model="selectedUserInfo.designation" name="designation" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
                                 </div>
                                 <div class="help-block" ng-messages="accessInfoForm.designation.$error" ng-hide="!accessInfoSubmitted && !accessInfoForm.designation.$touched">
                                     <p style="color:red" ng-message="required">Designation Cannot be blank</p>
@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label class="col-md-2 col-xs-12 control-label col-sm-2">User Type</label>
                             <div class="col-md-6 col-xs-12 col-sm-4">
-                                <select ng-model="userInfo.userType" class="form-control select" required name="userType">
+                                <select ng-model="selectedUserInfo.userType" class="form-control select" required name="userType">
                                     <option value="Normal">Normal</option>
                                     <option value="Admin">Admin</option>                              </select>
                             </div>
@@ -50,7 +50,7 @@
                             </div>
                             <label class="col-md-2 col-xs-12 control-label col-sm-2">Role</label>
                             <div class="col-md-6 col-xs-12 col-sm-4">
-                                <select class="form-control select" ng-model="userInfo.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
+                                <select class="form-control select" ng-model="selectedUserInfo.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
 
                                     <option ng-repeat="role in roleList" value={{role.roleId}}>{{role.roleName}}</option>
                                 </select>

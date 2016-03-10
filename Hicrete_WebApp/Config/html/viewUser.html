@@ -13,9 +13,9 @@
                     <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
 
                     <option value="" disabled selected>Search by </option>
-                    <option value="state">Name</option>
-                    <option value="state">Designation</option>
-                    <option value="state">User Type</option>
+                    <option value="name">Name</option>
+                    <option value="designation">Designation</option>
+                    <option value="type">User Type</option>
                     <option value="city">City</option>
 
                     </select>
@@ -25,10 +25,10 @@
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword"/>
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary">Search</button>
+                            <button class="btn btn-primary" ng-click="getUserData(searchKeyword)">Search</button>
                         </div>
                     </div>
                 </div>
@@ -54,8 +54,8 @@
                         <td>{{user.role}}</td>
                         <td>
                             <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" ng-click="selectUser(user)">View Details</button>
-                            <a ui-sref="Config.modifyUser"> <button class="btn btn-primary">Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
+                            <a ui-sref="Config.modifyUser"> <button class="btn btn-primary" ng-click="selectUserForModify(user)">Modify</button></a>
+                            <button class="btn btn-danger" ng-click="deleteUser(user)">Delete</button>
                         </td>
                     </tr>
 
