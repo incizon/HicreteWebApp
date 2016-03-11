@@ -80,12 +80,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         $scope.loading=true;
         $scope.errorMessage="";
         $scope.warningMessage="";
+
         $('#loader').css("display","block");
         var config = {
             params: {
                 product: product
             }
         };
+        console.log("Loader"+$scope.loading);
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
@@ -116,7 +118,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+                $scope.errorMessage=data.msg;
                 $('#error').css("display","block");
             });
 
@@ -508,7 +510,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
      **************************************************/
 
 // inventoryService.getProducts($scope,$http);
-// Get Suppliers From DB 
+// Get Suppliers From DB
     $http.post("Inventory/php/supplierSearch.php", null)
         .success(function (data) {
             console.log(data);
@@ -810,8 +812,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
 myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
     $scope.materialType = [];
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+
     $scope.materialType.push({
         type: ""
     });
@@ -1096,29 +1097,14 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
     var data = {
         module: 'inventorySearch'
     }
+    $('#loader').css("display","block");
     var config = {
         params: {
             data: data
         }
     };
-
-    $scope.todayDateOfEntry = function() {
-        $scope.prodBatchInfo.dateOfEntry = new Date();
-    };
-    $scope.todayDateOfEntry();
-
-    $scope.maxDate = new Date(2020, 5, 22);
-
-    $scope.openPicker = function() {
-        $scope.popup1.opened = true;
-    };
-
-    $scope.popup1 = {
-        opened: false
-    };
-
-
     $http.post("Inventory/php/InventoryIndex.php", null, config)
+
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");
             console.log(data);
@@ -1126,10 +1112,31 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
             $scope.paginateItemsPerPage = data;
             $scope.totalItems = $scope.inventoryData.length;
             console.log($scope.inventoryData);
+            if(data.msg!=""){
+                $scope.warningMessage=data.msg;
+                $('#warning').css("display","block");
+            }
+            setTimeout(function() {
+                $scope.$apply(function() {
+                    if(data.msg!=""){
+                        $('#warning').css("display","none");
+                    }
+                });
+            }, 3000);
+
+            $scope.loading=false;
+            $('#loader').css("display","none");
+            if(data.msg==""){
+                $scope.errorMessage=data.error;
+                $('#error').css("display","block");
+            }
         })
+
         .error(function (data, status, headers) {
             console.log("IN SERVICE OF Inventory Search Failure=");
+            $('#loader').css("display","none");
             console.log(data);
+            $('#error').css("display","block");
 
         });
 
@@ -1350,6 +1357,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
                 }, 1000);
             }
         }
+
         $scope.submitted = false;
     };
 
