@@ -1,0 +1,124 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">Add Employee<strong>To Payroll</strong></h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th class="text-center">Employee Name</th>
+                                <th class="text-center">Leave Approver</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td width="50%">
+                                        <div class="col-md-2">
+                                            <input type="checkbox" ng-model="selectEmployee1" name="selectEmployee" value="true">
+                                        </div>
+                                        <div class="col-md-10 ">
+                                            {{"Namdev Devmare"}}
+                                        </div>
+                                    </td>
+                                    <td width="50%">
+
+                                        <select class="form-control select" name="leaveApprover1" ng-model="leaveApprover1" required />
+                                        <option value="" disabled selected>Choose leave Approver..</option>
+                                        <option value="namdev">Namdev</option>
+                                        <option value="atul">Atul</option>
+                                        <option value="ajit">Ajit</option>
+
+                                        </select>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td width="50%">
+                                       <div class="col-md-2">
+                                        <input type="checkbox" ng-model="selectEmployee2" name="selectEmployee2" value="true">
+                                        </div>
+                                        <div class="col-md-10">
+                                           {{"Namdev Devmare"}}
+                                        </div>
+                                    </td>
+                                    <td width="50%">
+
+                                        <select class="form-control select" name="leaveApprover2" ng-model="leaveApprover2" required />
+                                        <option value="" disabled selected>Choose leave Approver..</option>
+                                        <option value="namdev">Namdev</option>
+                                        <option value="atul">Atul</option>
+                                        <option value="ajit">Ajit</option>
+
+                                        </select>
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+
+                                    <td width="50%">
+                                        <div class="col-md-2">
+                                            <input type="checkbox" ng-model="selectEmployee3" name="selectEmployee3" value="true">
+                                        </div>
+                                        <div class="col-md-10">
+                                            {{"Namdev Devmare"}}
+                                        </div>
+                                    </td>
+                                    <td width="50%">
+
+                                        <select class="form-control select" name="leaveApprover3" ng-model="leaveApprover3" required />
+                                        <option value="" disabled selected>Choose leave Approver..</option>
+                                        <option value="namdev">Namdev</option>
+                                        <option value="atul">Atul</option>
+                                        <option value="ajit">Ajit</option>
+
+                                        </select>
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="panel-footer">
+
+                <button class="btn btn-default pull-left">Clear Form</button>
+                <button class="btn btn-danger pull-right" data-ng-click="AddEmployee()">Add</button>
+                <button class="btn btn-default pull-right">Cancel</button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

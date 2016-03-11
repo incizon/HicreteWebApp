@@ -1,0 +1,185 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Leaves<strong>By Date</strong></h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+                        <div class="col-md-2">
+                                <input id="byYear" type="radio" value="Year" ng-model="byYear" name="searchBy"/>
+                                <label>By Year</label>
+
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Select Year :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-control select" name="year" ng-model="year" />
+                                    <option value="" disabled selected>Choose year..</option>
+                                    <option value="2010">2010</option>
+                                    <option value="2011">2011</option>
+                                    <option value="2012">2012</option>
+                                    <option value="2013">2013</option>
+                                    <option value="2014">2014</option>
+
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Select Month :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    <select class="form-control select" name="weeklyoffDay" ng-model="weeklyoffDay" />
+                                    <option value="" disabled selected>Choose month..</option>
+                                    <option value="Jan">Jan</option>
+                                    <option value="Feb">Feb</option>
+                                    <option value="Mar">Mar</option>
+                                    <option value="April">April</option>
+                                    <option value="May">May</option>
+                                    <option value="June">June</option>
+                                    <option value="July">July</option>
+                                    <option value="Aug">Aug</option>
+                                    <option value="Sep">Sep</option>
+                                    <option value="Oct">Oct</option>
+                                    <option value="Nov">Nov</option>
+                                    <option value="Dec">Dec</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <input id="byTime" type="radio" value="Year" ng-model="byTime" name="searchBy"/>
+                            <label>By Time Period</label>
+
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">From Date :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="date" class="form-control" name="fromDate" ng-model="fromDate"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">To Date :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="date" class="form-control" name="toDate" ng-model="toDate"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+
+                        <div class="col-md-offset-2 col-md-5">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Sort :</label>
+                                </div>
+
+                                <div class="col-md-9">
+
+                                        <select class="form-control select" name="sortOrder" ng-model="sortOrder" />
+                                        <option value="" disabled selected>Choose order..</option>
+                                        <option value="Descending">Descending</option>
+                                        <option value="Ascending">Ascending</option>
+                                        </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+
+                                <div class="col-md-offset-10 col-md-2">
+                                    <button class="btn btn-primary" data-ng-click="searchByDate()">Search</button>
+                                </div>
+                        </div>
+
+                     </div><br>
+                    <div class="row">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="5%">Sr.No</th>
+                                <th width="15%">Leave By</th>
+                                <th width="10%">From Date</th>
+                                <th width="10%">To Date</th>
+                                <th width="15%">Reason</th>
+                                <th width="10%">Type</th>
+                                <th width="10%" >Status</th>
+                                <th width="10%">Application Date</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="leave in leaveDetails">
+
+                                <td>{{$index+1}}</td>
+                                <td>{{leave.leaveBy}}</td>
+                                <td>{{leave.fromDate}}</td>
+                                <td>{{leave.toDate}}</td>
+                                <td>{{leave.reason}}</td>
+                                <td>{{leave.type}}</td>
+                                <td>{{leave.status}}</td>
+                                <td>{{leave.applicationDate}}</td>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
