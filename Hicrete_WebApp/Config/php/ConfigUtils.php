@@ -324,7 +324,6 @@ class ConfigUtils
 
     }
 
-
     private static function getSearchQueryForUser($searchBy){
         $searchBy=strtolower($searchBy);
 
@@ -366,14 +365,13 @@ class ConfigUtils
     }
 
 
-    public static function getCompanyDetails($keyword)
+    public static function getCompanyDetails()
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $keyword="%".$keyword."%";
-            $stmt = $conn->prepare("SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster` where companyName like :keyword");
-            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+            $stmt = $conn->prepare("SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster`");
+
             if($stmt->execute()){
 
                 $noOfRows=0;
