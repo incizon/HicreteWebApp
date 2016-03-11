@@ -58,7 +58,8 @@
                                         <div class="col-md-4 col-xs-12">
                                             <div class="input-group" >
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="text" name="productionStartDate"  class="form-control datepicker" ng-model="prodBatchInfo.startDate" required  data-date-format="dd-mm-yyyy">
+                                                <input type="text" name="productionStartDate"  class="form-control datepicker" ng-model="prodBatchInfo.startDate"
+                                                       ng-click="openStart()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showStart.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true">
                                             </div>
                                             <div class="help-block" ng-messages="prodBatchInitForm.productionStartDate.$error" ng-show="submitted">
                                                 <p style="color:red" ng-message="required">Please enter production start date</p>
@@ -71,7 +72,8 @@
                                         <div class="col-md-4 col-xs-12">
                                             <div class="input-group" >
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="text" name="productionEndDate"  class="form-control date" ng-model="prodBatchInfo.endDate" required data-date-format="dd-mm-yyyy">
+                                                <input type="text" name="productionEndDate"  class="form-control date" ng-model="prodBatchInfo.endDate"
+                                                       ng-click="openStart()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showStart.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true">
                                             </div>
                                             <div class="help-block" ng-messages="prodBatchInitForm.productionEndDate.$error" ng-show="submitted">
                                                 <p style="color:red" ng-message="required">Please enter production end date</p>
