@@ -156,6 +156,31 @@ myApp.controller('userController', function ($scope, $http, configService) {
         console.log("Modify My Profile");
         console.log($scope.userInfo);
 
+        var data = {
+            operation: "modifyUser",
+            userInfo: $scope.userInfo,
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+
+        $http.post("Config/php/configFacade.php", null, config)
+            .success(function (data) {
+
+                console.log("Modify User Profile");
+                console.log(data);
+
+            })
+            .error(function (data, status, headers, config) {
+                doShowAlert("Failure", "Error Occurred");
+                $scope.clearUserForm();
+
+            });
+
     }
     $scope.clearUserForm = function () {
         $scope.step = 1;
@@ -182,15 +207,6 @@ myApp.controller('userController', function ($scope, $http, configService) {
 
 
     $scope.addUser = function () {
-        // var companySelected=false;
-        // angular.forEach($scope.companyList, function(company) {
-        //       companySelected=companySelected || company.value;
-        //    });
-        // if(!companySelected){
-        // 	$scope.showCompanyError=true;
-        // 	return;
-        // }
-
 
         var data = {
             operation: "addUser",

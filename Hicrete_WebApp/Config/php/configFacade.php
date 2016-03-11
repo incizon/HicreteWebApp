@@ -28,7 +28,7 @@ switch ($data->operation) {
     				    break;
     case "addUser" :Config::addUser($data,"admin");
     				    break;
-    case "addUser" :Config::modifyUser($data,"admin");
+    case "modifyUser" :Config::modifyUser($data,"admin");
                         break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;
