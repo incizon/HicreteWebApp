@@ -430,7 +430,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('ChangePassword', {
             url: '/ChangePassword',
-            templateUrl:'Config/html/ChangePassword.html'
+            templateUrl:'Config/html/ChangePassword.html',
+            controller:'chngPassController'
 
         })
 
