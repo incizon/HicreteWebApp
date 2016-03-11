@@ -117,7 +117,9 @@ myApp.service('ApplicatorService',function(){
 
 				.error(function (data, status, headers){
 					console.log(data);
-
+					$('#loader').css("display","none");
+					$scope.errorMessage=data.error;
+					$('#error').css("display","block");
 				});
 	};
 

@@ -53,8 +53,7 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                <input type="date" class="form-control datepicker" ng-model="task.startDate"
-                                       name="date" required>
+                                <input type="text" class="form-control" ng-model="task.startDate" name="date" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="show.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true">
                             </div>
                         </div>
                     </div>
@@ -64,8 +63,8 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                <input type="date" class="form-control datepicker" ng-model="task.endDate"
-                                       name="date" required>
+                                <input type="text" class="form-control" ng-model="task.endDate"
+                                       name="date" ng-click="taskEndDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showEnd.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true">
                             </div>
                         </div>
                     </div>
