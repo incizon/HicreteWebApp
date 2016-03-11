@@ -15,11 +15,11 @@ class User
     public $isPayroll=false;
     public $isAdmin=false;
 
-    private function populateAccessRights($userId){
+    private function populateAccessRights($roleId,$userId){
     	$db = Database::getInstance();
         $conn = $db->getConnection();
-    	$stmt = $conn->prepare("SELECT DISTINCT(`ModuleName`) FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `useraccesspermission` WHERE `userId`=:userId)"); 
-    	
+    	$stmt = $conn->prepare("SELECT DISTINCT(`ModuleName`) FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId) OR `accessId` IN (SELECT `accessId` FROM `tempaccesspermissions` WHERE `userId`=:userId AND `fromDate` < now() AND `toDate` >  now())");
+		$stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
     	$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
     	$stmt->execute();
     	while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
@@ -46,7 +46,7 @@ class User
     
     	$db = Database::getInstance();
         $conn = $db->getConnection();
-    	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,userroleinfo.designation,userroleinfo.userType
+    	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,userroleinfo.designation,userroleinfo.userType,userroleinfo.roleId
 			FROM    `usermaster` INNER JOIN `userroleinfo` ON userroleinfo.userId=usermaster.userId
 			WHERE   usermaster.userId =:userId"); 
     	$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
@@ -60,12 +60,12 @@ class User
 			$this->emailId=$result[0]['emailId'];
 			$this->designation=$result[0]['designation'];
 			$userType=$result[0]['userType'];
-            
+            $roleId=$result[0]['roleId'];
 			if(strcasecmp($userType,"Admin")==0){
 				$this->isAdmin=true;
 			}
 			
-			$this->populateAccessRights($userId);
+			$this->populateAccessRights($roleId);
 			return true;
 		}
     }

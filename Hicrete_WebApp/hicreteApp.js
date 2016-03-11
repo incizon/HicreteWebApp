@@ -246,7 +246,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Config.userSearch', {
             url: '/SearchUser',
             templateUrl: 'Config/html/ViewUser.html',
-            controller:'userController'
+            controller:'searchUserController'
         })
 
         .state('Config.companySearch', {
@@ -264,9 +264,9 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Config.modifyCompany', {
-            url: '/ModifyCompany',
+            url: '/ModifyCompany?companyId',
             templateUrl: 'Config/html/ModifyCompany.html',
-            controller:'companyController'
+            controller:'ModifyCompanyController'
         })
 
         .state('Config.modifyRole', {
@@ -276,14 +276,15 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Config.modifyWarehouse', {
-            url: '/ModifyWarehouse',
+            url: '/ModifyWarehouse?warehouseId',
             templateUrl: 'Config/html/ModifyWarehouse.html',
             controller:'ModifyWarehouseController'
         })
         .state('Config.modifyUser', {
             url: '/ModifyUser',
             templateUrl: 'Config/html/ModifyUser.html',
-            controller:'ModifyUserController'
+            controller:'modifyUserController',
+            params : { userToModify: null }
         })
         .state('myProfile', {
             url: '/myProfile',

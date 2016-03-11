@@ -80,12 +80,14 @@ class ConfigUtils
     ///////////////////////////////////////////////////////////////////////////////////
     //For fetching ware house details
     ////////////////////////////////////////////////////////////////////////////////////
-   public static function getWareHouseDetails()
+   public static function getWareHouseDetails($key)
    {
        try{
            $db = Database::getInstance();
            $conn = $db->getConnection();
-           $stmt = $conn->prepare("SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster`");
+           $key="%".$key."%";
+           $stmt = $conn->prepare("SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster` where wareHouseName like :key");
+            $stmt->bindParam(':key',$key , PDO::PARAM_STR);
 
            if($stmt->execute()){
 
@@ -128,6 +130,78 @@ class ConfigUtils
            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
        }
    }
+
+    public static function modifyWareHouseDetails($data,$userId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("UPDATE `warehousemaster` SET `wareHouseName`=:wareHouseName,`warehouseAbbrevation`=:abbrevation,`address`=:address,`city`=:city,`state`=:state,`country`=:country,`pincode`=:pincode,`phoneNumber`=:phoneNumber,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE `warehouseId`=:warehouseId");
+
+            $stmt->bindParam(':wareHouseName',$data->data->wareHouseName , PDO::PARAM_STR);
+            $stmt->bindParam(':abbrevation', $data->data->warehouseAbbrevation, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
+            $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
+            $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
+            $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
+            $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
+            $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':warehouseId', $data->data->warehouseId, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                echo AppUtil::getReturnStatus("Successful","Company Modified successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+
+    }
+    public static function modifyCompanyDetails($data,$userId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("UPDATE companymaster SET companyName=:companyName,companyAbbrevation=:abbrevation,startDate=:startdate,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,emailId=:emailId,phoneNumber=:phoneNumber,lastModifiedBy=:userId,lastModificationDate=now() WHERE companyId=:companyId");
+
+            $stmt->bindParam(':companyName',$data->data->companyName , PDO::PARAM_STR);
+            $stmt->bindParam(':abbrevation', $data->data->companyAbbrevation, PDO::PARAM_STR);
+            $stmt->bindParam(':startdate', $data->data->startDate, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
+            $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
+            $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
+            $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
+            $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
+            $stmt->bindParam(':emailId', $data->data->emailId, PDO::PARAM_STR);
+            $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':companyId', $data->data->companyId, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                echo AppUtil::getReturnStatus("Successful","Company Modified successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+
+
+    }
 
     public static function modifyUser($data,$userId)
     {
@@ -186,25 +260,14 @@ class ConfigUtils
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            //echo $keyword;
+
             $keyword= "%".$keyword."%";
 
             //echo $keyword;
-            $selectStmt="SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where isdeleted!='1'";
+            $selectStmt=self::getSearchQueryForUser($searchBy);
 
-            if($searchBy == 'name')
-            {
-                $selectStmt=  $selectStmt." AND firstname like :keyword or lastname like :keyword";
-
-            }
-            if($searchBy == 'city')
-            {
-                $selectStmt=  $selectStmt." AND city like :keyword";
-            }
             $stmt = $conn->prepare($selectStmt);
-            if($searchBy == 'name' || $searchBy == 'city') {
-                $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
-            }
+            $stmt->bindParam(':keyword',$keyword, PDO::PARAM_STR);
             if($stmt->execute()){
 
                 $noOfRows=0;
@@ -224,12 +287,14 @@ class ConfigUtils
                     $result_array['emailId'] =$result['emailId'];
                     $result_array['mobileNumber'] =$result['mobileNumber'];
 
-                    $stmt1 = $conn->prepare("SELECT a.designation ,b.rolename  from userroleinfo a,rolemaster b where a.userid=:userid and a.roleid=b.roleid");
+                    $stmt1 = $conn->prepare("SELECT a.designation ,a.userType,b.rolename,b.roleId  from userroleinfo a,rolemaster b where a.userid=:userid AND a.roleid=b.roleid");
                     $stmt1->bindParam(':userid', $result['userId'], PDO::PARAM_STR);
                     if($stmt1->execute()) {
                         while($result1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
                             $result_array['designation'] = $result1['designation'];
                             $result_array['role'] = $result1['rolename'];
+                            $result_array['userType'] = $result1['userType'];
+                            $result_array['roleId'] = $result1['roleId'];
                         }
 
                     }
@@ -258,6 +323,47 @@ class ConfigUtils
 
 
     }
+
+    private static function getSearchQueryForUser($searchBy){
+        $searchBy=strtolower($searchBy);
+
+        if($searchBy == 'name')
+        {
+            return self::getQueryForSearchUserByName();
+
+        }
+        else if($searchBy == 'city')
+        {
+           return self::getQueryForUserByCity();
+        }
+
+        else if($searchBy == 'designation')
+        {
+            return self::getQueryForSearchUserByDesignation();
+        }
+        else if($searchBy == 'type')
+        {
+           return self::getQueryForUserByUserType();
+        }
+
+    }
+
+    private static function getQueryForSearchUserByName(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND (firstname like :keyword or lastname like :keyword)";
+    }
+
+    private static function getQueryForSearchUserByDesignation(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `designation` like :keyword)";
+    }
+
+    private static function getQueryForUserByUserType(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `userType` like :keyword)";
+    }
+
+    private static function getQueryForUserByCity(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND city like :keyword";
+    }
+
 
     public static function getCompanyDetails()
     {

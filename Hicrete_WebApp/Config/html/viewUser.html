@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-4">
 
-                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
+                    <select class="form-control select" name="searchBy" ng-model="searchAttribute"/>
 
                     <option value="" disabled selected>Search by </option>
                     <option value="name">Name</option>
@@ -46,7 +46,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in Users">
+                    <tr ng-repeat="user in Users | filter :paginate" >
                         <td>{{$index+1}}</td>
                         <td>{{user.firstName}} {{user.lastName}}</td>
                         <td>{{user.mobileNumber}}</td>
@@ -54,7 +54,7 @@
                         <td>{{user.role}}</td>
                         <td>
                             <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" ng-click="selectUser(user)">View Details</button>
-                            <a ui-sref="Config.modifyUser"> <button class="btn btn-primary" ng-click="selectUserForModify(user)">Modify</button></a>
+                            <a ui-sref="Config.modifyUser({userToModify:user})"> <button class="btn btn-primary">Modify</button></a>
                             <button class="btn btn-danger" ng-click="deleteUser(user)">Delete</button>
                         </td>
                     </tr>
@@ -71,7 +71,7 @@
     </div>
     <uib-pagination total-items="totalItems" ng-model="currentPage"
                     max-size="5" boundary-links="true"
-                    items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+                    items-per-page="UserPerPage" class="pagination-sm">
     </uib-pagination>
 
 

@@ -12,7 +12,7 @@
                             <label class="col-md-2 col-xs-12 control-label">User Names</label>
                             <div class="col-md-6 col-xs-12">
 
-                                    <label class="control-label">{{selectedUserInfo.fistName}} {{selectedUserInfo.lastName}}</label>
+                                    <label class="control-label">{{selectedUserInfo.firstName}} {{selectedUserInfo.lastName}}</label>
 
 
                             </div>
@@ -60,7 +60,7 @@
                             <a href="#b" data-toggle="modal" class="btn btn-primary pull-left" ng-click="addModalListener()">Add Role</a>
                         </div> -->
                         </div>
-                        <div ng-show="selectedRole.roleId">
+
                             <div class="form-group">
                                 <label class="col-md-2 col-xs-12 control-label col-sm-2">List of Permission</label>
                                 <div class="col-md-6 col-xs-12 col-sm-4 permission">
@@ -83,13 +83,9 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <!--<button class="btn btn-primary pull-left" data-target="#a" data-toggle="modal">Add more Permissions</button>-->
-                                    <a href="#a" data-toggle="modal" class="btn btn-primary pull-left" ng-click="loadExtraAccessPermission()">Add more Permissions</a>
 
-                                </div>
                             </div>
-                            </div>
+
                     </form>
 
                 </div>
@@ -100,42 +96,3 @@
             </div>
         </div>
 </div>
-<div id="a" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Select Access Permission</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group">
-                        <table class="table table-fixed">
-                            <thead>
-                            <tr>
-                                <th class="col-xs-8">Module name</th>
-                                <th class="col-xs-2">Read</th>
-                                <th class="col-xs-2">Write</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="accessEntry in otherAccessList">
-                                <td ng-model="accessEntry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
-                                <td class="col-xs-2 text-center"><input ng-if="accessEntry.read.ispresent"  ng-model="accessEntry.read.val" type="checkbox"></td>
-                                <td class="col-xs-2 text-center"><input ng-if="accessEntry.write.ispresent" ng-model="accessEntry.write.val"  type="checkbox"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="addExtraAccessPermission()">Add Permissions</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ADD PERMISSION FORM end-->

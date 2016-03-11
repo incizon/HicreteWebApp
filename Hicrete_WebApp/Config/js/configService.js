@@ -69,7 +69,7 @@ myApp.service('configService', function(){
 };
 
 
-self.getRoleList=function($http,$scope){
+    self.getRoleList=function($http,$scope){
                   //Get all permissions
           if($scope.roleList==undefined){
              $scope.roleList=[];
@@ -101,6 +101,10 @@ self.getRoleList=function($http,$scope){
                      });
         }      
   };
+
+
+
+
 
 
 });
