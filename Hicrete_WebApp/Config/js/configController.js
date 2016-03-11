@@ -75,7 +75,7 @@ configService.getAllAccessPermission($http,$scope);
 });
 
 
-myApp.controller('userController',function($scope,$http,configService){
+myApp.controller('userController',function($scope,$http,$rootScope,configService){
 
 $scope.refreshRoleList=true;
 $scope.step=1;
@@ -87,6 +87,8 @@ $scope.roleAccessList=[];
 $scope.selectedRole={"roleId":""};
 $scope.otherAccessList=[];
 $scope.isFromUser=true;
+    $scope.searchKeyword="";
+    $scope.sortExpression="";
 
 
 $scope.userInfo={
@@ -104,6 +106,116 @@ designation:"",
 userType:""
 };
 
+////////////////////////////////////////////////////////////
+// Functions to modify data START
+///////////////////////////////////////////////////////////
+    $scope.selectUserForModify= function(user)
+    {
+        $scope.selectedUserInfo=user;
+        console.log($scope.selectedUserInfo);
+
+    }
+
+    $scope.modifyUser=function(){
+        console.log($scope.selectedUserInfo);
+        var data={
+            operation :"modifyUser",
+            userInfo:$scope.selectedUserInfo
+
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+
+        /* $http.post("Config/php/configFacade.php",null, config)
+         .success(function (data)
+         {
+
+         console.log(data.status);
+         console.log(data.message);
+         if(data.status=="Successful"){
+         console.log(data);
+         // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+         }else if(data.status=="Unsuccessful"){
+         //doShowAlert("Failure",data.message);
+         console.log(data);
+         }else{
+         //doShowAlert("Failure",data.message);
+         console.log(data);
+         }
+         $scope.clearUserForm();
+
+         })
+         .error(function (data, status, headers, config)
+         {
+         doShowAlert("Failure","Error Occurred");
+         $scope.clearUserForm();
+
+         });*/
+
+        $scope.userInfoSubmitted=false;
+        $scope.accessInfoSubmitted=false;
+        $scope.showCompanyError=false;
+    }
+    ////////////////////////////////////////////////////////////
+// Functions to modify data END
+///////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////
+//// Function to delete the user- start
+/////////////////////////////////////////////////////////////////////
+
+$scope.deleteUser = function(user)
+{
+    var data={
+        operation:"deleteUser",
+        key:user.userId
+
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Config/php/configFacade.php",null, config)
+        .success(function (data)
+        {
+
+            if(data.status!="Successful"){
+                console.log(data);
+                //doShowAlert("Failure",data.message);
+            }
+            else
+            {
+                console.log(data);
+
+
+            }
+
+        })
+        .error(function (data, status, headers, config)
+        {
+            doShowAlert("Failure","Error Occured");
+        });
+
+
+};
+
+/////////////////////////////////////////////////////////////////////
+//// Function to delete the user- END
+/////////////////////////////////////////////////////////////////////
+
+
     $scope.selectUser = function(user)
     {
         $scope.selectedUser=user;
@@ -112,10 +224,14 @@ userType:""
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get User details
 /////////////////////////////////////////////////////////////////////////////////
-    $scope.getUserData = function(){
+    $scope.getUserData = function(keyword){
 
+        console.log(keyword);
+        console.log($scope.sortExpression);
         var data={
-            operation:"getUserDetails"
+            operation:"getUserDetails",
+            keyword:keyword,
+            searchBy:$scope.sortExpression
         };
         var config = {
             params: {
@@ -129,11 +245,13 @@ userType:""
                 if(data.status!="Successful"){
                     console.log(data);
                     //doShowAlert("Failure",data.message);
-                }else{
+                }
+                else
+                {
                     console.log(data);
-                    $scope.Users=data.message;
+                    $rootScope.Users=data.message;
+                    console.log($rootScope.Users);
 
-                    console.log($scope.Companies);
                 }
 
             })
@@ -143,9 +261,8 @@ userType:""
             });
 
 
-
     };
-    $scope.getUserData();
+    //$scope.getUserData();
 configService.getRoleList($http,$scope);
 
 		    $scope.nextStep = function() {
@@ -373,7 +490,9 @@ configService.getRoleList($http,$scope);
 
 
 
-myApp.controller('companyController',function($scope,$http){
+myApp.controller('companyController',function($scope,$rootScope,$http){
+    $scope.keyword="";
+    $scope.searchkeyword="";
  $scope.company={
  	name:"",
   abbrevation:"",
@@ -399,16 +518,33 @@ $scope.warehouse={
   phone:""
  };
 
+    ///////////////////////////////////////////////////////////////////////
+    // function to modify Company-Start
+    //////////////////////////////////////////////////////////////////
+    $scope.selectForModifyCmpny= function(comp)
+    {
+        $scope.companyDetails=comp;
+        console.log($scope.companyDetails);
 
- $scope.submitted=false;
- $scope.warehouseSubmitted=false;
-/////////////////////////////////////////////////////////////////////////////////
-// Function to get comapny details
-/////////////////////////////////////////////////////////////////////////////////
-    $scope.getCompanyData = function(){
+    };
+    $scope.modifyCompDetails=function()
+    {
+        console.log($scope.companyDetails);
+    }
 
+    ///////////////////////////////////////////////////////////////////////
+    // function to modify Company-End
+    //////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////
+// Function to get Ware house details
+/////////////////////////////////////////////////////////////////////////////////
+    $scope.getWareHouseDetails = function(keyword)
+    {
+        console.log(keyword);
         var data={
-            operation:"getCompanyDetails"
+            operation:"getWareHouseDetails",
+            key:keyword
         };
         var config = {
             params: {
@@ -424,7 +560,7 @@ $scope.warehouse={
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
-                    $scope.Companies=data.message;
+                    $rootScope.warehouses=data.message;
 
                     console.log($scope.Companies);
                 }
@@ -435,10 +571,49 @@ $scope.warehouse={
                 doShowAlert("Failure","Error Occured");
             });
 
+    };
+    //$scope.getWareHouseDetails();
 
+ $scope.submitted=false;
+ $scope.warehouseSubmitted=false;
+/////////////////////////////////////////////////////////////////////////////////
+// Function to get comapny details
+/////////////////////////////////////////////////////////////////////////////////
+    $scope.getCompanyData = function(searchkeyword){
+        console.log("Inside company fetch data ");
+        var data={
+            operation:"getCompanyDetails",
+            keyword:searchkeyword
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+       //if($rootScope.Companies.length==0) {
+            $http.post("Config/php/configFacade.php", null, config)
+                .success(function (data) {
+
+                    if (data.status != "Successful") {
+                        console.log(data);
+                        //doShowAlert("Failure",data.message);
+                    } else {
+                        console.log(data);
+                        $rootScope.Companies = data.message;
+                        console.log($rootScope.Companies);
+
+                       // console.log($scope.Companies);
+                    }
+
+                })
+                .error(function (data, status, headers, config) {
+                    doShowAlert("Failure", "Error Occured");
+                });
+
+        //}
 
     };
-    $scope.getCompanyData();
+   // $scope.getCompanyData();
 
 
 
@@ -728,24 +903,58 @@ $scope.exemptedAccessList=[];
 
           }      
 });
-myApp.controller('ModifyCompanyController',function($scope,$http) {
+myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $stateParams) {
 
         console.log("IN");
+    console.log($stateParams.companyId);
 
-        $scope.companyDetails={
+    for (var i = 0; i < $rootScope.Companies.length; i++) {
+        if ($stateParams.companyId == $rootScope.Companies[i].companyId) {
+            $scope.selectedCompany=$rootScope.Companies[i];
+            break;
+        }
+    }
+    console.log($scope.selectedCompany);
 
-            name:"Hicrete",
-            abbrevation:"HS",
-            startdate:"10-10-1990",
-            address:"K K Market",
-            city:"Pune",
-            state:"Maharashtra",
-            country:"India",
-            pincode:"411051",
-            email:"abc@gmail.com",
-            phone:"1234567890"
+
+    $scope.modifyCompanyDetails =function()
+    {
+        var data={
+            operation:"modifyCompanyDetails",
+            data:$scope.selectedCompany
 
         };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log($scope.selectedCompany);
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    };
+
+
+
+
 
 });
 
@@ -788,27 +997,59 @@ myApp.controller('ModifyRoleController',function($scope,$http) {
 
 });
 
-myApp.controller('ModifyWarehouseController',function($scope,$http) {
+myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$stateParams) {
 
     console.log("In");
 
+    for (var i = 0; i < $rootScope.warehouses.length; i++) {
+        if ($stateParams.warehouseId == $rootScope.warehouses[i].warehouseId) {
+            $scope.selectedWarehouse=$rootScope.warehouses[i];
+            break;
+        }
+    }
+    console.log($scope.selectedWarehouse);
 
-    $scope.warehouseDetails={
 
-        name:"Hicrete",
-        abbrevation:"HS",
-        address:"K K Market",
-        city:"Pune",
-        state:"Maharashtra",
-        country:"India",
-        pincode:"411051",
-        phone:"1234567890"
+    $scope.modifyWarehouse =function()
+    {
+        var data={
+            operation:"modifyWareHouseDetails",
+            data:$scope.selectedWarehouse
 
-    };
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        //console.log($scope.selectedCompany);
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    }
+
+
 });
 
 
-myApp.controller('ModifyUserController',function($scope,$http,configService){
+myApp.controller('ModifyUserController',function($scope,$http,$rootScope,configService){
 
     $scope.refreshRoleList=true;
     //$scope.step=1;
@@ -861,23 +1102,19 @@ myApp.controller('ModifyUserController',function($scope,$http,configService){
     //}
 
 
+    $scope.selectUserForModify= function(user)
+    {
+        $scope.userInfo=user;
+        console.log($scope.userInfo);
 
-    $scope.addUser=function(){
-        // var companySelected=false;
-        // angular.forEach($scope.companyList, function(company) {
-        //       companySelected=companySelected || company.value;
-        //    });
-        // if(!companySelected){
-        // 	$scope.showCompanyError=true;
-        // 	return;
-        // }
+    }
 
+    $scope.modifyUser=function(){
+        console.log($scope.userInfo);
+               var data={
+            operation :"modifyUser",
+            userInfo:$scope.userInfo
 
-        var data={
-            operation :"addUser",
-            userInfo:$scope.userInfo,
-            roleId: $scope.selectedRole.roleId,
-            accessPermissions:$scope.roleAccessList
         };
 
         var config = {
@@ -887,20 +1124,21 @@ myApp.controller('ModifyUserController',function($scope,$http,configService){
             }
         };
 
-        $http.post("Config/php/configFacade.php",null, config)
+       /* $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
             {
 
                 console.log(data.status);
                 console.log(data.message);
                 if(data.status=="Successful"){
-                    alert("Password is :"+data.message);
-                    doShowAlert("Success","User created successfully");
-                    window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+                    console.log(data);
+                   // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
                 }else if(data.status=="Unsuccessful"){
-                    doShowAlert("Failure",data.message);
+                    //doShowAlert("Failure",data.message);
+                    console.log(data);
                 }else{
-                    doShowAlert("Failure",data.message);
+                    //doShowAlert("Failure",data.message);
+                    console.log(data);
                 }
                 $scope.clearUserForm();
 
@@ -910,7 +1148,7 @@ myApp.controller('ModifyUserController',function($scope,$http,configService){
                 doShowAlert("Failure","Error Occurred");
                 $scope.clearUserForm();
 
-            });
+            });*/
 
         $scope.userInfoSubmitted=false;
         $scope.accessInfoSubmitted=false;

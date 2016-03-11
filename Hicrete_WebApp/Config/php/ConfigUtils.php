@@ -77,13 +77,208 @@ class ConfigUtils
            
     }
 
-    public static function getUserDetails()
+    ///////////////////////////////////////////////////////////////////////////////////
+    //For fetching ware house details
+    ////////////////////////////////////////////////////////////////////////////////////
+   public static function getWareHouseDetails($key)
+   {
+       try{
+           $db = Database::getInstance();
+           $conn = $db->getConnection();
+           $key="%".$key."%";
+           $stmt = $conn->prepare("SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster` where wareHouseName like :key");
+            $stmt->bindParam(':key',$key , PDO::PARAM_STR);
+
+           if($stmt->execute()){
+
+               $noOfRows=0;
+               $json_response = array();
+               while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
+               {
+                   $result_array = array();
+                   $result_array['warehouseId'] = $result['warehouseId'];
+                   $result_array['wareHouseName'] = $result['wareHouseName'];
+                   $result_array['warehouseAbbrevation'] =$result['warehouseAbbrevation'];
+                   $result_array['address'] =$result['address'];
+                   $result_array['city'] =$result['city'];
+                   $result_array['state'] =$result['state'];
+                   $result_array['country'] =$result['country'];
+                   $result_array['pincode'] =$result['pincode'];
+                   $result_array['phoneNumber'] =$result['phoneNumber'];
+                   array_push($json_response, $result_array); //push the values in the array
+                   $noOfRows++;
+
+               }
+               if($noOfRows>0){
+
+                   echo AppUtil::getReturnStatus("Successful",$json_response);}
+               else {
+
+                   echo AppUtil::getReturnStatus("NoRows", "No companies found");
+               }
+           }else{
+               echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+           }
+
+
+
+
+
+
+       }catch(Exception $e){
+
+           echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+       }
+   }
+
+    public static function modifyWareHouseDetails($data,$userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster`");
 
+            $stmt = $conn->prepare("UPDATE `warehousemaster` SET `wareHouseName`=:wareHouseName,`warehouseAbbrevation`=:abbrevation,`address`=:address,`city`=:city,`state`=:state,`country`=:country,`pincode`=:pincode,`phoneNumber`=:phoneNumber,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE `warehouseId`=:warehouseId");
+
+            $stmt->bindParam(':wareHouseName',$data->data->wareHouseName , PDO::PARAM_STR);
+            $stmt->bindParam(':abbrevation', $data->data->warehouseAbbrevation, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
+            $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
+            $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
+            $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
+            $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
+            $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':warehouseId', $data->data->warehouseId, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                echo AppUtil::getReturnStatus("Successful","Company Modified successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+
+    }
+    public static function modifyCompanyDetails($data,$userId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("UPDATE companymaster SET companyName=:companyName,companyAbbrevation=:abbrevation,startDate=:startdate,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,emailId=:emailId,phoneNumber=:phoneNumber,lastModifiedBy=:userId,lastModificationDate=now() WHERE companyId=:companyId");
+
+            $stmt->bindParam(':companyName',$data->data->companyName , PDO::PARAM_STR);
+            $stmt->bindParam(':abbrevation', $data->data->companyAbbrevation, PDO::PARAM_STR);
+            $stmt->bindParam(':startdate', $data->data->startDate, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
+            $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
+            $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
+            $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
+            $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
+            $stmt->bindParam(':emailId', $data->data->emailId, PDO::PARAM_STR);
+            $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':companyId', $data->data->companyId, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                echo AppUtil::getReturnStatus("Successful","Company Modified successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+
+
+    }
+
+    public static function modifyUser($data,$userId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("UPDATE `userroleinfo` SET `designation`=:designation,`roleId`=:roleId,`userType`=:userType,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE userid=:dataUserId");
+
+            $stmt->bindParam(':designation',$data->designation , PDO::PARAM_STR);
+            $stmt->bindParam(':roleId', $data->roleId, PDO::PARAM_STR);
+            $stmt->bindParam(':userType', $data->userType, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':dataUserId', $data->userId, PDO::PARAM_STR);
+            if($stmt->execute()){
+
+                echo AppUtil::getReturnStatus("Successful","User Deleted successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+    }
+    public static function deleteUser($key,$userId)
+    {
+        $delFlg='1';
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("UPDATE `usermaster` SET `isDeleted`=:flag,`deletedBy`=:deletedBy,`deletionDate`=now() WHERE userid=:key");
+
+            $stmt->bindParam(':flag',$delFlg , PDO::PARAM_STR);
+            $stmt->bindParam(':deletedBy', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':key', $key, PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                    echo AppUtil::getReturnStatus("Successful","User Deleted successfully");
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+    }
+
+    public static function getUserDetails($keyword,$searchBy)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            //echo $keyword;
+            $keyword= "%".$keyword."%";
+
+            //echo $keyword;
+            $selectStmt="SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where isdeleted!='1'";
+
+            if($searchBy == 'name')
+            {
+                $selectStmt=  $selectStmt." AND firstname like :keyword or lastname like :keyword";
+
+            }
+            if($searchBy == 'city')
+            {
+                $selectStmt=  $selectStmt." AND city like :keyword";
+            }
+            $stmt = $conn->prepare($selectStmt);
+            if($searchBy == 'name' || $searchBy == 'city') {
+                $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
+            }
             if($stmt->execute()){
 
                 $noOfRows=0;
@@ -113,7 +308,7 @@ class ConfigUtils
 
                     }
                     else
-                        echo "fail";
+                    {}
 
                     array_push($json_response, $result_array); //push the values in the array
                     $noOfRows++;
@@ -138,13 +333,14 @@ class ConfigUtils
 
     }
 
-    public static function getCompanyDetails()
+    public static function getCompanyDetails($keyword)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster`");
-
+            $keyword="%".$keyword."%";
+            $stmt = $conn->prepare("SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster` where companyName like :keyword");
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR);
             if($stmt->execute()){
 
                 $noOfRows=0;

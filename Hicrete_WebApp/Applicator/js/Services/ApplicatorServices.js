@@ -13,16 +13,32 @@ myApp.service('ApplicatorService',function(){
 								
 					.success(function (data, status, headers, config){	
 							console.log(data);
+						if(data.msg!=""){
+							$scope.warningMessage=data.msg;
+							$('#warning').css("display","block");
+						}
+						setTimeout(function() {
+							$scope.$apply(function() {
+								if(data.msg!=""){
+									$('#warning').css("display","none");
+								}
+							});
+						}, 3000);
 
+						$scope.loading=false;
+						$('#loader').css("display","none");
+						if(data.msg==""){
+							$scope.errorMessage=data.error;
+							$('#error').css("display","block");
+						}
 							setTimeout(function(){
 									window.location.reload(true);
 							},2000);
-
-
-
 						})
 						.error(function (data, status, headers, config){
-
+							$('#loader').css("display","none");
+							$scope.errorMessage=data.error;
+							$('#error').css("display","block");
                         			console.log(data);
 
 						});			
@@ -61,6 +77,10 @@ myApp.service('ApplicatorService',function(){
 	this.savePaymentDetails=function($scope,$http,applicatorDetails){
 
 		applicatorDetails.operation='savePaymentDetails';
+		$scope.loading=true;
+		$scope.errorMessage="";
+		$scope.warningMessage="";
+		$('#loader').css("display","block");
 		var config = {
 			params: {
 				data: applicatorDetails
@@ -70,6 +90,24 @@ myApp.service('ApplicatorService',function(){
 		$http.post("Applicator/php/Applicator.php", null,config)
 
 				.success(function (data, status, headers, config){
+					if(data.msg!=""){
+						$scope.warningMessage=data.msg;
+						$('#warning').css("display","block");
+					}
+					setTimeout(function() {
+						$scope.$apply(function() {
+							if(data.msg!=""){
+								$('#warning').css("display","none");
+							}
+						});
+					}, 3000);
+
+					$scope.loading=false;
+					$('#loader').css("display","none");
+					if(data.msg==""){
+						$scope.errorMessage=data.error;
+						$('#error').css("display","block");
+					}
 					console.log(data);
 					setTimeout(function(){
 						window.location.reload(true);

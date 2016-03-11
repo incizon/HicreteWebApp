@@ -16,14 +16,14 @@
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keyword"/>
 
 
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="input-group-btn">
-                        <button class="btn btn-primary">Search</button>
+                        <button class="btn btn-primary" ng-click="getWareHouseDetails(keyword)">Search</button>
                     </div>
 
                 </div>
@@ -44,167 +44,23 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
+                    <tr ng-repeat="wareHouse in warehouses">
+                        <td>{{$index+1}}</td>
+                        <td>{{wareHouse.wareHouseName}}</td>
+                        <td>{{wareHouse.address}}</td>
+                        <td>{{wareHouse.city}}</td>
+                        <td>{{wareHouse.state}}</td>
+                        <td>{{wareHouse.country}}</td>
+                        <td>{{wareHouse.pincode}}</td>
+                        <td>{{wareHouse.phoneNumber}}</td>
 
                         <td>
                             <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
+                            <button ui-sref="Config.modifyWarehouse({warehouseId:wareHouse.warehouseId})" class="btn btn-primary"  data-toggle="modal" data-target="">Modify</button>
                             <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
                         </td>
                     </tr>
 
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Modify</button>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>Hicrete</td>
-                        <td>K K Market</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>abc@gmail.com</td>
-                        <td>124567890</td>
-
-                        <td>
-                            <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyWarehouse"> <button class="btn btn-primary" >Modify</button></a>
-                            <button class="btn btn-primary"  data-toggle="modal" data-target="">Delete</button>
-                        </td>
-                    </tr>
 
 
                     </tbody>
