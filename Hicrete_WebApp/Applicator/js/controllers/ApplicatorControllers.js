@@ -539,13 +539,14 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                     $('#loader').css("display","none");
                     if(data.msg==""){
                         $scope.errorMessage=data.error;
+                        console.log($scope.errorMessage);
                         $('#error').css("display","block");
                     }
                     console.log($rootScope.permanentApplicators);
                 })
 
                 .error(function (data, status, headers) {
-                    console.log(data);
+                    console.log(data.error);
                     $('#loader').css("display","none");
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");

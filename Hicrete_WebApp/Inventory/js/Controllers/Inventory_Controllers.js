@@ -1102,10 +1102,15 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         }
     };
 
-    /*$scope.todayDateOfEntry = function() {
+    $scope.todayDateOfEntry = function() {
         $scope.prodBatchInfo.dateOfEntry = new Date();
     };
-    $scope.todayDateOfEntry();*/
+    $scope.todayDateOfEntry();
+
+    $scope.todayStartDate = function(){
+        $scope.prodBatchInfo.startDate = new Date();
+    }
+    $scope.todayStartDate();
 
     $scope.maxDate = new Date(2020, 5, 22);
 
@@ -1117,6 +1122,13 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         opened: false
     };
 
+    $scope.openStart = function() {
+        $scope.showStart.opened = true;
+    };
+
+    $scope.showStart = {
+        opened: false
+    };
 
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
