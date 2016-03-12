@@ -1,3 +1,18 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Expense",$userId,"Write");
+
+?>
+
 <div class="row">
 
     <div class="col-md-12">
@@ -32,10 +47,15 @@
                             <td width="20%">{{$index+1}}</td>
                             <td width="30%">{{segment.name}}</td>
                             <td width="50%">
-                                <button class="btn btn-info btn-sm" data-target="#modify" data-toggle="modal"
-                                        ng-click=""><span class="fa fa-pencil-square-o"></span>Modify
+                                <?php
+                                    if($hasWrite==1){
+                                        echo "<button class=\"btn btn-info btn-sm\" data-target=\"#modify\" data-toggle=\"modal\"
+                                        ng-click=\"\"><span class=\"fa fa-pencil-square-o\"></span>Modify
                                 </button>
-                                <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+                                <button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
+                                    }
+                                ?>
+
                             </td>
                         </tr>
                         </tbody>
