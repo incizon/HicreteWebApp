@@ -1,3 +1,17 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
+
+?>
 <div class="col-md-12">
 
     <div class="panel panel-default">
@@ -43,64 +57,22 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Namdev</td>
-                        <td>Pandharpur</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
+                    <tr ng-repeat="customer in customerList | filter :paginate | orderBy:name">
+                        <td width="5%">{{$index + 1}}</td>
+                        <td width="20%">{{customer.name}}</td>
+                        <td width="10%">{{customer.city}}</td>
+                        <td width="15%">{{customer.state}}</td>
+                        <td width="15%">{{customer.country}}</td>
                         <td>
-                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails">View Other Details</button>
-                             <a ui-sref="Process.modifyCustomer"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Atul</td>
-                        <td>Nasik</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>
-                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails">View Other Details</button>
-                            <a ui-sref="Process.modifyCustomer"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Harshal</td>
-                        <td>Nasik</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>
-                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails">View Other Details</button>
-                            <a ui-sref="Process.modifyCustomer"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Ajit</td>
-                        <td>Nagar</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>
-                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails">View Other Details</button>
-                            <a ui-sref="Process.modifyCustomer"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>Pranav</td>
-                        <td>Pune</td>
-                        <td>Maharashtra</td>
-                        <td>India</td>
-                        <td>
-                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails">View Other Details</button>
-                            <a ui-sref="Process.modifyCustomer"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger">Delete</button>
+                            <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" data-ng-click="showCustomerDetails(customer)">View Other Details</button>
+                            <?php
+                                if($hasWrite==1){
+                                    echo "<a ui-sref=\"Process.modifyCustomer\"> <button class=\"btn btn-info\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>
+                            <button class=\"btn btn-danger\">Delete</button>";
+                                }
+                            ?>
+
+
                         </td>
                     </tr>
                     </tbody>
@@ -138,7 +110,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"020-2020221"}}
+                            {{currentCustomer.contactNo}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
@@ -148,7 +120,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"9180919090"}}
+                            {{currentCustomer.mobileNo}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
@@ -158,7 +130,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"020-202021"}}
+                            {{currentCustomer.faxNo}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
@@ -168,7 +140,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"namdev07@gmail.com"}}
+                            {{currentCustomer.emailId}}
                         </div>
 
                     </div>
@@ -180,7 +152,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"ABCD1234"}}
+                            {{currentCustomer.pan}}
                         </div>
                     </div><br>
                     <div class="col-md-12">
@@ -190,7 +162,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"CST12345"}}
+                            {{currentCustomer.cstNo}}
                         </div>
                     </div><br>
 
@@ -201,7 +173,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"Vat-12345"}}
+                            {{currentCustomer.vatNo}}
                         </div>
 
                     </div>
@@ -213,7 +185,7 @@
 
                         </div>
                         <div class="col-md-9">
-                            {{"ST-12345"}}
+                            {{currentCustomer.serviceTaxNo}}
                         </div>
 
                     </div>

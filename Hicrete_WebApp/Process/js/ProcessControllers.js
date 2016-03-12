@@ -2,77 +2,6 @@
  * Created by Atul on 11-02-2016.
  */
 
-myApp.controller('ProcessWidgetController',function($scope,$http){
-
-    $scope.hasRead=true;
-    $scope.hasWrite=true;
-
-    var data={
-        operation :"CheckAccess",
-        moduleName:"Process",
-        accessType: "Read"
-    };
-
-    var config = {
-        params: {
-            data: data
-
-        }
-    };
-
-
-    //$http.post("Config/php/configFacade.php",null, config)
-    //    .success(function (data)
-    //    {
-    //        if(data.status=="Successful"){
-    //            $scope.hasRead=true;
-    //        }else if(data.status=="Unsuccessful"){
-    //            $scope.hasRead=false;
-    //        }else {
-    //            doShowAlert("Failure", data.message);
-    //        }
-    //    })
-    //    .error(function (data, status, headers, config)
-    //    {
-    //        doShowAlert("Failure","Error Occurred");
-    //
-    //    });
-
-
-    var data={
-        operation :"CheckAccess",
-        moduleName:"Process",
-        accessType: "Write"
-    };
-
-    var config = {
-        params: {
-            data: data
-
-        }
-    };
-
-
-    //$http.post("Config/php/configFacade.php",null, config)
-    //    .success(function (data)
-    //    {
-    //        if(data.status=="Successful"){
-    //            $scope.hasWrite=true;
-    //        }else if(data.status=="Unsuccessful"){
-    //            $scope.hasWrite=false;
-    //        }else {
-    //            doShowAlert("Failure", data.message);
-    //        }
-    //    })
-    //    .error(function (data, status, headers, config)
-    //    {
-    //        doShowAlert("Failure","Error Occurred");
-    //
-    //    });
-
-
-});
-
 
 
 
@@ -699,8 +628,57 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 });
 myApp.controller('ViewCustomerController',function($scope,$http){
+$scope.currentCustomer;
+    $scope.customerList=[];
+    $scope.customerList.push({
+        customerId:"asdasd",
+        name:"Gokhale",
+        city:"pune",
+        state:"maharashtra",
+        country:"India",
+        contactNo:"1231323",
+        mobileNo:"asdasda",
+        faxNo:"asdasd",
+        emailId:"abc@mail.com",
+        pan:"cDSda213",
+        cstNo:"CST-101",
+        vatNo:"Vat-101",
+        serviceTaxNo:"ST-101"
+    });
+    $scope.customerList.push({
+        customerId:"asdasd",
+        name:"Gokle",
+        city:"pune",
+        state:"maharashtra",
+        country:"India",
+        contactNo:"1231323",
+        mobileNo:"asdasda",
+        faxNo:"asdasd",
+        emailId:"abc@mail.com",
+        pan:"cDSda213",
+        cstNo:"CST-101",
+        vatNo:"Vat-101",
+        serviceTaxNo:"ST-101"
+    });
+    $scope.customerList.push({
+        customerId:"asdasd",
+        name:"Gokha",
+        city:"pune",
+        state:"maharashtra",
+        country:"India",
+        contactNo:"1231323",
+        mobileNo:"asdasda",
+        faxNo:"asdasd",
+        emailId:"abc@mail.com",
+        pan:"cDSda213",
+        cstNo:"CST-101",
+        vatNo:"Vat-101",
+        serviceTaxNo:"ST-101"
+    });
 
-
+    $scope.showCustomerDetails=function(customer){
+        $scope.currentCustomer=customer;
+    }
 });
 
 myApp.controller('ViewQuotationDetailsController',function($scope,$http){
@@ -783,6 +761,33 @@ myApp.controller('ViewTaskController',function($scope,$http){
 });
 
 myApp.controller('SearchTaskController',function($scope,$http){
+
+    $scope.taskList=[];
+    $scope.taskList.push({
+        taskId:"asdasd",
+        taskName:"Gokhale",
+        description:"pune",
+        completionPercentage:"maharashtra",
+        assignTo:"India",
+        creationDate:"22-09-1992"
+    });
+    $scope.taskList.push({
+        taskId:"asdasd",
+        taskName:"Gokhale",
+        description:"pune",
+        completionPercentage:"maharashtra",
+        assignTo:"India",
+        creationDate:"22-09-1992"
+    });
+    $scope.taskList.push({
+        taskId:"asdasd",
+        taskName:"Gokhale",
+        description:"pune",
+        completionPercentage:"maharashtra",
+        assignTo:"India",
+        creationDate:"22-09-1992"
+    });
+
 
 
 });

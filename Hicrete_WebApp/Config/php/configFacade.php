@@ -32,13 +32,15 @@ switch ($data->operation) {
                         break;
     case "deleteUser" : ConfigUtils::deleteUser($data->key,$userId);
                         break;
-    case "modifyUser" : ConfigUtils::modifyUser($data,$userId);
+    case "modifyUser" : ConfigUtils::modifyUser($data->userInfo,$userId);
                         break;
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
     case "addUser" :Config::addUser($data,$userId);
     				    break;
     case "ChangePassword" : ConfigUtils::ChangePassword($data,$userId);
+                        break;
+    case "getRoleDetails" : ConfigUtils::getRoleDetails($data->key,$userId);
                         break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;
@@ -53,10 +55,6 @@ switch ($data->operation) {
                         break;
     case "getWarehouses": Config::getWarehouse($userId);
                         break;
-    case "CheckAccess": ConfigUtils::doesUserHasAccess($data->moduleName,$userId,$data->accessType);
-        break;
-
-
 }
 
 	/*	$opt = array(
