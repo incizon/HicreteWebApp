@@ -240,7 +240,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.viewRole', {
             url: '/SearchRole',
-            templateUrl: 'Config/html/ViewRole.html'
+            templateUrl: 'Config/html/ViewRole.html',
+            controller:'viewRoleController'
 
         })
         .state('Config.userSearch', {
@@ -272,7 +273,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Config.modifyRole', {
             url: '/ModifyRole',
             templateUrl: 'Config/html/ModifyRole.html',
-            controller:'ModifyRoleController'
+            controller:'ModifyRoleController',
+            params : { selectedRole: null }
         })
 
         .state('Config.modifyWarehouse', {
@@ -553,6 +555,8 @@ myApp.run(function($rootScope,$http) {
     $rootScope.Companies=[];
     $rootScope.warehouses=[];
     $rootScope.Users=[];
+    $rootScope.Roles=[];
+    $rootScope.AllAccessPermissions=[];
 
 });
 

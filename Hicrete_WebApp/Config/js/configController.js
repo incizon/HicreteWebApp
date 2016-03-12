@@ -523,7 +523,81 @@ myApp.controller('modifyUserController',function($scope,$http,$stateParams,confi
 
 });
 
+myApp.controller('viewRoleController',function($scope,$http,$rootScope,$stateParams,configService)
+{
+    $scope.searchKeyword="";
 
+
+
+    $scope.getAllAccesspermissions= function()
+    {
+        var data={
+            operation:"getAccessPermission",
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+                    $rootScope.AllAccessPermissions=data.message;
+
+                    //console.log($scope.Companies);
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    }
+    $scope.getAllAccesspermissions();
+
+    $scope.getRoleDetails = function()
+    {
+        console.log($scope.searchKeyword);
+        var data={
+            operation:"getRoleDetails",
+            key:$scope.searchKeyword
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+                    $rootScope.Roles=data.message;
+
+                    //console.log($scope.Companies);
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    }
+
+});
 myApp.controller('companyController',function($scope,$rootScope,$http){
     $scope.keyword="";
     $scope.searchkeyword="";
@@ -992,11 +1066,57 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
 
 });
 
-myApp.controller('ModifyRoleController',function($scope,$http) {
+myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateParams) {
 
-     console.log("In");
+     console.log("");
+    $scope.roleId=$stateParams.roleId;
+    $scope.selectedRole=$stateParams.selectedRole
 
-    $scope.roleDetails={
+    $scope.access=[];
+  /*  console.log($scope.roleId);
+
+    for (var i = 0; i < $rootScope.Roles.length; i++) {
+        if ($stateParams.roleId == $rootScope.Roles[i].roleId) {
+            $scope.selectedRole=$rootScope.Roles[i];
+            break;
+        }
+    }*/
+    console.log($scope.selectedRole);
+    console.log($rootScope.AllAccessPermissions);
+    for(var j=0;j<$scope.selectedRole.accessList.length;j++) {
+
+            for (var i = 0; i < $rootScope.accessPermission.length; i++) {
+
+
+                $scope.newObject={
+                    moduleName:"",
+                    read:"",
+                    write:""
+                };
+                if($scope.selectedRole.accessList[j].accessId == $rootScope.AllAccessPermissions[i].accessId)
+                {
+                        $scope.newObject.moduleName=$rootScope.AllAccessPermissions[i].ModuleName;
+                        if($rootScope.AllAccessPermissions[i].accessType=="Read")
+                        {
+                            $scope.newObject.read=true;
+                        }
+                        else
+                            $scope.newObject.read=false;
+                    if($rootScope.AllAccessPermissions[i].accessType=="Write")
+                    {
+                        $scope.newObject.write=true;
+                    }
+                    else
+                        $scope.newObject.write=false;
+                    $scope.access.push($scope.newObject);
+                    break;
+                }
+
+            }
+        console.log($scope.selectedRole.accessList[j].accessId);
+    }
+    console.log($scope.access);
+    /*$scope.roleDetails={
 
         roleName:"Admin",
         accessList:[
@@ -1026,7 +1146,7 @@ myApp.controller('ModifyRoleController',function($scope,$http) {
                 write:true
             },
         ]
-    }
+    }*/
 
 
 });
