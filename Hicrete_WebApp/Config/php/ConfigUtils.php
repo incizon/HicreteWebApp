@@ -364,6 +364,85 @@ class ConfigUtils
         return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND city like :keyword";
     }
 
+    public static function getRoleDetails($key,$userId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $key="%".$key."%";
+
+            $stmt = $conn->prepare("SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword");
+            $stmt->bindParam(':keyword', $key, PDO::PARAM_STR);
+            if($stmt->execute()){
+
+                $noOfRows=0;
+                $json_response = array();
+
+                while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
+                {
+                    $result_array = array();
+                    $result_array['roleId'] = $result['roleId'];
+                    $result_array['roleName'] = $result['roleName'];
+                    $result_array['accessList'] = array();
+                    //$result_array['createdByI'] = $result['createdBy'];
+                   // echo $result['createdBy'];
+                    $date = new DateTime($result['creationDate']);
+                    $dob = $date->format('Y-m-d');
+
+                    $result_array['creationDate'] =$dob;
+
+                    $stmt1 = $conn->prepare("select firstname from usermaster where userid=:userId");
+                    $stmt1->bindParam(':userId', $result['createdBy'], PDO::PARAM_STR);
+                    if($stmt1->execute()){
+                        while ( $result1=$stmt1->fetch(PDO::FETCH_ASSOC))
+                        {
+
+                            $result_array['createdBy']= $result1['firstname'];
+                        }
+                    }
+                    $stmt2 = $conn->prepare("select accessId from roleaccesspermission where roleId=:roleId");
+                    $stmt2->bindParam(':roleId', $result['roleId'], PDO::PARAM_STR);
+                    if($stmt2->execute()){
+                        while ( $result2=$stmt2->fetch(PDO::FETCH_ASSOC))
+                        {
+
+                            $result_array['accessList'][] = array(
+                                'accessId' => $result2['accessId'],
+
+                            );
+                        }
+
+                    }
+
+
+
+                    array_push($json_response, $result_array); //push the values in the array
+                    $noOfRows++;
+
+                }
+                if($noOfRows>0){
+
+                    echo AppUtil::getReturnStatus("Successful",$json_response);}
+                else {
+
+                    echo AppUtil::getReturnStatus("NoRows", "No companies found");
+                }
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+
+
+
+
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+        }
+
+    }
+
     public static function ChangePassword($data,$userId)
     {
         try{
