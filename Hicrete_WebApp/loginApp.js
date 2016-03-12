@@ -34,6 +34,9 @@ app.controller('loginController', function($scope,$http) {
            });            
             
         }
+
+
+
     
 
 
@@ -41,3 +44,40 @@ app.controller('loginController', function($scope,$http) {
 
 
 });
+app.controller('resetPasswordController', function($scope,$http) {
+    $scope.message="";
+    $scope.cancel=function()
+    {
+        window.location="index.html";
+    }
+    $scope.resetPassword= function()
+    {
+        console.log($scope.resetDetails);
+        var data=$scope.resetDetails;
+
+        $http.post("resetPassword.php", data)
+            .success(function (data)
+            {
+                console.log(data);
+                if(data.status=="successful"){
+                    window.location="index.html";
+                }
+                else if(data.status=="NotAvailable"){
+                    $scope.message="Username or birthdate is incorrect";
+                }
+                else
+                {
+                    $scope.message="Resetting password failed ";
+                }
+
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                console.log(data.error);
+
+            });
+
+    }
+});
+

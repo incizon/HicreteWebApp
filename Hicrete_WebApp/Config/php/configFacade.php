@@ -38,6 +38,8 @@ switch ($data->operation) {
     				    break;
     case "addUser" :Config::addUser($data,$userId);
     				    break;
+    case "ChangePassword" : ConfigUtils::ChangePassword($data,$userId);
+                        break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;
     case "addTempAcccessRequest" :ConfigUtils::addTempAcccessRequest($data,$userId);

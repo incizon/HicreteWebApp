@@ -1,0 +1,121 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">Create<strong>Year</strong></h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal" name="createYearForm">
+                    <div class="row">
+                    <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Caption :</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="caption" ng-model="yearDetails.caption"/>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">Start Date :</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+
+                                <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="yearDetails.startDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Close"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">End Date :</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+
+                                <input type="text" class="form-control" uib-datepicker-popup="{{'yyyy-MM-dd'}}" ng-model="yearDetails.endDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" close-text="Close"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <label class="control-label">No of Paid leaves :</label>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="paidLeaves" ng-model="yearDetails.paidLeaves"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+
+                        <div class="col-md-12">
+                            <input type="checkbox" ng-model="yearDetails.weeklyOff" name="weeklyoff" value="true"> Weekly off
+                        </div>
+
+                    </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Select Day :</label>
+                            </div>
+                            <div class="col-md-9">
+                                    <select class="form-control select" name="weeklyoffDay" ng-model="yearDetails.weeklyoffDay" required />
+                                    <option value="" disabled selected>Choose day..</option>
+                                    <option value="Monday">Monday</option>
+                                    <option value="Tuesday">Tuesday</option>
+                                    <option value="Wednesday">Wednesday</option>
+                                    <option value="Thursday">Thursday</option>
+                                    <option value="Friday">Friday</option>
+                                    <option value="Saturday">Saturday</option>
+                                    <option value="Sunday">Sunday</option>
+                                </select>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="panel-footer">
+
+                <button class="btn btn-default pull-left">Clear Form</button>
+                <button class="btn btn-danger pull-right" data-ng-click="createYear()">Create</button>
+                <button class="btn btn-default pull-right">Cancel</button>
+            </div>
+            <!--End of buttons section-->
+        </div>
+
+
+     </div>
+
+</div>

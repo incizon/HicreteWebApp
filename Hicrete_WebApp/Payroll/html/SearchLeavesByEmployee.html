@@ -1,0 +1,131 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Leaves<strong>By Employee</strong></h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Select Employee :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-control select" name="year" ng-model="employee"/>
+                                    <option value="" disabled selected>Choose employee..</option>
+                                    <option value="Namdev">Namdev</option>
+                                    <option value="Ajit">Ajit</option>
+                                    <option value="Atul">Atul</option>
+                                    <option value="Pranav">Pranav</option>
+
+
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Sort order :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    <select class="form-control select" name="sortOrder" ng-model="sortOrder" />
+                                    <option value="" disabled selected>Choose order..</option>
+                                    <option value="Descending">Descending</option>
+                                    <option value="Ascending">Ascending</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Sort By :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    <select class="form-control select" name="sortBy" ng-model="sortBy" />
+                                    <option value="" disabled selected>Choose sort by..</option>
+                                    <option value="leaveDate">leave Date</option>
+                                    <option value="ApplicationDate">Application Date</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                           <div class="form-group">
+
+
+                                <div class="col-md-offset-10 col-md-2">
+                                    <button class="btn btn-primary" data-ng-click="searchByEmployee()">Search</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div><br>
+
+                    <div class="row">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th width="5%">Sr.No</th>
+                                <th width="15%">Leave By</th>
+                                <th width="10%">From Date</th>
+                                <th width="10%">To Date</th>
+                                <th width="15%">Reason</th>
+                                <th width="10%">Type</th>
+                                <th width="10%" >Status</th>
+                                <th width="10%">Application Date</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="leave in leaveDetails">
+
+                                <td>{{$index+1}}</td>
+                                <td>{{leave.leaveBy}}</td>
+                                <td>{{leave.fromDate}}</td>
+                                <td>{{leave.toDate}}</td>
+                                <td>{{leave.reason}}</td>
+                                <td>{{leave.type}}</td>
+                                <td>{{leave.status}}</td>
+                                <td>{{leave.applicationDate}}</td>
+
+
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
