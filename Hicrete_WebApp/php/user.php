@@ -12,7 +12,7 @@ class User
     public $isBusinessProcess=false;
     public $isExpense=false;
     public $isReporting=true;
-    public $isPayroll=false;
+    public $isPayroll=true;
     public $isAdmin=false;
 
     private function populateAccessRights($roleId,$userId){

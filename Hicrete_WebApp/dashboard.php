@@ -201,9 +201,9 @@ if(!$userObj->init($userId)){
                     </li>";
             }
 
-            if($userObj->isApplicator){
+            if($userObj->isPayroll){
                 echo "<li ng-class=\"{active:tab.isSet(5)}\">
-                            <a ng-click=\"tab.setTab(5)\" href=\"#\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
+                            <a ng-click=\"tab.setTab(5)\" ui-sref=\"Payroll\"><span class=\"fa fa-money\"></span> <span class=\"xn-text\">Payroll</span></a>
                     </li>";
             }
 

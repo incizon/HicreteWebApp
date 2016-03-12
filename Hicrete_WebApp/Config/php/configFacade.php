@@ -53,10 +53,6 @@ switch ($data->operation) {
                         break;
     case "getWarehouses": Config::getWarehouse($userId);
                         break;
-    case "CheckAccess": ConfigUtils::doesUserHasAccess($data->moduleName,$userId,$data->accessType);
-        break;
-
-
 }
 
 	/*	$opt = array(

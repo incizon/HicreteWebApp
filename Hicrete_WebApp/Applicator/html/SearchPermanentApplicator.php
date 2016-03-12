@@ -1,3 +1,23 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
+
+if($hasWrite){
+    header("Location: Dashboard.php");
+    exit();
+}
+?>
+
+
 <div>
     <div ng-include="'utils/loader.html'"></div>
 </div>
@@ -64,10 +84,15 @@
 
                             <a ui-sref="Applicator.permanentApplicatorDetails({applicator_id:applicator.applicator_master_id})"> <button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
 
-                            <a ui-sref="Applicator.modifyPermanentApplicatorDetails({applicator_id:applicator.applicator_master_id})"> <button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
+                            <?php
+
+                              if($hasWrite==1){
+                                  echo "<a ui-sref=\"Applicator.modifyPermanentApplicatorDetails({applicator_id:applicator.applicator_master_id})\"> <button class=\"btn btn-default btn-sm\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>
+                            <button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
+                              }
 
 
-                            <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+                            ?>
 
                         </td>
                     </tr>
