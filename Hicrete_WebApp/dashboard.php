@@ -110,6 +110,7 @@
     <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
     <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
     <script type="text/javascript" src="Process/js/ProcessControllers.js"></script>
+    <script type="text/javascript" src="Payroll/js/PayrollControllers.js"></script>
 
 </head>
 
