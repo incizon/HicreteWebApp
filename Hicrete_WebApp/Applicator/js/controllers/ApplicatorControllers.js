@@ -62,10 +62,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         opened: false
     };
 
-    $scope.todayDate = function() {
-        $scope.applicatorDetails.followupdate = new Date();
-    };
-    $scope.todayDate();
+    //$scope.todayDate = function() {
+    //    $scope.applicatorDetails.followupdate = new Date();
+    //};
+    //$scope.todayDate();
 
     $scope.openFollowDate = function() {
         $scope.followup.opened = true;

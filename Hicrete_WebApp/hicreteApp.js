@@ -11,7 +11,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         // Applicator STATES ========================================
         .state('Applicator', {
             url: '/Applicator',
-            templateUrl: 'Applicator/html/ApplicatorWidget.html'
+            templateUrl: 'Applicator/html/ApplicatorWidget.php'
         })
 
         .state('Applicator.addDealer', {
@@ -40,7 +40,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Applicator.tentetiveApplicator', {
             url: '/SearchTentativeApplicators',
-            templateUrl: 'Applicator/html/SearchTentativeApplicator.html',
+            templateUrl: 'Applicator/html/SearchTentativeApplicator.php',
             controller: 'SearchTentativeApplicatorController'
         })
         .state('Applicator.tentativeApplicatorDetails', {
@@ -58,7 +58,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Applicator.permanentApplicator', {
             url: '/SearchPermanentApplicators',
-            templateUrl: 'Applicator/html/SearchPermanentApplicator.html',
+            templateUrl: 'Applicator/html/SearchPermanentApplicator.php',
             controller: 'SearchPermanentApplicatorController'
         })
         .state('Applicator.permanentApplicatorDetails', {
@@ -76,7 +76,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Inventory', {
             url: '/Inventory',
-            templateUrl: 'Inventory/html/inventoryWidgets.html',
+            templateUrl: 'Inventory/html/inventoryWidgets.php',
             Controller:'inventoryCommonController'
 
         })
@@ -133,7 +133,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Inventory.searchProduct', {
             url: '/searchProduct',
-            templateUrl: 'Inventory/html/search/Inventory_Items_Search.html',
+            templateUrl: 'Inventory/html/search/Inventory_Items_Search.php',
             controller: 'productController'
         })
         .state('Inventory.searchInward', {
@@ -153,7 +153,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Inventory.searchSupplier', {
             url: '/searchSupplier',
-            templateUrl: 'Inventory/html/inventory_supplierSearch.html',
+            templateUrl: 'Inventory/html/search/inventory_supplierSearch.php',
             controller: 'supplierFetchController'
         })
         .state('Inventory.scheduleFollowup', {
@@ -309,7 +309,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process', {
             url: '/Process',
-            templateUrl: 'Process/html/processWidgets.html',
+            templateUrl: 'Process/html/ProcessWidget.php',
             controller:'ProcessWidgetController'
         })
 
@@ -456,6 +456,51 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/AccessApproval',
             templateUrl:'BillApproval/AccessApproval.html'
 
+        })
+
+        .state('Payroll', {
+            url: '/Payroll',
+            templateUrl:'Payroll/html/PayrollWidget.php'
+        })
+
+        .state('Payroll.createYear', {
+            url: '/CreateYear',
+            templateUrl:'Payroll/html/CreateYear.html',
+            controller:"CreateYearController"
+
+        })
+        .state('Payroll.configureHolidays', {
+            url: '/ConfigureHolidays',
+            templateUrl:'Payroll/html/ConfigureHolidays.html',
+            controller:"ConfigureHolidaysController"
+
+        })
+        .state('Payroll.applyForLeave', {
+            url: '/ApplyForLeave',
+            templateUrl:'Payroll/html/ApplyForLeave.html',
+            controller:"ApplyForLeaveController"
+
+        })
+        .state('Payroll.AddEmployeeToPayRoll', {
+            url: '/AddEmployeeToPayRoll',
+            templateUrl:'Payroll/html/AddEmployeeToPayRoll.html',
+            controller:"AddEmployeeToPayRollController"
+        })
+        .state('Payroll.showLeaves', {
+            url: '/ShowLeaves',
+            templateUrl:'Payroll/html/ShowLeaves.html',
+            controller:"ShowLeavesController"
+        })
+
+        .state('Payroll.searchLeavesByDate', {
+            url: '/SearchLeavesByDate',
+            templateUrl:'Payroll/html/SearchLeavesByDate.html',
+            controller:"SearchLeaveByDateController"
+        })
+        .state('Payroll..searchLeavesByEmployee', {
+            url: '/SearchLeavesByEmployee',
+            templateUrl:'Payroll/html/SearchLeavesByEmployee.html',
+            controller:"SearchLeaveByEmployeeController"
         })
 
 

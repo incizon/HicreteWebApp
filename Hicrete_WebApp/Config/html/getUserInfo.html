@@ -44,7 +44,7 @@
                                         <div class="col-md-3 col-xs-12 col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input ng-model="userInfo.dob" name="dob" type="text" class="form-control datepicker" value="" required >                                            
+                                                <input ng-model="userInfo.dob" name="dob" type="text" class="form-control" ng-click="openDob()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showPicker.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" />
                                             </div>
                                             <div class="help-block" ng-messages="userInfoForm.dob.$error" ng-hide="!userInfoSubmitted && !userInfoForm.dob.$touched">
                                                     <p style="color:red" ng-message="required">Date Of Birth Cannot be blank</p>        
