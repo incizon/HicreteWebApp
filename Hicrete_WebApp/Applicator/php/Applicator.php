@@ -13,11 +13,17 @@
 
 				if($operationObject->createPackage($data))
 					{
-						echo "Package Created Successfully";
+						$message = "Package Created Successfully...!!!";
+						$arr = array('msg' => $message, 'error' => '');
+						$jsn = json_encode($arr);
+						echo($jsn);
 					}
 				else
 					{
-						echo "Could not create package";
+						$message = "Unable to Create Package.Please try again...!!!";
+						$arr = array('msg' => '' , 'error' => $message);
+						$jsn = json_encode($arr);
+						echo($jsn);
 					}
 				break;
 
@@ -25,7 +31,10 @@
 
 				if(!$operationObject->viewPackages())
 					{
-						echo "Could not view package details";
+						$message = "No Package Details Available...!!!";
+						$arr = array('msg' => '', 'error' => $message);
+						$jsn = json_encode($arr);
+						echo($jsn);
 					}
 				break;
 
@@ -37,7 +46,10 @@
 
 							    if ($operationObject->createApplicator($data)) {
 
-								   echo "Created successfully";
+									$message = "Applicator Created Successfully...!!!";
+									$arr = array('msg' => $message, 'error' => '');
+									$jsn = json_encode($arr);
+									echo($jsn);
 
 							   }
 						   }
@@ -46,7 +58,10 @@
 
 						   if ($operationObject->createApplicator($data)) {
 
-							   echo "Created successfully";
+							   $message = "Applicator Created Successfully...!!!";
+							   $arr = array('msg' => $message, 'error' => '');
+							   $jsn = json_encode($arr);
+							   echo($jsn);
 						   }
 						}
 				break;
@@ -55,7 +70,10 @@
 
 					if(!$operationObject->viewTentativeApplicators($data)){
 
-						echo "No Applicator Details to show";
+						$message = "Applicator Details Not Available...!!!";
+						$arr = array('msg' => '', 'error' => $message);
+						$jsn = json_encode($arr);
+						echo($jsn);
 					}
 				break;
 
@@ -64,7 +82,10 @@
 
 				if(!$operationObject->viewPermanentApplicators($data)){
 
-					echo "No Applicator Details to show";
+					$message = "Applicator Details Not Available...!!!";
+					$arr = array('msg' => '', 'error' => $message);
+					$jsn = json_encode($arr);
+					echo($jsn);
 				}
 				break;
 
@@ -81,7 +102,10 @@
 			case 'getPaymentDetails':
 
                         if(!$operationObject->getApplicatorPaymentDetails()){
-                            echo "Not Applicator Payment Details to Display";
+							$message = "Applicator Payment Details Not Available...!!!";
+							$arr = array('msg' => '', 'error' => $message);
+							$jsn = json_encode($arr);
+							echo($jsn);
                         }
                         else{}
 				break;
@@ -90,7 +114,10 @@
 
                             if($operationObject->savePaymentDetails($data))
                              {
-                                echo "Payment Updated Successfully";
+								 $message = "Payment Details Updated Successfully...!!!";
+								 $arr = array('msg' => $message, 'error' => '');
+								 $jsn = json_encode($arr);
+								 echo($jsn);
                             }
 				break;
 			default :
