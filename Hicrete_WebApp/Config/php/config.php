@@ -14,6 +14,7 @@ class Config
             $conn = $db->getConnection();
             $companyId = AppUtil::generateId();
 
+
             $stmt = $conn->prepare("INSERT INTO `companymaster`(`companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) 
                 VALUES (:id,:name,:abbrevation,:startDate,:address,:city,:state,:country,:pincode,:email,:phone,:createdBy,now(),:lastModifiedBy,now())");
 
@@ -35,8 +36,11 @@ class Config
             if ($stmt->execute()) {
                 echo AppUtil::getReturnStatus("Successful", "");
 
+
             } else {
+
                 echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
+
             }
 
 
@@ -222,27 +226,27 @@ class Config
 
                     $rollback = true;
                 } else {
-                    foreach ($data->accessPermissions as $accessEntry) {
-                        if ($accessEntry->read->ispresent) {
-                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->read->accessId)) {
-                                $rollback = true;
+//                    foreach ($data->accessPermissions as $accessEntry) {
+//                        if ($accessEntry->read->ispresent) {
+//                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->read->accessId)) {
+//                                $rollback = true;
+//
+//                                break;
+//                            }
+//
+//                        }
+//
+//                        if ($accessEntry->write->ispresent) {
+//                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->write->accessId)) {
+//                                $rollback = true;
+//
+//                                break;
+//                            }
+//                        }
+//                    }
 
-                                break;
-                            }
 
-                        }
-
-                        if ($accessEntry->write->ispresent) {
-                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->write->accessId)) {
-                                $rollback = true;
-
-                                break;
-                            }
-                        }
-                    }
-
-
-                    if (!$rollback) {
+                    //if (!$rollback) {
                         $str = $data->userInfo->email . $userId;
 
                         $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`) 
@@ -256,7 +260,7 @@ class Config
 
                             $rollback = true;
                         }
-                    }
+                    //}
 
                 }
             } else {

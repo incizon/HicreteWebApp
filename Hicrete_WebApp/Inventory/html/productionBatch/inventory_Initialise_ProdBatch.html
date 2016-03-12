@@ -1,3 +1,13 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
 <div class="page-content-wrap">
 
                 
@@ -44,8 +54,8 @@
                                             <div class="input-group" >
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                                                 <input type="text" id="dateOfEntry" 
-                                                 name="dateOfEntry" class="form-control date"  ng-model="prodBatchInfo.dateOfEntry" required 
-                                                 data-date-format="dd-mm-yyyy">  
+                                                 name="dateOfEntry" class="form-control date"  ng-model="prodBatchInfo.dateOfEntry"
+                                                       ng-click="openPicker()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
                                             </div>
                                             <div class="help-block" ng-messages="prodBatchInitForm.dateOfEntry.$error" ng-show="submitted">
                                                 <p style="color:red" ng-message="required">Please enter date of entry</p>

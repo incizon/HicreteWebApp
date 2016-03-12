@@ -238,10 +238,15 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'tempAccessController'    
         })
 
+        .state('Config.viewRole', {
+            url: '/SearchRole',
+            templateUrl: 'Config/html/ViewRole.html'
+
+        })
         .state('Config.userSearch', {
             url: '/SearchUser',
             templateUrl: 'Config/html/ViewUser.html',
-            controller:'userController'
+            controller:'searchUserController'
         })
 
         .state('Config.companySearch', {
@@ -253,10 +258,34 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.warehouseSearch', {
             url: '/SearchWarehouse',
-            templateUrl: 'Config/html/ViewWarehouse.html'
+            templateUrl: 'Config/html/ViewWarehouse.html',
+            controller:'companyController'
 
         })
 
+        .state('Config.modifyCompany', {
+            url: '/ModifyCompany?companyId',
+            templateUrl: 'Config/html/ModifyCompany.html',
+            controller:'ModifyCompanyController'
+        })
+
+        .state('Config.modifyRole', {
+            url: '/ModifyRole',
+            templateUrl: 'Config/html/ModifyRole.html',
+            controller:'ModifyRoleController'
+        })
+
+        .state('Config.modifyWarehouse', {
+            url: '/ModifyWarehouse?warehouseId',
+            templateUrl: 'Config/html/ModifyWarehouse.html',
+            controller:'ModifyWarehouseController'
+        })
+        .state('Config.modifyUser', {
+            url: '/ModifyUser',
+            templateUrl: 'Config/html/ModifyUser.html',
+            controller:'modifyUserController',
+            params : { userToModify: null }
+        })
         .state('myProfile', {
             url: '/myProfile',
             templateUrl: 'Config/html/MyProfile.html',
@@ -332,6 +361,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController'
         })
+
 
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
@@ -412,6 +442,22 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         })
 
+        .state('billApproval', {
+            url: '/BillApproval',
+            templateUrl:'BillApproval/BillApproval.html'
+        })
+        .state('leaveApproval', {
+            url: '/LeaveApproval',
+            templateUrl:'BillApproval/LeaveApp.html'
+        })
+        .state('accessApproval', {
+            url: '/AccessApproval',
+            templateUrl:'BillApproval/AccessApproval.html'
+
+        })
+
+
+
         .state('SuperDashboard', {
             url: '',
             templateUrl: 'SuperMainPage.html',
@@ -420,7 +466,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         });
         // Package State =================================
         
-        
+
+
 });
 
 myApp.run(function($rootScope,$http) {
@@ -458,6 +505,9 @@ myApp.run(function($rootScope,$http) {
     $rootScope.tentativeApplicators=[];
     console.log($rootScope.tentativeApplicators);
     $rootScope.permanentApplicators=[];
+    $rootScope.Companies=[];
+    $rootScope.warehouses=[];
+    $rootScope.Users=[];
 
 });
 
@@ -488,22 +538,6 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
             
         }
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
-
-  $scope.open1 = function() {
-      $scope.popup1.opened = true;
-  };
-
-    $scope.open2 = function() {
-        $scope.popup1.opened = true;
-    };
-
-
-    $scope.popup1 = {
-        opened: false
-    };
-
-
-
 
         $scope.saveFollowupDetails=function(size,followupDetails){
 

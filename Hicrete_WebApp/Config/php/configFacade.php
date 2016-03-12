@@ -20,13 +20,23 @@ switch ($data->operation) {
     				    break;
     case "getRoles":  ConfigUtils::getAllRoles();
     				    break;
-    case "getCompanyDetails": ConfigUtils::getCompanyDetails();
+    case "getCompanyDetails": ConfigUtils::getCompanyDetails($data->keyword);
                         break;
-    case "getUserDetails" : ConfigUtils:: getUserDetails("");
+    case "modifyCompanyDetails":ConfigUtils::modifyCompanyDetails($data,$userId);
                         break;
+    case "getUserDetails" : ConfigUtils:: getUserDetails($data->keyword,$data->searchBy);
+                        break;
+    case "getWareHouseDetails" :ConfigUtils:: getWareHouseDetails($data->key);
+                        break;
+    case "modifyWareHouseDetails" : ConfigUtils::modifyWareHouseDetails($data,$userId);
+                        break;
+    case "deleteUser" : ConfigUtils::deleteUser($data->key,$userId);
+                        break;
+    case "modifyUser" : ConfigUtils::modifyUser($data,$userId);
+
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
-    case "addUser" :Config::addUser($data,"admin");
+    case "addUser" :Config::addUser($data,$userId);
     				    break;
     case "modifyUser" :Config::modifyUser($data,"admin");
                         break;
