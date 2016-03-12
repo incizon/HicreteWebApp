@@ -42,7 +42,7 @@ configService.getAllAccessPermission($http,$scope);
           $http.post("Config/php/configFacade.php",null, config)
            .success(function (data)
            {
-
+               $scope.roleDisabled=false;
              if(data.status=="Successful"){
                  $scope.loading=false;
                  $('#loader').css("display","none");
