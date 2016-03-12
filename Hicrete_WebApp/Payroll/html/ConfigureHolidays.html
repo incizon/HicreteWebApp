@@ -1,0 +1,193 @@
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Configure</strong> Holidays</h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal">
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Current Year :</label>
+                            </div>
+                            <div class="col-md-9">
+
+                                {{"2016"}}
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Start Date :</label>
+                            </div>
+                            <div class="col-md-9">
+
+                                {{"01-06-2016"}}
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">End Date :</label>
+                            </div>
+                            <div class="col-md-9">
+
+                                {{"01-7-2016"}}
+
+                            </div>
+                        </div>
+                    </div>
+                  </div><br>
+                    <div class="row">
+
+                        <h3 class="panel-title"><strong>Add</strong> Holiday</h3>
+
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Holiday Date :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="date" class="form-control" name="holidayDate" ng-model="holidayDate"/>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Description :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    <textarea class="form-control" name="Description"
+                                                         ng-model="description" rows="2"
+                                    >
+
+                                    </textarea>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                                <div class="col-md-offset-10 col-md-2">
+
+                                    <button class="btn btn-primary">Add</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div><br>
+                    <div class="row">
+
+                        <h3 class="panel-title"><strong>List of</strong> Holidays</h3>
+
+                    </div><br>
+                    <div class="row">
+
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Sr.No</th>
+                                <th>Holiday Date</th>
+                                <th>Description</th>
+                                <th>Created By</th>
+                                <th>Creation Date</th>
+                                <th>Remove</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{1}}</td>
+
+                                <td>
+                                    {{"12-02-2016"}}
+                                </td>
+                                <td>{{"Demo Holiday"}}</td>
+
+                                <td>
+                                    {{"Namdev"}}
+                                </td>
+                                <td>
+                                    {{"10-2-2000"}}
+                                </td>
+
+                                <td>
+                                    <a ng-click="removeHolidayItem($index)" class="panel-remove">
+                                        <span class="fa fa-times"></span>
+                                    </a>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td>{{1}}</td>
+
+                                <td>
+                                    {{"12-02-2016"}}
+                                </td>
+                                <td>{{"Demo Holiday"}}</td>
+
+                                <td>
+                                    {{"Namdev"}}
+                                </td>
+                                <td>
+                                    {{"10-2-2000"}}
+                                </td>
+
+                                <td>
+                                    <a ng-click="removeHolidayItem($index)" class="panel-remove">
+                                        <span class="fa fa-times"></span>
+                                    </a>
+                                </td>
+
+                            </tr><tr>
+                            <td>{{1}}</td>
+
+                            <td>
+                                {{"12-02-2016"}}
+                            </td>
+                            <td>{{"Demo Holiday"}}</td>
+
+                            <td>
+                                {{"Namdev"}}
+                            </td>
+                            <td>
+                                {{"10-2-2000"}}
+                            </td>
+
+                            <td>
+                                <a ng-click="removeHolidayItem($index)" class="panel-remove">
+                                    <span class="fa fa-times"></span>
+                                </a>
+                            </td>
+
+                        </tr>
+                         </tbody>
+                        </table>
+
+                    </div>
+
+                </form>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

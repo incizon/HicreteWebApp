@@ -1,0 +1,148 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title">Apply For<strong>Leave</strong></h3>
+            </div>
+            <div class="panel-body">
+
+                <form class="form-horizontal">
+
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Employee Name :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    {{leaveDetails.employee}}
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Leave Approver :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    {{leaveDetails.approver}}
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Type OF Leave :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <select class="form-control select" name="typeofLeave" ng-model="leaveDetails.typeofLeave" required />
+                                    <option value="" disabled selected>Choose leave type..</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="Unpaid">Unpaid</option>
+                                    </select>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">From Date :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="date" class="form-control" name="fromDate" ng-model="leaveDetails.fromDate"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">To Date :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="date" class="form-control" name="toDate" ng-model="leaveDetails.toDate"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">No of Leaves :</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="noOfLeaves" ng-model="leaveDetails.noOfLeaves"/>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">leaves Remaining :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                    {{leaveDetails.remaining}}
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Specify Reason :</label>
+                                </div>
+                                <div class="col-md-9">
+
+                                     <textarea class="form-control" name="Description"
+                                               ng-model="leaveDetails.description" rows="2"
+                                     >
+
+                                    </textarea>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="panel-footer">
+
+                <button class="btn btn-default pull-left">Clear Form</button>
+                <button class="btn btn-danger pull-right" data-ng-click="ApplyForLeave()">Apply</button>
+                <button class="btn btn-default pull-right">Cancel</button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>

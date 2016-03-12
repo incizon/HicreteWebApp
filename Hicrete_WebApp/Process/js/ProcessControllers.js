@@ -125,6 +125,20 @@ myApp.controller('QuotationController',function($scope,$http,$uibModal, $log){
         quotationItemDetails:[]
     };
 
+    $scope.today = function(){
+        $scope.QuotationDetails.quotationDate = new Date();
+    };
+
+    $scope.today();
+
+    $scope.quotDate = function(){
+        $scope.picker.opened =  true;
+    };
+
+    $scope.picker = {
+        opened:false
+    };
+
     $scope.addRows=function(){
 
         for(var index=0;index<$scope.noOfRows;index++) {
@@ -390,6 +404,28 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
     };
     $scope.formSubmitted=false;
     $scope.showPaymentDetails=false;
+
+    $scope.today = function(){
+        $scope.paymentDetails.paymentDate = new Date();
+    };
+    $scope.today();
+
+    $scope.openDate = function(){
+        $scope.showpopup.opened = true;
+    };
+
+    $scope.showpopup = {
+        opened:false
+    };
+
+    $scope.payDate = function(){
+        $scope.datePicker.opened = true;
+    };
+
+    $scope.datePicker = {
+        opened:false
+    };
+
     $scope.Projects=[
         {
             "project_id": "1",
@@ -752,6 +788,26 @@ myApp.controller('SearchTaskController',function($scope,$http){
 });
 myApp.controller('AssignTaskController',function($scope,$http){
 
+    //$scope.today = function(){
+    //    $scope.task.startDate = new Date();
+    //};
+    //
+    //$scope.today();
 
+    $scope.taskStartDate = function() {
+        $scope.show.opened = true;
+    };
+
+    $scope.show = {
+        opened:false
+    };
+
+    $scope.taskEndDate = function() {
+        $scope.showEnd.opened = true;
+    };
+
+    $scope.showEnd = {
+        opened:false
+    };
 });
 

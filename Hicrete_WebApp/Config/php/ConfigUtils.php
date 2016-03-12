@@ -368,6 +368,57 @@ class ConfigUtils
         return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND city like :keyword";
     }
 
+    public static function ChangePassword($data,$userId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT count(1) as count FROM `logindetails` WHERE `userid`=:username AND `password`=:password");
+
+            $stmt->bindParam(':username', $userId, PDO::PARAM_STR);
+            echo $userId."\n";
+            $pass=sha1($data->data->oldPass);
+            //echo $pass;
+            echo $pass;
+            $stmt->bindParam(':password',$pass , PDO::PARAM_STR);
+
+            if($stmt->execute()){
+
+                //$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                $result=$stmt->fetch(PDO::FETCH_ASSOC);
+                $count=$result['count'];
+                echo "\n".$count;
+                if($count > 0)
+                {
+                    $stmt = $conn->prepare("UPDATE logindetails set password=:password where userid=:username");
+                    $stmt->bindParam(':username', $userId, PDO::PARAM_STR);
+                    $pass=sha1($data->data->newPass);
+                    //echo $pass;
+                    $stmt->bindParam(':password',$pass , PDO::PARAM_STR);
+                    if($stmt->execute())
+                    {
+                        echo AppUtil::getReturnStatus("successful","Password Changed successfully");
+                    }
+                    else{
+                        echo AppUtil::getReturnStatus("Unsuccessful","Problems in changing password");
+                    }
+                }
+                else
+                {
+                    echo AppUtil::getReturnStatus("WrongPass","Entered password is wrong ");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+
+        }catch(Exception $e){
+
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while getting access permission");
+        }
+
+    }
 
     public static function getCompanyDetails()
     {

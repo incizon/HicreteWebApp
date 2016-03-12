@@ -64,15 +64,16 @@ if(!$hasRead && !$hasWrite){
         position:relative;
         float:left;
         margin:0;
-        padding:0
+        padding:0;
     }
     #primary_nav_wrap ul li.current-menu-item
     {
-        background:#ddd
+        background:#ddd;
     }
     #primary_nav_wrap ul li:hover
     {
-        background:#f6f6f6
+        background:#f6f6f6;
+        cursor: pointer;
     }
     #primary_nav_wrap ul ul
     {
@@ -88,21 +89,21 @@ if(!$hasRead && !$hasWrite){
     #primary_nav_wrap ul ul li
     {
         float:none;
-        width:200px
+        width:200px;
     }
     #primary_nav_wrap ul ul a
     {
         line-height:120%;
-        padding:10px 15px
+        padding:10px 15px;
     }
     #primary_nav_wrap ul ul ul
     {
         top:0;
-        left:100%
+        left:100%;
     }
     #primary_nav_wrap ul li:hover > ul
     {
-        display:block
+        display:block;
     }
 </style>
 

@@ -430,7 +430,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('ChangePassword', {
             url: '/ChangePassword',
-            templateUrl:'Config/html/ChangePassword.html'
+            templateUrl:'Config/html/ChangePassword.html',
+            controller:'chngPassController'
 
         })
 
@@ -453,6 +454,46 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/AccessApproval',
             templateUrl:'BillApproval/AccessApproval.html'
 
+        })
+
+        .state('createYear', {
+            url: '/CreateYear',
+            templateUrl:'Payroll/html/CreateYear.html',
+            controller:"CreateYearController"
+
+        })
+        .state('configureHolidays', {
+            url: '/ConfigureHolidays',
+            templateUrl:'Payroll/html/ConfigureHolidays.html',
+            controller:"ConfigureHolidaysController"
+
+        })
+        .state('applyForLeave', {
+            url: '/ApplyForLeave',
+            templateUrl:'Payroll/html/ApplyForLeave.html',
+            controller:"ApplyForLeaveController"
+
+        })
+        .state('AddEmployeeToPayRoll', {
+            url: '/AddEmployeeToPayRoll',
+            templateUrl:'Payroll/html/AddEmployeeToPayRoll.html',
+            controller:"AddEmployeeToPayRollController"
+        })
+        .state('showLeaves', {
+            url: '/ShowLeaves',
+            templateUrl:'Payroll/html/ShowLeaves.html',
+            controller:"ShowLeavesController"
+        })
+
+        .state('searchLeavesByDate', {
+            url: '/SearchLeavesByDate',
+            templateUrl:'Payroll/html/SearchLeavesByDate.html',
+            controller:"SearchLeaveByDateController"
+        })
+        .state('searchLeavesByEmployee', {
+            url: '/SearchLeavesByEmployee',
+            templateUrl:'Payroll/html/SearchLeavesByEmployee.html',
+            controller:"SearchLeaveByEmployeeController"
         })
 
 

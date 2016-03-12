@@ -224,6 +224,71 @@ userType:""
 
 });
 
+myApp.controller('chngPassController',function($scope,$rootScope,$http,configService) {
+
+    $scope.typeOfPassField = 'password';
+
+
+    console.log($scope.typeOfPassField);
+    $scope.checkFieldType =function()
+    {
+        if($scope.showPass == true)
+        {
+            $scope.typeOfPassField = 'text';
+        }
+        else
+        {
+            $scope.typeOfPassField = 'password';
+
+        }
+    }
+    $scope.cancelChangePass= function()
+    {
+        window.location ='dashboard.php';
+    }
+    $scope.changePassword =function()
+    {
+        console.log($scope.newDetails);
+        var data={
+            operation :"ChangePassword",
+            data:$scope.newDetails
+
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                console.log(data);
+                console.log(data.message);
+                if(data.status=="Successful"){
+
+                }else if(data.status=="Unsuccessful"){
+
+                }else{
+
+                }
+
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occurred");
+
+
+            });
+
+    }
+});
+
+
 myApp.controller('searchUserController',function($scope,$rootScope,$http,configService){
 
 
