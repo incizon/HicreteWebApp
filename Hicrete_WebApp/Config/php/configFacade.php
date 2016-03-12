@@ -10,6 +10,9 @@ if (!isset($_SESSION['token'])) {
 $userId=$_SESSION['token'];
 
 switch ($data->operation) {
+
+	case "addSuperUser":  Config::addSuperUser($data,$userId);
+						break;
     case "addCompany":  Config::addCompany($data->data,$userId);
     				    break;
     case "addWarehouse":  Config::addWarehouse($data->data,$userId);
@@ -24,7 +27,7 @@ switch ($data->operation) {
                         break;
     case "modifyCompanyDetails":ConfigUtils::modifyCompanyDetails($data,$userId);
                         break;
-    case "getUserDetails" : ConfigUtils:: getUserDetails($data->keyword,$data->searchBy);
+    case "getUserDetails" : ConfigUtils:: getUserDetails($data->keyword,$data->searchBy,$userId);
                         break;
     case "getWareHouseDetails" :ConfigUtils:: getWareHouseDetails($data->key);
                         break;
@@ -38,7 +41,7 @@ switch ($data->operation) {
     				    break;
     case "addUser" :Config::addUser($data,$userId);
     				    break;
-    case "modifyUser" :Config::modifyUser($data,"admin");
+    case "modifyUserDetails" :Config::modifyUserDetails($data,$userId);
                         break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;

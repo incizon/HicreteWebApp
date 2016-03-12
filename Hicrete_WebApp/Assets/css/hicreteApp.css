@@ -78,3 +78,7 @@ a.log_out:hover span{ color: #fff !important;}
 .tablehead{
 	text-align: center;
 }
+
+.inventoryDetails .modal-dialog{
+	width: 70% !important;
+}

@@ -255,19 +255,23 @@ class ConfigUtils
         }
     }
 
-    public static function getUserDetails($keyword,$searchBy)
+    public static function getUserDetails($keyword,$searchBy,$userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $keyword= "%".$keyword."%";
+            if($searchBy=="userId")
+                $keyword='568aa06f48c053329';
+            else
+                $keyword= "%".$keyword."%";
 
-            //echo $keyword;
+//            echo $keyword;
             $selectStmt=self::getSearchQueryForUser($searchBy);
-
+//            $selectStmt="SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`, `isDeleted`, `deletedBy`, `deletionDate` FROM `usermaster` WHERE `userId`=:keyword";
             $stmt = $conn->prepare($selectStmt);
             $stmt->bindParam(':keyword',$keyword, PDO::PARAM_STR);
+
             if($stmt->execute()){
 
                 $noOfRows=0;
@@ -278,7 +282,9 @@ class ConfigUtils
                     $result_array['userId'] = $result['userId'];
                     $result_array['firstName'] = $result['firstName'];
                     $result_array['lastName'] =$result['lastName'];
-                    $result_array['dateOfBirth'] =$result['dateOfBirth'];
+//                    $result_array['dateOfBirth'] =$result['dateOfBirth'];
+                    $date = date('m-d-Y', strtotime($result['dateOfBirth']));
+                    $result_array['dateOfBirth'] =$date;
                     $result_array['address'] =$result['address'];
                     $result_array['city'] =$result['city'];
                     $result_array['state'] =$result['state'];
@@ -345,6 +351,13 @@ class ConfigUtils
         {
            return self::getQueryForUserByUserType();
         }
+        else if($searchBy=='userid')
+        {
+
+            return self::getQueryForUserByUserID();
+        }else{
+
+        }
 
     }
 
@@ -364,7 +377,9 @@ class ConfigUtils
         return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND city like :keyword";
     }
 
-
+    private static function getQueryForUserByUserID(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`, `isDeleted`, `deletedBy`, `deletionDate` FROM `usermaster` WHERE `userId`=:keyword";
+    }
     public static function getCompanyDetails()
     {
         try{

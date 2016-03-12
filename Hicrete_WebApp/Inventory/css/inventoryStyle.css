@@ -1,7 +1,7 @@
 /*-------------------------Modal divs for inventory details-------------*/
 
 .inventoryDetails .modal-dialog{
-	width: 850px !important;	
+	width: 100% !important;
 }
 
 /*----------------------------------------------------------------------*/

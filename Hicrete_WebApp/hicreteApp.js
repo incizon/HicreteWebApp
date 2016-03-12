@@ -294,7 +294,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('createSuperUser', {
             url: '/CreateSuperUser',
-            templateUrl: 'Config/html/CreateSuperUser.html'
+            templateUrl: 'Config/html/CreateSuperUser.html',
+            controller:'superUserController'
 
         })
 

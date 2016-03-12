@@ -1,8 +1,8 @@
 <!-- ADD USER FORM START-->
-<div class="row" ng-controller="userController">
+<div class="row" ng-controller="ModifyUserController">
     <div class="col-md-12">
 
-        <form name="userForm" class="form-horizontal" onload="getUserData()" role="userForm" novalidate>
+        <form name="userForm" class="form-horizontal"  role="userForm" novalidate>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><strong>My profile </strong></h3>
@@ -157,7 +157,7 @@
                 <div class="panel-footer">
                     <!--<button class="btn btn-default pull-left">Clear Form</button>-->
                     <button class="btn btn-primary pull-right" ng-click="">Finish</button>
-                    <button class="btn btn-default pull-right" ng-click="(submitted=true) && userForm.$valid && modifyUserInfo()">Submit</button>
+                    <button class="btn btn-default pull-right" ng-click="(submitted=true) && userForm.$valid && modifyUser()">Submit</button>
                 </div>
             </div>
         </form>

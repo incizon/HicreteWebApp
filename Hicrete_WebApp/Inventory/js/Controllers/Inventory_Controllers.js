@@ -83,6 +83,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         $scope.warningMessage="";
 
         $('#loader').css("display","block");
+
         var config = {
             params: {
                 product: product
@@ -968,9 +969,11 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
             console.log(data);
 
         });
-    $scope.getViewDataObject = function (product) {
+    $scope.getViewDataObject = function (product,materialDetails) {
         console.log(product);
+        $scope.viewMaterials={};
         $scope.viewProduct = product;
+        $scope.viewMaterials =  $scope.viewProduct.materialDetails;
     }
     $scope.getMaterialObject = function (product) {
         $scope.viewMaterials = product;
@@ -986,6 +989,8 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
+        $scope.viewMaterials = $scope.selectedProduct.materialDetails;
+
     }
     /*************************************************
      * START of GETTING INWARD DATA

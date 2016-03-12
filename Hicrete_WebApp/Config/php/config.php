@@ -175,6 +175,49 @@ class Config
         return $stmt->execute();
     }
 
+    public static function addSuperUser($data, $userId)
+    {
+
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $conn->beginTransaction();
+
+            $userId = AppUtil::generateId();
+            $date = new DateTime($data->superUserInfo->dateOfBirth);
+            $dob = $date->format('Y-m-d');
+
+            $stmt = $conn->prepare("INSERT INTO `superuser`(`superUserId`,`designation`,`firstName`, `lastName`,dateOfBirth, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)
+                VALUES (:userId,:designation,:firstName,:lastName,:dob,:address,:city,:state,:country,:pincode,:mobileNumber,:emailId,:createdBy,now(),:lastModifiedBy,now())");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':designation', $data->superUserInfo->designation, PDO::PARAM_STR);
+            $stmt->bindParam(':firstName', $data->superUserInfo->firstName, PDO::PARAM_STR);
+            $stmt->bindParam(':lastName', $data->superUserInfo->lastName, PDO::PARAM_STR);
+            $stmt->bindParam(':dob', $dob, PDO::PARAM_STR);
+            $stmt->bindParam(':address', $data->superUserInfo->address, PDO::PARAM_STR);
+            $stmt->bindParam(':city', $data->superUserInfo->city, PDO::PARAM_STR);
+            $stmt->bindParam(':state', $data->superUserInfo->state, PDO::PARAM_STR);
+            $stmt->bindParam(':country', $data->superUserInfo->country, PDO::PARAM_STR);
+            $stmt->bindParam(':pincode', $data->superUserInfo->pincode, PDO::PARAM_STR);
+            $stmt->bindParam(':mobileNumber', $data->superUserInfo->phone, PDO::PARAM_STR);
+            $stmt->bindParam(':emailId', $data->superUserInfo->email, PDO::PARAM_STR);
+            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+
+            $rollback = false;
+            if ($stmt->execute()) {
+                echo AppUtil::getReturnStatus("Success","Super User created successfully");
+                $conn->commit();
+            }else{
+                echo AppUtil::getReturnStatus("fail","Something Went Wrong");
+                $conn->rollBack();
+            }
+
+        }catch(Exception $e){
+
+        }
+    }
+
     private static function insertUserAccessPermission($conn, $userId, $requestUserId, $accessId)
     {
 
@@ -282,7 +325,7 @@ class Config
 
     }
 
-    public static function modifyUser($data)
+    public static function modifyUserDetails($data)
     {
         try{
             echo json_encode($data->userInfo);
@@ -292,9 +335,9 @@ class Config
             $date = new DateTime($data->userInfo->newDate);
             $dob = $date->format('Y-m-d');
             $userId=$data->userInfo->userId;
+//            ,lchnguserid=:lchnguserid,lchngtime=now()
             $stmt=$conn->prepare("UPDATE usermaster SET firstName=:firstName,
-            lastName=:lastName,address=:address,city=:city,state=:state,country=:country
-            ,pincode=:pincode,mobileNumber=:mobileNumber,lchnguserid=:lchnguserid,lchngtime=now() WHERE userId = :userId");
+            lastName=:lastName,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,mobileNumber=:mobileNumber,lastModifiedBy=:lastModifiedBy,lastModificationDate=now() WHERE userId = :userId");
 
             $stmt->bindParam(':firstName', $data->userInfo->firstName, PDO::PARAM_STR);
             $stmt->bindParam(':lastName', $data->userInfo->lastName, PDO::PARAM_STR);
@@ -307,7 +350,7 @@ class Config
             $stmt->bindParam(':mobileNumber', $data->userInfo->mobileNumber, PDO::PARAM_STR);
 //            $stmt->bindParam(':emailId', $data->userInfo->email, PDO::PARAM_STR);
 //            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':lchnguserid', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 
             if($stmt->execute()){
