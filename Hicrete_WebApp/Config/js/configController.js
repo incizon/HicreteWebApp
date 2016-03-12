@@ -113,6 +113,19 @@ userType:""
             $scope.step--;
         }
 
+    $scope.today = function(){
+        $scope.userInfo.dob = new Date();
+    };
+
+    $scope.today();
+
+    $scope.openDob = function(){
+        $scope.showPicker.opened = true;
+    };
+
+    $scope.showPicker = {
+        opened:false
+    };
         
         $scope.clearUserForm=function(){
               $scope.step=1;     
@@ -136,8 +149,6 @@ userType:""
               //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser"; 
   
         }
-
-
 
         $scope.addUser=function(){
 
