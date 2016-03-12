@@ -197,7 +197,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.searchSegment', {
             url: '/searchSegment',
-            templateUrl: 'Expense/html/SegmentSearch.html',
+            templateUrl: 'Expense/html/SegmentSearch.php',
             controller: 'costCenterSearchController'
         })
         
@@ -309,8 +309,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process', {
             url: '/Process',
-            templateUrl: 'Process/html/ProcessWidget.php',
-            controller:'ProcessWidgetController'
+            templateUrl: 'Process/html/ProcessWidget.php'
+
         })
 
         .state('Process.addCustomer', {
@@ -354,7 +354,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.viewProject', {
             url: '/viewProjects',
-            templateUrl:'Process/html/ViewProjects.html',
+            templateUrl:'Process/html/SearchProjects.php',
             controller:'viewProjectController'
         })
         .state('Process.ProjectDetails', {
@@ -381,7 +381,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.viewCustomers', {
             url: '/Customers',
-            templateUrl:'Process/html/ViewCustomers.html',
+            templateUrl:'Process/html/SearchCustomers.php',
             controller:'ViewCustomerController'
         })
         .state('Process.AttachWorkorder', {
@@ -414,7 +414,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.searchTask', {
             url: '/SearchTask',
-            templateUrl:'Process/html/schedule/SearchTasks.html',
+            templateUrl:'Process/html/schedule/SearchTasks.php',
             controller:'SearchTaskController'
         })
 
@@ -497,7 +497,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Payroll/html/SearchLeavesByDate.html',
             controller:"SearchLeaveByDateController"
         })
-        .state('Payroll..searchLeavesByEmployee', {
+        .state('Payroll.searchLeavesByEmployee', {
             url: '/SearchLeavesByEmployee',
             templateUrl:'Payroll/html/SearchLeavesByEmployee.html',
             controller:"SearchLeaveByEmployeeController"

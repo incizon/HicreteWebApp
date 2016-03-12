@@ -11,10 +11,7 @@ if (!isset($_SESSION['token'])) {
 $userId=$_SESSION['token'];
 $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
 
-if($hasWrite){
-    header("Location: Dashboard.php");
-    exit();
-}
+
 ?>
 
 <div>
