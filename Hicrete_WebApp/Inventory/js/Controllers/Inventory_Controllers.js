@@ -1102,15 +1102,11 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         }
     };
 
-    $scope.todayDateOfEntry = function() {
-        $scope.prodBatchInfo.dateOfEntry = new Date();
-    };
-    $scope.todayDateOfEntry();
-
-    $scope.todayStartDate = function(){
-        $scope.prodBatchInfo.startDate = new Date();
-    }
-    $scope.todayStartDate();
+    //$scope.today = function() {
+    //    //$scope.prodBatchInfo.dateOfEntry = new Date();
+    //    $scope.prodBatchInfo.startDate = new Date();
+    //};
+    //$scope.today();
 
     $scope.maxDate = new Date(2020, 5, 22);
 
@@ -1127,6 +1123,14 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
     };
 
     $scope.showStart = {
+        opened: false
+    };
+
+    $scope.openEnd = function() {
+        $scope.showEnd.opened = true;
+    };
+
+    $scope.showEnd = {
         opened: false
     };
 
@@ -1185,7 +1189,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
 
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
-    $scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
+    //$scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
     $scope.submitted = false;
@@ -1215,9 +1219,9 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
     $scope.prodBatchInfo = {
         batchNo: "",
         batchCodeName: "",
-        dateOfEntry: $filter("date")(new Date, 'dd-MM-yyyy'),
-        startDate: $filter("date")(new Date, 'dd-MM-yyyy'),
-        endDate: $filter("date")(new Date, 'dd-MM-yyyy'),
+        dateOfEntry: "",
+        startDate: "",
+        endDate: "",
         rawMaterial: [],
         supervisor: "",
         prodcdMaterial: "",

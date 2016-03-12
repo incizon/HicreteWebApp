@@ -3,6 +3,7 @@ myApp.controller('roleController',function($scope,$http,configService){
  $scope.showAccessError=false;
  $scope.roleDisabled=false;
  $scope.roleName;
+
 configService.getAllAccessPermission($http,$scope);
   
         $scope.addRole=function(){
@@ -23,7 +24,12 @@ configService.getAllAccessPermission($http,$scope);
             operation :"addRole",
             roleName:$scope.roleName,
             accessPermissions: $scope.accessList   
-          };        
+          };
+
+            $scope.loading=true;
+            $scope.errorMessage="";
+            $scope.warningMessage="";
+            $('#loader').css("display","block");
 
           var config = {
                      params: {
@@ -35,20 +41,46 @@ configService.getAllAccessPermission($http,$scope);
           $http.post("Config/php/configFacade.php",null, config)
            .success(function (data)
            {
-         
+
              if(data.status=="Successful"){
-                doShowAlert("Success","Role created successfully");    
+                 $scope.loading=false;
+                 $('#loader').css("display","none");
+                 $scope.warningMessage="Role added Successfully..";
+                 console.log($scope.warningMessage);
+                 $('#warning').css("display","block");
+
+                 setTimeout(function() {
+                     $scope.$apply(function() {
+                         $('#warning').css("display","none");
+                     });
+                 }, 3000);
              }else if(data.status=="Unsuccessful"){
-                  doShowAlert("Failure",data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                     $scope.errorMessage="Role not added..";
+                     $('#error').css("display","block");
+                     setTimeout(function() {
+                         $scope.$apply(function() {
+                             $('#error').css("display","none");
+                         });
+                     }, 3000);
              }else{
-                  doShowAlert("Failure",data.message);
+                 $scope.loading=false;
+                 $('#loader').css("display","none");
+                 $scope.errorMessage="Role not added..";
+                 $('#error').css("display","block");
+                 setTimeout(function() {
+                     $scope.$apply(function() {
+                         $('#error').css("display","none");
+                     });
+                 }, 3000);
              } 
               clearRoleForm();       
            })
            .error(function (data, status, headers, config)
            {
-             doShowAlert("Failure","Error Occurred");
-             
+               $scope.errorMessage="Role not added..";
+               $('#error').css("display","block");
            });
    
            
@@ -66,8 +98,9 @@ configService.getAllAccessPermission($http,$scope);
         }
         $scope.finish=function(){
         	 clearRoleForm();
-
-            window.location="dashboard.php#/Config";
+            setTimeout(function() {
+               window.location.reload(true);
+            }, 3000);
         }
 });
 
@@ -113,11 +146,11 @@ userType:""
             $scope.step--;
         }
 
-    $scope.today = function(){
-        $scope.userInfo.dob = new Date();
-    };
-
-    $scope.today();
+    //$scope.today = function(){
+    //    $scope.userInfo.dob = new Date();
+    //};
+    //
+    //$scope.today();
 
     $scope.openDob = function(){
         $scope.showPicker.opened = true;
@@ -156,8 +189,12 @@ userType:""
             operation :"addUser",
             userInfo:$scope.userInfo,
             roleId: $scope.selectedRole.roleId,
+          };
 
-          };        
+            $scope.loading=true;
+            $scope.errorMessage="";
+            $scope.warningMessage="";
+            $('#loader').css("display","block");
 
           var config = {
                      params: {
@@ -174,21 +211,45 @@ userType:""
              console.log(data.message);
              if(data.status=="Successful"){
                 alert("Password is :"+data.message);
-                doShowAlert("Success","User created successfully");  
-                window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";  
+                 setTimeout(function(){
+                     $scope.loading=false;
+                     $('#loader').css("display","none");
+                 },3000);
+
+                 $scope.warningMessage= "User added successfully..";
+                 $('#warning').css("display","block");
+                 console.log($scope.warningMessage);
+                 //setTimeout(function() {
+                 //    $scope.$apply(function() {
+                 //        if(data.message!=""){
+                 //            $('#warning').css("display","none");
+                 //        }
+                 //    });
+                 //}, 3000);
+                //doShowAlert("Success","User created successfully");
+                 setTimeout(function(){
+                     window.location.reload(true);
+                 },6000);
              }else if(data.status=="Unsuccessful"){
-                  doShowAlert("Failure",data.message);
+                  //doShowAlert("Failure",data.message);
+                 $scope.errorMessage="User not Added";
+                 $('#error').css("display","block");
+                 console.log($scope.errorMessage);
              }else{
-                  doShowAlert("Failure",data.message);
+                  //doShowAlert("Failure",data.message);
+                 $scope.errorMessage="User not Added";
+                 $('#error').css("display","block");
+                 //console.log($scope.errorMessage);
              } 
              $scope.clearUserForm();
-                     
            })
            .error(function (data, status, headers, config)
            {
-             doShowAlert("Failure","Error Occurred");
+             //doShowAlert("Failure","Error Occurred");
              $scope.clearUserForm();
-             
+               $scope.errorMessage="User not Added";
+               $('#error').css("display","block");
+               console.log($scope.errorMessage);
            });
 
            $scope.userInfoSubmitted=false;
@@ -554,6 +615,14 @@ $scope.warehouse={
   phone:""
  };
 
+    $scope.openCompDate = function(){
+        $scope.compDate.opened = true;
+    };
+
+    $scope.compDate = {
+        opened:false
+    }
+
     ///////////////////////////////////////////////////////////////////////
     // function to modify Company-Start
     //////////////////////////////////////////////////////////////////
@@ -659,7 +728,11 @@ $scope.addCompany=function(){
     var data={
             operation :"addCompany",
             data:$scope.company
-      };        
+      };
+    $scope.loading=true;
+    $scope.errorMessage="";
+    $scope.warningMessage="";
+    $('#loader').css("display","block");
 
       var config = {
                  params: {
@@ -670,15 +743,41 @@ $scope.addCompany=function(){
       $http.post("Config/php/configFacade.php",null, config)
            .success(function (data)
            {
-           
-             if(data.status=="Successful"){
-                doShowAlert("Success","Company created successfully");    
-             }else if(data.status=="Unsuccessful"){
-                  doShowAlert("Failure",data.message);
-             }else{
-                  doShowAlert("Failure",data.message);
-             }  
-        
+
+               if(data.status=="Successful"){
+                   $scope.loading=false;
+                   $('#loader').css("display","none");
+                   $scope.warningMessage="Company added Successfully..";
+                   console.log($scope.warningMessage);
+                   $('#warning').css("display","block");
+
+                   setTimeout(function() {
+                       $scope.$apply(function() {
+                           $('#warning').css("display","none");
+                       });
+                   }, 3000);
+               }else if(data.status=="Unsuccessful"){
+                   $scope.loading=false;
+                   $('#loader').css("display","none");
+                   $scope.errorMessage="Company not added..";
+                   $('#error').css("display","block");
+                   setTimeout(function() {
+                       $scope.$apply(function() {
+                           $('#error').css("display","none");
+                       });
+                   }, 3000);
+               }else{
+                   $scope.loading=false;
+                   $('#loader').css("display","none");
+                   $scope.errorMessage="Role not added..";
+                   $('#error').css("display","block");
+                   setTimeout(function() {
+                       $scope.$apply(function() {
+                           $('#error').css("display","none");
+                       });
+                   }, 3000);
+               }
+
            })
            .error(function (data, status, headers, config)
            {
