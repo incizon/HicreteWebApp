@@ -904,7 +904,12 @@ $scope.addWarehouse=function(){
    var data={
             operation :"addWarehouse",
             data:$scope.warehouse
-      };        
+      };
+
+    $scope.loading=true;
+    $scope.errorMessage="";
+    $scope.warningMessage="";
+    $('#loader').css("display","block");
 
       var config = {
                  params: {
@@ -915,15 +920,41 @@ $scope.addWarehouse=function(){
       $http.post("Config/php/configFacade.php",null, config)
            .success(function (data)
            {
-           
-             if(data.status=="Successful"){
-                doShowAlert("Success","Warehouse created successfully");    
-             }else if(data.status=="Unsuccessful"){
-                  doShowAlert("Failure",data.message);
-             }else{
-                  doShowAlert("Failure",data.message);
-             }  
-        
+
+               if(data.status=="Successful"){
+                   $scope.loading=false;
+                   $('#loader').css("display","none");
+                   $scope.warningMessage="Warehouse created Successfully..";
+                   console.log($scope.warningMessage);
+                   $('#warning').css("display","block");
+
+                   setTimeout(function() {
+                       $scope.$apply(function() {
+                           $('#warning').css("display","none");
+                       });
+                   }, 3000);
+               }else if(data.status=="Unsuccessful"){
+                   $scope.loading=false;
+                   $('#loader').css("display","none");
+                   $scope.errorMessage="Warehouse not created..";
+                   $('#error').css("display","block");
+                   setTimeout(function() {
+                       $scope.$apply(function() {
+                           $('#error').css("display","none");
+                       });
+                   }, 3000);
+               }else{
+                   $scope.loading=false;
+                   $('#loader').css("display","none");
+                   $scope.errorMessage="Warehouse not created..";
+                   $('#error').css("display","block");
+                   setTimeout(function() {
+                       $scope.$apply(function() {
+                           $('#error').css("display","none");
+                       });
+                   }, 3000);
+               }
+
            })
            .error(function (data, status, headers, config)
            {

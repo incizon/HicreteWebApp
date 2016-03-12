@@ -23,7 +23,7 @@
                                     <div class="col-md-3 col-xs-12 col-sm-4">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input name="companyName" pattern="[a-zA-Z0-9]+" ng-model="company.name" type="text" class="form-control" placeholder="Enter Company Name"  required minlength=2/>
+                                            <input name="companyName" pattern="[a-zA-Z0-9]+" ng-model="company.name" type="text" class="form-control" required minlength=2/>
                                         </div>
                                         <div class="help-block" ng-messages="companyForm.companyName.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Your name is too short.</p>
@@ -141,7 +141,7 @@
                                         <label class="col-md-2 col-xs-12 control-label col-sm-2">Phone number</label>
                                         <div class="col-md-3 col-xs-12 col-sm-4">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
+                                                <span class="input-group-addon"><span class="fa fa-phone"></span></span>
                                                 <input ng-model="company.phone" name="phone" type="text" class="form-control"/>
                                             </div>
 
