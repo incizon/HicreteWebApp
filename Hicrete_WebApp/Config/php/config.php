@@ -199,7 +199,6 @@ class Config
 
             $conn->beginTransaction();
 
-            $password;
             $userId = AppUtil::generateId();
             $date = new DateTime($data->userInfo->dob);
             $dob = $date->format('Y-m-d');
@@ -226,27 +225,27 @@ class Config
 
                     $rollback = true;
                 } else {
-                    foreach ($data->accessPermissions as $accessEntry) {
-                        if ($accessEntry->read->ispresent) {
-                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->read->accessId)) {
-                                $rollback = true;
+//                    foreach ($data->accessPermissions as $accessEntry) {
+//                        if ($accessEntry->read->ispresent) {
+//                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->read->accessId)) {
+//                                $rollback = true;
+//
+//                                break;
+//                            }
+//
+//                        }
+//
+//                        if ($accessEntry->write->ispresent) {
+//                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->write->accessId)) {
+//                                $rollback = true;
+//
+//                                break;
+//                            }
+//                        }
+//                    }
 
-                                break;
-                            }
 
-                        }
-
-                        if ($accessEntry->write->ispresent) {
-                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->write->accessId)) {
-                                $rollback = true;
-
-                                break;
-                            }
-                        }
-                    }
-
-
-                    if (!$rollback) {
+                    //if (!$rollback) {
                         $str = $data->userInfo->email . $userId;
 
                         $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`) 
@@ -260,7 +259,7 @@ class Config
 
                             $rollback = true;
                         }
-                    }
+                    //}
 
                 }
             } else {

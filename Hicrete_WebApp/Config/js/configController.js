@@ -66,18 +66,15 @@ configService.getAllAccessPermission($http,$scope);
         }
         $scope.finish=function(){
         	 clearRoleForm();
-           if($scope.isFromUser){
-              $scope.isFromUser=false;
-              window.location="dashboard.php#/Config/addUser";
-           }else
+
             window.location="dashboard.php#/Config";
         }
 });
 
 
-myApp.controller('userController',function($scope,$http,configService){
+myApp.controller('userController',function($scope,$http,$rootScope,configService){
 
-$scope.refreshRoleList=true;
+
 $scope.step=1;
 $scope.userInfoSubmitted=false;
 $scope.accessInfoSubmitted=false;
@@ -86,7 +83,8 @@ $scope.showCompanyError=false;
 $scope.roleAccessList=[];
 $scope.selectedRole={"roleId":""};
 $scope.otherAccessList=[];
-$scope.isFromUser=true;
+
+
 
 
 $scope.userInfo={
@@ -104,51 +102,10 @@ designation:"",
 userType:""
 };
 
-    $scope.selectUser = function(user)
-    {
-        $scope.selectedUser=user;
-        console.log($scope.selectedUser);
-    }
-/////////////////////////////////////////////////////////////////////////////////
-// Function to get User details
-/////////////////////////////////////////////////////////////////////////////////
-    $scope.getUserData = function(){
-
-        var data={
-            operation:"getUserDetails"
-        };
-        var config = {
-            params: {
-                data: data
-            }
-        };
-        $http.post("Config/php/configFacade.php",null, config)
-            .success(function (data)
-            {
-
-                if(data.status!="Successful"){
-                    console.log(data);
-                    //doShowAlert("Failure",data.message);
-                }else{
-                    console.log(data);
-                    $scope.Users=data.message;
-
-                    console.log($scope.Companies);
-                }
-
-            })
-            .error(function (data, status, headers, config)
-            {
-                doShowAlert("Failure","Error Occured");
-            });
+    configService.getRoleList($http,$scope);
 
 
-
-    };
-    $scope.getUserData();
-configService.getRoleList($http,$scope);
-
-		    $scope.nextStep = function() {
+    $scope.nextStep = function() {
             $scope.step++;
         }
  
@@ -183,21 +140,12 @@ configService.getRoleList($http,$scope);
 
 
         $scope.addUser=function(){
-        	// var companySelected=false;
-        	// angular.forEach($scope.companyList, function(company) {
-         //       companySelected=companySelected || company.value;
-         //    });
-        	// if(!companySelected){
-        	// 	$scope.showCompanyError=true;
-        	// 	return;
-        	// }
-        	
 
           var data={
             operation :"addUser",
             userInfo:$scope.userInfo,
             roleId: $scope.selectedRole.roleId,
-            accessPermissions:$scope.roleAccessList 
+
           };        
 
           var config = {
@@ -237,12 +185,9 @@ configService.getRoleList($http,$scope);
               $scope.showCompanyError=false;
         }
 
-           
-
-
-
         $scope.loadAccessPermission=function(){
         		    
+              console.log($scope.selectedRole.roleId);
                 var data={
                       operation :"getAccessForRole",
                       roleId: $scope.selectedRole.roleId   
@@ -259,121 +204,320 @@ configService.getRoleList($http,$scope);
                      {
                      
                        if(data.status!="Successful"){
-                          doShowAlert("Failure",data.message);
+                          alert(data.message);
                        }else{
+                           $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
                        }
 
                      })
                      .error(function (data, status, headers, config)
                      {
-                       doShowAlert("Failure","Error Occured");
+                       alert("Error Occured");
                      });
             }
 
 
-      var populateOtherAccessList=function(){
 
-           console.log($scope.accessList);
-            console.log($scope.roleAccessList);
-            angular.forEach($scope.accessList, function(accessEntry) {
-                 var addThisEntry=true;
-                angular.forEach($scope.roleAccessList, function(roleAccessEntry) {
-                    if(accessEntry.moduleName===roleAccessEntry.moduleName){
-                        addThisEntry=false;
-                      if(!roleAccessEntry.read.ispresent){
-                        accessEntry.write.ispresent=false;
-                        $scope.otherAccessList.push(accessEntry);
-                      
-                      }else if(!roleAccessEntry.write.ispresent){
-                        accessEntry.read.ispresent=false;
-                        $scope.otherAccessList.push(accessEntry);
-                          
-                      }                           
-                    }                     
-               });
-               if(addThisEntry){
-                $scope.otherAccessList.push(accessEntry);
-               }
-          });
-            console.log($scope.otherAccessList);
-      }      
+});
 
-  
-      $scope.loadExtraAccessPermission=function(){
-       
-          $scope.accessList=[];
-          var data={
-              operation :"getAccessPermission"   
-          };        
-          var config = {
-                     params: {
-                           data: data
-                         }
-          };
+myApp.controller('chngPassController',function($scope,$rootScope,$http,configService) {
 
-          $http.post("Config/php/configFacade.php",null, config)
-               .success(function(data){
-                   if(data.status!="Successful"){
-                      doShowAlert("Failure",data.message);
-                    }else{
-
-                      configService.marshalledAccessList(data.message,$scope.accessList);
-                      populateOtherAccessList();  
-                    }
-               })
-               .error(function(data, status, headers, config)
-               {
-                 doShowAlert("Failure","Error Occured");
-                 $scope.loaded=true;
-               });
-      } 
+    $scope.typeOfPassField = 'password';
 
 
-
-
-
-
-        $scope.addExtraAccessPermission=function(){
-        	angular.forEach($scope.otherAccessList, function(otherAccessEntry) {
-                 var addThisEntry=true;
-                 angular.forEach($scope.roleAccessList, function(roleAccessEntry) {
-               			if(roleAccessEntry.moduleName===otherAccessEntry.moduleName){
-               				addThisEntry=false;
-                      if(otherAccessEntry.read.val){
-               					roleAccessEntry.read.ispresent=	true;	
-               					roleAccessEntry.read.val= true;
-                        roleAccessEntry.read.accessId=otherAccessEntry.read.accessId ;
-                        
-               				}else if(otherAccessEntry.write.val){
-                        
-                        roleAccessEntry.write.ispresent= true; 
-                        roleAccessEntry.write.val= true;
-                        roleAccessEntry.write.accessId=otherAccessEntry.write.accessId ;
-                        
-                      }            					
-               			}               			
-           		 });
-           		 if(addThisEntry){
-           		 	 
-                 if(otherAccessEntry.read.val) 
-                  otherAccessEntry.read.ispresent=otherAccessEntry.read.val; 
-
-                 if(otherAccessEntry.write.val)
-                  otherAccessEntry.write.ispresent=otherAccessEntry.write.val;      
-                 
-                 $scope.roleAccessList.push(otherAccessEntry);
-           		 }
-            });
+    console.log($scope.typeOfPassField);
+    $scope.checkFieldType =function()
+    {
+        if($scope.showPass == true)
+        {
+            $scope.typeOfPassField = 'text';
         }
+        else
+        {
+            $scope.typeOfPassField = 'password';
+
+        }
+    }
+    $scope.cancelChangePass= function()
+    {
+        window.location ='dashboard.php';
+    }
+    $scope.changePassword =function()
+    {
+        console.log($scope.newDetails);
+        var data={
+            operation :"ChangePassword",
+            data:$scope.newDetails
+
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                console.log(data);
+                console.log(data.message);
+                if(data.status=="Successful"){
+
+                }else if(data.status=="Unsuccessful"){
+
+                }else{
+
+                }
+
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occurred");
+
+
+            });
+
+    }
+});
+
+
+myApp.controller('searchUserController',function($scope,$rootScope,$http,configService){
+
+
+    $scope.isFromUser=true;
+    $scope.searchKeyword="";
+    $scope.searchAttribute="";
+
+
+    $scope.userInfo={
+        firstName:"",
+        lastName:"",
+        dob:"",
+        address:"",
+        city:"",
+        state:"",
+        country:"",
+        pincode:"",
+        email:"",
+        mobile:"",
+        designation:"",
+        userType:""
+    };
+
+    $scope.UserPerPage=5;
+    $scope.currentPage=1;
+
+    $scope.selectUser = function(user)
+    {
+        $scope.selectedUser=user;
+        console.log($scope.selectedUser);
+    }
+
+
+    $scope.getUserData = function(keyword){
+
+        console.log(keyword);
+        console.log($scope.searchAttribute);
+
+        var data={
+            operation:"getUserDetails",
+            keyword:keyword,
+            searchBy:$scope.searchAttribute
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status==="Successful"){
+                    console.log(data);
+                    $rootScope.Users=data.message;
+                    $scope.totalItems=$rootScope.Users.length;
+                    console.log($scope.totalItems);
+
+                }
+                else if(data.status==="NoRows")
+                {
+                    $rootScope.Users=[];
+                    alert(data.message);
+
+                }else{
+                alert(data.message);
+            }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+
+    };
+
+
+
+    $scope.deleteUser = function(user)
+    {
+        var data={
+            operation:"deleteUser",
+            key:user.userId
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status=="Successful"){
+                    var index = $rootScope.Users.indexOf(user);
+                    $rootScope.Users.splice(index, 1);
+                    alert("Deleted successfully");
+                }
+                else
+                {
+                   alert(data.message);
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+
+    };
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.UserPerPage;
+        end = begin + $scope.UserPerPage;
+        index = $rootScope.Users.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+});
+
+
+myApp.controller('modifyUserController',function($scope,$http,$stateParams,configService){
+
+    $scope.selectedUserInfo=$stateParams.userToModify;
+    configService.getRoleList($http,$scope);
+
+    $scope.roleAccessList=[];
+    $scope.selectedRole={"roleId":""};
+
+
+    configService.getRoleList($http,$scope);
+    $scope.loadAccessPermission=function(){
+
+        var data={
+            operation :"getAccessForRole",
+            roleId: $scope.selectedUserInfo.roleId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    doShowAlert("Failure",data.message);
+                }else{
+                    $scope.roleAccessList=[];
+                    configService.marshalledAccessList(data.message,$scope.roleAccessList);
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+    }
+    $scope.loadAccessPermission();
+
+    /*
+    $scope.selectUserForModify= function(user)
+    {
+        $scope.selectedUserInfo=user;
+        console.log($scope.selectedUserInfo);
+
+    }
+
+    $scope.modifyUser=function(){
+        console.log($scope.selectedUserInfo);
+        var data={
+            operation :"modifyUser",
+            userInfo:$scope.selectedUserInfo
+
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+*/
+        /* $http.post("Config/php/configFacade.php",null, config)
+         .success(function (data)
+         {
+
+         console.log(data.status);
+         console.log(data.message);
+         if(data.status=="Successful"){
+         console.log(data);
+         // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+         }else if(data.status=="Unsuccessful"){
+         //doShowAlert("Failure",data.message);
+         console.log(data);
+         }else{
+         //doShowAlert("Failure",data.message);
+         console.log(data);
+         }
+         $scope.clearUserForm();
+
+         })
+         .error(function (data, status, headers, config)
+         {
+         doShowAlert("Failure","Error Occurred");
+         $scope.clearUserForm();
+
+         });
+
+        $scope.userInfoSubmitted=false;
+        $scope.accessInfoSubmitted=false;
+        $scope.showCompanyError=false;
+    }*/
 
 
 });
 
 
-
-
 myApp.controller('companyController',function($scope,$rootScope,$http){
+    $scope.keyword="";
+    $scope.searchkeyword="";
  $scope.company={
  	name:"",
   abbrevation:"",
@@ -398,13 +542,34 @@ $scope.warehouse={
   pincode:"",
   phone:""
  };
+
+    ///////////////////////////////////////////////////////////////////////
+    // function to modify Company-Start
+    //////////////////////////////////////////////////////////////////
+    $scope.selectForModifyCmpny= function(comp)
+    {
+        $scope.companyDetails=comp;
+        console.log($scope.companyDetails);
+
+    };
+    $scope.modifyCompDetails=function()
+    {
+        console.log($scope.companyDetails);
+    }
+
+    ///////////////////////////////////////////////////////////////////////
+    // function to modify Company-End
+    //////////////////////////////////////////////////////////////////
+
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get Ware house details
 /////////////////////////////////////////////////////////////////////////////////
-    $scope.getWareHouseDetails = function()
+    $scope.getWareHouseDetails = function(keyword)
     {
+        console.log(keyword);
         var data={
-            operation:"getWareHouseDetails"
+            operation:"getWareHouseDetails",
+            key:keyword
         };
         var config = {
             params: {
@@ -420,7 +585,7 @@ $scope.warehouse={
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
-                    $scope.warehouses=data.message;
+                    $rootScope.warehouses=data.message;
 
                     console.log($scope.Companies);
                 }
@@ -432,24 +597,25 @@ $scope.warehouse={
             });
 
     };
-    $scope.getWareHouseDetails();
+    //$scope.getWareHouseDetails();
 
  $scope.submitted=false;
  $scope.warehouseSubmitted=false;
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get comapny details
 /////////////////////////////////////////////////////////////////////////////////
-    $scope.getCompanyData = function(){
+    $scope.getCompanyData = function(searchkeyword){
         console.log("Inside company fetch data ");
         var data={
-            operation:"getCompanyDetails"
+            operation:"getCompanyDetails",
+            keyword:searchkeyword
         };
         var config = {
             params: {
                 data: data
             }
         };
-        if($rootScope.Companies.length==0) {
+       //if($rootScope.Companies.length==0) {
             $http.post("Config/php/configFacade.php", null, config)
                 .success(function (data) {
 
@@ -469,7 +635,7 @@ $scope.warehouse={
                     doShowAlert("Failure", "Error Occured");
                 });
 
-        }
+        //}
 
     };
    // $scope.getCompanyData();
@@ -762,24 +928,58 @@ $scope.exemptedAccessList=[];
 
           }      
 });
-myApp.controller('ModifyCompanyController',function($scope,$http) {
+myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $stateParams) {
 
         console.log("IN");
+    console.log($stateParams.companyId);
 
-        $scope.companyDetails={
+    for (var i = 0; i < $rootScope.Companies.length; i++) {
+        if ($stateParams.companyId == $rootScope.Companies[i].companyId) {
+            $scope.selectedCompany=$rootScope.Companies[i];
+            break;
+        }
+    }
+    console.log($scope.selectedCompany);
 
-            name:"Hicrete",
-            abbrevation:"HS",
-            startdate:"10-10-1990",
-            address:"K K Market",
-            city:"Pune",
-            state:"Maharashtra",
-            country:"India",
-            pincode:"411051",
-            email:"abc@gmail.com",
-            phone:"1234567890"
+
+    $scope.modifyCompanyDetails =function()
+    {
+        var data={
+            operation:"modifyCompanyDetails",
+            data:$scope.selectedCompany
 
         };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log($scope.selectedCompany);
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    };
+
+
+
+
 
 });
 
@@ -822,27 +1022,59 @@ myApp.controller('ModifyRoleController',function($scope,$http) {
 
 });
 
-myApp.controller('ModifyWarehouseController',function($scope,$http) {
+myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$stateParams) {
 
     console.log("In");
 
+    for (var i = 0; i < $rootScope.warehouses.length; i++) {
+        if ($stateParams.warehouseId == $rootScope.warehouses[i].warehouseId) {
+            $scope.selectedWarehouse=$rootScope.warehouses[i];
+            break;
+        }
+    }
+    console.log($scope.selectedWarehouse);
 
-    $scope.warehouseDetails={
 
-        name:"Hicrete",
-        abbrevation:"HS",
-        address:"K K Market",
-        city:"Pune",
-        state:"Maharashtra",
-        country:"India",
-        pincode:"411051",
-        phone:"1234567890"
+    $scope.modifyWarehouse =function()
+    {
+        var data={
+            operation:"modifyWareHouseDetails",
+            data:$scope.selectedWarehouse
 
-    };
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        //console.log($scope.selectedCompany);
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    console.log(data);
+                    //doShowAlert("Failure",data.message);
+                }else{
+                    console.log(data);
+
+
+
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occured");
+            });
+
+    }
+
+
 });
 
 
-myApp.controller('ModifyUserController',function($scope,$http,configService){
+myApp.controller('ModifyUserController',function($scope,$http,$rootScope,configService){
 
     $scope.refreshRoleList=true;
     //$scope.step=1;
@@ -895,23 +1127,19 @@ myApp.controller('ModifyUserController',function($scope,$http,configService){
     //}
 
 
+    $scope.selectUserForModify= function(user)
+    {
+        $scope.userInfo=user;
+        console.log($scope.userInfo);
 
-    $scope.addUser=function(){
-        // var companySelected=false;
-        // angular.forEach($scope.companyList, function(company) {
-        //       companySelected=companySelected || company.value;
-        //    });
-        // if(!companySelected){
-        // 	$scope.showCompanyError=true;
-        // 	return;
-        // }
+    }
 
+    $scope.modifyUser=function(){
+        console.log($scope.userInfo);
+               var data={
+            operation :"modifyUser",
+            userInfo:$scope.userInfo
 
-        var data={
-            operation :"addUser",
-            userInfo:$scope.userInfo,
-            roleId: $scope.selectedRole.roleId,
-            accessPermissions:$scope.roleAccessList
         };
 
         var config = {
@@ -921,20 +1149,21 @@ myApp.controller('ModifyUserController',function($scope,$http,configService){
             }
         };
 
-        $http.post("Config/php/configFacade.php",null, config)
+       /* $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
             {
 
                 console.log(data.status);
                 console.log(data.message);
                 if(data.status=="Successful"){
-                    alert("Password is :"+data.message);
-                    doShowAlert("Success","User created successfully");
-                    window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+                    console.log(data);
+                   // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
                 }else if(data.status=="Unsuccessful"){
-                    doShowAlert("Failure",data.message);
+                    //doShowAlert("Failure",data.message);
+                    console.log(data);
                 }else{
-                    doShowAlert("Failure",data.message);
+                    //doShowAlert("Failure",data.message);
+                    console.log(data);
                 }
                 $scope.clearUserForm();
 
@@ -944,7 +1173,7 @@ myApp.controller('ModifyUserController',function($scope,$http,configService){
                 doShowAlert("Failure","Error Occurred");
                 $scope.clearUserForm();
 
-            });
+            });*/
 
         $scope.userInfoSubmitted=false;
         $scope.accessInfoSubmitted=false;

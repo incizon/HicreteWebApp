@@ -13,14 +13,14 @@
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchkeyword"/>
 
 
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="input-group-btn">
-                        <button class="btn btn-primary" ng-click="getCompanyData()">Search</button>
+                        <button class="btn btn-primary" ng-click="getCompanyData(searchkeyword)">Search</button>
                     </div>
 
                 </div>
@@ -55,7 +55,7 @@
 
                         <td>
                             <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyCompany"> <button class="btn btn-info">Modify</button></a>
+                            <a ui-sref="Config.modifyCompany({companyId:Comp.companyId})"> <button class="btn btn-info">Modify</button></a>
                             <button class="btn btn-danger">Delete</button>
                         </td>
                     </tr>
