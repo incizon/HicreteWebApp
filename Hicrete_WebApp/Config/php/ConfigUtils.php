@@ -208,6 +208,8 @@ class ConfigUtils
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            $conn->beginTransaction();
+
             $stmt = $conn->prepare("UPDATE `userroleinfo` SET `designation`=:designation,`roleId`=:roleId,`userType`=:userType,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE userid=:dataUserId");
 
             $stmt->bindParam(':designation',$data->designation , PDO::PARAM_STR);
@@ -215,17 +217,19 @@ class ConfigUtils
             $stmt->bindParam(':userType', $data->userType, PDO::PARAM_STR);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':dataUserId', $data->userId, PDO::PARAM_STR);
-            if($stmt->execute()){
 
-                echo AppUtil::getReturnStatus("Successful","User Deleted successfully");
+            if($stmt->execute()){
+                $conn->commit();
+                echo AppUtil::getReturnStatus("Successful","User Modified successfully");
 
             }else{
+
                 echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
             }
 
         }catch(Exception $e){
 
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+            echo AppUtil::getReturnStatus("Exception",$e);
         }
 
     }
@@ -723,34 +727,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
     }
 
 
-    public static function doesUserHasAccess($moduleName,$userId,$accessType){
-        try{
 
-            $db = Database::getInstance();
-            $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT * FROM `useraccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=:moduleName AND `accessType`=:accessType) AND `userId`=:userId");
-
-            $stmt->bindParam(':moduleName', $moduleName, PDO::PARAM_STR);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':accessType', $accessType, PDO::PARAM_STR);
-            if($stmt->execute()){
-                $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
-                if (count($result) > 0) {
-                    echo AppUtil::getReturnStatus("Successful","Has Permission ");
-                }else{
-
-
-                }
-
-            }else{
-                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
-            }
-
-        }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
-        }
-
-    }
 
 
 }

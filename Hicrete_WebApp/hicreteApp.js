@@ -11,7 +11,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         // Applicator STATES ========================================
         .state('Applicator', {
             url: '/Applicator',
-            templateUrl: 'Applicator/html/ApplicatorWidget.html'
+            templateUrl: 'Applicator/html/ApplicatorWidget.php'
         })
 
         .state('Applicator.addDealer', {
@@ -76,7 +76,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Inventory', {
             url: '/Inventory',
-            templateUrl: 'Inventory/html/inventoryWidgets.html',
+            templateUrl: 'Inventory/html/inventoryWidgets.php',
             Controller:'inventoryCommonController'
 
         })
@@ -307,7 +307,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process', {
             url: '/Process',
-            templateUrl: 'Process/html/processWidgets.html',
+            templateUrl: 'Process/html/ProcessWidget.php',
             controller:'ProcessWidgetController'
         })
 

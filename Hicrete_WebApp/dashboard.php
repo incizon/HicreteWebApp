@@ -1,3 +1,26 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once 'php/user.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    //header("Location: http://localhost/Hicrete_Repo/HicreteWebApp/Hicrete_WebApp/index.html");
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$userObj=new User();
+if(!$userObj->init($userId)){
+    session_destroy();
+    //header("Location: http://localhost/Hicrete_Repo/HicreteWebApp/Hicrete_WebApp/index.html");
+    header("Location: index.html");
+    exit();
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,22 +136,7 @@
 
 </head>
 
-<?php
 
-error_reporting(E_ERROR | E_PARSE);
-require_once 'php/user.php';
-if (!isset($_SESSION['token'])) {
-    session_start();
-}
-$userId=$_SESSION['token'];
-$userObj=new User();
-if(!$userObj->init($userId)){
-    session_destroy();
-    echo "Something went wrong..Cant find user";
-    return;
-}
-
-?>
 
 <body ng-app="hicreteApp" ng-controller="dashboardController">
 <!-- START PAGE CONTAINER -->

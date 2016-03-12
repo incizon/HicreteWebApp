@@ -6,6 +6,8 @@ myApp.controller('roleController',function($scope,$http,configService){
 configService.getAllAccessPermission($http,$scope);
   
         $scope.addRole=function(){
+            $scope.roleDisabled=true;
+            console.log("In addRole");
         	var accessSelected=false;
         	angular.forEach($scope.accessList, function(accessEntry) {
                accessSelected=accessSelected || accessEntry.read.val || accessEntry.write.val ;
@@ -35,19 +37,20 @@ configService.getAllAccessPermission($http,$scope);
           $http.post("Config/php/configFacade.php",null, config)
            .success(function (data)
            {
-         
+               $scope.roleDisabled=false;
              if(data.status=="Successful"){
-                doShowAlert("Success","Role created successfully");    
+                alert("Role created successfully");
              }else if(data.status=="Unsuccessful"){
-                  doShowAlert("Failure",data.message);
+                  alert(data.message);
              }else{
-                  doShowAlert("Failure",data.message);
+                  alert(data.message);
              } 
               clearRoleForm();       
            })
            .error(function (data, status, headers, config)
            {
-             doShowAlert("Failure","Error Occurred");
+               $scope.roleDisabled=false;
+               alert("Error Occurred");
              
            });
    
@@ -358,7 +361,6 @@ myApp.controller('modifyUserController',function($scope,$http,$stateParams,confi
     $scope.roleAccessList=[];
     $scope.selectedRole={"roleId":""};
 
-
     configService.getRoleList($http,$scope);
     $scope.loadAccessPermission=function(){
 
@@ -392,15 +394,14 @@ myApp.controller('modifyUserController',function($scope,$http,$stateParams,confi
     }
     $scope.loadAccessPermission();
 
-    /*
-    $scope.selectUserForModify= function(user)
-    {
-        $scope.selectedUserInfo=user;
-        console.log($scope.selectedUserInfo);
-
-    }
 
     $scope.modifyUser=function(){
+
+        if($scope.modifyUserForm.$pristine){
+            alert("Fields are not modified");
+            return;
+        }
+
         console.log($scope.selectedUserInfo);
         var data={
             operation :"modifyUser",
@@ -414,37 +415,34 @@ myApp.controller('modifyUserController',function($scope,$http,$stateParams,confi
 
             }
         };
-*/
-        /* $http.post("Config/php/configFacade.php",null, config)
+
+         $http.post("Config/php/configFacade.php",null, config)
          .success(function (data)
          {
 
-         console.log(data.status);
-         console.log(data.message);
+         console.log(data);
+
          if(data.status=="Successful"){
-         console.log(data);
-         // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
+            alert("User Modified Successfully");
+
          }else if(data.status=="Unsuccessful"){
-         //doShowAlert("Failure",data.message);
-         console.log(data);
+            console.log(data.message);
+            alert(data.message);
          }else{
-         //doShowAlert("Failure",data.message);
-         console.log(data);
+             console.log(data.message);
+            alert(data.message);
          }
-         $scope.clearUserForm();
+
 
          })
          .error(function (data, status, headers, config)
          {
-         doShowAlert("Failure","Error Occurred");
-         $scope.clearUserForm();
+            alert("Failure -Error Occurred");
 
          });
 
-        $scope.userInfoSubmitted=false;
-        $scope.accessInfoSubmitted=false;
-        $scope.showCompanyError=false;
-    }*/
+
+    }
 
 
 });
