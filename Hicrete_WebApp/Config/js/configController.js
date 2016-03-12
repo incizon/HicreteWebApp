@@ -238,7 +238,11 @@ userType:""
 myApp.controller('chngPassController',function($scope,$rootScope,$http,configService) {
 
     $scope.typeOfPassField = 'password';
-
+    $scope.error=false;
+    $scope.loading=true;
+    $scope.errorMessage="";
+    $scope.warningMessage="";
+    $('#loader').css("display","block");
 
     console.log($scope.typeOfPassField);
     $scope.checkFieldType =function()
@@ -259,43 +263,74 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
     }
     $scope.changePassword =function()
     {
+        if($scope.newDetails.newPassRe != $scope.newDetails.newPass)
+        {
+            $scope.error=true;
+            $scope.message="Password do not match";
+        }
+        else
+            $scope.error=false;
         console.log($scope.newDetails);
-        var data={
-            operation :"ChangePassword",
-            data:$scope.newDetails
+        if(!$scope.error) {
+            var data = {
+                operation: "ChangePassword",
+                data: $scope.newDetails
 
-        };
+            };
 
-        var config = {
-            params: {
-                data: data
-
-            }
-        };
-
-        $http.post("Config/php/configFacade.php",null, config)
-            .success(function (data)
-            {
-
-                console.log(data);
-                console.log(data.message);
-                if(data.status=="Successful"){
-
-                }else if(data.status=="Unsuccessful"){
-
-                }else{
+            var config = {
+                params: {
+                    data: data
 
                 }
+            };
+
+            $http.post("Config/php/configFacade.php", null, config)
+                .success(function (data) {
+
+                    console.log(data);
+                    console.log(data.message);
+                    /*if(data.msg!=""){
+                     $scope.warningMessage=data.msg;
+                     $('#warning').css("display","block");
+                     }
+                     setTimeout(function() {
+                     $scope.$apply(function() {
+                     if(data.msg!=""){
+                     $('#warning').css("display","none");
+                     }
+                     });
+                     }, 3000);
+
+                     $scope.loading=false;
+                     $('#loader').css("display","none");
+                     if(data.msg==""){
+                     $scope.errorMessage=data.error;
+                     $('#error').css("display","block");
+                     }*/
 
 
-            })
-            .error(function (data, status, headers, config)
-            {
-                doShowAlert("Failure","Error Occurred");
+                    if (data.status == "successful") {
+                        $scope.warningMessage = data.message;
+                        $('#warning').css("display", "block");
+                        window.location = 'dashboard.php';
+                    }
+                    else if (data.status == "WrongPass") {
+                        $scope.errorMessage = data.message;
+                        $('#error').css("display", "block");
+                    } else {
+                        $scope.errorMessage = data.message;
+                        $('#error').css("display", "block");
+                    }
 
 
-            });
+                })
+                .error(function (data, status, headers, config) {
+                    doShowAlert("Failure", "Error Occurred");
 
+
+                });
+        }
     }
 });
 

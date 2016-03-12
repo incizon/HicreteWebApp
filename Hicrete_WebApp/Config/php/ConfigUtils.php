@@ -455,10 +455,10 @@ class ConfigUtils
             $stmt = $conn->prepare("SELECT count(1) as count FROM `logindetails` WHERE `userid`=:username AND `password`=:password");
 
             $stmt->bindParam(':username', $userId, PDO::PARAM_STR);
-            echo $userId."\n";
+            //echo $userId."\n";
             $pass=sha1($data->data->oldPass);
             //echo $pass;
-            echo $pass;
+            //echo $pass;
             $stmt->bindParam(':password',$pass , PDO::PARAM_STR);
 
             if($stmt->execute()){
@@ -466,7 +466,7 @@ class ConfigUtils
                 //$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
                 $result=$stmt->fetch(PDO::FETCH_ASSOC);
                 $count=$result['count'];
-                echo "\n".$count;
+                //echo "\n".$count;
                 if($count > 0)
                 {
                     $stmt = $conn->prepare("UPDATE logindetails set password=:password where userid=:username");
