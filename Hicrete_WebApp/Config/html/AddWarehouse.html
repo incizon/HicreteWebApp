@@ -17,113 +17,124 @@
                                     <h3 class="panel-title"><strong>Add </strong>Warehouse</h3>
                                 </div>
                                 <div class="panel-body">                                                                        
-                                    
-                                    <div class="form-group">
-                                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">Warehouse Name</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="warehouse.name" name="warehouseName"type="text" class="form-control" required minlength=2 pattern="[a-zA-Z0-9]+"/>
-                                            </div>  
-                                            <div class="help-block" ng-messages="warehouseForm.warehouseName.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="required">WareHouse name cannot be blank</p> 
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-sm-4 col-xs-12 control-label">Warehouse Name</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="warehouse.name" name="warehouseName"type="text" class="form-control" required minlength=2 pattern="[a-zA-Z0-9]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="warehouseForm.warehouseName.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="required">WareHouse name cannot be blank</p>
                                                     <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
-                                                    <p style="color:red" ng-message="minlength">Warehouse name must have length > 2 </p>     
-                                            </div>                                          
-                                        </div>
-                                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">Warehouse Abbrevation</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="warehouse.abbrevation" name="abbrevation" type="text" class="form-control" minlength=2 pattern="[a-zA-Z0-9]+"/>
-                                            </div>  
-                                            <div class="help-block" ng-messages="warehouseForm.abbrevation.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="minlength">Abbrevation must have length >2</p> 
-                                                    <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>     
-                                            </div>                                          
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <div class="form-group">
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Address</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <textarea ng-model="warehouse.address" name="address" class="form-control" rows="5" required minlength=10></textarea>
-                                        </div>
-                                        <div class="help-block" ng-messages="warehouseForm.address.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="required">Address Cannot be blank</p>
-                                                    <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>     
-                                        </div> 
-
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">City</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group ">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="warehouse.city" name="city" type="text" class="form-control" required minlength=2 pattern="[a-zA-z]+"/>
+                                                    <p style="color:red" ng-message="minlength">Warehouse name must have length > 2 </p>
+                                                </div>
                                             </div>
-                                            <div class="help-block" ng-messages="warehouseForm.city.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="required">City Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">City must have more than 2 character</p>       
-                                             </div>                                               
                                         </div>
-                                                                     
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">State</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="warehouse.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
-                                            </div>  
-                                            <div class="help-block" ng-messages="warehouseForm.state.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="required">State Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">State must have more than 2 character</p>       
-                                             </div>           
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-xs-12 control-label col-sm-4">City</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="warehouse.city" name="city" type="text" class="form-control" required minlength=2 pattern="[a-zA-z]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="warehouseForm.city.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="required">City Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">City must have more than 2 character</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Country</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="warehouse.country" name="country"type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
-                                            </div>  
-                                            <div class="help-block" ng-messages="warehouseForm.country.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="required">Country Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">Country must have more than 2 character</p>       
-                                             </div>                                          
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-xs-12 control-label col-sm-4">State</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="warehouse.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="warehouseForm.state.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="required">State Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">State must have more than 2 character</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                                                     
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Pin code</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="warehouse.pincode" name="pincode" type="text" class="form-control" required minlength=2/>
-                                            </div>  
-                                            <div class="help-block" ng-messages="warehouseForm.pincode.$error" ng-show="warehouseSubmitted">
-                                                    <p style="color:red" ng-message="required">Pincode Cannot be blank</p>                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>                                   
-                                             </div>           
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-xs-12 control-label col-sm-4">Country</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="warehouse.country" name="country"type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                </div>
+                                                <div class="help-block" ng-messages="warehouseForm.country.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="required">Country Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">Country must have more than 2 character</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-xs-12 control-label col-sm-8">Phone number</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                                    <input ng-model="warehouse.phone" name="phone" type="text" class="form-control"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="form-group">                              
-                                        <label class="col-md-2 col-xs-12 control-label col-sm-2">Phone number</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
-                                                <input ng-model="warehouse.phone" name="phone" type="text" class="form-control"/>
-                                            </div>            
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-sm-4 col-xs-12 control-label">Warehouse Abbrevation</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="warehouse.abbrevation" name="abbrevation" type="text" class="form-control" minlength=2 pattern="[a-zA-Z0-9]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="warehouseForm.abbrevation.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="minlength">Abbrevation must have length >2</p>
+                                                    <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
+                                                </div>
+                                            </div>
                                         </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-xs-12 control-label col-sm-4">Address</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <textarea ng-model="warehouse.address" name="address" class="form-control" rows="6" required minlength=10></textarea>
+                                                <div class="help-block" ng-messages="warehouseForm.address.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="required">Address Cannot be blank</p>
+                                                    <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-4 col-xs-12 control-label col-sm-8">Pin code</label>
+                                            <div class="col-md-8 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="warehouse.pincode" name="pincode" type="text" class="form-control" required minlength=2/>
+                                                </div>
+                                                <div class="help-block" ng-messages="warehouseForm.pincode.$error" ng-show="warehouseSubmitted">
+                                                    <p style="color:red" ng-message="required">Pincode Cannot be blank</p>                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                 </div>
                                 <div class="panel-footer">
                                     <!--<button class="btn btn-default pull-left">Clear Form</button>-->
-                                    <button class="btn btn-primary pull-right">Finish</button>
                                     <button class="btn btn-default pull-right"  ng-click="(warehouseSubmitted=true) && warehouseForm.$valid && addWarehouse()">Submit</button>
                                 </div>
                             </div>
