@@ -11,7 +11,6 @@ configService.getAllAccessPermission($http,$scope);
         	var accessSelected=false;
         	angular.forEach($scope.accessList, function(accessEntry) {
                accessSelected=accessSelected || accessEntry.read.val || accessEntry.write.val ;
-               
             });
         	if(!accessSelected){
         		$scope.showAccessError=true;
@@ -87,6 +86,10 @@ configService.getAllAccessPermission($http,$scope);
            
 
         }
+
+        $scope.checkAll = function(){
+            console.log('CheckAll');
+        };
 
         var clearRoleForm=function(){
             $scope.roleName="";
@@ -220,17 +223,17 @@ userType:""
                  $scope.warningMessage= "User added successfully..";
                  $('#warning').css("display","block");
                  console.log($scope.warningMessage);
-                 //setTimeout(function() {
-                 //    $scope.$apply(function() {
-                 //        if(data.message!=""){
-                 //            $('#warning').css("display","none");
-                 //        }
-                 //    });
-                 //}, 3000);
+                 setTimeout(function() {
+                     $scope.$apply(function() {
+                         if(data.message!=""){
+                             $('#warning').css("display","none");
+                         }
+                     });
+                 }, 3000);
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
                      window.location.reload(true);
-                 },6000);
+                 },8000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
@@ -242,7 +245,7 @@ userType:""
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
              } 
-             $scope.clearUserForm();
+             //$scope.clearUserForm();
                      
            })
            .error(function (data, status, headers, config)
@@ -438,6 +441,12 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             keyword:keyword,
             searchBy:$scope.searchAttribute
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -449,6 +458,17 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
 
                 if(data.status==="Successful"){
                     console.log(data);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.warningMessage="Data found Successfully..";
+                    console.log($scope.warningMessage);
+                    $('#warning').css("display","block");
+
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                        });
+                    }, 3000);
                     $rootScope.Users=data.message;
                     $scope.totalItems=$rootScope.Users.length;
                     console.log($scope.totalItems);
@@ -457,16 +477,42 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 else if(data.status==="NoRows")
                 {
                     $rootScope.Users=[];
-                    alert(data.message);
+                    //alert(data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
 
                 }else{
-                alert(data.message);
+                //alert(data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
             }
 
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage="Data not found..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
 
@@ -666,6 +712,12 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
             operation:"getRoleDetails",
             key:$scope.searchKeyword
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -677,18 +729,56 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    //doShowAlert("Failure",data.message);
-                }else{
-                    console.log(data);
-                    $rootScope.Roles=data.message;
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
 
-                    //console.log($scope.Companies);
+                }else if(data.status === "Successful"){
+                    console.log(data);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+
+                    $rootScope.Roles=data.message;
+                }else{
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.warningMessage="Data found Successfully..";
+                console.log($scope.warningMessage);
+                $('#warning').css("display","block");
+
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#warning').css("display","none");
+                    });
+                }, 3000);
             });
 
     }
@@ -760,6 +850,12 @@ $scope.warehouse={
             operation:"getWareHouseDetails",
             key:keyword
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -771,18 +867,35 @@ $scope.warehouse={
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    //doShowAlert("Failure",data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
                 }else{
                     console.log(data);
                     $rootScope.warehouses=data.message;
-
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
                     console.log($scope.Companies);
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage="Data not found..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
     };
@@ -799,6 +912,12 @@ $scope.warehouse={
             operation:"getCompanyDetails",
             keyword:searchkeyword
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -810,27 +929,42 @@ $scope.warehouse={
 
                     if (data.status != "Successful") {
                         console.log(data);
-                        //doShowAlert("Failure",data.message);
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $scope.errorMessage="Data not found..";
+                        $('#error').css("display","block");
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $('#error').css("display","none");
+                            });
+                        }, 3000);
+
                     } else {
                         console.log(data);
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
                         $rootScope.Companies = data.message;
                         console.log($rootScope.Companies);
-
                        // console.log($scope.Companies);
                     }
 
                 })
                 .error(function (data, status, headers, config) {
-                    doShowAlert("Failure", "Error Occured");
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
                 });
 
         //}
 
     };
    // $scope.getCompanyData();
-
-
-
 
 
 $scope.addCompany=function(){

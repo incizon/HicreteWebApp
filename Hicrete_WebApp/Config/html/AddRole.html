@@ -48,9 +48,18 @@
                   <tbody>
                     <tr ng-repeat="accessEntry in accessList">
                       <td ng-model="accessEntry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
-                      <td class="col-xs-2 text-center"><input ng-model="accessEntry.read.val" type="checkbox" ng-show="accessEntry.read.ispresent" ></td>
-                      <td class="col-xs-2 text-center"><input ng-model="accessEntry.write.val"  type="checkbox"  ng-show="accessEntry.write.ispresent"></td>
+                      <td class="col-xs-2 "><input ng-model="accessEntry.read.val" type="checkbox" ng-show="accessEntry.read.ispresent" name="read"></td>
+                      <td class="col-xs-2 "><input ng-model="accessEntry.write.val"  type="checkbox"  ng-show="accessEntry.write.ispresent" name="write"></td>
                     </tr>
+                  <tr>
+                      <td class="col-xs-8"></td>
+                      <td class="col-xs-2">
+                          <input ng-model="accessEntry.read.selectAll" type="checkbox" ng-click="checkAll()" >
+                      </td>
+                      <td class=""col-xs-2>
+                          <input ng-model="accessEntry.write.selectAll" type="checkbox">
+                      </td>
+                  </tr>
                   </tbody>
                 </table>
                 </div>
@@ -65,7 +74,7 @@
       </div>
         
       </div>
-     
+      </form>
     </div>
   </div>
 </div>
