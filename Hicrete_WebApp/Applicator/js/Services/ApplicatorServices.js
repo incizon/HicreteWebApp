@@ -31,9 +31,9 @@ myApp.service('ApplicatorService',function(){
 							$scope.errorMessage=data.error;
 							$('#error').css("display","block");
 						}
-							setTimeout(function(){
-									window.location.reload(true);
-							},2000);
+							//setTimeout(function(){
+							//		window.location.reload(true);
+							//},2000);
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
@@ -44,11 +44,7 @@ myApp.service('ApplicatorService',function(){
 						});			
 	};
 
-	this.getApplicatorDetails=function($scope,$http,applicatorDetails){
 
-
-
-		};
 
 	this.getApplicatorPaymentDetails=function($scope,$http,applicatorDetails){
 
@@ -88,8 +84,9 @@ myApp.service('ApplicatorService',function(){
 		};
 
 		$http.post("Applicator/php/Applicator.php", null,config)
-
 				.success(function (data, status, headers, config){
+
+					console.log(data.msg);
 					if(data.msg!=""){
 						$scope.warningMessage=data.msg;
 						$('#warning').css("display","block");
@@ -109,9 +106,9 @@ myApp.service('ApplicatorService',function(){
 						$('#error').css("display","block");
 					}
 					console.log(data);
-					setTimeout(function(){
-						window.location.reload(true);
-					},2000);
+					//setTimeout(function(){
+					//	window.location.reload(true);
+					//},2000);
 
 				})
 
@@ -121,7 +118,29 @@ myApp.service('ApplicatorService',function(){
 					$scope.errorMessage=data.error;
 					$('#error').css("display","block");
 				});
-	};
+	}
+
+	this.modifyApplicatorDetails=function($scope,$http,applicatorDetails){
+
+
+		var config = {
+			params: {
+				data: applicatorDetails
+			}
+		};
+
+				$http.post("Applicator/php/Applicator.php", null, config)
+
+				.success(function (data, status, headers, config) {
+
+					console.log(data);
+
+				})
+				.error(function (data, status, headers) {
+					console.log(data);
+
+				});
+	}
 
 
 });

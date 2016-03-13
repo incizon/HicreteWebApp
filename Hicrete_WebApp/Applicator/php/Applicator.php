@@ -1,6 +1,13 @@
 <?php
 
+        require_once ("database_connection.php");
+
 		include_once ("ApplicatorClassLib.php");
+
+        if (!isset($_SESSION['token'])) {
+            session_start();
+        }
+        $userId=$_SESSION['token'];
 
 		$data=json_decode($_GET["data"]);
 		$operationObject=new Applicator($data);
@@ -11,8 +18,10 @@
 
 			case 'createPackage' :
 
-				if($operationObject->createPackage($data))
+                $connect->beginTransaction();
+				if($operationObject->createPackage($data,$userId))
 					{
+                        $connect->commit();
 						$message = "Package Created Successfully...!!!";
 						$arr = array('msg' => $message, 'error' => '');
 						$jsn = json_encode($arr);
@@ -20,6 +29,7 @@
 					}
 				else
 					{
+                        $connect->rollBack();
 						$message = "Unable to Create Package.Please try again...!!!";
 						$arr = array('msg' => '' , 'error' => $message);
 						$jsn = json_encode($arr);
@@ -40,29 +50,53 @@
 
 			case 'createApplicator':
 
+                        $connect->beginTransaction();
+
 				       if($data->packageEdited=="true") {
 
-						   if($operationObject->createPackage($data)) {
+						   if($operationObject->createPackage($data,$userId)) {
 
-							    if ($operationObject->createApplicator($data)) {
+							    if ($operationObject->createApplicator($data,$userId)) {
 
+                                    $connect->commit();
 									$message = "Applicator Created Successfully...!!!";
 									$arr = array('msg' => $message, 'error' => '');
 									$jsn = json_encode($arr);
 									echo($jsn);
-
 							   }
+                               else{
+                                   $connect->rollBack();
+                                   $message = "Unable to Create Applicator.Please try again...!!!";
+                                   $arr = array('msg' => '' , 'error' => $message);
+                                   $jsn = json_encode($arr);
+                                   echo($jsn);
+                               }
 						   }
+                           else{
+
+                               $connect->rollBack();
+                               $message = "Unable to Create Applicator.Please try again...!!!";
+                               $arr = array('msg' => '' , 'error' => $message);
+                               $jsn = json_encode($arr);
+                               echo($jsn);
+                           }
 					   }
 					   if($data->packageEdited=="false"){
 
-						   if ($operationObject->createApplicator($data)) {
-
+						   if ($operationObject->createApplicator($data,$userId)) {
+                               $connect->commit();
 							   $message = "Applicator Created Successfully...!!!";
 							   $arr = array('msg' => $message, 'error' => '');
 							   $jsn = json_encode($arr);
 							   echo($jsn);
 						   }
+                           else{
+                               $connect->rollBack();
+                               $message = "Unable to Create Applicator.Please try again...!!!";
+                               $arr = array('msg' => '' , 'error' => $message);
+                               $jsn = json_encode($arr);
+                               echo($jsn);
+                           }
 						}
 				break;
 
@@ -112,14 +146,44 @@
 
 			case 'savePaymentDetails' :
 
-                            if($operationObject->savePaymentDetails($data))
+                            $connect->beginTransaction();
+                            if($operationObject->savePaymentDetails($data,$userId))
                              {
+                                 $connect->commit();
 								 $message = "Payment Details Updated Successfully...!!!";
 								 $arr = array('msg' => $message, 'error' => '');
 								 $jsn = json_encode($arr);
 								 echo($jsn);
                             }
+                            else{
+                                $connect->rollBack();
+                                $message = "Unable to update Payment Details...!!!";
+                                $arr = array('msg' => '', 'error' => $message);
+                                $jsn = json_encode($arr);
+                                echo($jsn);
+
+                            }
 				break;
+
+			case 'modifyApplicatorDetails':
+
+                            $connect->beginTransaction();
+							if($operationObject->modifyApplicatorDetails($data,$userId)){
+
+                                $connect->commit();
+								$message = "Applicator Details Updated Successfully...!!!";
+								$arr = array('msg' => $message, 'error' => '');
+								$jsn = json_encode($arr);
+								echo($jsn);
+							}
+							else{
+                                $connect->rollBack();
+								$message = "Could not Update Applicator Details...!!!";
+								$arr = array('msg' => '', 'error' => $message);
+								$jsn = json_encode($arr);
+								echo($jsn);
+							}
+					break;
 			default :
 
 				   echo "Please provide correct operation  to do .";

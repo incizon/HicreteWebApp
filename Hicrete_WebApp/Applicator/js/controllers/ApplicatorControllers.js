@@ -410,6 +410,7 @@ myApp.controller('ViewTentativeApplicatorController',function($scope,$http,$stat
         purpose:"toView"
     }
 
+
     $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
     $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
 
@@ -439,7 +440,7 @@ myApp.controller('ViewTentativeApplicatorController',function($scope,$http,$stat
 
 });
 
-myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$stateParams){
+myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,ApplicatorService,$stateParams){
 
 
     $scope.applicatorDetails={
@@ -447,6 +448,10 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$st
         operation:"",
         purpose:"toModify"
     }
+
+    $scope.tentativeApplicatorsDetails={
+        operation:""
+    };
 
     $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
     $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
@@ -473,9 +478,9 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$st
         });
 
 
-    $scope.modifyApplicatorDetails=function(){
-
-         console.log($scope.tentativeApplicatorsDetails);
+    $scope.modify=function() {
+        $scope.tentativeApplicatorsDetails.operation="modifyApplicatorDetails";
+        ApplicatorService.modifyApplicatorDetails($scope, $http, $scope.tentativeApplicatorsDetails);
     }
 
 });
@@ -606,7 +611,7 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stat
 
 });
 
-myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$stateParams){
+myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,ApplicatorService,$stateParams){
 
 
     $scope.applicatorDetails={
@@ -614,6 +619,11 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$st
         operation:"",
         purpose:"toModify"
     }
+
+    $scope.permanentApplicatorsDetails={
+
+        operation:""
+    };
 
     $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
     $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
@@ -624,6 +634,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$st
         }
 
     };
+
 
     $http.post("Applicator/php/Applicator.php", null, config)
 
@@ -640,9 +651,9 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$st
         });
 
 
-    $scope.modifyApplicatorDetails=function(){
-
-        console.log($scope.permanentApplicatorsDetails);
+    $scope.modify=function() {
+        $scope.permanentApplicatorsDetails.operation="modifyApplicatorDetails";
+        ApplicatorService.modifyApplicatorDetails($scope, $http, $scope.permanentApplicatorsDetails);
     }
 
 });
@@ -842,8 +853,8 @@ myApp.controller('PackageController',function($scope,$http,PackageService){
         $scope.packageDetails.elementDetails.push({
 
             element_name:"",
-            element_quantity:"",
-            element_rate:""
+            element_quantity:0,
+            element_rate:0
 
         });
     };

@@ -5,7 +5,6 @@
             class Applicator
             {
 
-
                 var $lastInsertedApplicatorId;
                 var $lastInsertedEnrollmentId;
                 var $lastInsertedPaymentId;
@@ -18,7 +17,7 @@
                  *                 output : return true if created successfully.
                  *
                  */
-                public function createPackage($data)
+                public function createPackage($data,$userId)
                 {
 
                     global $connect;
@@ -27,14 +26,13 @@
                     $packageDescription = $data->package_description;
                     $isCustomized=$data->packageEdited;
 
-
-
                     $stmt = $connect->prepare("INSERT INTO payment_package_master(package_name,package_description,package_customized,package_dateof_creation,created_by,creation_date)
-						     VALUES (:packageName,:packageDescription,:isCustomized,NOW(),'Namdev',NOW())");
+						     VALUES (:packageName,:packageDescription,:isCustomized,NOW(),:createdBy,NOW())");
 
                     $stmt->bindParam(':packageName', $packageName);
                     $stmt->bindParam(':packageDescription', $packageDescription);
                     $stmt->bindParam(':isCustomized', $isCustomized);
+                    $stmt->bindParam(':createdBy', $userId);
 
                     if ($stmt->execute()) {
                         $this->lastInsertedPackageId = $connect->lastInsertId();
@@ -47,9 +45,10 @@
                             $packageElementAmount = $packageElementQuantity * $packageElementRate;
 
                             $stmt1 = $connect->prepare("INSERT INTO payment_package_details(package_element_name,package_element_quantity,package_element_rate,package_element_amount,created_by,creation_date, payment_package_id)
-							  VALUES (:packageElementName ,:packageElementQuantity ,:packageElementRate ,:packageElementAmount ,'Namdev',NOW(),:lastPackageId)");
+							  VALUES (:packageElementName ,:packageElementQuantity ,:packageElementRate ,:packageElementAmount ,:createdBy,NOW(),:lastPackageId)");
 
                             $stmt1->bindParam(':packageElementName', $packageElementName);
+                            $stmt1->bindParam(':createdBy',$userId);
                             $stmt1->bindParam(':packageElementQuantity', $packageElementQuantity);
                             $stmt1->bindParam(':packageElementRate', $packageElementRate);
                             $stmt1->bindParam(':packageElementAmount', $packageElementAmount);
@@ -110,7 +109,9 @@
                             }
                             array_push($json_response, $result1_array); //push the values in the array
                         }
+
                         echo json_encode($json_response);
+
                     } else {
 
                         return false;
@@ -127,11 +128,11 @@
                  *
                  */
 
-                public function createApplicator($data)
+                public function createApplicator($data,$userId)
                 {
                     global $connect;
 
-                   $companyId=1;
+                    $companyId=1;
                     $firmName = $data->firmname;
                     $applicatorAddressLine1 = $data->addressline1;
                     $applicatorAddressLine2 = $data->addressline2;
@@ -191,7 +192,7 @@
 
 
                     $stmt1 = $connect->prepare("INSERT INTO applicator_master(applicator_name,applicator_contact,applicator_address_line1,applicator_address_line2,applicator_city,applicator_state,applicator_country,applicator_vat_number,applicator_cst_number,applicator_stax_number,applicator_pan_number,last_modification_date,last_modified_by,created_by,creation_date)
-	                 VALUES (:firmName,:applicatorContactNo,:applicatorAddressLine1,:applicatorAddressLine2,:applicatorCity,:applicatorState,:applicatorCountry,:applicatorVatNumber,:applicatorCstNumber,:applicatorServiceTaxNumber,:applicatorPanNumber,NOW(),'Namdev','Atul',NOW())");
+	                 VALUES (:firmName,:applicatorContactNo,:applicatorAddressLine1,:applicatorAddressLine2,:applicatorCity,:applicatorState,:applicatorCountry,:applicatorVatNumber,:applicatorCstNumber,:applicatorServiceTaxNumber,:applicatorPanNumber,NOW(),:lastModifiedBy,:createdBy,NOW())");
 
                     $stmt1->bindParam(':firmName', $firmName);
                     $stmt1->bindParam(':applicatorContactNo', $applicatorContactNo);
@@ -205,59 +206,70 @@
                     $stmt1->bindParam(':applicatorServiceTaxNumber', $applicatorServiceTaxNumber);
                     $stmt1->bindParam(':applicatorPanNumber', $applicatorPanNumber);
 
+                    $stmt1->bindParam(':lastModifiedBy', $userId);
+                    $stmt1->bindParam(':createdBy', $userId);
+
 
                     $stmt2 = $connect->prepare("INSERT INTO applicator_pointof_contact(point_of_contact, point_of_contact_no, last_modification_date, last_modified_by, created_by, creation_date, applicator_master_id)
-	       			VALUES (:pointOfContact , :pointContactNo , NOW(), 'Namdev', 'Atul', NOW(), :lastApplicatorId)");
+	       			VALUES (:pointOfContact , :pointContactNo , NOW(), :lastModifiedBy, :createdBy, NOW(), :lastApplicatorId)");
 
                     $stmt2->bindParam(':pointOfContact', $pointOfContact);
                     $stmt2->bindParam(':pointContactNo', $pointContactNo);
                     $stmt2->bindParam(':lastApplicatorId', $this->lastInsertedApplicatorId);
 
+                    $stmt2->bindParam(':lastModifiedBy', $userId);
+                    $stmt2->bindParam(':createdBy', $userId);
+
                     $stmt3 = $connect->prepare("INSERT INTO applicator_enrollment(applicator_master_id,company_id,payment_package_id,payment_status,created_by,creation_date)
-	                                          VALUES (:lastApplicatorId,:companyId ,:MasterPackageId,:paymentStatus,'Atul', NOW())");
+	                                          VALUES (:lastApplicatorId,:companyId ,:MasterPackageId,:paymentStatus,:createdBy, NOW())");
 
                     $stmt3->bindParam(':lastApplicatorId', $this->lastInsertedApplicatorId);
                     $stmt3->bindParam(':companyId', $companyId);
                     $stmt3->bindParam(':MasterPackageId', $MasterPackageId);
                     $stmt3->bindParam(':paymentStatus', $paymentStatus);
-
+                    $stmt3->bindParam(':createdBy', $userId);
 
                     $stmt4 = $connect->prepare("INSERT INTO applicator_payment_info(enrollment_id,amount_paid,date_of_payment,paid_to,payment_mode,created_by,creation_date)
-	       								VALUES (:lastEnrollmentId,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,'Atul', NOW())");
+	       								VALUES (:lastEnrollmentId,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,:createdBy, NOW())");
 
                     $stmt4->bindParam(':lastEnrollmentId', $this->lastInsertedEnrollmentId);
                     $stmt4->bindParam(':amountPaid', $amountPaid);
                     $stmt4->bindParam(':dateOfPayment', $dateOfPayment);
                     $stmt4->bindParam(':amountPaidTo', $amountPaidTo);
                     $stmt4->bindParam(':paymentMode', $paymentMode);
-
+                    $stmt4->bindParam(':createdBy', $userId);
 
                     $stmt5 = $connect->prepare("INSERT INTO payment_mode_details(instrument_of_payment,number_of_instrument,bank_name,branch_name,created_by,creation_date,payment_id)
-	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,'Atul', NOW(),:lastPaymentId)");
+	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,:createdBy, NOW(),:lastPaymentId)");
 
                     $stmt5->bindParam(':instrumentOfPayment', $instrumentOfPayment);
                     $stmt5->bindParam(':numberOfInstrument', $numberOfInstrument);
                     $stmt5->bindParam(':bankName', $bankName);
                     $stmt5->bindParam(':branchName', $branchName);
                     $stmt5->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
-
+                    $stmt4->bindParam(':createdBy', $userId);
 
                     $stmt6 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
-									  VALUES (:followupDate,NOW(),'Ajit','Namdev',NOW(),:lastEnrollmentId)");
+									  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId)");
 
                     $stmt6->bindParam(':followupDate', $followupDate);
                     $stmt6->bindParam(':lastEnrollmentId', $this->lastInsertedEnrollmentId);
+                    $stmt6->bindParam(':lastModifiedBy', $userId);
+                    $stmt6->bindParam(':createdBy', $userId);
 
                     $stmt7=$connect->prepare("INSERT INTO follow_up_employee(employee_id,date_of_assignment,last_modification_date,last_modified_by,created_by,creation_date,follow_up_id)
-									  VALUES(:followupEmployeeId,NOW(),NOW(),'Ajit','Namdev',NOW(),:lastFollowupId)");
+									  VALUES(:followupEmployeeId,NOW(),NOW(),:lastModifiedBy,:createdBy,NOW(),:lastFollowupId)");
 
                     $stmt7->bindParam(':followupEmployeeId',$followupEmployeeId);
                     $stmt7->bindParam(':lastFollowupId', $this->lastInsertedFollowupId);
-
+                    $stmt7->bindParam(':lastModifiedBy', $userId);
+                    $stmt7->bindParam(':createdBy', $userId);
 
                     /* Update status of applicator */
                     $stmt8=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
                     $stmt8->bindParam(':lastCreatedApplicator',$this->lastInsertedApplicatorId);
+
+
 
                     if($stmt1->execute()){
 
@@ -279,32 +291,25 @@
                                             if($stmt5->execute()){
 
                                                 if($stmt8->execute()){
-
                                                     return true;
                                                 }
                                                 else{
-
-                                                     echo "Roll Back";
+                                                    return false;
                                                 }
                                             }
                                             else{
-
-                                                echo "Roll Back";
+                                                return false;
                                             }
                                         }
                                         if($stmt8->execute()){
-
                                             return true;
                                         }
                                         else{
-
-                                            echo "Roll Back";
+                                            return false;
                                         }
-
                                     }
                                     else{
-
-                                        echo "Roll Back";
+                                        return false;
                                     }
                                 }
                                 if($paymentReceived == 'No' && $paymentStatus == 'No'){
@@ -314,18 +319,15 @@
                                         $this->lastInsertedFollowupId=$connect->lastInsertId();
 
                                         if($stmt7->execute()){
-
                                             return true;
                                         }
                                         else{
-
-                                            echo "Roll Back";
+                                            return false;
                                         }
                                     }
                                     else{
-                                        echo "Roll Back";
+                                        return false;
                                     }
-
                                 }
                                 if($paymentReceived == 'Yes' && $paymentStatus == 'No'){
 
@@ -344,23 +346,18 @@
                                                     $this->lastInsertedFollowupId=$connect->lastInsertId();
 
                                                     if($stmt7->execute()){
-
                                                         return true;
                                                     }
                                                     else{
-
-                                                        echo "Roll Back";
+                                                        return false;
                                                     }
                                                 }
                                                 else{
-
-                                                    echo "Roll Back";
+                                                    return false;
                                                 }
-
                                             }
                                             else{
-
-                                                echo "Roll Back";
+                                                return false;
                                             }
                                         }
                                         else{
@@ -370,46 +367,33 @@
                                                 $this->lastInsertedFollowupId=$connect->lastInsertId();
 
                                                 if($stmt7->execute()){
-
                                                     return true;
                                                 }
                                                 else{
-
-                                                    echo "Roll Back";
+                                                    return false;
                                                 }
                                             }
                                             else{
-
-                                                echo "Roll Back";
+                                                return false;
                                             }
-
                                         }
                                     }
                                     else{
-
-                                        echo "Roll Back";
+                                        return false;
                                     }
-
-
                                 }
                             }
                             else{
-
-                                echo "Roll Back";
+                                return false;
                             }
                         }
                         else{
-
-                            echo "Roll Back";
+                           return false;
                         }
-
                     }
                     else{
-
-                        echo "Roll Back";
+                        return false;
                     }
-
-
                 }
 
 
@@ -740,7 +724,7 @@
                     return false;
                 }
 
-                public function savePaymentDetails($data){
+                public function savePaymentDetails($data,$userId){
 
                     global $connect;
 
@@ -773,36 +757,43 @@
 
 
                     $stmt2=$connect->prepare("INSERT INTO applicator_payment_info(enrollment_id,amount_paid,date_of_payment,paid_to,payment_mode,created_by,creation_date)
-	       								VALUES (:enrollment_id,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,'Atul', NOW())");
+	       								VALUES (:enrollment_id,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,:createdBy, NOW())");
 
                     $stmt2->bindParam(':enrollment_id',$enrollment_id);
                     $stmt2->bindParam(':amountPaid',$amountPaid);
                     $stmt2->bindParam(':dateOfPayment', $dateOfPayment);
                     $stmt2->bindParam(':amountPaidTo', $amountPaidTo);
                     $stmt2->bindParam(':paymentMode', $paymentMode);
+                    $stmt2->bindParam(':createdBy', $userId);
 
 
                     $stmt3 = $connect->prepare("INSERT INTO payment_mode_details(instrument_of_payment,number_of_instrument,bank_name,branch_name,created_by,creation_date,payment_id)
-	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,'Atul', NOW(),:lastPaymentId)");
+	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,:createdBy, NOW(),:lastPaymentId)");
 
                     $stmt3->bindParam(':instrumentOfPayment', $instrumentOfPayment);
                     $stmt3->bindParam(':numberOfInstrument', $numberOfInstrument);
                     $stmt3->bindParam(':bankName', $bankName);
                     $stmt3->bindParam(':branchName', $branchName);
                     $stmt3->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
+                    $stmt2->bindParam(':createdBy', $userId);
 
                     $stmt4=$connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
-									  VALUES (:followupDate,NOW(),'Ajit','Namdev',NOW(),:enrollment_id)");
+									  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:enrollment_id)");
 
                     $stmt4->bindParam(':followupDate', $followupDate);
                     $stmt4->bindParam(':enrollment_id', $enrollment_id);
+                    $stmt4->bindParam(':lastModifiedBy', $userId);
+                    $stmt4->bindParam(':createdBy', $userId);
+
 
 
                     $stmt5=$connect->prepare("INSERT INTO follow_up_employee(employee_id,date_of_assignment,last_modification_date,last_modified_by,created_by,creation_date,follow_up_id)
-									  VALUES(:followupEmployeeId,NOW(),NOW(),'Ajit','Namdev',NOW(),:lastFollowupId)");
+									  VALUES(:followupEmployeeId,NOW(),NOW(),:lastModifiedBy,:createdBy,NOW(),:lastFollowupId)");
 
                     $stmt5->bindParam(':followupEmployeeId',$followupEmployeeId);
                     $stmt5->bindParam(':lastFollowupId', $this->lastInsertedFollowupId);
+                    $stmt5->bindParam(':lastModifiedBy', $userId);
+                    $stmt5->bindParam(':createdBy', $userId);
 
                     $stmt6=$connect->prepare("SELECT  applicator_master_id FROM applicator_enrollment WHERE enrollment_id=:enrollmentID ");
                     $stmt6->bindParam(':enrollmentID',$enrollment_id);
@@ -812,9 +803,9 @@
                     $applicator_master_id=$result['applicator_master_id'];
 
                     /* Update status of applicator */
-                    $stmt7=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:applicator_id");
+                    $stmt7=$connect->prepare("UPDATE applicator_master set applicator_status='permanent',last_modified_by=:lastModifiedBy WHERE applicator_master_id=:applicator_id");
                     $stmt7->bindParam(':applicator_id',$applicator_master_id);
-
+                    $stmt7->bindParam(':lastModifiedBy', $userId);
 
                     if($paymentStatus=='Yes') {
 
@@ -918,42 +909,89 @@
                                         $this->lastInsertedFollowupId=$connect->lastInsertId();
 
                                         if($stmt5->execute()){
-
                                             return true;
                                         }
                                         else{
-
                                             echo "Roll Back";
                                         }
-
                                     }
                                     else{
-
                                         echo "Roll Back";
-
                                     }
-
                                 }
-
-
                             }
                             else{
-
                                 echo "Roll Back";
                             }
                         }
                        else{
-
                            echo "Roll Back";
                        }
                     }
                 }
 
+                public function modifyApplicatorDetails($data,$userId){
+
+                    global $connect;
+
+                    $applicatorMasterId=$data->applicator_master_id;
+                    $applicatorContactNo = $data->applicator_contact;
+                    $applicatorAddressLine1 = $data->applicator_address_line1;
+                    $applicatorAddressLine2 = $data->applicator_address_line2;
+                    $applicatorCountry = $data->applicator_country;
+                    $applicatorState = $data->applicator_state;
+                    $applicatorCity = $data->applicator_city;
+
+                    $pointOfContact = $data->point_of_contact;
+                    $pointContactNo = $data->point_of_contact_no;
+
+                    $stmt1=$connect->prepare("UPDATE applicator_master SET
+                                              applicator_contact=:applicatorContactNo,
+                                              applicator_address_line1=:applicatorAddressLine1,
+                                              applicator_address_line2=:applicatorAddressLine2,
+                                              applicator_city=:applicatorCity,
+                                              applicator_state=:applicatorState,
+                                              applicator_country=:applicatorCountry,
+                                              last_modified_by=:lastModifiedBy
+                                              WHERE applicator_master_id=:applicatorMasterId");
+
+
+                    $stmt1->bindParam(':applicatorMasterId', $applicatorMasterId);
+                    $stmt1->bindParam(':applicatorContactNo', $applicatorContactNo);
+                    $stmt1->bindParam(':applicatorAddressLine1', $applicatorAddressLine1);
+                    $stmt1->bindParam(':applicatorAddressLine2', $applicatorAddressLine2);
+                    $stmt1->bindParam(':applicatorCity', $applicatorCity);
+                    $stmt1->bindParam(':applicatorState', $applicatorState);
+                    $stmt1->bindParam(':applicatorCountry', $applicatorCountry);
+                    $stmt1->bindParam(':lastModifiedBy', $userId);
+
+
+                    $stmt2=$connect->prepare("UPDATE applicator_pointof_contact SET
+                                               point_of_contact=:pointOfContact,
+                                               point_of_contact_no=:pointContactNo,
+                                              last_modified_by=:lastModifiedBy
+                                              WHERE applicator_master_id=:applicatorMasterId
+                                             ");
+                    $stmt2->bindParam(':applicatorMasterId', $applicatorMasterId);
+                    $stmt2->bindParam(':pointOfContact', $pointOfContact);
+                    $stmt2->bindParam(':pointContactNo', $pointContactNo);
+                    $stmt2->bindParam(':lastModifiedBy', $userId);
+
+                     if($stmt1->execute()){
+
+                          if($stmt2->execute()){
+                              return true;
+                          }
+                         else{
+                              echo "Roll Back";
+                         }
+                     }
+                    else{
+
+                        echo "Roll Back";
+                    }
+                }
 
             }
-
-
-
-
 
 ?>
