@@ -1150,14 +1150,16 @@ $scope.exemptedAccessList=[];
 myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $stateParams) {
 
         console.log("IN");
-    console.log($stateParams.companyId);
-
-    for (var i = 0; i < $rootScope.Companies.length; i++) {
+    console.log($stateParams);
+    $scope.selectedCompany=$stateParams.selectedCompany;
+    $scope.companyIndex=$stateParams.index;
+    console.log($scope.companyIndex);
+   /* for (var i = 0; i < $rootScope.Companies.length; i++) {
         if ($stateParams.companyId == $rootScope.Companies[i].companyId) {
             $scope.selectedCompany=$rootScope.Companies[i];
             break;
         }
-    }
+    }*/
     console.log($scope.selectedCompany);
 
 
@@ -1179,10 +1181,15 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             {
 
                 if(data.status!="Successful"){
-                    console.log(data);
+
+                     console.log(data);
+
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
+                    $rootScope.Companies[$scope.companyIndex]=$scope.selectedCompany;
+                    alert(data.message);
+                    window.location= "/Config/SearchCompany";
 
 
 
