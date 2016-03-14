@@ -1,31 +1,31 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="col-md-12">
 
     <div class="panel panel-default">
 
         <div class="panel-heading">
-            <h3 class="panel-title"><strong>Role</strong>Details</h3>
+            <h3 class="panel-title"><strong>Role </strong>Details</h3>
         </div>
         <div class="panel-body form-horizontal">
 
             <div class="row">
-                <!--<div class="col-md-4">-->
 
-                    <!--<select class="form-control select" name="searchBy" ng-model="sortExpression"/>-->
-                    <!--<option value="" disabled selected>Search by </option>>-->
-
-                    <!--<option value="city">Role</option>-->
-
-                    <!--</select>-->
-
-                <!--</div>-->
                 <div class="col-md-8">
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Enter Role" value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Enter Role" value="" ng-model="searchKeyword"/>
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary">Search</button>
+                            <button ng-click="getRoleDetails()" class="btn btn-primary">Search</button>
                         </div>
                     </div>
                 </div>
@@ -42,37 +42,17 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Admin</td>
-                        <td>Namdev</td>
-                        <td>10-02-2016</td>
+                    <tr ng-repeat="role in Roles">
+                        <td>{{$index+1}}</td>
+                        <td>{{role.roleName}}</td>
+                        <td>{{role.createdBy}}</td>
+                        <td>{{role.creationDate}}</td>
                         <td>
-                            <a ui-sref="Config.modifyRole"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
+                            <a ui-sref="Config.modifyRole({selectedRole:role,index:$index})"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
                             <button class="btn btn-danger"><span class="fa fa-times"></span> Delete</button>
                         </td>
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>User 1</td>
-                        <td>Atul</td>
-                        <td>20-02-2016</td>
-                        <td>
-                            <a ui-sref="Config.modifyRole"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger"><span class="fa fa-times"></span> Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>User 3</td>
-                        <td>Ajit</td>
-                        <td>01-01-2016</td>
-                        <td>
 
-                            <a ui-sref="Config.modifyRole"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>Modify</button></a>
-                            <button class="btn btn-danger"><span class="fa fa-times"></span> Delete</button>
-                        </td>
-                    </tr>
 
                     </tbody>
                 </table>

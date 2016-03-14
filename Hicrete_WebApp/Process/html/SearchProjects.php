@@ -1,3 +1,18 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
+
+?>
+
 <div class="col-md-12">
 <!-- START SEARCH -->
 
@@ -68,34 +83,40 @@
                                     <span class="fa fa-eye"></span>
                                 </button>
                             </a>
-                            <a ui-sref="Process.modifyProject">
-                                <button class="btn btn-info" title="Modify project details">
-                                    <span class="fa fa-pencil-square-o"></span>
+
+                            <?php
+                                if($hasWrite==1){
+                                    echo "<a ui-sref=\"Process.modifyProject\">
+                                <button class=\"btn btn-info\" title=\"Modify project details\">
+                                    <span class=\"fa fa-pencil-square-o\"></span>
                                 </button>
                             </a>
-                            <a href="">
-                                <button class="btn btn-danger" title="Delete">
-                                    <span class="fa fa-times"></span>
+                            <a href=\"\">
+                                <button class=\"btn btn-danger\" title=\"Delete\">
+                                    <span class=\"fa fa-times\"></span>
                                 </button>
-                            </a>
+                            </a>";
+                                }
+                            ?>
+
                             <a ui-sref="Process.searchExpense">
                                 <button class="btn btn-primary" title="View cost center">
                                     <span class="fa fa-eye"></span>
                                     Cost center
                                 </button>
                             </a>
-                            <a ui-sref="Process.createCostCenter">
-                                <button class="btn btn-primary" title="Add cost center">
-                                    <span class="fa fa-plus"></span>
+                            <?php
+                                if($hasWrite==1){
+                                    echo "<a ui-sref=\"Process.createCostCenter\">
+                                <button class=\"btn btn-primary\" title=\"Add cost center\">
+                                    <span class=\"fa fa-plus\"></span>
                                     Cost center
                                 </button>
-                            </a>
-                            <!--<div class="col-md-4">-->
-                            <!--<a ui-sref="Process.createCostCenter"><input type="button" class="btn btn-info" value="Create Cost Center"/></a>-->
-                            <!--</div>-->
-                            <!--<div class="col-md-6">-->
-                            <!--<a ui-sref="Process.searchExpense"><input type="button" class="btn btn-info"  value="View Cost Center"/></a>-->
-                            <!--</div>-->
+                            </a>";
+                                }
+                            ?>
+
+
                         </td>
                     </tr>
                     </tbody>

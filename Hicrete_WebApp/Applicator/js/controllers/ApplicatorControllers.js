@@ -49,6 +49,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.today = function() {
         $scope.applicatorDetails.paymentDate = new Date();
+        $scope.applicatorDetails.followupdate = new Date();
     };
     $scope.today();
 
@@ -336,10 +337,12 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
              $scope.applicatorDetails.searchExpression=$scope.searchExpression;
              $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
              $scope.applicatorDetails.operation='viewTentativeApplicators';
+
              $scope.loading=true;
              $scope.errorMessage="";
              $scope.warningMessage="";
              $('#loader').css("display","block");
+
                 var config = {
                     params: {
                         data: $scope.applicatorDetails
@@ -357,7 +360,10 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                          $rootScope.tentativeApplicators = data;
                          $scope.totalItems = $rootScope.tentativeApplicators.length;
                          if(data.msg!=""){
-                             $scope.warningMessage=data.msg;
+                            $scope.loading=false;
+                            $('#loader').css("display","none");
+
+                             $scope.warningMessage="Tentative Applicator found successfully..";
                              $('#warning').css("display","block");
                          }
                          setTimeout(function() {
@@ -371,7 +377,7 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                          $scope.loading=false;
                          $('#loader').css("display","none");
                          if(data.msg==""){
-                             $scope.errorMessage=data.error;
+                             $scope.errorMessage="Tentative Applicator not found..";
                              $('#error').css("display","block");
                          }
                          console.log($rootScope.tentativeApplicators);
@@ -379,8 +385,9 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                      .error(function (data, status, headers) {
                          console.log(data);
+                         $scope.loading=false;
                          $('#loader').css("display","none");
-                         $scope.errorMessage=data.error;
+                         $scope.errorMessage="Tentative Applicator not found..";
                          $('#error').css("display","block");
                      });
 

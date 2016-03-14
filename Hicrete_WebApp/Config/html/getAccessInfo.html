@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <!--ACCESS INFORMATION FORM START-->
                     <div class="row">
                         <div class="col-md-12">
@@ -29,24 +38,25 @@
                                         <div class="col-md-6 col-xs-12 col-sm-4">
                                             <select ng-model="userInfo.userType" class="form-control select" required name="userType">
                                                 <option value="Normal">Normal</option>
-                                                <option value="Admin">Admin</option>                              </select>
+                                                <option value="Admin">Admin</option>
+                                            </select>
+                                            <div class="help-block" ng-messages="accessInfoForm.userType.$error" ng-hide="!accessInfoSubmitted && !accessInfoForm.userType.$touched">
+                                                <p style="color:red" ng-message="required">Select one of the UserType</p>
+                                            </div>
                                         </div>
-                                        <div class="help-block" ng-messages="accessInfoForm.userType.$error" ng-hide="!accessInfoSubmitted && !accessInfoForm.userType.$touched">
-                                                    <p style="color:red" ng-message="required">Select one of the UserType</p>                                                        
-                                             </div> 
                                     </div>
                                     
                                     <div class="form-group">                                        
-                                       <div class="help-block" ng-messages="accessInfoForm.roleName.$error" ng-hide="!accessInfoSubmitted && !accessInfoForm.roleName.$touched">
-                                                    <p style="color:red" ng-message="required">Select one of the role</p>                                                        
-                                         </div> 
+
                                         <label class="col-md-2 col-xs-12 control-label col-sm-2">Role</label>
                                         <div class="col-md-6 col-xs-12 col-sm-4">
                                             <select class="form-control select" ng-model="selectedRole.roleId" name="roleName"  ng-change="loadAccessPermission()" required>
                                                 
                                                 <option ng-repeat="role in roleList" value={{role.roleId}}>{{role.roleName}}</option>                                              
                                             </select>
-
+                                            <div class="help-block" ng-messages="accessInfoForm.roleName.$error" ng-hide="!accessInfoSubmitted && !accessInfoForm.roleName.$touched">
+                                                <p style="color:red" ng-message="required">Select one of the role</p>
+                                            </div>
                                         </div>
                                         <!-- <div class="col-md-2">
                                         <a href="#b" data-toggle="modal" class="btn btn-primary pull-left" ng-click="addModalListener()">Add Role</a>
@@ -89,7 +99,7 @@
                                 <div class="panel-footer">
                                     <button class="btn btn-default pull-left" ng-click="clearUserForm()">Clear Form</button>
                                     <button class="btn btn-default pull-right" ng-click="(accessInfoSubmitted=true) && accessInfoForm.$valid && addUser()">Submit</button>
-                                    <button class="btn btn-primary pull-right">Close</button>
+                                    <button class="btn btn-primary pull-right" style="margin-right:10px;">Close</button>
                                 </div>
                             </div>
                             </form>

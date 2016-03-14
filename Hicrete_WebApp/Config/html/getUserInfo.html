@@ -7,143 +7,158 @@
                                 <div class="panel-heading">
                                     <h3 class="panel-title"><strong>Personal </strong>Information</h3>
                                 </div>
-                                <div class="panel-body">                                                                        
-                                    
-                                    <div class="form-group">
-                                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">First Name</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                                                                   <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.firstName" name="firstName" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                <div class="panel-body">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-sm-4 col-xs-12 control-label">First Name</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="userInfo.firstName" name="firstName" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.firstName.$error" ng-hide="!userInfoSubmitted && !userInfoForm.firstName.$touched">
+                                                    <p style="color:red" ng-message="required">Firstname Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">FirstName must have >= 2 character</p>
+                                                </div>
+
                                             </div>
-                                            <div class="help-block" ng-messages="userInfoForm.firstName.$error" ng-hide="!userInfoSubmitted && !userInfoForm.firstName.$touched">
-                                                    <p style="color:red" ng-message="required">Firstname Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">FirstName must have >= 2 character</p>       
-                                             </div> 
+                                            </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">Date of birth</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                                    <input ng-model="userInfo.dob" name="dob" type="text" class="form-control" ng-click="openDob()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showPicker.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" />
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.dob.$error" ng-hide="!userInfoSubmitted && !userInfoForm.dob.$touched">
+                                                    <p style="color:red" ng-message="required">Date Of Birth Cannot be blank</p>
+                                                </div>
+
+                                            </div>
 
                                         </div>
-                                                                     
-                                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">Last Name</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.lastName" name="lastName" type="text" class="form-control" required minlength=2  pattern="[a-zA-Z]+"/>
-                                            </div>
-                                            <div class="help-block" ng-messages="userInfoForm.lastName.$error" ng-hide="!userInfoSubmitted && !userInfoForm.lastName.$touched">
-                                                    <p style="color:red" ng-message="required">LastName Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">LastName must have >= 2 character</p>       
-                                             </div>
 
-                                        </div>
-                                         
-                                    </div>
-                                    
-                                    <div class="form-group">                                        
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">Date of birth</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input ng-model="userInfo.dob" name="dob" type="text" class="form-control" ng-click="openDob()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showPicker.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" />
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">City</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group ">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="userInfo.city" name="city" type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.city.$error" ng-hide="!userInfoSubmitted && !userInfoForm.city.$touched">
+                                                    <p style="color:red" ng-message="required">City Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">City must have more than 2 character</p>
+                                                </div>
                                             </div>
-                                            <div class="help-block" ng-messages="userInfoForm.dob.$error" ng-hide="!userInfoSubmitted && !userInfoForm.dob.$touched">
-                                                    <p style="color:red" ng-message="required">Date Of Birth Cannot be blank</p>        
-                                             </div> 
+                                        </div>
 
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">Address</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <textarea ng-model="userInfo.address" name="address"class="form-control" rows="5" required minlength=10></textarea>
-                                        </div>
-                                         <div class="help-block" ng-messages="userInfoForm.address.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.address.$touched">
-                                                    <p style="color:red" ng-message="required">Address Cannot be blank</p>
-                                                    <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>     
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">City</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group ">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.city" name="city" type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
-                                            </div>    
-                                             <div class="help-block" ng-messages="userInfoForm.city.$error" ng-hide="!userInfoSubmitted && !userInfoForm.city.$touched">
-                                                    <p style="color:red" ng-message="required">City Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">City must have more than 2 character</p>       
-                                             </div>                                         
-                                        </div>
-                                                                     
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">State</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.state" name="state" type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">State</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="userInfo.state" name="state" type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.state.$error" ng-hide="!userInfoSubmitted && !userInfoForm.state.$touched">
+                                                    <p style="color:red" ng-message="required">State Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">State must have more than 2 character</p>
+                                                </div>
                                             </div>
-                                            <div class="help-block" ng-messages="userInfoForm.state.$error" ng-hide="!userInfoSubmitted && !userInfoForm.state.$touched">
-                                                    <p style="color:red" ng-message="required">State Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">State must have more than 2 character</p>       
-                                             </div>             
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">Country</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.country" name="country" type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
-                                            </div>  
-                                            <div class="help-block" ng-messages="userInfoForm.country.$error" ng-hide="!userInfoSubmitted && !userInfoForm.country.$touched">
-                                                    <p style="color:red" ng-message="required">Country Cannot be blank</p> 
-                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p> 
-                                                    <p style="color:red" ng-message="minlength">Country must have more than 2 character</p>       
-                                             </div>                                          
-                                        </div>
-                                                                     
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">Pin code</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.pincode" name="pincode"type="text" class="form-control" required minlength="2"/>
-                                            </div>   
-                                            <div class="help-block" ng-messages="userInfoForm.pincode.$error" ng-hide="!userInfoSubmitted && !userInfoForm.pincode.$touched">
-                                                    <p style="color:red" ng-message="required">Pincode Cannot be blank</p>                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>                                   
-                                             </div>         
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">Email Id</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">                                            
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-                                                <input type="email" ng-model="userInfo.email" name="emailId" class="form-control" required/>
-                                            </div>   
-                                            <div class="help-block" ng-messages="userInfoForm.emailId.$error" ng-hide="!userInfoSubmitted && !userInfoForm.emailId.$touched">
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">Country</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="userInfo.country" name="country" type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.country.$error" ng-hide="!userInfoSubmitted && !userInfoForm.country.$touched">
+                                                    <p style="color:red" ng-message="required">Country Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">Country must have more than 2 character</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">Email Id</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
+                                                    <input type="email" class="form-control" ng-model="userInfo.email" name="emailId"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="companyForm.emailId.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="email">Invalid email address</p>
-                                                    <p style="color:red" ng-message="required">email can not be blank</p>           
-                                             </div>                                           
+                                                </div>
+                                            </div>
                                         </div>
-                                                                     
-                                        <label class="col-md-1 col-xs-12 control-label col-sm-2">Mobile number</label>
-                                        <div class="col-md-3 col-xs-12 col-sm-4">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
-                                                <input ng-model="userInfo.mobile" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/>
-                                            </div>            
-                                        </div>
-                                         <div class="help-block" ng-messages="userInfoForm.mobile.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.mobile.$touched">
-                                                    <p style="color:red" ng-message="minlength">Mobile number should be of 10 character</p>
-                                                    <p style="color:red" ng-message="pattern">Invalid Mobile number</p>           
-                                             </div>
-                                    </div>
 
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-sm-4 col-xs-12 control-label">Last Name</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="userInfo.lastName" name="lastName" type="text" class="form-control" required minlength=2  pattern="[a-zA-Z]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.lastName.$error" ng-hide="!userInfoSubmitted && !userInfoForm.lastName.$touched">
+                                                    <p style="color:red" ng-message="required">LastName Cannot be blank</p>
+                                                    <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                    <p style="color:red" ng-message="minlength">LastName must have >= 2 character</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">Address</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <textarea ng-model="userInfo.address" name="address"class="form-control" rows="6" required minlength=10></textarea>
+
+                                            <div class="help-block" ng-messages="userInfoForm.address.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.address.$touched">
+                                                <p style="color:red" ng-message="required">Address Cannot be blank</p>
+                                                <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">Pin code</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input ng-model="userInfo.pincode" name="pincode" type="text" class="form-control" required minlength="2" pattern="[0-9]+"/>
+                                                </div>
+                                                <div class="help-block" ng-messages="userInfoForm.pincode.$error" ng-hide="!userInfoSubmitted && !userInfoForm.pincode.$touched">
+                                                    <p style="color:red" ng-message="required">Pincode Cannot be blank</p>
+                                                    <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>
+                                                    <p style="color:red" ng-message="pattern">Pincode must contain only digits</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="col-md-3 col-xs-12 control-label col-sm-4">Mobile number</label>
+                                            <div class="col-md-9 col-xs-12 col-sm-8">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-phone"></span></span>
+                                                    <input ng-model="userInfo.mobile" name="mobile" type="text" class="form-control" minlength="10" pattern="[0-9]+" required/>
+                                                </div>
+                                            <div class="help-block" ng-messages="userInfoForm.mobile.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.mobile.$touched">
+                                                <p style="color:red" ng-message="required">Mobile Number cannot be blank</p>
+                                                <p style="color:red" ng-message="minlength">Mobile number should be of 10 character</p>
+                                                <p style="color:red" ng-message="pattern">Invalid Mobile number</p>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                </div>
                                 </div>
                                 <div class="panel-footer">
                                     <button ng-click="(userInfoSubmitted=true) && userInfoForm.$valid && nextStep()" class="btn btn-primary pull-right">Next</button>

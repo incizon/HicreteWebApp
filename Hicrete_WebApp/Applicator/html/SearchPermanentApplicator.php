@@ -11,10 +11,7 @@ if (!isset($_SESSION['token'])) {
 $userId=$_SESSION['token'];
 $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
 
-if($hasWrite){
-    header("Location: Dashboard.php");
-    exit();
-}
+
 ?>
 
 
@@ -32,7 +29,7 @@ if($hasWrite){
     <div class="panel panel-default">
 
         <div class="panel-heading">
-            <h3 class="panel-title"><strong>Permanent</strong>Applicators</h3>
+            <h3 class="panel-title"><strong>Permanent </strong>Applicators</h3>
         </div>
 
         <div class="panel-body">

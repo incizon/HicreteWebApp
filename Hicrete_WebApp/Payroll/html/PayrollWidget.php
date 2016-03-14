@@ -28,7 +28,7 @@ if(!$hasRead && !$hasWrite){
             margin-top:15px;
             position:fixed;
             width: 100%;
-            z-index: 20;
+            z-index: 2;
         }
         #primary_nav_wrap ul {
             -moz-border-bottom-colors: none;

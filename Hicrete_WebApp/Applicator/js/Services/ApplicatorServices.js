@@ -129,6 +129,10 @@ myApp.service('PackageService',function(){
 
 		this.createPackage=function($scope,$http,packageDetails){
 				packageDetails.operation='createPackage';
+				$scope.loading=true;
+				$scope.errorMessage="";
+				$scope.warningMessage="";
+				$('#loader').css("display","block");
 				var config = {
 								params: {
 										data: packageDetails
@@ -141,14 +145,39 @@ myApp.service('PackageService',function(){
 					.success(function (data, status, headers, config){
 						            
 						            console.log(data);
+						if(data.msg!=""){
+							$scope.warningMessage=data.msg;
+							$('#warning').css("display","block");
+						}
+						setTimeout(function() {
+							$scope.$apply(function() {
+								if(data.msg!=""){
+									$('#warning').css("display","none");
+								}
+							});
+						}, 3000);
 
-									setTimeout(function(){
+						$scope.loading=false;
+						$('#loader').css("display","none");
+						if(data.msg==""){
+							$scope.errorMessage=data.error;
+							$('#error').css("display","block");
+						}
+						console.log(data);
+						setTimeout(function(){
+							window.location.reload(true);
+						},2000);
+
+						setTimeout(function(){
 										window.location.reload(true);
 									},2000);
 					})
 					.error(function (data, status, headers, config){
 									
-									console.log(data);
+						console.log(data);
+						$('#loader').css("display","none");
+						$scope.errorMessage=data.error;
+						$('#error').css("display","block");
 
                     });
 		};

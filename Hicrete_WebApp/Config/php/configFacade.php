@@ -21,6 +21,8 @@ switch ($data->operation) {
     				    break;
     case "addRole":  Config::addRole($data,$userId);
     				    break;
+    case "modifyRole":  ConfigUtils::modifyRole($data->roleId,$data->roleName,$data->accessList,$userId);
+                        break;
     case "getRoles":  ConfigUtils::getAllRoles();
     				    break;
     case "getCompanyDetails": ConfigUtils::getCompanyDetails($data->keyword);
@@ -44,6 +46,8 @@ switch ($data->operation) {
     case "modifyUserDetails" :Config::modifyUserDetails($data,$userId);
                         break;
     case "ChangePassword" : ConfigUtils::ChangePassword($data,$userId);
+                        break;
+    case "getRoleDetails" : ConfigUtils::getRoleDetails($data->key,$userId);
                         break;
     case "getExemptedAccessList" :ConfigUtils::getExemptedAccessList($userId);
     				    break;

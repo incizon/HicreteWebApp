@@ -197,7 +197,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.searchSegment', {
             url: '/searchSegment',
-            templateUrl: 'Expense/html/SegmentSearch.html',
+            templateUrl: 'Expense/html/SegmentSearch.php',
             controller: 'costCenterSearchController'
         })
         
@@ -240,7 +240,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Config.viewRole', {
             url: '/SearchRole',
-            templateUrl: 'Config/html/ViewRole.html'
+            templateUrl: 'Config/html/ViewRole.html',
+            controller:'viewRoleController'
 
         })
         .state('Config.userSearch', {
@@ -264,15 +265,17 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Config.modifyCompany', {
-            url: '/ModifyCompany?companyId',
+            url: '/ModifyCompany',
             templateUrl: 'Config/html/ModifyCompany.html',
-            controller:'ModifyCompanyController'
+            controller:'ModifyCompanyController',
+            params : { selectedCompany: null,index:null }
         })
 
         .state('Config.modifyRole', {
             url: '/ModifyRole',
             templateUrl: 'Config/html/ModifyRole.html',
-            controller:'ModifyRoleController'
+            controller:'ModifyRoleController',
+            params : { selectedRole: null,index:null }
         })
 
         .state('Config.modifyWarehouse', {
@@ -309,8 +312,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process', {
             url: '/Process',
-            templateUrl: 'Process/html/ProcessWidget.php',
-            controller:'ProcessWidgetController'
+            templateUrl: 'Process/html/ProcessWidget.php'
+
         })
 
         .state('Process.addCustomer', {
@@ -354,7 +357,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.viewProject', {
             url: '/viewProjects',
-            templateUrl:'Process/html/ViewProjects.html',
+            templateUrl:'Process/html/SearchProjects.php',
             controller:'viewProjectController'
         })
         .state('Process.ProjectDetails', {
@@ -381,7 +384,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Process.viewCustomers', {
             url: '/Customers',
-            templateUrl:'Process/html/ViewCustomers.html',
+            templateUrl:'Process/html/SearchCustomers.php',
             controller:'ViewCustomerController'
         })
         .state('Process.AttachWorkorder', {
@@ -414,7 +417,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.searchTask', {
             url: '/SearchTask',
-            templateUrl:'Process/html/schedule/SearchTasks.html',
+            templateUrl:'Process/html/schedule/SearchTasks.php',
             controller:'SearchTaskController'
         })
 
@@ -497,7 +500,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl:'Payroll/html/SearchLeavesByDate.html',
             controller:"SearchLeaveByDateController"
         })
-        .state('Payroll..searchLeavesByEmployee', {
+        .state('Payroll.searchLeavesByEmployee', {
             url: '/SearchLeavesByEmployee',
             templateUrl:'Payroll/html/SearchLeavesByEmployee.html',
             controller:"SearchLeaveByEmployeeController"
@@ -555,6 +558,10 @@ myApp.run(function($rootScope,$http) {
     $rootScope.Companies=[];
     $rootScope.warehouses=[];
     $rootScope.Users=[];
+    $rootScope.Roles=[];
+    $rootScope.AllAccessPermissions=[];
+    $rootScope.suppliers=[];
+    $rootScope.prodInq=[];
 
 });
 

@@ -10,14 +10,14 @@
             </div>
             <div class="panel-body">
 
-                <form name="roleForm" class="form-horizontal" novalidate>
+                <form name="modifyRoleForm" class="form-horizontal" novalidate>
 
 
                     <div class="form-group">
                         <label class="col-md-2 col-xs-12 control-label">Enter Role name</label>
                         <div class="input-group">
                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                            <input ng-model="roleDetails.roleName" name="roleName" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
+                            <input ng-model="roleName" name="roleName" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
                         </div>
                     </div>
 
@@ -36,10 +36,10 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="accessEntry in roleDetails.accessList">
+                                    <tr ng-repeat="accessEntry in access">
                                         <td ng-model="accessEntry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
-                                        <td class="col-xs-2 text-center"><input ng-model="accessEntry.read" type="checkbox"></td>
-                                        <td class="col-xs-2 text-center"><input ng-model="accessEntry.write"  type="checkbox"></td>
+                                        <td class="col-xs-2 text-center"><input ng-model="accessEntry.read.val" type="checkbox"></td>
+                                        <td class="col-xs-2 text-center"><input ng-model="accessEntry.write.val"  type="checkbox"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -51,8 +51,8 @@
 
              </div>
             <div class="panel-footer">
-                <button class="btn btn-danger pull-right" ng-click="modifyCompany()">Modify</button>
-                <button class="btn btn-default pull-right">Cancel</button>
+                <button class="btn btn-danger pull-right" ng-click="modifyRole()">Modify</button>
+                <button ui-sref="Config.viewRole" class="btn btn-default pull-right">Cancel</button>
 
             </div>
 
