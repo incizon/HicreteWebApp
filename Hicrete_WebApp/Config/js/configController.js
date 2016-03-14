@@ -1372,8 +1372,8 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
                 } else {
                     console.log("Fail Zala re");
                 }
-                //$scope.clearUserForm();
-            //
+                //window.location="dashboard.php#";
+
             })
             .error(function (data, status, headers, config) {
                 console.log("Fail Zala re in error");

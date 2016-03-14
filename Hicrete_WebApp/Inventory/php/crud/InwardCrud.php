@@ -2,6 +2,7 @@
 require_once 'utils/Common_Methods.php';
 require_once 'utils/DatabaseCommonOperations.php';
 
+
 /*
 *Inward Data class- CRUD operation on inward entry
 */
@@ -75,7 +76,7 @@ class InwardData extends CommonMethods
         $stmt = $dbh->prepare("SELECT * FROM inward");
         if ($stmt->execute()) {
             //push it into array
-
+            $material=InventoryUtils::getProductById('97');
             $json_array=array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $inwardData = array();
