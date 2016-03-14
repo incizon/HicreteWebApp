@@ -336,10 +336,12 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
              $scope.applicatorDetails.searchExpression=$scope.searchExpression;
              $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
              $scope.applicatorDetails.operation='viewTentativeApplicators';
+
              $scope.loading=true;
              $scope.errorMessage="";
              $scope.warningMessage="";
              $('#loader').css("display","block");
+
                 var config = {
                     params: {
                         data: $scope.applicatorDetails
@@ -356,24 +358,27 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                          $rootScope.tentativeApplicators = data;
                          $scope.totalItems = $rootScope.tentativeApplicators.length;
-                         if(data.msg!=""){
-                             $scope.warningMessage=data.msg;
+                         //if(data.msg!=""){
+                            $scope.loading=false;
+                            $('#loader').css("display","none");
+
+                             $scope.warningMessage="Tentative Applicator found successfully..";
                              $('#warning').css("display","block");
-                         }
+                         //}
                          setTimeout(function() {
                              $scope.$apply(function() {
-                                 if(data.msg!=""){
+                                 //if(data.msg!=""){
                                      $('#warning').css("display","none");
-                                 }
+                                 //}
                              });
                          }, 3000);
 
-                         $scope.loading=false;
-                         $('#loader').css("display","none");
-                         if(data.msg==""){
-                             $scope.errorMessage=data.error;
-                             $('#error').css("display","block");
-                         }
+                         //$scope.loading=false;
+                         //$('#loader').css("display","none");
+                         //if(data.msg==""){
+                         //    $scope.errorMessage=data.error;
+                         //    $('#error').css("display","block");
+                         //}
                          console.log($rootScope.tentativeApplicators);
                      })
 
