@@ -1,22 +1,24 @@
-myApp.controller('roleController', function ($scope, $http, configService) {
-    $scope.roleSubmitted = false;
-    $scope.showAccessError = false;
-    $scope.roleDisabled = false;
-    $scope.roleName;
-    configService.getAllAccessPermission($http, $scope);
-
-    $scope.addRole = function () {
-        var accessSelected = false;
-        angular.forEach($scope.accessList, function (accessEntry) {
-            accessSelected = accessSelected || accessEntry.read.val || accessEntry.write.val;
-
-        });
-        if (!accessSelected) {
-            $scope.showAccessError = true;
-            return;
-        }
-        $scope.showAccessError = false;
-        $scope.roleSubmitted = false;
+myApp.controller('roleController',function($scope,$http,configService){
+ $scope.roleSubmitted=false;
+ $scope.showAccessError=false;
+ $scope.roleDisabled=false;
+ $scope.roleName;
+configService.getAllAccessPermission($http,$scope);
+  
+        $scope.addRole=function(){
+            $scope.roleDisabled=true;
+            console.log("In addRole");
+        	var accessSelected=false;
+        	angular.forEach($scope.accessList, function(accessEntry) {
+               accessSelected=accessSelected || accessEntry.read.val || accessEntry.write.val ;
+               
+            });
+        	if(!accessSelected){
+        		$scope.showAccessError=true;
+        		return;
+        	}
+        	$scope.showAccessError=false;
+        	$scope.roleSubmitted=false;
 
 
         var data = {
@@ -32,23 +34,27 @@ myApp.controller('roleController', function ($scope, $http, configService) {
             }
         };
 
-        $http.post("Config/php/configFacade.php", null, config)
-            .success(function (data) {
-
-                if (data.status == "Successful") {
-                    doShowAlert("Success", "Role created successfully");
-                } else if (data.status == "Unsuccessful") {
-                    doShowAlert("Failure", data.message);
-                } else {
-                    doShowAlert("Failure", data.message);
-                }
-                clearRoleForm();
-            })
-            .error(function (data, status, headers, config) {
-                doShowAlert("Failure", "Error Occurred");
-
-            });
-
+          $http.post("Config/php/configFacade.php",null, config)
+           .success(function (data)
+           {
+               $scope.roleDisabled=false;
+             if(data.status=="Successful"){
+                alert("Role created successfully");
+             }else if(data.status=="Unsuccessful"){
+                  alert(data.message);
+             }else{
+                  alert(data.message);
+             }
+              clearRoleForm();
+           })
+           .error(function (data, status, headers, config)
+           {
+               $scope.roleDisabled=false;
+               alert("Error Occurred");
+             
+           });
+   
+           
 
     }
 
@@ -131,9 +137,45 @@ myApp.controller('userController', function ($scope, $http, $rootScope, configSe
         //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser";
 
     }
+    $scope.today = function(){
+        $scope.userInfo.dob = new Date();
+    };
+
+    $scope.today();
+
+    $scope.openDob = function(){
+        $scope.showPicker.opened = true;
+    };
+
+    $scope.showPicker = {
+        opened:false
+    };
+
+        $scope.clearUserForm=function(){
+              $scope.step=1;
+              $scope.userInfo={
+                firstName:"",
+                lastName:"",
+                dob:"",
+                address:"",
+                city:"",
+                state:"",
+                country:"",
+                pincode:"",
+                email:"",
+                mobile:"",
+                designation:"",
+                userType:""
+              };
+              $scope.roleAccessList=[];
+              $scope.otherAccessList=[];
+              $scope.selectedRole={"roleId":""};
+              //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser";
+
+        }
 
 
-    $scope.addUser = function () {
+        $scope.addUser=function(){
 
         var data = {
             operation: "addUser",
@@ -210,7 +252,73 @@ myApp.controller('userController', function ($scope, $http, $rootScope, configSe
 
 });
 
-myApp.controller('searchUserController', function ($scope, $rootScope, $http, configService) {
+
+myApp.controller('chngPassController',function($scope,$rootScope,$http,configService) {
+
+    $scope.typeOfPassField = 'password';
+
+
+    console.log($scope.typeOfPassField);
+    $scope.checkFieldType =function()
+    {
+        if($scope.showPass == true)
+        {
+            $scope.typeOfPassField = 'text';
+        }
+        else
+        {
+            $scope.typeOfPassField = 'password';
+
+        }
+    }
+    $scope.cancelChangePass= function()
+    {
+        window.location ='dashboard.php';
+    }
+    $scope.changePassword =function()
+    {
+        console.log($scope.newDetails);
+        var data={
+            operation :"ChangePassword",
+            data:$scope.newDetails
+
+        };
+
+        var config = {
+            params: {
+                data: data
+
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                console.log(data);
+                console.log(data.message);
+                if(data.status=="Successful"){
+
+                }else if(data.status=="Unsuccessful"){
+
+                }else{
+
+                }
+
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                doShowAlert("Failure","Error Occurred");
+
+
+            });
+
+    }
+});
+
+
+myApp.controller('searchUserController',function($scope,$rootScope,$http,configService){
 
 
     $scope.isFromUser = true;
@@ -371,18 +479,24 @@ myApp.controller('modifyUserController', function ($scope, $http, $stateParams, 
     $scope.loadAccessPermission();
 
     /*
-     $scope.selectUserForModify= function(user)
-     {
-     $scope.selectedUserInfo=user;
-     console.log($scope.selectedUserInfo);
+    $scope.selectUserForModify= function(user)
+    {
+        $scope.selectedUserInfo=user;
+        console.log($scope.selectedUserInfo);
 
-     }
+    }
 
-     $scope.modifyUser=function(){
-     console.log($scope.selectedUserInfo);
-     var data={
-     operation :"modifyUser",
-     userInfo:$scope.selectedUserInfo
+    $scope.modifyUser=function(){
+
+        if($scope.modifyUserForm.$pristine){
+            alert("Fields are not modified");
+            return;
+        }
+
+        console.log($scope.selectedUserInfo);
+        var data={
+            operation :"modifyUser",
+            userInfo:$scope.selectedUserInfo
 
      };
 
@@ -390,39 +504,36 @@ myApp.controller('modifyUserController', function ($scope, $http, $stateParams, 
      params: {
      data: data
 
-     }
-     };
-     */
-    /* $http.post("Config/php/configFacade.php",null, config)
-     .success(function (data)
-     {
+            }
+        };
 
-     console.log(data.status);
-     console.log(data.message);
-     if(data.status=="Successful"){
-     console.log(data);
-     // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
-     }else if(data.status=="Unsuccessful"){
-     //doShowAlert("Failure",data.message);
-     console.log(data);
-     }else{
-     //doShowAlert("Failure",data.message);
-     console.log(data);
-     }
-     $scope.clearUserForm();
+         $http.post("Config/php/configFacade.php",null, config)
+         .success(function (data)
+         {
 
-     })
-     .error(function (data, status, headers, config)
-     {
-     doShowAlert("Failure","Error Occurred");
-     $scope.clearUserForm();
+         console.log(data);
+
+         if(data.status=="Successful"){
+            alert("User Modified Successfully");
+
+         }else if(data.status=="Unsuccessful"){
+            console.log(data.message);
+            alert(data.message);
+         }else{
+             console.log(data.message);
+            alert(data.message);
+         }
+
+
+         })
+         .error(function (data, status, headers, config)
+         {
+            alert("Failure -Error Occurred");
 
      });
 
-     $scope.userInfoSubmitted=false;
-     $scope.accessInfoSubmitted=false;
-     $scope.showCompanyError=false;
-     }*/
+
+    }
 
 
 });
@@ -888,8 +999,8 @@ myApp.controller('ModifyRoleController', function ($scope, $http) {
             },
             {
                 moduleName: "Expense",
-                read: false,
-                write: true
+                read:false,
+                write:true
             },
             {
                 moduleName: "Payroll",

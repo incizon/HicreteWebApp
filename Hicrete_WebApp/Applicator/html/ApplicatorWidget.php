@@ -1,3 +1,25 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasRead=appUtil::doesUserHasAccess("Applicator",$userId,"Read");
+$hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
+
+if(!$hasRead && !$hasWrite){
+    header("Location: Dashboard.php");
+    exit();
+}
+?>
+
+
+
 <style>
     .panel.panel-default{
         margin-top: 40px;
@@ -41,16 +63,15 @@
         position:relative;
         float:left;
         margin:0;
-        padding:0;
+        padding:0
     }
     #primary_nav_wrap ul li.current-menu-item
     {
-        background:#ddd;
+        background:#ddd
     }
     #primary_nav_wrap ul li:hover
     {
-        background:#f6f6f6;
-        cursor: pointer;
+        background:#f6f6f6
     }
     #primary_nav_wrap ul ul
     {
@@ -66,59 +87,62 @@
     #primary_nav_wrap ul ul li
     {
         float:none;
-        width:200px;
+        width:200px
     }
     #primary_nav_wrap ul ul a
     {
         line-height:120%;
-        padding:10px 15px;
+        padding:10px 15px
     }
     #primary_nav_wrap ul ul ul
     {
         top:0;
-        left:100%;
+        left:100%
     }
     #primary_nav_wrap ul li:hover > ul
     {
-        display:block;
+        display:block
     }
 </style>
 
 <div>
     <nav id="primary_nav_wrap">
         <ul>
-            <li><a>Add</a>
+            <?php
+
+            if($hasWrite==1){
+                echo "<li><a>Add</a>
                 <ul>
-                    <li><a ui-sref="Applicator.addDealer">Applicator</a></li>
-                    <li><a ui-sref="Applicator.addPackage">Package</a></li>
+                    <li><a ui-sref=\"Applicator.addDealer\">Applicator</a></li>
+                    <li><a ui-sref=\"Applicator.addPackage\">Package</a></li>
 
                 </ul>
-            </li>
-            <li><a>Payment</a>
+            </li>";
+            }
+            echo "<li><a>Payment</a>
+                <ul>";
+                if($hasWrite==1)
+                    echo "<li><a ui-sref=\"Applicator.addPayment\">Add Payment</a></li>";
+                if($hasRead==1)
+                    echo "<li><a ui-sref=\"Applicator.paymentHistory\">Show Payment History</a></li>";
+
+            echo "</ul>
+            </li>";
+            if($hasRead==1){
+                echo "<li><a>Search</a>
                 <ul>
-                    <li><a ui-sref="Applicator.addPayment">Add Payment</a></li>
-                    <li><a ui-sref="Applicator.paymentHistory">Show Payment History</a></li>
-                    <!--<ul>-->
-                    <!--<li><a href="#">Deep Menu 1</a>-->
-                    <!--<ul>-->
-                    <!--<li><a href="#">Sub Deep 1</a></li>-->
-                    <!--<li><a href="#">Sub Deep 2</a></li>-->
-                    <!--<li><a href="#">Sub Deep 3</a></li>-->
-                    <!--<li><a href="#">Sub Deep 4</a></li>-->
-                    <!--</ul>-->
-                    <!--</li>-->
-                    <!--<li><a href="#">Deep Menu 2</a></li>-->
-                    <!--</ul>-->
-                    </li>
+                    <li><a ui-sref=\"Applicator.tentetiveApplicator\">Tentative Applicator</a></li>
+                    <li><a ui-sref=\"Applicator.permanentApplicator\">Permanent Applicator</a></li>
+                    <li><a ui-sref=\"Applicator.viewPackages\">Packages</a></li>
                 </ul>
-            </li>
-            <li><a>Search</a>
-                <ul>
-                    <li><a ui-sref="Applicator.tentetiveApplicator">Tentative Applicator</a></li>
-                    <li><a ui-sref="Applicator.permanentApplicator">Permanent Applicator</a></li>
-                    <li><a ui-sref="Applicator.viewPackages">Packages</a></li>
-                </ul>
-            </li>
+            </li>";
+            }
+
+
+
+
+
+            ?>
 
         </ul>
     </nav>
@@ -127,7 +151,7 @@
 <!-- PAGE CONTENT WRAPPER -->
 
 
-            <div ui-view></div>
-		
+<div ui-view></div>
 
-        <!-- END PAGE CONTENT WRAPPER -->
+
+<!-- END PAGE CONTENT WRAPPER -->

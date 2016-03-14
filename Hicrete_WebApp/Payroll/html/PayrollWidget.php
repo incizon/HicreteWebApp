@@ -1,3 +1,23 @@
+<!-- START WIDGETS -->
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasRead=appUtil::doesUserHasAccess("Payroll",$userId,"Read");
+$hasWrite=appUtil::doesUserHasAccess("Payroll",$userId,"Write");
+
+if(!$hasRead && !$hasWrite){
+    header("Location: Dashboard.php");
+    exit();
+}
+?>
 
     <style>
         .panel.panel-default{
@@ -88,35 +108,40 @@
     <div>
         <nav id="primary_nav_wrap">
             <ul>
-                <li><a>Create</a>
-                    <ul>
-                        <li><a ui-sref="Config.addUser">User</a></li>
-                        <li><a ui-sref="Config.addRole">Role</a></li>
-                        <li><a ui-sref="Config.addCompany">Company</a></li>
-                        <li><a ui-sref="Config.addWarehouse">Warehouse</a></li>
-                    </ul>
+                <li><a ui-sref="Payroll.applyForLeave">Apply For Leaves</a>
                 </li>
-                <li><a>Search</a>
-                    <ul>
-                        <li><a ui-sref="Config.userSearch">User</a></li>
-                        <li><a ui-sref="Config.companySearch">Company</a></li>
-                        <li><a ui-sref="Config.warehouseSearch">Warehouse</a></li>
+                <li><a ui-sref="Payroll.showLeaves">Show My Leaves</a>
+                </li>
+                <?php
+                if($hasWrite==1){
+                    echo "<li><a>Settings</a>
+                <ul>
+                    <li><a ui-sref=\"Payroll.createYear\">Start Year</a></li>
+                    <li><a ui-sref=\"Payroll.configureHolidays\">Configure Holidays</a></li>
+                    <li><a ui-sref=\"Payroll.AddEmployeeToPayRoll\">Add Employee To Payroll</a></li>
+                </ul>
+                </li>";
+                }
+                if($hasRead==1){
+                    echo "<li><a>Search Leaves</a>
+                <ul>
+                    <li><a ui-sref=\"Payroll.searchLeavesByDate\">By Date</a></li>
+                    <li><a ui-sref=\"Payroll.searchLeavesByEmployee\">By Employee</a></li>
 
-                        </li>
-                    </ul>
-                </li>
-                <li><a>Properties</a>
-                    <ul>
-                        <li><a>Log Properties</a></li>
-                        <li><a>Payroll Properties</a></li>
+                </ul>
+            </li>
 
-                    </ul>
-                </li>
-                <li><a ui-sref="Config.viewRole">View Roles</a></li>
+            ";
+                }
+
+                ?>
+
 
             </ul>
         </nav>
     </div>
+</div>
 
-    <div ui-view></div>
-    <!-- END WIDGETS -->
+
+<div ui-view></div>
+<!-- END WIDGETS -->

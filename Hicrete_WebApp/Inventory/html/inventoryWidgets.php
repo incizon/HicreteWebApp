@@ -1,4 +1,24 @@
 <!-- START WIDGETS -->
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasRead=appUtil::doesUserHasAccess("Inventory",$userId,"Read");
+$hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
+
+if(!$hasRead && !$hasWrite){
+    header("Location: Dashboard.php");
+    exit();
+}
+?>
+
 <div class="row" ng-controller="inventoryCommonController">
 
 <style>
@@ -44,15 +64,16 @@
         position:relative;
         float:left;
         margin:0;
-        padding:0
+        padding:0;
     }
     #primary_nav_wrap ul li.current-menu-item
     {
-        background:#ddd
+        background:#ddd;
     }
     #primary_nav_wrap ul li:hover
     {
-        background:#f6f6f6
+        background:#f6f6f6;
+        cursor: pointer;
     }
     #primary_nav_wrap ul ul
     {
@@ -68,52 +89,61 @@
     #primary_nav_wrap ul ul li
     {
         float:none;
-        width:200px
+        width:200px;
     }
     #primary_nav_wrap ul ul a
     {
         line-height:120%;
-        padding:10px 15px
+        padding:10px 15px;
     }
     #primary_nav_wrap ul ul ul
     {
         top:0;
-        left:100%
+        left:100%;
     }
     #primary_nav_wrap ul li:hover > ul
     {
-        display:block
+        display:block;
     }
 </style>
 
 <div>
     <nav id="primary_nav_wrap">
         <ul>
-            <li><a>Add</a>
+            <?php
+            if($hasWrite==1){
+                echo "<li><a>Add</a>
                 <ul>
-                    <li><a ui-sref="Inventory.addProduct">Product</a></li>
-                    <li><a ui-sref="Inventory.addMaterialType">Material Type</a></li>
-                    <li><a ui-sref="Inventory.addSupplier">Supplier</a></li>
+                    <li><a ui-sref=\"Inventory.addProduct\">Product</a></li>
+                    <li><a ui-sref=\"Inventory.addMaterialType\">Material Type</a></li>
+                    <li><a ui-sref=\"Inventory.addSupplier\">Supplier</a></li>
                 </ul>
             </li>
             <li><a>Create</a>
                 <ul>
-                    <li><a ui-sref="Inventory.inwardItem">Inward</a></li>
-                    <li><a ui-sref="Inventory.outwardItem">Outward</a></li>
-                    <li><a ui-sref="Inventory.prodInit">Production Batch</a></li>
+                    <li><a ui-sref=\"Inventory.inwardItem\">Inward</a></li>
+                    <li><a ui-sref=\"Inventory.outwardItem\">Outward</a></li>
+                    <li><a ui-sref=\"Inventory.prodInit\">Production Batch</a></li>
                     </li>
                 </ul>
-            </li>
-            <li><a>Search</a>
+            </li>";
+            }
+            if($hasRead==1){
+                echo "<li><a>Search</a>
                 <ul>
-                    <li><a ui-sref="Inventory.searchProduct">Product</a></li>
-                    <li><a ui-sref="Inventory.searchSupplier">Supplier</a></li>
-                    <li><a ui-sref="Inventory.searchInward">Inward</a></li>
-                    <li><a ui-sref="Inventory.searchOutward">Outward</a></li>
-                    <li><a ui-sref="Inventory.prodSearch">Production Batch</a></li>
+                    <li><a ui-sref=\"Inventory.searchProduct\">Product</a></li>
+                    <li><a ui-sref=\"Inventory.searchSupplier\">Supplier</a></li>
+                    <li><a ui-sref=\"Inventory.searchInward\">Inward</a></li>
+                    <li><a ui-sref=\"Inventory.searchOutward\">Outward</a></li>
+                    <li><a ui-sref=\"Inventory.prodSearch\">Production Batch</a></li>
                 </ul>
             </li>
-            <li><a ui-sref="Inventory.searchInventory">Show Inventory</a></li>
+            <li><a ui-sref=\"Inventory.searchInventory\">Show Inventory</a></li>
+            ";
+            }
+
+            ?>
+
 
         </ul>
     </nav>

@@ -62,10 +62,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
         opened: false
     };
 
-    $scope.todayDate = function() {
-        $scope.applicatorDetails.followupdate = new Date();
-    };
-    $scope.todayDate();
+    //$scope.todayDate = function() {
+    //    $scope.applicatorDetails.followupdate = new Date();
+    //};
+    //$scope.todayDate();
 
     $scope.openFollowDate = function() {
         $scope.followup.opened = true;
@@ -504,7 +504,10 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
         $scope.applicatorDetails.searchExpression=$scope.searchExpression;
         $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
         $scope.applicatorDetails.operation='viewPermanentApplicators';
-        $("#wait").css("display", "block");
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
         var config = {
             params: {
                 data: $scope.applicatorDetails
@@ -518,15 +521,35 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
             $http.post("Applicator/php/Applicator.php", null, config)
 
                 .success(function (data, status, headers, config) {
-                    $("#wait").css("display", "block");
                     $rootScope.permanentApplicators = data;
                     $scope.totalItems =$rootScope.permanentApplicators.length;
+                    if(data.msg!=""){
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","block");
+                    }
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg!=""){
+                                $('#warning').css("display","none");
+                            }
+                        });
+                    }, 3000);
+
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    if(data.msg==""){
+                        $scope.errorMessage=data.error;
+                        console.log($scope.errorMessage);
+                        $('#error').css("display","block");
+                    }
                     console.log($rootScope.permanentApplicators);
                 })
 
                 .error(function (data, status, headers) {
-                    console.log(data);
-
+                    console.log(data.error);
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
                 });
 
         }

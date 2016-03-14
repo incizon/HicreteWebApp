@@ -1,3 +1,17 @@
+<?php
+
+error_reporting(E_ERROR | E_PARSE);
+require_once '../../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
+
+?>
 
     <!-- END TEMPLATE -->
    
@@ -49,7 +63,13 @@
                                                     <td>{{supplier.suppliername}}</td>
                                                     <td>{{supplier.contactno}}</td>
                                                     <td><button class="btn btn-primary btn-sm"><span class="fa fa-eye"></span> Preview</button>
-                                                        <button class="btn btn-info btn-sm"><span class="fa fa-floppy"></span> Modify</button> <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span> Delete</button></td>
+                                                        <?php
+                                                            if($hasWrite==1)
+                                                                echo "<button class=\"btn btn-info btn-sm\"><span class=\"fa fa-floppy\"></span> Modify</button> <button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span> Delete</button>";
+                                                        ?>
+                                                    </td>
+
+
                                                 </tr>
 
 
