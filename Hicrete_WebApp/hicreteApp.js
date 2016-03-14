@@ -274,7 +274,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ModifyRole',
             templateUrl: 'Config/html/ModifyRole.html',
             controller:'ModifyRoleController',
-            params : { selectedRole: null }
+            params : { selectedRole: null,index:null }
         })
 
         .state('Config.modifyWarehouse', {

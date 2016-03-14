@@ -677,6 +677,7 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
 
                 if(data.status!="Successful"){
                     console.log(data);
+
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
@@ -688,7 +689,7 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                alert("Error Occured");
             });
 
     }
@@ -1202,87 +1203,106 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
 
 });
 
-myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateParams) {
+myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateParams,configService) {
 
-     console.log("");
-    $scope.roleId=$stateParams.roleId;
-    $scope.selectedRole=$stateParams.selectedRole
+    $scope.roleName=$stateParams.selectedRole.roleName;
+    $scope.roleId=$stateParams.selectedRole.roleId;
 
+    console.log($stateParams.selectedRole);
+    console.log($stateParams.index);
     $scope.access=[];
-  /*  console.log($scope.roleId);
+    $scope.roleAccessList=[];
 
-    for (var i = 0; i < $rootScope.Roles.length; i++) {
-        if ($stateParams.roleId == $rootScope.Roles[i].roleId) {
-            $scope.selectedRole=$rootScope.Roles[i];
-            break;
+    var data={
+        operation :"getAccessForRole",
+        roleId: $scope.roleId
+    };
+
+    var config = {
+        params: {
+            data: data
         }
-    }*/
-    console.log($scope.selectedRole);
-    console.log($rootScope.AllAccessPermissions);
-    for(var j=0;j<$scope.selectedRole.accessList.length;j++) {
+    };
 
-            for (var i = 0; i < $rootScope.accessPermission.length; i++) {
+    $http.post("Config/php/configFacade.php",null, config)
+        .success(function (data)
+        {
 
+            if(data.status!="Successful"){
+                doShowAlert("Failure",data.message);
+            }else{
+                configService.marshalledAccessList(data.message,$scope.roleAccessList);
+                console.log($scope.roleAccessList);
+                configService.marshalledAccessList($rootScope.AllAccessPermissions,$scope.access);
 
-                $scope.newObject={
-                    moduleName:"",
-                    read:"",
-                    write:""
-                };
-                if($scope.selectedRole.accessList[j].accessId == $rootScope.AllAccessPermissions[i].accessId)
-                {
-                        $scope.newObject.moduleName=$rootScope.AllAccessPermissions[i].ModuleName;
-                        if($rootScope.AllAccessPermissions[i].accessType=="Read")
+                for(var j=0;j<$scope.roleAccessList.length;j++) {
+
+                    for (var i = 0; i < $scope.access.length; i++) {
+
+                        if($scope.roleAccessList[j].moduleName == $scope.access[i].moduleName)
                         {
-                            $scope.newObject.read=true;
+                            $scope.access[i].read.val=$scope.roleAccessList[j].read.ispresent;
+                            $scope.access[i].write.val=$scope.roleAccessList[j].write.ispresent;
+                            break;
                         }
-                        else
-                            $scope.newObject.read=false;
-                    if($rootScope.AllAccessPermissions[i].accessType=="Write")
-                    {
-                        $scope.newObject.write=true;
+
                     }
-                    else
-                        $scope.newObject.write=false;
-                    $scope.access.push($scope.newObject);
-                    break;
+
+                }
+                console.log($scope.access);
+            }
+
+        })
+        .error(function (data, status, headers, config)
+        {
+            alert("Error Occured");
+        });
+
+
+
+
+
+
+    $scope.modifyRole=function(){
+        if($scope.modifyRoleForm.$pristine){
+            alert("Fields not modified");
+            return;
+        }
+        var data={
+            operation:"modifyRole",
+            roleId:$scope.roleId,
+            roleName:$scope.roleName,
+            accessList:$scope.access
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+                console.log(data);
+
+
+                if(data.status!="Successful"){
+                    alert(data.message);
+                    $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
+                }else{
+                    alert(data.message);
                 }
 
-            }
-        console.log($scope.selectedRole.accessList[j].accessId);
-    }
-    console.log($scope.access);
-    /*$scope.roleDetails={
+            })
+            .error(function (data, status, headers, config)
+            {
+                console.log(data);
+                alert("Error Occured");
+            });
 
-        roleName:"Admin",
-        accessList:[
-            {
-                moduleName: "Inventory",
-                read:true,
-                write:false
-            },
-            {
-                moduleName: "Applicator",
-                read:true,
-                write:false
-            },
-            {
-                moduleName: "Expense",
-                read:false,
-                write:true
-            },
-            {
-                moduleName: "Payroll",
-                read:true,
-                write:false
-            },
-            {
-                moduleName: "Business",
-                read:false,
-                write:true
-            },
-        ]
-    }*/
+
+
+    }
 
 
 });

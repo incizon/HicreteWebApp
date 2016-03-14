@@ -18,6 +18,8 @@ switch ($data->operation) {
     				    break;
     case "addRole":  Config::addRole($data,$userId);
     				    break;
+    case "modifyRole":  ConfigUtils::modifyRole($data->roleId,$data->roleName,$data->accessList,$userId);
+                        break;
     case "getRoles":  ConfigUtils::getAllRoles();
     				    break;
     case "getCompanyDetails": ConfigUtils::getCompanyDetails($data->keyword);

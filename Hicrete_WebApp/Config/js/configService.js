@@ -102,9 +102,4 @@ myApp.service('configService', function(){
         }      
   };
 
-
-
-
-
-
 });
