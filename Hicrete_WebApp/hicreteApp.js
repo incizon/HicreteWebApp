@@ -265,9 +265,10 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
 
         .state('Config.modifyCompany', {
-            url: '/ModifyCompany?companyId',
+            url: '/ModifyCompany',
             templateUrl: 'Config/html/ModifyCompany.html',
-            controller:'ModifyCompanyController'
+            controller:'ModifyCompanyController',
+            params : { selectedCompany: null,index:null }
         })
 
         .state('Config.modifyRole', {
@@ -557,6 +558,8 @@ myApp.run(function($rootScope,$http) {
     $rootScope.Users=[];
     $rootScope.Roles=[];
     $rootScope.AllAccessPermissions=[];
+    $rootScope.suppliers=[];
+    $rootScope.prodInq=[];
 
 });
 
