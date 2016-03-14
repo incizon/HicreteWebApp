@@ -10,7 +10,7 @@
         $userId=$_SESSION['token'];
 
 		$data=json_decode($_GET["data"]);
-		$operationObject=new Applicator($data);
+		$operationObject=new Applicator();
 
         $operation=$data->operation;
 

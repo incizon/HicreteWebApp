@@ -1,4 +1,17 @@
+<?php
 
+//error_reporting(E_ERROR | E_PARSE);
+require_once '../../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
+
+?>
 <!-- START SEARCH -->
 <div class="panel panel-default">
     <div class="panel-body">
@@ -17,9 +30,7 @@
 </div>
 
 <!-- END SEARCH -->
-
-<div class="search-results" ng-controller="productController">
-
+<div class="search-results">
     <div class="sr-item">
         <div class="sr-item-title">Products Available</div>
 
@@ -109,9 +120,15 @@
                             </div>
                             <!--End of modal dialog-->
                         </div>
-                        <button class="btn btn-info btn-sm" data-target="#modifyDetails" data-toggle="modal"
-                                ng-click="getProduct(product)"><span class="fa fa-pencil-square-o"></span>Modify
-                        </button>
+                        <?php
+                            if($hasWrite==1){
+                                echo "<button class=\"btn btn-info btn-sm\" data-target=\"#modifyDetails\" data-toggle=\"modal\"
+                                ng-click=\"getProduct(product)\"><span class=\"fa fa-pencil-square-o\"></span>Modify
+                        </button>";
+                            }
+                        ?>
+
+
                         <!-- START OF MODIFY MODAL-->
                         <div class="modal fade inventoryDetails" id="modifyDetails" role="dialog">
                             <div class="modal-dialog">
@@ -315,7 +332,13 @@
                         </div>
 
                         <!-- END OF MODIFY MODAL-->
-                        <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+
+                        <?php
+                        if($hasWrite==1){
+                            echo "<button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
+                        }
+                        ?>
+
                     </td>
                 </tr>
 

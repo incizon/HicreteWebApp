@@ -5,7 +5,7 @@ var inventoryApp = angular.module('Inventory', ['ngRoute','ui.bootstrap']);
 
 
             .when('/inventoryWidgets',{
-                templateUrl:'Inventory/html/inventoryWidgets.html'
+                templateUrl:'Inventory/html/inventoryWidgets.php'
 
             }).
 

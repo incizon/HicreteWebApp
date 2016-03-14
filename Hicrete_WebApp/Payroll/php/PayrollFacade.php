@@ -5,7 +5,6 @@ $details = json_decode($_GET["details"]);
    switch($details->operation){
 
        case 'createYear':
-
                $message = "Year Created Successfully";
                $arr = array('msg' => $message, 'error' => '');
                $jsn = json_encode($arr);
