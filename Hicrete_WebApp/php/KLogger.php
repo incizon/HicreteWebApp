@@ -1,5 +1,5 @@
 <?php
-	
+
 	/* Finally, A light, permissions-checking logging class. 
 	 * 
 	 * Author	: Kenneth Katzgrau < katzgrau@gmail.com >
@@ -121,6 +121,15 @@
 			}
 		}
 		
+		public function setPriority($priority){
+			if($priority<=6 && $priority >=1){
+				$this->priority=$priority;
+			}else{
+				throw  new Exception("Invalid priority value");
+			}
+
+		}
+
 		private function getTimeLine( $level )
 		{
 			$time = date( $this->DateFormat );
@@ -141,6 +150,9 @@
 					return "$time - LOG   -->";
 			}
 		}
+
+
+
 		
 	}
 
