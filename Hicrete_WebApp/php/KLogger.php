@@ -122,12 +122,7 @@
 		}
 		
 		public function setPriority($priority){
-			if($priority<=6 && $priority >=1){
-				$this->priority=$priority;
-			}else{
-				throw  new Exception("Invalid priority value");
-			}
-
+			$this->priority=$priority;
 		}
 
 		private function getTimeLine( $level )
