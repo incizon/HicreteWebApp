@@ -1315,6 +1315,18 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         console.log(prodBatchInfo);
         prodBatchInfo.option = message;
 
+        $scope.today = function(){
+            $scope.prodBatchInfo.dateOfEntryAftrProd = new Date();
+        };
+
+        $scope.openDOE = function(){
+            $scope.showPicker.opened = true;
+        };
+
+        $scope.showPicker = {
+            opened:false
+        }
+
         if (prodBatchInfo.option == 'complete' && prodBatchInfo.tranReq != true) {
             prodBatchInfo.modeOfTransport = "";
             prodBatchInfo.vehicleNo = "";

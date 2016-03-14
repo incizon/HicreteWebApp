@@ -113,7 +113,7 @@
                                                 <div class="col-md-9">
                                                     <div class="input-group" >
                                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                        <input style="width: 66%;" type="text" name="dateOfEntry" class="form-control date"  ng-model="prodBatchInfo.dateOfEntryAftrProd" required data-date-format="dd-mm-yyyy">
+                                                        <input style="width: 66%;" type="text" name="dateOfEntry" class="form-control"  ng-model="prodBatchInfo.dateOfEntryAftrProd" ng-click="openDOE()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showPicker.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
                                                     </div>
                                                     <div class="help-block" ng-messages="prodBatchOutwardForm.dateOfEntry.$error" ng-show="submitted">
                                                         <p style="color:red" ng-message="required">Please enter date</p>
