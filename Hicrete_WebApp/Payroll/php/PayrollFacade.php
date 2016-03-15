@@ -1,12 +1,16 @@
 <?php
 
-require_once ("database-connection.php");
+require_once ("../../php/Database.php");
 
 include_once ("PayrollClassLib.php");
 
 if (!isset($_SESSION['token'])) {
     session_start();
 }
+
+$db = Database::getInstance();
+$connect = $db->getConnection();
+
 $userId=$_SESSION['token'];
 
 $data = json_decode($_GET["details"]);

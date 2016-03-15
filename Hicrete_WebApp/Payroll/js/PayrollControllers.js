@@ -248,9 +248,37 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
 myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
 
     $scope.employeeDetails={
-
-        opeartion:""
+        operation:""
     }
+
+
+
+    $scope.getEmployeeDetails=function(){
+
+        $scope.employeeDetails.operation="getEmployeeDetails";
+        var config = {
+            params: {
+                details: $scope.employeeDetails
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+            .success(function (data) {
+
+                console.log(data);
+                $scope.LeaveApprovers=data.LeaveApprover;
+                $scope.EmployeeDetails=data.EmployeeDetails;
+
+                console.log($scope.LeaveApprovers);
+                console.log($scope.EmployeeDetails);
+            })
+            .error(function (data, status, headers, config) {
+
+
+            });
+
+    }
+
+    $scope.getEmployeeDetails();
 
     $scope.AddEmployee=function(){
 
