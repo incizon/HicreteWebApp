@@ -373,6 +373,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     }
     $scope.nextStep = function () {
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
+
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
             //alert("if");
@@ -380,6 +381,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.step++;
             console.log("Step Value:" + $scope.step);
+            console.log("in next step =");
+            console.log($scope.InwardData);
             $scope.submitted = false;
         }
     }
@@ -406,6 +409,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.addInwardDetails = function () {
         $scope.errorMessage="";
         $scope.warningMessage="";
+        console.log("in next step data before class =");
+        console.log($scope.InwardData);
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }

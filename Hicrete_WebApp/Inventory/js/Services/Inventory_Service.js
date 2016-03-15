@@ -242,7 +242,7 @@ myApp.service('inwardService', function () {
         console.log("IN SERVICE OF INWARD=");
         $('#loader').css("display","block");
         var data = {
-            inwardData: inwardData,
+            inwardData: $scope.InwardData,
             module: 'inward',
             operation: 'insert'
         }
@@ -251,7 +251,7 @@ myApp.service('inwardService', function () {
                 data: data
             }
         };
-        console.log(inwardData);
+        console.log(config);
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 $('#loader').css("display","none");
@@ -273,12 +273,12 @@ myApp.service('inwardService', function () {
                     $('#error').css("display","block");
                 }
 
+                window.location="dashboard.php#/Inventory";
 
-
-                $scope.inwardData=[];
+                //$scope.inwardData=[];
                 setTimeout(function(){
                     //window.location.reload(true);
-                    // window.location="dashboard.php#/Inventory";
+
                 },1000);
             })
             .error(function (data, status, headers) {

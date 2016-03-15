@@ -50,6 +50,7 @@ class InwardData extends CommonMethods
             $this->companyName = $inwardDetails->inwardData->companyName;
 //            $this->suppplierName = $inwardDetails->inwardData->suppplierName;
             $this->dateOfInward = $inwardDetails->inwardData->date;
+
 //            $this->materialQty = $inwardDetails->inwardData->materialQuantity;
             $this->warehouse = $inwardDetails->inwardData->warehouseName;
             $this->suppervisor = $inwardDetails->inwardData->suppervisor;
@@ -186,12 +187,15 @@ class InwardData extends CommonMethods
             //Begin Transaction
             $dbh->beginTransaction();
             //Create preapred Statement
+            $date = new DateTime($this->dateOfInward);
+            $inwardDate = $date->format('Y-m-d');
+
             $stmtInward = $dbh->prepare("INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime) 
              values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())");
             $stmtInward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':supervisorid', $this->suppervisor, PDO::PARAM_STR, 10);
-            $stmtInward->bindParam(':dateofentry', $this->dateOfInward, PDO::PARAM_STR, 40);
+            $stmtInward->bindParam(':dateofentry', $inwardDate, PDO::PARAM_STR, 40);
             $stmtInward->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
@@ -201,6 +205,7 @@ class InwardData extends CommonMethods
                 $materials = $data->inwardData->inwardMaterials;
                 //Insert Data into Inward Details table
                 foreach ($materials as $material) {
+
                     $stmtInwardDetails = $dbh->prepare("INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,lchnguserid,lchngtime,creuserid,cretime)
                     values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:lchnguserid,now(),:creuserid,now())");
                     $stmtInwardDetails->bindParam(':inwardid', $lastInwardId, PDO::PARAM_STR, 10);
