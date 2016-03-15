@@ -1234,8 +1234,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
 
 
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
+    inventoryService.getCompanys($scope,$http);
+    inventoryService.getWarehouses($scope,$http);
     //$scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     //$scope.today1 = Date();
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
