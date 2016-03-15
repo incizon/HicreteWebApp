@@ -88,6 +88,10 @@ configService.getAllAccessPermission($http,$scope);
 
         }
 
+        $scope.checkAll = function(){
+            console.log('CheckAll');
+        };
+
         var clearRoleForm=function(){
             $scope.roleName="";
             angular.forEach($scope.accessList, function(accessEntry) {
@@ -220,17 +224,17 @@ userType:""
                  $scope.warningMessage= "User added successfully..";
                  $('#warning').css("display","block");
                  console.log($scope.warningMessage);
-                 //setTimeout(function() {
-                 //    $scope.$apply(function() {
-                 //        if(data.message!=""){
-                 //            $('#warning').css("display","none");
-                 //        }
-                 //    });
-                 //}, 3000);
+                 setTimeout(function() {
+                     $scope.$apply(function() {
+                         if(data.message!=""){
+                             $('#warning').css("display","none");
+                         }
+                     });
+                 }, 3000);
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
                      window.location.reload(true);
-                 },6000);
+                 },8000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
@@ -438,6 +442,12 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             keyword:keyword,
             searchBy:$scope.searchAttribute
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -449,6 +459,17 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
 
                 if(data.status==="Successful"){
                     console.log(data);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.warningMessage="Data found Successfully..";
+                    console.log($scope.warningMessage);
+                    $('#warning').css("display","block");
+
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                        });
+                    }, 3000);
                     $rootScope.Users=data.message;
                     $scope.totalItems=$rootScope.Users.length;
                     console.log($scope.totalItems);
@@ -457,16 +478,42 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 else if(data.status==="NoRows")
                 {
                     $rootScope.Users=[];
-                    alert(data.message);
+                    //alert(data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
 
                 }else{
-                alert(data.message);
+                //alert(data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
             }
 
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage="Data not found..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
 
@@ -666,6 +713,12 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
             operation:"getRoleDetails",
             key:$scope.searchKeyword
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -677,10 +730,39 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    //doShowAlert("Failure",data.message);
-                }else{
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+
+                }else if(data.status === "Successful"){
                     console.log(data);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+
                     $rootScope.Roles=data.message;
+                }else{
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
 
                     //console.log($scope.Companies);
                 }
@@ -688,7 +770,17 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.warningMessage="Data found Successfully..";
+                console.log($scope.warningMessage);
+                $('#warning').css("display","block");
+
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#warning').css("display","none");
+                    });
+                }, 3000);
             });
 
     }
@@ -760,6 +852,12 @@ $scope.warehouse={
             operation:"getWareHouseDetails",
             key:keyword
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -771,18 +869,35 @@ $scope.warehouse={
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    //doShowAlert("Failure",data.message);
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
                 }else{
                     console.log(data);
                     $rootScope.warehouses=data.message;
-
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
                     console.log($scope.Companies);
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage="Data not found..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
     };
@@ -799,6 +914,12 @@ $scope.warehouse={
             operation:"getCompanyDetails",
             keyword:searchkeyword
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var config = {
             params: {
                 data: data
@@ -810,9 +931,20 @@ $scope.warehouse={
 
                     if (data.status != "Successful") {
                         console.log(data);
-                        //doShowAlert("Failure",data.message);
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $scope.errorMessage="Data not found..";
+                        $('#error').css("display","block");
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $('#error').css("display","none");
+                            });
+                        }, 3000);
+
                     } else {
                         console.log(data);
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
                         $rootScope.Companies = data.message;
                         console.log($rootScope.Companies);
 
@@ -821,7 +953,15 @@ $scope.warehouse={
 
                 })
                 .error(function (data, status, headers, config) {
-                    doShowAlert("Failure", "Error Occured");
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage="Data not found..";
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
                 });
 
         //}
@@ -904,7 +1044,7 @@ $scope.addWarehouse=function(){
    var data={
             operation :"addWarehouse",
             data:$scope.warehouse
-      };
+      };        
 
     $scope.loading=true;
     $scope.errorMessage="";
@@ -1181,14 +1321,16 @@ $scope.exemptedAccessList=[];
 myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $stateParams) {
 
         console.log("IN");
-    console.log($stateParams.companyId);
-
-    for (var i = 0; i < $rootScope.Companies.length; i++) {
+    console.log($stateParams);
+    $scope.selectedCompany=$stateParams.selectedCompany;
+    $scope.companyIndex=$stateParams.index;
+    console.log($scope.companyIndex);
+   /* for (var i = 0; i < $rootScope.Companies.length; i++) {
         if ($stateParams.companyId == $rootScope.Companies[i].companyId) {
             $scope.selectedCompany=$rootScope.Companies[i];
             break;
         }
-    }
+    }*/
     console.log($scope.selectedCompany);
 
 
@@ -1210,10 +1352,15 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             {
 
                 if(data.status!="Successful"){
-                    console.log(data);
+
+                     console.log(data);
+
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
+                    $rootScope.Companies[$scope.companyIndex]=$scope.selectedCompany;
+                    alert(data.message);
+                    window.location= "/Config/SearchCompany";
 
 
 
@@ -1233,87 +1380,106 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
 
 });
 
-myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateParams) {
+myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateParams,configService) {
 
-     console.log("");
-    $scope.roleId=$stateParams.roleId;
-    $scope.selectedRole=$stateParams.selectedRole
+    $scope.roleName=$stateParams.selectedRole.roleName;
+    $scope.roleId=$stateParams.selectedRole.roleId;
 
+    console.log($stateParams.selectedRole);
+    console.log($stateParams.index);
     $scope.access=[];
-  /*  console.log($scope.roleId);
+    $scope.roleAccessList=[];
 
-    for (var i = 0; i < $rootScope.Roles.length; i++) {
-        if ($stateParams.roleId == $rootScope.Roles[i].roleId) {
-            $scope.selectedRole=$rootScope.Roles[i];
-            break;
+    var data={
+        operation :"getAccessForRole",
+        roleId: $scope.roleId
+    };
+
+    var config = {
+        params: {
+            data: data
         }
-    }*/
-    console.log($scope.selectedRole);
-    console.log($rootScope.AllAccessPermissions);
-    for(var j=0;j<$scope.selectedRole.accessList.length;j++) {
+    };
 
-            for (var i = 0; i < $rootScope.accessPermission.length; i++) {
+    $http.post("Config/php/configFacade.php",null, config)
+        .success(function (data)
+        {
 
+            if(data.status!="Successful"){
+                doShowAlert("Failure",data.message);
+            }else{
+                configService.marshalledAccessList(data.message,$scope.roleAccessList);
+                console.log($scope.roleAccessList);
+                configService.marshalledAccessList($rootScope.AllAccessPermissions,$scope.access);
 
-                $scope.newObject={
-                    moduleName:"",
-                    read:"",
-                    write:""
-                };
-                if($scope.selectedRole.accessList[j].accessId == $rootScope.AllAccessPermissions[i].accessId)
-                {
-                        $scope.newObject.moduleName=$rootScope.AllAccessPermissions[i].ModuleName;
-                        if($rootScope.AllAccessPermissions[i].accessType=="Read")
+                for(var j=0;j<$scope.roleAccessList.length;j++) {
+
+                    for (var i = 0; i < $scope.access.length; i++) {
+
+                        if($scope.roleAccessList[j].moduleName == $scope.access[i].moduleName)
                         {
-                            $scope.newObject.read=true;
+                            $scope.access[i].read.val=$scope.roleAccessList[j].read.ispresent;
+                            $scope.access[i].write.val=$scope.roleAccessList[j].write.ispresent;
+                            break;
                         }
-                        else
-                            $scope.newObject.read=false;
-                    if($rootScope.AllAccessPermissions[i].accessType=="Write")
-                    {
-                        $scope.newObject.write=true;
+
                     }
-                    else
-                        $scope.newObject.write=false;
-                    $scope.access.push($scope.newObject);
-                    break;
+
+                }
+                console.log($scope.access);
+            }
+
+        })
+        .error(function (data, status, headers, config)
+        {
+            alert("Error Occured");
+        });
+
+
+
+
+
+
+    $scope.modifyRole=function(){
+        if($scope.modifyRoleForm.$pristine){
+            alert("Fields not modified");
+            return;
+        }
+        var data={
+            operation:"modifyRole",
+            roleId:$scope.roleId,
+            roleName:$scope.roleName,
+            accessList:$scope.access
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+                console.log(data);
+
+
+                if(data.status!="Successful"){
+                    alert(data.message);
+                    $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
+                }else{
+                    alert(data.message);
                 }
 
-            }
-        console.log($scope.selectedRole.accessList[j].accessId);
-    }
-    console.log($scope.access);
-    /*$scope.roleDetails={
+            })
+            .error(function (data, status, headers, config)
+            {
+                console.log(data);
+                alert("Error Occured");
+            });
 
-        roleName:"Admin",
-        accessList:[
-            {
-                moduleName: "Inventory",
-                read:true,
-                write:false
-            },
-            {
-                moduleName: "Applicator",
-                read:true,
-                write:false
-            },
-            {
-                moduleName: "Expense",
-                read:false,
-                write:true
-            },
-            {
-                moduleName: "Payroll",
-                read:true,
-                write:false
-            },
-            {
-                moduleName: "Business",
-                read:false,
-                write:true
-            },
-        ]
-    }*/
+
+
+    }
 
 
 });
@@ -1370,241 +1536,3 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 });
 
 
-myApp.controller('ModifyUserController',function($scope,$http,$rootScope,configService){
-
-    $scope.refreshRoleList=true;
-    //$scope.step=1;
-    $scope.userInfoSubmitted=false;
-    $scope.accessInfoSubmitted=false;
-    $scope.showCompanyError=false;
-
-    $scope.roleAccessList=[];
-    $scope.selectedRole={"roleId":""};
-    $scope.otherAccessList=[];
-    $scope.isFromUser=true;
-
-    $scope.userInfo={
-        name:"Atul Dhatrak"
-    };
-
-
-    configService.getRoleList($http,$scope);
-
-    //$scope.nextStep = function() {
-    //    $scope.step++;
-    //}
-    //
-    //$scope.prevStep = function() {
-    //    $scope.step--;
-    //}
-
-
-    //$scope.clearUserForm=function(){
-    //    $scope.step=1;
-    //    $scope.userInfo={
-    //        firstName:"",
-    //        lastName:"",
-    //        dob:"",
-    //        address:"",
-    //        city:"",
-    //        state:"",
-    //        country:"",
-    //        pincode:"",
-    //        email:"",
-    //        mobile:"",
-    //        designation:"",
-    //        userType:""
-    //    };
-    //    $scope.roleAccessList=[];
-    //    $scope.otherAccessList=[];
-    //    $scope.selectedRole={"roleId":""};
-    //    //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser";
-    //
-    //}
-
-
-    $scope.selectUserForModify= function(user)
-    {
-        $scope.userInfo=user;
-        console.log($scope.userInfo);
-
-    }
-
-    $scope.modifyUser=function(){
-        console.log($scope.userInfo);
-               var data={
-            operation :"modifyUser",
-            userInfo:$scope.userInfo
-
-        };
-
-        var config = {
-            params: {
-                data: data
-
-            }
-        };
-
-       /* $http.post("Config/php/configFacade.php",null, config)
-            .success(function (data)
-            {
-
-                console.log(data.status);
-                console.log(data.message);
-                if(data.status=="Successful"){
-                    console.log(data);
-                   // window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";
-                }else if(data.status=="Unsuccessful"){
-                    //doShowAlert("Failure",data.message);
-                    console.log(data);
-                }else{
-                    //doShowAlert("Failure",data.message);
-                    console.log(data);
-                }
-                $scope.clearUserForm();
-
-            })
-            .error(function (data, status, headers, config)
-            {
-                doShowAlert("Failure","Error Occurred");
-                $scope.clearUserForm();
-
-            });*/
-
-        $scope.userInfoSubmitted=false;
-        $scope.accessInfoSubmitted=false;
-        $scope.showCompanyError=false;
-    }
-
-
-
-
-
-    $scope.loadAccessPermission=function(){
-
-        var data={
-            operation :"getAccessForRole",
-            roleId: $scope.selectedRole.roleId
-        };
-
-        var config = {
-            params: {
-                data: data
-            }
-        };
-
-        $http.post("Config/php/configFacade.php",null, config)
-            .success(function (data)
-            {
-
-                if(data.status!="Successful"){
-                    doShowAlert("Failure",data.message);
-                }else{
-                    configService.marshalledAccessList(data.message,$scope.roleAccessList);
-                }
-
-            })
-            .error(function (data, status, headers, config)
-            {
-                doShowAlert("Failure","Error Occured");
-            });
-    }
-
-
-    var populateOtherAccessList=function(){
-
-        console.log($scope.accessList);
-        console.log($scope.roleAccessList);
-        angular.forEach($scope.accessList, function(accessEntry) {
-            var addThisEntry=true;
-            angular.forEach($scope.roleAccessList, function(roleAccessEntry) {
-                if(accessEntry.moduleName===roleAccessEntry.moduleName){
-                    addThisEntry=false;
-                    if(!roleAccessEntry.read.ispresent){
-                        accessEntry.write.ispresent=false;
-                        $scope.otherAccessList.push(accessEntry);
-
-                    }else if(!roleAccessEntry.write.ispresent){
-                        accessEntry.read.ispresent=false;
-                        $scope.otherAccessList.push(accessEntry);
-
-                    }
-                }
-            });
-            if(addThisEntry){
-                $scope.otherAccessList.push(accessEntry);
-            }
-        });
-        console.log($scope.otherAccessList);
-    }
-
-
-    $scope.loadExtraAccessPermission=function(){
-
-        $scope.accessList=[];
-        var data={
-            operation :"getAccessPermission"
-        };
-        var config = {
-            params: {
-                data: data
-            }
-        };
-
-        $http.post("Config/php/configFacade.php",null, config)
-            .success(function(data){
-                if(data.status!="Successful"){
-                    //doShowAlert("Failure",data.message);
-                }else{
-
-                    configService.marshalledAccessList(data.message,$scope.accessList);
-                    populateOtherAccessList();
-                }
-            })
-            .error(function(data, status, headers, config)
-            {
-                doShowAlert("Failure","Error Occured");
-                $scope.loaded=true;
-            });
-    }
-
-
-
-
-
-
-    $scope.addExtraAccessPermission=function(){
-        angular.forEach($scope.otherAccessList, function(otherAccessEntry) {
-            var addThisEntry=true;
-            angular.forEach($scope.roleAccessList, function(roleAccessEntry) {
-                if(roleAccessEntry.moduleName===otherAccessEntry.moduleName){
-                    addThisEntry=false;
-                    if(otherAccessEntry.read.val){
-                        roleAccessEntry.read.ispresent=	true;
-                        roleAccessEntry.read.val= true;
-                        roleAccessEntry.read.accessId=otherAccessEntry.read.accessId ;
-
-                    }else if(otherAccessEntry.write.val){
-
-                        roleAccessEntry.write.ispresent= true;
-                        roleAccessEntry.write.val= true;
-                        roleAccessEntry.write.accessId=otherAccessEntry.write.accessId ;
-
-                    }
-                }
-            });
-            if(addThisEntry){
-
-                if(otherAccessEntry.read.val)
-                    otherAccessEntry.read.ispresent=otherAccessEntry.read.val;
-
-                if(otherAccessEntry.write.val)
-                    otherAccessEntry.write.ispresent=otherAccessEntry.write.val;
-
-                $scope.roleAccessList.push(otherAccessEntry);
-            }
-        });
-    }
-
-
-});

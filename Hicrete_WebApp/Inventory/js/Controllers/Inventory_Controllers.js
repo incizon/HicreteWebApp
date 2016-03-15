@@ -1089,9 +1089,26 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
  * Start of of PRODUCTION BATCH
  *********************************************************************************************/
 
-myApp.controller('productionBatchController', function ($scope, $filter, $http,inventoryService, ProductionBatchService) {
+myApp.controller('productionBatchController', function ($scope,$rootScope, $filter, $http,inventoryService, ProductionBatchService) {
 
     $scope.qtyError=0;
+    $scope.currentPage = 1;
+    $scope.prodBatchPerPage = 5;
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.prodBatchPerPage;
+        end = begin + $scope.prodBatchPerPage;
+        index = $rootScope.prodInq.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+    $scope.formatDate=function()
+    {
+        $scope.prodBatchInfo.endDate=$filter("date")($scope.prodBatchInfo.endDate, 'dd-MM-yyyy');
+    }
 
     var data = {
         module: 'inventorySearch'
@@ -1151,12 +1168,12 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
 
     $scope.getAvailableQty = function (pMaterialId) {
         var qty;
-        console.log("New function here");
+       // console.log("New function here");
         for (var i = 0; i < $scope.inventoryData.length; i++) {
             if (pMaterialId == $scope.inventoryData[i].materialid) {
                 qty = $scope.inventoryData[i].totalquantity;
                 $scope.availableTotalquantity=qty;
-                console.log(qty);
+                //console.log(qty);
                 break;
             }
         }
@@ -1190,6 +1207,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
     inventoryService.getSavedCompanys($scope);
     inventoryService.getSavedWarehouses($scope);
     //$scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
+    //$scope.today1 = Date();
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
     console.log($scope.today);
     $scope.submitted = false;
@@ -1285,7 +1303,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         $scope.step = 1;
     }
     $scope.initProd = function (prodBatchInfo, page, message) {
-
+        console.log($scope.today1);
         console.log(prodBatchInfo.batchNo);
         console.log(prodBatchInfo.batchCodeName);
         console.log(prodBatchInfo.dateOfEntry);
@@ -1296,6 +1314,18 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         console.log(prodBatchInfo.tranReq);
         console.log(prodBatchInfo);
         prodBatchInfo.option = message;
+
+        $scope.today = function(){
+            $scope.prodBatchInfo.dateOfEntryAftrProd = new Date();
+        };
+
+        $scope.openDOE = function(){
+            $scope.showPicker.opened = true;
+        };
+
+        $scope.showPicker = {
+            opened:false
+        }
 
         if (prodBatchInfo.option == 'complete' && prodBatchInfo.tranReq != true) {
             prodBatchInfo.modeOfTransport = "";
@@ -1323,6 +1353,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
 
             prodBatchInfo.step = $scope.step;
             prodBatchInfo.option = message;
+
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
             setTimeout(function () {
                 window.location="dashboard.php#/Inventory";
@@ -1358,7 +1389,7 @@ myApp.controller('productionBatchController', function ($scope, $filter, $http,i
         else if (page == "Search" || page == 'Complete') {
             prodBatchInfo.option = message;
             prodBatchInfo.step = 0;
-            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
             if(page =='Complete')
             {
                 setTimeout(function () {

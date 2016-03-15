@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="col-md-12">
 
     <div class="panel panel-default">
@@ -55,7 +64,7 @@
 
                         <td>
                             <!--<button class="btn btn-primary"  data-toggle="modal" data-target="#viewDetails">View</button>-->
-                            <a ui-sref="Config.modifyCompany({companyId:Comp.companyId})"> <button class="btn btn-info">Modify</button></a>
+                            <a ui-sref="Config.modifyCompany({selectedCompany:Comp,index:$index})"> <button class="btn btn-info">Modify</button></a>
                             <button class="btn btn-danger">Delete</button>
                         </td>
                     </tr>

@@ -362,7 +362,7 @@ myApp.service('outwardService', function () {
 
 myApp.service('ProductionBatchService', function () {
 
-    this.addProdBatchInfo = function ($scope, $http, prodBatchInfo) {
+    this.addProdBatchInfo = function ($scope, $http, prodBatchInfo,$rootScope) {
 
         //console.log(prodBatchInfo.prodcdMaterial);
         //console.log("inside controller check"+materialType);
@@ -381,16 +381,31 @@ myApp.service('ProductionBatchService', function () {
                 console.log(data);
 
                 if (prodBatchInfo.option == 'Inquiry' || prodBatchInfo.option == 'InquiryAll') {
-                    $scope.prodInq = data;
+                    $rootScope.prodInq = data;
+                    $scope.totalItems= $rootScope.prodInq.length;
                 }
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlert("Success", data.msg);
+                    if(data.msg!=""){
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","block");
+                    }
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg!=""){
+                                $('#warning').css("display","none");
+                            }
+                        });
+                    }, 3000);
+
                 }
-                else if (data.error != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll')
+                else if (data.error != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlertFailure("Failure", data.error);
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
 
-
+                }
                 $scope.step = 1;
                 $scope.clear('All');
 
@@ -401,6 +416,8 @@ myApp.service('ProductionBatchService', function () {
             .error(function (data, status, headers, config) {
                 console.log("Error calling php");
                 //$scope.messages=data.error;
+                $scope.errorMessage=data.error;
+                $('#error').css("display","block");
                 $('#loader').css("display","none");
                 //$scope.messages.push(data.error);
             });

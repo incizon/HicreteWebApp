@@ -387,9 +387,6 @@ class ConfigUtils
                     $result_array = array();
                     $result_array['roleId'] = $result['roleId'];
                     $result_array['roleName'] = $result['roleName'];
-                    $result_array['accessList'] = array();
-                    //$result_array['createdByI'] = $result['createdBy'];
-                   // echo $result['createdBy'];
                     $date = new DateTime($result['creationDate']);
                     $dob = $date->format('Y-m-d');
 
@@ -404,21 +401,6 @@ class ConfigUtils
                             $result_array['createdBy']= $result1['firstname'];
                         }
                     }
-                    $stmt2 = $conn->prepare("select accessId from roleaccesspermission where roleId=:roleId");
-                    $stmt2->bindParam(':roleId', $result['roleId'], PDO::PARAM_STR);
-                    if($stmt2->execute()){
-                        while ( $result2=$stmt2->fetch(PDO::FETCH_ASSOC))
-                        {
-
-                            $result_array['accessList'][] = array(
-                                'accessId' => $result2['accessId'],
-
-                            );
-                        }
-
-                    }
-
-
 
                     array_push($json_response, $result_array); //push the values in the array
                     $noOfRows++;
@@ -429,7 +411,7 @@ class ConfigUtils
                     echo AppUtil::getReturnStatus("Successful",$json_response);}
                 else {
 
-                    echo AppUtil::getReturnStatus("NoRows", "No companies found");
+                    echo AppUtil::getReturnStatus("NoRows", "No Role found");
                 }
             }else{
                 echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
@@ -856,6 +838,78 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
 
     }
 
+
+
+    public static function modifyRole($roleId ,$roleName,$accessList, $userId)
+    {
+
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+
+            $conn->beginTransaction();
+
+            $stmt = $conn->prepare("SELECT * FROM `rolemaster` WHERE `roleId`=:roleId");
+            $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+
+            $rollback = true;
+            if ($stmt->execute()) {
+                $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                if (count($result) <= 0) {
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Role not found");
+                    return;
+                }else{
+
+                    $stmt = $conn->prepare("DELETE FROM `roleaccesspermission` WHERE `roleId`=:roleId");
+                    $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+                    if($stmt->execute()){
+
+                        $stmt= $conn->prepare("UPDATE `rolemaster` SET `roleName`=:roleName , `lastModifiedBy`=:userId,`lasModificationDate`=now() WHERE `roleId`=:roleId");
+                        $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+                        $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                        $stmt->bindParam(':roleName', $roleName, PDO::PARAM_STR);
+
+                        if($stmt->execute()){
+
+                            $isBreak=false;
+                            foreach ($accessList as $accessEntry) {
+                                if ($accessEntry->read->val) {
+                                    if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->read->accessId)) {
+                                        $isBreak=true;
+                                        break;
+                                    }
+                                }
+                                if ($accessEntry->write->val) {
+                                    if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->write->accessId)) {
+                                        $isBreak=true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!$isBreak) {
+                                $rollback = false;
+
+                            }
+                        }
+                    }
+
+                }
+
+            }
+            if ($rollback) {
+                $conn->rollback();
+                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+            } else {
+                $conn->commit();
+                echo AppUtil::getReturnStatus("Successful", "Role Modified successfully");
+            }
+
+        } catch (Exception $e) {
+            echo AppUtil::getReturnStatus("Exception", "Exception Occurred while creating role");
+        }
+
+    }
 
 
 

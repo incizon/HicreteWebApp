@@ -67,7 +67,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="supplier in suppliers ">
+                        <tr ng-repeat="supplier in suppliers |filter : paginate">
                             <td>{{$index + 1}}</td>
                             <td>{{supplier.suppliername}}</td>
                             <td>{{supplier.contactno}}</td>
@@ -93,14 +93,10 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
         </div>
         <!-- END SEARCH RESULT -->
 
-        <ul class="pagination pagination-sm pull-right push-down-20">
-            <li class="disabled"><a href="#">«</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">»</a></li>
-        </ul>
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="supplierPerPage" class="pagination-sm">
+        </uib-pagination>
 
     </div>
 </div>
