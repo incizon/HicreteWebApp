@@ -1,7 +1,7 @@
 <?php
     require_once('Supplier.php');
-require_once 'Database/Database.php';
-require_once '../../KLogger.php';
+    require_once 'Database/Database.php';
+//require_once '../../KLogger.php';
 
     //require_once('Database.php');
 
@@ -26,14 +26,14 @@ $userId = $_SESSION['token'];
 
     //$arr = array('supplierName' => 'abcd', 'contactNo' => "123123",'address' => "ithe",'city' => "Ithech",'country' => "hich",'pinCode' => "123123");
     //$suppObj = json_encode($arr);
-$log = new KLogger ( "../../logs/log.txt" , KLogger::INFO );
+//$log = new KLogger ( "../../logs/log.txt" , KLogger::INFO );
     $supplierVar = new Supplier($supplier);
     //echo $supplierVar->supplierName;
-    $log->LogFATAL("[".$userId."] Inside supplier submit");
+//    $log->LogFATAL("[".$userId."] Inside supplier submit");
     if(!$supplierVar->isAvailable($dbh))
     {
-        $supplierVar->addSupplierToDb($dbh,$userId);
-        $log->LogFATAL("36 [".$userId."] Its done");
+        $supplierVar->addSupplierToDb($dbh,$userId,$supplier);
+//        $log->LogFATAL("36 [".$userId."] Its done");
     }
     else
     {

@@ -175,15 +175,18 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .success(function (data) {
                 console.log("IN POST UPDATE OPERATION:");
                 console.log(data);
-                doShowAlert("Success", data.msg);
-                setTimeout(function () {
-                    window.location.reload(true);
-                }, 1000);
+                if(data.msg!="")
+                    alert("Success", data.msg);
+                else
+                    alert("Success", data.error);
+
+                    window.location="dashboard.php#/Inventory";
+
                 $('#loader').css("display","none");
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
-                doShowAlert("Failure", data.msg);
+                alert(data);
             });
 
     }
@@ -317,8 +320,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
+    //inventoryService.getSavedCompanys($scope);
+    //inventoryService.getSavedWarehouses($scope);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -367,8 +370,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
             //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
-            $scope.stepa=2;
-            //console.log("Step Value:" + $scope.stepa);
+            $scope.step=2;
+            console.log("Step Value:" + $scope.step);
             $scope.submitted = false;
             //console.log("in nest form function");
         }
@@ -376,13 +379,16 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     }
     $scope.nextStep = function () {
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
+
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            alert("if");
+            //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.step++;
             console.log("Step Value:" + $scope.step);
+            console.log("in next step =");
+            console.log($scope.InwardData);
             $scope.submitted = false;
         }
     }
@@ -409,6 +415,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.addInwardDetails = function () {
         $scope.errorMessage="";
         $scope.warningMessage="";
+        console.log("in next step data before class =");
+        console.log($scope.InwardData);
         inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }
@@ -511,10 +519,18 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
      **************************************************/
 
 // inventoryService.getProducts($scope,$http);
-// Get Suppliers From DB 
-    $http.post("Inventory/php/supplierSearch.php", null)
+// Get Suppliers From DB
+    var data = {
+        operation: 'search'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/supplierSearch.php", null,config)
         .success(function (data) {
-            console.log(data);
+            console.log("Suppliers="+data);
             $scope.suppliers = data;
             console.log($scope.suppliers);
         })
@@ -687,16 +703,23 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
+                if(data.msg!=""){
+                    alert(data.msg);
+                }else{
+                    alert(data.error);
+                }
                  setTimeout(function(){
                      window.location="dashboard.php#/Inventory";
+
                 },1000);
                 $scope.outwardData = data;
-                $scope.clearFields($scope.OutwardData);
+                //$scope.clearFields($scope.OutwardData);
                     $scope.submitted = false;
 
             })
             .error(function (data, status, headers) {
                 console.log(data);
+                alert(data);
 
             });
     }
@@ -1211,8 +1234,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
 
 
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
+    inventoryService.getCompanys($scope,$http);
+    inventoryService.getWarehouses($scope,$http);
     //$scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     //$scope.today1 = Date();
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');

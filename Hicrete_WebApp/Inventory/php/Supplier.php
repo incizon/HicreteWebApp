@@ -52,31 +52,30 @@ class Supplier
 
     }
 
-    public function addSupplierToDb($dbh,$userId)
+    public function addSupplierToDb($dbh,$userId,$supplier)
     {
+
         $delFlgDflt='N';
         try{
 
         $stmt = $dbh->prepare("INSERT INTO supplier (SUPPLIERNAME,CONTACTNO,POINTOFCONTACT,OFFICENO,CSTNO,VATNO,ADDRESS,CITY,COUNTRY,PINCODE,DELFLG,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
               values (:supplierName,:contactNo,:pointofcontact,:officeno,:cstno,:vatno,:address,:city,:country,:pincode,:delflg,:lchngUserId,now(),:creUserId,now())");
 
-        $stmt->bindParam(':supplierName', $this->supplierName, PDO::PARAM_STR,10);
-        $stmt->bindParam(':contactNo', $this->contactNo, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':pointofcontact', $this->pointOfContact, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':officeno', $this->officeNo, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':vatno', $this->vatNo, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':cstno', $this->cstNo, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':address', $this->address, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':city', $this->city, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':country', $this->country, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':pincode', $this->pinCode, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':delflg', $delFlgDflt, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
-        $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
+            $stmt->bindParam(':supplierName', $supplier->supplierName);
+            $stmt->bindParam(':contactNo', $supplier->contactNo);
+            $stmt->bindParam(':pointofcontact', $supplier->pointOfContact);
+            $stmt->bindParam(':officeno', $supplier->officeNo);
+            $stmt->bindParam(':cstno', $supplier->CSTNo);
+            $stmt->bindParam(':vatno', $supplier->VATNo);
+            $stmt->bindParam(':address', $supplier->address);
+            $stmt->bindParam(':city', $supplier->city);
+            $stmt->bindParam(':country', $supplier->country);
+            $stmt->bindParam(':pincode', $supplier->pinCode);
+            $stmt->bindParam(':delflg', $delFlgDflt);
+            $stmt->bindParam(':lchngUserId', $userId);
+            $stmt->bindParam(':creUserId', $userId);
 
-        $stmt->execute();
-
-            if($stmt)
+            if($stmt->execute())
             {
                 $message="User Created successfully";
                 $arr = array('msg' => $message, 'error' => '');

@@ -35,8 +35,6 @@ $scope.getSupplier=function(supplier)
             }
         };
 
-
-
         $http.post("Inventory/php/supplierSearch.php",null, config)
             .success(function (data)
             {
@@ -87,7 +85,6 @@ $scope.searchData=function(supplier){
 
         }
     };
-
 
       console.log(supplier);
       $http.post("Inventory/php/supplierSearch.php", null,config)
