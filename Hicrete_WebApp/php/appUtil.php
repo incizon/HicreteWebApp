@@ -21,6 +21,16 @@ class AppUtil
 
             $db = Database::getInstance();
             $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("SELECT `firstName`,`lastName`,`designation`,`emailId` FROM `superuser` WHERE `superUserId` =:userId");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                return true;
+            }
+
             $stmt = $conn->prepare("SELECT * FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=:moduleName AND `accessType`=:accessType) AND `roleId` IN (SELECT `roleId` FROM `userroleinfo` WHERE `userId`=:userId)");
 
             $stmt->bindParam(':moduleName', $moduleName, PDO::PARAM_STR);

@@ -377,7 +377,9 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
                     if (data.status == "successful") {
                         $scope.warningMessage = data.message;
                         $('#warning').css("display", "block");
-                        window.location = 'dashboard.php';
+                        $scope.newDetails.newPassRe='';
+                        $scope.newDetails.newPass='';
+                        $scope.newDetails.oldPass='';
                     }
                     else if (data.status == "WrongPass") {
                         $scope.errorMessage = data.message;
@@ -571,7 +573,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
 });
 
 
-myApp.controller('modifyUserController',function($scope,$http,$stateParams,configService){
+myApp.controller('ModifyUserController',function($scope,$http,$stateParams,configService){
 
     $scope.selectedUserInfo=$stateParams.userToModify;
     configService.getRoleList($http,$scope);
@@ -1535,4 +1537,152 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 
 });
 
+//SUPER USER CONTROLLER
+myApp.controller('superUserController', function ($scope, $rootScope, $http, configService) {
 
+    $scope.superUserInfo={};
+    $scope.addSuperUserInfo=function(){
+        console.log($scope.superUserInfo);
+        var data = {
+            operation: "addSuperUser",
+            superUserInfo: $scope.superUserInfo,
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Config/php/configFacade.php", null, config)
+            .success(function (data) {
+
+                console.log(data);
+
+                if (data.status == "Success") {
+                    alert(data.message);
+                } else {
+                    alert(data.message);
+                }
+                //window.location="dashboard.php#";
+
+            })
+            .error(function (data, status, headers, config) {
+                alert(data);
+                //console.log(data);
+            });
+
+    }
+
+});
+
+myApp.controller('MyProfileController',function($scope,$http) {
+
+
+    var data = {
+        operation: "getUserDetails",
+        keyword: "userId",
+        searchBy: "userId"
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Config/php/configFacade.php", null, config)
+        .success(function (data) {
+
+            if (data.status === "Successful") {
+                console.log("Successs= "+data.message[0]);
+                $scope.userInfo=data.message[0];
+                var collectionDate=$scope.userInfo.dateOfBirth;
+                $scope.userInfo.newDate=new Date(collectionDate);
+            }
+            else if (data.status === "NoRows") {
+
+                alert("No data found");
+                console.log("Norows= "+data);
+            } else {
+                alert(data.message);
+                console.log("Else= "+data.message);
+            }
+
+        })
+        .error(function (data, status, headers, config) {
+            alert("Error Occured");
+        });
+
+
+    $scope.modifyUser = function () {
+        console.log("in Modifu user");
+        if(!$scope.userForm.$pristine){
+            console.log($scope.userInfo);
+            var data = {
+                operation: "modifyUserDetails",
+                userInfo: $scope.userInfo
+            };
+
+            var config = {
+                params: {
+                    data: data
+                }
+            };
+
+            $http.post("Config/php/configFacade.php", null, config)
+                .success(function (data) {
+                    console.log(data);
+                       alert(data);
+
+                })
+                .error(function (data, status, headers, config) {
+                    alert("Error Occurred");
+                });
+
+
+        }else{
+
+            alert("Fields not updated");
+        }
+
+    }
+
+
+
+    //$scope.modifyUserInfo=function(){
+    //    console.log("Modify My Profile");
+    //    console.log($scope.userInfo);
+    //
+    //    var data = {
+    //        operation: "modifyUserDetails",
+    //        userInfo: $scope.userInfo
+    //    };
+    //
+    //    var config = {
+    //        params: {
+    //            data: data
+    //
+    //        }
+    //    };
+    //
+    //    $http.post("Config/php/configFacade.php", null, config)
+    //        .success(function (data) {
+    //
+    //            if(data.status==Successful){
+    //                alert("Profile updated");
+    //            }else{
+    //                alert(data.message);
+    //            }
+    //            console.log("Modify User Profile");
+    //            console.log(data);
+    //
+    //        })
+    //        .error(function (data, status, headers, config) {
+    //            alert(data);
+    //            $scope.clearUserForm();
+    //
+    //        });
+    //
+    //}
+
+
+});
