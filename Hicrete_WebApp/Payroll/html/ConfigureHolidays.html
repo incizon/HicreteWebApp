@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="row">
 
     <div class="col-md-12">
@@ -19,7 +28,7 @@
                             </div>
                             <div class="col-md-9">
 
-                                {{"2016"}}
+                                {{configureHoliday.caption_of_year}}
 
                             </div>
                         </div>
@@ -30,7 +39,7 @@
                             </div>
                             <div class="col-md-9">
 
-                                {{"01-06-2016"}}
+                                {{configureHoliday.from_date}}
 
                             </div>
                         </div>
@@ -40,7 +49,7 @@
                             </div>
                             <div class="col-md-9">
 
-                                {{"01-7-2016"}}
+                                {{configureHoliday.to_date}}
 
                             </div>
                         </div>
@@ -60,7 +69,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="holidayDate" ng-model="holidayDate"/>
+                                        <input type="date" class="form-control" name="holidayDate" ng-model="configureHoliday.holidayDate"/>
                                     </div>
 
                                 </div>
@@ -73,9 +82,8 @@
                                 <div class="col-md-9">
 
                                     <textarea class="form-control" name="Description"
-                                                         ng-model="description" rows="2"
+                                                         ng-model="configureHoliday.description" rows="2"
                                     >
-
                                     </textarea>
 
                                 </div>
@@ -84,7 +92,7 @@
 
                                 <div class="col-md-offset-10 col-md-2">
 
-                                    <button class="btn btn-primary">Add</button>
+                                    <button class="btn btn-danger" data-ng-click="addHoliday()">Add</button>
 
                                 </div>
                             </div>
@@ -110,71 +118,26 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>{{1}}</td>
+                            <tr ng-repeat="holiday in holidaysList">
+                                <td>{{$index+1}}</td>
+                                <td>{{holiday.holiday_date}}</td>
+                                <td>
+                                    {{holiday.description}}
+                                </td>
+                                <td>{{holiday.created_by}}</td>
 
                                 <td>
-                                    {{"12-02-2016"}}
-                                </td>
-                                <td>{{"Demo Holiday"}}</td>
-
-                                <td>
-                                    {{"Namdev"}}
+                                    {{holiday.creation_date}}
                                 </td>
                                 <td>
-                                    {{"10-2-2000"}}
-                                </td>
-
-                                <td>
-                                    <a ng-click="removeHolidayItem($index)" class="panel-remove">
+                                    <a ng-click="removeHoliday($index,holiday.holiday_date)" class="panel-remove">
                                         <span class="fa fa-times"></span>
                                     </a>
                                 </td>
 
                             </tr>
-                            <tr>
-                                <td>{{1}}</td>
 
-                                <td>
-                                    {{"12-02-2016"}}
-                                </td>
-                                <td>{{"Demo Holiday"}}</td>
 
-                                <td>
-                                    {{"Namdev"}}
-                                </td>
-                                <td>
-                                    {{"10-2-2000"}}
-                                </td>
-
-                                <td>
-                                    <a ng-click="removeHolidayItem($index)" class="panel-remove">
-                                        <span class="fa fa-times"></span>
-                                    </a>
-                                </td>
-
-                            </tr><tr>
-                            <td>{{1}}</td>
-
-                            <td>
-                                {{"12-02-2016"}}
-                            </td>
-                            <td>{{"Demo Holiday"}}</td>
-
-                            <td>
-                                {{"Namdev"}}
-                            </td>
-                            <td>
-                                {{"10-2-2000"}}
-                            </td>
-
-                            <td>
-                                <a ng-click="removeHolidayItem($index)" class="panel-remove">
-                                    <span class="fa fa-times"></span>
-                                </a>
-                            </td>
-
-                        </tr>
                          </tbody>
                         </table>
 

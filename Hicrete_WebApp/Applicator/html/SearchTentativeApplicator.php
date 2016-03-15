@@ -24,8 +24,15 @@ $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
     <div ng-include="'utils/WarningMessage.html'"></div>
 </div>
 <div class="col-md-12">
+
     <div class="panel panel-default">
-        <div class="panel-body form-horizontal">
+
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Tentative</strong>Applicators</h3>
+        </div>
+
+        <div class="panel-body">
+
             <div class="row">
                 <div class="col-md-4">
 
@@ -50,15 +57,7 @@ $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
                 </div>
             </div><br>
 
-        </div>
-    </div>
-    <!-- END SEARCH -->
-    <div class="panel panel-default">
 
-        <div class="panel-heading">
-            <h3 class="panel-title"><strong>Tentative </strong>Applicators</h3>
-        </div>
-        <div class="panel-body">
             <div class="table-responsive push-up-10">
                 <table class="table table-bordered table-bordered">
                     <thead>
