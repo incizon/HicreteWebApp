@@ -314,8 +314,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
+    //inventoryService.getSavedCompanys($scope);
+    //inventoryService.getSavedWarehouses($scope);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -364,8 +364,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
             //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
-            $scope.stepa=2;
-            //console.log("Step Value:" + $scope.stepa);
+            $scope.step=2;
+            console.log("Step Value:" + $scope.step);
             $scope.submitted = false;
             //console.log("in nest form function");
         }
@@ -375,7 +375,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
-            alert("if");
+            //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.step++;
@@ -508,10 +508,18 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
      **************************************************/
 
 // inventoryService.getProducts($scope,$http);
-// Get Suppliers From DB 
-    $http.post("Inventory/php/supplierSearch.php", null)
+// Get Suppliers From DB
+    var data = {
+        operation: 'search'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/supplierSearch.php", null,config)
         .success(function (data) {
-            console.log(data);
+            console.log("Suppliers="+data);
             $scope.suppliers = data;
             console.log($scope.suppliers);
         })

@@ -87,6 +87,7 @@ myApp.service('inventoryService', function () {
                 $('#loader').css("display","none");
                 console.log("IN Company Get");
                 companys = data;
+                $scope.Company=companys;
                 console.log(data);
             });
     }
@@ -119,7 +120,8 @@ myApp.service('inventoryService', function () {
         $http.post("Config/php/configFacade.php", null, config)
             .success(function (data) {
                 $('#loader').css("display","none");
-                warehouses = data
+                warehouses = data;
+                $scope.warehouses=data;
                 console.log(data);
             });
     }
