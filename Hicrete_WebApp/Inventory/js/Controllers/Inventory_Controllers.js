@@ -175,15 +175,18 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .success(function (data) {
                 console.log("IN POST UPDATE OPERATION:");
                 console.log(data);
-                doShowAlert("Success", data.msg);
-                setTimeout(function () {
-                    window.location.reload(true);
-                }, 1000);
+                if(data.msg!="")
+                    alert("Success", data.msg);
+                else
+                    alert("Success", data.error);
+
+                    window.location="dashboard.php#/Inventory";
+
                 $('#loader').css("display","none");
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
-                doShowAlert("Failure", data.msg);
+                alert(data);
             });
 
     }
@@ -700,16 +703,23 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
+                if(data.msg!=""){
+                    alert(data.msg);
+                }else{
+                    alert(data.error);
+                }
                  setTimeout(function(){
                      window.location="dashboard.php#/Inventory";
+
                 },1000);
                 $scope.outwardData = data;
-                $scope.clearFields($scope.OutwardData);
+                //$scope.clearFields($scope.OutwardData);
                     $scope.submitted = false;
 
             })
             .error(function (data, status, headers) {
                 console.log(data);
+                alert(data);
 
             });
     }

@@ -154,9 +154,13 @@ myApp.service('addSupplierService', function () {
                 supplier: supplier
             }
         };
+        console.log("supllier");
+        console.log(supplier);
         $http.post("Inventory/php/supplierSubmit.php", null, config)
             .success(function (data) {
-                console.log("Supplier Data="+data);
+                console.log("Supplier Data=");
+                console.log(data);
+                $scope.warningMessage="Success";
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");
@@ -169,16 +173,16 @@ myApp.service('addSupplierService', function () {
                 $('#loader').css("display","none");
                 if (data.error != ""){
                     $scope.errorMessage=data.error;
-                    $('#error').css("display","block");
+                    //$('#error').css("display","block");
                 }
                 //$scope.messages.push(data.msg);
-                $scope.clearData(supplier, 'submit');
+                //$scope.clearData(supplier, 'submit');
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 $('#loader').css("display","none");
                 $scope.errorMessage="Problem While connecting to server.Please check internet connection";
-                $('#error').css("display","block");
+                //$('#error').css("display","block");
             });
     };
 
@@ -261,7 +265,9 @@ myApp.service('inwardService', function () {
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");
+                    alert(data.msg);
                 }
+
                 setTimeout(function () {
                     if (data.msg != ""){
                         $('#warning').css("display","none");
@@ -271,6 +277,7 @@ myApp.service('inwardService', function () {
                 if (data.error != ""){
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");
+                    alert(data.error);
                 }
 
                 window.location="dashboard.php#/Inventory";
@@ -283,6 +290,7 @@ myApp.service('inwardService', function () {
             })
             .error(function (data, status, headers) {
                 console.log(data);
+                alert(data);
             });
     };
 
