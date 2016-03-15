@@ -221,7 +221,7 @@ userType:""
                      $('#loader').css("display","none");
                  },3000);
 
-                 $scope.warningMessage= "User added successfully..";
+                 $scope.warningMessage= "User added successfully...Credential send to "+$scope.userInfo.email;
                  $('#warning').css("display","block");
                  console.log($scope.warningMessage);
                  setTimeout(function() {
@@ -1560,7 +1560,7 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
                 console.log(data);
 
                 if (data.status == "Success") {
-                    alert(data.message);
+                    alert("Super User Created...Credentials Sent to "+$scope.superUserInfo.email);
                 } else {
                     alert(data.message);
                 }

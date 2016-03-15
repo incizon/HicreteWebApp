@@ -22,7 +22,7 @@ try{
     $date = new DateTime($params->dateOfBirth);
     $dob = $date->format('Y-m-d');
 
-    $stmt = $conn->prepare("SELECT count(1) as count from usermaster where emailid=:email and dateofbirth=:DOB");
+    $stmt = $conn->prepare("SELECT count(1) as count from usermaster where emailid=:email and dateofbirth=:DOB and `isDeleted`!=1 ");
     $stmt->bindParam(':email', $params->userName, PDO::PARAM_STR);
     $stmt->bindParam(':DOB', $dob, PDO::PARAM_STR);
     if($stmt->execute())
@@ -43,6 +43,7 @@ try{
             }
             else
             {
+                AppUtil::sendForgotPasswordMail($params->userName,$password);
                 echo AppUtil::getReturnStatus("successful", $password);
 
             }

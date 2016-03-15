@@ -81,6 +81,31 @@ class AppUtil
 
     }
 
+    public static function sendForgotPasswordMail($userName,$Password)
+    {
+
+        $email = new PHPMailer();
+
+        $MailManager = 'info@hitechflooringindia.com';
+
+        $userSubject = "Reset Hicrete WebApp Credential";
+
+        $userBody = "Dear User,
+                    Your new credentials for Hicrete Web Application is
+                    User Name :".$userName."
+                    Password  :".$Password;
+
+
+        $email->From      = $MailManager;
+        $email->FromName  = 'Administrator';
+        $email->Subject   = $userSubject;
+        $email->Body      = $userBody;
+        $email->AddAddress( $userName );
+
+        $email->Send();
+
+    }
+
 }
 
 

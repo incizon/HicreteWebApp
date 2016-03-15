@@ -60,7 +60,7 @@ app.controller('resetPasswordController', function($scope,$http) {
             {
                 console.log(data);
                 if(data.status=="successful"){
-                    alert("password is :"+data.message);
+                    alert("New Credentials Sent to your mail");
                     window.location="index.html";
                 }
                 else if(data.status=="NotAvailable"){

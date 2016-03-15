@@ -217,6 +217,7 @@ class Config
                     echo AppUtil::getReturnStatus("Success","Super User created successfully. Username is :".$data->superUserInfo->email.
                     "  Password is:".$password);
                     $conn->commit();
+                    AppUtil::sendMail($data->superUserInfo->email,$password,$data->superUserInfo->email,$data->superUserInfo->firstName);
                 }else{
                     echo AppUtil::getReturnStatus("fail","Something Went Wrong");
                     $conn->rollBack();
@@ -332,6 +333,7 @@ class Config
             } else {
                 $conn->commit();
                 echo AppUtil::getReturnStatus("Successful", $password);
+                AppUtil::sendMail($data->userInfo->email,$password,$data->userInfo->email,$data->userInfo->firstName);
             }
 
         } catch (Exception $e) {
