@@ -2,6 +2,7 @@
 require_once 'utils/Common_Methods.php';
 require_once 'utils/DatabaseCommonOperations.php';
 
+
 /*
 *Inward Data class- CRUD operation on inward entry
 */
@@ -76,7 +77,7 @@ class InwardData extends CommonMethods
         $stmt = $dbh->prepare("SELECT * FROM inward");
         if ($stmt->execute()) {
             //push it into array
-
+            $material=InventoryUtils::getProductById('97');
             $json_array=array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $inwardData = array();
@@ -96,14 +97,7 @@ class InwardData extends CommonMethods
                 $stmtTransport->bindParam(':inwardID', $inwardID);
                 if($stmtTransport->execute()){
 
-                    if($stmtTransport->rowCount()==0){
-                        $outwardData['transportationmode']="--";
-                        $outwardData['vehicleno']="--";
-                        $outwardData['drivername']="--";
-                        $outwardData['transportagency']="--";
-                        $outwardData['cost']="--";
-                        $outwardData['remark']="--";
-                    }else {
+                    if($stmtTransport->rowCount()!=0){
                         while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)) {
                             $inwardData['transportationmode'] = $resultTransport['transportationmode'];
                             $inwardData['vehicleno'] = $resultTransport['vehicleno'];
@@ -112,6 +106,13 @@ class InwardData extends CommonMethods
                             $inwardData['cost'] = $resultTransport['cost'];
                             $inwardData['remark'] = $resultTransport['remark'];
                         }
+                    }else {
+                        $inwardData['transportationmode']="--";
+                        $inwardData['vehicleno']="--";
+                        $inwardData['drivername']="--";
+                        $inwardData['transportagency']="--";
+                        $inwardData['cost']="--";
+                        $inwardData['remark']="--";
                     }
 
                 }

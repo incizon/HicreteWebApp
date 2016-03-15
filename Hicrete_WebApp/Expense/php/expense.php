@@ -100,14 +100,17 @@ class Expense
             
             if($data->isBillApplicable){
                 $unapprovedExpenseBillsId=uniqid();
+                $date = new DateTime($billData->dateOfBill);
+                $bilDate = $date->format('Y-m-d');
+
                 $stmt = $conn->prepare("INSERT INTO `unapproved_expense_bills`(`billid`, `expensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)");
                 $stmt->bindParam(':billid', $unapprovedExpenseBillsId, PDO::PARAM_STR);
                 $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
                 $stmt->bindParam(':billno', $billData->billNo, PDO::PARAM_STR);
-                $stmt->bindParam(':billissueingentity', $billData->firmName, PDO::PARAM_INT);
+                $stmt->bindParam(':billissueingentity', $billData->Issueing, PDO::PARAM_INT);
                 $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
-                $stmt->bindParam(':dateofbill', $billData->dateOfBill, PDO::PARAM_STR);
+                $stmt->bindParam(':dateofbill', $bilDate, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                 $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
 
@@ -134,8 +137,8 @@ class Expense
         $conn = $db->getConnection();
         $expenseDetailsId=uniqid();
         $budget='56b6e4bcf125c';
-        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`,budgetsegmentid, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
-        VALUES (:expensedetailsid,:projectid,:budgetsegmentid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
+        $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+        VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
         $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
         $stmt->bindParam(':projectid', $data->project, PDO::PARAM_STR);
         //GET SEGMENTNAME FROM BUDGET SEGMENT TABLE WITH RESPECT TO THE MATERIAL SEGMENT
@@ -144,7 +147,6 @@ class Expense
 //            $result2 = $stmt->fetch(PDO::FETCH_ASSOC)
 //              $budget= $result2['segmentname'];
 //        }
-        $stmt->bindParam(':budgetsegmentid', $budget, PDO::PARAM_STR);
 
         $stmt->bindParam(':materialid', $data->material, PDO::PARAM_STR);
         $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
@@ -152,20 +154,23 @@ class Expense
         $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
         $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
         $rollback=false;
+
         if($stmt->execute()){
 
             if($data->isBillApplicable){
                 $billId=uniqid();
-                echo "Added material expense";
+//                echo "Added material expense";
+                $date = new DateTime($billData->dateOfBill);
+                $bilDate = $date->format('Y-m-d');
                 //Add billing  info here
                 $stmt = $conn->prepare("INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)");
                 $stmt->bindParam(':billid', $billId, PDO::PARAM_STR);
                 $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
                 $stmt->bindParam(':billno', $billData->billNo, PDO::PARAM_STR);
-                $stmt->bindParam(':billissueingentity', $billData->firmName, PDO::PARAM_INT);
+                $stmt->bindParam(':billissueingentity', $billData->Issueing, PDO::PARAM_INT);
                 $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
-                $stmt->bindParam(':dateofbill', $billData->dateOfBill, PDO::PARAM_STR);
+                $stmt->bindParam(':dateofbill', $bilDate, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                 $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
 

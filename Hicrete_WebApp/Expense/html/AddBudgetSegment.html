@@ -45,8 +45,8 @@
                                             <div class="col-md-5">                                            
                                                 <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" required pattern="[a-zA-Z]+"  name="elementType" ng-model="segment.name" class="form-control"/>
-                                            </div> 
+                                                <input type="text" required pattern="^[-\w\s]+$"  name="elementType" ng-model="segment.name" class="form-control"/>
+                                            </div>
                                             <div class="help-block" ng-messages="segmentForm.elementType.$error" ng-show="submitClicked">
                                                     <p style="color:red" ng-message="required">Segment Field can not be blank</p> 
                                                     <p style="color:red" ng-message="pattern">Only alphabets are allowed</p>

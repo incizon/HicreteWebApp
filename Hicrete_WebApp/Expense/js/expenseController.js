@@ -64,7 +64,7 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
                 console.log(data);
                 if (data == "0")
                     doShowAlert("Success", "Added Successfully");
-                window.location = "dashboard.php#/Expense";
+                window.location = "dashboard.php#/Process";
 
             })
             .error(function (data, status, headers, config) {
@@ -155,7 +155,7 @@ myApp.controller('costCenterController', function ($scope, $http) {
                 console.log(data);
                 if (data == "0") {
                     doShowAlert("Success", "Costcenter created Successfully");
-                    window.location = "dashboard.php#/Expense";
+                    window.location = "dashboard.php#/Process";
                 } else {
                     doShowAlert("Failure", "Cannot connect to database");
                 }
@@ -292,7 +292,7 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                window.location = "dashboard.php#/Expense";
+                window.location = "dashboard.php#/Process";
                 if (data == "0") {
                     doShowAlert("Success", "Other Expense Details Added successfully");
                 } else {
@@ -351,7 +351,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     $scope.totalItems = 0;
     $scope.currentPage = 1;
-    $scope.ItemsPerPage = 5;
+    $scope.ItemsPerPage = 10;
     $scope.Segments = [];
 
     /*
@@ -370,12 +370,8 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
     $http.post("Expense/php/expenseUtils.php", null, config)
         .success(function (data) {
             console.log(data);
-            //if (data == "1") {
-            //
-            //} else {
                 $scope.Segments = data;
                 $scope.totalItems= $scope.Segments.length;
-            //}
 
         })
         .error(function (data, status, headers, config) {
@@ -404,13 +400,14 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
         $http.post("Expense/php/expenseUtils.php", null, config)
             .success(function (data) {
-                console.log(data);
+                console.log("Expense Details= "+data);
                 if (data == "1") {
 
                 } else {
                     $rootScope.expenseDetails = data;
                     $scope.costCenterData=data;
                     console.log($rootScope.expenseDetails);
+                    console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
                 }
 
             })

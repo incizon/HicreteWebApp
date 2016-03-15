@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12">
 
-        <form name="customerForm" class="form-horizontal" role="customerForm" novalidate>
+        <form name="superUserForm" class="form-horizontal" role="superUserForm" novalidate>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><strong>Create Super User </strong></h3>
@@ -10,16 +10,28 @@
                 <div class="panel-body">
 
                     <div class="form-group">
-                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">Customer Name</label>
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">First Name</label>
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="companyName" pattern="[a-zA-Z0-9]+" ng-model="company.name" type="text" class="form-control" placeholder="Enter Customer Name"  required minlength=2/>
+                                <input name="superUserInfoName" pattern="[a-zA-Z0-9]+" ng-model="superUserInfo.firstName" type="text" class="form-control" placeholder="Enter superUser Name"  required minlength=2/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.companyName.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.superUserInfoName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Your name is too short.</p>
                                 <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
-                                <p style="color:red" ng-message="minlength">Customer name must have length > 2 </p>
+                                <p style="color:red" ng-message="minlength">superUser name must have length > 2 </p>
+                            </div>
+                        </div>
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label">Last Name</label>
+                        <div class="col-md-3 col-xs-12 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input name="superUserInfoLastName" pattern="[a-zA-Z0-9]+" ng-model="superUserInfo.lastName" type="text" class="form-control" placeholder="Enter superUser Last Name"  required minlength=2/>
+                            </div>
+                            <div class="help-block" ng-messages="superUserForm.superUserInfoLastName.$error" ng-show="submitted">
+                                <p style="color:red" ng-message="required">Your name is too short.</p>
+                                <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
+                                <p style="color:red" ng-message="minlength">superUser name must have length > 2 </p>
                             </div>
                         </div>
                     </div>
@@ -29,12 +41,12 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="dateOfBirth"  ng-model="company.dateOfBirth" type="date" class="form-control" placeholder="Enter Date Of Birth"  required minlength=2/>
+                                <input name="dateOfBirth"  ng-model="superUserInfo.dateOfBirth" type="date" class="form-control" placeholder="Enter Date Of Birth"  required minlength=2/>
                             </div>
-                            <!--<div class="help-block" ng-messages="customerForm.companyName.$error" ng-show="submitted">
+                            <!--<div class="help-block" ng-messages="superUserForm.superUserInfoName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Your name is too short.</p>
                                 <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
-                                <p style="color:red" ng-message="minlength">Customer name must have length > 2 </p>
+                                <p style="color:red" ng-message="minlength">superUser name must have length > 2 </p>
                             </div>-->
                         </div>
                     </div>
@@ -43,9 +55,9 @@
                     <div class="form-group">
                         <label class="col-md-2 col-xs-12 control-label col-sm-2">Address</label>
                         <div class="col-md-3 col-xs-12 col-sm-4">
-                            <textarea ng-model="company.address" name="address" placeholder="Enter Customer Address" class="form-control" rows="5" required minlength=10></textarea>
+                            <textarea ng-model="superUserInfo.address" name="address" placeholder="Enter superUser Address" class="form-control" rows="5" required minlength=10></textarea>
                         </div>
-                        <div class="help-block" ng-messages="customerForm.address.$error" ng-show="submitted">
+                        <div class="help-block" ng-messages="superUserForm.address.$error" ng-show="submitted">
                             <p style="color:red" ng-message="required">Address Cannot be blank</p>
                             <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>
                         </div>
@@ -58,9 +70,9 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group ">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="city" ng-model="company.city" placeholder="Enter Customer City" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                <input type="text" name="city" ng-model="superUserInfo.city" placeholder="Enter superUser City" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.city.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.city.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">City Cannot be blank</p>
                                 <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
                                 <p style="color:red" ng-message="minlength">City must have more than 2 character</p>
@@ -71,9 +83,9 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="company.state" name="state" type="text" placeholder="Enter Customer State" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                <input ng-model="superUserInfo.state" name="state" type="text" placeholder="Enter superUser State" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.state.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.state.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">State Cannot be blank</p>
                                 <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
                                 <p style="color:red" ng-message="minlength">State must have more than 2 character</p>
@@ -85,9 +97,9 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="company.country" name="country" placeholder="Enter Customer Country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
+                                <input ng-model="superUserInfo.country" name="country" placeholder="Enter superUser Country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.country.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.country.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Country Cannot be blank</p>
                                 <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
                                 <p style="color:red" ng-message="minlength">Country must have more than 2 character</p>
@@ -99,9 +111,9 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="company.pincode" name="pincode" type="text" placeholder="Enter Pincode" class="form-control" required minlength=2/>
+                                <input ng-model="superUserInfo.pincode" name="pincode" type="text" placeholder="Enter Pincode" class="form-control" required minlength=2/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.pincode.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.pincode.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Pincode Cannot be blank</p>                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>
                             </div>
                         </div>
@@ -112,9 +124,9 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-                                <input type="email" class="form-control" placeholder="Enter Customer Email Id" ng-model="company.email" name="emailId"/>
+                                <input type="email" class="form-control" placeholder="Enter superUser Email Id" ng-model="superUserInfo.email" name="emailId"/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.emailId.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.emailId.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="email">Invalid email address</p>
                             </div>
 
@@ -124,7 +136,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
-                                <input ng-model="company.phone" placeholder="Enter Phone Number" name="phone" type="text" class="form-control"/>
+                                <input ng-model="superUserInfo.phone" placeholder="Enter Phone Number" name="phone" type="text" class="form-control"/>
                             </div>
 
                         </div>
@@ -136,12 +148,12 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="designation" pattern="[a-zA-Z0-9]+" ng-model="company.designation" type="text" class="form-control" placeholder="Enter Designation"  required minlength=2/>
+                                <input name="designation" pattern="[a-zA-Z0-9]+" ng-model="superUserInfo.designation" type="text" class="form-control" placeholder="Enter Designation"  required minlength=2/>
                             </div>
-                            <div class="help-block" ng-messages="customerForm.companyName.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="superUserForm.superUserInfoName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Your Designation is too short.</p>
                                 <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
-                                <!--<p style="color:red" ng-message="minlength">Customer name must have length > 2 </p>-->
+                                <!--<p style="color:red" ng-message="minlength">superUser name must have length > 2 </p>-->
                             </div>
                         </div>
                     </div>
@@ -152,11 +164,11 @@
                 <div class="panel-footer">
                     <button class="btn btn-default pull-left">Clear</button>
                     <button class="btn btn-primary pull-right" ng-click="">Cancel</button>
-                    <button class="btn btn-default pull-right" ng-click="(submitted=true) && customerForm.$valid && addCompany()">Add</button>
+                    <button class="btn btn-default pull-right" ng-click="(submitted=true) && superUserForm.$valid && addSuperUserInfo()">Add</button>
                 </div>
             </div>
         </form>
 
     </div>
 </div>
-<!--ADD COMPANY FORM START
+<!--ADD superUserInfo FORM START

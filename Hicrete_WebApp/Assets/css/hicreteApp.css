@@ -71,6 +71,18 @@ a.log_out:hover span{ color: #fff !important;}
 	top: 0px;
 }
 
+
+.tablerow{
+	text-align: center;
+}
+.tablehead{
+	text-align: center;
+}
+
+.inventoryDetails .modal-dialog{
+	width: 70% !important;
+}
+
 .x-navigation.x-navigation-horizontal > li.active > a {
 	background-color: #1caf9a !important;
 	border: 1px #1caf9a solid !important;

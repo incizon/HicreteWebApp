@@ -78,9 +78,11 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         product.opertaion = "insert";
         $scope.submitted = false;
         $scope.loading=true;
+
         $scope.errorMessage="";
         $scope.warningMessage="";
         $('#loader').css("display","block");
+
         var config = {
             params: {
                 product: product
@@ -89,6 +91,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
+                $('#loader').css("display","none");
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");
@@ -102,7 +105,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 }, 3000);
 
                 $scope.loading=false;
-                $('#loader').css("display","none");
+
                 if(data.msg==""){
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");
@@ -978,9 +981,11 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
             console.log(data);
 
         });
-    $scope.getViewDataObject = function (product) {
+    $scope.getViewDataObject = function (product,materialDetails) {
         console.log(product);
+        $scope.viewMaterials={};
         $scope.viewProduct = product;
+        $scope.viewMaterials =  $scope.viewProduct.materialDetails;
     }
     $scope.getMaterialObject = function (product) {
         $scope.viewMaterials = product;
@@ -996,6 +1001,8 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
+        $scope.viewMaterials = $scope.selectedProduct.materialDetails;
+
     }
     /*************************************************
      * START of GETTING INWARD DATA
