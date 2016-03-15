@@ -1,6 +1,6 @@
 <?php
 
-        require_once ("database-connection.php");
+
         require_once ("../../php/Database.php");
         require_once ("../../php/appUtil.php");
 
@@ -9,7 +9,10 @@
 
                 public function createYear($data,$userId){
 
-                    global $connect;
+
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+
                     $captionYear=$data->caption;
 
                     $date1 = new DateTime($data->startDate);
@@ -51,10 +54,10 @@
                 }
 
                 public function getYearDetails(){
-                    global $connect;
+
 
                     $db = Database::getInstance();
-                    $conn = $db->getConnection();
+                    $connect = $db->getConnection();
 
                     $result_array=array();
                     $result_array['holidaysList']=array();
@@ -73,7 +76,7 @@
                                         $holidaysList['holiday_date']=$result2['holiday_date'];
                                         $holidaysList['description']=$result2['description'];
                                         $holidaysList['creation_date']=$result2['creation_date'];
-                                        $stmt3=$conn->prepare("SELECT firstName,lastName from usermaster WHERE userId='$result2[created_by]'");
+                                        $stmt3=$connect->prepare("SELECT firstName,lastName from usermaster WHERE userId='$result2[created_by]'");
 
                                         if($stmt3->execute()){
                                             $result3=$stmt3->fetch(PDO::FETCH_ASSOC);
@@ -89,7 +92,8 @@
 
                 public function createHoliday($data,$userId){
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $captionYear=$data->caption_of_year;
 
@@ -117,7 +121,9 @@
                 }
             public function removeHoliday($data){
 
-                    global $connect;
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
                     $holidayDate=$data->holiday_date;
 
                     $stmt1=$connect->prepare("DELETE FROM holiday_in_year WHERE holiday_date=:holidayDate");
@@ -135,7 +141,8 @@
 
             public function createLeave($data){
 
-                global $connect;
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
 
                 $applicationId=AppUtil::generateId();
                 $leaveAppliedBy=$data->employee;
@@ -172,6 +179,33 @@
                 else{
                     return false;
                 }
+
+            }
+
+            public function getEmployeeDetails(){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $result_array=array();
+
+                $stmt1=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster WHERE usermaster.userId NOT IN (SELECT employee_id FROM employee_on_payroll)");
+
+                if($stmt1->execute()){
+
+                    $result1=$stmt1->fetchAll();
+                    $result_array['EmployeeDetails']=$result1;
+
+                }
+
+                $stmt2=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster");
+                if($stmt2->execute()){
+
+                    $result2=$stmt2->fetchAll();
+                    $result_array['LeaveApprover']=$result2;
+                }
+                echo json_encode($result_array);
+
 
             }
 

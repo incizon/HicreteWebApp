@@ -286,13 +286,13 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Config.modifyUser', {
             url: '/ModifyUser',
             templateUrl: 'Config/html/ModifyUser.html',
-            controller:'modifyUserController',
+            controller:'ModifyUserController',
             params : { userToModify: null }
         })
         .state('myProfile', {
             url: '/myProfile',
             templateUrl: 'Config/html/MyProfile.html',
-            controller:'userController'
+            controller:'MyProfileController'
         })
 
         .state('createSuperUser', {

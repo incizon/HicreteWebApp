@@ -175,7 +175,7 @@ class Config
         return $stmt->execute();
     }
 
-    public static function addSuperUser($data, $userId)
+    public static function addSuperUser($data, $loggedInUserId)
     {
 
         try {
@@ -201,13 +201,28 @@ class Config
             $stmt->bindParam(':pincode', $data->superUserInfo->pincode, PDO::PARAM_STR);
             $stmt->bindParam(':mobileNumber', $data->superUserInfo->phone, PDO::PARAM_STR);
             $stmt->bindParam(':emailId', $data->superUserInfo->email, PDO::PARAM_STR);
-            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':createdBy', $loggedInUserId, PDO::PARAM_STR);
+            $stmt->bindParam(':lastModifiedBy', $loggedInUserId, PDO::PARAM_STR);
 
-            $rollback = false;
+
             if ($stmt->execute()) {
-                echo AppUtil::getReturnStatus("Success","Super User created successfully");
-                $conn->commit();
+                $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`)
+                            VALUES (:userId,:userName,:password)");
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':userName', $data->superUserInfo->email, PDO::PARAM_STR);
+                $password = mt_rand(1000000, 9999999);
+                $hash = sha1($password);
+                $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+                if($stmt->execute()){
+                    echo AppUtil::getReturnStatus("Success","Super User created successfully. Username is :".$data->superUserInfo->email.
+                    "  Password is:".$password);
+                    $conn->commit();
+                }else{
+                    echo AppUtil::getReturnStatus("fail","Something Went Wrong");
+                    $conn->rollBack();
+                }
+
+
             }else{
                 echo AppUtil::getReturnStatus("fail","Something Went Wrong");
                 $conn->rollBack();
@@ -328,7 +343,7 @@ class Config
     public static function modifyUserDetails($data)
     {
         try{
-            echo json_encode($data->userInfo);
+
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
@@ -354,13 +369,14 @@ class Config
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 
             if($stmt->execute()){
-                echo "User Modified successfully!!!";
                 $conn->commit();
+                echo "Profile Modified successfully";
+
             }else{
                 echo "Something went wrong.Please try again";
             }
         }catch(Exception $e) {
-            echo "An Exception occured";
+            echo "Exception Occured";
         }
 
     }

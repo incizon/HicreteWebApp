@@ -1,5 +1,7 @@
 <?php
 require_once 'Database.php';
+include_once 'PHPMailer/class.phpmailer.php';
+
 class AppUtil
 {
     
@@ -21,6 +23,16 @@ class AppUtil
 
             $db = Database::getInstance();
             $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("SELECT `firstName`,`lastName`,`designation`,`emailId` FROM `superuser` WHERE `superUserId` =:userId");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                return true;
+            }
+
             $stmt = $conn->prepare("SELECT * FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=:moduleName AND `accessType`=:accessType) AND `roleId` IN (SELECT `roleId` FROM `userroleinfo` WHERE `userId`=:userId)");
 
             $stmt->bindParam(':moduleName', $moduleName, PDO::PARAM_STR);
@@ -44,8 +56,30 @@ class AppUtil
     return false;
     }
 
+    public static function sendMail($userName,$Password,$userMail,$Name)
+    {
+
+        $email = new PHPMailer();
+
+        $MailManager = 'info@hitechflooringindia.com';
+
+        $userSubject = "User Credential";
+
+        $userBody = "Dear $Name,
+                    Following are the your account credentials.
+                    User Name :$userName
+                    Password  :$Password";
 
 
+        $email->From      = $MailManager;
+        $email->FromName  = 'Administrator';
+        $email->Subject   = $userSubject;
+        $email->Body      = $userBody;
+        $email->AddAddress( $userMail );
+
+        $email->Send();
+
+    }
 
 }
 
