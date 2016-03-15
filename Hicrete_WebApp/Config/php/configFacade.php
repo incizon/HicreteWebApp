@@ -10,6 +10,9 @@ if (!isset($_SESSION['token'])) {
 $userId=$_SESSION['token'];
 
 switch ($data->operation) {
+
+	case "addSuperUser":  Config::addSuperUser($data,$userId);
+						break;
     case "addCompany":  Config::addCompany($data->data,$userId);
     				    break;
     case "addWarehouse":  Config::addWarehouse($data->data,$userId);
@@ -26,7 +29,7 @@ switch ($data->operation) {
                         break;
     case "modifyCompanyDetails":ConfigUtils::modifyCompanyDetails($data,$userId);
                         break;
-    case "getUserDetails" : ConfigUtils:: getUserDetails($data->keyword,$data->searchBy);
+    case "getUserDetails" : ConfigUtils:: getUserDetails($data->keyword,$data->searchBy,$userId);
                         break;
     case "getWareHouseDetails" :ConfigUtils:: getWareHouseDetails($data->key);
                         break;
@@ -34,12 +37,14 @@ switch ($data->operation) {
                         break;
     case "deleteUser" : ConfigUtils::deleteUser($data->key,$userId);
                         break;
-    case "modifyUser" : ConfigUtils::modifyUser($data->userInfo,$userId);
-                        break;
+    case "modifyUser" : ConfigUtils::modifyUser($data,$userId);
+
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;
     case "addUser" :Config::addUser($data,$userId);
     				    break;
+    case "modifyUserDetails" :Config::modifyUserDetails($data,$userId);
+                        break;
     case "ChangePassword" : ConfigUtils::ChangePassword($data,$userId);
                         break;
     case "getRoleDetails" : ConfigUtils::getRoleDetails($data->key,$userId);
@@ -57,6 +62,10 @@ switch ($data->operation) {
                         break;
     case "getWarehouses": Config::getWarehouse($userId);
                         break;
+    case "CheckAccess": ConfigUtils::doesUserHasAccess($data->moduleName,$userId,$data->accessType);
+        break;
+
+
 }
 
 	/*	$opt = array(

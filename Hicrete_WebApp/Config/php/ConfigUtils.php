@@ -259,19 +259,23 @@ class ConfigUtils
         }
     }
 
-    public static function getUserDetails($keyword,$searchBy)
+    public static function getUserDetails($keyword,$searchBy,$userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $keyword= "%".$keyword."%";
+            if($searchBy=="userId")
+                $keyword='568aa06f48c053329';
+            else
+                $keyword= "%".$keyword."%";
 
-            //echo $keyword;
+//            echo $keyword;
             $selectStmt=self::getSearchQueryForUser($searchBy);
-
+//            $selectStmt="SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`, `isDeleted`, `deletedBy`, `deletionDate` FROM `usermaster` WHERE `userId`=:keyword";
             $stmt = $conn->prepare($selectStmt);
             $stmt->bindParam(':keyword',$keyword, PDO::PARAM_STR);
+
             if($stmt->execute()){
 
                 $noOfRows=0;
@@ -282,7 +286,9 @@ class ConfigUtils
                     $result_array['userId'] = $result['userId'];
                     $result_array['firstName'] = $result['firstName'];
                     $result_array['lastName'] =$result['lastName'];
-                    $result_array['dateOfBirth'] =$result['dateOfBirth'];
+//                    $result_array['dateOfBirth'] =$result['dateOfBirth'];
+                    $date = date('m-d-Y', strtotime($result['dateOfBirth']));
+                    $result_array['dateOfBirth'] =$date;
                     $result_array['address'] =$result['address'];
                     $result_array['city'] =$result['city'];
                     $result_array['state'] =$result['state'];
@@ -348,6 +354,13 @@ class ConfigUtils
         else if($searchBy == 'type')
         {
            return self::getQueryForUserByUserType();
+        }
+        else if($searchBy=='userid')
+        {
+
+            return self::getQueryForUserByUserID();
+        }else{
+
         }
 
     }
@@ -429,6 +442,9 @@ class ConfigUtils
 
     }
 
+    private static function getQueryForUserByUserID(){
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`, `isDeleted`, `deletedBy`, `deletionDate` FROM `usermaster` WHERE `userId`=:keyword";
+    }
     public static function ChangePassword($data,$userId)
     {
         try{
@@ -912,6 +928,34 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
     }
 
 
+    public static function doesUserHasAccess($moduleName,$userId,$accessType){
+        try{
+
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT * FROM `useraccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=:moduleName AND `accessType`=:accessType) AND `userId`=:userId");
+
+            $stmt->bindParam(':moduleName', $moduleName, PDO::PARAM_STR);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':accessType', $accessType, PDO::PARAM_STR);
+            if($stmt->execute()){
+                $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                if (count($result) > 0) {
+                    echo AppUtil::getReturnStatus("Successful","Has Permission ");
+                }else{
+
+
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
+        }
+
+    }
 
 
 }

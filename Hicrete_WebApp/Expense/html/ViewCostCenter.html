@@ -22,7 +22,6 @@
                                 <th width="8%" style="text-align: center;">Total expenditure</th>
                                 <!--<th width="5%" style="text-align: center;">Status</th>-->
 
-
                             </tr>
                             </thead>
                             <tbody style="text-align: center;">
@@ -36,11 +35,87 @@
                             </tr>
                             </tbody>
                         </table>
-                          </div>
+                    </div>
                     <!--table end-->
+                    <uib-accordion>
+                        <uib-accordion-group heading="Material Expense Details">
+                            <table class="table table-actions table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Sr.No</th>
+                                    <th>Material Name</th>
+                                    <th>Expense</th>
+                                    <th>Description</th>
+                                    <th>Bill No</th>
+                                    <th >Bill Amount</th>
+                                    <th >Bill Issued By</th>
+                                    <th >Bill Date</th>
 
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="materialExpense in expenseDetails[0].materialExpenseDetails">
+                                    <td>{{$index + 1}}</td>
+                                    <td>{{materialExpense.material}}</td>
+                                    <td >{{materialExpense.amountMaterialExpenseDetails}}</td>
+                                    <td >{{materialExpense.descriptionMaterialExpenseDetails}}</td>
+                                    <td >{{materialExpense.billNo}}</td>
+                                    <td >{{materialExpense.billAmount}}</td>
+                                    <td >{{materialExpense.billissueingentity}}</td>
+                                    <td >{{materialExpense.dateofbill}}</td>
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+                        </uib-accordion-group>
+                    </uib-accordion>
+                    <uib-accordion>
+
+                        <uib-accordion-group  heading="{{segmentExpense.segmentName}} Segment - Allocated Budget:{{segmentExpense.allocatedBudget}}, TotalExpense: {{segmentExpense.totalSegmentExpense}}" ng-repeat="segmentExpense in expenseDetails[0].SegmentExpenseDetails">
+
+                            <table class="table table-actions table-striped">
+                                <thead>
+                                <tr>
+                                    <th >Sr.No</th>
+                                    <th >Segment Name</th>
+                                    <th >Expense</th>
+                                    <th >Description</th>
+                                    <th>Bill No</th>
+                                    <th >Bill Amount</th>
+                                    <th >Bill Issued By</th>
+                                    <th >Bill Date</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="expense in segmentExpense.SegmentExpense">
+                                    <td >{{$index + 1}}</td>
+                                    <td>{{expense.segmentName}}</td>
+                                    <td >{{expense.amountExpenseDetails}}</td>
+                                    <td >{{expense.descriptionExpenseDetails}}</td>
+                                    <td >{{expense.billNo}}</td>
+                                    <td >{{expense.billAmount}}</td>
+                                    <td >{{expense.billissueingentity}}</td>
+                                    <td >{{expense.dateofbill}}</td>
+
+                                </tr>
+
+                                </tbody>
+
+                            </table>
+                        </uib-accordion-group>
+                    </uib-accordion>
                 </div>
                 <!-- END DATATABLE EXPORT -->
 
+                <!-- Accordian-->
+
+
+
+
             </div>
         </div>
+    </div>
+</div>

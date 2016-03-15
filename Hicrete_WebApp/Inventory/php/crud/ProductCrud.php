@@ -64,6 +64,7 @@
             try {
                 //BEGIN THE TRANSACTION
                 $dbh->beginTransaction();
+
                 $stmtProduct = $dbh->prepare("INSERT INTO product_master (productname,materialtypeid,unitofmeasure,lchnguserid,lchngtime,creuserid,cretime)
                                 values (:productname,:materialtypeid,:unitofmeasure,:lchnguserid,now(),:creuserid,now())");
                 $stmtProduct->bindParam(':productname', $this->productName, PDO::PARAM_STR, 10);

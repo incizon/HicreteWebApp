@@ -31,13 +31,13 @@
             <table class="table table-actions table-striped">
                 <thead >
                     <tr style="text-align: center;">
-                        <th width="4%">Inward.No</th>
-                        <th width="14%">TotalMaterialInwards</th>
+                        <th width="4%" class="tablehead">Inward.No</th>
+                        <th width="14%" class="tablehead">TotalMaterialInwards</th>
                         <!-- <th width="13%">Company</th> -->
-                        <th width="16%">Company</th>
-                        <th width="16%">Warehouse</th>
-                        <th width="10%">Date</th>
-                        <th width="40%">Actions</th>
+                        <th width="16%" class="tablehead">Company</th>
+                        <th width="16%" class="tablehead">Warehouse</th>
+                        <th width="10%" class="tablehead">Date</th>
+                        <th width="40%" class="tablehead">Actions</th>
 
                     </tr>
                 </thead>
@@ -49,7 +49,7 @@
                         <td width="15%">{{product.warehouseName}}</td>
                         <td width="15%">{{product.dateofentry}}</td>
                         <td width="35%">
-                            <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
+                            <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product,viewProduct.materialDetails)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                             <div class="modal fade inventoryDetails" id="viewInwardDetails" role="dialog">
                                 <div class="modal-dialog">
                                     <form class="form-horizontal">
@@ -60,133 +60,207 @@
                                             <h4 class="modal-title">Inward Details of {{viewProduct.inwardno}}</h4>
                                         </div>
                                         <div class="modal-body">
+                                            <h4 style="text-align: left;"><b>Basic Details of {{viewProduct.inwardno}}</b></h4>
+                                            <table class="table table-actions">
+                                                <thead>
+                                                <tr>
+                                                    <th class="tablehead">Inward Number</th>
+                                                    <th class="tablehead">Company</th>
+                                                    <th class="tablehead">Warehouse</th>
+                                                    <th class="tablehead">Date</th>
+                                                    <th class="tablehead">Supervisor</th>
+                                                </tr>
+                                                </thead>
+                                                <tr>
+                                                    <td>
+                                                        {{viewProduct.inwardno}}
+                                                    </td>
+                                                    <td>
+                                                        {{viewProduct.companyName}}
+                                                    </td>
+                                                    <td>
+                                                        {{viewProduct.warehouseName}}
+                                                    </td>
+                                                    <td>
+                                                        {{viewProduct.dateofentry}}
+                                                    </td>
+                                                    <td>
+                                                        {{viewProduct.supervisorid}}
+                                                    </td>
+                                                </tr>
+                                            </table>
                                             <div class="row">
-                                                <div class="col-md-6 padRight">
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Inward Number :</label>
-                                                            <div class="col-md-8">                       
-                                                                <div class="input-group pt7">
-                                                                {{viewProduct.inwardno}}
-                                                                </div>                                          
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Total Material Inwards :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.materialDetails.length}}
-                                                                    <button data-target="#viewMaterialDetails" ng-click="getMaterialObject(viewProduct.materialDetails)" data-toggle="modal"
-                                                                            class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
-                                                                </div>
-                                                            </div>
-                                                    </div>
+                                                <!--<div class="col-md-6 padRight">-->
                                                     <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Quantity :</label>-->
-                                                            <!--<div class="col-md-8">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Inward Number :</label>-->
+                                                            <!--<div class="col-md-8">                       -->
                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.quantity}}-->
-                                                                <!--</div>                       -->
+                                                                <!--{{viewProduct.inwardno}}-->
+                                                                <!--</div>                                          -->
                                                             <!--</div>-->
                                                     <!--</div>-->
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Company :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.companyName}}
-                                                                </div>
-                                                            </div>
-                                                    </div> 
                                                     <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Supplier :</label>-->
+                                                        <!--<label class="col-md-4 control-label text-left">Total Material Inwards :</label>-->
                                                             <!--<div class="col-md-8">-->
                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.suppliername}}-->
+                                                                    <!--{{viewProduct.materialDetails.length}}-->
+                                                                    <!--<button data-target="#viewMaterialDetails" ng-click="getMaterialObject(viewProduct.materialDetails)" data-toggle="modal"-->
+                                                                            <!--class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>-->
                                                                 <!--</div>-->
                                                             <!--</div>-->
                                                     <!--</div>-->
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Date :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.dateofentry}}
-                                                                </div>
-                                                            </div>
-                                                    </div>
+                                                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                                                        <!--&lt;!&ndash;<label class="col-md-4 control-label text-left">Quantity :</label>&ndash;&gt;-->
+                                                            <!--&lt;!&ndash;<div class="col-md-8">&ndash;&gt;-->
+                                                                <!--&lt;!&ndash;<div class="input-group pt7">&ndash;&gt;-->
+                                                                    <!--&lt;!&ndash;{{viewProduct.quantity}}&ndash;&gt;-->
+                                                                <!--&lt;!&ndash;</div>                       &ndash;&gt;-->
+                                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
                                                     <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Package Unit :</label>-->
+                                                        <!--<label class="col-md-4 control-label text-left">Company :</label>-->
                                                             <!--<div class="col-md-8">-->
                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.packagedunits}}-->
+                                                                    <!--{{viewProduct.companyName}}-->
                                                                 <!--</div>-->
                                                             <!--</div>-->
                                                     <!--</div>-->
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Warehouse :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.warehouseName}}
-                                                                </div>
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Supervisor :</label>
-                                                        <div class="col-md-8">
-                                                            <div class="input-group pt7">
-                                                                {{viewProduct.supervisorid}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Date :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.dateofentry}}-->
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
 
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Transport :</label>
-                                                            <div class="col-md-8">
-                                                                <div class="input-group pt7">
-                                                                    {{viewProduct.transportationmode}}
-                                                                </div>
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Vehicle Number :</label>
-                                                            <div class="col-md-8">
-                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.vehicleno}}
-                                                                </div>                      
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Transport Cost :</label>
-                                                            <div class="col-md-8">
-                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.cost}}
-                                                                </div>                      
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Remark :</label>
-                                                            <div class="col-md-8">
-                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.remark}}
-                                                                </div>                      
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Transport Agency :</label>
-                                                            <div class="col-md-8">
-                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.transportagency}}
-                                                                </div>                      
-                                                            </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <label class="col-md-4 control-label text-left">Driver :</label>
-                                                            <div class="col-md-8">
-                                                                 <div class="input-group pt7">
-                                                                    {{viewProduct.drivername}}
-                                                                </div>                      
-                                                            </div>
-                                                    </div> 
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Warehouse :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.warehouseName}}-->
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Supervisor :</label>-->
+                                                        <!--<div class="col-md-8">-->
+                                                            <!--<div class="input-group pt7">-->
+                                                                <!--{{viewProduct.supervisorid}}-->
+                                                            <!--</div>-->
+                                                        <!--</div>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                                <div class="col-md-12">
+                                                    <h4 style="text-align: left;"><b>Transport Details of {{viewProduct.inwardno}}</b></h4>
+                                                    <table class="table table-actions">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="tablehead">Transport</th>
+                                                            <th class="tablehead">Vehicle Number</th>
+                                                            <th class="tablehead">Transport Cost</th>
+                                                            <th class="tablehead">Transport Agency</th>
+                                                            <th class="tablehead">Remark</th>
+                                                            <th class="tablehead">Driver</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr>
+                                                            <td>
+                                                                {{viewProduct.transportationmode}}
+                                                            </td>
+                                                            <td>
+                                                                {{viewProduct.vehicleno}}
+                                                            </td>
+                                                            <td>
+                                                                {{viewProduct.cost}}
+                                                            </td>
+                                                            <td>
+                                                                {{viewProduct.transportagency}}
+                                                            </td>
+                                                            <td>
+                                                                {{viewProduct.remark}}
+                                                            </td>
+                                                            <td>
+                                                                {{viewProduct.drivername}}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Transport :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.transportationmode}}-->
+                                                                <!--</div>-->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Vehicle Number :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                 <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.vehicleno}}-->
+                                                                <!--</div>                      -->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Transport Cost :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                 <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.cost}}-->
+                                                                <!--</div>                      -->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Remark :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                 <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.remark}}-->
+                                                                <!--</div>                      -->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Transport Agency :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                 <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.transportagency}}-->
+                                                                <!--</div>                      -->
+                                                            <!--</div>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="form-group">-->
+                                                        <!--<label class="col-md-4 control-label text-left">Driver :</label>-->
+                                                            <!--<div class="col-md-8">-->
+                                                                 <!--<div class="input-group pt7">-->
+                                                                    <!--{{viewProduct.drivername}}-->
+                                                                <!--</div>                      -->
+                                                            <!--</div>-->
+                                                    <!--</div> -->
+                                                </div>
+                                                <h4 style="text-align: left;"><b>Material Details of {{viewProduct.inwardno}}</b></h4>
+                                                <div class="col-md-8" style="overflow-y: auto;max-height: 200px;">
+
+                                                    <table class="table table-actions">
+                                                        <thead>
+                                                        <tr>
+                                                            <th class="tablehead">Material</th>
+                                                            <th class="tablehead">Quantity</th>
+                                                            <th class="tablehead">Packaging Type</th>
+                                                            <th class="tablehead">Supplier</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tr ng-repeat="materials in viewMaterials">
+                                                            <td>
+                                                                {{materials.productname}}
+                                                            </td>
+                                                            <td>
+                                                                {{materials.quantity}}
+                                                            </td>
+                                                            <td>
+                                                                {{materials.packagedunits}}
+                                                            </td>
+                                                            <td>
+                                                                {{materials.suppliername}}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>

@@ -3,6 +3,7 @@
     include_once 'crud/InwardCrud.php';
     include_once 'crud/OutwardCrud.php';
     require_once 'utils/DatabaseCommonOperations.php';
+    require_once 'utils/InventoryUtils.php';
 
     /********************************************************
      * Get connection to the Database
@@ -119,6 +120,7 @@
     function getInventory()
     {
         global $dbh;
+        $material=InventoryUtils::getProductById('97');
         $stmt = $dbh->prepare(
             "SELECT * FROM inventory
                 JOIN material ON
@@ -140,6 +142,7 @@
                 $inventoryData['materialtype']=$result2['materialtype'];
                 $inventoryData['productname']=$result2['productname'];
                 $inventoryData['totalquantity']=$result2['totalquantity'];
+                $inventoryData['materialName']=$material;
                 $warehouseId=$result2['warehouseid'];
                 $companyId=$result2['companyid'];
                 $inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
