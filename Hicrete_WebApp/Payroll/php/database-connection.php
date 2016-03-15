@@ -1,9 +1,9 @@
 <?php
 
 $hostname = 'localhost';
-$dbname='payroll';
-$username = 'root';
-$password = '';
+$dbname='hicrete';
+$username = 'hicreteRoot';
+$password = 'hicrete@123';
 
 try{
     $connect= new PDO("mysql:host=$hostname;dbname=$dbname" , $username ,$password);
