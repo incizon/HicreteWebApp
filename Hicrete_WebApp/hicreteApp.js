@@ -74,6 +74,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ModifyPermanentApplicatorController'
 
         })
+
         .state('Inventory', {
             url: '/Inventory',
             templateUrl: 'Inventory/html/inventoryWidgets.php',

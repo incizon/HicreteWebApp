@@ -323,8 +323,8 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 5;
-    $scope.searchExpression=undefined;
-    $scope.searchKeyword=undefined;
+    $scope.searchExpression;
+    $scope.searchKeyword;
 
     $scope.applicatorDetails={
         searchExpression:"",
@@ -349,8 +349,6 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                     }
 
                 };
-
-             if($rootScope.tentativeApplicators.length==0) {
 
 
                  $http.post("Applicator/php/Applicator.php", null, config)
@@ -391,7 +389,7 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                          $('#error').css("display","block");
                      });
 
-             }
+
 
     }
 
@@ -527,7 +525,6 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
 
         };
 
-        if($rootScope.permanentApplicators.length==0) {
 
 
             $http.post("Applicator/php/Applicator.php", null, config)
@@ -564,7 +561,7 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                     $('#error').css("display","block");
                 });
 
-        }
+
 
     }
 
@@ -919,3 +916,4 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
 /*
 End of view package controller
  */
+
