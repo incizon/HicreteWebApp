@@ -177,25 +177,25 @@ if(!$userObj->init($userId)){
 
             <?php
 
-            if($userObj->isInventory){
+            if($userObj->isSuper or $userObj->isInventory){
                 echo "<li ng-class=\"{active:tab.isSet(2)}\">
                             <a ng-click=\"tab.setTab(2)\" ui-sref=\"Inventory\"><span class=\"fa fa-industry\"></span> <span class=\"xn-text\">Inventory</span></a>
                     </li>";
             }
 
-            if($userObj->isBusinessProcess){
+            if($userObj->isSuper or $userObj->isBusinessProcess){
                 echo "<li ng-class=\"{active:tab.isSet(3)}\">
                             <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
             }
 
-            if($userObj->isExpense){
+            if($userObj->isSuper or $userObj->isExpense){
 //                echo "<li class=\"\">
 //                            <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
 //                    </li>";
             }
 
-            if($userObj->isApplicator){
+            if($userObj->isSuper or $userObj->isApplicator){
                 echo "<li ng-class=\"{active:tab.isSet(4)}\">
                             <a ng-click=\"tab.setTab(4)\" ui-sref=\"Applicator\"><span class=\"fa fa-users\"></span> <span class=\"xn-text\">Applicator</span></a>
                     </li>";
@@ -207,13 +207,13 @@ if(!$userObj->init($userId)){
                     </li>";
             }
 
-            if($userObj->isReporting){
+            if($userObj->isSuper){
                 echo "<li ng-class=\"{active:tab.isSet(6)}\">
                             <a ng-click=\"tab.setTab(6)\" href=\"#\"><span class=\"fa fa-line-chart\"></span> <span class=\"xn-text\">Reporting</span></a>
                     </li>";
             }
 
-            if($userObj->isAdmin){
+            if($userObj->isSuper or $userObj->isAdmin){
                 echo "<li ng-class=\"{active:tab.isSet(7)}\">
                             <a ng-click=\"tab.setTab(7)\" ui-sref=\"Config\"><span class=\"fa fa-cog\"></span> <span class=\"xn-text\">Configuration</span></a>
                     </li>";
@@ -279,15 +279,25 @@ if(!$userObj->init($userId)){
                 <a ng-click=""><span class="fa fa-sign-out"></span></a>
                 <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging" style="width: 230px;">
                     <div class="panel-body list-group list-group-contacts">
-                        <a ui-sref="myProfile" class="list-group-item">
-                            <span class="contacts-title">My Profile</span>
-                        </a>
-                        <a ui-sref="createSuperUser"  class="list-group-item">
-                            <span class="contacts-title">Create Super User</span>
-                        </a>
-                        <a ui-sref="RequestAccess" class="list-group-item">
-                            <span class="contacts-title">Request for access</span>
-                        </a>
+
+
+                        <?php
+                            if($userObj->isSuper || true){
+                                echo "<a ui-sref=\"createSuperUser\"  class=\"list-group-item\">
+                                 <span class=\"contacts-title\">Create Super User</span>
+                                </a>";
+                            }else{
+                                echo "<a ui-sref=\"myProfile\" class=\"list-group-item\">
+                            <span class=\"contacts-title\">My Profile</span>
+                        </a>";
+                                echo "<a ui-sref=\"RequestAccess\" class=\"list-group-item\">
+                            <span class=\"contacts-title\">Request for access</span>
+                        </a>";
+                            }
+
+                        ?>
+
+
                         <a ui-sref="ChangePassword" class="list-group-item">
                             <span class="contacts-title">Change Password</span>
                         </a>

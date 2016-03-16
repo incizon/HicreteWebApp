@@ -14,7 +14,7 @@ class User
     public $isReporting=true;
     public $isPayroll=true;
     public $isAdmin=false;
-
+	public $isSuper=false;
     private function populateAccessRights($roleId,$userId){
     	$db = Database::getInstance();
         $conn = $db->getConnection();
@@ -38,14 +38,40 @@ class User
              }
         }
 
- 
-
     }
+
+	public function isSuperUser($userId){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+
+		$stmt = $conn->prepare("SELECT `firstName`,`lastName`,`designation`,`emailId` FROM `superuser` WHERE `superUserId` =:userId");
+		$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if (count($result) <= 0) {
+			return false;
+		}else {
+			$this->username = $result[0]['firstName'] . " " . $result[0]['lastName'];
+			$this->emailId = $result[0]['emailId'];
+			$this->designation = $result[0]['designation'];
+			return true;
+		}
+		return false;
+
+
+	}
 
     public function init($userId){
     
     	$db = Database::getInstance();
         $conn = $db->getConnection();
+
+
+		$this->isSuper=$this->isSuperUser($userId);
+		if($this->isSuper)
+			return true;
+
     	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,userroleinfo.designation,userroleinfo.userType,userroleinfo.roleId
 			FROM    `usermaster` INNER JOIN `userroleinfo` ON userroleinfo.userId=usermaster.userId
 			WHERE   usermaster.userId =:userId"); 

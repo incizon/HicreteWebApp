@@ -87,6 +87,7 @@ myApp.service('inventoryService', function () {
                 $('#loader').css("display","none");
                 console.log("IN Company Get");
                 companys = data;
+                $scope.Company=companys;
                 console.log(data);
             });
     }
@@ -119,7 +120,8 @@ myApp.service('inventoryService', function () {
         $http.post("Config/php/configFacade.php", null, config)
             .success(function (data) {
                 $('#loader').css("display","none");
-                warehouses = data
+                warehouses = data;
+                $scope.warehouses=data;
                 console.log(data);
             });
     }
@@ -152,9 +154,13 @@ myApp.service('addSupplierService', function () {
                 supplier: supplier
             }
         };
+        console.log("supllier");
+        console.log(supplier);
         $http.post("Inventory/php/supplierSubmit.php", null, config)
             .success(function (data) {
-                console.log("Supplier Data="+data);
+                console.log("Supplier Data=");
+                console.log(data);
+                $scope.warningMessage="Success";
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");
@@ -167,16 +173,16 @@ myApp.service('addSupplierService', function () {
                 $('#loader').css("display","none");
                 if (data.error != ""){
                     $scope.errorMessage=data.error;
-                    $('#error').css("display","block");
+                    //$('#error').css("display","block");
                 }
                 //$scope.messages.push(data.msg);
-                $scope.clearData(supplier, 'submit');
+                //$scope.clearData(supplier, 'submit');
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 $('#loader').css("display","none");
                 $scope.errorMessage="Problem While connecting to server.Please check internet connection";
-                $('#error').css("display","block");
+                //$('#error').css("display","block");
             });
     };
 
@@ -240,7 +246,7 @@ myApp.service('inwardService', function () {
         console.log("IN SERVICE OF INWARD=");
         $('#loader').css("display","block");
         var data = {
-            inwardData: inwardData,
+            inwardData: $scope.InwardData,
             module: 'inward',
             operation: 'insert'
         }
@@ -249,7 +255,7 @@ myApp.service('inwardService', function () {
                 data: data
             }
         };
-        console.log(inwardData);
+        console.log(config);
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 $('#loader').css("display","none");
@@ -259,7 +265,9 @@ myApp.service('inwardService', function () {
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
                     $('#warning').css("display","block");
+                    alert(data.msg);
                 }
+
                 setTimeout(function () {
                     if (data.msg != ""){
                         $('#warning').css("display","none");
@@ -269,18 +277,20 @@ myApp.service('inwardService', function () {
                 if (data.error != ""){
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");
+                    alert(data.error);
                 }
 
+                window.location="dashboard.php#/Inventory";
 
-
-                $scope.inwardData=[];
+                //$scope.inwardData=[];
                 setTimeout(function(){
                     //window.location.reload(true);
-                     window.location="dashboard.php#/Inventory";
+                    // window.location="dashboard.php#/Inventory";
                 },1000);
             })
             .error(function (data, status, headers) {
                 console.log(data);
+                alert(data);
             });
     };
 
@@ -381,8 +391,16 @@ myApp.service('ProductionBatchService', function () {
                 console.log(data);
 
                 if (prodBatchInfo.option == 'Inquiry' || prodBatchInfo.option == 'InquiryAll') {
-                    $rootScope.prodInq = data;
-                    $scope.totalItems= $rootScope.prodInq.length;
+                    if(prodBatchInfo.option == 'Inquiry' ) {
+                        $rootScope.prodInq = data;
+                        $scope.totalItems = $rootScope.prodInq.length;
+                    }
+                    if(prodBatchInfo.option == 'InquiryAll')
+                    {
+                        $rootScope.prodInqAll = data;
+                        $scope.totalItems = $rootScope.prodInqAll.length;
+
+                    }
                 }
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {

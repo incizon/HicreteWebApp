@@ -23,6 +23,16 @@ class AppUtil
 
             $db = Database::getInstance();
             $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("SELECT `firstName`,`lastName`,`designation`,`emailId` FROM `superuser` WHERE `superUserId` =:userId");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (count($result) > 0) {
+                return true;
+            }
+
             $stmt = $conn->prepare("SELECT * FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=:moduleName AND `accessType`=:accessType) AND `roleId` IN (SELECT `roleId` FROM `userroleinfo` WHERE `userId`=:userId)");
 
             $stmt->bindParam(':moduleName', $moduleName, PDO::PARAM_STR);
@@ -66,6 +76,31 @@ class AppUtil
         $email->Subject   = $userSubject;
         $email->Body      = $userBody;
         $email->AddAddress( $userMail );
+
+        $email->Send();
+
+    }
+
+    public static function sendForgotPasswordMail($userName,$Password)
+    {
+
+        $email = new PHPMailer();
+
+        $MailManager = 'info@hitechflooringindia.com';
+
+        $userSubject = "Reset Hicrete WebApp Credential";
+
+        $userBody = "Dear User,
+                    Your new credentials for Hicrete Web Application is
+                    User Name :".$userName."
+                    Password  :".$Password;
+
+
+        $email->From      = $MailManager;
+        $email->FromName  = 'Administrator';
+        $email->Subject   = $userSubject;
+        $email->Body      = $userBody;
+        $email->AddAddress( $userName );
 
         $email->Send();
 

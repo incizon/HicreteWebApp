@@ -23,7 +23,7 @@
                                         <div class="col-md-6 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input ng-model="userInfo.designation" name="designation" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
+                                                <input ng-model="userInfo.designation" name="designation" type="text" class="form-control" required minlength=2/>
                                             </div> 
                                              <div class="help-block" ng-messages="accessInfoForm.designation.$error" ng-hide="!accessInfoSubmitted && !accessInfoForm.designation.$touched">
                                                     <p style="color:red" ng-message="required">Designation Cannot be blank</p>               

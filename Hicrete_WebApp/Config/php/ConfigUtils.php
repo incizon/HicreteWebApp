@@ -239,6 +239,7 @@ class ConfigUtils
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            $conn->beginTransaction();
             $stmt = $conn->prepare("UPDATE `usermaster` SET `isDeleted`=:flag,`deletedBy`=:deletedBy,`deletionDate`=now() WHERE userid=:key");
 
             $stmt->bindParam(':flag',$delFlg , PDO::PARAM_STR);
@@ -246,8 +247,16 @@ class ConfigUtils
             $stmt->bindParam(':key', $key, PDO::PARAM_STR);
 
             if($stmt->execute()){
-
+                $stmt = $conn->prepare("DELETE FROM `logindetails` WHERE `userId`=:userid");
+                $stmt->bindParam(':userId', $key, PDO::PARAM_STR);
+                if($stmt->execute()){
+                    $conn->commit();
                     echo AppUtil::getReturnStatus("Successful","User Deleted successfully");
+                }else{
+                    $conn->rollBack();
+                    echo AppUtil::getReturnStatus("Unsuccessful","Can not delete user");
+                }
+
 
             }else{
                 echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
@@ -266,7 +275,7 @@ class ConfigUtils
             $conn = $db->getConnection();
 
             if($searchBy=="userId")
-                $keyword='568aa06f48c053329';
+                $keyword=$userId;
             else
                 $keyword= "%".$keyword."%";
 
@@ -450,6 +459,8 @@ class ConfigUtils
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            $conn->beginTransaction();
+
             $stmt = $conn->prepare("SELECT count(1) as count FROM `logindetails` WHERE `userid`=:username AND `password`=:password");
 
             $stmt->bindParam(':username', $userId, PDO::PARAM_STR);
@@ -474,9 +485,11 @@ class ConfigUtils
                     $stmt->bindParam(':password',$pass , PDO::PARAM_STR);
                     if($stmt->execute())
                     {
-                        echo AppUtil::getReturnStatus("successful","Password Changed successfully");
+                        $conn->commit();
+                        echo AppUtil::getReturnStatus("Successful","Password Changed successfully");
                     }
                     else{
+
                         echo AppUtil::getReturnStatus("Unsuccessful","Problems in changing password");
                     }
                 }

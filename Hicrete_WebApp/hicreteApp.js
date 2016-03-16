@@ -287,13 +287,13 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Config.modifyUser', {
             url: '/ModifyUser',
             templateUrl: 'Config/html/ModifyUser.html',
-            controller:'modifyUserController',
+            controller:'ModifyUserController',
             params : { userToModify: null }
         })
         .state('myProfile', {
             url: '/myProfile',
             templateUrl: 'Config/html/MyProfile.html',
-            controller:'userController'
+            controller:'MyProfileController'
         })
 
         .state('createSuperUser', {
@@ -563,6 +563,7 @@ myApp.run(function($rootScope,$http) {
     $rootScope.AllAccessPermissions=[];
     $rootScope.suppliers=[];
     $rootScope.prodInq=[];
+    $rootScope.prodInqAll=[];
 
 });
 
@@ -592,16 +593,24 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
            });
             
         }
+
+
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
 
         $scope.saveFollowupDetails=function(size,followupDetails){
-
 
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'FollowupForm.html',
                 controller:  function ($scope, $uibModalInstance,followupDetails) {
 
+                    $scope.taskStartDate = function(){
+                        $scope.taskStart.opened = true;
+                    };
+
+                    $scope.taskStart = {
+                        opened:false
+                    };
 
                     $scope.followupDetails = followupDetails;
 
@@ -630,9 +639,6 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
-
-
-
 
 
 });
