@@ -49,7 +49,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.today = function() {
         $scope.applicatorDetails.paymentDate = new Date();
-        $scope.applicatorDetails.followupdate = new Date();
+        //$scope.applicatorDetails.followupdate = new Date();
     };
     $scope.today();
 
