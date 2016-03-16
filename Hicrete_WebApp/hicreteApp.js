@@ -562,6 +562,7 @@ myApp.run(function($rootScope,$http) {
     $rootScope.AllAccessPermissions=[];
     $rootScope.suppliers=[];
     $rootScope.prodInq=[];
+    $rootScope.prodInqAll=[];
 
 });
 

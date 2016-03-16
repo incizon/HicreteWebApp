@@ -183,8 +183,9 @@ else {
 
 			break;
 		case "InquiryAll":
-			$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where productionbatchmasterid IN (select productionbatchmasterid from produced_good)");
-
+			$keywords="%".$prodBatchinfo->Keywords."%";
+			$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid IN (select productionbatchmasterid from produced_good)");
+			$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
 			if ($stmt1->execute()) {
 
 				$json_response = array();
@@ -271,9 +272,9 @@ else {
 
 
 		case "Inquiry":
-
-			$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where productionbatchmasterid NOT IN (select productionbatchmasterid from produced_good)");
-
+			$keywords="%".$prodBatchinfo->Keywords."%";
+			$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid NOT IN (select productionbatchmasterid from produced_good)");
+			$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
 			if ($stmt1->execute()) {
 
 				$json_response = array();
