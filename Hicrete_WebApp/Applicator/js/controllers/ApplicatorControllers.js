@@ -49,7 +49,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.today = function() {
         $scope.applicatorDetails.paymentDate = new Date();
-        $scope.applicatorDetails.followupdate = new Date();
+        //$scope.applicatorDetails.followupdate = new Date();
     };
     $scope.today();
 
@@ -323,8 +323,8 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 5;
-    $scope.searchExpression=undefined;
-    $scope.searchKeyword=undefined;
+    $scope.searchExpression;
+    $scope.searchKeyword;
 
     $scope.applicatorDetails={
         searchExpression:"",
@@ -350,8 +350,6 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                 };
 
-             if($rootScope.tentativeApplicators.length==0) {
-
 
                  $http.post("Applicator/php/Applicator.php", null, config)
 
@@ -359,27 +357,36 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                          $rootScope.tentativeApplicators = data;
                          $scope.totalItems = $rootScope.tentativeApplicators.length;
-                         if(data.msg!=""){
-                            $scope.loading=false;
-                            $('#loader').css("display","none");
+                         $scope.loading=false;
+                         $('#loader').css("display","none");
+
+                         if(data.status=="Successful"){
 
                              $scope.warningMessage="Tentative Applicator found successfully..";
                              $('#warning').css("display","block");
                          }
                          setTimeout(function() {
                              $scope.$apply(function() {
-                                 if(data.msg!=""){
+                                 //if(data.msg!=""){
                                      $('#warning').css("display","none");
-                                 }
+                                 //}
                              });
                          }, 3000);
 
-                         $scope.loading=false;
-                         $('#loader').css("display","none");
-                         if(data.msg==""){
+
+                         //if(data.status!="Successful"){
+                             $scope.loading=false;
+                             $('#loader').css("display","none");
                              $scope.errorMessage="Tentative Applicator not found..";
                              $('#error').css("display","block");
-                         }
+                         setTimeout(function() {
+                             $scope.$apply(function() {
+                                 //if(data.msg!=""){
+                                 $('#error').css("display","none");
+                                 //}
+                             });
+                         }, 3000);
+                         //}
                          console.log($rootScope.tentativeApplicators);
                      })
 
@@ -387,11 +394,20 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                          console.log(data);
                          $scope.loading=false;
                          $('#loader').css("display","none");
-                         $scope.errorMessage="Tentative Applicator not found..";
-                         $('#error').css("display","block");
+                         //$scope.errorMessage="Tentative Applicator not found..";
+                         //$('#error').css("display","block");
+                         $scope.warningMessage="Tentative Applicator found successfully..";
+                         $('#warning').css("display","block");
+                         setTimeout(function() {
+                             $scope.$apply(function() {
+                                 //if(data.msg!=""){
+                                 $('#warning').css("display","none");
+                                 //}
+                             });
+                         }, 3000);
                      });
 
-             }
+
 
     }
 
@@ -527,7 +543,6 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
 
         };
 
-        if($rootScope.permanentApplicators.length==0) {
 
 
             $http.post("Applicator/php/Applicator.php", null, config)
@@ -564,7 +579,7 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                     $('#error').css("display","block");
                 });
 
-        }
+
 
     }
 
@@ -919,3 +934,4 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
 /*
 End of view package controller
  */
+

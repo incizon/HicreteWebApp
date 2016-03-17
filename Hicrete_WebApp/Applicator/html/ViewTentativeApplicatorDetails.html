@@ -243,7 +243,7 @@
 
 
 <div class="modal fade" id="viewPaymentDetails" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -259,8 +259,11 @@
                             <tr>
                                 <th width="15%">Amount Paid</th>
                                 <th width="15%">Date of payment</th>
-                                <th width="15%">Paid to</th>
+                                <th width="10%">Paid to</th>
                                 <th width="15%">Payment Mode</th>
+                                <th width="15%">Bank Name</th>
+                                <th width="15%">Branch Name</th>
+                                <th width="15%">Unique Number</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -269,6 +272,9 @@
                                 <td>{{paymentDetail.date_of_payment}}</td>
                                 <td>{{paymentDetail.paid_to}}</td>
                                 <td>{{paymentDetail.payment_mode}}</td>
+                                <td>{{paymentDetail.bank_name}}</td>
+                                <td>{{paymentDetail.branch_name}}</td>
+                                <td>{{paymentDetail.unique_number}}</td>
                             </tr>
                             </tbody>
                         </table>

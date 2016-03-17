@@ -247,7 +247,7 @@
                     $stmt5->bindParam(':bankName', $bankName);
                     $stmt5->bindParam(':branchName', $branchName);
                     $stmt5->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
-                    $stmt4->bindParam(':createdBy', $userId);
+                    $stmt5->bindParam(':createdBy', $userId);
 
                     $stmt6 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
 									  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId)");
@@ -268,8 +268,6 @@
                     /* Update status of applicator */
                     $stmt8=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
                     $stmt8->bindParam(':lastCreatedApplicator',$this->lastInsertedApplicatorId);
-
-
 
                     if($stmt1->execute()){
 
@@ -532,38 +530,66 @@
                                         $stmt5->bindParam(':enrollment_id',$enrollment_id);
                                         $stmt5->execute();
 
-                                        $affectedRow = $stmt5->rowCount();
+                                         $affectedRow = $stmt5->rowCount();
 
                                         if($affectedRow!=0){
 
                                             while($result5=$stmt5->fetch(PDO::FETCH_ASSOC)){
 
-                                                $applicator['paymentDetails'][] = array(
-                                                                                'amount_paid' => $result5['amount_paid'],
-                                                                                'date_of_payment' => $result5['date_of_payment'],
-                                                                                'paid_to' => $result5['paid_to'],
-                                                                                'payment_mode' => $result5['payment_mode']
-                                                                            );
+                                                $stmt6=$connect->prepare("SELECT number_of_instrument, bank_name,branch_name FROM payment_mode_details WHERE payment_id=:paymentId");
+                                                $stmt6->bindParam(':paymentId',$result5['payment_id']);
 
-                                                 $applicator['total_paid_amount']+=$result5['amount_paid'];
+                                                if($stmt6->execute()) {
+
+                                                    $affectedRow1=$stmt6->rowCount();
+                                                    if($affectedRow1!=0){
+
+                                                        $result6=$stmt6->fetch();
+                                                        $applicator['paymentDetails'][] = array(
+                                                            'amount_paid' => $result5['amount_paid'],
+                                                            'date_of_payment' => $result5['date_of_payment'],
+                                                            'paid_to' => $result5['paid_to'],
+                                                            'payment_mode' => $result5['payment_mode'],
+                                                            'bank_name'=>$result6['bank_name'],
+                                                            'branch_name'=>$result6['branch_name'],
+                                                            'unique_number'=>$result6['number_of_instrument']
+                                                        );
+                                                    }
+                                                    else{
+
+                                                        $applicator['paymentDetails'][] = array(
+                                                            'amount_paid' => $result5['amount_paid'],
+                                                            'date_of_payment' => $result5['date_of_payment'],
+                                                            'paid_to' => $result5['paid_to'],
+                                                            'payment_mode' => $result5['payment_mode'],
+                                                            'bank_name'=>'-',
+                                                            'branch_name'=>'-',
+                                                            'unique_number'=>'-'
+                                                        );
+                                                    }
+                                                    $applicator['total_paid_amount']+=$result5['amount_paid'];
+                                                }
                                             }
                                         }
                                         else{
 
                                             $applicator['paymentDetails'][] = array(
-                                                                            'amount_paid' => 0,
-                                                                            'date_of_payment' => 'Not Available',
-                                                                            'paid_to' => 'Not Available',
-                                                                            'payment_mode' => 'Not Available'
+                                                                            'amount_paid' =>'-',
+                                                                            'date_of_payment' => '-',
+                                                                            'paid_to' => '-',
+                                                                            'payment_mode' => '-',
+                                                                            'bank_name'=>'-',
+                                                                            'branch_name'=>'-',
+                                                                            'unique_number'=>'-'
                                                                         );
                                         }
 
 
-                                    $stmt6=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");
-                                    $stmt6->bindParam(':enrollment_id',$enrollment_id);
-                                    $stmt6->execute();
-                                    $result6=$stmt6->fetch(PDO::FETCH_ASSOC);
-                                    $applicator['date_of_follow_up']=$result6['date_of_follow_up'];
+                                    $stmt7=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");
+                                    $stmt7->bindParam(':enrollment_id',$enrollment_id);
+                                    $stmt7->execute();
+                                    $result7=$stmt7->fetch(PDO::FETCH_ASSOC);
+                                    $applicator['date_of_follow_up']=$result7['date_of_follow_up'];
 
                                 echo json_encode($applicator);
 
@@ -991,6 +1017,8 @@
                         echo "Roll Back";
                     }
                 }
+
+
 
             }
 
