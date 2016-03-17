@@ -15,11 +15,11 @@
         <div class="panel panel-default">
 
             <div class="panel-heading">
-                <h3 class="panel-title">Apply For<strong>Leave</strong></h3>
+                <h3 class="panel-title">Apply For <strong>Leave</strong></h3>
             </div>
             <div class="panel-body">
 
-                <form class="form-horizontal">
+                <form class="form-horizontal" name="applyForLeaveForm">
 
 
                     <div class="row">
@@ -58,7 +58,9 @@
                                     <option value="Paid">Paid</option>
                                     <option value="Unpaid">Unpaid</option>
                                     </select>
-
+                                    <div class="help-block" ng-messages="applyForLeaveForm.typeofLeave.$error" ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Type of leave needs to be selected</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -69,9 +71,11 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="fromDate" ng-model="leaveDetails.fromDate"/>
+                                        <input type="text" class="form-control" name="fromDate" ng-model="leaveDetails.fromDate" ng-click="leaveFrom()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="from.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
-
+                                    <div class="help-block" ng-messages="applyForLeaveForm.fromDate.$error" ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">From date for leave is required..</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -81,9 +85,11 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="toDate" ng-model="leaveDetails.toDate"/>
+                                        <input type="text" class="form-control" name="toDate" ng-model="leaveDetails.toDate" ng-click="leaveTo()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="to.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
-
+                                    <div class="help-block" ng-messages="applyForLeaveForm.toDate.$error" ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">To date for leave is required..</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -93,9 +99,8 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="noOfLeaves" ng-model="leaveDetails.noOfLeaves"/>
+                                        <input type="text" class="form-control" name="noOfLeaves" ng-model="leaveDetails.noOfLeaves" ng-click="dayDiff(leaveDetails.fromDate,leaveDetails.toDate)"/>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -136,7 +141,7 @@
             <div class="panel-footer">
 
                 <button class="btn btn-default pull-left">Clear Form</button>
-                <button class="btn btn-danger pull-right" data-ng-click="ApplyForLeave()">Apply</button>
+                <button class="btn btn-danger pull-right" data-ng-click="(formSubmitted=true) && applyForLeaveForm.$valid && ApplyForLeave()">Apply</button>
                 <button class="btn btn-default pull-right">Cancel</button>
             </div>
 
