@@ -20,7 +20,7 @@
             </div>
             <div class="panel-body">
 
-                <form class="form-horizontal">
+                <form class="form-horizontal" novalidate>
 
 
                     <div class="row">
@@ -33,7 +33,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="searchFromDate" ng-model="searchFromDate"/>
+                                        <input type="text" class="form-control" name="searchFromDate" ng-model="searchFromDate" ng-click="showFromDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showFrom.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
 
                                 </div>
@@ -47,7 +47,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="searchToDate" ng-model="searchToDate"/>
+                                        <input type="text" class="form-control" name="searchToDate" ng-model="searchToDate" ng-click="showToDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showTo.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
 
                                 </div>
