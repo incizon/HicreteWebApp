@@ -223,8 +223,28 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         opened:false
     };
 
-    $scope.ApplyForLeave=function(){
 
+    ////count number of leaves applied
+    //$scope.dayDiff = function(leaveDetails.fromDate,leaveDetails.toDate){
+    //    var date2 = new Date($scope.formatString(leaveDetails.toDate));
+    //    console.log(date2);
+    //    var date1 = new Date($scope.formatString(leaveDetails.fromDate));
+    //    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    //    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    //    alert(diffDays);
+    //}
+    //
+    //$scope.formatString = function(format) {
+    //    var day   = parseInt(format.substring(0,2));
+    //    var month  = parseInt(format.substring(3,5));
+    //    var year   = parseInt(format.substring(6,10));
+    //    var date = new Date(year, month-1, day);
+    //    return date;
+    //}
+
+    //console.log($scope.leaveDetails.fromDate);
+
+    $scope.ApplyForLeave=function(){
         $scope.errorMessage="";
         $scope.warningMessage="";
 
@@ -560,6 +580,24 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
     $scope.leaves={
         opeartion:""
     }
+
+
+    $scope.searchFrom = function(){
+        $scope.from.opened = true;
+    };
+
+    $scope.from = {
+        opened:false
+    }
+
+    $scope.searchTo = function(){
+        $scope.to.opened = true;
+    };
+
+    $scope.to = {
+        opened:false
+    }
+
     $scope.searchByDate=function(){
 
         $scope.errorMessage="";
