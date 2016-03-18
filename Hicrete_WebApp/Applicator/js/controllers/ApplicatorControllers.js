@@ -12,6 +12,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.applicatorDetails={
 
+        vatnumber:"",
+        cstnumber:"",
+        servicetaxnumber:"",
+        pannumber:"",
         operation:"",
         packageEdited:"false",
         elementDetails:[]
@@ -327,8 +331,8 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
     $scope.searchKeyword;
 
     $scope.applicatorDetails={
-        searchExpression:"",
-        searchKeyword:"",
+        searchExpression:" ",
+        searchKeyword:" ",
         operation:""
     };
 
@@ -338,9 +342,11 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
              $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
              $scope.applicatorDetails.operation='viewTentativeApplicators';
 
+         console.log($scope.applicatorDetails);
              $scope.loading=true;
              $scope.errorMessage="";
              $scope.warningMessage="";
+
              $('#loader').css("display","block");
 
                 var config = {
@@ -350,61 +356,30 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                 };
 
-
                  $http.post("Applicator/php/Applicator.php", null, config)
 
                      .success(function (data, status, headers, config) {
 
-                         $rootScope.tentativeApplicators = data;
-                         $scope.totalItems = $rootScope.tentativeApplicators.length;
-                         $scope.loading=false;
-                         $('#loader').css("display","none");
-
-                         if(data.status=="Successful"){
-
-                             $scope.warningMessage="Tentative Applicator found successfully..";
-                             $('#warning').css("display","block");
+                         console.log(data);
+                         if(data.status==="success") {
+                             $rootScope.tentativeApplicators = data.message;
+                             $scope.totalItems = $rootScope.tentativeApplicators.length;
+                             $('#loader').css("display","none");
                          }
-                         setTimeout(function() {
-                             $scope.$apply(function() {
-                                 //if(data.msg!=""){
-                                     $('#warning').css("display","none");
-                                 //}
-                             });
-                         }, 3000);
-
-
-                         //if(data.status!="Successful"){
+                         else{
                              $scope.loading=false;
                              $('#loader').css("display","none");
-                             $scope.errorMessage="Tentative Applicator not found..";
+                             $scope.errorMessage=data.message;
                              $('#error').css("display","block");
-                         setTimeout(function() {
-                             $scope.$apply(function() {
-                                 //if(data.msg!=""){
-                                 $('#error').css("display","none");
-                                 //}
-                             });
-                         }, 3000);
-                         //}
-                         console.log($rootScope.tentativeApplicators);
+
+                         }
                      })
 
                      .error(function (data, status, headers) {
-                         console.log(data);
                          $scope.loading=false;
                          $('#loader').css("display","none");
-                         //$scope.errorMessage="Tentative Applicator not found..";
-                         //$('#error').css("display","block");
-                         $scope.warningMessage="Tentative Applicator found successfully..";
-                         $('#warning').css("display","block");
-                         setTimeout(function() {
-                             $scope.$apply(function() {
-                                 //if(data.msg!=""){
-                                 $('#warning').css("display","none");
-                                 //}
-                             });
-                         }, 3000);
+                         $scope.errorMessage="Could Not Fetch Data";
+                         $('#error').css("display","block");
                      });
 
 
@@ -543,39 +518,28 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
 
         };
 
-
-
             $http.post("Applicator/php/Applicator.php", null, config)
 
                 .success(function (data, status, headers, config) {
-                    $rootScope.permanentApplicators = data;
-                    $scope.totalItems =$rootScope.permanentApplicators.length;
-                    if(data.msg!=""){
-                        $scope.warningMessage=data.msg;
-                        $('#warning').css("display","block");
-                    }
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.msg!=""){
-                                $('#warning').css("display","none");
-                            }
-                        });
-                    }, 3000);
 
+                    console.log(data);
+                    if(data.status==="success") {
+                        $rootScope.permanentApplicators = data.message;
+                        $scope.totalItems = $rootScope.permanentApplicators.length;
+                        $('#loader').css("display","none");
+                    }
+                    else{
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $scope.errorMessage=data.message;
+                        $('#error').css("display","block");
+
+                    }
+                })
+                .error(function (data, status, headers) {
                     $scope.loading=false;
                     $('#loader').css("display","none");
-                    if(data.msg==""){
-                        $scope.errorMessage=data.error;
-                        console.log($scope.errorMessage);
-                        $('#error').css("display","block");
-                    }
-                    console.log($rootScope.permanentApplicators);
-                })
-
-                .error(function (data, status, headers) {
-                    console.log(data.error);
-                    $('#loader').css("display","none");
-                    $scope.errorMessage=data.error;
+                    $scope.errorMessage="Could Not Fetch Data";
                     $('#error').css("display","block");
                 });
 
@@ -596,8 +560,6 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
 });
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stateParams){
 
-
-
     $scope.applicatorDetails={
         applicator_master_id:"",
         operation:"",
@@ -611,9 +573,7 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stat
         params: {
             data: $scope.applicatorDetails
         }
-
     };
-
     $http.post("Applicator/php/Applicator.php", null, config)
 
         .success(function (data, status, headers, config) {
@@ -627,9 +587,6 @@ myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stat
             console.log(data);
 
         });
-
-
-
 
 });
 
