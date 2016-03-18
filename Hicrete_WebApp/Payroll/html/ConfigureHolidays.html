@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body">
 
-                <form class="form-horizontal">
+                <form class="form-horizontal" name="configureHolidaysForm" novalidate>
 
                 <div class="row">
                     <div class="col-md-6">
@@ -71,7 +71,9 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="holidayDate" ng-model="configureHoliday.holidayDate" ng-click="pickHolidayDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="holidayDate.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
-
+                                    <div class="help-block" ng-messages="configureHolidaysForm.holidayDate.$error" ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Holiday Date is required..</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -81,18 +83,18 @@
                                 </div>
                                 <div class="col-md-9">
 
-                                    <textarea class="form-control" name="Description"
-                                                         ng-model="configureHoliday.description" rows="2"
-                                    >
+                                    <textarea class="form-control" name="Description" ng-model="configureHoliday.description" rows="2" required>
                                     </textarea>
-
+                                    <div class="help-block" ng-messages="configureHolidaysForm.Description.$error" ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">Holiday Description is required..</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
 
                                 <div class="col-md-offset-10 col-md-2">
 
-                                    <button class="btn btn-danger" data-ng-click="addHoliday()">Add</button>
+                                    <button class="btn btn-danger" data-ng-click="(formSubmitted=true) && configureHolidaysForm.$valid &&addHoliday()">Add</button>
 
                                 </div>
                             </div>
