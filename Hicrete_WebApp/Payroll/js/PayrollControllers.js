@@ -90,6 +90,13 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
         operation:""
     };
 
+    $scope.pickHolidayDate = function(){
+        $scope.holidayDate.opened = true;
+    };
+
+    $scope.holidayDate = {
+        opened:false
+    };
 
     $scope.getCurrentYearDetails=function(){
         $scope.holidaysDetails.operation="getCurrentYearHolidayDetails";
@@ -200,8 +207,44 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         operation:""
     };
 
-    $scope.ApplyForLeave=function(){
+    $scope.leaveFrom = function(){
+        $scope.from.opened = true;
+    };
 
+    $scope.from = {
+        opened:false
+    };
+
+    $scope.leaveTo = function(){
+        $scope.to.opened = true;
+    };
+
+    $scope.to = {
+        opened:false
+    };
+
+
+    ////count number of leaves applied
+    //$scope.dayDiff = function(leaveDetails.fromDate,leaveDetails.toDate){
+    //    var date2 = new Date($scope.formatString(leaveDetails.toDate));
+    //    console.log(date2);
+    //    var date1 = new Date($scope.formatString(leaveDetails.fromDate));
+    //    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
+    //    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    //    alert(diffDays);
+    //}
+    //
+    //$scope.formatString = function(format) {
+    //    var day   = parseInt(format.substring(0,2));
+    //    var month  = parseInt(format.substring(3,5));
+    //    var year   = parseInt(format.substring(6,10));
+    //    var date = new Date(year, month-1, day);
+    //    return date;
+    //}
+
+    //console.log($scope.leaveDetails.fromDate);
+
+    $scope.ApplyForLeave=function(){
         $scope.errorMessage="";
         $scope.warningMessage="";
 
@@ -357,6 +400,23 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
     $scope.leaves={
         operation:""
     }
+
+    $scope.showFromDate = function(){
+        $scope.showFrom.opened = true;
+    };
+
+    $scope.showFrom = {
+        opened:false
+    };
+
+    $scope.showToDate = function(){
+        $scope.showTo.opened = true;
+    };
+
+    $scope.showTo = {
+        opened:false
+    };
+
     $scope.SearchLeave=function(){
 
         $scope.errorMessage="";
@@ -520,6 +580,24 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
     $scope.leaves={
         opeartion:""
     }
+
+
+    $scope.searchFrom = function(){
+        $scope.from.opened = true;
+    };
+
+    $scope.from = {
+        opened:false
+    }
+
+    $scope.searchTo = function(){
+        $scope.to.opened = true;
+    };
+
+    $scope.to = {
+        opened:false
+    }
+
     $scope.searchByDate=function(){
 
         $scope.errorMessage="";
