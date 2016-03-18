@@ -1433,12 +1433,12 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
     };
 
 
-    $scope.getProdInfo = function (prodInfo) {
-        console.log(prodInfo);
-        console.log("Inside this function");
-        $scope.modProdBatchInfo = prodInfo;
+    $scope.getProdInfo = function (prodInfo,index) {
 
-        console.log($scope.modProdBatchInfo.rawMaterial);
+        $scope.modProdBatchInfo = prodInfo;
+        $scope.modProdBatchInfo.selectedIndex=index;
+
+
         //console.log($scope.selectedProdBatchInfo);
     };
 
