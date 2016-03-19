@@ -27,7 +27,7 @@
                                         <div class="col-md-4 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input name="prodBatchNo" type="text" ng-model="prodBatchInfo.batchNo"  class="form-control" required/>
+                                                <input name="prodBatchNo" maxlength="20" type="text" ng-model="prodBatchInfo.batchNo"  class="form-control" required/>
                                             </div>
                                             <div class="help-block" ng-messages="prodBatchInitForm.prodBatchNo.$error" ng-show="submitted">
                                                 <p style="color:red" ng-message="required">Please enter production batch number</p>
@@ -40,7 +40,7 @@
                                         <div class="col-md-4 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" name="batchCodeName" ng-model="prodBatchInfo.batchCodeName" class="form-control" required/>
+                                                <input type="text" name="batchCodeName" maxlength="30" ng-model="prodBatchInfo.batchCodeName" class="form-control" required/>
                                             </div>
                                             <div class="help-block" ng-messages="prodBatchInitForm.batchCodeName.$error" ng-show="submitted">
                                                 <p style="color:red" ng-message="required">Please enter production code name</p>
@@ -92,7 +92,7 @@
                                         <div class="col-md-4 col-xs-12">                                            
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" name="productionSupervisor" ng-model="prodBatchInfo.supervisor" class="form-control" required/>
+                                                <input type="text" maxlength="20" name="productionSupervisor" ng-model="prodBatchInfo.supervisor" class="form-control" required/>
                                             </div>
                                             <div class="help-block" ng-messages="prodBatchInitForm.productionSupervisor.$error" ng-show="submitted">
                                                 <p style="color:red" ng-message="required">Please enter production supervisor name</p>

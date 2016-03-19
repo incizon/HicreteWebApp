@@ -162,8 +162,13 @@ myApp.service('addSupplierService', function () {
                 console.log(data);
                 $rootScope.warningMessage="Success";
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
+                    //$scope.warningMessage=data.msg;
+                    //$('#warning').css("display","block");
+                    alert(data.msg);
+                    window.location="dashboard.php#/Inventory/addSupplier";
+                    $scope.submitted=false;
+                    $scope.clearData(supplier,'clear');
+
                 }
                 setTimeout(function () {
                     if (data.msg != ""){
@@ -344,6 +349,12 @@ myApp.service('ProductionBatchService', function () {
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlert("Success", data.msg);
+                    if(prodBatchInfo.option=='complete')
+                    {
+                        alert(data.msg);
+                        $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
+
+                    }
                     if(data.msg!=""){
                         $scope.warningMessage=data.msg;
                         $('#warning').css("display","block");

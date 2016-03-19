@@ -152,7 +152,7 @@ class ConfigUtils
 
             if($stmt->execute()){
 
-                echo AppUtil::getReturnStatus("Successful","Company Modified successfully");
+                echo AppUtil::getReturnStatus("Successful","Warehoue Modified successfully");
 
             }else{
                 echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
