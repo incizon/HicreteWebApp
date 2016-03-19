@@ -136,6 +136,7 @@ if(!$hasRead && !$hasWrite){
                     <li><a ui-sref=\"Inventory.searchInward\">Inward</a></li>
                     <li><a ui-sref=\"Inventory.searchOutward\">Outward</a></li>
                     <li><a ui-sref=\"Inventory.prodSearch\">Production Batch</a></li>
+                    <li><a ui-sref=\"Inventory.prodInq\">Completed Production Batch</a></li>
                 </ul>
             </li>
             <li><a ui-sref=\"Inventory.searchInventory\">Show Inventory</a></li>

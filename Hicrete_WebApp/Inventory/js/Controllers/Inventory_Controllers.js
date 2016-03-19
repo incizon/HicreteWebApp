@@ -1133,6 +1133,15 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         //console.log(index);
         return (begin <= index && index < end);
     };
+    $scope.paginate1 = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.prodBatchPerPage;
+        end = begin + $scope.prodBatchPerPage;
+        index = $rootScope.prodInqAll.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
 
     $scope.formatDate=function()
     {
@@ -1282,7 +1291,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         driver: "",
         TranspAgency: "",
         cost: "",
-        tranReq: ""
+        tranReq: "",
+        Keywords:""
     };
 
     $scope.modProdBatchInfo = {
@@ -1332,15 +1342,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         $scope.step = 1;
     }
     $scope.initProd = function (prodBatchInfo, page, message) {
-        console.log($scope.today1);
-        console.log(prodBatchInfo.batchNo);
-        console.log(prodBatchInfo.batchCodeName);
-        console.log(prodBatchInfo.dateOfEntry);
-        console.log(prodBatchInfo.startDate);
-        console.log(prodBatchInfo.endDate);
-        console.log(prodBatchInfo.supervisor);
 
-        console.log(prodBatchInfo.tranReq);
         console.log(prodBatchInfo);
         prodBatchInfo.option = message;
 
