@@ -1541,6 +1541,17 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 myApp.controller('superUserController', function ($scope, $rootScope, $http, configService) {
 
     $scope.superUserInfo={};
+    $scope.today = function(){
+        $scope.superUserInfo.dateOfBirth = new Date();
+    };
+    $scope.today();
+    $scope.showDob = function(){
+        $scope.showPicker.opened = true;
+    };
+
+    $scope.showPicker = {
+        opened:false
+    }
     $scope.addSuperUserInfo=function(){
         console.log($scope.superUserInfo);
         var data = {

@@ -797,6 +797,28 @@ myApp.controller('ViewTaskController',function($scope,$http){
 
     console.log("In");
 
+    $scope.today = function(){
+        $scope.actualStartDate = new Date();
+        $scope.actualEndDate = new Date();
+    };
+
+    $scope.today();
+
+    $scope.taskStartDate = function(){
+        $scope.taskStart.opened = true;
+    };
+
+    $scope.taskStart = {
+        opened:false
+    };
+
+    $scope.taskEndDate = function(){
+        $scope.taskEnd.opened = true;
+    };
+
+    $scope.taskEnd = {
+        opened:false
+    };
 });
 
 myApp.controller('SearchTaskController',function($scope,$http){

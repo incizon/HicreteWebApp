@@ -1,6 +1,7 @@
 <?php
 
-            include_once ("database_connection.php");
+            require_once ("../../php/Database.php");
+            require_once ("../../php/appUtil.php");
 
             class Applicator
             {
@@ -20,7 +21,8 @@
                 public function createPackage($data,$userId)
                 {
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $packageName = $data->package_name;
                     $packageDescription = $data->package_description;
@@ -247,7 +249,7 @@
                     $stmt5->bindParam(':bankName', $bankName);
                     $stmt5->bindParam(':branchName', $branchName);
                     $stmt5->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
-                    $stmt4->bindParam(':createdBy', $userId);
+                    $stmt5->bindParam(':createdBy', $userId);
 
                     $stmt6 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
 									  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId)");
@@ -268,8 +270,6 @@
                     /* Update status of applicator */
                     $stmt8=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
                     $stmt8->bindParam(':lastCreatedApplicator',$this->lastInsertedApplicatorId);
-
-
 
                     if($stmt1->execute()){
 
@@ -399,11 +399,22 @@
 
                 public function viewTentativeApplicators($data){
 
-                    $json_response=array();
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
-                    $searchExpression=$data->searchExpression;
-                    $searchKeyword='%'.$data->searchKeyword.'%';
+                    $searchKeyword="";
+                    $searchExpression="";
+                    $json_response=array();
+
+                    if(isset($data->searchExpression)) {
+                        $searchExpression = $data->searchExpression;
+                    }
+                    if(isset($data->searchKeyword)) {
+                        $searchKeyword = '%' . $data->searchKeyword . '%';
+                    }
+                    else{
+                        $searchKeyword='%'."".'%';
+                    }
 
 
                     if($searchExpression=='applicator_name'){
@@ -412,7 +423,6 @@
 							WHERE applicator_status='tentative' AND  applicator_name LIKE :searchKeyword");
 
                         $stmt1->bindParam(':searchKeyword',$searchKeyword);
-
 
                     }
                     else if ($searchExpression==='applicator_city'){
@@ -428,6 +438,11 @@
 							WHERE applicator_status='tentative' AND  applicator_state LIKE :searchKeyword");
 
                         $stmt1->bindParam(':searchKeyword',$searchKeyword);
+                    }
+                    else{
+
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='tentative'");
                     }
 
 
@@ -445,18 +460,25 @@
                             array_push($json_response, $applicator);
                         }
 
-                        echo json_encode($json_response);
+                        if(sizeof($json_response)>0){
 
-                        return true;
+                           echo AppUtil::getReturnStatus("success",$json_response);
+                            return true;
+                        }
+                    }
+                    else{
+
+                        return false;
                     }
 
-                    return false;
+
                 }
 
                 function getApplicatorDetails($data){
 
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $applicator_master_id=$data->applicator_master_id;
                     $purpose=$data->purpose;
@@ -532,40 +554,69 @@
                                         $stmt5->bindParam(':enrollment_id',$enrollment_id);
                                         $stmt5->execute();
 
-                                        $affectedRow = $stmt5->rowCount();
+                                         $affectedRow = $stmt5->rowCount();
 
                                         if($affectedRow!=0){
 
                                             while($result5=$stmt5->fetch(PDO::FETCH_ASSOC)){
 
-                                                $applicator['paymentDetails'][] = array(
-                                                                                'amount_paid' => $result5['amount_paid'],
-                                                                                'date_of_payment' => $result5['date_of_payment'],
-                                                                                'paid_to' => $result5['paid_to'],
-                                                                                'payment_mode' => $result5['payment_mode']
-                                                                            );
+                                                $stmt6=$connect->prepare("SELECT number_of_instrument, bank_name,branch_name FROM payment_mode_details WHERE payment_id=:paymentId");
+                                                $stmt6->bindParam(':paymentId',$result5['payment_id']);
 
-                                                 $applicator['total_paid_amount']+=$result5['amount_paid'];
+                                                if($stmt6->execute()) {
+
+                                                    $affectedRow1=$stmt6->rowCount();
+                                                    if($affectedRow1!=0){
+
+                                                        $result6=$stmt6->fetch();
+                                                        $applicator['paymentDetails'][] = array(
+                                                            'amount_paid' => $result5['amount_paid'],
+                                                            'date_of_payment' => $result5['date_of_payment'],
+                                                            'paid_to' => $result5['paid_to'],
+                                                            'payment_mode' => $result5['payment_mode'],
+                                                            'bank_name'=>$result6['bank_name'],
+                                                            'branch_name'=>$result6['branch_name'],
+                                                            'unique_number'=>$result6['number_of_instrument']
+                                                        );
+                                                    }
+                                                    else{
+
+                                                        $applicator['paymentDetails'][] = array(
+                                                            'amount_paid' => $result5['amount_paid'],
+                                                            'date_of_payment' => $result5['date_of_payment'],
+                                                            'paid_to' => $result5['paid_to'],
+                                                            'payment_mode' => $result5['payment_mode'],
+                                                            'bank_name'=>'-',
+                                                            'branch_name'=>'-',
+                                                            'unique_number'=>'-'
+                                                        );
+                                                    }
+                                                    $applicator['total_paid_amount']+=$result5['amount_paid'];
+                                                }
                                             }
                                         }
                                         else{
 
                                             $applicator['paymentDetails'][] = array(
-                                                                            'amount_paid' => 0,
-                                                                            'date_of_payment' => 'Not Available',
-                                                                            'paid_to' => 'Not Available',
-                                                                            'payment_mode' => 'Not Available'
+                                                                            'amount_paid' =>'-',
+                                                                            'date_of_payment' => '-',
+                                                                            'paid_to' => '-',
+                                                                            'payment_mode' => '-',
+                                                                            'bank_name'=>'-',
+                                                                            'branch_name'=>'-',
+                                                                            'unique_number'=>'-'
                                                                         );
                                         }
 
 
-                                    $stmt6=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");
-                                    $stmt6->bindParam(':enrollment_id',$enrollment_id);
-                                    $stmt6->execute();
-                                    $result6=$stmt6->fetch(PDO::FETCH_ASSOC);
-                                    $applicator['date_of_follow_up']=$result6['date_of_follow_up'];
+                                    $stmt7=$connect->prepare("SELECT * FROM applicator_follow_up WHERE enrollment_id=:enrollment_id");
+                                    $stmt7->bindParam(':enrollment_id',$enrollment_id);
+                                    $stmt7->execute();
+                                    $result7=$stmt7->fetch(PDO::FETCH_ASSOC);
+                                    $applicator['date_of_follow_up']=$result7['date_of_follow_up'];
+                                    $applicator['remaining_amount']=$applicator['package_total_amount']-$applicator['total_paid_amount'];
 
-                                echo json_encode($applicator);
+                                    echo json_encode($applicator);
 
 
                             }
@@ -598,12 +649,22 @@
                 }
                 public function viewPermanentApplicators($data){
 
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+
+                    $searchKeyword="";
+                    $searchExpression="";
                     $json_response=array();
-                    global $connect;
 
-                    $searchExpression=$data->searchExpression;
-                    $searchKeyword='%'.$data->searchKeyword.'%';
-
+                    if(isset($data->searchExpression)) {
+                        $searchExpression = $data->searchExpression;
+                    }
+                    if(isset($data->searchKeyword)) {
+                        $searchKeyword = '%' . $data->searchKeyword . '%';
+                    }
+                    else{
+                        $searchKeyword='%'."".'%';
+                    }
 
                     if($searchExpression=='applicator_name'){
 
@@ -628,7 +689,11 @@
 
                         $stmt1->bindParam(':searchKeyword',$searchKeyword);
                     }
+                    else{
 
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='permanent'");
+                    }
 
                     if($stmt1->execute()){
 
@@ -644,9 +709,13 @@
                             array_push($json_response, $applicator);
                         }
 
-                        echo json_encode($json_response);
-
-                        return true;
+                        if(sizeof($json_response)>0){
+                            echo AppUtil::getReturnStatus("success",$json_response);
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
                     }
 
                     return false;
@@ -654,7 +723,9 @@
                 }
                 public function getApplicatorPaymentDetails(){
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+
                     $response_array=array();
 
                     $stmt1=$connect->prepare("SELECT * FROM applicator_enrollment
@@ -826,14 +897,14 @@
                                         }
                                         else{
 
-                                            echo "Roll Back";
+                                            return false;
                                         }
 
 
                                     }
                                     else{
 
-                                        echo "Roll Back";
+                                        return false;
                                     }
 
                                 }
@@ -845,20 +916,19 @@
                                     }
                                     else{
 
-                                        echo "Roll Back";
+                                        return false;
                                     }
                                 }
 
                             }
                             else{
 
-                                echo "Roll Back";
+                                return false;
                             }
                         }
                         else{
 
-
-                            echo "Roll Back";
+                            return false;
                         }
 
                     }
@@ -882,23 +952,23 @@
 
                                              if($stmt5->execute()){
 
-                                                  return true;
+                                                 return false;
                                              }
                                             else{
 
-                                                echo "Roll Back";
+                                                return false;
                                             }
 
                                         }
                                         else{
 
-                                            echo "Roll Back";
+                                            return false;
                                         }
 
                                     }
                                     else{
 
-                                        echo "Roll Back";
+                                        return false;
                                     }
 
                                 }
@@ -912,27 +982,28 @@
                                             return true;
                                         }
                                         else{
-                                            echo "Roll Back";
+                                            return false;
                                         }
                                     }
                                     else{
-                                        echo "Roll Back";
+                                        return false;
                                     }
                                 }
                             }
                             else{
-                                echo "Roll Back";
+                                return false;
                             }
                         }
                        else{
-                           echo "Roll Back";
+                           return false;
                        }
                     }
                 }
 
                 public function modifyApplicatorDetails($data,$userId){
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $applicatorMasterId=$data->applicator_master_id;
                     $applicatorContactNo = $data->applicator_contact;
@@ -941,7 +1012,10 @@
                     $applicatorCountry = $data->applicator_country;
                     $applicatorState = $data->applicator_state;
                     $applicatorCity = $data->applicator_city;
-
+                    $applicatorVatNumber = $data->applicator_vat_number;
+                    $applicatorCstNumber = $data->applicator_cst_number;
+                    $applicatorServiceTaxNumber = $data->applicator_stax_number;
+                    $applicatorPanNumber = $data->applicator_pan_number;
                     $pointOfContact = $data->point_of_contact;
                     $pointContactNo = $data->point_of_contact_no;
 
@@ -952,6 +1026,10 @@
                                               applicator_city=:applicatorCity,
                                               applicator_state=:applicatorState,
                                               applicator_country=:applicatorCountry,
+                                              applicator_vat_number=:vatNumber,
+                                              applicator_cst_number=:cstNumber,
+                                              applicator_stax_number=:staxNumber,
+                                              applicator_pan_number=:panNumber,
                                               last_modified_by=:lastModifiedBy
                                               WHERE applicator_master_id=:applicatorMasterId");
 
@@ -963,6 +1041,10 @@
                     $stmt1->bindParam(':applicatorCity', $applicatorCity);
                     $stmt1->bindParam(':applicatorState', $applicatorState);
                     $stmt1->bindParam(':applicatorCountry', $applicatorCountry);
+                    $stmt1->bindParam(':vatNumber', $applicatorVatNumber);
+                    $stmt1->bindParam(':cstNumber', $applicatorCstNumber);
+                    $stmt1->bindParam(':staxNumber', $applicatorServiceTaxNumber);
+                    $stmt1->bindParam(':panNumber', $applicatorPanNumber);
                     $stmt1->bindParam(':lastModifiedBy', $userId);
 
 
@@ -983,14 +1065,16 @@
                               return true;
                           }
                          else{
-                              echo "Roll Back";
+                              return false;
                          }
                      }
                     else{
 
-                        echo "Roll Back";
+                        return false;
                     }
                 }
+
+
 
             }
 

@@ -8,7 +8,7 @@
                                         <div class="col-md-6">
                                             <div class="input-group push-down-10" >
                                                 <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                                                <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="Keywords"/>
+                                                <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="prodBatchInfo.Keywords"/>
                                                 <div class="input-group-btn">
                                                     <button class="btn btn-primary" ng-click="initProd(prodBatchInfo,'Search','InquiryAll')">Search</button>
                                                 </div>
@@ -42,7 +42,7 @@
                                                 <!--</th>-->
                                             </thead>
                                             <tbody>
-                                                <tr ng-repeat="prodBatch in prodInq | filter:paginate">
+                                                <tr ng-repeat="prodBatch in prodInqAll | filter:paginate1 | filter:prodBatchInfo.Keywords">
                                                     <td>{{$index + 1}}</td>
                                                     <td>{{prodBatch.batchNo}}</td>
                                                     <td>{{prodBatch.batchCodeName}}</td>
@@ -54,7 +54,7 @@
 
 
 
-                                                        <button ng-click="getProdInfo(prodBatch)" data-target="#modifyProdInfo" data-toggle="modal"
+                                                        <button disabled ng-click="getProdInfo(prodBatch)" data-target="#modifyProdInfo" data-toggle="modal"
                                                         class="btn btn-info btn-sm"><span class="fa fa-pencil-square-o"></span>Modify</button> 
 
 

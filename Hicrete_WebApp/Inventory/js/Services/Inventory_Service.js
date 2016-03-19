@@ -391,8 +391,16 @@ myApp.service('ProductionBatchService', function () {
                 console.log(data);
 
                 if (prodBatchInfo.option == 'Inquiry' || prodBatchInfo.option == 'InquiryAll') {
-                    $rootScope.prodInq = data;
-                    $scope.totalItems= $rootScope.prodInq.length;
+                    if(prodBatchInfo.option == 'Inquiry' ) {
+                        $rootScope.prodInq = data;
+                        $scope.totalItems = $rootScope.prodInq.length;
+                    }
+                    if(prodBatchInfo.option == 'InquiryAll')
+                    {
+                        $rootScope.prodInqAll = data;
+                        $scope.totalItems = $rootScope.prodInqAll.length;
+
+                    }
                 }
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {

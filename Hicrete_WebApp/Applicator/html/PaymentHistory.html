@@ -1,0 +1,149 @@
+<div class="row">
+<div class="col-md-12">
+    <!--Start of form section-->
+    <div class="panel panel-default">
+        <!--Start of form heading section-->
+        <div class="panel-heading">
+            <h3 class="panel-title"><strong>Applicator Payment</strong> History</h3>
+        </div>
+        <!--End of form heading section-->
+        <div class="panel-body">
+            <!--Start of form container row-->
+            <div class="row">
+                <!--Form Starts here-->
+                <form name="ApplicatorPaymentHistory" class="form-horizontal" novalidate>
+                    <!--Start of First column of form-->
+                    <div class="col-md-6">
+                        <!--Start Project name feild-->
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Applicator Name</label>
+                            </div>
+                            <div class="col-md-9">
+                                <select class="form-control select" name="applicatorName" ng-model="applicatorId">
+                                    <option value="" disabled selected>Choose Applicator..</option>
+                                    <option value="Project 1">Project 1</option>
+                                    <option value="Project 2">Project 2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <!--End of Applicator name field-->
+                    </div>
+                    <!--End of First column of form-->
+
+                    <!--Start of Second column of form-->
+                    <div class="col-md-6">
+                            <div class="col-md-3">
+                             <button class="btn btn-primary" data-ng-click="getPaymentHistory(applicatorId)">Show</button>
+                            </div>
+
+                    </div>
+                    <!--End of second column of form-->
+                </form>
+                <!--End of Form-->
+            </div>
+            <!--End of form container row-->
+            <!--Start of table row-->
+            <div class="row">
+                <div class="table-responsive push-up-20">
+                    <table class="table table-bordered table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="5%">Sr.No</th>
+                            <th width="10%">Applicator Name</th>
+                            <th width="10%">Payment Date</th>
+                            <th width="10%">Received By</th>
+                            <th width="15%">Amount Remaining</th>
+                            <th width="40%"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="ApplicatorPaymentHistory in ApplicatorPaymentHistoryData">
+                            <td>{{$index+1}}</td>
+                            <td>{{paymentHistory.amountPaid}}</td>
+                            <td>{{paymentHistory.paymentDate}}</td>
+                            <td>{{paymentHistory.recievedBy}}</td>
+                            <td>{{paymentHistory.amountRemaining}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" data-target="#viewAllHistory"
+                                        ng-click="getPaymentHistoryData(paymentHistory)" data-toggle="modal"><span
+                                        class="fa fa-eye"></span>View Transaction Detail
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <uib-pagination total-items="totalItems" ng-model="currentPage"
+                                max-size="5" boundary-links="true"
+                                items-per-page="ApplicatorPerPage" class="pagination-sm">
+                </uib-pagination>
+            </div>
+            <!--End of table row-->
+        </div>
+    </div>
+    <!--End of form section-->
+</div>
+
+
+
+<div class="modal fade" id="viewAllHistory" role="dialog">
+    <div class="modal-dialog">
+        <form class="form-horizontal">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Payment History of {{project}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 padRight">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Payment Mode :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group pt7">
+                                        {{viewHistory.paymentMode}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Bank Name :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group pt7">
+                                        {{viewHistory.bankName}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Branch Name :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group pt7">
+                                        {{viewHistory.branchName}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Unique Number :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group pt7">
+                                        {{viewHistory.unqiueNo}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                <!--End of modal-footer-->
+            </div>
+            <!--End of Modal Content-->
+        </form>
+    </div>
+    <!--End of modal dialog-->
+</div>
+</div>
