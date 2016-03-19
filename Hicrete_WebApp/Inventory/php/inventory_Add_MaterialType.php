@@ -4,10 +4,10 @@
     /* $db = Database::getInstance();
      $this->_dbh = $db->getConnection();*/
     $hostname = 'localhost';
-    $dbname = 'inventory';
-    $username = 'admin';
-    $password = 'admin';
-    $userId = "Pranav";
+    $dbname = 'hicrete';
+    $username = 'hicreteRoot';
+    $password = 'hicrete@123';
+
 
     $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
     #fetching veriables from front end and initializing

@@ -21,7 +21,7 @@ myApp.controller('inventoryCommonController', function ($scope, $http, inventory
  * Start of Product controller
  *
  ***********************************************************************************/
-myApp.controller('productController', function ($scope, $http, inventoryService) {
+myApp.controller('productController', function ($scope, $http, inventoryService,$rootScope) {
 
     //Pagination variables
     $scope.totalItems = 0;
@@ -79,8 +79,8 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         $scope.submitted = false;
         $scope.loading=true;
 
-        $scope.errorMessage="";
-        $scope.warningMessage="";
+        $rootScope.errorMessage="";
+        $rootScope.warningMessage="";
         $('#loader').css("display","block");
 
         var config = {
@@ -93,7 +93,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .success(function (data) {
                 $('#loader').css("display","none");
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
                 }
                 setTimeout(function() {
@@ -107,7 +107,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 $scope.loading=false;
 
                 if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                 }
                 console.log("IN POST OF add product success");
@@ -119,7 +119,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 console.log(data.error);
                 //doShowAlert("Failure", data.msg);
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+                $rootScope.errorMessage=data.error;
                 $('#error').css("display","block");
             });
 
@@ -277,7 +277,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
+myApp.controller('inwardController', function ($scope, $http, inventoryService,$rootScope) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
@@ -307,8 +307,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    $rootScope.errorMessage="";
+    $rootScope.warningMessage="";
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -320,8 +320,6 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
-    //inventoryService.getSavedCompanys($scope);
-    //inventoryService.getSavedWarehouses($scope);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -412,11 +410,56 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     };
 
     $scope.addInwardDetails = function () {
-        $scope.errorMessage="";
-        $scope.warningMessage="";
+        $rootScope.errorMessage="";
+        $rootScope.warningMessage="";
         console.log("in next step data before class =");
         console.log($scope.InwardData);
-        inwardService.inwardEntry($scope, $http, $scope.InwardData);
+        //inwardService.inwardEntry($scope, $http, $scope.InwardData);
+        console.log("IN Add INWARD=");
+        $('#loader').css("display","block");
+        var data = {
+            inwardData: $scope.InwardData,
+            module: 'inward',
+            operation: 'insert'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                $('#loader').css("display","none");
+                console.log("IN success OF add INWARD=");
+                console.log(data.msg);
+              //  $rootScope.warningMessage=data.msg;
+                if(data.msg!==""){
+                    $rootScope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }else{
+                    $rootScope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                    alert(data.error);
+                }
+
+                setTimeout(function () {
+                    if (data.msg!==""){
+                        $('#warning').css("display","none");
+                        window.location="dashboard.php#/Inventory";
+                    }
+                }, 3000);
+
+                   //$scope.inwardData=[];
+                setTimeout(function(){
+                    //window.location.reload(true);
+                    // window.location="dashboard.php#/Inventory";
+                },1000);
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+                alert(data);
+            });
         $scope.submitted = false;
     }
 
@@ -445,7 +488,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         console.log(data);
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                console.log("IN SERVICE OF INWARD=");
+                console.log("IN success OF modify INWARD=");
                 console.log(data);
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
@@ -551,9 +594,10 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
  *
  ************************************************************************************************************/
 
-myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService) {
+myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService,$rootScope) {
+    $rootScope.errorMessage="";
+    $rootScope.warningMessage="";
     $scope.OutwardData = {
-
         outwardMaterials: [
             {
                 material: "",
@@ -599,8 +643,6 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
-    inventoryService.getSavedCompanys($scope);
-    inventoryService.getSavedWarehouses($scope);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -612,7 +654,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     // inventoryService.getProductsForInwardandOutward($scope,$http);
     //Available Products
     inventoryService.getProducts($scope, $http);
-    inventoryService.getSavedProducts($scope);
+
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
@@ -685,6 +727,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
      * Return- success or failure
      *************************************************************/
     $scope.addOutwardDetails = function () {
+        $('#loader').css("display","block");
         console.log($scope.OutwardData);
         // outwardService.outwardEntry($scope,$http,$OutwardData);
         var data = {
@@ -702,23 +745,37 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
-                if(data.msg!=""){
-                    alert(data.msg);
+                $('#loader').css("display","none");
+                $rootScope.warningMessage=data.msg;
+                if(data.msg!==""){
+                    $rootScope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
                 }else{
+                    $rootScope.errorMessage=data.error;
+                    $('#error').css("display","block");
                     alert(data.error);
                 }
+
+                setTimeout(function () {
+                    if (data.msg!==""){
+                        $('#warning').css("display","none");
+                        window.location="dashboard.php#/Inventory";
+                    }
+                }, 3000);
+
                  setTimeout(function(){
                      window.location="dashboard.php#/Inventory";
-
                 },1000);
                 $scope.outwardData = data;
                 //$scope.clearFields($scope.OutwardData);
-                    $scope.submitted = false;
+                $scope.submitted = false;
 
             })
             .error(function (data, status, headers) {
                 console.log(data);
-                alert(data);
+                $('#loader').css("display","none");
+                $('#error').css("display","block");
+                //alert(data);
 
             });
     }
@@ -832,11 +889,11 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
  *
  ************************************************************************************************************/
 
-myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
+myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService,$rootScope) {
     $scope.materialType = [];
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    $rootScope.errorMessage="";
+    $rootScope.warningMessage="";
     $scope.materialType.push({
         type: ""
     });
@@ -884,7 +941,7 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
  * START OF SUPPLIER CONTROLLER
  *Add Supplier controller
  **************************************************************************************************/
-myApp.controller('addSupplierController', function ($scope, $http, addSupplierService) {
+myApp.controller('addSupplierController', function ($scope, $http, addSupplierService,$rootScope) {
 
     $scope.supplier = {
         supplierName: "",
@@ -924,9 +981,9 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         console.log(supplier.city);
         console.log(supplier.country);
         console.log(supplier.pinCode);
-        $scope.errorMessage="";
-        $scope.warningMessage="";
-        addSupplierService.addSupplier($scope, $http, supplier);
+        $rootScope.errorMessage="";
+        $rootScope.warningMessage="";
+        addSupplierService.addSupplier($scope, $http, supplier,$rootScope);
     };
 
 
@@ -939,7 +996,7 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
 /*********************************************************************************************
  * START of Search Controller
  *********************************************************************************************/
-myApp.controller('SearchController', function ($scope, $http, inventoryService) {
+myApp.controller('SearchController', function ($scope, $http, inventoryService,$rootScope) {
     //Pagination variables
     $scope.submitted = false;
     $scope.submittedModal = false;

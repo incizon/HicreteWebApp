@@ -643,7 +643,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,App
 
 /* start of applicator payment controller*/
 
-myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
+myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log,$rootScope){
 
 
     $scope.applicatorDetails={
@@ -727,7 +727,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
 
             applicatorDetails.paymentStatus='Yes';
             console.log(applicatorDetails);
-            ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+            ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails,$rootScope);
         }
         else if($scope.applicatorDetails.pendingAmount!=0){
 
@@ -744,7 +744,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
 
                     $scope.ok = function () {
 
-                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails,$rootScope);
                         $uibModalInstance.close();
                     };
 
