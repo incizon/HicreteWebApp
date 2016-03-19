@@ -2,7 +2,46 @@
  * Created by Atul on 11-02-2016.
  */
 
+myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $log){
+    $scope.projectDetails={
+        projectName:'',
+        state:'',
+        address:'',
+        country:'',
+        city:'',
+        pincode:'',
+        pointOfContactName:'',
+        pointOfContactEmailId:'',
+        pointOfContactLandlineNo:'',
+        pointfContactMobileNo:'',
+        projectManagerId:'',
+        projectSource:'',
+    }
 
+    $scope.companies=[];
+    $scope.companies.push({checkVal:false,companyId:123,companyName:"Hitech"});
+    $scope.companies.push({checkVal:false,companyId:123,companyName:"HiCrete"});
+    $scope.companies.push({checkVal:false,companyId:123,companyName:"HiFlooring"});
+    $scope.projectManagers=[];
+    $scope.projectManagers.push({projectManagerId:1,name:"Atul Dhatrak"});
+    $scope.projectManagers.push({projectManagerId:2,name:"Namdev Devmare"});
+    $scope.projectManagers.push({projectManagerId:3,name:"Ajit Zagade"});
+
+    var companiesInvolved=[];
+    for(var i=0;i<$scope.companies.length;i++){
+        if($scope.companies[i].checkVal){
+            companiesInvolved.push($scope.companies[i]);
+        }
+
+    }
+
+
+
+
+
+
+
+});
 
 
 myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log){

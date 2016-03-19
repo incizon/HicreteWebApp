@@ -4,8 +4,8 @@ class Database
     private $_connection;
     private static $_instance; //The single instance
     private $_host = "localhost";
-    private $_username = "admin";
-    private $_password = "admin";
+    private $_username = "hicreteRoot";
+    private $_password = "hicrete@123";
     private $_database = "hicrete";
 
     /*
