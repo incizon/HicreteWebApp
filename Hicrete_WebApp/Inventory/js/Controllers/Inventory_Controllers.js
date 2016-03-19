@@ -977,10 +977,18 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
             data: data
         }
     };
+
+    $scope.loading=true;
+    $('#loader').css("display","block");
+
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");
             console.log(data);
+            setTimeout(function(){
+                $scope.loading=false;
+                $('#loader').css("display","none");
+            },3000);
             $scope.inventoryData = data;
             $scope.paginateItemsPerPage = data;
             $scope.totalItems = $scope.inventoryData.length;
@@ -989,7 +997,10 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
         .error(function (data, status, headers) {
             console.log("IN SERVICE OF Inventory Search Failure=");
             console.log(data);
-
+            setTimeout(function(){
+                $scope.loading=false;
+                $('#loader').css("display","none");
+            },3000);
         });
     $scope.getViewDataObject = function (product,materialDetails) {
         console.log(product);
@@ -1028,10 +1039,17 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
         }
     };
 
+        $scope.loading=true;
+        $('#loader').css("display","block");
+
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
 
             console.log("IN INWARD Search");
+            setTimeout(function(){
+                $scope.loading=false;
+                $('#loader').css("display","none");
+            });
             $scope.InwardSearchData = data;
             $scope.totalInwardItems = $scope.InwardSearchData.length;
             console.log(data);
