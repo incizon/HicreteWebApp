@@ -163,30 +163,69 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         product.isProductDetailsTable = isPrductDetailsTable;
         product.isProductPackagingTable = isProductPkgingTable;
         product.isProductMaterialTable = isMaterialTable;
-        $('#loader').css("display","block");
+        $scope.loading = "";
+        $scope.warningMessage = "";
+        $scope.errorMessage = "";
+
         // Create json object
         var config = {
             params: {
                 product: product
             }
         };
+        $scope.loading = true;
+        $('#loader').css("display","block");
         //call add product service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
                 console.log("IN POST UPDATE OPERATION:");
                 console.log(data);
-                if(data.msg!="")
-                    alert("Success", data.msg);
-                else
-                    alert("Success", data.error);
-
-                    window.location="dashboard.php#/Inventory";
-
+                $scope.lodaing = false;
                 $('#loader').css("display","none");
+                if(data.msg!="") {
+                    //alert("Success", data.msg);
+                    $scope.warningMessage = data.msg;
+                    $('#warning').css("display", "block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.message!=""){
+                                $('#warning').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
+                else {
+                    //alert("Success", data.error);
+                    $scope.errorMessage = data.error;
+                    $('#error').css("display", "block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.message!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
+                setTimeout(function() {
+                    $scope.apply(function () {
+                        window.location.reload = true;
+                    });
+                },1000);
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
-                alert(data);
+                //alert(data);
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+                $scope.errorMessage = data.error;
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if(data.message!=""){
+                            $('#error').css("display","none");
+                        }
+                    });
+                }, 3000);
             });
 
     }
