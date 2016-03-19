@@ -31,9 +31,9 @@ myApp.service('ApplicatorService',function(){
 							$scope.errorMessage=data.error;
 							$('#error').css("display","block");
 						}
-							//setTimeout(function(){
-							//		window.location.reload(true);
-							//},2000);
+							setTimeout(function(){
+									window.location.reload(true);
+							},2000);
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
@@ -70,12 +70,12 @@ myApp.service('ApplicatorService',function(){
 
 	};
 
-	this.savePaymentDetails=function($scope,$http,applicatorDetails){
+	this.savePaymentDetails=function($scope,$http,applicatorDetails,$rootScope){
 
 		applicatorDetails.operation='savePaymentDetails';
 		$scope.loading=true;
-		$scope.errorMessage="";
-		$scope.warningMessage="";
+		$rootScope.errorMessage="";
+		$rootScope.warningMessage="";
 		$('#loader').css("display","block");
 		var config = {
 			params: {
@@ -88,7 +88,7 @@ myApp.service('ApplicatorService',function(){
 
 					console.log(data.msg);
 					if(data.msg!=""){
-						$scope.warningMessage=data.msg;
+						$rootScope.warningMessage=data.msg;
 						$('#warning').css("display","block");
 					}
 					setTimeout(function() {
@@ -102,20 +102,20 @@ myApp.service('ApplicatorService',function(){
 					$scope.loading=false;
 					$('#loader').css("display","none");
 					if(data.msg==""){
-						$scope.errorMessage=data.error;
+						$rootScope.errorMessage=data.error;
 						$('#error').css("display","block");
 					}
 					console.log(data);
-					//setTimeout(function(){
-					//	window.location.reload(true);
-					//},2000);
+					setTimeout(function(){
+						window.location.reload(true);
+					},2000);
 
 				})
 
 				.error(function (data, status, headers){
 					console.log(data);
 					$('#loader').css("display","none");
-					$scope.errorMessage=data.error;
+					$rootScope.errorMessage=data.error;
 					$('#error').css("display","block");
 				});
 	}

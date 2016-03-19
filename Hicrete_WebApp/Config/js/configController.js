@@ -80,6 +80,7 @@ configService.getAllAccessPermission($http,$scope);
            })
            .error(function (data, status, headers, config)
            {
+               $scope.loading=false;
                $scope.errorMessage="Role not added..";
                $('#error').css("display","block");
            });
@@ -1362,7 +1363,7 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
                     console.log(data);
                     $rootScope.Companies[$scope.companyIndex]=$scope.selectedCompany;
                     alert(data.message);
-                    window.location= "/Config/SearchCompany";
+                    window.location= "dashboard.php#/Config/SearchCompany";
 
 
 
@@ -1521,6 +1522,9 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
+                    alert(data.message);
+
+                    window.location= "dashboard.php#/Config/SearchWarehouse";
 
 
 

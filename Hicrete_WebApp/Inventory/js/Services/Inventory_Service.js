@@ -146,7 +146,7 @@ myApp.service('inventoryService', function () {
  ****************************************************************************/
 myApp.service('addSupplierService', function () {
 
-    this.addSupplier = function ($scope, $http, supplier) {
+    this.addSupplier = function ($scope, $http, supplier,$rootScope) {
 
         $('#loader').css("display","block");
         var config = {
@@ -160,10 +160,15 @@ myApp.service('addSupplierService', function () {
             .success(function (data) {
                 console.log("Supplier Data=");
                 console.log(data);
-                $scope.warningMessage="Success";
+                $rootScope.warningMessage="Success";
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
+                    //$scope.warningMessage=data.msg;
+                    //$('#warning').css("display","block");
+                    alert(data.msg);
+                    window.location="dashboard.php#/Inventory/addSupplier";
+                    $scope.submitted=false;
+                    $scope.clearData(supplier,'clear');
+
                 }
                 setTimeout(function () {
                     if (data.msg != ""){
@@ -172,7 +177,7 @@ myApp.service('addSupplierService', function () {
                 }, 3000);
                 $('#loader').css("display","none");
                 if (data.error != ""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     //$('#error').css("display","block");
                 }
                 //$scope.messages.push(data.msg);
@@ -181,7 +186,7 @@ myApp.service('addSupplierService', function () {
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 $('#loader').css("display","none");
-                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $rootScope.errorMessage="Problem While connecting to server.Please check internet connection";
                 //$('#error').css("display","block");
             });
     };
@@ -237,67 +242,6 @@ myApp.service('addMaterialTypeService', function () {
  * END of Material Type Service
  ****************************************************************************/
 
-/*****************************************************************************
- * START OF INWARD  Service
- ****************************************************************************/
-myApp.service('inwardService', function () {
-
-    this.inwardEntry = function ($scope, $http, inwardData) {
-        console.log("IN SERVICE OF INWARD=");
-        $('#loader').css("display","block");
-        var data = {
-            inwardData: $scope.InwardData,
-            module: 'inward',
-            operation: 'insert'
-        }
-        var config = {
-            params: {
-                data: data
-            }
-        };
-        console.log(config);
-        $http.post("Inventory/php/InventoryIndex.php", null, config)
-            .success(function (data) {
-                $('#loader').css("display","none");
-                console.log("IN SERVICE OF INWARD=");
-                console.log(data);
-                $scope.warningMessage=data.msg;
-                if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
-                    alert(data.msg);
-                }
-
-                setTimeout(function () {
-                    if (data.msg != ""){
-                        $('#warning').css("display","none");
-                    }
-                }, 3000);
-                $('#loader').css("display","none");
-                if (data.error != ""){
-                    $scope.errorMessage=data.error;
-                    $('#error').css("display","block");
-                    alert(data.error);
-                }
-
-                window.location="dashboard.php#/Inventory";
-
-                //$scope.inwardData=[];
-                setTimeout(function(){
-                    //window.location.reload(true);
-                    // window.location="dashboard.php#/Inventory";
-                },1000);
-            })
-            .error(function (data, status, headers) {
-                console.log(data);
-                alert(data);
-            });
-    };
-
-});
-/************************************************************************
- * End Of Inward Service
- *************************************************************************/
 
 /*****************************************************************************
  * START OF OUTWARD  Service
@@ -405,6 +349,12 @@ myApp.service('ProductionBatchService', function () {
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlert("Success", data.msg);
+                    if(prodBatchInfo.option=='complete')
+                    {
+                        alert(data.msg);
+                        $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
+
+                    }
                     if(data.msg!=""){
                         $scope.warningMessage=data.msg;
                         $('#warning').css("display","block");

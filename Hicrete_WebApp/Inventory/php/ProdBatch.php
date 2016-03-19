@@ -211,17 +211,14 @@ class ProdBatch
 
             if($stmt->execute())
             {
-                //echo "at aloy";
+
                 $lastId = $dbh->lastInsertId();
             //Fetch master id from product master table
                 $this->producedGoodId=$lastId;
-                /*$message="User Created successfully";
-                return $message;*/
-                            //Inhouse Inward start
-                            //echo "pahila zalai bgh";
-                            $stmt = $dbh->prepare("INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME) 
+                            $stmt = $dbh->prepare("INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
                                   values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())");
-                            //echo $this->prodMasterId;
+
+
                             $stmt->bindParam(':productionbatchmasterid', $this->prodMasterId, PDO::PARAM_STR,10);
                             $stmt->bindParam(':producedgoodid', $this->producedGoodId, PDO::PARAM_STR,10);
 
@@ -235,11 +232,9 @@ class ProdBatch
                             $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
 
                             //$stmt->execute();
-                           
-
                                 if($stmt->execute())
                                 {
-                                   // echo "dusra zalai bgh";
+
                                      $lastId = $dbh->lastInsertId();
                                 //Fetch master id from product master table
                                      $this->inhouseInwardId=$lastId;
@@ -249,19 +244,6 @@ class ProdBatch
                                     if ($this->tranReq) {
                                             //echo "m ithe aloy";
                                               if($this->addToInhouseTransport($dbh,$userId)){
-
-                                                       /* if($this->insertToInventory($dbh,$userId))
-                                                        {
-                                                                //echo "inventory mdhe zala bgh";
-                                                                      $dbh->commit();
-                                                                        return 1;
-                                                        }
-                                                        else {
-                                                            //echo "inventory mdhe nai zala bgh";
-
-                                                            $dbh->rollBack();
-                                                            return 0;
-                                                        }    */
 
 
                                                 
@@ -543,10 +525,12 @@ class ProdBatch
                                    
                                     if ($i!=(sizeof($this->rawMaterial)))
                                     {
+                                        echo "chuktai re";
                                          $dbh->rollBack();
                                             return 0;
                                     }
                                     else{
+                                        echo "zalai";
                                         $dbh->commit();
                                         return 1;
                                     }
