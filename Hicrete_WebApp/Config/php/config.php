@@ -133,11 +133,13 @@ class Config
                 }
             } else {
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+                return;
             }
 
 
             if ($rollback) {
                 $conn->rollback();
+
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
             } else {
                 $conn->commit();

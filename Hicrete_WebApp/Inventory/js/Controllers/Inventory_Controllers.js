@@ -352,8 +352,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
                 packageUnit: "",
                 suppplierName: ""
             });
-        }
-        ;
+        };
     }
     /**********************************
      End of Add material fields
