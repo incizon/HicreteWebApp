@@ -1,6 +1,6 @@
 <?php
 
-        require_once ("database_connection.php");
+	    require_once ("../../php/Database.php");
 
 		include_once ("ApplicatorClassLib.php");
 
@@ -9,7 +9,10 @@
         }
         $userId=$_SESSION['token'];
 
-		$data=json_decode($_GET["data"]);
+        $db = Database::getInstance();
+        $connect = $db->getConnection();
+
+        $data=json_decode($_GET["data"]);
 		$operationObject=new Applicator();
 
         $operation=$data->operation;
@@ -102,13 +105,12 @@
 
 			case 'viewTentativeApplicators':
 
-					if(!$operationObject->viewTentativeApplicators($data)){
 
-						$message = "Applicator Details Not Available...!!!";
-						$arr = array('msg' => '', 'error' => $message);
-						$jsn = json_encode($arr);
-						echo($jsn);
-					}
+                    if(!$operationObject->viewTentativeApplicators($data)){
+                        $message = "Applicator Details Not Available...!!!";
+                        echo AppUtil::getReturnStatus("fail",$message);
+                    }
+
 				break;
 
 
@@ -116,11 +118,10 @@
 
 				if(!$operationObject->viewPermanentApplicators($data)){
 
-					$message = "Applicator Details Not Available...!!!";
-					$arr = array('msg' => '', 'error' => $message);
-					$jsn = json_encode($arr);
-					echo($jsn);
-				}
+                        $message = "Applicator Details Not Available...!!!";
+                        echo AppUtil::getReturnStatus("fail",$message);
+
+                }
 				break;
 
 			case 'getTentativeApplicatorDetails':

@@ -90,13 +90,6 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
         operation:""
     };
 
-    $scope.pickHolidayDate = function(){
-        $scope.holidayDate.opened = true;
-    };
-
-    $scope.holidayDate = {
-        opened:false
-    };
 
     $scope.getCurrentYearDetails=function(){
         $scope.holidaysDetails.operation="getCurrentYearHolidayDetails";
@@ -207,44 +200,35 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         operation:""
     };
 
-    $scope.leaveFrom = function(){
-        $scope.from.opened = true;
+    $scope.employeeDetails={
+        operation:""
     };
+    $scope.getEmployeeDetails=function(){
 
-    $scope.from = {
-        opened:false
-    };
+        $scope.employeeDetails.operation="getEmployeeDetailsForLeave";
+        var config = {
+            params: {
+                details: $scope.employeeDetails
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+            .success(function (data) {
 
-    $scope.leaveTo = function(){
-        $scope.to.opened = true;
-    };
+                console.log(data);
+                $scope.employeeData=data;
 
-    $scope.to = {
-        opened:false
-    };
+            })
+            .error(function (data, status, headers, config) {
 
 
-    ////count number of leaves applied
-    //$scope.dayDiff = function(leaveDetails.fromDate,leaveDetails.toDate){
-    //    var date2 = new Date($scope.formatString(leaveDetails.toDate));
-    //    console.log(date2);
-    //    var date1 = new Date($scope.formatString(leaveDetails.fromDate));
-    //    var timeDiff = Math.abs(date2.getTime() - date1.getTime());
-    //    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    //    alert(diffDays);
-    //}
-    //
-    //$scope.formatString = function(format) {
-    //    var day   = parseInt(format.substring(0,2));
-    //    var month  = parseInt(format.substring(3,5));
-    //    var year   = parseInt(format.substring(6,10));
-    //    var date = new Date(year, month-1, day);
-    //    return date;
-    //}
+            });
 
-    //console.log($scope.leaveDetails.fromDate);
+    }
+
+    $scope.getEmployeeDetails();
 
     $scope.ApplyForLeave=function(){
+
         $scope.errorMessage="";
         $scope.warningMessage="";
 
@@ -294,8 +278,12 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
         operation:""
     }
 
+    $scope.payrollDetails={
 
+        operation:"",
+        employee:[]
 
+    };
     $scope.getEmployeeDetails=function(){
 
         $scope.employeeDetails.operation="getEmployeeDetails";
@@ -308,11 +296,8 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
             .success(function (data) {
 
                 console.log(data);
-                $scope.LeaveApprovers=data.LeaveApprover;
-                $scope.EmployeeDetails=data.EmployeeDetails;
-
-                console.log($scope.LeaveApprovers);
-                console.log($scope.EmployeeDetails);
+                $scope.payrollEmployeeDetails=data;
+                $scope.modifyObject();
             })
             .error(function (data, status, headers, config) {
 
@@ -323,18 +308,39 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
 
     $scope.getEmployeeDetails();
 
+   $scope.modifyObject=function(){
+
+       for(var i=0;i<$scope.payrollEmployeeDetails.EmployeeDetails.length;i++){
+
+           $scope.payrollEmployeeDetails.EmployeeDetails[i].val=false;
+       }
+       console.log($scope.payrollEmployeeDetails.EmployeeDetails);
+
+   }
     $scope.AddEmployee=function(){
+
+        console.log($scope.payrollEmployeeDetails.EmployeeDetails);
+
+        for(var i=0;i<$scope.payrollEmployeeDetails.EmployeeDetails.length;i++){
+
+             if($scope.payrollEmployeeDetails.EmployeeDetails[i].val===true){
+
+                    $scope.payrollDetails.employee.push($scope.payrollEmployeeDetails.EmployeeDetails[i]);
+             }
+        }
+
+        console.log($scope.payrollDetails);
 
         $scope.errorMessage="";
         $scope.warningMessage="";
 
-        $scope.employeeDetails.operation="addEmployee";
+        $scope.payrollDetails.operation="addEmployeeToPayroll";
 
         $('#loader').css("display","block");
 
         var config = {
             params: {
-                details: $scope.employeeDetails
+                details: $scope.payrollDetails
             }
         };
         $http.post("Payroll/php/PayrollFacade.php", null, config)
@@ -400,23 +406,6 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
     $scope.leaves={
         operation:""
     }
-
-    $scope.showFromDate = function(){
-        $scope.showFrom.opened = true;
-    };
-
-    $scope.showFrom = {
-        opened:false
-    };
-
-    $scope.showToDate = function(){
-        $scope.showTo.opened = true;
-    };
-
-    $scope.showTo = {
-        opened:false
-    };
-
     $scope.SearchLeave=function(){
 
         $scope.errorMessage="";
@@ -580,24 +569,6 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
     $scope.leaves={
         opeartion:""
     }
-
-
-    $scope.searchFrom = function(){
-        $scope.from.opened = true;
-    };
-
-    $scope.from = {
-        opened:false
-    }
-
-    $scope.searchTo = function(){
-        $scope.to.opened = true;
-    };
-
-    $scope.to = {
-        opened:false
-    }
-
     $scope.searchByDate=function(){
 
         $scope.errorMessage="";
