@@ -614,6 +614,14 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
 
                     $scope.followupDetails = followupDetails;
 
+                    $scope.reFollowupDate = function(){
+                        $scope.reFollowup.opened = true;
+                    };
+
+                    $scope.reFollowup = {
+                        opened:false
+                    };
+
                     $scope.Save = function () {
                         $uibModalInstance.close();
                     };

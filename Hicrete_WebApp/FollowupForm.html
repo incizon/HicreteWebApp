@@ -116,7 +116,7 @@
                                 <div class="col-md-7">
                                     <div class="input-group col-md-8">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input  type="date" name="date" ng-model="followup.dateOfBill" type="text" class="form-control datepicker" required/>
+                                        <input  type="type" name="dateOfBill"  class="form-control" ng-model="followup.dateOfBill"  ng-click="reFollowupDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="reFollowup.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
                                     </div>
                                     <!--<div class="help-block" ng-messages="rescheduleFollowup.billDate.$error">-->
                                         <!--<p style="color:red" ng-message="required"> Followup Date cannot be blank</p>-->

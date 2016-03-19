@@ -80,6 +80,8 @@ configService.getAllAccessPermission($http,$scope);
            })
            .error(function (data, status, headers, config)
            {
+               $scope.loading=false;
+               $('#loader').css("display","none");
                $scope.errorMessage="Role not added..";
                $('#error').css("display","block");
            });

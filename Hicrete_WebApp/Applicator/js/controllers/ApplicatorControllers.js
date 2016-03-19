@@ -72,14 +72,6 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     //};
     //$scope.todayDate();
 
-    $scope.openFollowDate = function() {
-        $scope.followup.opened = true;
-    };
-
-    $scope.followup = {
-        opened: false
-    };
-
 
     /* to show package details while creating applicator */
 
@@ -739,6 +731,14 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
 
+                    //date picker for followup date
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
+
+                    $scope.followup = {
+                        opened: false
+                    };
 
                     $scope.applicatorDetails = applicatorDetails;
 

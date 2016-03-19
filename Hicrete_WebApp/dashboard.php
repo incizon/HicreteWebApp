@@ -89,6 +89,10 @@ if(!$userObj->init($userId)){
         ul.dropdown-menu table tbody td .btn.btn-sm,ul.dropdown-menu table tbody td .btn-group-sm > .btn{
             padding: 2px 5px;
         }
+
+        .text-info{
+            font-weight: 700;
+        }
         /*--------- Select Box --------*/
         select.btn.dropdown-toggle.selectpicker {
             border: 1px solid #D5D5D5;
