@@ -887,6 +887,7 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
  **************************************************************************************************/
 myApp.controller('addSupplierController', function ($scope, $http, addSupplierService) {
 
+    $scope.submitted=false;
     $scope.supplier = {
         supplierName: "",
         contactNo: "",
