@@ -1,6 +1,7 @@
 <?php
 
-            include_once ("database_connection.php");
+            require_once ("../../php/Database.php");
+            require_once ("../../php/appUtil.php");
 
             class Applicator
             {
@@ -20,7 +21,8 @@
                 public function createPackage($data,$userId)
                 {
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $packageName = $data->package_name;
                     $packageDescription = $data->package_description;
@@ -397,11 +399,22 @@
 
                 public function viewTentativeApplicators($data){
 
-                    $json_response=array();
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
-                    $searchExpression=$data->searchExpression;
-                    $searchKeyword='%'.$data->searchKeyword.'%';
+                    $searchKeyword="";
+                    $searchExpression="";
+                    $json_response=array();
+
+                    if(isset($data->searchExpression)) {
+                        $searchExpression = $data->searchExpression;
+                    }
+                    if(isset($data->searchKeyword)) {
+                        $searchKeyword = '%' . $data->searchKeyword . '%';
+                    }
+                    else{
+                        $searchKeyword='%'."".'%';
+                    }
 
 
                     if($searchExpression=='applicator_name'){
@@ -410,7 +423,6 @@
 							WHERE applicator_status='tentative' AND  applicator_name LIKE :searchKeyword");
 
                         $stmt1->bindParam(':searchKeyword',$searchKeyword);
-
 
                     }
                     else if ($searchExpression==='applicator_city'){
@@ -426,6 +438,11 @@
 							WHERE applicator_status='tentative' AND  applicator_state LIKE :searchKeyword");
 
                         $stmt1->bindParam(':searchKeyword',$searchKeyword);
+                    }
+                    else{
+
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='tentative'");
                     }
 
 
@@ -443,18 +460,25 @@
                             array_push($json_response, $applicator);
                         }
 
-                        echo json_encode($json_response);
+                        if(sizeof($json_response)>0){
 
-                        return true;
+                           echo AppUtil::getReturnStatus("success",$json_response);
+                            return true;
+                        }
+                    }
+                    else{
+
+                        return false;
                     }
 
-                    return false;
+
                 }
 
                 function getApplicatorDetails($data){
 
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $applicator_master_id=$data->applicator_master_id;
                     $purpose=$data->purpose;
@@ -590,8 +614,9 @@
                                     $stmt7->execute();
                                     $result7=$stmt7->fetch(PDO::FETCH_ASSOC);
                                     $applicator['date_of_follow_up']=$result7['date_of_follow_up'];
+                                    $applicator['remaining_amount']=$applicator['package_total_amount']-$applicator['total_paid_amount'];
 
-                                echo json_encode($applicator);
+                                    echo json_encode($applicator);
 
 
                             }
@@ -624,12 +649,22 @@
                 }
                 public function viewPermanentApplicators($data){
 
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+
+                    $searchKeyword="";
+                    $searchExpression="";
                     $json_response=array();
-                    global $connect;
 
-                    $searchExpression=$data->searchExpression;
-                    $searchKeyword='%'.$data->searchKeyword.'%';
-
+                    if(isset($data->searchExpression)) {
+                        $searchExpression = $data->searchExpression;
+                    }
+                    if(isset($data->searchKeyword)) {
+                        $searchKeyword = '%' . $data->searchKeyword . '%';
+                    }
+                    else{
+                        $searchKeyword='%'."".'%';
+                    }
 
                     if($searchExpression=='applicator_name'){
 
@@ -654,7 +689,11 @@
 
                         $stmt1->bindParam(':searchKeyword',$searchKeyword);
                     }
+                    else{
 
+                        $stmt1=$connect->prepare("SELECT * FROM applicator_master
+							WHERE applicator_status='permanent'");
+                    }
 
                     if($stmt1->execute()){
 
@@ -670,9 +709,13 @@
                             array_push($json_response, $applicator);
                         }
 
-                        echo json_encode($json_response);
-
-                        return true;
+                        if(sizeof($json_response)>0){
+                            echo AppUtil::getReturnStatus("success",$json_response);
+                            return true;
+                        }
+                        else{
+                            return false;
+                        }
                     }
 
                     return false;
@@ -680,7 +723,9 @@
                 }
                 public function getApplicatorPaymentDetails(){
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+
                     $response_array=array();
 
                     $stmt1=$connect->prepare("SELECT * FROM applicator_enrollment
@@ -852,14 +897,14 @@
                                         }
                                         else{
 
-                                            echo "Roll Back";
+                                            return false;
                                         }
 
 
                                     }
                                     else{
 
-                                        echo "Roll Back";
+                                        return false;
                                     }
 
                                 }
@@ -871,20 +916,19 @@
                                     }
                                     else{
 
-                                        echo "Roll Back";
+                                        return false;
                                     }
                                 }
 
                             }
                             else{
 
-                                echo "Roll Back";
+                                return false;
                             }
                         }
                         else{
 
-
-                            echo "Roll Back";
+                            return false;
                         }
 
                     }
@@ -908,23 +952,23 @@
 
                                              if($stmt5->execute()){
 
-                                                  return true;
+                                                 return false;
                                              }
                                             else{
 
-                                                echo "Roll Back";
+                                                return false;
                                             }
 
                                         }
                                         else{
 
-                                            echo "Roll Back";
+                                            return false;
                                         }
 
                                     }
                                     else{
 
-                                        echo "Roll Back";
+                                        return false;
                                     }
 
                                 }
@@ -938,27 +982,28 @@
                                             return true;
                                         }
                                         else{
-                                            echo "Roll Back";
+                                            return false;
                                         }
                                     }
                                     else{
-                                        echo "Roll Back";
+                                        return false;
                                     }
                                 }
                             }
                             else{
-                                echo "Roll Back";
+                                return false;
                             }
                         }
                        else{
-                           echo "Roll Back";
+                           return false;
                        }
                     }
                 }
 
                 public function modifyApplicatorDetails($data,$userId){
 
-                    global $connect;
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
 
                     $applicatorMasterId=$data->applicator_master_id;
                     $applicatorContactNo = $data->applicator_contact;
@@ -967,7 +1012,10 @@
                     $applicatorCountry = $data->applicator_country;
                     $applicatorState = $data->applicator_state;
                     $applicatorCity = $data->applicator_city;
-
+                    $applicatorVatNumber = $data->applicator_vat_number;
+                    $applicatorCstNumber = $data->applicator_cst_number;
+                    $applicatorServiceTaxNumber = $data->applicator_stax_number;
+                    $applicatorPanNumber = $data->applicator_pan_number;
                     $pointOfContact = $data->point_of_contact;
                     $pointContactNo = $data->point_of_contact_no;
 
@@ -978,6 +1026,10 @@
                                               applicator_city=:applicatorCity,
                                               applicator_state=:applicatorState,
                                               applicator_country=:applicatorCountry,
+                                              applicator_vat_number=:vatNumber,
+                                              applicator_cst_number=:cstNumber,
+                                              applicator_stax_number=:staxNumber,
+                                              applicator_pan_number=:panNumber,
                                               last_modified_by=:lastModifiedBy
                                               WHERE applicator_master_id=:applicatorMasterId");
 
@@ -989,6 +1041,10 @@
                     $stmt1->bindParam(':applicatorCity', $applicatorCity);
                     $stmt1->bindParam(':applicatorState', $applicatorState);
                     $stmt1->bindParam(':applicatorCountry', $applicatorCountry);
+                    $stmt1->bindParam(':vatNumber', $applicatorVatNumber);
+                    $stmt1->bindParam(':cstNumber', $applicatorCstNumber);
+                    $stmt1->bindParam(':staxNumber', $applicatorServiceTaxNumber);
+                    $stmt1->bindParam(':panNumber', $applicatorPanNumber);
                     $stmt1->bindParam(':lastModifiedBy', $userId);
 
 
@@ -1009,12 +1065,12 @@
                               return true;
                           }
                          else{
-                              echo "Roll Back";
+                              return false;
                          }
                      }
                     else{
 
-                        echo "Roll Back";
+                        return false;
                     }
                 }
 

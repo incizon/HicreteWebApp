@@ -6,7 +6,6 @@
 
         class Payroll{
 
-
                 public function createYear($data,$userId){
 
 
@@ -193,7 +192,7 @@
 
                 if($stmt1->execute()){
 
-                    $result1=$stmt1->fetchAll();
+                    $result1=$stmt1->fetchAll(PDO::FETCH_ASSOC);
                     $result_array['EmployeeDetails']=$result1;
 
                 }
@@ -201,10 +200,67 @@
                 $stmt2=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster");
                 if($stmt2->execute()){
 
-                    $result2=$stmt2->fetchAll();
+                    $result2=$stmt2->fetchAll(PDO::FETCH_ASSOC);
                     $result_array['LeaveApprover']=$result2;
                 }
                 echo json_encode($result_array);
+
+
+            }
+
+            public function addEmployeeToPayroll($data,$userId){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                for ($index = 0; $index < sizeof($data); $index++) {
+
+                    $employeeId = $data->employee[$index]->userId;
+                    $approverId = $data->employee[$index]->approverId;
+
+                    $stmt1 = $connect->prepare("INSERT INTO employee_on_payroll(employee_id,leave_approver_id,created_by,creation_date,last_modified_by,last_modification_date)
+							  VALUES (:employeeId ,:approverId ,:createdBy ,NOW(),:modifiedBy,NOW())");
+                    $stmt1->bindParam(':employeeId', $employeeId);
+                    $stmt1->bindParam(':approverId', $approverId);
+                    $stmt1->bindParam(':createdBy',$userId);
+                    $stmt1->bindParam(':modifiedBy',$userId);
+
+                    if ($stmt1->execute()) {
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+
+            }
+
+            public  function getEmployeeDetailsForLeave($userId){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $result_array=array();
+
+                $stmt1=$connect->prepare("SELECT leave_approver_id FROM employee_on_payroll WHERE employee_id=:userId ");
+                $stmt1->bindParam(':userId',$userId);
+
+                $stmt1->execute();
+                $result1=$stmt1->fetch(PDO::FETCH_ASSOC);
+                $approverId=$result1['leave_approver_id'];
+
+                $stmt2=$connect->prepare("SELECT firstName,lastName FROM userMaster WHERE userId='$approverId'");
+                $stmt2->execute();
+                $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
+                $result_array['approverName']=$result2['firstName']." ".$result2['lastName'];
+
+                $stmt3=$connect->prepare("SELECT firstName,lastName FROM userMaster WHERE userId=:userId");
+                $stmt3->bindParam(':userId',$userId);
+                $stmt3->execute();
+                $result3=$stmt3->fetch(PDO::FETCH_ASSOC);
+                $result_array['employeeName']=$result3['firstName']." ".$result3['lastName'];
+
+                echo  json_encode($result_array);
 
 
             }
