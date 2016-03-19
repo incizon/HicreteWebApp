@@ -10,7 +10,7 @@
                 <div>
                     <div ng-include="'utils/WarningMessage.html'"></div>
                 </div>
-                <form class="form-horizontal" name="supplierAdd" ng-submit="submitData(supplier,'message1')">
+                <form class="form-horizontal" name="supplierAdd"  novalidate>
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Add Supplier</strong></h3>
@@ -23,11 +23,16 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" required  ng-model="supplier.supplierName" class="form-control"/>
+                                    <input maxlength="40" type="text" name="supplierName" pattern="[a-zA-Z ]+" required  ng-model="supplier.supplierName" class="form-control" required/>
                                 </div>
-                                 <!--<span style="color:RED" class="help-block" ng-show="supplierAdd.supplierName.$invalid
-                                && supplierAdd.supplierName.$dirty && submitted">Please only characters in Supplier name</span>-->
-                                <!-- <span style="color:RED" class="help-block" ng-show="supplierAdd.supplierName.$error.required && supplierAdd.supplierName.$dirty">Supplier Name is compulsary</span> -->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.supplierName.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">Supplier name  is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only characters are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -38,9 +43,17 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                    <input type="number" required ng-model="supplier.contactNo" class="form-control"/>
+                                    <input name="contactNo" maxlength="15"pattern="[0-9]*" type="text" required ng-model="supplier.contactNo" class="form-control" required/>
                                 </div>
-                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.contactNo.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">contact no  is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
+
                             </div>
                         </div>
 
@@ -49,9 +62,17 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" required ng-model="supplier.pointOfContact" class="form-control"/>
+                                    <input maxlength="30" name="pointOfContact" pattern="[a-zA-Z ]*" type="text" required ng-model="supplier.pointOfContact" class="form-control" required/>
                                 </div>
-                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.pointOfContact.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">point of contact  is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Alphabets are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -60,9 +81,16 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                    <input type="number" required ng-model="supplier.officeNo" class="form-control"/>
+                                    <input name="officeNo" maxlength="15" pattern="[0-9]*" type="text" required ng-model="supplier.officeNo" class="form-control"/>
                                 </div>
-                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.officeNo.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">contact no  is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -71,9 +99,16 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" required ng-model="supplier.VATNo" class="form-control"/>
+                                    <input name="vatNo" maxlength="30" type="text" required ng-model="supplier.VATNo" class="form-control" required/>
                                 </div>
-                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.vatNo.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">Vat no  is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -82,9 +117,16 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" required ng-model="supplier.CSTNo" class="form-control"/>
+                                    <input name="cstNo" maxlength="30" type="text" required ng-model="supplier.CSTNo" class="form-control"/>
                                 </div>
-                               <!--  <span style="color:RED" ng-show="supplierAdd.contactNo.$invalid && supplierAdd.contactNo.$dirty " class="help-block">Please insert correct contact no</span> -->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.cstNo.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">CST number  is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -93,8 +135,15 @@
                         <div class="form-group">
                             <label class="col-md-4 col-xs-12 control-label">Address</label>
                             <div class="col-md-4 col-xs-12">
-                                <textarea class="form-control"  ng-model="supplier.address" rows="5"></textarea>
-                                <!--<span class="help-block">Default textarea field</span>-->
+                                <textarea name="address" required maxlength="100" class="form-control"  ng-model="supplier.address" rows="5"></textarea>
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.address.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">Address is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -103,9 +152,16 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" ng-model="supplier.city"class="form-control"/>
+                                    <input name="city" required maxlength="30" type="text" ng-model="supplier.city"class="form-control"/>
                                 </div>
-                               <!-- <span class="help-block">This is sample of text field</span>-->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.city.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">City is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
                             </div>
                         </div>
 
@@ -114,9 +170,17 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" ng-model="supplier.country" class="form-control"/>
+                                    <input name="country" required maxlength="30" type="text" ng-model="supplier.country" class="form-control"/>
                                 </div>
-                               <!-- <span class="help-block">This is sample of text field</span>-->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.country.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">Country is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
+
                             </div>
                         </div>
 
@@ -125,9 +189,16 @@
                             <div class="col-md-4 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" ng-model="supplier.pinCode" class="form-control"/>
+                                    <input name="pincode" required pattern="[0-9]*"maxlength="16" type="text" ng-model="supplier.pinCode" class="form-control"/>
                                 </div>
-                               <!-- <span class="help-block">This is sample of text field</span>-->
+                                <div class="help-block"
+                                     ng-messages="supplierAdd.pincode.$error"
+                                     ng-show="submitted">
+
+                                    <span style="color:red" ng-message="required">Country is compulsary</span>
+                                    <span style="color:red" ng-message="pattern">Only Numbers are allowed</span>
+
+                                </div>
                             </div>
                         </div>
                         <!-- <span class="help-block" ng-repeat="msg in messages">{{msg}} </span> -->
@@ -136,8 +207,9 @@
                         </ul>  -->
                     </div>
                     <div class="panel-footer" style="text-align: center;">
-                        <button class="btn btn-default" type="Clear" ng-click="clearData(supplier,'clear')">Clear Form</button>
-                        <button class="btn btn-primary" type="submit"  >Submit</button>
+                        <button class="btn btn-default" type="Clear" ng-click="(submitted=false) && clearData(supplier,'clear')">Clear Form</button>
+                        <button class="btn btn-primary" type="submit" ng-click="(submitted=true)
+                    && supplierAdd.$valid && submitData(supplier,'message1')" >Submit</button>
                     </div>
                 </div>
                 </form>
