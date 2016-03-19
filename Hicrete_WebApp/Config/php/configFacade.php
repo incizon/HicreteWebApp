@@ -64,7 +64,10 @@ switch ($data->operation) {
                         break;
     case "CheckAccess": ConfigUtils::doesUserHasAccess($data->moduleName,$userId,$data->accessType);
         break;
-
+    case "getCompanyList" : Config::getCompanyList($userId);
+        break;
+    case "getAllProcessUser" : ConfigUtils::getAllProcessUser($userId);
+        break;
 
 }
 

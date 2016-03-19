@@ -330,8 +330,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addProject', {
             url: '/addProject',
-            templateUrl: 'Process/html/ProjectCreation.html'
-
+            templateUrl: 'Process/html/ProjectCreation.html',
+            controller:'ProjectCreationController'
         })
         .state('Process.modifyProject', {
             url: '/ModifyProject',
@@ -364,7 +364,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.ProjectDetails', {
             url: '/ProjectDetails',
             templateUrl:'Process/html/ProjectDetails.html',
-            controller:'ProjectDetailsController'
+            controller:'ProjectDetailsController',
+            params : { projectToModify: null }
         })
 
 

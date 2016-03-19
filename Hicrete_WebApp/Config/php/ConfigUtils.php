@@ -970,6 +970,26 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
 
     }
 
+    public static function getAllProcessUser($userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        try {
+            $stmt = $conn->prepare("SELECT `userId`,`firstName`,`lastName` FROM `usermaster` WHERE `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `roleId` IN (SELECT `roleId` FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=\"Business Process\")))");
+            if ($stmt->execute()) {
+                $result = $stmt->fetchAll();
+                echo  AppUtil::getReturnStatus("Successful",$result);
+            } else {
+                echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
+            }
+        }catch(Exceptio $e){
+            echo AppUtil::getReturnStatus("Exception",$e.getMessage());
+        }
+    }
+
+
+
 
 }
 

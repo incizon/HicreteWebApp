@@ -218,15 +218,15 @@
 
                         </tr>
                         </thead>
-                        <<tr ng-repeat="company in companies">
+                        <<tr ng-repeat="companyEntry in Companies">
                             <td>1</td>
 
                             <td>
-                               {{company.companyName}}
+                               {{companyEntry.companyName}}
                             </td>
                             <td>
                                 <div>
-                                    <input type="checkbox" ng-model="company.checkVal" name="toselect1" >
+                                    <input type="checkbox" ng-model="companyEntry.checkVal" name="toselect1" >
                                 </div>
                             </td>
 

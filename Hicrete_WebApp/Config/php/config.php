@@ -407,6 +407,28 @@ class Config
         $json = json_encode($result1);
         echo $json;
     }
+
+
+    public static function getCompanyList($userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        try {
+            $stmt = $conn->prepare("SELECT `companyId` ,`companyName` FROM `companymaster`");
+            if ($stmt->execute()) {
+                $result = $stmt->fetchAll();
+                echo  AppUtil::getReturnStatus("Successful",$result);
+            } else {
+               echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
+            }
+        }catch(Exceptio $e){
+           echo AppUtil::getReturnStatus("Exception",$e.getMessage());
+        }
+    }
+
+
 }
+
 
 ?>
