@@ -24,7 +24,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="warehouse.name" name="warehouseName"type="text" class="form-control" required minlength=2 pattern="[a-zA-Z0-9]+"/>
+                                                    <input ng-model="warehouse.name" name="warehouseName"type="text" class="form-control" required minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="warehouseForm.warehouseName.$error" ng-show="warehouseSubmitted">
                                                     <p style="color:red" ng-message="required">WareHouse name cannot be blank</p>
@@ -39,7 +39,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group ">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="warehouse.city" name="city" type="text" class="form-control" required minlength=2 pattern="[a-zA-z]+"/>
+                                                    <input ng-model="warehouse.city" name="city" type="text" class="form-control" required minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="warehouseForm.city.$error" ng-show="warehouseSubmitted">
                                                     <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -54,7 +54,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="warehouse.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                                    <input ng-model="warehouse.state" name="state" type="text" class="form-control" required minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="warehouseForm.state.$error" ng-show="warehouseSubmitted">
                                                     <p style="color:red" ng-message="required">State Cannot be blank</p>
@@ -69,7 +69,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="warehouse.country" name="country"type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                    <input ng-model="warehouse.country" name="country"type="text" class="form-control" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="warehouseForm.country.$error" ng-show="warehouseSubmitted">
                                                     <p style="color:red" ng-message="required">Country Cannot be blank</p>
@@ -97,7 +97,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="warehouse.abbrevation" name="abbrevation" type="text" class="form-control" minlength=2 pattern="[a-zA-Z0-9]+"/>
+                                                    <input ng-model="warehouse.abbrevation" name="abbrevation" type="text" class="form-control" minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="warehouseForm.abbrevation.$error" ng-show="warehouseSubmitted">
                                                     <p style="color:red" ng-message="minlength">Abbrevation must have length >2</p>

@@ -130,7 +130,7 @@ $operationObject=new Payroll();
            }
            else{
                $connect->rollBack();
-               $message = "Could Not Add Employee...!!!";
+               $message = "Could Not Add Employeee...!!!";
                $arr = array('msg' => '', 'error' => $message);
                $jsn = json_encode($arr);
                echo($jsn);

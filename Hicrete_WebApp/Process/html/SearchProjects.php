@@ -27,7 +27,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
             <div class="row">
                 <div class="col-md-4">
 
-                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
+                    <select class="form-control select" name="searchBy" ng-model="searchBy"/>
                     <option value="" disabled selected>Search by </option>>
                     <option value="project_name">Name</option>
                     <option value="project_city">City</option>
@@ -38,7 +38,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword"/>
                     </div>
                 </div>
                     <div class="col-md-2">

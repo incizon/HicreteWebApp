@@ -1,4 +1,3 @@
-
 myApp.controller('supplierFetchController', function($scope, $http,$rootScope) {
     $scope.currentPage = 1;
     $scope.supplierPerPage = 5;
@@ -72,7 +71,7 @@ $scope.getSupplier=function(supplier)
 
     }
 $scope.searchData=function(supplier){
-
+     //alert("In search data"+supplier);
     var data = {
         operation: "search",
         data: supplier
@@ -86,7 +85,7 @@ $scope.searchData=function(supplier){
         }
     };
 
-      console.log(supplier);
+//      console.log(supplier);
       $http.post("Inventory/php/supplierSearch.php", null,config)
         .success(function (data)
         {

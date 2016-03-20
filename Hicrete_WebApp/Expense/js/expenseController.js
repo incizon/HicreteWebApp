@@ -62,8 +62,12 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
             .success(function (data) {
                 console.log("Dataa");
                 console.log(data);
-                if (data == "0")
-                    doShowAlert("Success", "Added Successfully");
+                if (data == "0"){
+                  alert("Segments Added Successsfully.!!!");
+                 }else{
+                   alert(data);
+                 }
+                    //doShowAlert("Success", "Added Successfully");
                 window.location = "dashboard.php#/Process";
 
             })
@@ -117,11 +121,7 @@ myApp.controller('costCenterController', function ($scope, $http) {
     $http.post("Expense/php/expenseUtils.php", null, config)
         .success(function (data) {
             console.log(data);
-            if (data == "1") {
-
-            } else {
-                $scope.segmentList = data;
-            }
+            $scope.segmentList = data;
 
         })
         .error(function (data, status, headers, config) {
@@ -407,7 +407,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
                     $rootScope.expenseDetails = data;
                     $scope.costCenterData=data;
                     console.log($rootScope.expenseDetails);
-                    console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
+                  //  console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
                 }
 
             })

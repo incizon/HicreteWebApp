@@ -124,16 +124,19 @@ if(!$userObj->init($userId)){
     <!-- END SCRIPTS -->
 
     <!--Controllers and service-->
+<script type="text/javascript" src="Inventory/js/Controllers/supplierFetch.js"></script>
     <script type="text/javascript" src="Inventory/js/Services/Inventory_Service.js"></script>
     <script type="text/javascript" src="Inventory/js/Controllers/Inventory_Controllers.js"></script>
-    <script type="text/javascript" src="Inventory/js/controllers/supplierFetch.js"></script>
+    
     <script type="text/javascript" src="Expense/js/expenseController.js"></script>
     <script type="text/javascript" src="Config/js/configController.js"></script>
     <script type="text/javascript" src="Config/js/configService.js"></script>
-    <script type="text/javascript" src="Applicator/js/Controllers/ApplicatorControllers.js"></script>
+    <script type="text/javascript" src="Applicator/js/controllers/ApplicatorControllers.js"></script>
     <script type="text/javascript" src="Applicator/js/Services/ApplicatorServices.js"></script>
     <script type="text/javascript" src="Process/js/ProcessControllers.js"></script>
     <script type="text/javascript" src="Payroll/js/PayrollControllers.js"></script>
+    <script type="text/javascript" src="utils/AppService.js"></script>
+
 
 </head>
 

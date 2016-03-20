@@ -30,13 +30,18 @@ switch ($data->operation) {
 
 //$stmt->bindParam(':supplierName',$searchString, PDO::PARAM_STR,100);
 
-            $stmt->execute();
-            $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-            $result = $stmt->fetchAll();
-            $json = json_encode($result);
-            echo $json;
-        } catch (exception $e) {
+            if($stmt->execute()){
+                 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                 $result = $stmt->fetchAll();
+                $json = json_encode($result);
+                echo $json;
+            }else{
+            	echo "statement failed";
+            }
+            
 
+        } catch (exception $e) {
+		echo "Exception occured";
         }
         break;
     case "modify":

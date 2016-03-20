@@ -161,10 +161,10 @@
 
                     <div class="form-group">
                         <div class="col-md-4">
-                            <label class="control-label">Remaining Amount :</label>
+                            <label class="control-label">Follow-Up Date :</label>
                         </div>
                         <div class="col-md-8">
-                            {{permanentApplicatorsDetails.remaining_amount}}
+                            {{permanentApplicatorsDetails.date_of_follow_up}}
                         </div>
                     </div>
                     <div class="form-group">
@@ -243,7 +243,7 @@
 
 
 <div class="modal fade" id="viewPaymentDetails" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -257,13 +257,10 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th width="12%">Amount Paid</th>
-                                <th width="18%">Date of payment</th>
-                                <th width="10%">Paid to</th>
+                                <th width="15%">Amount Paid</th>
+                                <th width="15%">Date of payment</th>
+                                <th width="15%">Paid to</th>
                                 <th width="15%">Payment Mode</th>
-                                <th width="15%">Bank Name</th>
-                                <th width="15%">Branch Name</th>
-                                <th width="20%">Unique Number</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -272,9 +269,6 @@
                                 <td>{{paymentDetail.date_of_payment}}</td>
                                 <td>{{paymentDetail.paid_to}}</td>
                                 <td>{{paymentDetail.payment_mode}}</td>
-                                <td>{{paymentDetail.bank_name}}</td>
-                                <td>{{paymentDetail.branch_name}}</td>
-                                <td>{{paymentDetail.unique_number}}</td>
                             </tr>
                             </tbody>
                         </table>

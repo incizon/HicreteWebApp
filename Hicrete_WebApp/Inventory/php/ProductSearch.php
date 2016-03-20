@@ -15,13 +15,10 @@
             JOIN material ON 
             product_master.productmasterid=material.productmasterid
             JOIN materialtype ON
-            materialtype.materialtypeid=product_master.materialtypeid
-            JOIN inventory ON 
-            inventory.materialid=material.materialid"
-            );
+            materialtype.materialtypeid=product_master.materialtypeid");
 
 	$stmt->execute();
-	$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+	//$result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
 	$result = $stmt->fetchAll();
 	$json= json_encode($result);
 	echo $json;

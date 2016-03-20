@@ -41,17 +41,18 @@
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Start Date : </label>
 
-                                <div class="col-md-6">
+                                <div class="col-md-2">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" class="form-control" ng-model="task.startDate" name="date" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="taskStart.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                        <input type="date" class="form-control datepicker" ng-model="task.startDate"
+                                               name="date" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
 
                                 <label class="col-md-3 control-label">Note : </label>
-                                <div class="col-md-6 ">
+                                <div class="col-md-4 ">
                                     <textarea name="note" class="form-control" rows="2" ng-model="paymentFollowUp.note"></textarea>
                                     <span class="help-block"></span>
                                 </div>

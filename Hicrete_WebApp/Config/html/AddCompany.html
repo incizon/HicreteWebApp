@@ -24,7 +24,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input name="companyName" pattern="[a-zA-Z0-9 ]+" ng-model="company.name" type="text" class="form-control" required minlength=2/>
+                                                    <input name="companyName" ng-model="company.name" type="text" class="form-control" required minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.companyName.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="required">Your name is too short.</p>
@@ -53,7 +53,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group ">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input type="text" name="city" ng-model="company.city" class="form-control" required pattern="[a-zA-Z ]+" minlength=2/>
+                                                    <input type="text" name="city" ng-model="company.city" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.city.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -68,7 +68,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="company.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                                    <input ng-model="company.state" name="state" type="text" class="form-control" required minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.state.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="required">State Cannot be blank</p>
@@ -83,7 +83,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="company.country" name="country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
+                                                    <input ng-model="company.country" name="country" type="text" class="form-control" minlength=2 required />
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.country.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="required">Country Cannot be blank</p>
@@ -116,7 +116,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input name="abbrevation" ng-model="company.abbrevation"  type="text" class="form-control" pattern="[a-zA-Z0-9]+" minlength=2/>
+                                                    <input name="abbrevation" ng-model="company.abbrevation"  type="text" class="form-control" minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.abbrevation.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="minlength">Abbrevation must have length >2</p>

@@ -11,7 +11,7 @@ myApp.service('ApplicatorService',function(){
 					$http.post("Applicator/php/Applicator.php", null, config)
 								
 					.success(function (data, status, headers, config){	
-						console.log(data);
+							console.log(data);
 						if(data.msg!=""){
 							$scope.warningMessage=data.msg;
 							$('#warning').css("display","block");

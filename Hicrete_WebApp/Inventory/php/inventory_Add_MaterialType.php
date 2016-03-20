@@ -4,9 +4,9 @@
     /* $db = Database::getInstance();
      $this->_dbh = $db->getConnection();*/
     $hostname = 'localhost';
-    $dbname = 'inventory';
-    $username = 'admin';
-    $password = 'admin';
+    $dbname = 'hicrete';
+    $username = 'hicreteRoot';
+    $password = 'hicrete@123';
     $userId = "Pranav";
 
     $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);

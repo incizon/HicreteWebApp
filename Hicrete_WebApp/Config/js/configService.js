@@ -50,9 +50,13 @@ myApp.service('configService', function(){
       $http.post("Config/php/configFacade.php",null, config)
            .success(function(data){
                if(data.status!="Successful"){
-                  doShowAlert("Failure",data.message);
+//                  doShowAlert("Failure",data.message);
+			console.log("Something went wrong");
+			console.log(data);
                 }else{
-                  self.marshalledAccessList(data.message,$scope.accessList);
+               		console.log("succwss");
+                	console.log(data.message);
+                	self.marshalledAccessList(data.message,$scope.accessList);
 
                 }
                 $scope.loaded=true;

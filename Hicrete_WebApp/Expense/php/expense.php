@@ -17,14 +17,7 @@ class Expense
             $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             if($stmt->execute()){
-                if($segment->name==$data->materialSegment){
-                    $uniqid=uniqid();
-                     $stmt = $conn->prepare("INSERT INTO `material_segment`(`materialsegmentid`,`segmentname`) VALUES (:uniqid,:segmentName)");
-                     $stmt->bindParam(':uniqid', $uniqid, PDO::PARAM_STR);
-                     $stmt->bindParam(':segmentName', $segment->name, PDO::PARAM_STR);
-                     $stmt->execute();
-                             echo "0";
-                }
+                    echo"0";
             }else{
                         echo "1";
             }
