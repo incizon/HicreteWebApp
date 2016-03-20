@@ -11,6 +11,12 @@ class AppUtil
          return json_encode($returnVal);          
     }
 
+    public static function getLoggerInUserId(){
+        if (!isset($_SESSION['token'])) {
+            session_start();
+        }
+        return $_SESSION['token'];
+    }
 
     public static function generateId(){
          $id=uniqid();

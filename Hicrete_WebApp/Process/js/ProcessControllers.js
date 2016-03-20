@@ -15,7 +15,9 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
         pointOfContactLandlineNo:'',
         pointfContactMobileNo:'',
         projectManagerId:'',
-        projectSource:''
+        projectSource:'',
+        customerId:''
+
     }
 
     $scope.Companies=[];
@@ -25,14 +27,47 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
     AppService.getProjectManagers($http,$scope);
     console.log("In Project Creation Controller");
 
-    /*
-    var companiesInvolved=[];
-    for(var i=0;i<$scope.Companies.length;i++){
-        if($scope.Companies[i].checkVal){
-            companiesInvolved.push($scope.Companies[i]);
+    $scope.customers=[];
+    AppService.getAllCustomers($http,$scope);
+
+    $scope.creteProject = function(){
+
+        var company = '';
+        var isTracking = 0;
+
+        $scope = this;
+        if($scope.isSiteTracking == true){
+            isTracking = 1;
         }
 
-    }*/
+
+        var companiesInvolved=[];
+        for(var i=0;i<$scope.Companies.length;i++){
+            if($scope.Companies[i].checkVal){
+                companiesInvolved.push($scope.Companies[i]);
+            }
+
+        }
+        var projectBasicDetails = {"ProjectName":$scope.projectDetails.projectName,"ProjectManagerId":$scope.projectDetails.projectManagerId,"ProjectSource":$scope.projectDetails.projectSource,"IsSiteTrackingProject":$scope.isSiteTracking,"CustomerId":$scope.projectDetails.customerId,"Address":$scope.projectDetails.address,"City":$scope.projectDetails.city,"State":$scope.projectDetails.state,"Country":$scope.projectDetails.country,"Pincode":$scope.projectDetails.pinCode,"PointContactName":$scope.projectDetails.pointOfContacName,"MobileNo":$scope.projectDetails.pointfContactMobileNo,"LandlineNo":$scope.projectDetails.pointOfContactLandlineNo,"EmailId":$scope.projectDetails.pointofConactEmailID};
+        var projectData={
+            projectDetails:projectBasicDetails,
+            companiesInvolved:companiesInvolved
+        }
+        // console.log("data is "+projectData);
+        console.log("Posting");
+        console.log("data is "+JSON.stringify(projectData));
+        $http.post('php/api/projects', projectData)
+            .success(function (data, status, headers) {
+                //$scope.PostDataResponse = data;
+                alert("data is "+data+" status is "+status);
+
+            })
+            .error(function (data, status, header) {
+                //$scope.ResponseDetails = "Data: " + data;
+                console.log(data);
+                alert(data);
+            });
+    }
 
 
 });
@@ -681,57 +716,116 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 });
 myApp.controller('ViewCustomerController',function($scope,$http){
-$scope.currentCustomer;
-    $scope.customerList=[];
-    $scope.customerList.push({
-        customerId:"asdasd",
-        name:"Gokhale",
-        city:"pune",
-        state:"maharashtra",
-        country:"India",
-        contactNo:"1231323",
-        mobileNo:"asdasda",
-        faxNo:"asdasd",
-        emailId:"abc@mail.com",
-        pan:"cDSda213",
-        cstNo:"CST-101",
-        vatNo:"Vat-101",
-        serviceTaxNo:"ST-101"
-    });
-    $scope.customerList.push({
-        customerId:"asdasd",
-        name:"Gokle",
-        city:"pune",
-        state:"maharashtra",
-        country:"India",
-        contactNo:"1231323",
-        mobileNo:"asdasda",
-        faxNo:"asdasd",
-        emailId:"abc@mail.com",
-        pan:"cDSda213",
-        cstNo:"CST-101",
-        vatNo:"Vat-101",
-        serviceTaxNo:"ST-101"
-    });
-    $scope.customerList.push({
-        customerId:"asdasd",
-        name:"Gokha",
-        city:"pune",
-        state:"maharashtra",
-        country:"India",
-        contactNo:"1231323",
-        mobileNo:"asdasda",
-        faxNo:"asdasd",
-        emailId:"abc@mail.com",
-        pan:"cDSda213",
-        cstNo:"CST-101",
-        vatNo:"Vat-101",
-        serviceTaxNo:"ST-101"
-    });
+
+    $scope.CustomerPerPage=5;
+    $scope.currentPage=1;
+
+
+    $scope.searchCustomer = function(){
+        $scope.customers = [];
+        var cust = [];
+
+        if($scope.searchKeyword==""){
+
+            $http.get("php/api/customer").then(function(response) {
+                console.log(response.data.length);
+                if(response.data.status=="Successful"){
+                    for(var i = 0; i<response.data.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
+                        });
+                    }
+                    $scope.customers = cust;
+                    console.log($scope.customers);
+                }else{
+                    alert(response.data.message);
+                }
+
+
+            })
+
+        }
+        else{
+            //alert("in "+searchCity);
+
+            $http.get("php/api/customer/search/"+$scope.searchKeyword+'&'+$scope.searchBy).then(function(response) {
+
+                if(response.data.status=="Successful"){
+                    console.log(response.data.message.length);
+                    for(var i = 0; i<response.data.message.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
+                        });
+                    }
+                    $scope.customers = cust;
+                    console.log($scope.customers);
+                }else{
+                    alert(response.data.message);
+                }
+
+            })
+
+        }
+    }
+
+
+    $scope.deleteCustomer = function($id){
+        console.log("delete cust id "+$id);
+
+
+        $http({
+            method: 'GET',
+            url: 'php/api/customer/delete/'+$id
+        }).then(function successCallback(response) {
+            alert("in success"+response.status );
+        }, function errorCallback(response) {
+            alert("in error "+response);
+        });
+    }
 
     $scope.showCustomerDetails=function(customer){
         $scope.currentCustomer=customer;
     }
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.CustomerPerPage;
+        end = begin + $scope.CustomerPerPage;
+        index = $scope.customers.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
 });
 
 myApp.controller('ViewQuotationDetailsController',function($scope,$http){
@@ -755,29 +849,71 @@ myApp.controller('PaymentHistoryController',function($scope,$http){
 myApp.controller('CustomerController',function($scope,$http){
 
     $scope.submitted=false;
+    $scope.submitted=false;
+
+    $scope.createCustomer = function() {
+        var date = new Date();
+
+        var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
+
+        $http.post('php/api/customer', custData)
+            .success(function (data, status, headers) {
+                if (data.status == "Successful") {
+                    $scope.postCustData = data;
+                    alert("Customer created Successfully");
+                } else {
+                    alert(data.message);
+                }
+            })
+            .error(function (data, status, header) {
+                $scope.ResponseDetails = "Data: " + data;
+                alert("Error Occurred:" + data);
+            });
+    }
+
+
 });
 
-myApp.controller('ModifyCustomerController',function($scope,$http){
-
+myApp.controller('ModifyCustomerController',function($scope,$http,$stateParams){
 
     $scope.customerDetails={
 
-        customer_name:"Namdev",
-        customer_address:"Old Mali Lane ,Pandharpur",
-        customer_pincode:"413304",
-        customer_city:"Pandharpur",
-        customer_country:"India",
-        customer_state:"Maharashtra",
-        customer_emailId:"namdev@gmail.com",
-        customer_landline:"020-220202",
-        customer_phone:"9090989898",
-        customer_faxNo:"020-220202",
-        customer_vatNo:"V12345678901",
-        customer_cstNo:"C12345678901",
-        customer_panNo:"ABCDE123A",
-        customer_serviceTaxNo:"ABCDE1234ABC123"
-
+        customer_id:$stateParams.customerToModify.id,
+        customer_name:$stateParams.customerToModify.name,
+        customer_address:$stateParams.customerToModify.address,
+        customer_pincode:$stateParams.customerToModify.pincode,
+        customer_city:$stateParams.customerToModify.city,
+        customer_country:$stateParams.customerToModify.country,
+        customer_vatNo:$stateParams.customerToModify.vatNo,
+        customer_cstNo:$stateParams.customerToModify.cstNo,
+        customer_panNo:$stateParams.customerToModify.pan,
+        customer_state:$stateParams.customerToModify.state,
+        customer_emailId:$stateParams.customerToModify.emailId,
+        customer_landline:$stateParams.customerToModify.contactNo,
+        customer_phone:$stateParams.customerToModify.mobileNo,
+        customer_faxNo:$stateParams.customerToModify.faxNo,
+        customer_serviceTaxNo:$stateParams.customerToModify.serviceTaxNo
     };
+
+    $scope.modifyCustomer = function($custId){
+
+        var custUpdate = '{"CustomerName":"'+$scope.customerDetails.customer_name+'","Address":"'+$scope.customerDetails.customer_address+'","City":"'+$scope.customerDetails.customer_city+'","State":"'+$scope.customerDetails.customer_state+'","Country":"'+$scope.customerDetails.customer_country+'","Mobileno":"'+$scope.customerDetails.customer_phone+'","Landlineno":"'+$scope.customerDetails.customer_landline+'","FaxNo":"'+$scope.customerDetails.customer_faxNo+'","EmailId":"'+$scope.customerDetails.customer_emailId+'","VATNo":"'+$scope.customerDetails.customer_vatNo+'","CSTNo":"'+$scope.customerDetails.customer_cstNo+'","PAN":"'+$scope.customerDetails.customer_panNo+'","ServiceTaxNo":"'+$scope.customerDetails.customer_serviceTaxNo+'"}';
+        //  console.log("update data is ::"+custUpdate);
+        $http.post('php/api/customer/update/'+$custId, custUpdate)
+            .success(function (data, status) {
+                $scope.postCustData = data;
+                alert("data is "+data+" status is "+status);
+
+            })
+            .error(function (data, status) {
+
+                alert($scope.ResponseDetails );
+            });
+
+    }
+
+
+
 
 
 });
