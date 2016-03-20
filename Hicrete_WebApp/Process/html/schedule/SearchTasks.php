@@ -58,18 +58,18 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="task in taskList | filter :paginate | orderBy:creationDate">
-                        <td width="20%">{{task.taskId}}</td>
-                        <td width="10%">{{task.taskName}}</td>
-                        <td width="15%">{{task.description}}</td>
-                        <td width="15%">{{task.completionPercentage}}</td>
-                        <td width="15%">{{task.assignTo}}</td>
+                    <tr ng-repeat = "task in tasks | filter:paginateTasksDetails">
+                        <td>{{task.TaskID}}</td>
+                        <td>{{task.TaskName}}</td>
+                        <td>{{task.TaskDescripion}}</td>
+                        <td>{{task.CompletionPercentage}}</td>
+                        <td>{{task.UserName}}</td>
                         <td>
 
-                            <a ui-sref="Process.viewTask"> <button class="btn btn-info"><span class="fa fa-pencil-square-o"></span>View</button></a>
+                            <a ui-sref="Process.viewTask" > <button class="btn btn-info" ng-click="setTask(task)"><span class="fa fa-pencil-square-o"></span>View</button></a>
                             <?php
                                 if($hasWrite==1){
-                                    echo "<button class=\"btn btn-danger\">Delete</button>";
+                                   <button class="btn btn-danger" ng-click = "deleteTask(task.TaskID)">Delete</button>
                                 }
                             ?>
 
@@ -85,8 +85,8 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
     </div>
     <uib-pagination total-items="totalItems" ng-model="currentPage"
-                    max-size="5" boundary-links="true"
-                    items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+                    boundary-links="true"
+                    items-per-page="tasksPerPage" class="pagination-sm">
     </uib-pagination>
 
 

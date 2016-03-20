@@ -32,7 +32,7 @@ Class User {
 		try {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT * from user_master um WHERE um.isDeleted = 0");
+			$stmt = $conn->prepare("SELECT * from usermaster um WHERE um.isDeleted = 0");
 			if($result = $stmt->execute()) {
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 					array_push($object, $row);

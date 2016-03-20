@@ -13,13 +13,13 @@
                         <label class="col-md-3 control-label"> Task Assigned To</label>
 
                         <div class="col-md-9">
-                            <select class="btn dropdown-toggle selectpicker btn-default" ng-model="InwardData.assignedTo" name="companyName"
-                                    required>
+                            <select class="btn dropdown-toggle selectpicker btn-default"  ng-model="task.assignedTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
+                                    required >
                                 <option value="" disabled selected>------------Select Employee------------</option>
-                                <option>Ajit</option>
-                                <option>as</option>
+                                <option value = "">{{user.name}}</option>
+                                <!-- <option>as</option>
                                 <option>Ajgffit</option>
-                                <option>Ajidfgdft</option>
+                                <option>Ajidfgdft</option> -->
                             </select>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button class="btn btn-default" data-ng-click="clearFields(task)">Cancel</button>
-                    <button class="btn btn-primary" name="Assign">Assign</button>
+                    <button class="btn btn-primary" name="Assign" ng-click = "assignTask()">Assign</button>
                 </div>
             </div>
         </form>

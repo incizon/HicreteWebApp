@@ -91,9 +91,6 @@ myApp.service('AppService', function () {
                 alert("Error  Occurred:"+data);
 
             });
-
-
-
     }
 
 
