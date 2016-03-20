@@ -69,7 +69,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="holidayDate" ng-model="configureHoliday.holidayDate" ng-click="pickHolidayDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="holidayDate.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <input type="date" class="form-control" name="holidayDate" ng-model="configureHoliday.holidayDate"/>
                                     </div>
                                     <div class="help-block" ng-messages="configureHolidaysForm.holidayDate.$error" ng-show="formSubmitted">
                                         <span style="color:red" ng-message="required">Holiday Date is required..</span>

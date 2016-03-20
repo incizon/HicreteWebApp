@@ -951,26 +951,19 @@
                                             $this->lastInsertedFollowupId=$connect->lastInsertId();
 
                                              if($stmt5->execute()){
-
                                                  return false;
                                              }
                                             else{
-
                                                 return false;
                                             }
-
                                         }
                                         else{
-
                                             return false;
                                         }
-
                                     }
                                     else{
-
                                         return false;
                                     }
-
                                 }
                                 else{
 
@@ -1006,6 +999,7 @@
                     $connect = $db->getConnection();
 
                     $applicatorMasterId=$data->applicator_master_id;
+                    $applicatorName = $data->applicator_name;
                     $applicatorContactNo = $data->applicator_contact;
                     $applicatorAddressLine1 = $data->applicator_address_line1;
                     $applicatorAddressLine2 = $data->applicator_address_line2;
@@ -1020,6 +1014,7 @@
                     $pointContactNo = $data->point_of_contact_no;
 
                     $stmt1=$connect->prepare("UPDATE applicator_master SET
+                                              applicator_name=:applicatorName,
                                               applicator_contact=:applicatorContactNo,
                                               applicator_address_line1=:applicatorAddressLine1,
                                               applicator_address_line2=:applicatorAddressLine2,
@@ -1035,6 +1030,7 @@
 
 
                     $stmt1->bindParam(':applicatorMasterId', $applicatorMasterId);
+                    $stmt1->bindParam(':applicatorName', $applicatorName);
                     $stmt1->bindParam(':applicatorContactNo', $applicatorContactNo);
                     $stmt1->bindParam(':applicatorAddressLine1', $applicatorAddressLine1);
                     $stmt1->bindParam(':applicatorAddressLine2', $applicatorAddressLine2);
@@ -1060,7 +1056,6 @@
                     $stmt2->bindParam(':lastModifiedBy', $userId);
 
                      if($stmt1->execute()){
-
                           if($stmt2->execute()){
                               return true;
                           }
@@ -1069,13 +1064,9 @@
                          }
                      }
                     else{
-
                         return false;
                     }
                 }
-
-
-
             }
 
 ?>

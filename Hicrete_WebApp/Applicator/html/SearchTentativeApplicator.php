@@ -28,7 +28,7 @@ $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
     <div class="panel panel-default">
 
         <div class="panel-heading">
-            <h3 class="panel-title"><strong>Tentative </strong>Applicators</h3>
+            <h3 class="panel-title"><strong>Tentative</strong>Applicators</h3>
         </div>
 
         <div class="panel-body">
@@ -37,7 +37,7 @@ $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
                 <div class="col-md-4">
 
                     <select class="form-control select" name="searchBy" ng-model="searchExpression"/>
-                    <option value="" disabled selected>Search by </option>
+                    <option value="" disabled selected>Search by </option>>
                     <option value="applicator_name">Name</option>
                     <option value="applicator_city">City</option>
                     <option value="applicator_state">State</option>

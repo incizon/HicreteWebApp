@@ -15,7 +15,7 @@
         <div class="panel panel-default">
 
             <div class="panel-heading">
-                <h3 class="panel-title">Search Leaves <strong>By Date</strong></h3>
+                <h3 class="panel-title">Search Leaves<strong>By Date</strong></h3>
             </div>
             <div class="panel-body">
 
@@ -24,26 +24,21 @@
 
                     <div class="row">
                         <div class="col-md-2">
-                                <input id="byYear" type="radio" value="Year" ng-model="byYear" name="searchBy"/>
+                                <input id="byYear" type="radio" value="Year" ng-model="searchBy" name="searchBy"/>
                                 <label>By Year</label>
 
                         </div>
+                        <div ng-show="searchBy=='Year'">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">Select Year :</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="form-control select" name="year" ng-model="year" />
+                                    <select class="form-control select" name="year" ng-model="searchDetails.year" />
                                     <option value="" disabled selected>Choose year..</option>
-                                    <option value="2010">2010</option>
-                                    <option value="2011">2011</option>
-                                    <option value="2012">2012</option>
-                                    <option value="2013">2013</option>
-                                    <option value="2014">2014</option>
-
+                                    <option  ng-repeat="year in years" value="{{year.caption_of_year}}">{{year.caption_of_year}}</option>
                                     </select>
-
                                 </div>
                             </div>
                         </div>
@@ -53,8 +48,7 @@
                                     <label class="control-label">Select Month :</label>
                                 </div>
                                 <div class="col-md-9">
-
-                                    <select class="form-control select" name="weeklyoffDay" ng-model="weeklyoffDay" />
+                                    <select class="form-control select" name="month" ng-model="searchDetails.month" />
                                     <option value="" disabled selected>Choose month..</option>
                                     <option value="Jan">Jan</option>
                                     <option value="Feb">Feb</option>
@@ -69,18 +63,19 @@
                                     <option value="Nov">Nov</option>
                                     <option value="Dec">Dec</option>
                                     </select>
-
                                 </div>
                             </div>
                         </div>
-
+                        </div>
                     </div><br>
                     <div class="row">
                         <div class="col-md-2">
-                            <input id="byTime" type="radio" value="Year" ng-model="byTime" name="searchBy"/>
+                            <input id="byTime" type="radio" value="timePeriod" ng-model="searchBy" name="searchBy"/>
                             <label>By Time Period</label>
 
                         </div>
+
+                        <div ng-show="searchBy=='timePeriod'">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="col-md-3">
@@ -89,7 +84,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="fromDate" ng-model="fromDate" ng-click="searchFrom()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="from.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <input type="date" class="form-control" name="fromDate" ng-model="fromDate"/>
                                     </div>
 
                                 </div>
@@ -103,11 +98,12 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="toDate" ng-model="toDate" ng-click="searchTo()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="to.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <input type="date" class="form-control" name="toDate" ng-model="toDate"/>
                                     </div>
 
                                 </div>
                             </div>
+                        </div>
                         </div>
                     </div><br>
                     <div class="row">

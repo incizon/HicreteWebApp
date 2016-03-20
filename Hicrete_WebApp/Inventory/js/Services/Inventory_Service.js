@@ -53,6 +53,29 @@ myApp.service('inventoryService', function () {
 
             });
     }
+    this.getProductsForOutward = function ($scope, $http) {
+        $('#loader').css("display","block");
+        var data = {
+            module: 'getProductsForOutward'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log("IN SERVICE OF Inventory PRODUCTS FOR INWARD OUTWARD=");
+                console.log(data);
+                $('#loader').css("display","none");
+                $scope.materialsForOutward= data;
+            })
+            .error(function (data, status, headers) {
+                console.log("IN SERVICE OF Inventory Search Failure=");
+                console.log(data);
+
+            });
+    }
     /***************************************************************************
      Get Material Types
      ****************************************************************************/
@@ -162,8 +185,13 @@ myApp.service('addSupplierService', function () {
                 console.log(data);
                 $scope.warningMessage="Success";
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
+                    //$scope.warningMessage=data.msg;
+                    //$('#warning').css("display","block");
+                    alert(data.msg);
+                    window.location="dashboard.php#/Inventory/addSupplier";
+                    $scope.submitted=false;
+                    $scope.clearData(supplier,'clear');
+
                 }
                 setTimeout(function () {
                     if (data.msg != ""){
@@ -405,6 +433,12 @@ myApp.service('ProductionBatchService', function () {
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlert("Success", data.msg);
+                    if(prodBatchInfo.option=='complete')
+                    {
+                        alert(data.msg);
+                        $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
+
+                    }
                     if(data.msg!=""){
                         $scope.warningMessage=data.msg;
                         $('#warning').css("display","block");

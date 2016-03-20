@@ -217,11 +217,11 @@ userType:""
              console.log(data.status);
              console.log(data.message);
              if(data.status=="Successful"){
-                alert("Password is :"+data.message);
+                alert("User added successfully. Password is :"+data.message);
                  setTimeout(function(){
                      $scope.loading=false;
                      $('#loader').css("display","none");
-                 },3000);
+                 },1000);
 
                  $scope.warningMessage= "User added successfully...Credential send to "+$scope.userInfo.email;
                  $('#warning').css("display","block");
@@ -235,7 +235,7 @@ userType:""
                  }, 3000);
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
-                     window.location.reload(true);
+                //     window.location.reload(true);
                  },8000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
@@ -248,7 +248,8 @@ userType:""
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
              } 
-             $scope.clearUserForm();
+             window.location="dashboard.php#/Config";
+            // $scope.clearUserForm();
                      
            })
            .error(function (data, status, headers, config)
@@ -356,32 +357,14 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
 
                     console.log(data);
                     console.log(data.message);
-                    /*if(data.msg!=""){
-                     $scope.warningMessage=data.msg;
-                     $('#warning').css("display","block");
-                     }
-                     setTimeout(function() {
-                     $scope.$apply(function() {
-                     if(data.msg!=""){
-                     $('#warning').css("display","none");
-                     }
-                     });
-                     }, 3000);
 
-                     $scope.loading=false;
-                     $('#loader').css("display","none");
-                     if(data.msg==""){
-                     $scope.errorMessage=data.error;
-                     $('#error').css("display","block");
-                     }*/
-
-
-                    if (data.status == "successful") {
+                    if (data.status == "Successful") {
                         $scope.warningMessage = data.message;
                         $('#warning').css("display", "block");
                         $scope.newDetails.newPassRe='';
                         $scope.newDetails.newPass='';
                         $scope.newDetails.oldPass='';
+
                     }
                     else if (data.status == "WrongPass") {
                         $scope.errorMessage = data.message;
@@ -737,10 +720,10 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
                     $scope.loading=false;
                     $('#loader').css("display","none");
                     $scope.errorMessage="Data not found..";
-                    $('#error').css("display","block");
+                   // $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
-                            $('#error').css("display","none");
+                     //       $('#error').css("display","none");
                         });
                     }, 3000);
 
@@ -749,10 +732,10 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
                     $scope.loading=false;
                     $('#loader').css("display","none");
                     $scope.errorMessage="Data not found..";
-                    $('#error').css("display","block");
+                   // $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
-                            $('#error').css("display","none");
+                           // $('#error').css("display","none");
                         });
                     }, 3000);
 
@@ -1306,7 +1289,7 @@ $scope.exemptedAccessList=[];
                        }else{
                           doShowAlert("Success","Access Request Added");
                           $scope.clearForm();
-                          window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config";    
+                          window.location="dashboard.php#/Config";
                        }
 
                      })
@@ -1364,7 +1347,7 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
                     console.log(data);
                     $rootScope.Companies[$scope.companyIndex]=$scope.selectedCompany;
                     alert(data.message);
-                    window.location= "/Config/SearchCompany";
+                    window.location= "dashboard.php#/Config/SearchCompany";
 
 
 
@@ -1470,6 +1453,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
                 if(data.status!="Successful"){
                     alert(data.message);
                     $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
+                    window.location="dashboard.php#/Config/SearchRole";
                 }else{
                     alert(data.message);
                 }
@@ -1520,10 +1504,13 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 
                 if(data.status!="Successful"){
                     console.log(data);
+                    alert(data.message);
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
 
+                    alert(data.message);
+                    window.location= "dashboard.php#/Config/SearchWarehouse";
 
 
                 }
@@ -1577,7 +1564,7 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
                 } else {
                     alert(data.message);
                 }
-                //window.location="dashboard.php#";
+                window.location="dashboard.php#";
 
             })
             .error(function (data, status, headers, config) {

@@ -3,7 +3,7 @@
 			 
 		<uib-accordion>
 			<uib-accordion-group heading="Package Name :{{package.package_name}} Package Description:{{package.package_description}}" ng-repeat="package in packages |  filter :paginatePackage">
-				<table class="table table-bordered">
+				<table class="table table-actions table-striped">
 					<thead>                                            
                             <tr>
                                 <th width="5%">Sr.No</th>
@@ -23,12 +23,11 @@
 						<td width="10%">{{Element['element_amount']}}</td>
 						
 					</tr>
+					<b>	Package Total Amount :{{package.package_total_amount}}</b>
 
 					</tbody>
 
-
 				</table>
-				<b>	Package Total Amount :{{package.package_total_amount}}</b>
 			</uib-accordion-group>   
 		</uib-accordion>
 				 <uib-pagination total-items="totalPackages" ng-model="currentPackagePage"

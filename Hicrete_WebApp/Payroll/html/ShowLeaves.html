@@ -32,8 +32,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="searchFromDate" ng-model="searchFromDate" ng-click="showFromDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showFrom.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="text" class="form-control" name="searchFromDate" ng-model="leaves.fromDate" ng-click="showFromDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showFrom.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
 
                                 </div>
@@ -46,8 +46,8 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="searchToDate" ng-model="searchToDate" ng-click="showToDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showTo.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="text" class="form-control" name="searchToDate" ng-model="leaves.toDate" ng-click="showToDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showTo.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
                                     </div>
 
                                 </div>
@@ -80,17 +80,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="leave in leaveDetails">
+                            <tr ng-repeat="leave in leavesDetails">
 
                                 <td>{{$index+1}}</td>
-                                <td>{{leave.fromDate}}</td>
-                                <td>{{leave.toDate}}</td>
+                                <td>{{leave.from_date}}</td>
+                                <td>{{leave.to_date}}</td>
                                 <td>{{leave.reason}}</td>
-                                <td>{{leave.type}}</td>
+                                <td>{{leave.type_of_leaves}}</td>
                                 <td>{{leave.status}}</td>
-                                <td>{{leave.applicationDate}}</td>
-                                <td><button class="btn btn-primary">Cancel</button> </td>
-
+                                <td>{{leave.application_date}}</td>
+                                <td ng-if="leave.status=='pending'"><button class="btn btn-primary" data-ng-click="changeStatus(leave.application_id)">Cancel</button></td>
                             </tr>
 
                             </tbody>

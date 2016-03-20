@@ -64,7 +64,7 @@
 
 
 
-                                                        <button ng-disabled="prodBatch.endDate > today" ng-click="getProdInfo(prodBatch)" data-target="#completeProdInfo" data-toggle="modal"
+                                                        <button ng-disabled="prodBatch.endDate > today" ng-click="getProdInfo(prodBatch,$index)" data-target="#completeProdInfo" data-toggle="modal"
                                                         class="btn btn-info btn-sm"><span class="fa fa-pencil-square-o"></span>Complete Production</button> 
 
                                                         <button disabled ng-click="getProdInfo(prodBatch)" data-target="#modifyProdInfo" data-toggle="modal"
@@ -347,24 +347,13 @@
                                                 </div>
                                             </div>
 
-                                            <!--<div class="form-group">
-                                                <label class="col-md-3 control-label">Company</label>
-                                                <div class="col-md-9">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" type="text" name="company" ng-model="modProdBatchInfo.company" class="form-control" required/>
-                                                    </div>
-                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.company.$error" ng-show="submitted">
-                                                        <p style="color:red" ng-message="required">Please enter company name</p>
-                                                    </div>
-                                                </div>
-                                            </div>-->
+
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label"> Company</label>
 
-                                                <div class="col-md-9" >
+                                                <div class="col-md-4" >
                                                     <div class="input-group">
-                                                        <select class="btn dropdown-toggle selectpicker btn-default" style="width: 165%;"ng-model="prodBatchInfo.company" name="companyName"
+                                                        <select class="btn dropdown-toggle selectpicker btn-default" style="width: 165%;"ng-model="modProdBatchInfo.company" name="companyName"
                                                                 required>
                                                             <option value="" disabled selected>Select Company</option>
                                                             <option ng-repeat="x in Company"
@@ -381,24 +370,13 @@
                                                 </div>
                                             </div>
 
-                                            <!--<div class="form-group">
-                                                <label class="col-md-3 control-label">Warehouse</label>
-                                                <div class="col-md-9">
-                                                    <div class="input-group">
-                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input style="width: 66%;" name="wareHouse" type="text" ng-model="modProdBatchInfo.wareHouse" class="form-control" required/>
-                                                    </div>
-                                                    <div class="help-block" ng-messages="prodBatchOutwardForm.wareHouse.$error" ng-show="submitted">
-                                                        <p style="color:red" ng-message="required">Please enter warehouse name</p>
-                                                    </div>
-                                                </div>
-                                            </div>-->
+
                                             <div class="form-group">
                                                 <label class="col-md-3 control-label">Warehouse</label>
 
                                                 <div class="col-md-9">
                                                     <div class="input-group" >
-                                                        <select style="width: 155%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.wareHouse"
+                                                        <select style="width: 155%;" class="btn dropdown-toggle selectpicker btn-default" ng-model="modProdBatchInfo.wareHouse"
                                                                 name="warehouseName" required>
                                                             <option value="" disabled selected>Select Warehouse</option>
                                                             <option ng-repeat="x in warehouses"

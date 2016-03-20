@@ -52,7 +52,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Applicator.modifyTentativeApplicatorDetails',{
             url: '/ModifyTentativeApplicatorDetails?applicator_id',
-            templateUrl: 'Applicator/html/ModifyTentativeApplicatorDetails.html',
+            templateUrl: 'Applicator/html/modifyTentativeApplicatorDetails.html',
             controller: 'ModifyTentativeApplicatorController'
 
         })
@@ -74,7 +74,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ModifyPermanentApplicatorController'
 
         })
-
         .state('Inventory', {
             url: '/Inventory',
             templateUrl: 'Inventory/html/inventoryWidgets.php',
@@ -83,7 +82,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Inventory.addProduct', {
             url: '/addProduct',
-            templateUrl: 'Inventory/html/inventory_Add_Product.html',
+            templateUrl: 'Inventory/html/Inventory_Add_Product.html',
             controller: 'productController'
         })
 
@@ -247,13 +246,13 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Config.userSearch', {
             url: '/SearchUser',
-            templateUrl: 'Config/html/ViewUser.html',
+            templateUrl: 'Config/html/viewUser.html',
             controller:'searchUserController'
         })
 
         .state('Config.companySearch', {
             url: '/SearchCompany',
-            templateUrl: 'Config/html/ViewCompany.html',
+            templateUrl: 'Config/html/viewCompany.html',
             controller:'companyController'
 
         })
@@ -298,7 +297,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('createSuperUser', {
             url: '/CreateSuperUser',
-            templateUrl: 'Config/html/CreateSuperUser.html',
+            templateUrl: 'Config/html/createSuperUser.html',
             controller:'superUserController'
 
         })
@@ -330,8 +329,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Process.addProject', {
             url: '/addProject',
-            templateUrl: 'Process/html/ProjectCreation.html'
-
+            templateUrl: 'Process/html/ProjectCreation.html',
+            controller:'ProjectCreationController'
         })
         .state('Process.modifyProject', {
             url: '/ModifyProject',
@@ -364,7 +363,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.ProjectDetails', {
             url: '/ProjectDetails',
             templateUrl:'Process/html/ProjectDetails.html',
-            controller:'ProjectDetailsController'
+            controller:'ProjectDetailsController',
+            params : { projectToModify: null }
         })
 
 
@@ -436,7 +436,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('ChangePassword', {
             url: '/ChangePassword',
-            templateUrl:'Config/html/ChangePassword.html',
+            templateUrl:'Config/html/changePassword.html',
             controller:'chngPassController'
 
         })
@@ -593,24 +593,16 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
            });
             
         }
-
-
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
 
         $scope.saveFollowupDetails=function(size,followupDetails){
+
 
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'FollowupForm.html',
                 controller:  function ($scope, $uibModalInstance,followupDetails) {
 
-                    $scope.taskStartDate = function(){
-                        $scope.taskStart.opened = true;
-                    };
-
-                    $scope.taskStart = {
-                        opened:false
-                    };
 
                     $scope.followupDetails = followupDetails;
 
@@ -647,6 +639,9 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
+
+
+
 
 
 });
@@ -727,4 +722,3 @@ myApp.directive('hicretemodal', function () {
       }
     };
   });
-

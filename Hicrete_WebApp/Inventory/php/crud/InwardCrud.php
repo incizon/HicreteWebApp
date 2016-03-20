@@ -28,6 +28,7 @@ class InwardData extends CommonMethods
     public $transportPayable;
     public $hasTransportDetails;
     public $isSuccess;
+    public $size;
     private $dbh;
     private $db;
 
@@ -67,6 +68,31 @@ class InwardData extends CommonMethods
         }
     }
 
+    //Function to fetch unit of measure
+    public static function getUnitOfMeasure($dbh,$materialId)
+    {
+        try{
+            $stmt = $dbh->prepare("select a.unitofmeasure as unitofmeasure from product_master a, material b where a.productmasterid=b.productmasterid and b.materialid=:materialid");
+            $stmt->bindParam(':materialid', $materialId, PDO::PARAM_STR, 10);
+            if($stmt->execute())
+            {
+                $json_array=array();
+                while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    //$result = $stmt->fetch(PDO::FETCH_ASSOC);
+                    $json_array['unitofmeasure']=$result['unitofmeasure'];
+                }
+            }
+            echo json_encode($json_array);
+
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
+
+    //Funciton to fetch unit of measure
     /**********************************************************************************
      * Purpose- This function will get all the inward entries from DB
      * @param1- $dbh connection object
@@ -191,7 +217,7 @@ class InwardData extends CommonMethods
             $date = new DateTime($this->dateOfInward);
             $inwardDate = $date->format('Y-m-d');
 
-            $stmtInward = $dbh->prepare("INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime) 
+            $stmtInward = $dbh->prepare("INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime)
              values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())");
             $stmtInward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
             $stmtInward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
@@ -206,33 +232,40 @@ class InwardData extends CommonMethods
                 $materials = $data->inwardData->inwardMaterials;
                 //Insert Data into Inward Details table
                 foreach ($materials as $material) {
+                    $material->materialQuantity=$material->materialQuantity*$material->packagesize;
+                    //echo $material->materialQuantity;
 
-                    $stmtInwardDetails = $dbh->prepare("INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,lchnguserid,lchngtime,creuserid,cretime)
-                    values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:lchnguserid,now(),:creuserid,now())");
+                    $stmtInwardDetails = $dbh->prepare("INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)
+                    values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())");
                     $stmtInwardDetails->bindParam(':inwardid', $lastInwardId, PDO::PARAM_STR, 10);
                     $stmtInwardDetails->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
                     $stmtInwardDetails->bindParam(':supplierid', $material->suppplierName, PDO::PARAM_STR, 10);
                     $stmtInwardDetails->bindParam(':quantity', $material->materialQuantity, PDO::PARAM_STR, 40);
                     $stmtInwardDetails->bindParam(':packagedunits', $material->packageUnit, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':size', $material->packagesize, PDO::PARAM_STR, 10);
                     $stmtInwardDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                     $stmtInwardDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
                     if ($stmtInwardDetails->execute()) {
                         $isSuccess = true;
                         //Check if material already exist in inventory table if yes update else Insert
-                        $stmtAvailabiltyCheck = $dbh->prepare("SELECT materialid FROM inventory WHERE materialid=:materialid");
+                        $stmtAvailabiltyCheck = $dbh->prepare("SELECT materialid FROM inventory WHERE materialid=:materialid AND packagingType=:packagingType AND packagingSize=:packagingSize");
                         $stmtAvailabiltyCheck->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+                        $stmtAvailabiltyCheck->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
+                        $stmtAvailabiltyCheck->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
                         $stmtAvailabiltyCheck->execute();
                         $count = $stmtAvailabiltyCheck->rowcount();
                         if ($count != 0) {
                             //UPDATE
                             $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
                                         warehouseid=:warehouseid,companyid=:companyid
-                            WHERE materialid = :materialid");
+                            WHERE materialid = :materialid AND packagingType=:packagingType AND packagingSize=:packagingSize");
 
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
 
                             if ($stmtInventory->execute()) {
                                 $isSuccess = true;
@@ -241,13 +274,15 @@ class InwardData extends CommonMethods
                             }
                         }else{
                             //Insert
-                            $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
-                                                      values (:materialid,:companyid,:warehouseid,:totalquantity)");
+                            $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity,packagingtype,packagingsize)
+                                                      values (:materialid,:companyid,:warehouseid,:totalquantity,:packagingType,:packagingSize)");
 
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
 
                             if ($stmtInventory->execute()) {
                                 $isSuccess = true;

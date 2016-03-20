@@ -1,4 +1,3 @@
-
 <div ng-show="step==1">
     <div>
         <div ng-include="'utils/loader.html'"></div>
@@ -19,7 +18,7 @@
                     </div>
 
                     <div class="panel-body">
-                        <h5>Material</h5>
+                        <h5><b>Basic details</b></h5>
 
                         <div class="row">
 
@@ -160,13 +159,15 @@
                                     <th>Material</th>
                                     <th>Quantity</th>
                                     <th>Packaging Type</th>
+                                    <th>Packaging Size</th>
+                                    <th>Unit</th>
                                     <th>Supplier</th>
                                     <th>Remove</th>
                                 </tr>
                                 </thead>
                                 <tr ng-repeat="materials in InwardData.inwardMaterials">
                                     <td>
-                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.material" name="material"
+                                        <select ng-change="getUnitOfMeasure(materials)" class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.material" name="material"
                                                 ng-value="Select" required>
                                             <option value="" disabled selected>Select Material</option>
                                             <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
@@ -201,6 +202,19 @@
                                              ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please select packaging unit.</p>
                                         </div>
+                                    </td>
+                                    <td>
+
+                                        <input type="text" class="form-control" ng-model="materials.packagesize"
+                                               name="size"  />
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="pattern">Only Numeric values allowed</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {{materials.unitOfMeasure}}
                                     </td>
                                     <td>
                                         <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.suppplierName"

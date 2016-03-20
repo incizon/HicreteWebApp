@@ -14,7 +14,7 @@ class Config
             $conn = $db->getConnection();
             $companyId = AppUtil::generateId();
 
-
+		
             $stmt = $conn->prepare("INSERT INTO `companymaster`(`companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) 
                 VALUES (:id,:name,:abbrevation,:startDate,:address,:city,:state,:country,:pincode,:email,:phone,:createdBy,now(),:lastModifiedBy,now())");
 
@@ -34,12 +34,12 @@ class Config
             $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             if ($stmt->execute()) {
-                echo AppUtil::getReturnStatus("Successful", "");
+                echo AppUtil::getReturnStatus("Successful", "failure in stmt1");
 
 
             } else {
 
-                echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
+                echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed".$userId);
 
             }
 
@@ -407,6 +407,28 @@ class Config
         $json = json_encode($result1);
         echo $json;
     }
+
+
+    public static function getCompanyList($userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        try {
+            $stmt = $conn->prepare("SELECT `companyId` ,`companyName` FROM `companymaster`");
+            if ($stmt->execute()) {
+                $result = $stmt->fetchAll();
+                echo  AppUtil::getReturnStatus("Successful",$result);
+            } else {
+               echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
+            }
+        }catch(Exceptio $e){
+           echo AppUtil::getReturnStatus("Exception",$e.getMessage());
+        }
+    }
+
+
 }
+
 
 ?>

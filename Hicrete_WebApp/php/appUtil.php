@@ -58,7 +58,6 @@ class AppUtil
 
     public static function sendMail($userName,$Password,$userMail,$Name)
     {
-
         $email = new PHPMailer();
 
         $MailManager = 'info@hitechflooringindia.com';
