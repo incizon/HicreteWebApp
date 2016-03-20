@@ -200,33 +200,6 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         operation:""
     };
 
-    $scope.employeeDetails={
-        operation:""
-    };
-    $scope.getEmployeeDetails=function(){
-
-        $scope.employeeDetails.operation="getEmployeeDetailsForLeave";
-        var config = {
-            params: {
-                details: $scope.employeeDetails
-            }
-        };
-        $http.post("Payroll/php/PayrollFacade.php", null, config)
-            .success(function (data) {
-
-                console.log(data);
-                $scope.employeeData=data;
-
-            })
-            .error(function (data, status, headers, config) {
-
-
-            });
-
-    }
-
-    $scope.getEmployeeDetails();
-
     $scope.ApplyForLeave=function(){
 
         $scope.errorMessage="";
@@ -278,12 +251,8 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
         operation:""
     }
 
-    $scope.payrollDetails={
 
-        operation:"",
-        employee:[]
 
-    };
     $scope.getEmployeeDetails=function(){
 
         $scope.employeeDetails.operation="getEmployeeDetails";
@@ -296,8 +265,11 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
             .success(function (data) {
 
                 console.log(data);
-                $scope.payrollEmployeeDetails=data;
-                $scope.modifyObject();
+                $scope.LeaveApprovers=data.LeaveApprover;
+                $scope.EmployeeDetails=data.EmployeeDetails;
+
+                console.log($scope.LeaveApprovers);
+                console.log($scope.EmployeeDetails);
             })
             .error(function (data, status, headers, config) {
 
@@ -308,39 +280,18 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
 
     $scope.getEmployeeDetails();
 
-   $scope.modifyObject=function(){
-
-       for(var i=0;i<$scope.payrollEmployeeDetails.EmployeeDetails.length;i++){
-
-           $scope.payrollEmployeeDetails.EmployeeDetails[i].val=false;
-       }
-       console.log($scope.payrollEmployeeDetails.EmployeeDetails);
-
-   }
     $scope.AddEmployee=function(){
-
-        console.log($scope.payrollEmployeeDetails.EmployeeDetails);
-
-        for(var i=0;i<$scope.payrollEmployeeDetails.EmployeeDetails.length;i++){
-
-             if($scope.payrollEmployeeDetails.EmployeeDetails[i].val===true){
-
-                    $scope.payrollDetails.employee.push($scope.payrollEmployeeDetails.EmployeeDetails[i]);
-             }
-        }
-
-        console.log($scope.payrollDetails);
 
         $scope.errorMessage="";
         $scope.warningMessage="";
 
-        $scope.payrollDetails.operation="addEmployeeToPayroll";
+        $scope.employeeDetails.operation="addEmployee";
 
         $('#loader').css("display","block");
 
         var config = {
             params: {
-                details: $scope.payrollDetails
+                details: $scope.employeeDetails
             }
         };
         $http.post("Payroll/php/PayrollFacade.php", null, config)

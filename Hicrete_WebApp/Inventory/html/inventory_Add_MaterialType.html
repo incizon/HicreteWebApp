@@ -1,4 +1,3 @@
-
 <div class="row" ng-controller="addMaterialType">
     <div>
         <div ng-include="'utils/loader.html'"></div>
@@ -53,8 +52,9 @@
                             <div class="form-group" ng-repeat="mat in materialType">
                                 <!-- <span>{{$index+1}}</span> -->
                                 <label class="col-md-3 col-xs-12 control-label">Material Type</label>
-                                <div class="col-md-6 col-xs-12">
+                                <div class="col-md-7 col-xs-12">
                                     <div class="input-group">
+                                    
                                         <span class="input-group-addon"><span class="fa fa-cube"></span></span>
                                         <input type="text" style="width:86%" name="materialType"  ng-model="mat.type" class="form-control" required/>
                                          <ul class="panel-controls">

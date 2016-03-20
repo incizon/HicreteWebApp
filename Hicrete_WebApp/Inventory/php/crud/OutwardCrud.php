@@ -66,7 +66,7 @@ class OutwardData extends CommonMethods
     {
 
 
-        $stmt = $dbh->prepare("SELECT * FROM Outward");
+        $stmt = $dbh->prepare("SELECT * FROM outward");
         if ($stmt->execute()) {
 
             //push it into array
@@ -85,7 +85,7 @@ class OutwardData extends CommonMethods
                 $outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
                 $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 
-                $stmtTransport=$dbh->prepare("SELECT * FROM Outward_transportation_details WHERE outwardid=:outwardID");
+                $stmtTransport=$dbh->prepare("SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID");
                 $stmtTransport->bindParam(':outwardID', $outwardID);
                 if($stmtTransport->execute()){
                     if($stmtTransport->rowCount()==0){
@@ -111,9 +111,9 @@ class OutwardData extends CommonMethods
                 //push inward transport details data into array
 
                 // Join
-                $stmt1 = $dbh->prepare("SELECT * FROM Outward_details
+                $stmt1 = $dbh->prepare("SELECT * FROM outward_details
                         JOIN material ON
-                        material.materialid=Outward_details.materialid
+                        material.materialid=outward_details.materialid
                         JOIN product_master ON
                         material.productmasterid=product_master.productmasterid
                         WHERE outwardid=:outwardID");
@@ -164,13 +164,14 @@ class OutwardData extends CommonMethods
         try {
             //BEGIN THE TRANSACTION
             $dbh->beginTransaction();
-
-            $stmtOutward = $dbh->prepare("INSERT INTO Outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
-                           values (:warehouseid,:companyid,:supervisorid,now(),:Outwardno,:lchnguserid,now(),:creuserid,now())");
+	   $date = new DateTime($this->dateOfInward);
+            $dob = $date->format('Y-m-d');
+            $stmtOutward = $dbh->prepare("INSERT INTO outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
+                           values (:warehouseid,:companyid,:supervisorid,:dateofentry,:Outwardno,:lchnguserid,now(),:creuserid,now())");
             $stmtOutward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':supervisorid',  $this->suppervisor, PDO::PARAM_STR, 10);
-            // $stmtOutward->bindParam(':dateofentry', $this->dateOfInward, PDO::PARAM_STR, 40);
+             $stmtOutward->bindParam(':dateofentry', $dob, PDO::PARAM_STR, 40);
             $stmtOutward->bindParam(':Outwardno', $this->OutwardNumber, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
@@ -181,7 +182,7 @@ class OutwardData extends CommonMethods
                 //Insert Data into Outward Details table
 
                 foreach ($materials as $material) {
-                    $stmtOutwardDetails = $dbh->prepare("INSERT INTO Outward_details (Outwardid,materialid,quantity,packagedunits,lchnguserid,lchngtime,creuserid,cretime)
+                    $stmtOutwardDetails = $dbh->prepare("INSERT INTO outward_details (Outwardid,materialid,quantity,packagedunits,lchnguserid,lchngtime,creuserid,cretime)
               values (:Outwardid,:materialid,:quantity,:packagedunits,:lchnguserid,now(),:creuserid,now())");
                     $stmtOutwardDetails->bindParam(':Outwardid', $lastOutwardId, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
@@ -213,12 +214,17 @@ class OutwardData extends CommonMethods
 //                                $this->showAlert('success', "Outward details added Successfully!!!");
 //                                $dbh->commit();
                             } else {
+                   $this->showAlert('Failure', "Error 3rd");
                                 $isSuccess=false;
 //                                $this->showAlert('Failure', "Error while adding4th");
 //                                $dbh->rollBack();
                             }
+                        }else{
+                   $this->showAlert('Failure', "Error 2nd");
+                             $isSuccess = false;
                         }
                     } else {
+                   $this->showAlert('Failure', "Error 1st");
                         $isSuccess = false;
                     }
                 }
@@ -229,7 +235,7 @@ class OutwardData extends CommonMethods
 
                     // Insert Data into Transport Details Table
                     if ($this->hasTransportDetails == 'Yes') {
-                        $stmtTransportDetails = $dbh->prepare("INSERT INTO Outward_transportation_details (Outwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)
+                        $stmtTransportDetails = $dbh->prepare("INSERT INTO outward_transportation_details (Outwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)
                values (:Outwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchnguserid,now(),:creuserid,now(),:remark)");
                         $stmtTransportDetails->bindParam(':Outwardid', $lastOutwardId, PDO::PARAM_STR, 10);
                         $stmtTransportDetails->bindParam(':transportationmode', $this->transportMode, PDO::PARAM_STR, 10);

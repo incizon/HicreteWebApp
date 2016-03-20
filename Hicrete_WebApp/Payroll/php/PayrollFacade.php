@@ -1,6 +1,6 @@
 <?php
 
-require_once ("../../php/Database.php");
+require_once ("database-connection.php");
 
 include_once ("PayrollClassLib.php");
 
@@ -8,8 +8,7 @@ if (!isset($_SESSION['token'])) {
     session_start();
 }
 
-$db = Database::getInstance();
-$connect = $db->getConnection();
+global $connect;
 
 $userId=$_SESSION['token'];
 
@@ -94,10 +93,6 @@ $operationObject=new Payroll();
          }
 
          break;
-     case 'getEmployeeDetailsForLeave':
-
-                    $operationObject->getEmployeeDetailsForLeave($userId);
-         break;
      case 'createLeave':
 
          $connect->beginTransaction();
@@ -118,23 +113,12 @@ $operationObject=new Payroll();
          }
            break;
 
-       case 'addEmployeeToPayroll':
+       case 'addEmployee':
 
-           $connect->beginTransaction();
-           if($operationObject->addEmployeeToPayroll($data,$userId)){
-               $connect->commit();
-               $message = "Employee Added Successfully";
-               $arr = array('msg' => $message, 'error' => '');
-               $jsn = json_encode($arr);
-               echo($jsn);
-           }
-           else{
-               $connect->rollBack();
-               $message = "Could Not Add Employeee...!!!";
-               $arr = array('msg' => '', 'error' => $message);
-               $jsn = json_encode($arr);
-               echo($jsn);
-           }
+           $message = "Added Successfully";
+           $arr = array('msg' => $message, 'error' => '');
+           $jsn = json_encode($arr);
+           echo($jsn);
 
            break;
        case 'searchLeave':

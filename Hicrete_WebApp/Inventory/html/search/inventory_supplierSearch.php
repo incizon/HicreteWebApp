@@ -38,7 +38,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                             <span class="input-group-addon"><span class="fa fa-search"></span></span>
                             <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="Keywords"/>
                             <div class="input-group-btn">
-                                <button class="btn btn-primary" ng-click="searchData(supplier)">Search</button>
+                                <button class="btn btn-primary" ng-click="searchData(Keywords)">Search</button>
                             </div>
                         </div>
                     </div>

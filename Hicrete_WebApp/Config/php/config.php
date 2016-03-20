@@ -14,7 +14,7 @@ class Config
             $conn = $db->getConnection();
             $companyId = AppUtil::generateId();
 
-
+		
             $stmt = $conn->prepare("INSERT INTO `companymaster`(`companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) 
                 VALUES (:id,:name,:abbrevation,:startDate,:address,:city,:state,:country,:pincode,:email,:phone,:createdBy,now(),:lastModifiedBy,now())");
 
@@ -34,12 +34,12 @@ class Config
             $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             if ($stmt->execute()) {
-                echo AppUtil::getReturnStatus("Successful", "");
+                echo AppUtil::getReturnStatus("Successful", "failure in stmt1");
 
 
             } else {
 
-                echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
+                echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed".$userId);
 
             }
 
@@ -133,13 +133,11 @@ class Config
                 }
             } else {
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
-                return;
             }
 
 
             if ($rollback) {
                 $conn->rollback();
-
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
             } else {
                 $conn->commit();

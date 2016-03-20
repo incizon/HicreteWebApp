@@ -125,7 +125,7 @@ if(!$hasRead && !$hasWrite){
                 if($hasWrite==1)
                     echo "<li><a ui-sref=\"Applicator.addPayment\">Add Payment</a></li>";
                 if($hasRead==1)
-                    //echo "<li><a ui-sref=\"Applicator.applicatorPaymentHistory\">Show Payment History</a></li>";
+                    echo "<li><a ui-sref=\"Applicator.paymentHistory\">Show Payment History</a></li>";
 
             echo "</ul>
             </li>";
