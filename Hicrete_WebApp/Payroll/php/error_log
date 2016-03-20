@@ -1,0 +1,24 @@
+[16-Mar-2016 07:04:20 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`hicrete`.`attendance_year`, CONSTRAINT `AttendanceYearCreatedBy` FOREIGN KEY (`created_by`) REFERENCES `usermaster` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE)' in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php:48
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php(48): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Payroll/php/PayrollFacade.php(25): Payroll->createYear(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php on line 48
+[16-Mar-2016 07:13:45 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`hicrete`.`attendance_year`, CONSTRAINT `AttendanceYearCreatedBy` FOREIGN KEY (`created_by`) REFERENCES `usermaster` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE)' in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php:48
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php(48): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Payroll/php/PayrollFacade.php(25): Payroll->createYear(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php on line 48
+[16-Mar-2016 07:17:20 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`hicrete`.`attendance_year`, CONSTRAINT `AttendanceYearCreatedBy` FOREIGN KEY (`created_by`) REFERENCES `usermaster` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE)' in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php:48
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php(48): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Payroll/php/PayrollFacade.php(25): Payroll->createYear(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php on line 48
+[16-Mar-2016 08:30:57 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1452 Cannot add or update a child row: a foreign key constraint fails (`hicrete`.`holiday_in_year`, CONSTRAINT `CreatedBYUser` FOREIGN KEY (`created_by`) REFERENCES `usermaster` (`userId`) ON DELETE CASCADE ON UPDATE CASCADE)' in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php:112
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php(112): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Payroll/php/PayrollFacade.php(56): Payroll->createHoliday(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Payroll/php/PayrollClassLib.php on line 112

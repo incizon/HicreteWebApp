@@ -1,0 +1,39 @@
+[16-Mar-2016 03:58:12 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens' in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php:342
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php(342): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Applicator/php/Applicator.php(86): Applicator->createApplicator(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 342
+[16-Mar-2016 04:12:41 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens' in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php:291
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php(291): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Applicator/php/Applicator.php(86): Applicator->createApplicator(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 291
+[16-Mar-2016 05:32:35 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens' in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php:291
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php(291): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Applicator/php/Applicator.php(86): Applicator->createApplicator(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 291
+[18-Mar-2016 06:03:33 UTC] PHP Fatal error:  Call to a member function execute() on a non-object in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 633
+[18-Mar-2016 11:27:18 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'package_description' cannot be null' in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php:37
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php(37): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Applicator/php/Applicator.php(57): Applicator->createPackage(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 37
+[18-Mar-2016 13:52:21 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'date_of_follow_up' cannot be null' in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php:907
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php(907): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Applicator/php/Applicator.php(150): Applicator->savePaymentDetails(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 907
+[18-Mar-2016 13:54:33 UTC] PHP Fatal error:  Call to a member function execute() on a non-object in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 633
+[19-Mar-2016 07:32:25 UTC] PHP Fatal error:  Uncaught exception 'PDOException' with message 'SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'employee_id' cannot be null' in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php:369
+Stack trace:
+#0 /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php(369): PDOStatement->execute()
+#1 /home/hitech2204/public_html/Demo/Applicator/php/Applicator.php(59): Applicator->createApplicator(Object(stdClass), '56e87cbeedde774...')
+#2 {main}
+  thrown in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 369
+[19-Mar-2016 07:32:54 UTC] PHP Fatal error:  Call to a member function execute() on a non-object in /home/hitech2204/public_html/Demo/Applicator/php/ApplicatorClassLib.php on line 434
