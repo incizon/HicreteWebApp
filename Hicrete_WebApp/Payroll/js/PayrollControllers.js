@@ -484,94 +484,108 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
 
 myApp.controller('SearchLeaveByEmployeeController', function($scope,$http) {
 
-    $scope.leaveDetails=[
-        {
-            leaveBy:"Atul",
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        },
-        {
-            leaveBy:"Ajit",
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        },
-        {
-            leaveBy:"Namdev",
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        }
+    $scope.employeePerPage=5;
+    $scope.currentPage=1;
 
+    $scope.leaveDetails=[];
 
-    ];
+    $scope.employees=[];
 
     $scope.leaves={
-        opeartion:""
+        operation:""
     }
-    $scope.searchByEmployee=function(){
+    $scope.searchDetails= {
+        employee: "",
+        operation:""
+    }
 
-        $scope.errorMessage="";
-        $scope.warningMessage="";
 
-        $scope.leaves.operation="searchLeaveByEmployee";
+    $scope.getEmployeeDetails=function(){
 
-        $('#loader').css("display","block");
-
+        $scope.leaves.operation="getEmployees";
         var config = {
             params: {
                 details: $scope.leaves
             }
         };
-
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
-
-                    setTimeout(function() {
-                        if(data.msg!=""){
-                            $('#warning').css("display","none");
-                        }
-                    }, 3000);
-                }
-                $scope.loading=false;
-                $('#loader').css("display","none");
-                if(data.msg==""){
-                    $scope.errorMessage=data.error;
-                    $('#error').css("display","block");
-                }
+                $scope.employees=data;
             })
             .error(function (data, status, headers, config) {
+
+            });
+    }
+
+    $scope.getEmployeeDetails();
+
+    $scope.searchByEmployee=function(){
+
+
+        console.log($scope.searchDetails);
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+
+        $scope.searchDetails.operation="searchLeaveByEmployee";
+
+        $('#loader').css("display","block");
+
+        var config = {
+            params: {
+                details: $scope.searchDetails
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+        .success(function (data) {
+            console.log(data);
+            if(data.status==="success") {
+                $scope.leavesDetails = data.message;
+                $scope.totalItems = $scope.leavesDetails.length;
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+            }
+            else{
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage=data.message;
+                $('#error').css("display","block");
+            }
+        })
+            .error(function (data, status, headers) {
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage="Could Not Fetch Data";
                 $('#error').css("display","block");
             });
-
     }
+
+    $scope.paginate = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.employeePerPage;
+        end = begin + $scope.employeePerPage;
+        index = $scope.leavesDetails.indexOf(value);
+
+        return (begin <= index && index < end);
+    };
 });
 
 myApp.controller('SearchLeaveByDateController', function($scope,$http) {
 
-    $scope.leaveDetails=[];
+    $scope.currentPage=1;
+    $scope.employeePerPage=5;
+    $scope.hide=false;
+    $scope.leavesDetails=[];
 
-    $scope.leaves={
-        opeartion:""
+    $scope.searchDetails= {
+        searchBy: 'Year',
+        operation:""
     }
 
-    $scope.searchBy='Year';
+     $scope.leaves={
+         operation:""
+     }
+
     $scope.getYears=function(){
 
         $scope.leaves.operation="getYears";
@@ -584,56 +598,69 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
             .success(function (data) {
                 console.log(data);
                 $scope.years=data;
-
             })
             .error(function (data, status, headers, config) {
-
 
             });
     }
 
+
     $scope.getYears();
+
+    $scope.disableSearch=function(value){
+        console.log("In");
+        if(value=="Year") {
+            $scope.hide = false;
+        }
+        if(value=="timePeriod") {
+            $scope.hide = true;
+        }
+    }
+
     $scope.searchByDate=function(){
 
+        console.log($scope.searchDetails);
         $scope.errorMessage="";
         $scope.warningMessage="";
 
-        $scope.leaves.operation="searchLeaveByDate";
+        $scope.searchDetails.operation="searchLeaveByDate";
 
         $('#loader').css("display","block");
 
         var config = {
             params: {
-                details: $scope.leaves
+                details: $scope.searchDetails
             }
         };
-
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
-
-                    setTimeout(function() {
-                        if(data.msg!=""){
-                            $('#warning').css("display","none");
-                        }
-                    }, 3000);
+                if(data.status==="success") {
+                    $scope.leavesDetails= data.message;
+                    $scope.totalItems = $scope.leavesDetails.length;
+                    $('#loader').css("display","none");
                 }
-                $scope.loading=false;
-                $('#loader').css("display","none");
-                if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                else{
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
                     $('#error').css("display","block");
                 }
             })
-            .error(function (data, status, headers, config) {
+            .error(function (data, status, headers) {
+                $scope.loading=false;
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+                $scope.errorMessage="Could not send ";
                 $('#error').css("display","block");
             });
-
-
     }
+    $scope.paginate = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.employeePerPage;
+        end = begin + $scope.employeePerPage;
+        index = $scope.leavesDetails.indexOf(value);
+
+        return (begin <= index && index < end);
+    };
 });
