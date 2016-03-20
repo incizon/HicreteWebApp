@@ -69,7 +69,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                             <a ui-sref="Process.viewTask" > <button class="btn btn-info" ng-click="setTask(task)"><span class="fa fa-pencil-square-o"></span>View</button></a>
                             <?php
                                 if($hasWrite==1){
-                                   <button class="btn btn-danger" ng-click = "deleteTask(task.TaskID)">Delete</button>
+                                 echo"<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID)\">Delete</button>";
                                 }
                             ?>
 

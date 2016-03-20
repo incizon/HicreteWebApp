@@ -958,42 +958,44 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
-myApp.controller('ViewTaskController',function($scope,$http){
+
+myApp.controller('ViewTaskController',function(setInfo,$scope,$http,$filter,$rootScope){
+
 
 
     var task  = setInfo.get();
     console.log("task set is "+JSON.stringify(task));
     $scope.ViewTask = {
-                task_id :task.TaskID,
-                task_name :task.TaskName,
-                task_desc :task.TaskDescripion,
-                task_startDate : task.ScheduleStartDate,
-                task_endDate : task.ScheduleEndDate,
-                task_isCompleted:task.isCompleted
+        task_id :task.TaskID,
+        task_name :task.TaskName,
+        task_desc :task.TaskDescripion,
+        task_startDate : task.ScheduleStartDate,
+        task_endDate : task.ScheduleEndDate,
+        task_isCompleted:task.isCompleted
     };
 
 
-    $scope.getViewNotes=function(tasks){
-     $scope.ViewNotes = [];
-     var notes = [];
+    $scope.getViewNotes=function(){
+        $scope.ViewNotes = [];
+        var notes = [];
 
-    $scope.ViewNotes.length = 0; 
-     $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
-             for(var i = 0; i<response.data.length ; i++){
+        $scope.ViewNotes.length = 0;
+        $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
+            for(var i = 0; i<response.data.length ; i++){
                 notes.push({
-                Note : response.data[i].ConductionNote,
-                AddedBy : response.data[i].FirstName+" "+response.data[i].LastName,
-                NoteDate : response.data[i].DateAdded
-            });
-             }
-         $scope.ViewNotes = notes;
-         setInfo.set(notes);
+                    Note : response.data[i].ConductionNote,
+                    AddedBy : response.data[i].firstName+" "+response.data[i].lastName,
+                    NoteDate : response.data[i].DateAdded
+                });
+            }
+            $scope.ViewNotes = notes;
+            setInfo.set(notes);
         });
     }
-        $scope.getViewNotes(task);
-     $scope.updateTask = function(taskid){
-        
-        
+    $scope.getViewNotes();
+    $scope.updateTask = function(taskid){
+
+
         var isCompleted = $scope.completed;
         console.log("completed "+isCompleted);
 
@@ -1007,38 +1009,109 @@ myApp.controller('ViewTaskController',function($scope,$http){
         var data = '{"CompletionPercentage":"'+$scope.taskCompletionP+'","isCompleted":"'+isCompleted+'","ActualStartDate":"'+actualStart+'","ActualEndDate":"'+actualEnd+'","ConductionNote":"'+$scope.note+'","NoteAddedBy":"1","NoteAdditionDate":"'+noteCreatedDate+'"}';
         console.log("update task data is "+data);
 
-         $.ajax({
-                            type: "POST",
-                            url: 'php/api/task/edit/'+taskid,
-                            data: data,
-                            dataType: 'json',
-                            cache: false,
-                            contentType: 'application/json',
-                            processData: false,
-                           
-                            success:  function(data)
-                            {
-                               //  $scope.ViewNotes=[];
-                               //  var tasks=setInfo.get();
-                               // tasks.push({
-                               //     Note : $scope.note,
-                               //     AddedBy :"n",
-                               //     NoteDate : noteCreatedDate
-                               //  });
-                                
-                               // $scope.ViewNotes=tasks;
-                               $scope.getViewNotes(task);
-                                console.log($scope.ViewNotes);
-                                alert("success in task updation "+data);
-                             } ,
-                            error: function(data){
-                            alert("error in task updation "+data);         
-                            } 
-                        });
+        $.ajax({
+            type: "POST",
+            url: 'php/api/task/edit/'+taskid,
+            data: data,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json',
+            processData: false,
 
-
-     }
+            success:  function(data)
+            {
+                $scope.getViewNotes(task);
+                console.log($scope.ViewNotes);
+                alert("success in task updation "+data);
+            } ,
+            error: function(data){
+                alert("error in task updation "+data);
+            }
+        });
+    }
 });
+
+
+//myApp.controller('ViewTaskController',function(setInfo,$filter,$scope,$http){
+//
+//
+//    var task  = setInfo.get();
+//    console.log("task set is "+JSON.stringify(task));
+//    $scope.ViewTask = {
+//                task_id :task.TaskID,
+//                task_name :task.TaskName,
+//                task_desc :task.TaskDescripion,
+//                task_startDate : task.ScheduleStartDate,
+//                task_endDate : task.ScheduleEndDate,
+//                task_isCompleted:task.isCompleted
+//    };
+//
+//
+//    $scope.getViewNotes=function(tasks){
+//     $scope.ViewNotes = [];
+//     var notes = [];
+//
+//    $scope.ViewNotes.length = 0;
+//     $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
+//             for(var i = 0; i<response.data.length ; i++){
+//                notes.push({
+//                Note : response.data[i].ConductionNote,
+//                AddedBy : response.data[i].FirstName+" "+response.data[i].LastName,
+//                NoteDate : response.data[i].DateAdded
+//            });
+//             }
+//         $scope.ViewNotes = notes;
+//         setInfo.set(notes);
+//        });
+//    }
+//     $scope.getViewNotes(task);
+//     $scope.updateTask = function(taskid){
+//
+//        var isCompleted = $scope.completed;
+//        console.log("completed "+isCompleted);
+//
+//        var completed = 0;
+//        console.log("is completed"+completed);
+//        var crdate = new Date();
+//        var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//        var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//        var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//
+//        var data = '{"CompletionPercentage":"'+$scope.taskCompletionP+'","isCompleted":"'+isCompleted+'","ActualStartDate":"'+actualStart+'","ActualEndDate":"'+actualEnd+'","ConductionNote":"'+$scope.note+'","NoteAddedBy":"1","NoteAdditionDate":"'+noteCreatedDate+'"}';
+//        console.log("update task data is "+data);
+//
+//         $.ajax({
+//                            type: "POST",
+//                            url: 'php/api/task/edit/'+taskid,
+//                            data: data,
+//                            dataType: 'json',
+//                            cache: false,
+//                            contentType: 'application/json',
+//                            processData: false,
+//
+//                            success:  function(data)
+//                            {
+//                               //  $scope.ViewNotes=[];
+//                               //  var tasks=setInfo.get();
+//                               // tasks.push({
+//                               //     Note : $scope.note,
+//                               //     AddedBy :"n",
+//                               //     NoteDate : noteCreatedDate
+//                               //  });
+//
+//                               // $scope.ViewNotes=tasks;
+//                               $scope.getViewNotes(task);
+//                                console.log($scope.ViewNotes);
+//                                alert("success in task updation "+data);
+//                             } ,
+//                            error: function(data){
+//                            alert("error in task updation "+data);
+//                            }
+//                        });
+//
+//
+//     }
+//});
 
 myApp.controller('SearchTaskController',function(setInfo,$scope,$http){
 
@@ -1046,6 +1119,7 @@ myApp.controller('SearchTaskController',function(setInfo,$scope,$http){
 $scope.tasks = [];
 var task = [];
     $http.get("php/api/task").then(function(response){
+        console.log(response);
         for(var i = 0; i<response.data.length ; i++){
 
             task.push({
@@ -1062,7 +1136,7 @@ var task = [];
                     "ActualStartDate": response.data[i].ActualStartDate,
                     "AcutalEndDate": response.data[i].AcutalEndDate,
                     "UserId": response.data[i].UserId,
-                    "UserName": response.data[i].FirstName+" "+response.data[i].LastName
+                    "UserName": response.data[i].firstName+" "+response.data[i].lastName
         
             });
         }
@@ -1097,16 +1171,6 @@ var task = [];
                         alert("in error ::"+response);
                     });
         }
-    //$scope.taskList.push({
-    //    taskId:"asdasd",
-    //    taskName:"Gokhale",
-    //    description:"pune",
-    //    completionPercentage:"maharashtra",
-    //    assignTo:"India",
-    //    creationDate:"22-09-1992"
-    //});
-
-
 
 });
 myApp.controller('AssignTaskController',function($scope,$http,AppService,$filter){
@@ -1157,8 +1221,7 @@ myApp.controller('AssignTaskController',function($scope,$http,AppService,$filter
                             success:  function(data)
                             {
                                 alert("success in assign task "+data);
-                          
-                        
+
                              } ,
                             error: function(data){
                                 console.log(data);
