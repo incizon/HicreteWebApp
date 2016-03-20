@@ -7,13 +7,13 @@ Class Task {
     public function saveTask($data){
         
        $taskId = AppUtil::generateId();
-       
+        $userId=$_SESSION['token'];
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
                 $stmt = $conn->prepare("INSERT INTO task_master (TaskID, TaskName, TaskDescripion, ScheduleStartDate, ScheduleEndDate, CompletionPercentage, TaskAssignedTo, isCompleted, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?,?)");
-                        if($stmt->execute([$taskId,$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$data->CreatedBy]) === TRUE)
+                        if($stmt->execute([$taskId,$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$userId]) === TRUE)
                         {
                             $conn->commit();
                             return "Task created succesfully";

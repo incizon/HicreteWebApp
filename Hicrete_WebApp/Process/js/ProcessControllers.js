@@ -1109,25 +1109,11 @@ var task = [];
 
 
 });
-myApp.controller('AssignTaskController',function($scope,$http){
+myApp.controller('AssignTaskController',function($scope,$http,AppService,$filter){
 
    console.log("in AssignTaskController");
      $scope.users = [];
-    var user = [];
-     $http.get("php/api/user").then(function(response) {
-        console.log(response.data.length);
-        for(var i = 0; i<response.data.length ; i++){
-
-            user.push({
-                        id: response.data[i].UserId,
-                        name: response.data[i].FirstName+" "+response.data[i].LastName
-                        
-            });
-        }
-       $scope.users = user;
-     //  console.log("users scope is "+JSON.stringify($scope.users));
-        
-    })
+    AppService.getUsers($scope,$http);
 
     $scope.assignTask = function(){
          var date = new Date();
@@ -1136,8 +1122,8 @@ myApp.controller('AssignTaskController',function($scope,$http){
          var endDate = $filter('date')($scope.task.endDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
 
          console.log("startDate "+startDate);
-        var Taskdata = '{"TaskName":"'+$scope.task.taskname+'","TaskDescripion":"'+$scope.task.description+'","ScheduleStartDate":"'+startDate+'","ScheduleEndDate":"'+endDate+'","CompletionPercentage":"0","TaskAssignedTo":"'+$scope.InwardData.assignedTo.id+'","isCompleted":"0","CreationDate":"'+creationDate+'","CreatedBy":"1"}';
-               //   console.log("Task data is "+Taskdata);
+        var Taskdata = '{"TaskName":"'+$scope.task.taskname+'","TaskDescripion":"'+$scope.task.description+'","ScheduleStartDate":"'+startDate+'","ScheduleEndDate":"'+endDate+'","CompletionPercentage":"0","TaskAssignedTo":"'+$scope.task.assignedTo.id+'","isCompleted":"0","CreationDate":"'+creationDate+'"}';
+                  console.log("Task data is "+Taskdata);
                      /* $http.post('php/api/task', Taskdata,config)
                             .success(function (data, status) {
                                 alert("Task has been created Successfuly.. "+status);
@@ -1175,7 +1161,8 @@ myApp.controller('AssignTaskController',function($scope,$http){
                         
                              } ,
                             error: function(data){
-                            alert("error in task assignment"+data);         
+                                console.log(data);
+                                alert("error in task assignment"+data);
                             } 
                         });
 

@@ -16,10 +16,7 @@
                             <select class="btn dropdown-toggle selectpicker btn-default"  ng-model="task.assignedTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
                                     required >
                                 <option value="" disabled selected>------------Select Employee------------</option>
-                                <option value = "">{{user.name}}</option>
-                                <!-- <option>as</option>
-                                <option>Ajgffit</option>
-                                <option>Ajidfgdft</option> -->
+                                <option value = {{user.id}}>{{user.name}}</option>
                             </select>
                         </div>
                     </div>
