@@ -80,8 +80,8 @@ configService.getAllAccessPermission($http,$scope);
            })
            .error(function (data, status, headers, config)
            {
-           	$scope.loading=false;
-           
+               $scope.loading=false;
+               $('#loader').css("display","none");
                $scope.errorMessage="Role not added..";
                $('#error').css("display","block");
            });
@@ -364,7 +364,7 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
                         $scope.newDetails.newPassRe='';
                         $scope.newDetails.newPass='';
                         $scope.newDetails.oldPass='';
-                        
+
                     }
                     else if (data.status == "WrongPass") {
                         $scope.errorMessage = data.message;
@@ -979,7 +979,7 @@ $scope.addCompany=function(){
       $http.post("Config/php/configFacade.php",null, config)
            .success(function (data)
            {
-		console.log(data);
+
                if(data.status=="Successful"){
                    $scope.loading=false;
                    $('#loader').css("display","none");
@@ -1289,7 +1289,7 @@ $scope.exemptedAccessList=[];
                        }else{
                           doShowAlert("Success","Access Request Added");
                           $scope.clearForm();
-                          window.location="dashboard.php#/Config";    
+                          window.location="dashboard.php#/Config";
                        }
 
                      })
@@ -1530,6 +1530,17 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 myApp.controller('superUserController', function ($scope, $rootScope, $http, configService) {
 
     $scope.superUserInfo={};
+    $scope.today = function(){
+        $scope.superUserInfo.dateOfBirth = new Date();
+    };
+    $scope.today();
+    $scope.showDob = function(){
+        $scope.showPicker.opened = true;
+    };
+
+    $scope.showPicker = {
+        opened:false
+    }
     $scope.addSuperUserInfo=function(){
         console.log($scope.superUserInfo);
         var data = {

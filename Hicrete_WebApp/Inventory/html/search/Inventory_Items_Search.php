@@ -12,11 +12,23 @@ $userId=$_SESSION['token'];
 $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
 ?>
+
+
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+<div class="col-lg-12 col-md-12">
 <!-- START SEARCH -->
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row stacked">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-8">
                 <div class="input-group push-down-10" >
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
                     <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
@@ -353,4 +365,5 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                     items-per-page="InventoryItemsPerPage" class="pagination-sm">
     </uib-pagination>
 
+</div>
 </div>
