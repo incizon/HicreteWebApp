@@ -130,7 +130,7 @@ $operationObject=new Payroll();
            }
            else{
                $connect->rollBack();
-               $message = "Could Not Add Employeee...!!!";
+               $message = "Could Not Add Employee...!!!";
                $arr = array('msg' => '', 'error' => $message);
                $jsn = json_encode($arr);
                echo($jsn);
@@ -138,13 +138,22 @@ $operationObject=new Payroll();
 
            break;
        case 'searchLeave':
-           $message = "Leave Details";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
 
+           if(!$operationObject->getLeaveDetails($data,$userId)){
+               $message = "Leave Details Not Available...!!!";
+               echo AppUtil::getReturnStatus("fail",$message);
+           }
 
            break;
+
+     case 'changeLeaveStatus':
+
+                if(!$operationObject->changeLeaveStatus($data)){
+                    $message = "Could not Cancel Leave...!!!";
+                    echo AppUtil::getReturnStatus("fail",$message);
+                }
+
+            break;
        case 'searchLeaveByDate':
            $message = "Leave Details by Date";
            $arr = array('msg' => $message, 'error' => '');
@@ -153,6 +162,14 @@ $operationObject=new Payroll();
 
 
            break;
+     case 'getYears':
+
+         if(!$operationObject->getYears()){
+             $message = "Year Details Not Available...!!!";
+             echo AppUtil::getReturnStatus("fail",$message);
+         }
+
+         break;
 
        case 'searchLeaveByEmployee':
            $message = "Leave Details by Employee";

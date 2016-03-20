@@ -192,9 +192,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
 myApp.controller('ApplyForLeaveController', function($scope,$http) {
 
     $scope.leaveDetails={
-
-        employee:"Namdev Devmare",
-        approver:"Atul Dhatrak",
+        userId:"",
         status:"pending",
         remaining:10,
         operation:""
@@ -215,7 +213,9 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
             .success(function (data) {
 
                 console.log(data);
-                $scope.employeeData=data;
+                $scope.employeeName=data.employeeName;
+                $scope.approverName=data.approverName;
+                $scope.leaveDetails.userId=data.userId;
 
             })
             .error(function (data, status, headers, config) {
@@ -374,46 +374,37 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
 
 myApp.controller('ShowLeavesController', function($scope,$http) {
 
-    $scope.leaveDetails=[
-        {
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        },
-        {
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        },
-        {
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        }
-
-
-    ];
 
     $scope.leaves={
-        operation:""
+        operation:"",
+        fromDate:"",
+        toDate:""
+    }
+
+
+    $scope.showFromDate=function(){
+
+        $scope.showFrom.opened=true;
+    }
+
+    $scope.showToDate=function(){
+
+        $scope.showTo.opened=true;
+    }
+
+    $scope.showTo={
+        opened:false
+    }
+    $scope.showFrom={
+        opened:false
     }
     $scope.SearchLeave=function(){
 
         $scope.errorMessage="";
         $scope.warningMessage="";
+        $('#loader').css("display","block");
 
         $scope.leaves.operation="searchLeave";
-
-        $('#loader').css("display","block");
 
         var config = {
             params: {
@@ -422,31 +413,71 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
         };
 
         $http.post("Payroll/php/PayrollFacade.php", null, config)
-            .success(function (data) {
+            .success(function (data, status, headers, config) {
                 console.log(data);
-                if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
-
-                    setTimeout(function() {
-                        if(data.msg!=""){
-                            $('#warning').css("display","none");
-                        }
-                    }, 3000);
+                if(data.status==="success") {
+                    $scope.leavesDetails = data.message;
+                    $scope.totalItems = $scope.leavesDetails.length;
+                    $('#loader').css("display","none");
                 }
-                $scope.loading=false;
-                $('#loader').css("display","none");
-                if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                else{
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
                     $('#error').css("display","block");
                 }
             })
-            .error(function (data, status, headers, config) {
+            .error(function (data, status, headers) {
+                $scope.loading=false;
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+                $scope.errorMessage="Could Not Fetch Data";
                 $('#error').css("display","block");
             });
+    }
 
+    $scope.changeStatus=function(applicationId){
+
+        for(var i=0;i<$scope.leavesDetails.length;i++){
+
+                if(applicationId==$scope.leavesDetails[i].application_id){
+                    $scope.leavesDetails[i].status='cancel';
+                }
+        }
+
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
+        $scope.leaves.applicationId=applicationId;
+        $scope.leaves.operation="changeLeaveStatus";
+
+        var config = {
+            params: {
+                details: $scope.leaves
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+
+            .success(function (data) {
+                console.log(data);
+                if(data.status==="success") {
+                    $scope.warningMessage = data.message;
+                    $('#warning').css("display","block");
+                    $('#loader').css("display","none");
+                }
+                else{
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
+                    $('#error').css("display","block");
+                }
+            })
+            .error(function (data, status, headers) {
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                $scope.errorMessage="Could not send ";
+                $('#error').css("display","block");
+            });
 
     }
 });
@@ -534,41 +565,34 @@ myApp.controller('SearchLeaveByEmployeeController', function($scope,$http) {
 
 myApp.controller('SearchLeaveByDateController', function($scope,$http) {
 
-    $scope.leaveDetails=[
-        {
-            leaveBy:"Namdev",
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        },
-        {
-            leaveBy:"Atul",
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        },
-        {
-            leaveBy:"Ajit",
-            fromDate:"02-02-2016",
-            toDate:"03-03-2016",
-            reason:"Personal",
-            type:"Paid",
-            status:"rejeted",
-            applicationDate:"01-01-2016"
-        }
-
-
-    ];
+    $scope.leaveDetails=[];
 
     $scope.leaves={
         opeartion:""
     }
+
+    $scope.searchBy='Year';
+    $scope.getYears=function(){
+
+        $scope.leaves.operation="getYears";
+        var config = {
+            params: {
+                details: $scope.leaves
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $scope.years=data;
+
+            })
+            .error(function (data, status, headers, config) {
+
+
+            });
+    }
+
+    $scope.getYears();
     $scope.searchByDate=function(){
 
         $scope.errorMessage="";

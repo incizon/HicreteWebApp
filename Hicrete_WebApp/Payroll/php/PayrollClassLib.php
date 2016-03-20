@@ -144,8 +144,7 @@
                 $connect = $db->getConnection();
 
                 $applicationId=AppUtil::generateId();
-                $leaveAppliedBy=$data->employee;
-
+                $leaveAppliedBy=$data->userId;
                 $date1 = new DateTime($data->fromDate);
                 $fromDate = $date1->format('Y-m-d');
                 $date2 = new DateTime($data->toDate);
@@ -254,10 +253,12 @@
                 $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
                 $result_array['approverName']=$result2['firstName']." ".$result2['lastName'];
 
-                $stmt3=$connect->prepare("SELECT firstName,lastName FROM userMaster WHERE userId=:userId");
+                $stmt3=$connect->prepare("SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId");
                 $stmt3->bindParam(':userId',$userId);
                 $stmt3->execute();
                 $result3=$stmt3->fetch(PDO::FETCH_ASSOC);
+
+                $result_array['userId']=$result3['userId'];
                 $result_array['employeeName']=$result3['firstName']." ".$result3['lastName'];
 
                 echo  json_encode($result_array);
@@ -265,6 +266,93 @@
 
             }
 
+            public function getLeaveDetails($data,$userId){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $json_response=array();
+
+                if(!empty($data->fromDate) && !empty($data->toDate)){
+                    $date1 = new DateTime($data->fromDate);
+                    $fromDate = $date1->format('Y-m-d');
+                    $date2 = new DateTime($data->toDate);
+                    $toDate = $date2->format('Y-m-d');
+                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate AND leave_applied_by=:userId");
+
+                    $stmt1->bindParam(':userId',$userId);
+                    $stmt1->bindParam(':fromDate',$fromDate);
+                    $stmt1->bindParam(':toDate',$toDate);
+                }
+                else{
+                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE leave_applied_by=:userId");
+                    $stmt1->bindParam(':userId',$userId);
+                }
+
+
+                if($stmt1->execute()){
+
+                    while($result1=$stmt1->fetch(PDO::FETCH_ASSOC)){
+
+                        $leaves=array();
+                        $leaves['from_date']=$result1['from_date'];
+                        $leaves['to_date']=$result1['to_date'];
+                        $leaves['type_of_leaves']=$result1['type_of_leaves'];
+                        $leaves['reason']=$result1['reason'];
+                        $leaves['status']=$result1['status'];
+                        $leaves['application_date']=$result1['application_date'];
+                        $leaves['application_id']=$result1['application_id'];
+
+                        array_push($json_response, $leaves);
+                    }
+
+                    if(sizeof($json_response)>0){
+
+                        echo AppUtil::getReturnStatus("success",$json_response);
+                        return true;
+                    }
+                }
+                else{
+
+                    return false;
+                }
+
+
+            }
+             public function changeLeaveStatus($data){
+
+                 $applicationId=$data->applicationId;
+
+                 $db = Database::getInstance();
+                 $connect = $db->getConnection();
+
+                 $stmt1=$connect->prepare("UPDATE leave_application_master
+                                            SET status='cancel'
+                                            WHERE application_id=:applicationId
+                                          ");
+                 $stmt1->bindParam(':applicationId',$applicationId);
+                      if($stmt1->execute()){
+                          $message="Leave Status Changed Successfully";
+                          echo AppUtil::getReturnStatus("success",$message);
+                          return true;
+                      }
+                     else{
+                          return false;
+                     }
+                }
+
+            public function getYears(){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+                $stmt=$connect->prepare("SELECT caption_of_year FROM attendance_year ");
+
+                if($stmt->execute()){
+
+                    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                    return true;
+                }
+            }
         }
 
 ?>
