@@ -43,6 +43,8 @@ configService.getAllAccessPermission($http,$scope);
            .success(function (data)
            {
                $scope.roleDisabled=false;
+               $scope.showAccessError=true;
+               $scope.roleSubmitted=true;
              if(data.status=="Successful"){
                  $scope.loading=false;
                  $('#loader').css("display","none");
@@ -66,6 +68,9 @@ configService.getAllAccessPermission($http,$scope);
                          });
                      }, 3000);
              }else{
+                 $scope.roleDisabled=false;
+                 $scope.showAccessError=true;
+                 $scope.roleSubmitted=true;
                  $scope.loading=false;
                  $('#loader').css("display","none");
                  $scope.errorMessage="Role not added..";
@@ -75,8 +80,9 @@ configService.getAllAccessPermission($http,$scope);
                          $('#error').css("display","none");
                      });
                  }, 3000);
-             } 
-              clearRoleForm();       
+             }
+              window.location.reload(true);
+
            })
            .error(function (data, status, headers, config)
            {
@@ -248,7 +254,7 @@ userType:""
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
              } 
-             window.location="dashboard.php#/Config";
+             window.location.reload=true;
             // $scope.clearUserForm();
                      
            })
@@ -377,7 +383,7 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
 
                 })
                 .error(function (data, status, headers, config) {
-                    doShowAlert("Failure", "Error Occurred");
+                    alert("Error Occurred:"+data);
 
 
                 });
@@ -539,7 +545,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                alert("Error Occured"+data);
             });
 
 
@@ -586,7 +592,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                    doShowAlert("Failure",data.message);
+                    alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -595,7 +601,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                alert("Error Occured"+data);
             });
     }
     $scope.loadAccessPermission();
@@ -676,7 +682,8 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    //doShowAlert("Failure",data.message);
+                    alert(data.message);
+
                 }else{
                     console.log(data);
                     $rootScope.AllAccessPermissions=data.message;
@@ -687,7 +694,8 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                alert("Error Occured"+data);
+
             });
 
     }
@@ -1017,7 +1025,7 @@ $scope.addCompany=function(){
            })
            .error(function (data, status, headers, config)
            {
-             doShowAlert("Failure","Error Occurred");
+               alert("Error Occured"+data);
              
            });
       $scope.submitted=false;
@@ -1085,7 +1093,7 @@ $scope.addWarehouse=function(){
            })
            .error(function (data, status, headers, config)
            {
-             doShowAlert("Failure","Error Occurred");
+               alert("Error Occured"+data);
              
            });
       $scope.warehouseSubmitted=false;
@@ -1151,7 +1159,7 @@ $scope.buttonDisabled=true;
                      {
                      
                        if(data.status!="Successful"){
-                          doShowAlert("Failure",data.message);
+                           alert(data.message);
                        }else{
                             
                             $scope.tempAccess=data.message.requestDetails;
@@ -1162,7 +1170,7 @@ $scope.buttonDisabled=true;
                      })
                      .error(function (data, status, headers, config)
                      {
-                       doShowAlert("Failure","Error Occured");
+                         alert("Error Occured"+data);
                      });
 
 
@@ -1189,15 +1197,15 @@ $scope.buttonDisabled=true;
                      {
                      
                        if(data.status!="Successful"){
-                          doShowAlert("Failure",data.message);
+                           alert(data.message);
                        }else{
-                          doShowAlert("Success","Operation Successful");      
+                          alert("Request Added Successfully");
                        }
 
                      })
                      .error(function (data, status, headers, config)
                      {
-                       doShowAlert("Failure","Error Occured");
+                         alert("Error Occured"+data);
                      });
  	          }
 
@@ -1231,7 +1239,7 @@ $scope.exemptedAccessList=[];
                      {
                      
                        if(data.status!="Successful"){
-                          doShowAlert("Failure",data.message);
+                           alert(data.message);
                        }else{
                             configService.marshalledAccessList(data.message,$scope.exemptedAccessList);
                        }
@@ -1239,7 +1247,7 @@ $scope.exemptedAccessList=[];
                      })
                      .error(function (data, status, headers, config)
                      {
-                       doShowAlert("Failure","Error Occured");
+                         alert("Error Occured"+data);
                      });
 
           $scope.clearForm=function(){
@@ -1283,11 +1291,12 @@ $scope.exemptedAccessList=[];
                      {
                         
                        if(data.status!="Successful"){
-                          doShowAlert("Failure",data.message);
-                          $scope.submitDisable=false;
+
+                           alert(data.message);
+                           $scope.submitDisable=false;
                           $scope.clearDisable=false;
                        }else{
-                          doShowAlert("Success","Access Request Added");
+                          alert("Access Request Added");
                           $scope.clearForm();
                           window.location="dashboard.php#/Config";    
                        }
@@ -1295,7 +1304,7 @@ $scope.exemptedAccessList=[];
                      })
                      .error(function (data, status, headers, config)
                      {
-                       doShowAlert("Failure","Error Occured");
+                         alert("Error Occured"+data);
                        $scope.submitDisable=false;
                         $scope.clearDisable=false;
                      });
@@ -1340,8 +1349,8 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
 
                 if(data.status!="Successful"){
 
-                     console.log(data);
-
+                    console.log(data);
+                    alert(data.message);
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
@@ -1356,7 +1365,7 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                alert("Error Occured"+data);
             });
 
     };
@@ -1393,7 +1402,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
         {
 
             if(data.status!="Successful"){
-                doShowAlert("Failure",data.message);
+                alert(data.message);
             }else{
                 configService.marshalledAccessList(data.message,$scope.roleAccessList);
                 console.log($scope.roleAccessList);
@@ -1518,7 +1527,7 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
             })
             .error(function (data, status, headers, config)
             {
-                doShowAlert("Failure","Error Occured");
+                alert("Error Occured"+data);
             });
 
     }
