@@ -35,9 +35,13 @@ $scope.getSupplier=function(supplier)
             }
         };
 
+        $scope.loading=true;
+        $('#loader').css("display","block");
         $http.post("Inventory/php/supplierSearch.php",null, config)
             .success(function (data)
             {
+                $scope.loading=false;
+                $('#loader').css("display","none");
                 console.log(data);
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
