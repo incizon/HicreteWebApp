@@ -50,6 +50,11 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     var isProductPkgingTable = false;
 
     //Available Products
+    //inventoryService.getProducts($scope, $http);
+
+    inventoryService.getSavedProducts($scope);
+
+
     inventoryService.getProducts($scope, $http);
     // inventoryService.getSavedProducts($scope);
     /*
@@ -93,7 +98,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                 $('#loader').css("display","none");
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
-                    alert(data.msg);
+                    //alert(data.msg);
                     $('#warning').css("display","block");
                 }
                 setTimeout(function() {
@@ -108,7 +113,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 
                 if(data.msg==""){
                     $scope.errorMessage=data.error;
-                    alert(data.error);
+                    //alert(data.error);
                     $('#error').css("display","block");
                 }
                 console.log("IN POST OF add product success");
@@ -119,7 +124,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             .error(function (data, status, headers, config) {
                 console.log(data.error);
 
-                alert(data);
+                //alert(data);
                 $('#loader').css("display","none");
                 $scope.errorMessage=data.error;
                 $('#error').css("display","block");

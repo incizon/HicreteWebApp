@@ -593,16 +593,24 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
            });
             
         }
+
+
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
 
         $scope.saveFollowupDetails=function(size,followupDetails){
-
 
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'FollowupForm.html',
                 controller:  function ($scope, $uibModalInstance,followupDetails) {
 
+                    $scope.taskStartDate = function(){
+                        $scope.taskStart.opened = true;
+                    };
+
+                    $scope.taskStart = {
+                        opened:false
+                    };
 
                     $scope.followupDetails = followupDetails;
 
@@ -639,9 +647,6 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
-
-
-
 
 
 });
@@ -722,3 +727,4 @@ myApp.directive('hicretemodal', function () {
       }
     };
   });
+
