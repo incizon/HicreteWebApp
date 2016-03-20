@@ -42,7 +42,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
-    $scope.loading=false;
+    $scope.loading="";
     var isProductMasterTable = false;
     var isMaterialTable = false;
     var isPrductDetailsTable = false;
@@ -52,7 +52,9 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 
     //Available Products
     //inventoryService.getProducts($scope, $http);
+
     inventoryService.getSavedProducts($scope);
+
     /*
      Start of Pagination Function
      */
@@ -206,11 +208,9 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                         });
                     }, 3000);
                 }
-                setTimeout(function() {
-                    $scope.apply(function () {
+
                         window.location.reload = true;
-                    });
-                },1000);
+
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
