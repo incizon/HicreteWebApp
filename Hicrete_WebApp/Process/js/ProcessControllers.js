@@ -2,10 +2,47 @@
  * Created by Atul on 11-02-2016.
  */
 
+myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $log,AppService){
+    $scope.projectDetails={
+        projectName:'',
+        state:'',
+        address:'',
+        country:'',
+        city:'',
+        pincode:'',
+        pointOfContactName:'',
+        pointOfContactEmailId:'',
+        pointOfContactLandlineNo:'',
+        pointfContactMobileNo:'',
+        projectManagerId:'',
+        projectSource:''
+    }
+
+    $scope.Companies=[];
+    AppService.getCompanyList($http,$scope);
+
+    $scope.projectManagers=[];
+    AppService.getProjectManagers($http,$scope);
+    console.log("In Project Creation Controller");
+
+    /*
+    var companiesInvolved=[];
+    for(var i=0;i<$scope.Companies.length;i++){
+        if($scope.Companies[i].checkVal){
+            companiesInvolved.push($scope.Companies[i]);
+        }
+
+    }*/
 
 
+});
 
-myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log){
+
+myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log,$stateParmas){
+
+    $scope.project=$stateParmas.projectToModify;
+
+
     $scope.animationsEnabled=true;
 
    $scope.scheduleFollowup=function(size) {
@@ -523,7 +560,11 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
 
 myApp.controller('viewProjectController',function($scope,$http){
 
-
+    $scope.searchBy='';
+    $scope.searchKeyword='';
+    $scope.ProjectPerPage=2;
+    $scope.currentPage=1;
+    $scope.totalItems=5;
     $scope.Projects=[
         {
             "project_id": "1",
@@ -572,6 +613,18 @@ myApp.controller('viewProjectController',function($scope,$http){
         }
 
     ];
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.ProjectPerPage;
+        end = begin + $scope.ProjectPerPage;
+        index = $scope.Projects.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
 });
 
 myApp.controller('ModifyProjectController',function($scope,$http) {
