@@ -72,6 +72,14 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     //};
     //$scope.todayDate();
 
+    $scope.openFollowDate = function() {
+        $scope.followup.opened = true;
+    };
+
+    $scope.followup = {
+        opened: false
+    };
+
 
     /* to show package details while creating applicator */
 
