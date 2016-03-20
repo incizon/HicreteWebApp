@@ -29,7 +29,7 @@ myApp.service('ApplicatorService',function(){
 
 
 
-						//if(data.msg==""){
+						if(data.msg==""){
 							$scope.errorMessage="Unable to create Applicator...";
 							$('#error').css("display","block");
 							setTimeout(function() {
@@ -39,7 +39,7 @@ myApp.service('ApplicatorService',function(){
 									}
 								});
 							}, 3000);
-						//}
+						}
 							setTimeout(function(){
 									window.location.reload(true);
 							},6000);
