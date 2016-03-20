@@ -12,6 +12,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.applicatorDetails={
 
+        vatnumber:"",
+        cstnumber:"",
+        servicetaxnumber:"",
+        pannumber:"",
         operation:"",
         packageEdited:"false",
         elementDetails:[]
@@ -49,7 +53,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     $scope.today = function() {
         $scope.applicatorDetails.paymentDate = new Date();
-        $scope.applicatorDetails.followupdate = new Date();
+        //$scope.applicatorDetails.followupdate = new Date();
     };
     $scope.today();
 
@@ -67,14 +71,6 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     //    $scope.applicatorDetails.followupdate = new Date();
     //};
     //$scope.todayDate();
-
-    $scope.openFollowDate = function() {
-        $scope.followup.opened = true;
-    };
-
-    $scope.followup = {
-        opened: false
-    };
 
 
     /* to show package details while creating applicator */
@@ -104,16 +100,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                         element_quantity:$scope.packages[pindex].elementType[index].element_quantity,
                         element_rate:$scope.packages[pindex].elementType[index].element_rate,
 
-
                     });
-
-
                 }
-
             }
-
         }
-
     }
 
     /* if package edited then set packageEdited to true and editPackage to true adn hide package details*/
@@ -129,23 +119,17 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     $scope.add = function (noOfMaterials) {
 
         console.log(noOfMaterials);
-
         for (var i = 0; i < noOfMaterials; i++) {
             $scope.addField();
         };
-
-
     };
 
     $scope.clear =function() {
-
         $scope.applicatorDetails.elementDetails.splice(0,$scope.applicatorDetails.elementDetails.length);//Remove items in array elementType
-
     };
 
     //Removing field selected
     $scope.remove= function(index){
-
         $scope.applicatorDetails.elementDetails.splice(index,1); //remove item by index
     };
 
@@ -213,22 +197,28 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         }
         if(($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes')){
-
+            $scope.loading = false;
+            $('#loading').css('display','none');
 
             //$scope.showModal = true;
             console.log("Half Amount Paid");
             applicatorDetails.paymentStatus="No";
-
-
 
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
 
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
+
+                    $scope.followup = {
+                        opened: false
+                    };
+
 
                     $scope.applicatorDetails = applicatorDetails;
-
                     $scope.ok = function () {
 
                         ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
@@ -255,18 +245,22 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             $scope.toggleAnimation = function () {
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
-
-
         }
         if($scope.applicatorDetails.received=='No'){
-            //$scope.showModal = true;
+
             console.log("No Amount paid");
             applicatorDetails.paymentStatus="No";
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
 
+                    $scope.followup = {
+                        opened: false
+                    };
 
                     $scope.applicatorDetails = applicatorDetails;
 
@@ -297,7 +291,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
-
+        $('#loader').css("display","none");
 
     };
 
@@ -311,7 +305,6 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
     };
 
-
 });
 
 /* End of Applicator Controller */
@@ -323,12 +316,12 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 5;
-    $scope.searchExpression=undefined;
-    $scope.searchKeyword=undefined;
+    $scope.searchExpression;
+    $scope.searchKeyword;
 
     $scope.applicatorDetails={
-        searchExpression:"",
-        searchKeyword:"",
+        searchExpression:" ",
+        searchKeyword:" ",
         operation:""
     };
 
@@ -338,9 +331,11 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
              $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
              $scope.applicatorDetails.operation='viewTentativeApplicators';
 
+         console.log($scope.applicatorDetails);
              $scope.loading=true;
              $scope.errorMessage="";
              $scope.warningMessage="";
+
              $('#loader').css("display","block");
 
                 var config = {
@@ -350,48 +345,31 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
                 };
 
-             if($rootScope.tentativeApplicators.length==0) {
-
-
                  $http.post("Applicator/php/Applicator.php", null, config)
 
                      .success(function (data, status, headers, config) {
 
-                         $rootScope.tentativeApplicators = data;
-                         $scope.totalItems = $rootScope.tentativeApplicators.length;
-                         if(data.msg!=""){
-                            $scope.loading=false;
-                            $('#loader').css("display","none");
-
-                             $scope.warningMessage="Tentative Applicator found successfully..";
-                             $('#warning').css("display","block");
+                         console.log(data);
+                         if(data.status==="success") {
+                             $rootScope.tentativeApplicators = data.message;
+                             $scope.totalItems = $rootScope.tentativeApplicators.length;
+                             $('#loader').css("display","none");
                          }
-                         setTimeout(function() {
-                             $scope.$apply(function() {
-                                 if(data.msg!=""){
-                                     $('#warning').css("display","none");
-                                 }
-                             });
-                         }, 3000);
-
-                         $scope.loading=false;
-                         $('#loader').css("display","none");
-                         if(data.msg==""){
-                             $scope.errorMessage="Tentative Applicator not found..";
+                         else{
+                             $scope.loading=false;
+                             $('#loader').css("display","none");
+                             $scope.errorMessage=data.message;
                              $('#error').css("display","block");
+
                          }
-                         console.log($rootScope.tentativeApplicators);
                      })
 
                      .error(function (data, status, headers) {
-                         console.log(data);
                          $scope.loading=false;
                          $('#loader').css("display","none");
-                         $scope.errorMessage="Tentative Applicator not found..";
+                         $scope.errorMessage="Could Not Fetch Data";
                          $('#error').css("display","block");
                      });
-
-             }
 
     }
 
@@ -417,37 +395,38 @@ myApp.controller('ViewTentativeApplicatorController',function($scope,$http,$stat
         purpose:"toView"
     }
 
+    $scope.getTentativeApplicatorDetails=function(){
 
-    $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
-    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+        $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
+        $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
 
-    var config = {
-        params: {
-            data: $scope.applicatorDetails
-        }
+        var config = {
+            params: {
+                data: $scope.applicatorDetails
+            }
 
-    };
+        };
 
-    $http.post("Applicator/php/Applicator.php", null, config)
+        $http.post("Applicator/php/Applicator.php", null, config)
 
-        .success(function (data,status,headers,config) {
+            .success(function (data,status,headers,config) {
 
-            $scope.tentativeApplicatorsDetails = data;
-            console.log(data);
+                $scope.tentativeApplicatorsDetails = data;
+                console.log(data);
 
-        })
+            })
 
-        .error(function (data, status, headers) {
-            console.log(data);
+            .error(function (data, status, headers) {
+                console.log(data);
 
-        });
+            });
+    }
 
-
-
+    $scope.getTentativeApplicatorDetails();
 
 });
 
-myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,ApplicatorService,$stateParams){
+myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$rootScope,$stateParams){
 
 
     $scope.applicatorDetails={
@@ -460,34 +439,48 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,App
         operation:""
     };
 
-    $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
-    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+    $scope.getTentativeApplicatorDetails=function(){
 
-    var config = {
-        params: {
-            data: $scope.applicatorDetails
-        }
+        $scope.applicatorDetails.operation="getTentativeApplicatorDetails";
+        $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
 
-    };
+        var config = {
+            params: {
+                data: $scope.applicatorDetails
+            }
+        };
 
         $http.post("Applicator/php/Applicator.php", null, config)
+            .success(function (data, status, headers, config) {
+                $scope.tentativeApplicatorsDetails = data;
+                console.log($scope.tentativeApplicatorsDetails);
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+            });
+    }
 
-        .success(function (data, status, headers, config) {
-
-            $scope.tentativeApplicatorsDetails = data;
-            console.log($scope.tentativeApplicatorsDetails);
-
-        })
-
-        .error(function (data, status, headers) {
-            console.log(data);
-
-        });
-
+    $scope.getTentativeApplicatorDetails();
 
     $scope.modify=function() {
         $scope.tentativeApplicatorsDetails.operation="modifyApplicatorDetails";
-        ApplicatorService.modifyApplicatorDetails($scope, $http, $scope.tentativeApplicatorsDetails);
+        var config = {
+            params: {
+                data: $scope.tentativeApplicatorsDetails
+            }
+        };
+
+        $http.post("Applicator/php/Applicator.php", null, config)
+
+            .success(function (data, status, headers, config) {
+
+                console.log(data);
+                $rootScope.tentativeApplicators=[];
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+
+            });
     }
 
 });
@@ -524,47 +517,31 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
             params: {
                 data: $scope.applicatorDetails
             }
-
         };
-
-        if($rootScope.permanentApplicators.length==0) {
-
-
             $http.post("Applicator/php/Applicator.php", null, config)
 
                 .success(function (data, status, headers, config) {
-                    $rootScope.permanentApplicators = data;
-                    $scope.totalItems =$rootScope.permanentApplicators.length;
-                    if(data.msg!=""){
-                        $scope.warningMessage=data.msg;
-                        $('#warning').css("display","block");
-                    }
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.msg!=""){
-                                $('#warning').css("display","none");
-                            }
-                        });
-                    }, 3000);
 
+                    console.log(data);
+                    if(data.status==="success") {
+                        $rootScope.permanentApplicators = data.message;
+                        $scope.totalItems = $rootScope.permanentApplicators.length;
+                        $('#loader').css("display","none");
+                    }
+                    else{
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $scope.errorMessage=data.message;
+                        $('#error').css("display","block");
+
+                    }
+                })
+                .error(function (data, status, headers) {
                     $scope.loading=false;
                     $('#loader').css("display","none");
-                    if(data.msg==""){
-                        $scope.errorMessage=data.error;
-                        console.log($scope.errorMessage);
-                        $('#error').css("display","block");
-                    }
-                    console.log($rootScope.permanentApplicators);
-                })
-
-                .error(function (data, status, headers) {
-                    console.log(data.error);
-                    $('#loader').css("display","none");
-                    $scope.errorMessage=data.error;
+                    $scope.errorMessage="Could Not Fetch Data";
                     $('#error').css("display","block");
                 });
-
-        }
 
     }
 
@@ -581,45 +558,42 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
 });
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stateParams){
 
-
-
     $scope.applicatorDetails={
         applicator_master_id:"",
         operation:"",
         purpose:"toView"
     }
 
-    $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
-    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+      $scope.getPermanentApplicatorDetails=function(){
 
-    var config = {
-        params: {
-            data: $scope.applicatorDetails
-        }
+          $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
+          $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
 
-    };
+          var config = {
+              params: {
+                  data: $scope.applicatorDetails
+              }
+          };
+          $http.post("Applicator/php/Applicator.php", null, config)
 
-    $http.post("Applicator/php/Applicator.php", null, config)
+              .success(function (data, status, headers, config) {
 
-        .success(function (data, status, headers, config) {
+                  $scope.permanentApplicatorsDetails = data;
+                  console.log(data);
 
-            $scope.permanentApplicatorsDetails = data;
-            console.log(data);
+              })
 
-        })
+              .error(function (data, status, headers) {
+                  console.log(data);
 
-        .error(function (data, status, headers) {
-            console.log(data);
+              });
+      }
 
-        });
-
-
-
+    $scope.getPermanentApplicatorDetails();
 
 });
 
-myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,ApplicatorService,$stateParams){
-
+myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$rootScope,$stateParams){
 
     $scope.applicatorDetails={
         applicator_master_id:"",
@@ -632,47 +606,59 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,App
         operation:""
     };
 
-    $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
-    $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
+    $scope.getPermanentApplicatorDetails=function(){
 
-    var config = {
-        params: {
-            data: $scope.applicatorDetails
-        }
+        $scope.applicatorDetails.operation="getPermanentApplicatorDetails";
+        $scope.applicatorDetails.applicator_master_id=$stateParams.applicator_id;
 
-    };
+        var config = {
+            params: {
+                data: $scope.applicatorDetails
+            }
+        };
 
+        $http.post("Applicator/php/Applicator.php", null, config)
 
-    $http.post("Applicator/php/Applicator.php", null, config)
-
-        .success(function (data, status, headers, config) {
-
-            $scope.permanentApplicatorsDetails = data;
-            console.log($scope.permanentApplicatorsDetails);
-
-        })
-
-        .error(function (data, status, headers) {
-            console.log(data);
-
-        });
-
-
-    $scope.modify=function() {
-        $scope.permanentApplicatorsDetails.operation="modifyApplicatorDetails";
-        ApplicatorService.modifyApplicatorDetails($scope, $http, $scope.permanentApplicatorsDetails);
+            .success(function (data, status, headers, config) {
+                $scope.permanentApplicatorsDetails = data;
+                console.log($scope.permanentApplicatorsDetails);
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+            });
     }
 
+    $scope.getPermanentApplicatorDetails();
+
+    $scope.modify=function() {
+
+        $scope.permanentApplicatorsDetails.operation="modifyApplicatorDetails";
+        var config = {
+            params: {
+                data: $scope.permanentApplicatorsDetails
+            }
+        };
+
+        $http.post("Applicator/php/Applicator.php", null, config)
+
+            .success(function (data, status, headers, config) {
+
+                console.log(data);
+                $rootScope.permanentApplicators=[];
+
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+
+            });
+        }
 });
 
-
 /*End of view permanent applicator */
-
 
 /* start of applicator payment controller*/
 
 myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
-
 
     $scope.applicatorDetails={
         operation:""
@@ -700,7 +686,6 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
     };
 
     ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
-
 
     $scope.viewApplicatorPaymentDetails=function(enrollmentId){
 
@@ -731,15 +716,12 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
                         payment_mode:$scope.Applicators[index].paymentDetails[index1].payment_mode
 
                     });
-
                 }
                 break;
             }
         }
 
     }
-
-
 
     $scope.getPendingAmount=function(){
         console.log("In Pending amount function");
@@ -759,7 +741,6 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
         }
         else if($scope.applicatorDetails.pendingAmount!=0){
 
-
             applicatorDetails.paymentStatus='No';
 
             var modalInstance = $uibModal.open({
@@ -767,6 +748,14 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
 
+                    //date picker for followup date
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
+
+                    $scope.followup = {
+                        opened: false
+                    };
 
                     $scope.applicatorDetails = applicatorDetails;
 
@@ -816,35 +805,26 @@ myApp.controller('PackageController',function($scope,$http,PackageService){
     $scope.showElementField=false;
     //Clear form Fields
 
-
     $scope.clearFields=function(packageDetails){
 
         packageDetails.packagedescription="";
         packageDetails.packagename="";
         packageDetails.elementDetails=[];
-
     };
 
     //Adding Number of Fields
     $scope.add = function () {
 
-
         $scope.showElementField=true;
 
-
         for (var i = 0; i < $scope.noOfElement; i++) {
-
             $scope.addField();
         };
 
-
     };
 
-
     $scope.clear =function() {
-
         $scope.packageDetails.elementDetails.splice(0,$scope.packageDetails.elementDetails.length);//Remove items in array elementType
-
     };
 
     //Removing field selected
@@ -894,14 +874,11 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
     $scope.packagePerPage=5;
     $scope.currentPackagePage = 1;
 
-
     $scope.packageDetails={
         operation :""
     };
 
-
     PackageService.viewPackages($scope,$http,$scope.packageDetails);
-
     $scope.paginatePackage = function(value) {
 
         var begin, end, index;
@@ -911,9 +888,6 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
 
         return (begin <= index && index < end);
     };
-
-
-
 });
 
 /*

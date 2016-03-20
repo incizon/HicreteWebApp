@@ -3,11 +3,21 @@
         padding-top: 7px;
     }
 </style>
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <!-- START SEARCH -->
+<div class="col-lg-12 col-md-12">
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row stacked">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-8">
                 <div class="input-group push-down-10" >
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
                     <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
@@ -31,24 +41,24 @@
             <table class="table table-actions table-striped">
                 <thead >
                     <tr style="text-align: center;">
-                        <th width="4%" class="tablehead">Inward.No</th>
-                        <th width="14%" class="tablehead">TotalMaterialInwards</th>
+                        <th  class="tablehead">Inward.No</th>
+                        <th  class="tablehead">TotalMaterialInwards</th>
                         <!-- <th width="13%">Company</th> -->
-                        <th width="16%" class="tablehead">Company</th>
-                        <th width="16%" class="tablehead">Warehouse</th>
-                        <th width="10%" class="tablehead">Date</th>
-                        <th width="40%" class="tablehead">Actions</th>
+                        <th  class="tablehead">Company</th>
+                        <th  class="tablehead">Warehouse</th>
+                        <th  class="tablehead">Date</th>
+                        <th  class="tablehead">Actions</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
-                        <td width="5%">{{product.inwardno}}</td>
-                        <td width="20%">{{product.materialDetails.length}}</td>
-                        <td width="10%">{{product.companyName}}</td>
-                        <td width="15%">{{product.warehouseName}}</td>
-                        <td width="15%">{{product.dateofentry}}</td>
-                        <td width="35%">
+                        <td>{{product.inwardno}}</td>
+                        <td>{{product.materialDetails.length}}</td>
+                        <td>{{product.companyName}}</td>
+                        <td>{{product.warehouseName}}</td>
+                        <td>{{product.dateofentry}}</td>
+                        <td >
                             <button data-target="#viewInwardDetails" ng-click="getViewDataObject(product,viewProduct.materialDetails)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
                             <div class="modal fade inventoryDetails" id="viewInwardDetails" role="dialog">
                                 <div class="modal-dialog">
@@ -90,67 +100,7 @@
                                                 </tr>
                                             </table>
                                             <div class="row">
-                                                <!--<div class="col-md-6 padRight">-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Inward Number :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<div class="input-group pt7">-->
-                                                                <!--{{viewProduct.inwardno}}-->
-                                                                <!--</div>                                          -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Total Material Inwards :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.materialDetails.length}}-->
-                                                                    <!--<button data-target="#viewMaterialDetails" ng-click="getMaterialObject(viewProduct.materialDetails)" data-toggle="modal"-->
-                                                                            <!--class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>-->
-                                                                <!--</div>-->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<label class="col-md-4 control-label text-left">Quantity :</label>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<div class="col-md-8">&ndash;&gt;-->
-                                                                <!--&lt;!&ndash;<div class="input-group pt7">&ndash;&gt;-->
-                                                                    <!--&lt;!&ndash;{{viewProduct.quantity}}&ndash;&gt;-->
-                                                                <!--&lt;!&ndash;</div>                       &ndash;&gt;-->
-                                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Company :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.companyName}}-->
-                                                                <!--</div>-->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Date :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.dateofentry}}-->
-                                                                <!--</div>-->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
 
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Warehouse :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.warehouseName}}-->
-                                                                <!--</div>-->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Supervisor :</label>-->
-                                                        <!--<div class="col-md-8">-->
-                                                            <!--<div class="input-group pt7">-->
-                                                                <!--{{viewProduct.supervisorid}}-->
-                                                            <!--</div>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
                                                 <div class="col-md-12">
                                                     <h4 style="text-align: left;"><b>Transport Details of {{viewProduct.inwardno}}</b></h4>
                                                     <table class="table table-actions">
@@ -185,54 +135,7 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Transport :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.transportationmode}}-->
-                                                                <!--</div>-->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Vehicle Number :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.vehicleno}}-->
-                                                                <!--</div>                      -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Transport Cost :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.cost}}-->
-                                                                <!--</div>                      -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Remark :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.remark}}-->
-                                                                <!--</div>                      -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Transport Agency :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.transportagency}}-->
-                                                                <!--</div>                      -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Driver :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                 <!--<div class="input-group pt7">-->
-                                                                    <!--{{viewProduct.drivername}}-->
-                                                                <!--</div>                      -->
-                                                            <!--</div>-->
-                                                    <!--</div> -->
+
                                                 </div>
                                                 <h4 style="text-align: left;"><b>Material Details of {{viewProduct.inwardno}}</b></h4>
                                                 <div class="col-md-8" style="overflow-y: auto;max-height: 200px;">
@@ -243,6 +146,7 @@
                                                             <th class="tablehead">Material</th>
                                                             <th class="tablehead">Quantity</th>
                                                             <th class="tablehead">Packaging Type</th>
+                                                            <th class="tablehead">Packaging Size</th>
                                                             <th class="tablehead">Supplier</th>
                                                         </tr>
                                                         </thead>
@@ -255,6 +159,9 @@
                                                             </td>
                                                             <td>
                                                                 {{materials.packagedunits}}
+                                                            </td>
+                                                            <td>
+                                                                {{materials.packagesize}}
                                                             </td>
                                                             <td>
                                                                 {{materials.suppliername}}
@@ -520,6 +427,7 @@
                                    <th>Material</th>
                                    <th>Quantity</th>
                                    <th>Packaging Type</th>
+                                   <th>Packaging Size</th>
                                    <th>Supplier</th>
                                </tr>
                                </thead>
@@ -532,6 +440,9 @@
                                    </td>
                                    <td>
                                        {{materials.packagedunits}}
+                                   </td>
+                                   <td>
+                                       {{materials.packagesize}}
                                    </td>
                                    <td>
                                        {{materials.suppliername}}
@@ -552,4 +463,6 @@
 
 
 
+</div>
+    <!--END OF SEARCH RESULT -->
 </div>

@@ -90,7 +90,7 @@
                             <div class="help-block"
                                  ng-messages="applicatorForm.firmContactNo.$error"
                                  ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">Contact No is required</span> 
+                                <span style="color:red" ng-message="required">Contact No is required</span>
                                 <span style="color:red" ng-message="pattern">Only digits are allowed</span>
                                 <span style="color:red" ng-message="maxlength">Max 10 digits Contact No allowed</span>
                                 <span style="color:red" ng-message="minlength">Min 8 digits Contact No allowed</span>                                  
@@ -103,19 +103,18 @@
                         <div class="col-md-3">
                             <label class="control-label">Country</label>
                         </div>
-                        <div class="col-md-9">                            
-                            <select class="form-control select" name="firmCountry" ng-model="applicatorDetails.country" required>
-                                <option value="" disabled selected>Choose Country..</option>
-                                <option value="India">India</option>
-                                <option value="America">America</option>
-                                <option value="South Africa">South Africa</option>
-                                <option value="Japan">Japan</option>
-                                <option value="Italy">Italy</option>
-                            </select>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="firmCountry" ng-model="applicatorDetails.country"  pattern="[a-zA-Z ]+"required />
+                            </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.firmCountry.$error"
-                                 ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">Please select country </span>      
+                                 ng-show="formSubmitted">
+
+                                <span style="color:red" ng-message="required">Country name is required</span>
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+
                             </div>   
                         </div>
                     </div>
@@ -125,19 +124,18 @@
                         <div class="col-md-3">    
                             <label class="control-label">State</label>
                         </div>
-                        <div class="col-md-9">                                              
-                            <select class="form-control select" name="firmState"ng-model="applicatorDetails.state" required />
-                                <option value="" disabled selected>Choose State..</option>
-                                <option value="Delhi">Delhi</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Benglore">Benglore</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Culcatta">Culcatta</option>
-                            </select>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="firmState" ng-model="applicatorDetails.state"  pattern="[a-zA-Z ]+" required />
+                            </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.firmState.$error"
-                                 ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">Please select state </span>      
+                                 ng-show="formSubmitted">
+
+                                <span style="color:red" ng-message="required">State name is required</span>
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+
                             </div>  
                         </div>
                     </div>
@@ -147,20 +145,17 @@
                         <div class="col-md-3">
                             <label class="control-label">City</label>
                         </div>
-                        <div class="col-md-9">                                               
-                            <select class="form-control select" name="firmCity" ng-model="applicatorDetails.city" required />
-                                <option value="" disabled selected>Choose City..</option>
-                                <option value="Pune">Pune</option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Nagar">Nagar</option>
-                                <option value="Nasik">Nasik</option>
-                                <option value="Pandharpur">Pandharpur</option>
-                            </select>
+                        <div class="col-md-9">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                <input type="text" class="form-control" name="firmCity" ng-model="applicatorDetails.city"  pattern="[a-zA-Z ]+" required />
+                            </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.firmCity.$error"
-                                 ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">Please select city </span>      
-                            </div>  
+                                 ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">City name is required</span>
+                                <span style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</span>
+                            </div>
                         </div>
                     </div>
                     <!--End of City Field-->                      
@@ -181,7 +176,7 @@
                              <div class="help-block"
                                  ng-messages="applicatorForm.vatNumber.$error"
                                  ng-show="formSubmitted"> 
-                                 <span style="color:red" ng-message="required">Vat No is required</span> 
+                                 <span style="color:red" ng-message="required">Vat No is required</span>
                                 <span style="color:red" ng-message="pattern">Only 11 digits and 1 alphabet is allowed</span>
                                 <span style="color:red" ng-message="maxlength">Max 12 characters Vat No is allowed</span>
                             </div>              
@@ -204,7 +199,7 @@
                                  ng-show="formSubmitted">
                                  <span style="color:red" ng-message="required">CST No is required</span>
                                 <span style="color:red" ng-message="pattern">Only 11 digits and one charcter are allowed</span>
-                                <span style="color:red" ng-message="maxlength">Max 12 characters VST No. is allowed</span>
+                                <span style="color:red" ng-message="maxlength">Max 12 characters CST No. is allowed</span>
                             </div>
                         </div>
                         
@@ -227,9 +222,7 @@
                                 <span style="color:red" ng-message="pattern">Enter a valid service tax number</span>
                                 <span style="color:red" ng-message="maxlength">Max 15 charcters Service Tax No. is allowed</span>
                             </div>
-
                         </div>
-
                     </div>
                     <!--End of Service Tax No. feild-->
                     <!--Start of PAN No. feild-->

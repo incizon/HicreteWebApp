@@ -1,6 +1,6 @@
 <?php
 
-require_once ("database-connection.php");
+require_once ("../../php/Database.php");
 
 include_once ("PayrollClassLib.php");
 
@@ -8,7 +8,8 @@ if (!isset($_SESSION['token'])) {
     session_start();
 }
 
-global $connect;
+$db = Database::getInstance();
+$connect = $db->getConnection();
 
 $userId=$_SESSION['token'];
 
@@ -93,6 +94,10 @@ $operationObject=new Payroll();
          }
 
          break;
+     case 'getEmployeeDetailsForLeave':
+
+                    $operationObject->getEmployeeDetailsForLeave($userId);
+         break;
      case 'createLeave':
 
          $connect->beginTransaction();
@@ -113,22 +118,42 @@ $operationObject=new Payroll();
          }
            break;
 
-       case 'addEmployee':
+       case 'addEmployeeToPayroll':
 
-           $message = "Added Successfully";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
+           $connect->beginTransaction();
+           if($operationObject->addEmployeeToPayroll($data,$userId)){
+               $connect->commit();
+               $message = "Employee Added Successfully";
+               $arr = array('msg' => $message, 'error' => '');
+               $jsn = json_encode($arr);
+               echo($jsn);
+           }
+           else{
+               $connect->rollBack();
+               $message = "Could Not Add Employeee...!!!";
+               $arr = array('msg' => '', 'error' => $message);
+               $jsn = json_encode($arr);
+               echo($jsn);
+           }
 
            break;
        case 'searchLeave':
-           $message = "Leave Details";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
 
+           if(!$operationObject->getLeaveDetails($data,$userId)){
+               $message = "Leave Details Not Available...!!!";
+               echo AppUtil::getReturnStatus("fail",$message);
+           }
 
            break;
+
+     case 'changeLeaveStatus':
+
+                if(!$operationObject->changeLeaveStatus($data)){
+                    $message = "Could not Cancel Leave...!!!";
+                    echo AppUtil::getReturnStatus("fail",$message);
+                }
+
+            break;
        case 'searchLeaveByDate':
            $message = "Leave Details by Date";
            $arr = array('msg' => $message, 'error' => '');
@@ -137,6 +162,14 @@ $operationObject=new Payroll();
 
 
            break;
+     case 'getYears':
+
+         if(!$operationObject->getYears()){
+             $message = "Year Details Not Available...!!!";
+             echo AppUtil::getReturnStatus("fail",$message);
+         }
+
+         break;
 
        case 'searchLeaveByEmployee':
            $message = "Leave Details by Employee";

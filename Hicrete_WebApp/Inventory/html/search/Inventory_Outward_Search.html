@@ -1,8 +1,18 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+<div class="col-lg-12 col-md-12">
 <!-- START SEARCH -->
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row stacked">
-            <div class="col-md-8">
+            <div class="col-lg-8 col-md-8">
                 <div class="input-group push-down-10" >
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
                     <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
@@ -14,10 +24,7 @@
         </div>
     </div>
 </div>
-
 <!-- END SEARCH -->
-
-
    <!-- START SEARCH RESULT -->
    <div class="search-results" ng-controller="SearchController">
 
@@ -90,67 +97,6 @@
                                                 </tr>
                                             </table>
                                             <div class="row">
-                                                <!--<div class="col-md-6 padRight">-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Outward Number :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">-->
-                                                                    <!--{{selectedProduct.outwardno}}-->
-                                                                <!--</label>                                         -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<label class="col-md-4 control-label text-left">Unit Of Measure :</label>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<div class="col-md-8">                       &ndash;&gt;-->
-                                                                <!--&lt;!&ndash;<label class="col-md-4 control-label text-left">{{selectedProduct.unitofmeasure}}&ndash;&gt;-->
-                                                                <!--&lt;!&ndash;</label>                                            &ndash;&gt;-->
-                                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                   <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Total Materials Outward :</label>-->
-                                                            <!--<div class="col-md-8">-->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.materialDetails.length}}-->
-                                                                <!--</label>-->
-                                                                <!--<button data-target="#viewOutwardMaterialDetails" ng-click="getMaterialObject(selectedProduct.materialDetails)" data-toggle="modal"-->
-                                                                        <!--class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>-->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Date of Entry :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.dateofentry}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Under Company :</label>-->
-                                                        <!--<div class="col-md-8">-->
-                                                            <!--<label class="col-md-4 control-label text-left">{{selectedProduct.companyName}}-->
-                                                            <!--</label>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Under Warehouse :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.warehouseName}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-                                                        <!--&lt;!&ndash;<label class="col-md-4 control-label text-left">Packaging :</label>&ndash;&gt;-->
-                                                            <!--&lt;!&ndash;<div class="col-md-8">                       &ndash;&gt;-->
-                                                                <!--&lt;!&ndash;<label class="col-md-4 control-label text-left">{{selectedProduct.packagedunits}}&ndash;&gt;-->
-                                                                <!--&lt;!&ndash;</label>                                            &ndash;&gt;-->
-                                                            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                                    <!--&lt;!&ndash;</div>    &ndash;&gt;-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Remark :</label>-->
-                                                        <!--<div class="col-md-8">-->
-                                                            <!--<label class="col-md-4 control-label text-left">{{selectedProduct.remark}}-->
-                                                            <!--</label>-->
-                                                        <!--</div>-->
-                                                    <!--</div>-->
-                                                <!--</div>-->
                                                 <div class="col-md-12">
                                                     <h4 style="text-align: left;"><b>Transport Details of  {{selectedProduct.outwardno}}</b></h4>
                                                     <table class="table table-actions">
@@ -185,51 +131,18 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Transport Mode :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.transportationmode}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Vehicle Number :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.vehicleno}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Transport Cost :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.cost}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Transport Agency :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.transportagency}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
-                                                    <!--<div class="form-group">-->
-                                                        <!--<label class="col-md-4 control-label text-left">Driver Name :</label>-->
-                                                            <!--<div class="col-md-8">                       -->
-                                                                <!--<label class="col-md-4 control-label text-left">{{selectedProduct.drivername}}-->
-                                                                <!--</label>                                            -->
-                                                            <!--</div>-->
-                                                    <!--</div>-->
+
 
                                                 </div>
                                                 <h4 style="text-align: left;"><b>Material Details of {{selectedProduct.outwardno}}</b></h4>
-                                                <div class="col-md-8" style="overflow-y: auto;max-height: 200px;">
+                                                <div class="col-md-9" style="overflow-y: auto;max-height: 200px;">
                                                     <table class="table table-actions">
                                                         <thead>
                                                         <tr>
                                                             <th class="tablehead">Material</th>
                                                             <th class="tablehead">Quantity</th>
                                                             <th class="tablehead">Packaging Type</th>
+                                                            <th class="tablehead">Packaging Size</th>
                                                         </tr>
                                                         </thead>
                                                         <tr ng-repeat="materials in viewMaterials">
@@ -242,7 +155,9 @@
                                                             <td>
                                                                 {{materials.packagedunits}}
                                                             </td>
-
+                                                            <td>
+                                                                {{materials.packagesize}}
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -528,4 +443,6 @@
            </div>
            <!--End of modal dialog-->
        </div>
+</div>
+    <!-- END SEARCH RESULT -->
 </div>
