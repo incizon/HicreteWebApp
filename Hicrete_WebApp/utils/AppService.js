@@ -71,6 +71,31 @@ myApp.service('AppService', function () {
 
     }
 
+    this.getAllCustomers=function($http,$scope){
+        $('#loader').css("display","block");
+
+        $http.post("php/api/customerlist", null)
+            .success(function (data) {
+                $('#loader').css("display","none");
+                console.log("IN Company Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $scope.customers.push({checkVal:false,customerId:data.message[i].CustomerId,customerName:data.message[i].CustomerName});
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+
+
+    }
+
 
 
 });

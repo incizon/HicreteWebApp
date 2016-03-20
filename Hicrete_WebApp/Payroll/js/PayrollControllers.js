@@ -90,6 +90,13 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
         operation:""
     };
 
+    $scope.pickHolidayDate = function(){
+        $scope.holidayDate.opened = true;
+    };
+
+    $scope.holidayDate = {
+        opened:false
+    };
 
     $scope.getCurrentYearDetails=function(){
         $scope.holidaysDetails.operation="getCurrentYearHolidayDetails";
@@ -197,6 +204,23 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         remaining:10,
         operation:""
     };
+
+    $scope.leaveFrom = function(){
+        $scope.from.opened = true;
+    };
+
+    $scope.from = {
+        opened:false
+    };
+
+    $scope.leaveTo = function(){
+        $scope.to.opened = true;
+    };
+
+    $scope.to = {
+        opened:false
+    };
+
 
     $scope.employeeDetails={
         operation:""

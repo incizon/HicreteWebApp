@@ -24,7 +24,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
             <div class="row">
                 <div class="col-md-4">
 
-                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
+                    <select class="form-control select" name="searchBy" ng-model="searchBy"/>
                     <option value="" disabled selected>Search by </option>>
 
                     <option value="city">City</option>
@@ -36,10 +36,10 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     <div class="input-group" >
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword"/>
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary">Search</button>
+                            <button class="btn btn-primary" ng-click="searchCustomer()">Search</button>
                         </div>
                     </div>
                 </div>
@@ -57,7 +57,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="customer in customerList | filter :paginate | orderBy:name">
+                    <tr ng-repeat="customer in customers | filter :paginate | orderBy:name">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{customer.name}}</td>
                         <td width="10%">{{customer.city}}</td>
@@ -67,7 +67,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                             <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" data-ng-click="showCustomerDetails(customer)">View Other Details</button>
                             <?php
                                 if($hasWrite==1){
-                                    echo "<a ui-sref=\"Process.modifyCustomer\"> <button class=\"btn btn-info\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>
+                                    echo "<a ui-sref=\"Process.modifyCustomer({customerToModify:customer})\"> <button class=\"btn btn-info\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>
                             <button class=\"btn btn-danger\">Delete</button>";
                                 }
                             ?>
@@ -83,9 +83,9 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
 
     </div>
-    <uib-pagination total-items="totalItems" ng-model="currentPage"
+    <uib-pagination total-items="customers.length" ng-model="currentPage"
                     max-size="5" boundary-links="true"
-                    items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+                    items-per-page="customerPerPage" class="pagination-sm">
     </uib-pagination>
 
 

@@ -34,9 +34,13 @@ $scope.getSupplier=function(supplier)
             }
         };
 
+        $scope.loading=true;
+        $('#loader').css("display","block");
         $http.post("Inventory/php/supplierSearch.php",null, config)
             .success(function (data)
             {
+                $scope.loading=false;
+                $('#loader').css("display","none");
                 console.log(data);
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
@@ -71,7 +75,7 @@ $scope.getSupplier=function(supplier)
 
     }
 $scope.searchData=function(supplier){
-     //alert("In search data"+supplier);
+
     var data = {
         operation: "search",
         data: supplier
@@ -85,11 +89,15 @@ $scope.searchData=function(supplier){
         }
     };
 
-//      console.log(supplier);
+    $scope.loading=true;
+    $('#loader').css("display","block");
+      console.log(supplier);
       $http.post("Inventory/php/supplierSearch.php", null,config)
         .success(function (data)
         {
          console.log(data);
+            $scope.loading=false;
+            $('#loader').css("display","none");
             $rootScope.suppliers=data;
          console.log($scope.suppliers);
             $scope.totalItems=$rootScope.suppliers.length;

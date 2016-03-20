@@ -11,40 +11,53 @@ myApp.service('ApplicatorService',function(){
 					$http.post("Applicator/php/Applicator.php", null, config)
 								
 					.success(function (data, status, headers, config){	
-							console.log(data);
-						if(data.msg!=""){
-							$scope.warningMessage=data.msg;
-							$('#warning').css("display","block");
-						}
-						setTimeout(function() {
-							$scope.$apply(function() {
-								if(data.msg!=""){
-									$('#warning').css("display","none");
-								}
-							});
-						}, 3000);
-
+						console.log(data);
 						$scope.loading=false;
 						$('#loader').css("display","none");
+						//if(data.msg!=""){
+							$scope.warningMessage="Applicator Created Successfully...";
+							$('#warning').css("display","block");
+							setTimeout(function() {
+								$scope.$apply(function() {
+									if(data.msg!=""){
+										$('#warning').css("display","none");
+									}
+								});
+							}, 3000);
+						//}
+
+
+
 						if(data.msg==""){
-							$scope.errorMessage=data.error;
+							$scope.errorMessage="Unable to create Applicator...";
 							$('#error').css("display","block");
+							setTimeout(function() {
+								$scope.$apply(function() {
+									if(data.msg!=""){
+										$('#error').css("display","none");
+									}
+								});
+							}, 3000);
 						}
-							//setTimeout(function(){
-							//		window.location.reload(true);
-							//},2000);
+							setTimeout(function(){
+									window.location.reload(true);
+							},6000);
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
-							$scope.errorMessage=data.error;
+							$scope.errorMessage="Unable to create Applicator...";
 							$('#error').css("display","block");
+							setTimeout(function() {
+								$scope.$apply(function() {
+									if(data.msg!=""){
+										$('#error').css("display","none");
+									}
+								});
+							}, 3000);
                         			console.log(data);
 
 						});			
 	};
-
-
-
 	this.getApplicatorPaymentDetails=function($scope,$http,applicatorDetails){
 
 		applicatorDetails.operation='getPaymentDetails';
@@ -84,10 +97,10 @@ myApp.service('ApplicatorService',function(){
 
 		$http.post("Applicator/php/Applicator.php", null,config)
 				.success(function (data, status, headers, config){
-
+					$('#loader').css("display","none");
 					console.log(data.msg);
 					if(data.msg!=""){
-						$scope.warningMessage=data.msg;
+						$scope.warningMessage = "Payment Details Added Successfully..";
 						$('#warning').css("display","block");
 					}
 					setTimeout(function() {
@@ -101,20 +114,20 @@ myApp.service('ApplicatorService',function(){
 					$scope.loading=false;
 					$('#loader').css("display","none");
 					if(data.msg==""){
-						$scope.errorMessage=data.error;
+						$scope.errorMessage="Unable to Add Payment Details..";
 						$('#error').css("display","block");
 					}
 					console.log(data);
-					//setTimeout(function(){
-					//	window.location.reload(true);
-					//},2000);
+					setTimeout(function(){
+						window.location.reload(true);
+					},4000);
 
 				})
 
 				.error(function (data, status, headers){
 					console.log(data);
 					$('#loader').css("display","none");
-					$scope.errorMessage=data.error;
+					$scope.errorMessage="Unable to Add Payment Details..";
 					$('#error').css("display","block");
 				});
 	}

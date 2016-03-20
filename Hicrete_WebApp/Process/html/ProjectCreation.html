@@ -16,6 +16,13 @@
 
                     <div class="col-md-6">
 
+                        <div class="col-md-8">
+                            <select class="form-control select" name="customer" ng-model="projectDetails.customerId">
+                                <option value="" disabled selected>Choose Customer</option>
+                                <option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>
+
+                            </select>
+
                         <div class="form-group">
                             <div class="col-md-4">
                                 <label class="control-label">Project Name :</label>
@@ -275,7 +282,7 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right" data-ng-click="creteProject()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
             <button class="btn  btn-default pull-right">Clear Form</button>
         </div>

@@ -29,9 +29,11 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="caption" ng-model="yearDetails.caption"/>
+                                <input type="text" class="form-control" name="caption" ng-model="yearDetails.caption" required/>
                             </div>
-
+                            <div class="help-block" ng-messages="createYearForm.caption.$error" ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">Caption is required..</span>
+                            </div>
                         </div>
                     </div>
 
@@ -42,10 +44,11 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-
-                                <input type="text" class="form-control" data-ng-click="openStartYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.startDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" show-button-bar="false"/>
+                                <input type="text" class="form-control" name="startDate" data-ng-click="openStartYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.startDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" show-button-bar="false" required/>
                             </div>
-
+                            <div class="help-block" ng-messages="createYearForm.startDate.$error" ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">Start Date is required..</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -55,10 +58,11 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-
-                                <input type="text" class="form-control" data-ng-click="openEndYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.endDate" show-weeks="false" is-open="popup2.opened" datepicker-options="dateOptions" show-button-bar="false"/>
+                                <input type="text" class="form-control" name="endDate" data-ng-click="openEndYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.endDate" show-weeks="false" is-open="popup2.opened" datepicker-options="dateOptions" show-button-bar="false" required/>
                             </div>
-
+                            <div class="help-block" ng-messages="createYearForm.endDate.$error" ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">End Date is required..</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -68,13 +72,14 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="paidLeaves" ng-model="yearDetails.paidLeaves"/>
+                                <input type="text" class="form-control" name="paidLeaves" ng-model="yearDetails.paidLeaves" required/>
                             </div>
-
+                            <div class="help-block" ng-messages="createYearForm.paidLeaves.$error" ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">Number of paid leaves is required..</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
-
                         <div class="col-md-12">
                             <input type="checkbox" ng-model="yearDetails.weeklyOff" name="weeklyoff"> Weekly off
                         </div>
@@ -108,7 +113,7 @@
             <div class="panel-footer">
 
                 <button class="btn btn-default pull-left">Clear Form</button>
-                <button class="btn btn-danger pull-right" data-ng-click="createYear()">Create</button>
+                <button class="btn btn-danger pull-right" data-ng-click="(formSubmitted=true) && createYearForm.$valid &&  createYear()">Create</button>
                 <button class="btn btn-default pull-right">Cancel</button>
             </div>
             <!--End of buttons section-->

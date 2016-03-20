@@ -72,14 +72,6 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     //};
     //$scope.todayDate();
 
-    $scope.openFollowDate = function() {
-        $scope.followup.opened = true;
-    };
-
-    $scope.followup = {
-        opened: false
-    };
-
 
     /* to show package details while creating applicator */
 
@@ -205,7 +197,10 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
         }
         if(($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes')){
+            $scope.loading = false;
+            $('#loading').css('display','none');
 
+            //$scope.showModal = true;
             console.log("Half Amount Paid");
             applicatorDetails.paymentStatus="No";
 
@@ -213,6 +208,15 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
+
+                    $scope.followup = {
+                        opened: false
+                    };
+
 
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
@@ -250,6 +254,13 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
+
+                    $scope.followup = {
+                        opened: false
+                    };
 
                     $scope.applicatorDetails = applicatorDetails;
 
@@ -280,6 +291,8 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
+        $('#loader').css("display","none");
+
     };
 
     /* if not amount is paid or half amount is paid */
@@ -735,6 +748,14 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
 
+                    //date picker for followup date
+                    $scope.openFollowDate = function() {
+                        $scope.followup.opened = true;
+                    };
+
+                    $scope.followup = {
+                        opened: false
+                    };
 
                     $scope.applicatorDetails = applicatorDetails;
 
