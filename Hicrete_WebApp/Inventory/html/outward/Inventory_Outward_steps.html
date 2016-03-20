@@ -134,7 +134,7 @@
                                     <th>Quantity</th>
                                     <th>Packaging Type</th>
                                     <th>Packaging Size</th>
-                                    <th></th>
+                                    <th>Unit</th>
                                     <th>Available Quantity</th>
                                     <th>Remove</th>
                                 </tr>
@@ -142,7 +142,7 @@
                                 <tr ng-repeat="materials in OutwardData.outwardMaterials">
 
                                     <td>
-                                        <select class="btn dropdown-toggle selectpicker btn-default"
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"
                                                 ng-model="materials.material" ng-value="Select" name="material" required>
                                             <option value="" disabled selected>Select Material</option>
                                             <option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>
@@ -153,7 +153,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="number" min="0" ng-disabled="availableTotalquantity==0" class="form-control"
+                                        <input type="number" min="1" ng-disabled="availableTotalquantity==0" class="form-control"
                                                ng-model="materials.materialQuantity" name="materialQuantity" required/>
                                         <div class="help-block" ng-messages="outwardMaterialForm.materialQuantity.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please enter material quantity</p>
@@ -176,10 +176,15 @@
                                         </div>
                                     </td>
                                     <td>
-                                        {{materials.unitOfMeasure}}
+                                        <!--{{getAvailableQty(materials.material)}}-->
+                                        <label >{{getUnit(materials.material)}}</label>
                                     </td>
+                                    <!--<td>-->
+                                        <!--<button ng-show="selected==true" data-target="#showAvailablequantity" data-ng-click="getAvailableQuantiyPerPackage(materials.material)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>Available Qty</button>-->
+
+                                    <!--</td>-->
                                     <td>
-                                        <label class="col-md-4 control-label text-left pt12" name="availableQty">{{getAvailableQty(materials.material)}}</label>
+                                        <label  name="availableQty">{{getAvailableQty(materials.material)}}</label>
                                         <div class="help-block" ng-show="availableTotalquantity==0">
                                             <span style="color:red">Selected material is not available. Contact inventory manager</span>
                                         </div>
@@ -214,4 +219,57 @@
 
     <div ng-include="'Inventory/html/outward/Inventory_Outward_Transport_Details.html'"></div>
 
+</div>
+
+<!-- MODAL SHOOW AVAILABLE QUANTITY -->
+<div class="modal fade" id="showAvailablequantity" role="dialog">
+    <div class="modal-dialog">
+        <form class="form-horizontal">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Available Quantity.</h4>
+                </div>
+                <div class="modal-body">
+
+                    <table class="table table-actions">
+                        <thead>
+                        <tr>
+                            <th class="tablehead">Sr.No</th>
+                            <th class="tablehead">Packaging Type</th>
+                            <th class="tablehead">Packaging Size</th>
+                            <th class="tablehead">Available Quantity</th>
+
+
+                        </tr>
+                        </thead>
+                        <tr ng-repeat="product in productAvailables">
+                            <td class="tablerow">
+                                {{$index+1}}
+                            </td>
+                            <td class="tablerow">
+                               {{product.packagingtype}}
+                            </td>
+                            <td class="tablerow">
+                            {{product.packagingsize}} {{getAvailableQty(materials.material)}}
+                             </td>
+                            <td class="tablerow">
+                                {{product.totalquantity}}
+                            </td>
+
+                        </tr>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                <!--End of modal-footer-->
+            </div>
+            <!--End of Modal Content-->
+        </form>
+    </div>
+    <!--End of modal dialog-->
 </div>

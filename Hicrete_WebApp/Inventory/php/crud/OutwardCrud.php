@@ -106,9 +106,7 @@ class OutwardData extends CommonMethods
                         }
                     }
                 }
-                //push inward data into array
 
-                //push inward transport details data into array
 
                 // Join
                 $stmt1 = $dbh->prepare("SELECT * FROM outward_details
@@ -129,7 +127,8 @@ class OutwardData extends CommonMethods
                             'materialid' => $resultMaterials['materialid'],
                             'quantity' => $resultMaterials['quantity'],
                             'productname' => $resultMaterials['productname'],
-                            'packagedunits' => $resultMaterials['packagedunits']
+                            'packagedunits' => $resultMaterials['packagedunits'],
+                            'packagesize' => $resultMaterials['packagesize']
                         );
                     }
 
@@ -164,7 +163,7 @@ class OutwardData extends CommonMethods
         try {
             //BEGIN THE TRANSACTION
             $dbh->beginTransaction();
-	   $date = new DateTime($this->dateOfInward);
+	        $date = new DateTime($this->dateOfOutward);
             $dob = $date->format('Y-m-d');
             $stmtOutward = $dbh->prepare("INSERT INTO outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
                            values (:warehouseid,:companyid,:supervisorid,:dateofentry,:Outwardno,:lchnguserid,now(),:creuserid,now())");
@@ -182,12 +181,13 @@ class OutwardData extends CommonMethods
                 //Insert Data into Outward Details table
 
                 foreach ($materials as $material) {
-                    $stmtOutwardDetails = $dbh->prepare("INSERT INTO outward_details (Outwardid,materialid,quantity,packagedunits,lchnguserid,lchngtime,creuserid,cretime)
-              values (:Outwardid,:materialid,:quantity,:packagedunits,:lchnguserid,now(),:creuserid,now())");
+                    $stmtOutwardDetails = $dbh->prepare("INSERT INTO outward_details (Outwardid,materialid,quantity,packagedunits,packagesize,lchnguserid,lchngtime,creuserid,cretime)
+              values (:Outwardid,:materialid,:quantity,:packagedunits,:packagesize,:lchnguserid,now(),:creuserid,now())");
                     $stmtOutwardDetails->bindParam(':Outwardid', $lastOutwardId, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':quantity', $material->materialQuantity, PDO::PARAM_STR, 40);
                     $stmtOutwardDetails->bindParam(':packagedunits', $material->packageUnit, PDO::PARAM_STR, 10);
+                    $stmtOutwardDetails->bindParam(':packagesize', $material->packagesize, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
                     if ($stmtOutwardDetails->execute()) {
@@ -211,13 +211,11 @@ class OutwardData extends CommonMethods
 
                             if ($stmtInventory->execute()) {
                                 $isSuccess=true;
-//                                $this->showAlert('success', "Outward details added Successfully!!!");
-//                                $dbh->commit();
+
                             } else {
-                   $this->showAlert('Failure', "Error 3rd");
+                                 $this->showAlert('Failure', "Error 3rd");
                                 $isSuccess=false;
-//                                $this->showAlert('Failure', "Error while adding4th");
-//                                $dbh->rollBack();
+
                             }
                         }else{
                    $this->showAlert('Failure', "Error 2nd");

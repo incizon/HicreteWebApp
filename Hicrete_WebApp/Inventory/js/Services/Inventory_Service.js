@@ -65,13 +65,13 @@ myApp.service('inventoryService', function () {
         };
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                console.log("IN SERVICE OF Inventory PRODUCTS FOR INWARD OUTWARD=");
+                console.log("IN SERVICE OF getting OUTWARD=");
                 console.log(data);
                 $('#loader').css("display","none");
                 $scope.materialsForOutward= data;
             })
             .error(function (data, status, headers) {
-                console.log("IN SERVICE OF Inventory Search Failure=");
+
                 console.log(data);
 
             });

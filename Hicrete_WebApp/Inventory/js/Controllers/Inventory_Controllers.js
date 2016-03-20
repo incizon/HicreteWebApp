@@ -348,44 +348,21 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
      *******************************/
         // function to fetch unit of measure- START
 
-    $scope.getUnitOfMeasure= function(material)
-    {
-        console.log(material);
-        console.log("finding unit of measure");
-        var data = {
-            inwardData: material,
-            module: 'inward',
-            operation: 'getunitofmeasure'
-        };
-        var config = {
-            params: {
-                data: data
+    $scope.getUnitOfMeasure = function (pMaterialId) {
+        var qty;
+
+        for (var i = 0; i < $scope.materialsForOutwardInward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutwardInward[i].materialid) {
+                // qty = $scope.materialsForOutward[i].totalquantity;
+                $scope.availableTotalquantity=qty;
+                $scope.unitofMeasure=$scope.materialsForOutwardInward[i].unitofmeasure;
+                qty= $scope.unitofMeasure;
+                console.log("UNIT"+qty);
             }
-        };
-        $http.post("Inventory/php/InventoryIndex.php", null, config)
-            .success(function (data) {
+        }
 
-                console.log(data);
-                if (data.msg != "") {
-                    material.unitOfMeasure=data.unitofmeasure;
-
-                } else if (data.error != "")
-                {
-
-                }
-
-            })
-            .error(function (data, status, headers) {
-                console.log(data);
-
-            });
-
-
-
-    };
-
-
-
+        return qty;
+    }
 
     //function to fetch unit of measure -ENd
     $scope.addFields = function () {
@@ -599,6 +576,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     $scope.errorMessage="";
     $scope.warningMessage="";
     $scope.productsToModify = [];
+    $scope.productAvailable=[];
     $scope.OutwardData = {
 
         outwardMaterials: [
@@ -643,7 +621,43 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
+    $scope.getAvailableQuantiyPerPackage=function(material){
+        console.log(material);
+        var data = {
+            materialId:material,
+            module: 'outward',
+            operation: 'getProductAvailableQty'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log("In Post of outward entry success:");
+                console.log(data);
+                $scope.productAvailables=data;
+                console.log($scope.productAvailables);
+                if(data.msg!=""){
+                   // alert(data.msg);
+                   // console.log(data.msg);
+                   // $scope.productAvailables=data.msg;
 
+                }else{
+                  //  alert(data.error);
+                    console.log(data.error);
+                }
+
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+                alert(data);
+
+            });
+
+
+    }
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -665,12 +679,30 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
                 qty = $scope.materialsForOutward[i].totalquantity;
                 $scope.availableTotalquantity=qty;
+                $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
+               // qty= $scope.unitofMeasure;
                 //console.log(qty);
             }
         }
-        ;
+
         return qty;
     }
+    $scope.getUnit = function (pMaterialId) {
+        var qty;
+
+        for (var i = 0; i < $scope.materialsForOutward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutward[i].materialid) {
+                //qty = $scope.materialsForOutward[i].totalquantity;
+                //$scope.availableTotalquantity=qty;
+                $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
+                 qty= $scope.unitofMeasure;
+                //console.log(qty);
+            }
+        }
+
+        return qty;
+    }
+
     /**********************************
      Add material fields
      *******************************/
@@ -735,19 +767,20 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                 data: data
             }
         };
+        console.log(config);
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
                 if(data.msg!=""){
                     alert(data.msg);
+                    setTimeout(function(){
+                        window.location="dashboard.php#/Inventory";
+                    },1000);
                 }else{
                     alert(data.error);
                 }
-                setTimeout(function(){
-                    window.location="dashboard.php#/Inventory";
 
-                },1000);
                 //$scope.clearFields($scope.OutwardData);
                 $scope.submitted = false;
 
@@ -1299,7 +1332,6 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             console.log("Error calling php");
 
         });
-
 
     $scope.prodBatchInfo = {
         batchNo: "",

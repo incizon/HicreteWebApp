@@ -169,7 +169,8 @@ class InwardData extends CommonMethods
                             'supplierid' => $resultMaterials['supplierid'],
                             'productname' => $resultMaterials['productname'],
                             'suppliername' => $resultMaterials['suppliername'],
-                            'packagedunits' => $resultMaterials['packagedunits']
+                            'packagedunits' => $resultMaterials['packagedunits'],
+                            'packagesize' => $resultMaterials['size']
                         );
                     }
 
@@ -232,7 +233,7 @@ class InwardData extends CommonMethods
                 $materials = $data->inwardData->inwardMaterials;
                 //Insert Data into Inward Details table
                 foreach ($materials as $material) {
-                    $material->materialQuantity=$material->materialQuantity*$material->packagesize;
+//                    $material->materialQuantity=$material->materialQuantity*$material->packagesize;
                     //echo $material->materialQuantity;
 
                     $stmtInwardDetails = $dbh->prepare("INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)
@@ -258,14 +259,12 @@ class InwardData extends CommonMethods
                             //UPDATE
                             $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
                                         warehouseid=:warehouseid,companyid=:companyid
-                            WHERE materialid = :materialid AND packagingType=:packagingType AND packagingSize=:packagingSize");
+                            WHERE materialid = :materialid");
 
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
-                            $stmtInventory->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
-                            $stmtInventory->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
 
                             if ($stmtInventory->execute()) {
                                 $isSuccess = true;
@@ -274,15 +273,14 @@ class InwardData extends CommonMethods
                             }
                         }else{
                             //Insert
-                            $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity,packagingtype,packagingsize)
-                                                      values (:materialid,:companyid,:warehouseid,:totalquantity,:packagingType,:packagingSize)");
+                            $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
+                                                      values (:materialid,:companyid,:warehouseid,:totalquantity)");
 
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
-                            $stmtInventory->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
-                            $stmtInventory->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
+
 
                             if ($stmtInventory->execute()) {
                                 $isSuccess = true;
