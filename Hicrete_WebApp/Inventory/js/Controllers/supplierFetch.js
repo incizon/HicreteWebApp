@@ -86,11 +86,15 @@ $scope.searchData=function(supplier){
         }
     };
 
+    $scope.loading=true;
+    $('#loader').css("display","block");
       console.log(supplier);
       $http.post("Inventory/php/supplierSearch.php", null,config)
         .success(function (data)
         {
          console.log(data);
+            $scope.loading=false;
+            $('#loader').css("display","none");
             $rootScope.suppliers=data;
          console.log($scope.suppliers);
             $scope.totalItems=$rootScope.suppliers.length;

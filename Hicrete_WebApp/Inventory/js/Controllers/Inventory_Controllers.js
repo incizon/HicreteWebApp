@@ -1265,13 +1265,14 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         opened: false
     };
 
-    $scope.loading=true;
-    $('#loader').css("display","block");
+
 
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");
             console.log(data);
+            $scope.loading=true;
+            $('#loader').css("display","block");
             $scope.loading=false;
             $('#loader').css("display","none");
             $scope.inventoryData = data;
