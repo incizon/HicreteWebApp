@@ -28,7 +28,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="firmName" ng-model="permanentApplicatorsDetails.applicator_name" readonly="readonly">
+                                    <input type="text" class="form-control" name="firmName" ng-model="permanentApplicatorsDetails.applicator_name">
                                 </div>
                             </div>
                         </div>
@@ -76,14 +76,10 @@
                                 <label class=" control-label">Country</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" ng-model="permanentApplicatorsDetails.applicator_country">
-                                    <option value="">Choose Country..</option>
-                                    <option value="India">India</option>
-                                    <option value="America">America</option>
-                                    <option value="South Africa">South Africa</option>
-                                    <option value="Japan">Japan</option>
-                                    <option value="Italy">Italy</option>
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmCountry" ng-model="permanentApplicatorsDetails.applicator_country">
+                                </div>
                             </div>
                         </div>
                         <!--End of Country Field-->
@@ -93,14 +89,10 @@
                                 <label class=" control-label">State</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select"ng-model="permanentApplicatorsDetails.applicator_state">
-                                    <option value="">Choose State..</option>
-                                    <option value="Delhi">Delhi</option>
-                                    <option value="Maharashtra">Maharashtra</option>
-                                    <option value="Benglore">Benglore</option>
-                                    <option value="Karnataka">Karnataka</option>
-                                    <option value="Culcatta">Culcatta</option>
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmState" ng-model="permanentApplicatorsDetails.applicator_state">
+                                </div>
                             </div>
                         </div>
                         <!--End of State Field-->
@@ -110,14 +102,10 @@
                                 <label class="control-label">City</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select"ng-model="permanentApplicatorsDetails.applicator_city">
-                                    <option value="">Choose City..</option>
-                                    <option value="Pune">Pune</option>
-                                    <option value="Mumbai">Mumbai</option>
-                                    <option value="Nagar">Nagar</option>
-                                    <option value="Nasik">Nasik</option>
-                                    <option value="Pandharpur">Pandharpur</option>
-                                </select>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmCity" ng-model="permanentApplicatorsDetails.applicator_city">
+                                </div>
                             </div>
                         </div>
                         <!--End of City Field-->

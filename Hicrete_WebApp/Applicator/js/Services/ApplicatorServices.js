@@ -6,7 +6,6 @@ myApp.service('ApplicatorService',function(){
 						params: {
 									data: applicatorDetails
 								}
-						  	 
 					};
 
 					$http.post("Applicator/php/Applicator.php", null, config)
@@ -123,23 +122,7 @@ myApp.service('ApplicatorService',function(){
 	this.modifyApplicatorDetails=function($scope,$http,applicatorDetails){
 
 
-		var config = {
-			params: {
-				data: applicatorDetails
-			}
-		};
 
-				$http.post("Applicator/php/Applicator.php", null, config)
-
-				.success(function (data, status, headers, config) {
-
-					console.log(data);
-
-				})
-				.error(function (data, status, headers) {
-					console.log(data);
-
-				});
 	}
 
 

@@ -117,10 +117,8 @@
 			case 'viewPermanentApplicators':
 
 				if(!$operationObject->viewPermanentApplicators($data)){
-
                         $message = "Applicator Details Not Available...!!!";
                         echo AppUtil::getReturnStatus("fail",$message);
-
                 }
 				break;
 
@@ -131,7 +129,7 @@
 
 			case 'getPermanentApplicatorDetails':
 
-				$operationObject->getApplicatorDetails($data);
+	 			 $operationObject->getApplicatorDetails($data);
 
 				break;
 			case 'getPaymentDetails':
