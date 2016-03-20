@@ -324,7 +324,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.modifyCustomer', {
             url: '/ModifyCustomer',
             templateUrl: 'Process/html/ModifyCustomer.html',
-            controller:'ModifyCustomerController'
+            controller:'ModifyCustomerController',
+            params : { customerToModify: null }
         })
 
         .state('Process.addProject', {

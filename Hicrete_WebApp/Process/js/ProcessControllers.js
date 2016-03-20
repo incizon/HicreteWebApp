@@ -717,7 +717,7 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 });
 myApp.controller('ViewCustomerController',function($scope,$http){
 
-    $scope.customerPerPage=5;
+    $scope.CustomerPerPage=5;
     $scope.currentPage=1;
 
 
@@ -729,26 +729,32 @@ myApp.controller('ViewCustomerController',function($scope,$http){
 
             $http.get("php/api/customer").then(function(response) {
                 console.log(response.data.length);
-                for(var i = 0; i<response.data.length ; i++){
-                    cust.push({
-                        'id':response.data[i].CustomerId,
-                        'name':response.data[i].CustomerName,
-                        'address':response.data[i].Address,
-                        'city':response.data[i].City,
-                        'state':response.data[i].State,
-                        'country':response.data[i].Country,
-                        'mobileNo':response.data[i].Mobileno,
-                        'contactNo':response.data[i].Landlineno,
-                        'faxNo':response.data[i].FaxNo,
-                        'emailId':response.data[i].EmailId,
-                        'pan':response.data[i].PAN,
-                        'cstNo':response.data[i].CSTNo,
-                        'vatNo':response.data[i].VATNo,
-                        'serviceTaxNo':response.data[i].ServiceTaxNo,
-                        'pincode':response.data[i].Pincode
-                    });
+                if(response.data.status=="Successful"){
+                    for(var i = 0; i<response.data.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
+                        });
+                    }
+                    $scope.customers = cust;
+                    console.log($scope.customers);
+                }else{
+                    alert(response.data.message);
                 }
-                $scope.customers = cust;
+
 
             })
 
@@ -762,25 +768,25 @@ myApp.controller('ViewCustomerController',function($scope,$http){
                     console.log(response.data.message.length);
                     for(var i = 0; i<response.data.message.length ; i++){
                         cust.push({
-                            'id':response.data.message[i].CustomerId,
-                            'name':response.data.message[i].CustomerName,
-                            'address':response.data.message[i].Address,
-                            'city':response.data.message[i].City,
-                            'state':response.data.message[i].State,
-                            'country':response.data.message[i].Country,
-                            'mobileNo':response.data.message[i].Mobileno,
-                            'landlineno':response.data.message[i].Landlineno,
-                            'faxno':response.data.message[i].FaxNo,
-                            'email':response.data.message[i].EmailId,
-                            'pan':response.data.message[i].PAN,
-                            'cst':response.data.message[i].CSTNo,
-                            'vat':response.data.message[i].VATNo,
-                            'servicetxno':response.data.message[i].ServiceTaxNo,
-                            'pincode':response.data.message[i].Pincode
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
                         });
                     }
                     $scope.customers = cust;
-                    setInfo.set($scope.customers);
+                    console.log($scope.customers);
                 }else{
                     alert(response.data.message);
                 }
@@ -790,9 +796,6 @@ myApp.controller('ViewCustomerController',function($scope,$http){
         }
     }
 
-    $scope.setvalue = function(details){
-        setInfo.set(details);
-    }
 
     $scope.deleteCustomer = function($id){
         console.log("delete cust id "+$id);
@@ -811,6 +814,18 @@ myApp.controller('ViewCustomerController',function($scope,$http){
     $scope.showCustomerDetails=function(customer){
         $scope.currentCustomer=customer;
     }
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.CustomerPerPage;
+        end = begin + $scope.CustomerPerPage;
+        index = $scope.customers.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
 });
 
 myApp.controller('ViewQuotationDetailsController',function($scope,$http){
@@ -859,27 +874,46 @@ myApp.controller('CustomerController',function($scope,$http){
 
 });
 
-myApp.controller('ModifyCustomerController',function($scope,$http){
-
+myApp.controller('ModifyCustomerController',function($scope,$http,$stateParams){
 
     $scope.customerDetails={
 
-        customer_name:"Namdev",
-        customer_address:"Old Mali Lane ,Pandharpur",
-        customer_pincode:"413304",
-        customer_city:"Pandharpur",
-        customer_country:"India",
-        customer_state:"Maharashtra",
-        customer_emailId:"namdev@gmail.com",
-        customer_landline:"020-220202",
-        customer_phone:"9090989898",
-        customer_faxNo:"020-220202",
-        customer_vatNo:"V12345678901",
-        customer_cstNo:"C12345678901",
-        customer_panNo:"ABCDE123A",
-        customer_serviceTaxNo:"ABCDE1234ABC123"
-
+        customer_id:$stateParams.customerToModify.id,
+        customer_name:$stateParams.customerToModify.name,
+        customer_address:$stateParams.customerToModify.address,
+        customer_pincode:$stateParams.customerToModify.pincode,
+        customer_city:$stateParams.customerToModify.city,
+        customer_country:$stateParams.customerToModify.country,
+        customer_vatNo:$stateParams.customerToModify.vatNo,
+        customer_cstNo:$stateParams.customerToModify.cstNo,
+        customer_panNo:$stateParams.customerToModify.pan,
+        customer_state:$stateParams.customerToModify.state,
+        customer_emailId:$stateParams.customerToModify.emailId,
+        customer_landline:$stateParams.customerToModify.contactNo,
+        customer_phone:$stateParams.customerToModify.mobileNo,
+        customer_faxNo:$stateParams.customerToModify.faxNo,
+        customer_serviceTaxNo:$stateParams.customerToModify.serviceTaxNo
     };
+
+    $scope.modifyCustomer = function($custId){
+
+        var custUpdate = '{"CustomerName":"'+$scope.customerDetails.customer_name+'","Address":"'+$scope.customerDetails.customer_address+'","City":"'+$scope.customerDetails.customer_city+'","State":"'+$scope.customerDetails.customer_state+'","Country":"'+$scope.customerDetails.customer_country+'","Mobileno":"'+$scope.customerDetails.customer_phone+'","Landlineno":"'+$scope.customerDetails.customer_landline+'","FaxNo":"'+$scope.customerDetails.customer_faxNo+'","EmailId":"'+$scope.customerDetails.customer_emailId+'","VATNo":"'+$scope.customerDetails.customer_vatNo+'","CSTNo":"'+$scope.customerDetails.customer_cstNo+'","PAN":"'+$scope.customerDetails.customer_panNo+'","ServiceTaxNo":"'+$scope.customerDetails.customer_serviceTaxNo+'"}';
+        //  console.log("update data is ::"+custUpdate);
+        $http.post('php/api/customer/update/'+$custId, custUpdate)
+            .success(function (data, status) {
+                $scope.postCustData = data;
+                alert("data is "+data+" status is "+status);
+
+            })
+            .error(function (data, status) {
+
+                alert($scope.ResponseDetails );
+            });
+
+    }
+
+
+
 
 
 });
