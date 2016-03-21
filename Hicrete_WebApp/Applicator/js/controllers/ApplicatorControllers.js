@@ -360,7 +360,13 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                              $('#loader').css("display","none");
                              $scope.errorMessage=data.message;
                              $('#error').css("display","block");
-
+                             setTimeout(function() {
+                                 $scope.$apply(function() {
+                                     //if(data.msg!=""){
+                                         $('#error').css("display","none");
+                                     //}
+                                 });
+                             }, 3000);
                          }
                      })
 
@@ -463,6 +469,8 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
     $scope.getTentativeApplicatorDetails();
 
     $scope.modify=function() {
+        $scope.loading=true;
+        $('#loader').css("display","block");
         $scope.tentativeApplicatorsDetails.operation="modifyApplicatorDetails";
         var config = {
             params: {
@@ -474,12 +482,48 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
 
             .success(function (data, status, headers, config) {
 
+                $scope.loading=false;
+                $('#loader').css("display","none");
                 console.log(data);
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if(data.msg!=""){
+                            $('#warning').css("display","none");
+                        }
+                    });
+                }, 3000);
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
                 $rootScope.tentativeApplicators=[];
             })
             .error(function (data, status, headers) {
                 console.log(data);
-
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
             });
     }
 
@@ -533,7 +577,13 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                         $('#loader').css("display","none");
                         $scope.errorMessage=data.message;
                         $('#error').css("display","block");
-
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                if(data.msg!=""){
+                                    $('#error').css("display","none");
+                                }
+                            });
+                        }, 3000);
                     }
                 })
                 .error(function (data, status, headers) {
@@ -541,6 +591,13 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                     $('#loader').css("display","none");
                     $scope.errorMessage="Could Not Fetch Data";
                     $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
                 });
 
     }
@@ -639,17 +696,57 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
             }
         };
 
+        $scope.loading=true;
+        $('#loader').css("display","block");
+
         $http.post("Applicator/php/Applicator.php", null, config)
 
             .success(function (data, status, headers, config) {
 
                 console.log(data);
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                console.log(data);
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if(data.msg!=""){
+                            $('#warning').css("display","none");
+                        }
+                    });
+                }, 3000);
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg==""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
                 $rootScope.permanentApplicators=[];
 
             })
             .error(function (data, status, headers) {
                 console.log(data);
-
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.msg!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
             });
         }
 });
