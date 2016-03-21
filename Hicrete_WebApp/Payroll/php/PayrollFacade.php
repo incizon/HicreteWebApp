@@ -155,11 +155,10 @@ $operationObject=new Payroll();
 
             break;
        case 'searchLeaveByDate':
-           $message = "Leave Details by Date";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
-
+            if(!$operationObject->searchLeaveByDate($data)){
+                $message = "Leave details not available...!!!";
+                echo AppUtil::getReturnStatus("fail",$message);
+            }
 
            break;
      case 'getYears':
@@ -171,11 +170,18 @@ $operationObject=new Payroll();
 
          break;
 
+     case 'getEmployees':
+
+             $operationObject->getEmployees();
+
+         break;
+
        case 'searchLeaveByEmployee':
-           $message = "Leave Details by Employee";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
+
+           if(!$operationObject->searchLeaveByEmployee($data)){
+               $message = "Leave details not available...!!!";
+               echo AppUtil::getReturnStatus("fail",$message);
+           }
 
 
            break;

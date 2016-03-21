@@ -24,18 +24,17 @@
 
                     <div class="row">
                         <div class="col-md-2">
-                                <input id="byYear" type="radio" value="Year" ng-model="searchBy" name="searchBy"/>
+                                <input id="byYear" type="radio" value="Year" ng-model="searchDetails.searchBy" name="searchBy" ng-change="disableSearch('Year')"/>
                                 <label>By Year</label>
-
                         </div>
-                        <div ng-show="searchBy=='Year'">
+
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">Select Year :</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="form-control select" name="year" ng-model="searchDetails.year" />
+                                    <select class="form-control select" name="year" ng-model="searchDetails.year" ng-disabled="hide"/>
                                     <option value="" disabled selected>Choose year..</option>
                                     <option  ng-repeat="year in years" value="{{year.caption_of_year}}">{{year.caption_of_year}}</option>
                                     </select>
@@ -48,34 +47,33 @@
                                     <label class="control-label">Select Month :</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="form-control select" name="month" ng-model="searchDetails.month" />
+                                    <select class="form-control select" name="month" ng-model="searchDetails.month" ng-disabled="hide"/>
                                     <option value="" disabled selected>Choose month..</option>
-                                    <option value="Jan">Jan</option>
-                                    <option value="Feb">Feb</option>
-                                    <option value="Mar">Mar</option>
-                                    <option value="April">April</option>
-                                    <option value="May">May</option>
-                                    <option value="June">June</option>
-                                    <option value="July">July</option>
-                                    <option value="Aug">Aug</option>
-                                    <option value="Sep">Sep</option>
-                                    <option value="Oct">Oct</option>
-                                    <option value="Nov">Nov</option>
-                                    <option value="Dec">Dec</option>
+                                    <option value="01">Jan</option>
+                                    <option value="02">Feb</option>
+                                    <option value="03">Mar</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">Aug</option>
+                                    <option value="09">Sep</option>
+                                    <option value="10">Oct</option>
+                                    <option value="11">Nov</option>
+                                    <option value="12">Dec</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
-                        </div>
+
                     </div><br>
                     <div class="row">
                         <div class="col-md-2">
-                            <input id="byTime" type="radio" value="timePeriod" ng-model="searchBy" name="searchBy"/>
+                            <input id="byTime" type="radio" value="timePeriod" ng-model="searchDetails.searchBy" name="searchBy" ng-change="disableSearch('timePeriod')"/>
                             <label>By Time Period</label>
-
                         </div>
 
-                        <div ng-show="searchBy=='timePeriod'">
+                        <div ng-disabled="hide">
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="col-md-3">
@@ -84,9 +82,8 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="fromDate" ng-model="fromDate"/>
+                                        <input type="date" class="form-control" name="fromDate" ng-model="searchDetails.fromDate" ng-disabled="!hide"/>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -98,7 +95,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="date" class="form-control" name="toDate" ng-model="toDate"/>
+                                        <input type="date" class="form-control" name="toDate" ng-model="searchDetails.toDate" ng-disabled="!hide"/>
                                     </div>
 
                                 </div>
@@ -118,11 +115,10 @@
 
                                         <select class="form-control select" name="sortOrder" ng-model="sortOrder" />
                                         <option value="" disabled selected>Choose order..</option>
-                                        <option value="Descending">Descending</option>
-                                        <option value="Ascending">Ascending</option>
+                                        <option value="-">Descending</option>
+                                        <option value="+">Ascending</option>
                                         </select>
                                 </div>
-
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -131,10 +127,8 @@
                                     <button class="btn btn-primary" data-ng-click="searchByDate()">Search</button>
                                 </div>
                         </div>
-
                      </div><br>
                     <div class="row">
-
                         <table class="table table-bordered">
                             <thead>
                             <tr>
@@ -146,22 +140,18 @@
                                 <th width="10%">Type</th>
                                 <th width="10%" >Status</th>
                                 <th width="10%">Application Date</th>
-
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="leave in leaveDetails">
-
+                            <tr ng-repeat="leave in leavesDetails | orderBy :sortOrder | filter :paginate ">
                                 <td>{{$index+1}}</td>
-                                <td>{{leave.leaveBy}}</td>
-                                <td>{{leave.fromDate}}</td>
-                                <td>{{leave.toDate}}</td>
+                                <td>{{leave.leave_applied_by}}</td>
+                                <td>{{leave.from_date}}</td>
+                                <td>{{leave.to_date}}</td>
                                 <td>{{leave.reason}}</td>
-                                <td>{{leave.type}}</td>
+                                <td>{{leave.type_of_leaves}}</td>
                                 <td>{{leave.status}}</td>
-                                <td>{{leave.applicationDate}}</td>
-
-
+                                <td>{{leave.application_date}}</td>
                             </tr>
 
                             </tbody>
@@ -174,7 +164,10 @@
             </div>
 
         </div>
-
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="employeePerPage" class="pagination-sm">
+        </uib-pagination>
 
     </div>
 

@@ -289,7 +289,6 @@
                     $stmt1->bindParam(':userId',$userId);
                 }
 
-
                 if($stmt1->execute()){
 
                     while($result1=$stmt1->fetch(PDO::FETCH_ASSOC)){
@@ -353,6 +352,130 @@
                     return true;
                 }
             }
+
+            public function searchLeaveByDate($data){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $json_response=array();
+                $searchBy=$data->searchBy;
+                if($searchBy==="Year"){
+
+                    $year=$data->year;
+                    if(isset($data->month)){
+                        $month=$data->month;
+                        $stmt1=$connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year' AND DATE_FORMAT(`leave_application_master`.`from_date`, '%m') = '$month'");
+                    }
+                    else{
+                        $stmt1=$connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year'");
+                    }
+
+                }
+                else{
+
+                    $date1 = new DateTime($data->fromDate);
+                    $fromDate = $date1->format('Y-m-d');
+                    $date2 = new DateTime($data->toDate);
+                    $toDate = $date2->format('Y-m-d');
+                    $stmt1=$connect->prepare("SELECT leave_applied_by,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate");
+                    $stmt1->bindParam(':fromDate',$fromDate);
+                    $stmt1->bindParam(':toDate',$toDate);
+                }
+
+                if($stmt1->execute()) {
+
+                    while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
+
+                        $result_array=array();
+                        $result_array['from_date']=$result['from_date'];
+                        $result_array['to_date']=$result['to_date'];
+                        $result_array['reason']=$result['reason'];
+                        $result_array['type_of_leaves']=$result['type_of_leaves'];
+                        $result_array['status']=$result['status'];
+                        $result_array['application_date']=$result['application_date'];
+
+                        $userId=$result['leave_applied_by'];
+                        $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId='$userId'");
+                        if($stmt2->execute()){
+                            $result1=$stmt2->fetch(PDO::FETCH_ASSOC);
+                            $result_array['leave_applied_by']=$result1['firstName']." ".$result1['lastName'];
+                        }
+                        array_push($json_response,$result_array);
+                    }
+                    if(sizeof($json_response)>0) {
+                        echo AppUtil::getReturnStatus("success", $json_response);
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+
+            }
+
+            public function getEmployees(){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $stmt1=$connect->prepare("SELECT userId,firstName,lastName from usermaster");
+                $stmt1->execute();
+                $result=$stmt1->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+
+            }
+            public function searchLeaveByEmployee($data){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $json_response=array();
+                $searchBy=$data->employee;
+
+
+                $stmt1=$connect->prepare("SELECT * FROM leave_application_master WHERE leave_applied_by=:searchBy");
+                $stmt1->bindParam(':searchBy',$searchBy);
+
+
+
+                if($stmt1->execute()) {
+
+                    while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
+
+                        $result_array=array();
+                        $result_array['from_date']=$result['from_date'];
+                        $result_array['to_date']=$result['to_date'];
+                        $result_array['reason']=$result['reason'];
+                        $result_array['type_of_leaves']=$result['type_of_leaves'];
+                        $result_array['status']=$result['status'];
+                        $result_array['application_date']=$result['application_date'];
+
+                        $userId=$result['leave_applied_by'];
+                        $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId='$userId'");
+                        if($stmt2->execute()){
+                            $result1=$stmt2->fetch(PDO::FETCH_ASSOC);
+                            $result_array['leave_applied_by']=$result1['firstName']." ".$result1['lastName'];
+                        }
+                        array_push($json_response,$result_array);
+                    }
+                    if(sizeof($json_response)>0) {
+                        echo AppUtil::getReturnStatus("success", $json_response);
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    return false;
+                }
+
+            }
+
         }
 
 ?>

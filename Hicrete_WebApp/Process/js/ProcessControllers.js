@@ -1,6 +1,21 @@
 /**
  * Created by Atul on 11-02-2016.
  */
+ 
+ myApp.factory('setInfo', function() {
+ var savedData = {}
+    function set(data) {
+            savedData = data;
+    }
+    function get() {
+            return savedData;
+    }
+
+ return {
+  set: set,
+  get: get
+ }
+});
 
 myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $log,AppService){
     $scope.projectDetails={
@@ -15,7 +30,9 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
         pointOfContactLandlineNo:'',
         pointfContactMobileNo:'',
         projectManagerId:'',
-        projectSource:''
+        projectSource:'',
+        customerId:''
+
     }
 
     $scope.Companies=[];
@@ -25,14 +42,47 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
     AppService.getProjectManagers($http,$scope);
     console.log("In Project Creation Controller");
 
-    /*
-    var companiesInvolved=[];
-    for(var i=0;i<$scope.Companies.length;i++){
-        if($scope.Companies[i].checkVal){
-            companiesInvolved.push($scope.Companies[i]);
+    $scope.customers=[];
+    AppService.getAllCustomers($http,$scope);
+
+    $scope.creteProject = function(){
+
+        var company = '';
+        var isTracking = 0;
+
+        $scope = this;
+        if($scope.isSiteTracking == true){
+            isTracking = 1;
         }
 
-    }*/
+
+        var companiesInvolved=[];
+        for(var i=0;i<$scope.Companies.length;i++){
+            if($scope.Companies[i].checkVal){
+                companiesInvolved.push($scope.Companies[i]);
+            }
+
+        }
+        var projectBasicDetails = {"ProjectName":$scope.projectDetails.projectName,"ProjectManagerId":$scope.projectDetails.projectManagerId,"ProjectSource":$scope.projectDetails.projectSource,"IsSiteTrackingProject":$scope.isSiteTracking,"CustomerId":$scope.projectDetails.customerId,"Address":$scope.projectDetails.address,"City":$scope.projectDetails.city,"State":$scope.projectDetails.state,"Country":$scope.projectDetails.country,"Pincode":$scope.projectDetails.pinCode,"PointContactName":$scope.projectDetails.pointOfContacName,"MobileNo":$scope.projectDetails.pointfContactMobileNo,"LandlineNo":$scope.projectDetails.pointOfContactLandlineNo,"EmailId":$scope.projectDetails.pointofConactEmailID};
+        var projectData={
+            projectDetails:projectBasicDetails,
+            companiesInvolved:companiesInvolved
+        }
+        // console.log("data is "+projectData);
+        console.log("Posting");
+        console.log("data is "+JSON.stringify(projectData));
+        $http.post('php/api/projects', projectData)
+            .success(function (data, status, headers) {
+                //$scope.PostDataResponse = data;
+                alert("data is "+data+" status is "+status);
+
+            })
+            .error(function (data, status, header) {
+                //$scope.ResponseDetails = "Data: " + data;
+                console.log(data);
+                alert(data);
+            });
+    }
 
 
 });
@@ -681,57 +731,116 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
 });
 myApp.controller('ViewCustomerController',function($scope,$http){
-$scope.currentCustomer;
-    $scope.customerList=[];
-    $scope.customerList.push({
-        customerId:"asdasd",
-        name:"Gokhale",
-        city:"pune",
-        state:"maharashtra",
-        country:"India",
-        contactNo:"1231323",
-        mobileNo:"asdasda",
-        faxNo:"asdasd",
-        emailId:"abc@mail.com",
-        pan:"cDSda213",
-        cstNo:"CST-101",
-        vatNo:"Vat-101",
-        serviceTaxNo:"ST-101"
-    });
-    $scope.customerList.push({
-        customerId:"asdasd",
-        name:"Gokle",
-        city:"pune",
-        state:"maharashtra",
-        country:"India",
-        contactNo:"1231323",
-        mobileNo:"asdasda",
-        faxNo:"asdasd",
-        emailId:"abc@mail.com",
-        pan:"cDSda213",
-        cstNo:"CST-101",
-        vatNo:"Vat-101",
-        serviceTaxNo:"ST-101"
-    });
-    $scope.customerList.push({
-        customerId:"asdasd",
-        name:"Gokha",
-        city:"pune",
-        state:"maharashtra",
-        country:"India",
-        contactNo:"1231323",
-        mobileNo:"asdasda",
-        faxNo:"asdasd",
-        emailId:"abc@mail.com",
-        pan:"cDSda213",
-        cstNo:"CST-101",
-        vatNo:"Vat-101",
-        serviceTaxNo:"ST-101"
-    });
+
+    $scope.CustomerPerPage=5;
+    $scope.currentPage=1;
+
+
+    $scope.searchCustomer = function(){
+        $scope.customers = [];
+        var cust = [];
+
+        if($scope.searchKeyword==""){
+
+            $http.get("php/api/customer").then(function(response) {
+                console.log(response.data.length);
+                if(response.data.status=="Successful"){
+                    for(var i = 0; i<response.data.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
+                        });
+                    }
+                    $scope.customers = cust;
+                    console.log($scope.customers);
+                }else{
+                    alert(response.data.message);
+                }
+
+
+            })
+
+        }
+        else{
+            //alert("in "+searchCity);
+
+            $http.get("php/api/customer/search/"+$scope.searchKeyword+'&'+$scope.searchBy).then(function(response) {
+
+                if(response.data.status=="Successful"){
+                    console.log(response.data.message.length);
+                    for(var i = 0; i<response.data.message.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
+                        });
+                    }
+                    $scope.customers = cust;
+                    console.log($scope.customers);
+                }else{
+                    alert(response.data.message);
+                }
+
+            })
+
+        }
+    }
+
+
+    $scope.deleteCustomer = function($id){
+        console.log("delete cust id "+$id);
+
+
+        $http({
+            method: 'GET',
+            url: 'php/api/customer/delete/'+$id
+        }).then(function successCallback(response) {
+            alert("in success"+response.status );
+        }, function errorCallback(response) {
+            alert("in error "+response);
+        });
+    }
 
     $scope.showCustomerDetails=function(customer){
         $scope.currentCustomer=customer;
     }
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.CustomerPerPage;
+        end = begin + $scope.CustomerPerPage;
+        index = $scope.customers.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
 });
 
 myApp.controller('ViewQuotationDetailsController',function($scope,$http){
@@ -755,29 +864,71 @@ myApp.controller('PaymentHistoryController',function($scope,$http){
 myApp.controller('CustomerController',function($scope,$http){
 
     $scope.submitted=false;
+    $scope.submitted=false;
+
+    $scope.createCustomer = function() {
+        var date = new Date();
+
+        var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
+
+        $http.post('php/api/customer', custData)
+            .success(function (data, status, headers) {
+                if (data.status == "Successful") {
+                    $scope.postCustData = data;
+                    alert("Customer created Successfully");
+                } else {
+                    alert(data.message);
+                }
+            })
+            .error(function (data, status, header) {
+                $scope.ResponseDetails = "Data: " + data;
+                alert("Error Occurred:" + data);
+            });
+    }
+
+
 });
 
-myApp.controller('ModifyCustomerController',function($scope,$http){
-
+myApp.controller('ModifyCustomerController',function($scope,$http,$stateParams){
 
     $scope.customerDetails={
 
-        customer_name:"Namdev",
-        customer_address:"Old Mali Lane ,Pandharpur",
-        customer_pincode:"413304",
-        customer_city:"Pandharpur",
-        customer_country:"India",
-        customer_state:"Maharashtra",
-        customer_emailId:"namdev@gmail.com",
-        customer_landline:"020-220202",
-        customer_phone:"9090989898",
-        customer_faxNo:"020-220202",
-        customer_vatNo:"V12345678901",
-        customer_cstNo:"C12345678901",
-        customer_panNo:"ABCDE123A",
-        customer_serviceTaxNo:"ABCDE1234ABC123"
-
+        customer_id:$stateParams.customerToModify.id,
+        customer_name:$stateParams.customerToModify.name,
+        customer_address:$stateParams.customerToModify.address,
+        customer_pincode:$stateParams.customerToModify.pincode,
+        customer_city:$stateParams.customerToModify.city,
+        customer_country:$stateParams.customerToModify.country,
+        customer_vatNo:$stateParams.customerToModify.vatNo,
+        customer_cstNo:$stateParams.customerToModify.cstNo,
+        customer_panNo:$stateParams.customerToModify.pan,
+        customer_state:$stateParams.customerToModify.state,
+        customer_emailId:$stateParams.customerToModify.emailId,
+        customer_landline:$stateParams.customerToModify.contactNo,
+        customer_phone:$stateParams.customerToModify.mobileNo,
+        customer_faxNo:$stateParams.customerToModify.faxNo,
+        customer_serviceTaxNo:$stateParams.customerToModify.serviceTaxNo
     };
+
+    $scope.modifyCustomer = function($custId){
+
+        var custUpdate = '{"CustomerName":"'+$scope.customerDetails.customer_name+'","Address":"'+$scope.customerDetails.customer_address+'","City":"'+$scope.customerDetails.customer_city+'","State":"'+$scope.customerDetails.customer_state+'","Country":"'+$scope.customerDetails.customer_country+'","Mobileno":"'+$scope.customerDetails.customer_phone+'","Landlineno":"'+$scope.customerDetails.customer_landline+'","FaxNo":"'+$scope.customerDetails.customer_faxNo+'","EmailId":"'+$scope.customerDetails.customer_emailId+'","VATNo":"'+$scope.customerDetails.customer_vatNo+'","CSTNo":"'+$scope.customerDetails.customer_cstNo+'","PAN":"'+$scope.customerDetails.customer_panNo+'","ServiceTaxNo":"'+$scope.customerDetails.customer_serviceTaxNo+'"}';
+        //  console.log("update data is ::"+custUpdate);
+        $http.post('php/api/customer/update/'+$custId, custUpdate)
+            .success(function (data, status) {
+                $scope.postCustData = data;
+                alert("data is "+data+" status is "+status);
+
+            })
+            .error(function (data, status) {
+
+                alert($scope.ResponseDetails );
+            });
+
+    }
+
+
+
 
 
 });
@@ -807,67 +958,278 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
-myApp.controller('ViewTaskController',function($scope,$http){
 
-    console.log("In");
+myApp.controller('ViewTaskController',function(setInfo,$scope,$http,$filter,$rootScope){
 
-    $scope.today = function(){
-        $scope.actualStartDate = new Date();
-        $scope.actualEndDate = new Date();
+
+
+    var task  = setInfo.get();
+    console.log("task set is "+JSON.stringify(task));
+    $scope.ViewTask = {
+        task_id :task.TaskID,
+        task_name :task.TaskName,
+        task_desc :task.TaskDescripion,
+        task_startDate : task.ScheduleStartDate,
+        task_endDate : task.ScheduleEndDate,
+        task_isCompleted:task.isCompleted
     };
 
-    $scope.today();
 
-    $scope.taskStartDate = function(){
-        $scope.taskStart.opened = true;
-    };
+    $scope.getViewNotes=function(){
+        $scope.ViewNotes = [];
+        var notes = [];
 
-    $scope.taskStart = {
-        opened:false
-    };
+        $scope.ViewNotes.length = 0;
+        $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
+            for(var i = 0; i<response.data.length ; i++){
+                notes.push({
+                    Note : response.data[i].ConductionNote,
+                    AddedBy : response.data[i].firstName+" "+response.data[i].lastName,
+                    NoteDate : response.data[i].DateAdded
+                });
+            }
+            $scope.ViewNotes = notes;
+            setInfo.set(notes);
+        });
+    }
+    $scope.getViewNotes();
+    $scope.updateTask = function(taskid){
 
-    $scope.taskEndDate = function(){
-        $scope.taskEnd.opened = true;
-    };
 
-    $scope.taskEnd = {
-        opened:false
-    };
+        var isCompleted = $scope.completed;
+        console.log("completed "+isCompleted);
+
+        var completed = 0;
+        console.log("is completed"+completed);
+        var crdate = new Date();
+        var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+        var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+        var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+        var data = '{"CompletionPercentage":"'+$scope.taskCompletionP+'","isCompleted":"'+isCompleted+'","ActualStartDate":"'+actualStart+'","ActualEndDate":"'+actualEnd+'","ConductionNote":"'+$scope.note+'","NoteAddedBy":"1","NoteAdditionDate":"'+noteCreatedDate+'"}';
+        console.log("update task data is "+data);
+
+        $.ajax({
+            type: "POST",
+            url: 'php/api/task/edit/'+taskid,
+            data: data,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json',
+            processData: false,
+
+            success:  function(data)
+            {
+                $scope.getViewNotes(task);
+                console.log($scope.ViewNotes);
+                alert("success in task updation "+data);
+            } ,
+            error: function(data){
+                alert("error in task updation "+data);
+            }
+        });
+    }
 });
 
-myApp.controller('SearchTaskController',function($scope,$http){
 
-    $scope.taskList=[];
-    $scope.taskList.push({
-        taskId:"asdasd",
-        taskName:"Gokhale",
-        description:"pune",
-        completionPercentage:"maharashtra",
-        assignTo:"India",
-        creationDate:"22-09-1992"
-    });
-    $scope.taskList.push({
-        taskId:"asdasd",
-        taskName:"Gokhale",
-        description:"pune",
-        completionPercentage:"maharashtra",
-        assignTo:"India",
-        creationDate:"22-09-1992"
-    });
-    $scope.taskList.push({
-        taskId:"asdasd",
-        taskName:"Gokhale",
-        description:"pune",
-        completionPercentage:"maharashtra",
-        assignTo:"India",
-        creationDate:"22-09-1992"
-    });
+//myApp.controller('ViewTaskController',function(setInfo,$filter,$scope,$http){
+//
+//
+//    var task  = setInfo.get();
+//    console.log("task set is "+JSON.stringify(task));
+//    $scope.ViewTask = {
+//                task_id :task.TaskID,
+//                task_name :task.TaskName,
+//                task_desc :task.TaskDescripion,
+//                task_startDate : task.ScheduleStartDate,
+//                task_endDate : task.ScheduleEndDate,
+//                task_isCompleted:task.isCompleted
+//    };
+//
+//
+//    $scope.getViewNotes=function(tasks){
+//     $scope.ViewNotes = [];
+//     var notes = [];
+//
+//    $scope.ViewNotes.length = 0;
+//     $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
+//             for(var i = 0; i<response.data.length ; i++){
+//                notes.push({
+//                Note : response.data[i].ConductionNote,
+//                AddedBy : response.data[i].FirstName+" "+response.data[i].LastName,
+//                NoteDate : response.data[i].DateAdded
+//            });
+//             }
+//         $scope.ViewNotes = notes;
+//         setInfo.set(notes);
+//        });
+//    }
+//     $scope.getViewNotes(task);
+//     $scope.updateTask = function(taskid){
+//
+//        var isCompleted = $scope.completed;
+//        console.log("completed "+isCompleted);
+//
+//        var completed = 0;
+//        console.log("is completed"+completed);
+//        var crdate = new Date();
+//        var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//        var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//        var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//
+//        var data = '{"CompletionPercentage":"'+$scope.taskCompletionP+'","isCompleted":"'+isCompleted+'","ActualStartDate":"'+actualStart+'","ActualEndDate":"'+actualEnd+'","ConductionNote":"'+$scope.note+'","NoteAddedBy":"1","NoteAdditionDate":"'+noteCreatedDate+'"}';
+//        console.log("update task data is "+data);
+//
+//         $.ajax({
+//                            type: "POST",
+//                            url: 'php/api/task/edit/'+taskid,
+//                            data: data,
+//                            dataType: 'json',
+//                            cache: false,
+//                            contentType: 'application/json',
+//                            processData: false,
+//
+//                            success:  function(data)
+//                            {
+//                               //  $scope.ViewNotes=[];
+//                               //  var tasks=setInfo.get();
+//                               // tasks.push({
+//                               //     Note : $scope.note,
+//                               //     AddedBy :"n",
+//                               //     NoteDate : noteCreatedDate
+//                               //  });
+//
+//                               // $scope.ViewNotes=tasks;
+//                               $scope.getViewNotes(task);
+//                                console.log($scope.ViewNotes);
+//                                alert("success in task updation "+data);
+//                             } ,
+//                            error: function(data){
+//                            alert("error in task updation "+data);
+//                            }
+//                        });
+//
+//
+//     }
+//});
 
+myApp.controller('SearchTaskController',function(setInfo,$scope,$http){
 
+  
+$scope.tasks = [];
+var task = [];
+    $http.get("php/api/task").then(function(response){
+        console.log(response);
+        for(var i = 0; i<response.data.length ; i++){
+
+            task.push({
+                    "TaskID": response.data[i].TaskID,
+                    "TaskName": response.data[i].TaskName,
+                    "TaskDescripion": response.data[i].TaskDescripion,
+                    "ScheduleStartDate": response.data[i].ScheduleStartDate,
+                    "ScheduleEndDate": response.data[i].ScheduleEndDate,
+                    "CompletionPercentage": response.data[i].CompletionPercentage,
+                    "TaskAssignedTo": response.data[i].TaskAssignedTo,
+                    "isCompleted": response.data[i].isCompleted,
+                    "CreationDate": response.data[i].CreationDate,
+                    "CreatedBy": response.data[i].CreatedBy,
+                    "ActualStartDate": response.data[i].ActualStartDate,
+                    "AcutalEndDate": response.data[i].AcutalEndDate,
+                    "UserId": response.data[i].UserId,
+                    "UserName": response.data[i].firstName+" "+response.data[i].lastName
+        
+            });
+        }
+       $scope.tasks = task;
+        $scope.totalItems = $scope.tasks.length;
+        $scope.currentPage = 1;
+        $scope.tasksPerPage=5;
+        $scope.paginateTasksDetails = function (value) {
+            //console.log("In Paginate");
+            var begin, end, index;
+            begin = ($scope.currentPage - 1) * $scope.tasksPerPage;
+            end = begin + $scope.tasksPerPage;
+            index = $scope.tasks.indexOf(value);
+            //console.log(index);
+            return (begin <= index && index < end);
+        };
+       // setInfo.set($scope.customers);
+    })
+
+        $scope.setTask = function(task){
+            setInfo.set(task);
+        }
+
+         $scope.deleteTask= function(taskid){
+                console.log("delete task "+taskid);
+                 $http({
+                     method: 'GET',
+                     url: 'php/api/task/delete/'+taskid
+                        }).then(function successCallback(response) {
+                            alert("in success :::"+response );
+                      }, function errorCallback(response) {
+                        alert("in error ::"+response);
+                    });
+        }
 
 });
-myApp.controller('AssignTaskController',function($scope,$http){
+myApp.controller('AssignTaskController',function($scope,$http,AppService,$filter){
 
+   console.log("in AssignTaskController");
+     $scope.users = [];
+    AppService.getUsers($scope,$http);
+
+    $scope.assignTask = function(){
+         var date = new Date();
+         var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
+         var startDate = $filter('date')($scope.task.startDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+         var endDate = $filter('date')($scope.task.endDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+         console.log("startDate "+startDate);
+        var Taskdata = '{"TaskName":"'+$scope.task.taskname+'","TaskDescripion":"'+$scope.task.description+'","ScheduleStartDate":"'+startDate+'","ScheduleEndDate":"'+endDate+'","CompletionPercentage":"0","TaskAssignedTo":"'+$scope.task.assignedTo.id+'","isCompleted":"0","CreationDate":"'+creationDate+'"}';
+                  console.log("Task data is "+Taskdata);
+                     /* $http.post('php/api/task', Taskdata,config)
+                            .success(function (data, status) {
+                                alert("Task has been created Successfuly.. "+status);
+                                        })
+                            .error(function (data, status) {
+                
+                                alert("Error in task creation "+$scope.ResponseDetails );
+                        });*/
+/*
+                            $http({
+                                    method: 'POST',
+                                    url: 'php/api/task',
+                                    data: Taskdata,
+                                    headers: {'Content-Type': 'application/json'}
+                                    }).success(function (data, status) {
+                                         alert("Task has been created Successfuly.. "+status);
+                                            })
+                                      .error(function (data, status) {
+                                    alert("Error in task creation "+$scope.ResponseDetails );
+                            });*/
+
+                     $.ajax({
+                            type: "POST",
+                            url: 'php/api/task',
+                            data: Taskdata,
+                            dataType: 'json',
+                            cache: false,
+                            contentType: 'application/json',
+                            processData: false,
+                           
+                            success:  function(data)
+                            {
+                                alert("success in assign task "+data);
+
+                             } ,
+                            error: function(data){
+                                console.log(data);
+                                alert("error in task assignment"+data);
+                            } 
+                        });
+
+    }
     //$scope.today = function(){
     //    $scope.task.startDate = new Date();
     //};

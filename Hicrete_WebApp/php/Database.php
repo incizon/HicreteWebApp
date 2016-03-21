@@ -4,8 +4,8 @@ class Database
     private $_connection;
     private static $_instance; //The single instance
     private $_host = "localhost";
-    private $_username = "root";
-    private $_password = "";
+    private $_username = "hicreteRoot";
+    private $_password = "hicrete@123";
     private $_database = "hicrete";
 
     /*
@@ -31,7 +31,7 @@ class Database
     {
         try {
             $this->_connection  = new PDO("mysql:host=$this->_host;dbname=$this->_database", $this->_username, $this->_password);
-           
+            $this->_connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
            // echo 'Connected to database';
         } catch (PDOException $e) {
            
