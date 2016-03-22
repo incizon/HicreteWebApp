@@ -100,13 +100,12 @@ class InwardData extends CommonMethods
      ***********************************************************************************/
     public function getInwardEntries($dbh,$keyword,$searchTerm,$dbhHicrete)
     {
-        if(isset($keyword)) {
-            $keyword = "%" . $keyword . "%";
-        }
+        $keyword = "%" . $keyword . "%";
+
         //$selectStatement = "SELECT * FROM inward ";
         $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
         //echo "select statement".$selectStatement;
-        if(isset($searchTerm)) {
+
             switch ($searchTerm) {
                 case'InwardNo':
                     $selectStatement = $selectStatement . " AND a.inwardno like :keyword";
@@ -118,15 +117,15 @@ class InwardData extends CommonMethods
                     $selectStatement = $selectStatement . " AND c.wareHouseName like :keyword";
                     break;
             }
-        }
+
        // echo $selectStatement;
         //$stmt = $dbh->prepare("SELECT * FROM inward");
         $stmt = $dbh->prepare($selectStatement);
-        if(isset($searchTerm)) {
+
             if ($searchTerm == 'InwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
                 $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
             }
-        }
+
         if ($stmt->execute()) {
             //push it into array
             $material=InventoryUtils::getProductById('97');
