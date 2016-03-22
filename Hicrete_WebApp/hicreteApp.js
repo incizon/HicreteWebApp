@@ -109,11 +109,11 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Inventory/html/inward/Inventory_Inward_Form.html',
             controller: 'inwardController'
         })
-        .state('Inventory.inwardSearch', {
-            url: '/inwardSearch',
-            templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
-            controller: 'inwardController'
-        })
+        //.state('Inventory.inwardSearch', {
+        //    url: '/inwardSearch',
+        //    templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
+        //    controller: 'inwardController'
+        //})
         .state('Inventory.outwardItem', {
             url: '/outwardItem',
             templateUrl: 'Inventory/html/outward/Inventory_Outward_steps.html',
@@ -129,21 +129,22 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/addSupplier',
             templateUrl: 'Inventory/html/inventory_Add_Supplier.html',
             controller: 'addSupplierController'
-        })  
+        })
 
         .state('Inventory.searchProduct', {
             url: '/searchProduct',
             templateUrl: 'Inventory/html/search/Inventory_Items_Search.php',
-            controller: 'productController'
+            controller: 'ProductSearchController'
         })
         .state('Inventory.searchInward', {
             url: '/searchInward',
             templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
-
+            controller:'InwardSearchController'
         })
         .state('Inventory.searchOutward', {
             url: '/searchOutward',
             templateUrl: 'Inventory/html/search/Inventory_Outward_Search.html',
+            controller:'OutwardSearchController'
 
         })
         .state('Inventory.searchInventory', {
