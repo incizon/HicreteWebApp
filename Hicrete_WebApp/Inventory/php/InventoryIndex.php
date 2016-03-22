@@ -77,7 +77,10 @@
             case 'search':
                 # code...
                 $productObjSearch = new InwardData($pData);
-                $productObjSearch->getInwardEntries($dbh,$dbhHicret);
+               // echo $pData->keyword;
+               // echo $pData->SearchTerm;
+
+                $productObjSearch->getInwardEntries($dbh,$pData->keyword,$pData->SearchTerm,$dbhHicret);
                 break;
 
             default:
@@ -112,7 +115,7 @@
             case 'search':
                 # code...
                 $productObjSearch = new OutwardData($pData);
-                $productObjSearch->getOutwardEntries($dbh);
+                $productObjSearch->getOutwardEntries($dbh,$pData->keyword,$pData->SearchTerm);
                 break;
             case 'getProductAvailableQty':
 //                echo json_encode($pData->materialId);

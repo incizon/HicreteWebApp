@@ -98,9 +98,29 @@ class InwardData extends CommonMethods
      * @param1- $dbh connection object
      * Returns- inward entries
      ***********************************************************************************/
-    public function getInwardEntries($dbh,$dbhHicrete)
+    public function getInwardEntries($dbh,$keyword,$searchTerm,$dbhHicrete)
     {
-        $stmt = $dbh->prepare("SELECT * FROM inward");
+        $keyword="%".$keyword."%";
+        //$selectStatement = "SELECT * FROM inward ";
+        $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
+        //echo "select statement".$selectStatement;
+        switch($searchTerm) {
+            case'InwardNo':
+                $selectStatement = $selectStatement." AND a.inwardno like :keyword";
+                break;
+            case'Company':
+                $selectStatement = $selectStatement." AND b.companyName like :keyword";
+                break;
+            case'Warehouse':
+                $selectStatement = $selectStatement." AND c.wareHouseName like :keyword";
+                break;
+    }
+       // echo $selectStatement;
+        //$stmt = $dbh->prepare("SELECT * FROM inward");
+        $stmt = $dbh->prepare($selectStatement);
+        if($searchTerm == 'InwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
+        }
         if ($stmt->execute()) {
             //push it into array
             $material=InventoryUtils::getProductById('97');
@@ -116,9 +136,10 @@ class InwardData extends CommonMethods
                 $inwardData['dateofentry']=$result2['dateofentry'];
                 $warehouseId=$result2['warehouseid'];
                 $companyId=$result2['companyid'];
-                $inwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
-                $inwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
-
+                //$inwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                //$inwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
+                $inwardData['companyName']= $result2['companyName'];
+                $inwardData['warehouseName']=$result2['wareHouseName'];
                 $stmtTransport=$dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
                 $stmtTransport->bindParam(':inwardID', $inwardID);
                 if($stmtTransport->execute()){

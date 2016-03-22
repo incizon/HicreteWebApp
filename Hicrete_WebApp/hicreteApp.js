@@ -134,16 +134,17 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Inventory.searchProduct', {
             url: '/searchProduct',
             templateUrl: 'Inventory/html/search/Inventory_Items_Search.php',
-            controller: 'productController'
+            controller: 'ProductSearchController'
         })
         .state('Inventory.searchInward', {
             url: '/searchInward',
             templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
-
+            controller:'InwardSearchController'
         })
         .state('Inventory.searchOutward', {
             url: '/searchOutward',
             templateUrl: 'Inventory/html/search/Inventory_Outward_Search.html',
+            controller:'OutwardSearchController'
 
         })
         .state('Inventory.searchInventory', {
@@ -565,6 +566,8 @@ myApp.run(function($rootScope,$http) {
     $rootScope.suppliers=[];
     $rootScope.prodInq=[];
     $rootScope.prodInqAll=[];
+    $rootScope.InwardSearchData=[];
+    $rootScope.OutwardSearchData=[];
 
 });
 

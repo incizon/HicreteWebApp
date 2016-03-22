@@ -12,12 +12,22 @@
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row stacked">
-            <div class="col-lg-8 col-md-8">
+            <div class="col-lg-3 col-md-3">
+                <div class="input-group" >
+                    <select class="form-control" ng-model="SearchTerm" value="">
+                        <option value="" disabled selected>Search by</option>
+                        <option value="OutwardNo">Outward Number</option>
+                        <option value="Company">Company</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9">
                 <div class="input-group push-down-10" >
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
+                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keyword"/>
                     <div class="input-group-btn">
-                        <button class="btn btn-primary" ng-click="getInventory()">Search</button>
+                        <button class="btn btn-primary" ng-click="getOutwardDetails()">Search</button>
                     </div>
                 </div>
             </div>
@@ -26,7 +36,7 @@
 </div>
 <!-- END SEARCH -->
    <!-- START SEARCH RESULT -->
-   <div class="search-results" ng-controller="SearchController">
+   <div class="search-results" >
 
     <div class="sr-item">
         <div class="sr-item-title">Outward Products
@@ -48,7 +58,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in OutwardSearchData |filter:paginateOutward | filter:keywords | orderBy:'productname'">
+                    <tr ng-repeat="product in OutwardSearchData |filter:paginateOutward | filter:keyword | orderBy:'productname'">
                         <td  class="tablerow">{{product.outwardno}}</td>
                         <td  class="tablerow">{{product.materialDetails.length}}</td>
                         <td class="tablerow">{{product.companyName}}</td>
