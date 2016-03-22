@@ -36,7 +36,7 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
         var isTracking = 0;
 
         $scope = this;
-        if($scope.isSiteTracking == true){
+        if($scope.projectSource == "Site Tracking"){
             isTracking = 1;
         }
 
@@ -48,18 +48,32 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
             }
 
         }
-        var projectBasicDetails = {"ProjectName":$scope.projectDetails.projectName,"ProjectManagerId":$scope.projectDetails.projectManagerId,"ProjectSource":$scope.projectDetails.projectSource,"IsSiteTrackingProject":$scope.isSiteTracking,"CustomerId":$scope.projectDetails.customerId,"Address":$scope.projectDetails.address,"City":$scope.projectDetails.city,"State":$scope.projectDetails.state,"Country":$scope.projectDetails.country,"Pincode":$scope.projectDetails.pinCode,"PointContactName":$scope.projectDetails.pointOfContacName,"MobileNo":$scope.projectDetails.pointfContactMobileNo,"LandlineNo":$scope.projectDetails.pointOfContactLandlineNo,"EmailId":$scope.projectDetails.pointofConactEmailID};
+        var projectBasicDetails = {
+            ProjectName:$scope.projectDetails.projectName,
+            ProjectManagerId:$scope.projectDetails.projectManagerId,
+            ProjectSource:$scope.projectDetails.projectSource,
+            CustomerId:$scope.projectDetails.customerId,
+            Address:$scope.projectDetails.address,
+            City:$scope.projectDetails.city,
+            State:$scope.projectDetails.state,
+            Country:$scope.projectDetails.country,
+            Pincode:$scope.projectDetails.pinCode,
+            PointContactName:$scope.projectDetails.pointOfContactName,
+            MobileNo:$scope.projectDetails.pointfContactMobileNo,
+            LandlineNo:$scope.projectDetails.pointOfContactLandlineNo,
+            EmailId:$scope.projectDetails.pointOfContactEmailId
+        };
         var projectData={
             projectDetails:projectBasicDetails,
             companiesInvolved:companiesInvolved
         }
         // console.log("data is "+projectData);
         console.log("Posting");
-        console.log("data is "+JSON.stringify(projectData));
+
         $http.post('php/api/projects', projectData)
             .success(function (data, status, headers) {
                 //$scope.PostDataResponse = data;
-                alert("data is "+data+" status is "+status);
+                alert(data.message);
 
             })
             .error(function (data, status, header) {
@@ -593,71 +607,82 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal, $lo
     }
 });
 
-myApp.controller('viewProjectController',function($scope,$http){
+myApp.controller('viewProjectController',function($scope,$http,$rootScope){
 
-    $scope.searchBy='';
-    $scope.searchKeyword='';
-    $scope.ProjectPerPage=2;
+    $scope.ProjectPerPage=5;
     $scope.currentPage=1;
-    $scope.totalItems=5;
-    $scope.Projects=[
-        {
-            "project_id": "1",
-            project_name: "Dream city",
-            project_manager:"Namdev",
-            project_status:"incomplete",
-            payment_status:"no",
-            project_quotation:'yes'
 
-        },
-        {
-            "project_id": "2",
-            project_name: "Prayeja city",
-            project_manager:"Atul",
-            project_status:"complete",
-            payment_status:"yes",
-            project_quotation:"yes"
+    $scope.searchproject = function(){
+        var project = [];
+        var expression = $scope.searchBy +""+$scope.searchKeyword;
+        console.log(expression);
 
-        },
-        {
-            "project_id": "4",
-            project_name: "dsk",
-            project_manager:"Ajit",
-            project_status:"incomplete",
-            payment_status:"no",
-            project_quotation:"yes"
+        if($scope.searchBy!=undefined){
+            // alert("nt");
+            $http.get("php/api/projects/search/"+$scope.searchBy+"&"+$scope.searchKeyword).then(function(response) {
 
-        },
-        {
-            "project_id": "3",
-            project_name: "Ghokhale Constructions",
-            project_manager:"Pranav",
-            project_status:"complete",
-            payment_status:"yes",
-            project_quotation:"yes"
+                if(response.data.status=="Successful"){
+                    for(var i = 0; i<response.data.length ; i++){
+                        project.push({'project_name':response.data.message[i].ProjectName,
+                            'projectId':response.data.message[i].ProjectId,
+                            'project_status':response.data.message[i].ProjectStatus,
+                            'project_manager':response.data.message[i].FirstName+" "+response.data.message[i].LastName,
+                            'project_id':response.data.message[i].ProjectId,
+                            'project_Address':response.data.message[i].Address,
+                            'project_City':response.data.message[i].City,
+                            'project_State':response.data.message[i].State,
+                            'project_Country':response.data.message[i].Country,
+                            'PointContactName' : response.data.message[i].PointContactName,
+                            'MobileNo' :response.data.message[i].MobileNo,
+                            'LandlineNo':response.data.message[i].LandlineNo,
+                            'EmailId' :response.data.message[i].EmailId ,
+                            'Pincode' : response.data.message[i].Pincode
+                        });
+                        //$scope.Projects = b;
+                    }
+                    $rootScope.projectSearch = project;
+                    if($rootScope.projectSearch.length==0){
+                        alert("No Data Found For Search Criteria");
+                    }
+                }else{
+                    alert(response.data.message);
+                }
 
-        },
-        {
-            "project_id": "5",
-            project_name: "ABI",
-            project_manager:"Pranav",
-            project_status:"incomplete",
-            payment_status:"no",
-            project_quotation:"no"
 
+            })
+        }else{
+
+            alert("Please Select Search By From SelectList");
         }
+    }
 
-    ];
+
+    $scope.projectDetails = function(viewData){
+        myService.set(viewData);
+    }
+
+    /*delete project*/
+    $scope.deleteProject = function(id){
+        console.log("in Deleted fn"+id);
+        $http.get('php/api/project/delete/'+id)
+            .success(function (data, status) {
+                //  $scope.postCustData = data;
+                alert("data is "+data+" status is "+status);
+            })
+            .error(function (data, status) {
+                alert($scope.ResponseDetails );
+            });
+    }
 
     $scope.paginate = function(value) {
         //console.log("In Paginate");
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.ProjectPerPage;
         end = begin + $scope.ProjectPerPage;
-        index = $scope.Projects.indexOf(value);
+        index = $rootScope.projectSearch.indexOf(value);
         //console.log(index);
         return (begin <= index && index < end);
-    };
+    }
 
 
 });
@@ -701,28 +726,132 @@ myApp.controller('ViewInvoiceDetails',function($scope,$http){
     console.log("IN");
 
 });
-myApp.controller('QuotationFollowupHistoryController',function($scope,$http){
+myApp.controller('QuotationFollowupHistoryController',function($scope,$http,AppService){
 
+    $scope.projects = [];
 
+    AppService.getAllProjects($http,$scope);
+
+    $scope.selectProject = function(){
+        $scope.quotations = [];
+        AppService.getAllQuotationOfProject($http,$scope,$scope.selectedProjectId);
+    }
+
+    $scope.show=function(){
+
+        $http.post("php/api/quotation/followup/"+$scope.selectedQuotationId, null)
+            .success(function (data) {
+
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i = 0; i<data.message.length ; i++){
+                        $scope.followups.push({
+                            followup_id:data.message[i].FollowupId,
+                            followup_date:data.message[i].FollowupDate,
+                            followup_title:data.message[i].FollowupTitle,
+                            followup_description:data.message[i].Description,
+                            followup_conductionDate:data.message[i].ConductDate,
+                            followup_by:data.message[i].firstName+" "+data.message[i].lastName
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
 
 });
 
-myApp.controller('PaymentFollowupHistoryController',function($scope,$http){
+myApp.controller('PaymentFollowupHistoryController',function($scope,$http,AppService){
 
+    $scope.projects = [];
+
+    AppService.getAllProjects($http,$scope);
+
+    $scope.selectProject = function(){
+        $scope.invoicess = [];
+        AppService.getAllInvoicesOfProject($http,$scope,$scope.selectedProjectId);
+    }
+
+    $scope.show=function(){
+
+        $http.post("php/api/invoice/followup/"+$scope.selectedInvoiceId, null)
+            .success(function (data) {
+
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i = 0; i<data.message.length ; i++){
+                        $scope.followups.push({
+                            followup_id:data.message[i].FollowupId,
+                            followup_date:data.message[i].FollowupDate,
+                            followup_title:data.message[i].FollowupTitle,
+                            followup_description:data.message[i].Description,
+                            followup_conductionDate:data.message[i].ConductDate,
+                            followup_by:data.message[i].firstName+" "+data.message[i].lastName
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
 
 });
+
 myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
+    $scope.projects = [];
+
+    AppService.getAllSiteTrackingProjects($http,$scope);
+
+    $scope.show=function(){
+
+        $http.post("php/api/projects/siteFollowup/"+$scope.selectedProjectId, null)
+            .success(function (data) {
+
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i = 0; i<data.message.length ; i++){
+                        $scope.followups.push({
+                            followup_id:data.message[i].FollowupId,
+                            followup_date:data.message[i].FollowupDate,
+                            followup_title:data.message[i].FollowupTitle,
+                            followup_description:data.message[i].Description,
+                            followup_conductionDate:data.message[i].ConductDate,
+                            followup_by:data.message[i].firstName+" "+data.message[i].lastName
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
 
 });
-myApp.controller('ViewCustomerController',function($scope,$http){
+
+myApp.controller('ViewCustomerController',function($scope,$http,$rootScope){
 
     $scope.CustomerPerPage=5;
     $scope.currentPage=1;
 
 
     $scope.searchCustomer = function(){
-        $scope.customers = [];
+
         var cust = [];
 
         if($scope.searchKeyword==""){
@@ -746,11 +875,12 @@ myApp.controller('ViewCustomerController',function($scope,$http){
                             cstNo:response.data.message[i].CSTNo,
                             vatNo:response.data.message[i].VATNo,
                             serviceTaxNo:response.data.message[i].ServiceTaxNo,
-                            pincode:response.data.message[i].Pincode
+                            pincode:response.data.message[i].Pincode,
+                            index:i
                         });
                     }
-                    $scope.customers = cust;
-                    console.log($scope.customers);
+                    $rootScope.customerSearch = cust;
+
                 }else{
                     alert(response.data.message);
                 }
@@ -785,8 +915,8 @@ myApp.controller('ViewCustomerController',function($scope,$http){
                             pincode:response.data.message[i].Pincode
                         });
                     }
-                    $scope.customers = cust;
-                    console.log($scope.customers);
+                    $rootScope.customerSearch = cust;
+
                 }else{
                     alert(response.data.message);
                 }
@@ -820,7 +950,7 @@ myApp.controller('ViewCustomerController',function($scope,$http){
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.CustomerPerPage;
         end = begin + $scope.CustomerPerPage;
-        index = $scope.customers.indexOf(value);
+        index = $rootScope.customerSearch.indexOf(value);
         //console.log(index);
         return (begin <= index && index < end);
     };
@@ -874,7 +1004,8 @@ myApp.controller('CustomerController',function($scope,$http){
 
 });
 
-myApp.controller('ModifyCustomerController',function($scope,$http,$stateParams){
+myApp.controller('ModifyCustomerController',function($scope,$http,$stateParams,$rootScope){
+
 
     $scope.customerDetails={
 
@@ -892,22 +1023,26 @@ myApp.controller('ModifyCustomerController',function($scope,$http,$stateParams){
         customer_landline:$stateParams.customerToModify.contactNo,
         customer_phone:$stateParams.customerToModify.mobileNo,
         customer_faxNo:$stateParams.customerToModify.faxNo,
-        customer_serviceTaxNo:$stateParams.customerToModify.serviceTaxNo
+        customer_serviceTaxNo:$stateParams.customerToModify.serviceTaxNo,
+        index:$stateParams.customerToModify.index
     };
 
-    $scope.modifyCustomer = function($custId){
-
+    $scope.modifyCustomer = function(){
+        $custId=$scope.customerDetails.customer_id;
         var custUpdate = '{"CustomerName":"'+$scope.customerDetails.customer_name+'","Address":"'+$scope.customerDetails.customer_address+'","City":"'+$scope.customerDetails.customer_city+'","State":"'+$scope.customerDetails.customer_state+'","Country":"'+$scope.customerDetails.customer_country+'","Mobileno":"'+$scope.customerDetails.customer_phone+'","Landlineno":"'+$scope.customerDetails.customer_landline+'","FaxNo":"'+$scope.customerDetails.customer_faxNo+'","EmailId":"'+$scope.customerDetails.customer_emailId+'","VATNo":"'+$scope.customerDetails.customer_vatNo+'","CSTNo":"'+$scope.customerDetails.customer_cstNo+'","PAN":"'+$scope.customerDetails.customer_panNo+'","ServiceTaxNo":"'+$scope.customerDetails.customer_serviceTaxNo+'"}';
         //  console.log("update data is ::"+custUpdate);
         $http.post('php/api/customer/update/'+$custId, custUpdate)
             .success(function (data, status) {
-                $scope.postCustData = data;
-                alert("data is "+data+" status is "+status);
+                if(data.status=="Successful"){
+                    alert(data.message);
 
+                }else{
+                    alert(data.message);
+                }
             })
             .error(function (data, status) {
 
-                alert($scope.ResponseDetails );
+                alert(data.message );
             });
 
     }

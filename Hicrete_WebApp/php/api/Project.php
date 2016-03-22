@@ -4,7 +4,7 @@ require_once '../Database.php';
 
 Class Project {
 	
-	public function load($id) {
+	public static function load($id) {
 		$object = array();
 		try {
 			$db = Database::getInstance();
@@ -79,33 +79,28 @@ Class Project {
 
 	public function loadProjectSiteFollowup($projID){
 		$object = array();
-		try{
-				$db = Database::getInstance();
-				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM site_tracking_followup_schedule s , site_tracking_followup_details sd,user_master um WHERE s.FollowupId = sd.FollowupId AND um.UserId = s.AssignEmployee AND s.ProjectId = :projid");
-					$stmt->bindParam(':projid',$projID,PDO::PARAM_STR);
-						if($stmt->execute() === TRUE){
-							while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-								array_push($object, $row);
-							}
-						}
-						else{
-
-						}
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `site_tracking_followup_schedule`.`FollowupId`,`FollowupTitle`,`FollowupDate`,`Description`,`ConductDate`,`firstName`,`lastName` FROM `site_tracking_followup_schedule` ,`site_tracking_followup_details`  , usermaster  where `site_tracking_followup_schedule`.FollowupId = `site_tracking_followup_details`.FollowupId AND usermaster.userId = `site_tracking_followup_schedule`.AssignEmployee AND `site_tracking_followup_schedule`.`ProjectId` = :id");
+		$stmt->bindParam(':id',$projID,PDO::PARAM_STR);
+		if($stmt->execute() === TRUE){
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
 		}
-		catch(PDOException $e){
-			return "Exception in loadProjectSiteFollowup ".$e->getMessage();
+		else{
+			return false;
 		}
 		$db = null;
 		return $object;
 	}
 
-	public function loadAll(){
+	public static function loadAll(){
 		$object = array();
 		try {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT * from project_master pm ,project_address_details pad ,user_master u , project_point_of_contact_details ppoc WHERE pm.IsClosedProject = 0 AND pm.isDeleted = 0 AND (pm.ProjectManagerId = u.UserId AND pm.ProjectId = pad.ProjectId AND ppoc.ProjectId = pm.ProjectId) ");
+			$stmt = $conn->prepare("SELECT * from project_master pm ,project_address_details pad , project_point_of_contact_details ppoc WHERE pm.IsClosedProject = 0 AND pm.isDeleted = 0 AND (pm.ProjectManagerId = u.UserId AND pm.ProjectId = pad.ProjectId AND ppoc.ProjectId = pm.ProjectId) ");
 			if($result = $stmt->execute()) {
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 					array_push($object, $row);
@@ -117,6 +112,54 @@ Class Project {
 		$db = null;
 		return $object;
 	}
+
+
+
+	public static function loadAllCustomerBySearch() {
+
+		//return "i m in";
+	}
+
+
+	public static function getProjectSearchQuery($searchBy){
+		if($searchBy=='project_name'){
+			return "SELECT pm.*,pad.*,u.FirstName,u.LastName from project_master pm,project_address_details pad,usermaster u where (pm.ProjectName LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId`" ;
+		}else if($searchBy=='project_city'){
+			return "SELECT pm.*,pad.*,u.FirstName,u.LastName from project_master pm,project_address_details pad,usermaster u where (pad.`City` LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId" ;
+		}
+	}
+
+
+
+	public static function searchProject($searchTerm,$searchBy) {
+
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$searchTerm='%'.$searchTerm.'%';
+		$searchBy=strtolower($searchBy);
+		$queryStmt=self::getProjectSearchQuery($searchBy);
+
+		$stmt = $conn->prepare($queryStmt);
+		$stmt->bindParam(':searchTerm', $searchTerm, PDO::PARAM_STR);
+
+		//$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+
+		if($result = $stmt->execute()){
+			$noOfRows=0;
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+				$noOfRows++;
+			}
+
+		}
+
+		$db = null;
+		return $object ;
+
+	}
+
 
 
 
@@ -219,7 +262,7 @@ Class Project {
 		$conn = null;
 	}*/
 
-public function saveProject($data ,$userId){
+public static function saveProject($data ,$userId){
 		
 		$projnum = AppUtil::generateId();
 		$projectBasicDetails=$data->projectDetails;	
@@ -235,6 +278,7 @@ public function saveProject($data ,$userId){
 			
 			$stmt = $conn->prepare("INSERT INTO project_master (ProjectId, ProjectName, ProjectManagerId, ProjectSource, IsSiteTrackingProject, ProjectStatus, CustomerId, IsClosedProject, isDeleted, CreationDate, CreatedBy, LastModificationDate, LastModifiedBy)
 														VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+
 				if($stmt->execute([$projnum, $projectBasicDetails->ProjectName,$projectBasicDetails->ProjectManagerId,$projectBasicDetails->ProjectSource,'0','Initiated',$projectBasicDetails->CustomerId,'0','0',$current,$userId,$current,$userId]) === TRUE){
 						$stmt2 = $conn->prepare("INSERT INTO project_address_details (ProjectId, Address, City, State, Country, Pincode) VALUES (?,?,?,?,?,?)");
 							if($stmt2->execute([$projnum,$projectBasicDetails->Address,$projectBasicDetails->City,$projectBasicDetails->State,$projectBasicDetails->Country,$projectBasicDetails->Pincode]) === TRUE){
@@ -244,6 +288,8 @@ public function saveProject($data ,$userId){
 										foreach ($data->companiesInvolved as $company) {
 											$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
 											if(!$stmt4->execute([$projnum, $company->companyId]) ){
+
+												throw new Exception($stmt4->errorInfo);
 												$break=true;
 												break;	
 											}	
@@ -252,36 +298,34 @@ public function saveProject($data ,$userId){
 											if(!$break){
 												$conn->commit();
 												$rollBack=false;
-												return "Project created succesfully";
 											}
-											else{
-												return "Error in creation of project";
-											}
+
 									}
 									else
 									{
-										return "Error in stmt3";
+										throw new Exception($stmt3->errorInfo);
 									}
 							}
 							else{
-									return "Error in stmt2";
+								throw new Exception($stmt2->errorInfo);
 							}
 				}
 				else
 				{
 					throw new Exception($stmt->errorInfo);
-					//return "Error in stmt";
+
 				}
-		
-			if($rollBack) {
-					//$conn->rollBack();
-					return "Error: ";
-					
+
+			if($rollBack){
+				$conn->rollBack();
+				return false;
 			}
+			return true;
+		
+
 		} catch (PDOException $e) {
-            echo "Exception alay";
-            echo $e->getMessage();
             $conn->rollBack();
+			throw new Exception($e->getMessage()) ;
         }
 		$conn = null;
 	}
@@ -400,5 +444,47 @@ public function updateProject($id,$data){
 			return "Exception in closeProject ".$e->getMessage();
 		}
 	}
+
+	public static function getProjectList() {
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0'");
+		if($result = $stmt->execute()) {
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}else
+			return null;
+
+		$db = null;
+		return $object;
+
+
+	}
+
+	public static function getSiteTrackingProjectList() {
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='SiteTracking'");
+		if($result = $stmt->execute()) {
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}else{
+			return null;
+		}
+
+		$db = null;
+		return $object;
+
+
+	}
+
+
+
 
 }

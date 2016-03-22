@@ -605,7 +605,7 @@ class ConfigUtils
       try{
           $db = Database::getInstance();
           $conn = $db->getConnection();
-          $stmt = $conn->prepare("SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` NOT IN (SELECT `accessId` FROM `useraccesspermission` WHERE `userId`=:userId)");
+          $stmt = $conn->prepare("SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` NOT IN (SELECT `accessId` FROM `roleaccesspermission` where `roleId` IN (SELECT `roleId` FROM `userroleinfo` WHERE `userId`=:userId`))");
           $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 
           if($stmt->execute()){

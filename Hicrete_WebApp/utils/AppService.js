@@ -97,5 +97,111 @@ myApp.service('AppService', function () {
     }
 
 
+    this.getAllProjects=function($http,$scope){
+
+        $http.post("php/api/projectlist", null)
+            .success(function (data) {
+
+                console.log("IN Project Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $scope.projects.push({
+                            id: response.data.message[i].ProjectId,
+                            name: response.data.message[i].ProjectName
+
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
+
+    this.getAllQuotationOfProject=function($http,$scope,$projectId){
+
+        $http.post("php/api/quotationlist/"+$projectId, null)
+            .success(function (data) {
+
+                console.log("IN Project Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $scope.quotations.push({
+                            id: response.data.message[i].QuotationId,
+                            name: response.data.message[i].QuotationTitle,
+                            refNo:response.data.message[i].RefNo
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
+
+    this.getAllInvoicesOfProject=function($http,$scope,$projectId){
+
+        $http.post("php/api/invoicelist/"+$projectId, null)
+            .success(function (data) {
+
+                console.log("IN Invoice Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $scope.quotations.push({
+                            id: response.data.message[i].InvoiceNo,
+                            name: response.data.message[i].InvoiceTitle
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
+
+
+
+    this.getAllSiteTrackingProjects=function($http,$scope){
+
+        $http.post("php/api/sitetrackingprojectlist", null)
+            .success(function (data) {
+
+                console.log("IN Project Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $scope.projects.push({
+                            id: response.data.message[i].ProjectId,
+                            name: response.data.message[i].ProjectName
+
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:"+data);
+
+            });
+
+    }
+
+
 
 });

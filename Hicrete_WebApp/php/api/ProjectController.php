@@ -13,7 +13,7 @@ class ProjectController
      * @url GET /projects/$id
      */
 
-    public function getProject($id = null){
+    public static function getProject($id = null){
         
          if ($id !=null) {
              $project = Project::load($id); // possible user loading method
@@ -23,6 +23,26 @@ class ProjectController
 
          return $project;
     }
+
+    /**
+     * Gets projet by search terms
+     *
+     * @url GET /projects/search/$expression&$searchKeyword
+     */
+
+    public function searchProject($expression,$searchKeyword){
+
+        try{
+            $project = Project::searchProject($expression,$searchKeyword); // possible user loading method
+            echo AppUtil::getReturnStatus("Successful",$project);
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
+
 
      /**
      * Gets companies involved in project by project id
@@ -56,7 +76,19 @@ class ProjectController
      */
 
     public function getProjectSiteFollowup($projid){
-             $project = Project::loadProjectSiteFollowup($projid); // possible user loading method
+        try{
+            $project = Project::loadProjectSiteFollowup($projid); // possible user loading method
+
+            if($project!=null){
+                echo AppUtil::getReturnStatus("Successful",$project);
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
          return $project;
     }
 
@@ -85,12 +117,24 @@ class ProjectController
     public function saveProject($id = null, $data)
     {
         // ... validate $data properties such as $data->username, $data->firstName, etc.
-        $data->id = $id;
-        $userId="1";
-        
-        $project = Project::saveProject($data,$userId); // saving the user to the database
-        
-        return $project; // returning the updated or newly created user object
+        try{
+            $data->id = $id;
+            $userId=AppUtil::getLoggerInUserId();
+
+            $project = Project::saveProject($data,$userId); // saving the user to the database
+
+            if($project){
+                echo AppUtil::getReturnStatus("Successful","Project Created Successfully");
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred while Creating project");
+            }
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
     }
 
 
@@ -132,5 +176,49 @@ class ProjectController
              $project = Project::closeProject($projid); // possible user loading method
          return $project;
     }
-  
+
+
+
+    /**
+     * delete customer using id
+     *
+     * @url POST /projectlist
+     *
+     */
+
+    public static function getProjectList(){
+        try{
+            $project = Project::getProjectList();
+            if($project!=null)
+                echo AppUtil::getReturnStatus("Successful",$project);
+            else
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
+
+    /**
+     * delete customer using id
+     *
+     * @url POST /sitetrackingprojectlist
+     *
+     */
+
+    public static function getSiteTrackingProjectList(){
+        try{
+            $project = Project::getSiteTrackingProjectList();
+            if($project!=null)
+              echo AppUtil::getReturnStatus("Successful",$project);
+            else
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
+
 }

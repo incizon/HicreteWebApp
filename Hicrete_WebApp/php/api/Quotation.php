@@ -7,25 +7,21 @@ Class Quotation {
 
 	public function loadQuotationFollowup($id) {
 		$object = array();
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			//$stmt = $conn->prepare("SELECT * from quotation q, quotation_details qd,quotation_followup_details qfd , quotation_followup qf where q.QuotationId = qd.QuotationId AND  q.QuotationId = qf.QuotationId AND qf.FollowupId = qfd.FollowupId AND  q.QuotationId =:id");
-			$stmt = $conn->prepare("SELECT * FROM quotation_followup qf ,quotation_followup_details qfd , user_master um where qf.FollowupId = qfd.FollowupId AND um.UserID = qf.AssignEmployee AND qf.QUotationId = :id");
-				$stmt->bindparam(':id',$id,PDO::PARAM_STR);
-				if($stmt->execute() === TRUE){
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-							array_push($object, $row);
-						}
-				}
-				else{
-					return "Error in fetching quotation folowup";
-				}
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		//$stmt = $conn->prepare("SELECT * from quotation q, quotation_details qd,quotation_followup_details qfd , quotation_followup qf where q.QuotationId = qd.QuotationId AND  q.QuotationId = qf.QuotationId AND qf.FollowupId = qfd.FollowupId AND  q.QuotationId =:id");
+		$stmt = $conn->prepare("SELECT quotation_followup.`FollowupId`,`FollowupTitle`,`FollowupDate`,`Description`,`ConductDate`,`firstName`,`lastName` FROM quotation_followup ,quotation_followup_details  , usermaster  where quotation_followup.FollowupId = quotation_followup_details.FollowupId AND usermaster.userId = quotation_followup.AssignEmployee AND quotation_followup.QuotationId = :id");
+		$stmt->bindparam(':id',$id,PDO::PARAM_STR);
+		if($stmt->execute() === TRUE){
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}else{
+			return null;
 		}
-		catch(PDOException $e){
-			return "Exception in loading quotation with Followup".$e->getMessage();
-		}
-		$db = null;
+
+
 		return $object;
 	}
 
@@ -338,6 +334,25 @@ Class Quotation {
 		catch(PDOException $e){
 				return "Exception in deletion of Quotation ".$e->getMessage();
 		}
+
+	}
+
+	public static function getQuotationListForProject($projectId) {
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `QuotationId`,`QuotationTitle`,`RefNo` FROM `quotation` WHERE `ProjectId`=:projectId");
+		$stmt->bindParam(':projectId',$projectId);
+		if($result = $stmt->execute()) {
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}
+
+		$db = null;
+		return $object;
+
 
 	}
 }

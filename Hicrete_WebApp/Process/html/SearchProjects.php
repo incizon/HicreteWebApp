@@ -42,7 +42,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     </div>
                 </div>
                     <div class="col-md-2">
-                        <button class="btn btn-primary">Search</button>
+                        <button class="btn btn-primary" ng-click="searchproject()">Search</button>
                     </div>
             </div>
         </div><br>
@@ -71,7 +71,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="project  in Projects | filter :paginate | filter :searchKeyword | orderBy :sortExpression | orderBy:'payment_status':sortByPayment | orderBy:'project_quotation':sortByQuotation | orderBy:'project_status':sortByCurrentWorking">
+                    <tr ng-repeat="project  in projectSearch | filter :paginate">
                         <td>{{$index + 1}}</td>
                         <td>{{project.project_name}}</td>
                         <td>{{project.project_status}}</td>
@@ -86,7 +86,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
                             <?php
                                 if($hasWrite==1){
-                                    echo "<a ui-sref=\"Process.modifyProject\">
+                                    echo "<a ui-sref=\"Process.modifyProject({projectToModify:project})\">
                                 <button class=\"btn btn-info\" title=\"Modify project details\">
                                     <span class=\"fa fa-pencil-square-o\"></span>
                                 </button>
@@ -125,7 +125,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
         </div>
 
     </div>
-    <uib-pagination total-items="totalItems" ng-model="currentPage"
+    <uib-pagination total-items="projectSearch.length" ng-model="currentPage"
                     max-size="5" boundary-links="true"
                     items-per-page="ProjectPerPage" class="pagination-sm">
     </uib-pagination>

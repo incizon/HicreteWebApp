@@ -325,7 +325,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ModifyCustomer',
             templateUrl: 'Process/html/ModifyCustomer.html',
             controller:'ModifyCustomerController',
-            params : { customerToModify: null }
+            params : { customerToModify: null,index:null }
         })
 
         .state('Process.addProject', {
@@ -336,7 +336,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.modifyProject', {
             url: '/ModifyProject',
             templateUrl: 'Process/html/ProjectModification.html',
-            controller:'ModifyProjectController'
+            controller:'ModifyProjectController',
+            params:{projectToModify:null}
         })
 
         .state('Process.addQuotation', {
@@ -565,7 +566,8 @@ myApp.run(function($rootScope,$http) {
     $rootScope.suppliers=[];
     $rootScope.prodInq=[];
     $rootScope.prodInqAll=[];
-
+    $rootScope.customerSearch=[];
+    $rootScope.projectSearch=[];
 });
 
 
