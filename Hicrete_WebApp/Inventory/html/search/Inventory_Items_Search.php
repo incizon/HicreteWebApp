@@ -28,12 +28,22 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row stacked">
-            <div class="col-lg-8 col-md-8">
+            <div class="col-lg-3 col-md-3">
+                <div class="input-group" >
+                    <select class="form-control" ng-model="SearchTerm" value="">
+                        <option value="" disabled selected>Search by</option>
+                        <option value="productName">Product Name</option>
+                        <option value="materialType">Material Type</option>
+<!--                        <option value="Warehouse">Warehouse</option>-->
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9">
                 <div class="input-group push-down-10" >
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
+                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keyword"/>
                     <div class="input-group-btn">
-                        <button class="btn btn-primary" ng-click="getInventory()">Search</button>
+                        <button class="btn btn-primary" ng-click="getProductDetails()">Search</button>
                     </div>
                 </div>
             </div>
@@ -60,7 +70,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="product in products | filter :paginate | filter:keywords | orderBy:'productname'">
+                <tr ng-repeat="product in products | filter :paginate | filter:keyword | orderBy:'productname'">
                     <td width="5%">{{$index + 1}}</td>
                     <td width="20%">{{product.productname}}</td>
                     <td width="10%">{{product.unitofmeasure}}</td>
