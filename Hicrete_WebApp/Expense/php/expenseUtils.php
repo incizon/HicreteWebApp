@@ -120,7 +120,7 @@ function getExpenseDetails()
 
             $materialId=$result['materialid'];
 
-            $material=InventoryUtils::getProductById('97');
+            $material=InventoryUtils::getProductById($materialId);
 
             $stmtBillDetails=$conn->prepare("select * FROM material_expense_bills WHERE materialexpensedetailsid='$result[materialexpensedetailsid]'");
             if($stmtBillDetails->execute()){

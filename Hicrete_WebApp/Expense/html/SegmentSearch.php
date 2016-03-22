@@ -49,9 +49,10 @@ $hasWrite=appUtil::doesUserHasAccess("Expense",$userId,"Write");
                             <td width="50%">
                                 <?php
                                     if($hasWrite==1){
-                                        echo "<button class=\"btn btn-info btn-sm\" data-target=\"#modify\" data-toggle=\"modal\"
-                                        ng-click=\"\"><span class=\"fa fa-pencil-square-o\"></span>Modify
-                                </button>
+//                                        <button class="btn btn-info btn-sm" data-target="#modify" data-toggle="modal"
+//                                        ng-click=""><span class="fa fa-pencil-square-o"></span>Modify
+//                                </button>
+                                        echo "
                                 <button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
                                     }
                                 ?>

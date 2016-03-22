@@ -22,8 +22,8 @@
                                 <label class="control-label">Task Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <div class="input-group">
-                                    {{"Task Name"}}
+                                <div class="input-group" >
+                                {{ViewTask.task_name}}
                                 </div>
 
                             </div>
@@ -33,7 +33,7 @@
                                 <label class="control-label">Description :</label>
                             </div>
                             <div class="col-md-8">
-                                {{"Task Description Demo"}}
+                                {{ViewTask.task_desc}}
                             </div>
                         </div>
                         <div class="form-group">
@@ -43,7 +43,7 @@
                             <div class="col-md-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="actualStartDate" ng-model="actualStartDate" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="taskStart.opened" datepicker-options="dateOptions"  show-button-bar="false"/>
+                                    <input type="text" ng-disabled="ViewTask.task_isCompleted==1"  class="form-control" name="actualStartDate" ng-model="actualStartDate" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="taskStart.opened" datepicker-options="dateOptions"  show-button-bar="false"/>
                                 </div>
 
                             </div>
@@ -56,7 +56,7 @@
                             <div class="col-md-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="actualEndDate" ng-model="actualEndDate" ng-click="taskEndDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="taskEnd.opened" datepicker-options="dateOptions"  show-button-bar="false"/>
+                                    <input type="text" ng-disabled="ViewTask.task_isCompleted==1" class="form-control" name="actualEndDate" ng-model="actualEndDate" ng-click="taskEndDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="taskEnd.opened" datepicker-options="dateOptions"  show-button-bar="false"/>
                                 </div>
 
                             </div>
@@ -69,7 +69,7 @@
                             <div class="col-md-8">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="taskName" ng-model="taskName"/>
+                                    <input type="text" class="form-control" ng-disabled="ViewTask.task_isCompleted==1" name="taskCompletionP" ng-model="taskCompletionP"/>
                                 </div>
 
                             </div>
@@ -78,7 +78,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-4 col-md-6">
                                     <div class="input-group">
-                                        <input type="checkbox" ng-model="completed" name="completed" >  Mark This Task As Completed
+                                        <input type="checkbox"  ng-disabled="ViewTask.task_isCompleted==1" ng-model="completed" ng-true-value="'1'" ng-false-value="'0'" name="completed" >  Mark This Task As Completed
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                             </div>
                             <div class="col-md-8">
 
-                                      <textarea class="form-control" name="note"
+                                      <textarea ng-disabled="ViewTask.task_isCompleted==1" class="form-control" name="note"
                                                 ng-model="note" rows="2">
                                     </textarea>
                             </div>
@@ -97,7 +97,8 @@
                         <div class="form-group">
 
                             <div class="col-md-offset-4 col-md-8">
-                                      <button class="btn btn-primary"> Add</button>
+
+                                      <button class="btn btn-primary" ng-disabled="ViewTask.task_isCompleted==1" ng-click="updateTask(ViewTask.task_id)"> Add</button>
                                       <button class="btn btn-primary"> Cancel</button>
                             </div>
                         </div>
@@ -109,7 +110,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    {{"10-02-2016"}}
+                                    {{ViewTask.task_startDate}}
                                 </div>
 
                             </div>
@@ -120,12 +121,19 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    {{"10-03-2016"}}
+                                    {{ViewTask.task_endDate}}
                                 </div>
 
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-md-8">
+                                <div class="input-group" >
+                                   <h1 ng-show="ViewTask.task_isCompleted==1"> Task has been completed!!!!</h1>
+                                </div>
 
+                            </div>
+                        </div>
                     </div>
 
                 </div><br>
@@ -142,47 +150,17 @@
                             <th width=15%>Date</th>
                         </tr>
                         </thead>
-                        <tr>
-                            <td>1</td>
+                        <tr ng-repeat = "note in ViewNotes">
+                            <td>{{$index+1}}</td>
                             <td>
-                                {{"Demo Note 1"}}
+                                {{note.Note}}
                             </td>
                             <td>
-                                {{"Namdev Devmare"}}
-                            </td>
-
-                            <td>
-                                   {{"10-02-2016"}}
-                            </td>
-
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td>
-                                {{"Demo Note 2"}}
-                            </td>
-                            <td>
-                                {{"Ajit Zagade"}}
+                                {{note.AddedBy}}
                             </td>
 
                             <td>
-                                {{"10-02-2016"}}
-                            </td>
-
-                        </tr>
-
-                        <tr>
-                            <td>3</td>
-                            <td>
-                                {{"Demo Note 3"}}
-                            </td>
-                            <td>
-                                {{"Atul Dhatrak"}}
-                            </td>
-
-                            <td>
-                                {{"10-01-2016"}}
+                                   {{note.NoteDate}}
                             </td>
 
                         </tr>

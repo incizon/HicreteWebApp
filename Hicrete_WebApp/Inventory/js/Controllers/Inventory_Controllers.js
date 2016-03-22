@@ -1,20 +1,5 @@
 
-myApp.controller('inventoryCommonController', function ($scope, $http, inventoryService) {
 
-    //get Material Tyepes
-    inventoryService.getMaterialTypes($scope, $http);
-
-    //Available Products
-    inventoryService.getProducts($scope, $http);
-
-    ////Get Warehouses
-    //inventoryService.getWarehouses($scope,$http);
-    //// Get Company
-    //inventoryService.getCompanys($scope,$http);
-
-
-
-});
 
 
 /**********************************************************************************
@@ -52,7 +37,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     //Available Products
     //inventoryService.getProducts($scope, $http);
 
-    inventoryService.getSavedProducts($scope);
+    //inventoryService.getSavedProducts($scope);
 
 
     inventoryService.getProducts($scope, $http);
@@ -249,34 +234,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      *End of Getter
      **********************************************************************************/
 
-    /***************************************************************************
-     * Purpose- This function will retrieve the product details from database
-     * @param1- $scope and $http
-     * Return- Items available in database
-     ****************************************************************************/
-        // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-        // $scope.productSearch=function($scope,$http){
-    $scope.lodaing = "";
-    $http.post("Inventory/php/ProductSearch.php", null)
-        .success(function (data) {
-            console.log("Items Present in database");
-            console.log(data);
-            $scope.lodaing = true;
-            $('#loader').css("display","block");
-            $scope.lodaing = false;
-            $('#loader').css("display","none");
-            $scope.products = data;
-            $scope.totalItems = $scope.products.length;
-        })
-        .error(function (data, status, headers) {
-            console.log(data);
-            $scope.lodaing = false;
-            $('#loader').css("display","none");
-        });
-    // };
-    /***************************************************************************
-     * End of Get Product Details
-     ****************************************************************************/
+
 
     /**********************************************************************************
      *Setters to set true/false for tables to modify
@@ -1055,6 +1013,215 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
  * End of Supplier Controller
  */
 
+//Start of outward search controller
+myApp.controller('OutwardSearchController',function($http,$scope,$rootScope){
+
+    $scope.keyword="";
+    $scope.totalOutwardItems = 0;
+    $scope.currentOutwardPage = 1;
+    $scope.InventoryOutwardItemsPerPage = 10;
+
+    $scope.getProduct = function (product) {
+        $scope.selectedProduct = product;
+        $scope.viewMaterials = $scope.selectedProduct.materialDetails;
+
+    }
+    $scope.paginateOutward = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentOutwardPage - 1) * $scope.InventoryOutwardItemsPerPage;
+        end = begin + $scope.InventoryOutwardItemsPerPage;
+        index = $scope.OutwardSearchData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
+
+
+    $scope.getOutwardDetails = function()
+    {
+        console.log($scope.SearchTerm);
+        $scope.materialDetails=[];
+        var data = {
+            module: 'outward',
+            operation: 'search',
+            keyword: $scope.keyword,
+            SearchTerm:$scope.SearchTerm
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                $scope.loading=true;
+                $('#loader').css("display","block");
+                //setTimeout(function(){
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                //},1000);
+                console.log("IN INWARD Search");
+                $rootScope.OutwardSearchData = data;
+                $scope.totalOutwardItems = $rootScope.OutwardSearchData.length;
+                console.log(data);
+            })
+            .error(function (data, status, headers) {
+                console.log("IN SERVICE OF Inward Search Failure=");
+                console.log(data);
+                $scope.loading=false;
+                $('#loader').css("display","none");
+            });
+
+    };
+
+
+});
+
+//End of outward search controller
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//Start of inward search controller
+/////////////////////////////////////////////////////////////////////////////////////
+
+myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
+    $scope.keyword="";
+    $scope.totalInwardItems = 0;
+    $scope.currentInwardPage = 1;
+    $scope.InventoryInwardItemsPerPage = 10;
+    $scope.paginateInward = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
+        end = begin + $scope.InventoryInwardItemsPerPage;
+        index = $rootScope.InwardSearchData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+    $scope.getViewDataObject = function (product,materialDetails) {
+        console.log(product);
+        $scope.viewMaterials={};
+        $scope.viewProduct = product;
+        $scope.viewMaterials =  $scope.viewProduct.materialDetails;
+    }
+    $scope.getInwardDetails = function()
+    {
+        console.log($scope.SearchTerm);
+        $scope.materialDetails=[];
+        var data = {
+            module: 'inward',
+            operation: 'search',
+            keyword: $scope.keyword,
+            SearchTerm:$scope.SearchTerm
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                $scope.loading=true;
+                $('#loader').css("display","block");
+                //setTimeout(function(){
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                //},1000);
+                console.log("IN INWARD Search");
+                $rootScope.InwardSearchData = data;
+                $scope.totalInwardItems = $rootScope.InwardSearchData.length;
+                console.log(data);
+            })
+            .error(function (data, status, headers) {
+                console.log("IN SERVICE OF Inward Search Failure=");
+                console.log(data);
+                $scope.loading=false;
+                $('#loader').css("display","none");
+            });
+
+    };
+
+
+});
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+//End of inward search controller
+/////////////////////////////////////////////////////////////////////////////////////
+
+
+/*********************************************************************************************
+ * START of product Search Controller
+ *********************************************************************************************/
+
+
+/*********************************************************************************************
+ * End of product Search Controller
+ *********************************************************************************************/
+
+myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) {
+    $scope.totalItems = 0;
+    $scope.currentPage = 1;
+    $scope.InventoryItemsPerPage = 5;
+    $scope.keyword="";
+
+    $scope.paginate = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
+        end = begin + $scope.InventoryItemsPerPage;
+        index = $scope.products.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+    $scope.getProduct = function (product) {
+        $scope.selectedProduct = product;
+    }
+
+    $scope.getProductDetails= function()
+    {
+        $scope.lodaing = "";
+        var data = {
+
+            keyword: $scope.keyword,
+            SearchTerm:$scope.SearchTerm
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/ProductSearch.php", null ,config)
+            .success(function (data) {
+                console.log("Items Present in database");
+                console.log(data);
+                $scope.lodaing = true;
+                $('#loader').css("display","block");
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+                $rootScope.products = data;
+                $scope.totalItems = $rootScope.products.length;
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+            });
+    }
+
+
+
+
+
+});
+
+
 
 /*********************************************************************************************
  * START of Search Controller
@@ -1148,36 +1315,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     /*************************************************
      * START of GETTING INWARD DATA
      **************************************************/
-    $scope.materialDetails=[];
-    var data = {
-        module: 'inward',
-        operation: 'search'
-    }
-    var config = {
-        params: {
-            data: data
-        }
-    };
 
-    $http.post("Inventory/php/InventoryIndex.php", null, config)
-        .success(function (data) {
-            $scope.loading=true;
-            $('#loader').css("display","block");
-            //setTimeout(function(){
-                $scope.loading=false;
-                $('#loader').css("display","none");
-            //},1000);
-            console.log("IN INWARD Search");
-            $scope.InwardSearchData = data;
-            $scope.totalInwardItems = $scope.InwardSearchData.length;
-            console.log(data);
-        })
-        .error(function (data, status, headers) {
-            console.log("IN SERVICE OF Inward Search Failure=");
-            console.log(data);
-            $scope.loading=false;
-            $('#loader').css("display","none");
-        });
     /*************************************************
      * END of GETTING INWARD DATA
      **************************************************/

@@ -1,6 +1,21 @@
 /**
  * Created by Atul on 11-02-2016.
  */
+ 
+ myApp.factory('setInfo', function() {
+ var savedData = {}
+    function set(data) {
+            savedData = data;
+    }
+    function get() {
+            return savedData;
+    }
+
+ return {
+  set: set,
+  get: get
+ }
+});
 
 myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $log,AppService){
     $scope.projectDetails={
@@ -943,67 +958,278 @@ myApp.controller('ReviseQuotation',function($scope,$http){
 
 
 });
-myApp.controller('ViewTaskController',function($scope,$http){
 
-    console.log("In");
+myApp.controller('ViewTaskController',function(setInfo,$scope,$http,$filter,$rootScope){
 
-    $scope.today = function(){
-        $scope.actualStartDate = new Date();
-        $scope.actualEndDate = new Date();
+
+
+    var task  = setInfo.get();
+    console.log("task set is "+JSON.stringify(task));
+    $scope.ViewTask = {
+        task_id :task.TaskID,
+        task_name :task.TaskName,
+        task_desc :task.TaskDescripion,
+        task_startDate : task.ScheduleStartDate,
+        task_endDate : task.ScheduleEndDate,
+        task_isCompleted:task.isCompleted
     };
 
-    $scope.today();
 
-    $scope.taskStartDate = function(){
-        $scope.taskStart.opened = true;
-    };
+    $scope.getViewNotes=function(){
+        $scope.ViewNotes = [];
+        var notes = [];
 
-    $scope.taskStart = {
-        opened:false
-    };
+        $scope.ViewNotes.length = 0;
+        $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
+            for(var i = 0; i<response.data.length ; i++){
+                notes.push({
+                    Note : response.data[i].ConductionNote,
+                    AddedBy : response.data[i].firstName+" "+response.data[i].lastName,
+                    NoteDate : response.data[i].DateAdded
+                });
+            }
+            $scope.ViewNotes = notes;
+            setInfo.set(notes);
+        });
+    }
+    $scope.getViewNotes();
+    $scope.updateTask = function(taskid){
 
-    $scope.taskEndDate = function(){
-        $scope.taskEnd.opened = true;
-    };
 
-    $scope.taskEnd = {
-        opened:false
-    };
+        var isCompleted = $scope.completed;
+        console.log("completed "+isCompleted);
+
+        var completed = 0;
+        console.log("is completed"+completed);
+        var crdate = new Date();
+        var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+        var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+        var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+        var data = '{"CompletionPercentage":"'+$scope.taskCompletionP+'","isCompleted":"'+isCompleted+'","ActualStartDate":"'+actualStart+'","ActualEndDate":"'+actualEnd+'","ConductionNote":"'+$scope.note+'","NoteAddedBy":"1","NoteAdditionDate":"'+noteCreatedDate+'"}';
+        console.log("update task data is "+data);
+
+        $.ajax({
+            type: "POST",
+            url: 'php/api/task/edit/'+taskid,
+            data: data,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json',
+            processData: false,
+
+            success:  function(data)
+            {
+                $scope.getViewNotes(task);
+                console.log($scope.ViewNotes);
+                alert("success in task updation "+data);
+            } ,
+            error: function(data){
+                alert("error in task updation "+data);
+            }
+        });
+    }
 });
 
-myApp.controller('SearchTaskController',function($scope,$http){
 
-    $scope.taskList=[];
-    $scope.taskList.push({
-        taskId:"asdasd",
-        taskName:"Gokhale",
-        description:"pune",
-        completionPercentage:"maharashtra",
-        assignTo:"India",
-        creationDate:"22-09-1992"
-    });
-    $scope.taskList.push({
-        taskId:"asdasd",
-        taskName:"Gokhale",
-        description:"pune",
-        completionPercentage:"maharashtra",
-        assignTo:"India",
-        creationDate:"22-09-1992"
-    });
-    $scope.taskList.push({
-        taskId:"asdasd",
-        taskName:"Gokhale",
-        description:"pune",
-        completionPercentage:"maharashtra",
-        assignTo:"India",
-        creationDate:"22-09-1992"
-    });
+//myApp.controller('ViewTaskController',function(setInfo,$filter,$scope,$http){
+//
+//
+//    var task  = setInfo.get();
+//    console.log("task set is "+JSON.stringify(task));
+//    $scope.ViewTask = {
+//                task_id :task.TaskID,
+//                task_name :task.TaskName,
+//                task_desc :task.TaskDescripion,
+//                task_startDate : task.ScheduleStartDate,
+//                task_endDate : task.ScheduleEndDate,
+//                task_isCompleted:task.isCompleted
+//    };
+//
+//
+//    $scope.getViewNotes=function(tasks){
+//     $scope.ViewNotes = [];
+//     var notes = [];
+//
+//    $scope.ViewNotes.length = 0;
+//     $http.get("php/api/task/notes/"+task.TaskID).then(function(response){
+//             for(var i = 0; i<response.data.length ; i++){
+//                notes.push({
+//                Note : response.data[i].ConductionNote,
+//                AddedBy : response.data[i].FirstName+" "+response.data[i].LastName,
+//                NoteDate : response.data[i].DateAdded
+//            });
+//             }
+//         $scope.ViewNotes = notes;
+//         setInfo.set(notes);
+//        });
+//    }
+//     $scope.getViewNotes(task);
+//     $scope.updateTask = function(taskid){
+//
+//        var isCompleted = $scope.completed;
+//        console.log("completed "+isCompleted);
+//
+//        var completed = 0;
+//        console.log("is completed"+completed);
+//        var crdate = new Date();
+//        var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//        var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//        var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+//
+//        var data = '{"CompletionPercentage":"'+$scope.taskCompletionP+'","isCompleted":"'+isCompleted+'","ActualStartDate":"'+actualStart+'","ActualEndDate":"'+actualEnd+'","ConductionNote":"'+$scope.note+'","NoteAddedBy":"1","NoteAdditionDate":"'+noteCreatedDate+'"}';
+//        console.log("update task data is "+data);
+//
+//         $.ajax({
+//                            type: "POST",
+//                            url: 'php/api/task/edit/'+taskid,
+//                            data: data,
+//                            dataType: 'json',
+//                            cache: false,
+//                            contentType: 'application/json',
+//                            processData: false,
+//
+//                            success:  function(data)
+//                            {
+//                               //  $scope.ViewNotes=[];
+//                               //  var tasks=setInfo.get();
+//                               // tasks.push({
+//                               //     Note : $scope.note,
+//                               //     AddedBy :"n",
+//                               //     NoteDate : noteCreatedDate
+//                               //  });
+//
+//                               // $scope.ViewNotes=tasks;
+//                               $scope.getViewNotes(task);
+//                                console.log($scope.ViewNotes);
+//                                alert("success in task updation "+data);
+//                             } ,
+//                            error: function(data){
+//                            alert("error in task updation "+data);
+//                            }
+//                        });
+//
+//
+//     }
+//});
 
+myApp.controller('SearchTaskController',function(setInfo,$scope,$http){
 
+  
+$scope.tasks = [];
+var task = [];
+    $http.get("php/api/task").then(function(response){
+        console.log(response);
+        for(var i = 0; i<response.data.length ; i++){
+
+            task.push({
+                    "TaskID": response.data[i].TaskID,
+                    "TaskName": response.data[i].TaskName,
+                    "TaskDescripion": response.data[i].TaskDescripion,
+                    "ScheduleStartDate": response.data[i].ScheduleStartDate,
+                    "ScheduleEndDate": response.data[i].ScheduleEndDate,
+                    "CompletionPercentage": response.data[i].CompletionPercentage,
+                    "TaskAssignedTo": response.data[i].TaskAssignedTo,
+                    "isCompleted": response.data[i].isCompleted,
+                    "CreationDate": response.data[i].CreationDate,
+                    "CreatedBy": response.data[i].CreatedBy,
+                    "ActualStartDate": response.data[i].ActualStartDate,
+                    "AcutalEndDate": response.data[i].AcutalEndDate,
+                    "UserId": response.data[i].UserId,
+                    "UserName": response.data[i].firstName+" "+response.data[i].lastName
+        
+            });
+        }
+       $scope.tasks = task;
+        $scope.totalItems = $scope.tasks.length;
+        $scope.currentPage = 1;
+        $scope.tasksPerPage=5;
+        $scope.paginateTasksDetails = function (value) {
+            //console.log("In Paginate");
+            var begin, end, index;
+            begin = ($scope.currentPage - 1) * $scope.tasksPerPage;
+            end = begin + $scope.tasksPerPage;
+            index = $scope.tasks.indexOf(value);
+            //console.log(index);
+            return (begin <= index && index < end);
+        };
+       // setInfo.set($scope.customers);
+    })
+
+        $scope.setTask = function(task){
+            setInfo.set(task);
+        }
+
+         $scope.deleteTask= function(taskid){
+                console.log("delete task "+taskid);
+                 $http({
+                     method: 'GET',
+                     url: 'php/api/task/delete/'+taskid
+                        }).then(function successCallback(response) {
+                            alert("in success :::"+response );
+                      }, function errorCallback(response) {
+                        alert("in error ::"+response);
+                    });
+        }
 
 });
-myApp.controller('AssignTaskController',function($scope,$http){
+myApp.controller('AssignTaskController',function($scope,$http,AppService,$filter){
 
+   console.log("in AssignTaskController");
+     $scope.users = [];
+    AppService.getUsers($scope,$http);
+
+    $scope.assignTask = function(){
+         var date = new Date();
+         var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
+         var startDate = $filter('date')($scope.task.startDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+         var endDate = $filter('date')($scope.task.endDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+         console.log("startDate "+startDate);
+        var Taskdata = '{"TaskName":"'+$scope.task.taskname+'","TaskDescripion":"'+$scope.task.description+'","ScheduleStartDate":"'+startDate+'","ScheduleEndDate":"'+endDate+'","CompletionPercentage":"0","TaskAssignedTo":"'+$scope.task.assignedTo.id+'","isCompleted":"0","CreationDate":"'+creationDate+'"}';
+                  console.log("Task data is "+Taskdata);
+                     /* $http.post('php/api/task', Taskdata,config)
+                            .success(function (data, status) {
+                                alert("Task has been created Successfuly.. "+status);
+                                        })
+                            .error(function (data, status) {
+                
+                                alert("Error in task creation "+$scope.ResponseDetails );
+                        });*/
+/*
+                            $http({
+                                    method: 'POST',
+                                    url: 'php/api/task',
+                                    data: Taskdata,
+                                    headers: {'Content-Type': 'application/json'}
+                                    }).success(function (data, status) {
+                                         alert("Task has been created Successfuly.. "+status);
+                                            })
+                                      .error(function (data, status) {
+                                    alert("Error in task creation "+$scope.ResponseDetails );
+                            });*/
+
+                     $.ajax({
+                            type: "POST",
+                            url: 'php/api/task',
+                            data: Taskdata,
+                            dataType: 'json',
+                            cache: false,
+                            contentType: 'application/json',
+                            processData: false,
+                           
+                            success:  function(data)
+                            {
+                                alert("success in assign task "+data);
+
+                             } ,
+                            error: function(data){
+                                console.log(data);
+                                alert("error in task assignment"+data);
+                            } 
+                        });
+
+    }
     //$scope.today = function(){
     //    $scope.task.startDate = new Date();
     //};
