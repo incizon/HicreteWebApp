@@ -73,7 +73,7 @@
                             <label>By Time Period</label>
                         </div>
 
-                        <div ng-disabled="hide">
+
                         <div class="col-md-5">
                             <div class="form-group">
                                 <div class="col-md-3">
@@ -97,22 +97,18 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="date" class="form-control" name="toDate" ng-model="searchDetails.toDate" ng-disabled="!hide"/>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
-                        </div>
+
                     </div><br>
                     <div class="row">
-
                         <div class="col-md-offset-2 col-md-5">
                             <div class="form-group">
                                 <div class="col-md-3">
                                     <label class="control-label">Sort :</label>
                                 </div>
-
                                 <div class="col-md-9">
-
                                         <select class="form-control select" name="sortOrder" ng-model="sortOrder" />
                                         <option value="" disabled selected>Choose order..</option>
                                         <option value="-">Descending</option>
@@ -153,20 +149,15 @@
                                 <td>{{leave.status}}</td>
                                 <td>{{leave.application_date}}</td>
                             </tr>
-
                             </tbody>
                         </table>
-
                     </div>
-
                 </form>
-
             </div>
-
         </div>
         <uib-pagination total-items="totalItems" ng-model="currentPage"
                         max-size="5" boundary-links="true"
-                        items-per-page="employeePerPage" class="pagination-sm">
+                        items-per-page="leavePerPage" class="pagination-sm">
         </uib-pagination>
 
     </div>
