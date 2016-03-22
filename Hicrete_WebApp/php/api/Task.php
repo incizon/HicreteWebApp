@@ -4,23 +4,26 @@ require_once '../Database.php';
 
 Class Task {
 
-    public function saveTask($data){
-        
+    public static function saveTask($data){
+        if (!isset($_SESSION['token'])) {
+            session_start();
+        }
+        $userId=$_SESSION['token'];
        $taskId = AppUtil::generateId();
-       
+
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
                 $stmt = $conn->prepare("INSERT INTO task_master (TaskID, TaskName, TaskDescripion, ScheduleStartDate, ScheduleEndDate, CompletionPercentage, TaskAssignedTo, isCompleted, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?,?)");
-                        if($stmt->execute([$taskId,$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$data->CreatedBy]) === TRUE)
+                        if($stmt->execute([$taskId,$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$userId]) === TRUE)
                         {
                             $conn->commit();
-                            return "Task created succesfully";
+                            return "Task created successfully";
                         }
                         else
                         {
-                            return "Task creation faild..";
+                            return "Task creation Failed..";
                         }
 
         } catch (PDOException $e) {
@@ -31,8 +34,11 @@ Class Task {
     }
 
 
-     public function getAllTaskForUser($userId){
-        
+     public static function getAllTaskForUser($userId){
+         if (!isset($_SESSION['token'])) {
+             session_start();
+         }
+         $userId=$_SESSION['token'];
         $object = array();       
         try {
             $db = Database::getInstance();
@@ -42,9 +48,14 @@ Class Task {
                     $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
                         {
-                           while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                array_push($object, $row);
-                           }
+//                            if($stmt->rowCount()>0){
+                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                    array_push($object, $row);
+                                }
+//                            }else{
+//                                return "No Task assigned yet..";
+//                            }
+
                         }
                         else
                         {
@@ -60,7 +71,7 @@ Class Task {
     }
 
 
-    public function getTask($id){
+    public static function getTask($id){
             $object  = array();
         try {
             $db = Database::getInstance();
@@ -87,13 +98,13 @@ Class Task {
         return $object;
     }
 
-    public function getAllTask(){
+    public static function getAllTask(){
         $object  = array();
         try{
                 $db = Database::getInstance();
                 $conn = $db->getConnection();
                 $conn->beginTransaction();
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , user_master u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {
                              while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
                              {
@@ -108,7 +119,11 @@ Class Task {
         return $object;
     }
 
-    public function editTask($taskId,$data){
+    public static function editTask($taskId,$data){
+        if (!isset($_SESSION['token'])) {
+            session_start();
+        }
+        $userId=$_SESSION['token'];
         try 
         {
             $db = Database::getInstance();
@@ -124,7 +139,7 @@ Class Task {
 
                         if($stmt->execute() === TRUE)  {
                             $stmt2 = $conn->prepare("INSERT INTO task_conduction_notes(TaskID, ConductionNote, NoteAddedBy, DateAdded) VALUES(?,?,?,?)");
-                            if($stmt2->execute([$taskId,$data->ConductionNote,$data->NoteAddedBy,$data->NoteAdditionDate]) === TRUE){
+                            if($stmt2->execute([$taskId,$data->ConductionNote,$userId,$data->NoteAdditionDate]) === TRUE){
                                 $conn->commit();
                                 return "task has been updated succesfully ";
                             }
@@ -143,7 +158,7 @@ Class Task {
         $db = null;
     }
 
-    public function deleteTask($taskId) {
+    public static function deleteTask($taskId) {
         try{
                 $db  = Database::getInstance();
                 $conn = $db->getConnection();
@@ -167,12 +182,12 @@ Class Task {
     }
 
 
-     public function getNotes($projid){
+     public static function  getNotes($projid){
             $object  = array();
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-                $stmt = $conn->prepare("SELECT * FROM task_conduction_notes tc,user_master um  WHERE tc.TaskID = :id AND um.UserId = tc.NoteAddedBy ");
+                $stmt = $conn->prepare("SELECT * FROM task_conduction_notes tc,usermaster um  WHERE tc.TaskID = :id AND um.UserId = tc.NoteAddedBy ");
                        $stmt->bindParam(':id', $projid, PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
                         {

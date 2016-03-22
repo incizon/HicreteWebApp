@@ -134,13 +134,6 @@ class Expense
         VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
         $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
         $stmt->bindParam(':projectid', $data->project, PDO::PARAM_STR);
-        //GET SEGMENTNAME FROM BUDGET SEGMENT TABLE WITH RESPECT TO THE MATERIAL SEGMENT
-//        $stmtBudgetSegment=$conn->prepare("SELECT segmentname FROM material_segment");
-//        if($stmtBudgetSegment->execute()){
-//            $result2 = $stmt->fetch(PDO::FETCH_ASSOC)
-//              $budget= $result2['segmentname'];
-//        }
-
         $stmt->bindParam(':materialid', $data->material, PDO::PARAM_STR);
         $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
         $stmt->bindParam(':description', $data->desc, PDO::PARAM_STR);
@@ -175,15 +168,15 @@ class Expense
             }
         }else{
             $rollback=true;
-            echo "1";
+            echo "fail first";
             return;
         }
 
-        if($rollback){
-            echo "1";
-        }else{
-            echo "0";
-        }
+//        if($rollback){
+//            echo "1";
+//        }else{
+//            echo "0";
+//        }
     }
 
 }

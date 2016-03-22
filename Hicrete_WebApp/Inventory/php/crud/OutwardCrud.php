@@ -62,11 +62,28 @@ class OutwardData extends CommonMethods
         }
     }
 
-    public function getOutwardEntries($dbh)
+    public function getOutwardEntries($dbh,$keyword,$searchTerm)
     {
+        $keyword="%".$keyword."%";
 
+        $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from outward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
 
-        $stmt = $dbh->prepare("SELECT * FROM outward");
+        switch($searchTerm) {
+            case 'OutwardNo':
+                $selectStatement = $selectStatement." AND a.outwardno like :keyword";
+                break;
+            case'Company':
+                $selectStatement = $selectStatement." AND b.companyName like :keyword";
+                break;
+            case'Warehouse':
+                $selectStatement = $selectStatement." AND c.wareHouseName like :keyword";
+                break;
+        }
+        $stmt = $dbh->prepare($selectStatement);
+        if($searchTerm == 'OutwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
+        }
+        //$stmt = $dbh->prepare("SELECT * FROM outward");
         if ($stmt->execute()) {
 
             //push it into array
@@ -82,8 +99,11 @@ class OutwardData extends CommonMethods
 
                 $companyId=$result2['companyid'];
                 $warehouseId=$result2['warehouseid'];
-                $outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
-                $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
+                //$outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+               // $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
+
+                $outwardData['companyName']=$result2['companyName'];
+                $outwardData['warehouseName']=$result2['wareHouseName'];
 
                 $stmtTransport=$dbh->prepare("SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID");
                 $stmtTransport->bindParam(':outwardID', $outwardID);

@@ -23,7 +23,8 @@ $operationObject=new Payroll();
 
                         $connect->beginTransaction();
 
-                        if($operationObject->createYear($data,$userId)){
+                        $status=$operationObject->createYear($data,$userId);
+                        if($status==1){
 
                             $connect->commit();
                             $message = "Year Created Successfully";
@@ -31,10 +32,17 @@ $operationObject=new Payroll();
                             $jsn = json_encode($arr);
                             echo($jsn);
                         }
-                        else{
+                        else if($status==0){
 
                             $connect->rollBack();
                             $message = "Could Not Create Year...!!!";
+                            $arr = array('msg' => '', 'error' => $message);
+                            $jsn = json_encode($arr);
+                            echo($jsn);
+                        }
+                        else{
+
+                            $message = "Year with same dete range conflict occure...!!!";
                             $arr = array('msg' => '', 'error' => $message);
                             $jsn = json_encode($arr);
                             echo($jsn);
@@ -155,11 +163,10 @@ $operationObject=new Payroll();
 
             break;
        case 'searchLeaveByDate':
-           $message = "Leave Details by Date";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
-
+            if(!$operationObject->searchLeaveByDate($data)){
+                $message = "Leave details not available...!!!";
+                echo AppUtil::getReturnStatus("fail",$message);
+            }
 
            break;
      case 'getYears':
@@ -171,11 +178,18 @@ $operationObject=new Payroll();
 
          break;
 
+     case 'getEmployees':
+
+             $operationObject->getEmployees();
+
+         break;
+
        case 'searchLeaveByEmployee':
-           $message = "Leave Details by Employee";
-           $arr = array('msg' => $message, 'error' => '');
-           $jsn = json_encode($arr);
-           echo($jsn);
+
+           if(!$operationObject->searchLeaveByEmployee($data)){
+               $message = "Leave details not available...!!!";
+               echo AppUtil::getReturnStatus("fail",$message);
+           }
 
 
            break;
@@ -183,6 +197,13 @@ $operationObject=new Payroll();
      case 'getEmployeeDetails':
             $operationObject->getEmployeeDetails();
          break;
+
+
+     case 'getNoOfLeaves':
+
+           $operationObject->getNoOfLeaves($data);
+         break;
+
    }
 
 

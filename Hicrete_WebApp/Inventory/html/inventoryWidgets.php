@@ -19,7 +19,7 @@ if(!$hasRead && !$hasWrite){
 }
 ?>
 
-<div class="row" ng-controller="inventoryCommonController">
+<div class="row" >
 
 <style>
     .panel.panel-default{

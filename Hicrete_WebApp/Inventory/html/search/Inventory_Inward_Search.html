@@ -16,13 +16,23 @@
 <div class="col-lg-12 col-md-12">
 <div class="panel panel-default">
     <div class="panel-body">
-        <div class="row stacked">
-            <div class="col-lg-8 col-md-8">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="input-group" >
+                    <select class="form-control" ng-model="SearchTerm" value="">
+                        <option value="" disabled selected>Search by</option>
+                        <option value="InwardNo">Inward Number</option>
+                        <option value="Company">Company</option>
+                        <option value="Warehouse">Warehouse</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9">
                 <div class="input-group push-down-10" >
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
+                    <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keyword"/>
                     <div class="input-group-btn">
-                        <button class="btn btn-primary" ng-click="getInventory()">Search</button>
+                        <button class="btn btn-primary" ng-click="getInwardDetails()">Search</button>
                     </div>
                 </div>
             </div>
@@ -30,7 +40,7 @@
     </div>
 </div>
    <!-- START SEARCH RESULT -->
-   <div class="search-results" ng-controller="SearchController">
+   <div class="search-results">
 
     <div class="sr-item">
         <div class="sr-item-title">Inward Products
@@ -48,11 +58,10 @@
                         <th  class="tablehead">Warehouse</th>
                         <th  class="tablehead">Date</th>
                         <th  class="tablehead">Actions</th>
-
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keywords">
+                    <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keyword">
                         <td>{{product.inwardno}}</td>
                         <td>{{product.materialDetails.length}}</td>
                         <td>{{product.companyName}}</td>

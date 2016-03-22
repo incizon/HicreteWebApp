@@ -55,7 +55,7 @@
                                 <div class="col-md-9">
                                     <select class="form-control select" name="typeofLeave" ng-model="leaveDetails.typeofLeave" required />
                                     <option value="" disabled selected>Choose leave type..</option>
-                                    <option value="Paid">Paid</option>
+                                    <option value="Paid" ng-hide="hideOption">Paid</option>
                                     <option value="Unpaid">Unpaid</option>
                                     </select>
                                     <div class="help-block" ng-messages="applyForLeaveForm.typeofLeave.$error" ng-show="formSubmitted">
@@ -71,7 +71,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="fromDate" ng-model="leaveDetails.fromDate" ng-click="leaveFrom()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="from.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <input type="text" class="form-control" name="fromDate" ng-model="leaveDetails.fromDate" ng-click="leaveFrom()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="from.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true" ng-change="getNoOfLeaves()"/>
                                     </div>
                                     <div class="help-block" ng-messages="applyForLeaveForm.fromDate.$error" ng-show="formSubmitted">
                                         <span style="color:red" ng-message="required">From date for leave is required..</span>
@@ -85,7 +85,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="toDate" ng-model="leaveDetails.toDate" ng-click="leaveTo()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="to.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                        <input type="text" class="form-control" name="toDate" ng-model="leaveDetails.toDate" ng-click="leaveTo()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="to.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"  ng-change="getNoOfLeaves()"/>
                                     </div>
                                     <div class="help-block" ng-messages="applyForLeaveForm.toDate.$error" ng-show="formSubmitted">
                                         <span style="color:red" ng-message="required">To date for leave is required..</span>
@@ -99,7 +99,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="noOfLeaves" ng-model="leaveDetails.noOfLeaves" ng-click="dayDiff(leaveDetails.fromDate,leaveDetails.toDate)"/>
+                                        <input type="text" class="form-control" name="noOfLeaves" ng-model="leaveDetails.numberOfLeaves" ng-click="dayDiff(leaveDetails.fromDate,leaveDetails.toDate)"/>
                                     </div>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="col-md-9">
 
-                                    {{leaveDetails.remaining}}
+                                    {{leaveDetails.leaves_remaining}}
 
                                 </div>
                             </div>

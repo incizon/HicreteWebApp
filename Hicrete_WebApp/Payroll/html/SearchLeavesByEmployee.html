@@ -30,13 +30,9 @@
                                     <label class="control-label">Select Employee :</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="form-control select" name="year" ng-model="employee"/>
+                                    <select class="form-control select" name="employee" ng-model="searchDetails.employee"/>
                                     <option value="" disabled selected>Choose employee..</option>
-                                    <option value="Namdev">Namdev</option>
-                                    <option value="Ajit">Ajit</option>
-                                    <option value="Atul">Atul</option>
-                                    <option value="Pranav">Pranav</option>
-
+                                    <option  ng-repeat="employee in employees" value="{{employee.userId}}">{{employee.firstName+" "+employee.lastName}}</option>
 
                                     </select>
 
@@ -100,16 +96,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="leave in leaveDetails">
+                            <tr ng-repeat="leave in leavesDetails | filter: paginate">
 
                                 <td>{{$index+1}}</td>
-                                <td>{{leave.leaveBy}}</td>
-                                <td>{{leave.fromDate}}</td>
-                                <td>{{leave.toDate}}</td>
+                                <td>{{leave.leave_applied_by}}</td>
+                                <td>{{leave.from_date}}</td>
+                                <td>{{leave.to_date}}</td>
                                 <td>{{leave.reason}}</td>
-                                <td>{{leave.type}}</td>
+                                <td>{{leave.type_of_leaves}}</td>
                                 <td>{{leave.status}}</td>
-                                <td>{{leave.applicationDate}}</td>
+                                <td>{{leave.application_date}}</td>
 
 
                             </tr>
@@ -124,8 +120,10 @@
             </div>
 
         </div>
-
-
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="leavePerPage" class="pagination-sm">
+        </uib-pagination>
     </div>
 
 </div>

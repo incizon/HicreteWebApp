@@ -177,32 +177,37 @@ myApp.service('addSupplierService', function () {
                 supplier: supplier
             }
         };
+
+        $scope.errorMessage = "";
+        $scope.warningMessage = "";
         console.log("supllier");
         console.log(supplier);
         $http.post("Inventory/php/supplierSubmit.php", null, config)
             .success(function (data) {
                 console.log("Supplier Data=");
                 console.log(data);
-                $scope.warningMessage="Success";
+                //$scope.warningMessage="Success";
                 if(data.msg!=""){
-                    //$scope.warningMessage=data.msg;
-                    //$('#warning').css("display","block");
-                    alert(data.msg);
+                    $scope.warningMessage="Supplier Added Successfully..";
+                    $("#warning").css("display","block");
+                    setTimeout(function () {
+                        if (data.msg != ""){
+                            $("#warning").css("display","none");
+                        }
+                    }, 3000);
+                    console.log( $scope.warningMessage);
+                    //alert(data.msg);
                     window.location="dashboard.php#/Inventory/addSupplier";
                     $scope.submitted=false;
                     $scope.clearData(supplier,'clear');
 
                 }
-                setTimeout(function () {
-                    if (data.msg != ""){
-                        $('#warning').css("display","none");
-                    }
-                }, 3000);
+
                 $('#loader').css("display","none");
-                if (data.error != ""){
-                    $scope.errorMessage=data.error;
-                    //$('#error').css("display","block");
-                }
+                //if (data.error != ""){
+                //    $scope.errorMessage=data.error;
+                //    //$('#error').css("display","block");
+                //}
                 //$scope.messages.push(data.msg);
                 //$scope.clearData(supplier, 'submit');
             })
