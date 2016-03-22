@@ -1,20 +1,5 @@
 
-myApp.controller('inventoryCommonController', function ($scope, $http, inventoryService) {
 
-    //get Material Tyepes
-    inventoryService.getMaterialTypes($scope, $http);
-
-    //Available Products
-    inventoryService.getProducts($scope, $http);
-
-    ////Get Warehouses
-    //inventoryService.getWarehouses($scope,$http);
-    //// Get Company
-    //inventoryService.getCompanys($scope,$http);
-
-
-
-});
 
 
 /**********************************************************************************
@@ -52,7 +37,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     //Available Products
     //inventoryService.getProducts($scope, $http);
 
-    inventoryService.getSavedProducts($scope);
+    //inventoryService.getSavedProducts($scope);
 
 
     inventoryService.getProducts($scope, $http);
@@ -249,34 +234,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      *End of Getter
      **********************************************************************************/
 
-    /***************************************************************************
-     * Purpose- This function will retrieve the product details from database
-     * @param1- $scope and $http
-     * Return- Items available in database
-     ****************************************************************************/
-        // CALLL THIS FUNCTION ON WIDGET SEARCH CLICK_____IMPPPPPPP
-        // $scope.productSearch=function($scope,$http){
-    $scope.lodaing = "";
-    $http.post("Inventory/php/ProductSearch.php", null)
-        .success(function (data) {
-            console.log("Items Present in database");
-            console.log(data);
-            $scope.lodaing = true;
-            $('#loader').css("display","block");
-            $scope.lodaing = false;
-            $('#loader').css("display","none");
-            $scope.products = data;
-            $scope.totalItems = $scope.products.length;
-        })
-        .error(function (data, status, headers) {
-            console.log(data);
-            $scope.lodaing = false;
-            $('#loader').css("display","none");
-        });
-    // };
-    /***************************************************************************
-     * End of Get Product Details
-     ****************************************************************************/
+
 
     /**********************************************************************************
      *Setters to set true/false for tables to modify

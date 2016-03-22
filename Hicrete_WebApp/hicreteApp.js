@@ -76,8 +76,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Inventory', {
             url: '/Inventory',
-            templateUrl: 'Inventory/html/inventoryWidgets.php',
-            Controller:'inventoryCommonController'
+            templateUrl: 'Inventory/html/inventoryWidgets.php'
 
         })
         .state('Inventory.addProduct', {
@@ -568,6 +567,7 @@ myApp.run(function($rootScope,$http) {
     $rootScope.prodInqAll=[];
     $rootScope.InwardSearchData=[];
     $rootScope.OutwardSearchData=[];
+    $rootScope.products=[];
 
 });
 

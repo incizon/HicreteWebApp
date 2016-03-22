@@ -8,8 +8,9 @@
 
 	//echo $mData->keyword;
 	//echo $mData->SearchTerm;
-
-	$keyword="%".$mData->keyword."%";
+	if(isset($mData->keyword)) {
+		$keyword = "%" . $mData->keyword . "%";
+	}
 	$selectStatement="SELECT * FROM product_master
             JOIN product_details ON
             product_master.productmasterid=product_details.productmasterid
@@ -20,21 +21,22 @@
             JOIN materialtype ON
             materialtype.materialtypeid=product_master.materialtypeid ";
 
-
-	switch($mData->SearchTerm)
-	{
-		case 'productName':
-			$selectStatement=$selectStatement." WHERE product_master.productname like :keyword";
-			break;
-		case 'materialType':
-			$selectStatement=$selectStatement." WHERE materialtype.materialtype like :keyword";
-			break;
+	if(isset($mData->SearchTerm)) {
+		switch ($mData->SearchTerm) {
+			case 'productName':
+				$selectStatement = $selectStatement . " WHERE product_master.productname like :keyword";
+				break;
+			case 'materialType':
+				$selectStatement = $selectStatement . " WHERE materialtype.materialtype like :keyword";
+				break;
+		}
 	}
-
 	//echo $selectStatement;
 	$stmt=$dbh->prepare($selectStatement);
-if($mData->SearchTerm == 'productName' || $mData->SearchTerm == 'materialType') {
-	$stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
+if(isset($mData->SearchTerm)) {
+	if ($mData->SearchTerm == 'productName' || $mData->SearchTerm == 'materialType') {
+		$stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
+	}
 }
 
 	$stmt->execute();
