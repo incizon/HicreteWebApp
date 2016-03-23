@@ -69,6 +69,9 @@ switch ($data->operation) {
     case "getAllProcessUser" : ConfigUtils::getAllProcessUser($userId);
         break;
 
+    case "getAccessApprovals" : ConfigUtils::getAccessApprovals();
+        break;
+
 }
 
 	/*	$opt = array(

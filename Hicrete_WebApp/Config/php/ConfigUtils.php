@@ -605,7 +605,7 @@ class ConfigUtils
       try{
           $db = Database::getInstance();
           $conn = $db->getConnection();
-          $stmt = $conn->prepare("SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` NOT IN (SELECT `accessId` FROM `useraccesspermission` WHERE `userId`=:userId)");
+          $stmt = $conn->prepare("SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` NOT IN (SELECT `accessId` FROM `roleaccesspermission` where `roleId` IN (SELECT `roleId` FROM `userroleinfo` WHERE `userId`=:userId))");
           $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 
           if($stmt->execute()){
@@ -624,7 +624,7 @@ class ConfigUtils
               if($noOfRows>0)   
                   echo AppUtil::getReturnStatus("Successful",$json_response);
               else
-                 echo AppUtil::getReturnStatus("NoRows","Access Permissions not defined");
+                 echo AppUtil::getReturnStatus("NoRows","User has All The Permissions");
           
           }else{
               echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
@@ -633,7 +633,7 @@ class ConfigUtils
 
         }catch(Exception $e){
      
-                echo AppUtil::getReturnStatus("Exception","Exception Occurred while getting access permission");
+                echo AppUtil::getReturnStatus("Exception","Exception occur while getting access permissions");
         }
            
     }
@@ -704,7 +704,7 @@ class ConfigUtils
             } 
           
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
+            echo AppUtil::getReturnStatus("Exception",$e->getMessage());
         }
 
     }
@@ -750,12 +750,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
                     }else{
                         echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");      
                     }
-                }  
-        
-                
-                    
-                
-            
+                }
             }else{
                 echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
             }    
@@ -862,7 +857,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
             } 
           
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
+            echo AppUtil::getReturnStatus("Exception",$e->getMessage());
         }
 
     }
@@ -988,7 +983,23 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
         }
     }
 
+    public static function getAccessApprovals()
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
 
+        try {
+            $stmt = $conn->prepare("SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster` JOIN   `tempaccessrequest` ON usermaster.userId=tempaccessrequest.requestedBy");
+            if ($stmt->execute()) {
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo  AppUtil::getReturnStatus("Successful",$result);
+            } else {
+                echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
+            }
+        }catch(Exceptio $e){
+            echo AppUtil::getReturnStatus("Exception",$e.getMessage());
+        }
+    }
 
 
 }

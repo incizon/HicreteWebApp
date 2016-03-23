@@ -1137,6 +1137,7 @@ var clearWarehouseForm=function(){
 });        
 
 myApp.controller('tempAccessController',function($scope,$http,configService){
+
 $scope.requestId="56929ff47e6183070";
 $scope.tempSubmitted=false;
 $scope.accessRequested=[];
@@ -1176,7 +1177,7 @@ $scope.buttonDisabled=true;
 
  	$scope.AddAccessRequestAction=function(actionStatus){
       $scope.buttonDisabled=true;
- 		  $scope.tempSubmitted=false;
+        $scope.tempSubmitted=false;
    		 var data={
                       operation :"TempAccessRequestAction",
                       requestId : $scope.requestId,
@@ -1694,4 +1695,119 @@ myApp.controller('MyProfileController',function($scope,$http) {
     //}
 
 
+});
+
+myApp.controller('AccessApprovalController',function($scope,$http,configService) {
+
+    console.log("In");
+    $scope.AccessApprovalPerPage=2;
+    $scope.currentPage=1;
+    $scope.ApprovalList=[];
+
+
+    $scope.getAccessApprovals=function(){
+
+        var data = {
+            operation: "getAccessApprovals",
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php", null, config)
+            .success(function (data) {
+                $scope.ApprovalList=data.message;
+                $scope.totalItems=$scope.ApprovalList.length;
+                console.log($scope.totalItems);
+            })
+            .error(function (data, status, headers, config) {
+
+
+            });
+    }
+        $scope.getAccessApprovals();
+
+    $scope.viewApproveDetails=function(requestId){
+
+        console.log(requestId);
+        $scope.requestId=requestId;
+        $scope.tempSubmitted=false;
+        $scope.accessRequested=[];
+        $scope.tempAccess={};
+        $scope.remark="";
+        $scope.buttonDisabled=true;
+        var data={
+            operation :"getTempAccessRequestDetails",
+            requestId : $scope.requestId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    alert(data.message);
+                }else{
+
+                    $scope.tempAccess=data.message.requestDetails;
+                    configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
+                    $scope.buttonDisabled=false;
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                alert("Error Occured"+data);
+            });
+
+    }
+    $scope.AddAccessRequestAction=function(actionStatus){
+        $scope.buttonDisabled=true;
+        $scope.tempSubmitted=false;
+        var data={
+            operation :"TempAccessRequestAction",
+            requestId : $scope.requestId,
+            remark:$scope.remark,
+            status:actionStatus,
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    alert(data.message);
+                }else{
+                    alert("Request Added Successfully");
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                alert("Error Occured"+data);
+            });
+    }
+
+    $scope.paginate = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.AccessApprovalPerPage;
+        end = begin + $scope.AccessApprovalPerPage;
+        index = $scope.ApprovalList.indexOf(value);
+
+        return (begin <= index && index < end);
+    };
 });

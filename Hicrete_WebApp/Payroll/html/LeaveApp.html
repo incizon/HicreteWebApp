@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Leave </strong>Approval</h3>
+            </div>
+            <div class="panel-body form-horizontal">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Applied By</th>
+                            <th>Description</th>
+                            <th>Type</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="leave in leaveApprovalList | filter:paginate">
+
+                            <td>{{$index+1}}</td>
+                            <td>{{leave.firstName+" "+leave.lastName}}</td>
+                            <td>{{leave.reason}}</td>
+                            <td>{{leave.type_of_leaves}}</td>
+                            <td>{{leave.from_date}}</td>
+                            <td>{{leave.to_date}}</td>
+                            <td>
+                                <button data-toggle="modal"  data-target="#viewAccessApproval" class="btn btn-info" data-ng-click="viewApproveDetails(accessRequest.requestId)">View</button>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+        </div>
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="leaveApprovalPerPage" class="pagination-sm">
+        </uib-pagination>
+
+
+    </div>
+</div>
+
