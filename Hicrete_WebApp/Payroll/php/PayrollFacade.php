@@ -23,7 +23,8 @@ $operationObject=new Payroll();
 
                         $connect->beginTransaction();
 
-                        if($operationObject->createYear($data,$userId)){
+                        $status=$operationObject->createYear($data,$userId);
+                        if($status==1){
 
                             $connect->commit();
                             $message = "Year Created Successfully";
@@ -31,10 +32,17 @@ $operationObject=new Payroll();
                             $jsn = json_encode($arr);
                             echo($jsn);
                         }
-                        else{
+                        else if($status==0){
 
                             $connect->rollBack();
                             $message = "Could Not Create Year...!!!";
+                            $arr = array('msg' => '', 'error' => $message);
+                            $jsn = json_encode($arr);
+                            echo($jsn);
+                        }
+                        else{
+
+                            $message = "Year with same dete range conflict occure...!!!";
                             $arr = array('msg' => '', 'error' => $message);
                             $jsn = json_encode($arr);
                             echo($jsn);
@@ -189,6 +197,13 @@ $operationObject=new Payroll();
      case 'getEmployeeDetails':
             $operationObject->getEmployeeDetails();
          break;
+
+
+     case 'getNoOfLeaves':
+
+           $operationObject->getNoOfLeaves($data);
+         break;
+
    }
 
 

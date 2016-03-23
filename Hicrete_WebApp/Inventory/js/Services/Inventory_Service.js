@@ -195,6 +195,7 @@ myApp.service('addSupplierService', function () {
                             $("#warning").css("display","none");
                         }
                     }, 3000);
+                    console.log( $scope.warningMessage);
                     //alert(data.msg);
                     window.location="dashboard.php#/Inventory/addSupplier";
                     $scope.submitted=false;

@@ -132,7 +132,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="PointOfName" ng-model="projectDetails.pointOfContacName"/>
+                                    <input type="text" class="form-control" name="PointOfName" ng-model="projectDetails.pointOfContactName"/>
                                 </div>
 
                             </div>
@@ -167,7 +167,7 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="projectDetails.pointOfContactEmailId" ng-model="pointofConactEmailID"/>
+                                    <input type="text" class="form-control" name="pointOfContactEmailId" ng-model="projectDetails.pointOfContactEmailId"/>
                                 </div>
 
                             </div>
@@ -251,13 +251,7 @@
 
                         <div class="col-md-6">
 
-                            <div class="form-group">
-                                <div class="col-md-offset-4 col-md-8">
-                                <div class="input-group">
-                                    <input type="checkbox" ng-model="isSiteTracking" name="isSiteTracking" >  is it a Site Tracking Project ?
-                                </div>
-                                </div>
-                            </div>
+
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Source :</label>
@@ -265,11 +259,11 @@
                                 <div class="col-md-8">
                                     <select class="form-control select" name="Source" ng-model="projectDetails.projectSource">
                                         <option value="" disabled selected>Choose source..</option>
-                                        <option value="telephone">Telephone</option>
-                                        <option value="email">Email</option>
-                                        <option value="visit">Visit</option>
-                                        <option value="website">Website</option>
-
+                                        <option value="Telephone">Telephone</option>
+                                        <option value="Email">Email</option>
+                                        <option value="Visit">Visit</option>
+                                        <option value="Website">Website</option>
+                                        <option value="Site Tracking">Site Tracking</option>
                                     </select>
 
                                 </div>

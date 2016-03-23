@@ -20,9 +20,6 @@
                     $date2 = new DateTime($data->endDate);
                     $toDate = $date2->format('Y-m-d');
 
-                    $dateDifference=$date2->diff($date1,true)->days;
-//                  echo $dateDifference->format('%d days');
-
 
                     $noOfPaidLeaves=$data->paidLeaves;
                     $weeklyOff=$data->weeklyOff;
@@ -33,22 +30,47 @@
                     else{
                         $weeklyOffDay="null";
                     }
+                    $stmt=$connect->prepare(" Select count(*) from attendance_year WHERE to_date>=:toDate");
+                    $stmt->bindParam(':toDate',$toDate);
+                    $stmt->execute();
+                    $result=$stmt->fetch();
+                    $count=$result[0];
 
-                    $stmt1 = $connect->prepare("INSERT INTO attendance_year(caption_of_year,from_date,to_date,no_of_paid_leaves,weekly_off_day,created_by,creation_date)
+                    if($count>0){
+
+                        return 2;
+                    }
+                    else {
+                        $stmt1 = $connect->prepare("INSERT INTO attendance_year(caption_of_year,from_date,to_date,no_of_paid_leaves,weekly_off_day,created_by,creation_date)
 						     VALUES (:captionYear,:fromDate,:toDate,:noOfPaidLeaves,:weeklyOffDay,:createdBy,NOW())");
 
-                    $stmt1->bindParam(':captionYear',$captionYear);
-                    $stmt1->bindParam(':fromDate',$fromDate);
-                    $stmt1->bindParam(':toDate', $toDate);
-                    $stmt1->bindParam(':noOfPaidLeaves', $noOfPaidLeaves);
-                    $stmt1->bindParam(':weeklyOffDay', $weeklyOffDay);
-                    $stmt1->bindParam(':createdBy', $userId);
+                        $stmt1->bindParam(':captionYear', $captionYear);
+                        $stmt1->bindParam(':fromDate', $fromDate);
+                        $stmt1->bindParam(':toDate', $toDate);
+                        $stmt1->bindParam(':noOfPaidLeaves', $noOfPaidLeaves);
+                        $stmt1->bindParam(':weeklyOffDay', $weeklyOffDay);
+                        $stmt1->bindParam(':createdBy', $userId);
 
-                    if($stmt1->execute()){
-                        return true;
-                    }
-                    else{
-                         return false;
+                        if ($stmt1->execute()) {
+                            $isComplete = 1;
+                            $endDate = strtotime($toDate);
+                            for ($i = strtotime($weeklyOffDay, strtotime($fromDate)); $i <= $endDate; $i = strtotime('+1 week', $i)) {
+
+                                $stmt2 = $connect->prepare("INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)");
+                                $stmt2->bindParam(':caption', $captionYear);
+                                $date = new DateTime(date('Y-m-d', $i));
+                                $nxtDate = $date->format('Y-m-d');
+
+                                $stmt2->bindParam(':offDate', $nxtDate);
+                                if (!$stmt2->execute()) {
+                                    $isComplete = 0;
+                                    break;
+                                }
+                            }
+                            return $isComplete;
+                        } else {
+                            return 0;
+                        }
                     }
                 }
 
@@ -144,12 +166,15 @@
                 $connect = $db->getConnection();
 
                 $applicationId=AppUtil::generateId();
+
                 $leaveAppliedBy=$data->userId;
                 $date1 = new DateTime($data->fromDate);
                 $fromDate = $date1->format('Y-m-d');
+
                 $date2 = new DateTime($data->toDate);
                 $toDate = $date2->format('Y-m-d');
-                $noOfLeaves=$data->noOfLeaves;
+
+                $noOfLeaves=$data->numberOfLeaves;
                 $typeOfLeave=$data->typeofLeave;
                 $reason=$data->description;
                 $status=$data->status;
@@ -176,6 +201,7 @@
                 }
                 else{
                     return false;
+                    echo $stmt1->errorInfo();
                 }
 
             }
@@ -259,13 +285,84 @@
                 $result3=$stmt3->fetch(PDO::FETCH_ASSOC);
 
                 $result_array['userId']=$result3['userId'];
+                $userId=$result3['userId'];
                 $result_array['employeeName']=$result3['firstName']." ".$result3['lastName'];
 
-                echo  json_encode($result_array);
+                $date=date('Y-m-d');
 
+                $stmt4=$connect->prepare("SELECT caption_of_year FROM attendance_year WHERE from_date<=:currentDate AND to_date>=:currentDate");
+
+                $stmt4->bindParam(':currentDate',$date);
+
+                $stmt4->execute();
+                $result4=$stmt4->fetch(PDO::FETCH_ASSOC);
+                $result_array['caption_of_year']=$result4['caption_of_year'];
+
+                $stmt5=$connect->prepare("SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='2017'
+                                                  AND `leave_application_master`.`status`!='cancel' AND
+                                                   `leave_application_master`.`leave_applied_by`=:userId
+                                                    AND `leave_application_master`.`type_of_leaves`='paid'
+                                                     group by `leave_application_master`.`leave_applied_by`");
+
+                $stmt5->bindParam(':userId',$userId);
+                $stmt5->execute();
+                $result5=$stmt5->fetch();
+                $result_array['leaves_remaining']=$result5[0];
+                echo  json_encode($result_array);
 
             }
 
+
+            public function getNoOfLeaves($data){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $date1 = new DateTime($data->fromDate);
+                $fromDate = $date1->format('Y-m-d');
+                $date2 = new DateTime($data->toDate);
+                $toDate = $date2->format('Y-m-d');
+
+                $caption=$data->caption_of_year;
+
+                $dateDifference=$date2->diff($date1,true)->days;
+
+
+                $stmt1=$connect->prepare("SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)
+                                          AND `caption_of_year`=:caption");
+
+                $stmt1->bindParam(':fromDate',$fromDate);
+                $stmt1->bindParam(':toDate',$toDate);
+                $stmt1->bindParam(':caption',$caption);
+
+                $stmt1->execute();
+                $result1=$stmt1->fetch();
+                $resultdays1=$result1[0];
+
+                $stmt2=$connect->prepare("SELECT count(*) FROM `holiday_in_year` WHERE (`holiday_date` BETWEEN :fromDate AND :toDate) AND `caption_of_year`=:caption");
+
+                $stmt2->bindParam(':fromDate',$fromDate);
+                $stmt2->bindParam(':toDate',$toDate);
+                $stmt2->bindParam(':caption',$caption);
+
+                $stmt2->execute();
+                $result2=$stmt2->fetch();
+                $resultdays2=$result2[0];
+
+                $numberOfDays=$resultdays1+$resultdays2;
+                $numberOfLeaves=$dateDifference-$numberOfDays;
+
+                if($numberOfLeaves<=0){
+                    $numberOfLeaves=0;
+                    echo json_encode($numberOfLeaves);
+                }
+                else{
+                    echo json_encode($numberOfLeaves);
+                }
+
+
+
+            }
             public function getLeaveDetails($data,$userId){
 
                 $db = Database::getInstance();
@@ -357,30 +454,37 @@
 
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
-
                 $json_response=array();
+
                 $searchBy=$data->searchBy;
                 if($searchBy==="Year"){
-
-                    $year=$data->year;
-                    if(isset($data->month)){
-                        $month=$data->month;
-                        $stmt1=$connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year' AND DATE_FORMAT(`leave_application_master`.`from_date`, '%m') = '$month'");
+                    if(isset($data->year)) {
+                        $year = $data->year;
+                        if (isset($data->month)) {
+                            $month = $data->month;
+                            $stmt1 = $connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year' AND DATE_FORMAT(`leave_application_master`.`from_date`, '%m') = '$month'");
+                        } else {
+                            $stmt1 = $connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year'");
+                        }
                     }
                     else{
-                        $stmt1=$connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year'");
+                        return false;
                     }
-
                 }
                 else{
 
-                    $date1 = new DateTime($data->fromDate);
-                    $fromDate = $date1->format('Y-m-d');
-                    $date2 = new DateTime($data->toDate);
-                    $toDate = $date2->format('Y-m-d');
-                    $stmt1=$connect->prepare("SELECT leave_applied_by,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate");
-                    $stmt1->bindParam(':fromDate',$fromDate);
-                    $stmt1->bindParam(':toDate',$toDate);
+                    if(isset($data->fromDate) && isset($data->toDate)) {
+                        $date1 = new DateTime($data->fromDate);
+                        $fromDate = $date1->format('Y-m-d');
+                        $date2 = new DateTime($data->toDate);
+                        $toDate = $date2->format('Y-m-d');
+                        $stmt1 = $connect->prepare("SELECT leave_applied_by,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate");
+                        $stmt1->bindParam(':fromDate', $fromDate);
+                        $stmt1->bindParam(':toDate', $toDate);
+                    }
+                    else{
+                        return false;
+                    }
                 }
 
                 if($stmt1->execute()) {
@@ -432,20 +536,15 @@
 
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
-
                 $json_response=array();
                 $searchBy=$data->employee;
-
 
                 $stmt1=$connect->prepare("SELECT * FROM leave_application_master WHERE leave_applied_by=:searchBy");
                 $stmt1->bindParam(':searchBy',$searchBy);
 
-
-
                 if($stmt1->execute()) {
 
                     while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
-
                         $result_array=array();
                         $result_array['from_date']=$result['from_date'];
                         $result_array['to_date']=$result['to_date'];
@@ -453,7 +552,6 @@
                         $result_array['type_of_leaves']=$result['type_of_leaves'];
                         $result_array['status']=$result['status'];
                         $result_array['application_date']=$result['application_date'];
-
                         $userId=$result['leave_applied_by'];
                         $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId='$userId'");
                         if($stmt2->execute()){
@@ -473,9 +571,7 @@
                 else{
                     return false;
                 }
-
             }
-
         }
 
 ?>

@@ -80,7 +80,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr ng-repeat="leave in leavesDetails">
+                            <tr ng-repeat="leave in leavesDetails | filter :paginate">
 
                                 <td>{{$index+1}}</td>
                                 <td>{{leave.from_date}}</td>
@@ -102,7 +102,10 @@
             </div>
 
         </div>
-
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="5" boundary-links="true"
+                        items-per-page="leavePerPage" class="pagination-sm">
+        </uib-pagination>
 
     </div>
 
