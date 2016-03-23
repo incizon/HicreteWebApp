@@ -33,12 +33,12 @@ class ProjectController
     public function searchProject($expression,$searchKeyword){
 
         try{
-            $project = Project::searchProject($expression,$searchKeyword); // possible user loading method
+            $project = Project::searchProject($searchKeyword,$expression); // possible user loading method
             echo AppUtil::getReturnStatus("Successful",$project);
 
 
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }
 
     }
@@ -50,11 +50,17 @@ class ProjectController
      * @url GET /projects/companies/$id
      */
 
-    public function getCompaniesForProject($id){
-       
-             $project = Project::getCompaniesForProject($id); // possible user loading method
-       
-         return $project;
+    public static function getCompaniesForProject($id){
+
+        try{
+            $project = Project::getCompaniesForProject($id); // possible user loading method
+            echo AppUtil::getReturnStatus("Successful",$project);
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
     /**

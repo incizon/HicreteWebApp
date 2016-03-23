@@ -36,14 +36,14 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
     }
 
     $scope.Companies=[];
-    AppService.getCompanyList($http,$scope);
+    AppService.getCompanyList($http,$scope.Companies);
 
     $scope.projectManagers=[];
-    AppService.getProjectManagers($http,$scope);
+    AppService.getProjectManagers($http,$scope.projectManagers);
     console.log("In Project Creation Controller");
 
     $scope.customers=[];
-    AppService.getAllCustomers($http,$scope);
+    AppService.getAllCustomers($http,$scope.customers);
 
     $scope.creteProject = function(){
 
@@ -630,14 +630,16 @@ myApp.controller('viewProjectController',function($scope,$http,$rootScope){
     $scope.searchproject = function(){
         var project = [];
         var expression = $scope.searchBy +""+$scope.searchKeyword;
-        console.log(expression);
+
 
         if($scope.searchBy!=undefined){
             // alert("nt");
+            console.log($scope.searchBy);
+            console.log($scope.searchKeyword);
             $http.get("php/api/projects/search/"+$scope.searchBy+"&"+$scope.searchKeyword).then(function(response) {
 
                 if(response.data.status=="Successful"){
-                    for(var i = 0; i<response.data.length ; i++){
+                    for(var i = 0; i<response.data.message.length ; i++){
                         project.push({'project_name':response.data.message[i].ProjectName,
                             'projectId':response.data.message[i].ProjectId,
                             'project_status':response.data.message[i].ProjectStatus,
@@ -651,7 +653,10 @@ myApp.controller('viewProjectController',function($scope,$http,$rootScope){
                             'MobileNo' :response.data.message[i].MobileNo,
                             'LandlineNo':response.data.message[i].LandlineNo,
                             'EmailId' :response.data.message[i].EmailId ,
-                            'Pincode' : response.data.message[i].Pincode
+                            'Pincode' : response.data.message[i].Pincode,
+                            'customerId':response.data.message[i].CustomerId,
+                            'customerName':response.data.message[i].CustomerName,
+                            projectManagerId:response.data.message[i].ProjectManagerId
                         });
                         //$scope.Projects = b;
                     }
@@ -702,30 +707,100 @@ myApp.controller('viewProjectController',function($scope,$http,$rootScope){
 
 });
 
-myApp.controller('ModifyProjectController',function($scope,$http) {
+myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,AppService) {
 
-        console.log("IN");
-        $scope.projectDetails={
+    $scope.customers=[];
+    AppService.getAllCustomers($http,$scope.customers);
 
-            projectName:"Prayeja City",
-            projectAddress:"Katraj",
-            projectCity:"Pune",
-            projectState:"Maharashtra",
-            projectCountry:"India",
-            pinCode:"411051",
+    $scope.companies=[];
+    AppService.getCompanyList($http,$scope.companies);
 
-            pointOfConatcName:"Namdev Devmare",
-            pointofConactEmailID:"namdev@gmail.com",
-            pointOfLandlineNo:"020-202020",
-            pointofConactMobileNo:"9090989897",
-            projectManager:"Namdev Devmare",
+    $scope.projectManagers=[];
+    AppService.getProjectManagers($http,$scope.projectManagers);
 
-            company1:true
+    console.log($stateParams);
+    $scope.projectDetails={
+        projectId:$stateParams.projectToModify.projectId,
+        projectName: $stateParams.projectToModify.project_name,
+        projectAddress: $stateParams.projectToModify.project_Address,
+        projectCity :$stateParams.projectToModify.project_City,
+        projectState: $stateParams.projectToModify.project_State,
+        projectCountry: $stateParams.projectToModify.project_Country,
+        pinCode: $stateParams.projectToModify.Pincode,
+        pointOfContactName: $stateParams.projectToModify.PointContactName,
+        pointOfContactEmailID: $stateParams.projectToModify.EmailId,
+        pointOfContactLandlineNo: $stateParams.projectToModify.LandlineNo,
+        pointOfConactMobileNo: $stateParams.projectToModify.MobileNo,
+        projectManager: $stateParams.projectToModify.project_manager,
+        projectManagerId:$stateParams.projectToModify.projectManagerId,
+        customerId:$stateParams.projectToModify.customerId
+    };
+
+    var companiesInvolved;
+    $http.get("php/api/projects/companies/"+$scope.projectDetails.projectId).then(function(response) {
+        if(response.data.status=="Successful"){
+            for(var i=0;i<response.data.message.length;i++){
+                for(var j=0;j<$scope.companies.length;j++){
+                    if($scope.companies[j].companyId==response.data.message[i].CompanyID){
+                        $scope.companies[j].checkVal=true;
+                        break;
+                    }
+                }
+
+            }
+
+        }else{
+            alert("Error Occurred Getting Company Information For This Project");
+        }
+    });
 
 
+        $scope.modifyProject = function() {
+        console.log("in ");
+        // console.log("in modifyProject ");
+        var date = new Date();
+        var d2 = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
 
-        };
+        var companiesInvolved=[];
+        for(var i=0;i<$scope.companies.length;i++){
+            if($scope.companies[i].checkVal){
+                companiesInvolved.push($scope.companies[i]);
+            }
+
+        }
+        var projectBasicDetails = {"ProjectName":$scope.projectDetails.projectName,"ProjectManagerId":$scope.projectDetails.projectManager,"ProjectSource":$scope.projectDetails.projectSource,"IsSiteTrackingProject":$scope.isSiteTracking,"CustomerId":$scope.projectDetails.customerId,"Address":$scope.projectDetails.projectAddress,"City":$scope.projectDetails.projectCity,"State":$scope.projectDetails.projectState,"Country":$scope.projectDetails.projectCountry,"Pincode":$scope.projectDetails.Pincode,"PointContactName":$scope.projectDetails.pointOfConatcName,"MobileNo":$scope.projectDetails.pointofConactMobileNo,"LandlineNo":$scope.projectDetails.pointOfLandlineNo,"EmailId":$scope.projectDetails.pointofConactEmailID};
+        var projectData={
+            projectDetails:projectBasicDetails,
+            companiesInvolved:companiesInvolved
+        }
+        // console.log("data is "+projectData);
+        console.log("Posting");
+        console.log("data is "+JSON.stringify(projectData));
+        $.ajax({
+            type: "POST",
+            url: 'php/api/project/update/'+projId,
+            data: JSON.stringify(projectData),
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json',
+            processData: false,
+
+            success:  function(data)
+            {
+                alert("success in project updation "+data);
+
+
+            } ,
+            error: function(data){
+                alert("error in project updation "+JSON.stringify(data));
+            }
+        });
+
+
+    }
+
 });
+
 myApp.controller('ViewInvoiceDetails',function($scope,$http){
 
     $scope.invoiceNumber="Invoice-123";
@@ -745,11 +820,11 @@ myApp.controller('QuotationFollowupHistoryController',function($scope,$http,AppS
 
     $scope.projects = [];
 
-    AppService.getAllProjects($http,$scope);
+    AppService.getAllProjects($http, $scope.projects);
 
     $scope.selectProject = function(){
         $scope.quotations = [];
-        AppService.getAllQuotationOfProject($http,$scope,$scope.selectedProjectId);
+        AppService.getAllQuotationOfProject($http,$scope.quotations,$scope.selectedProjectId);
     }
 
     $scope.show=function(){
@@ -786,11 +861,11 @@ myApp.controller('PaymentFollowupHistoryController',function($scope,$http,AppSer
 
     $scope.projects = [];
 
-    AppService.getAllProjects($http,$scope);
+    AppService.getAllProjects($http,$scope.projects);
 
     $scope.selectProject = function(){
         $scope.invoicess = [];
-        AppService.getAllInvoicesOfProject($http,$scope,$scope.selectedProjectId);
+        AppService.getAllInvoicesOfProject($http,$scope.invoicess,$scope.selectedProjectId);
     }
 
     $scope.show=function(){
@@ -827,7 +902,7 @@ myApp.controller('SiteTrackingFollowupHistoryController',function($scope,$http){
 
     $scope.projects = [];
 
-    AppService.getAllSiteTrackingProjects($http,$scope);
+    AppService.getAllSiteTrackingProjects($http,$scope.projects);
 
     $scope.show=function(){
 

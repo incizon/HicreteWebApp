@@ -3,7 +3,7 @@
  */
 myApp.service('AppService', function () {
 
-    this.getCompanyList=function($http,$scope){
+    this.getCompanyList=function($http,$companies){
         $('#loader').css("display","block");
         var data = {
             operation: "getCompanyList"
@@ -24,7 +24,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.Companies.push({checkVal:false,companyId:data.message[i].companyId,companyName:data.message[i].companyName});
+                        $companies.push({checkVal:false,companyId:data.message[i].companyId,companyName:data.message[i].companyName});
                     }
                 }
             })
@@ -37,7 +37,7 @@ myApp.service('AppService', function () {
 
     }
 
-    this.getProjectManagers=function($http,$scope){
+    this.getProjectManagers=function($http,$projectManagers){
         $('#loader').css("display","block");
         var data = {
             operation: "getAllProcessUser"
@@ -58,7 +58,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.projectManagers.push({checkVal:false,projectManagerId:data.message[i].userId,name:data.message[i].firstName+" "+data.message[i].lastName});
+                        $projectManagers.push({checkVal:false,projectManagerId:data.message[i].userId,name:data.message[i].firstName+" "+data.message[i].lastName});
                     }
                 }
             })
@@ -71,7 +71,7 @@ myApp.service('AppService', function () {
 
     }
 
-    this.getAllCustomers=function($http,$scope){
+    this.getAllCustomers=function($http,$customers){
         $('#loader').css("display","block");
 
         $http.post("php/api/customerlist", null)
@@ -83,7 +83,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.customers.push({checkVal:false,customerId:data.message[i].CustomerId,customerName:data.message[i].CustomerName});
+                        $customers.push({checkVal:false,customerId:data.message[i].CustomerId,customerName:data.message[i].CustomerName});
                     }
                 }
             })
@@ -97,7 +97,7 @@ myApp.service('AppService', function () {
     }
 
 
-    this.getAllProjects=function($http,$scope){
+    this.getAllProjects=function($http,$projects){
 
         $http.post("php/api/projectlist", null)
             .success(function (data) {
@@ -108,7 +108,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.projects.push({
+                        $projects.push({
                             id: response.data.message[i].ProjectId,
                             name: response.data.message[i].ProjectName
 
@@ -123,7 +123,7 @@ myApp.service('AppService', function () {
 
     }
 
-    this.getAllQuotationOfProject=function($http,$scope,$projectId){
+    this.getAllQuotationOfProject=function($http,$quotations,$projectId){
 
         $http.post("php/api/quotationlist/"+$projectId, null)
             .success(function (data) {
@@ -134,7 +134,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.quotations.push({
+                        $quotations.push({
                             id: response.data.message[i].QuotationId,
                             name: response.data.message[i].QuotationTitle,
                             refNo:response.data.message[i].RefNo
@@ -149,7 +149,7 @@ myApp.service('AppService', function () {
 
     }
 
-    this.getAllInvoicesOfProject=function($http,$scope,$projectId){
+    this.getAllInvoicesOfProject=function($http,$invoices,$projectId){
 
         $http.post("php/api/invoicelist/"+$projectId, null)
             .success(function (data) {
@@ -160,7 +160,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.quotations.push({
+                        $invoices.push({
                             id: response.data.message[i].InvoiceNo,
                             name: response.data.message[i].InvoiceTitle
                         });
@@ -176,7 +176,7 @@ myApp.service('AppService', function () {
 
 
 
-    this.getAllSiteTrackingProjects=function($http,$scope){
+    this.getAllSiteTrackingProjects=function($http,$projects){
 
         $http.post("php/api/sitetrackingprojectlist", null)
             .success(function (data) {
@@ -187,7 +187,7 @@ myApp.service('AppService', function () {
                     alert("Failed:"+data.message);
                 }else {
                     for(var i=0;i<data.message.length;i++){
-                        $scope.projects.push({
+                        $projects.push({
                             id: response.data.message[i].ProjectId,
                             name: response.data.message[i].ProjectName
 
@@ -201,7 +201,5 @@ myApp.service('AppService', function () {
             });
 
     }
-
-
 
 });
