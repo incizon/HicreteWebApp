@@ -15,7 +15,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="companyName" pattern="[a-zA-Z0-9]+" ng-model="selectedCompany.companyName" type="text" class="form-control" placeholder="Enter Company Name"  required minlength=2/>
+                                <input maxlength = "50" name="companyName" pattern="[a-zA-Z0-9]+" ng-model="selectedCompany.companyName" type="text" class="form-control" placeholder="Enter Company Name"  required minlength=2/>
                             </div>
 
                         </div>
@@ -23,7 +23,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="abbrevation" ng-model="selectedCompany.companyAbbrevation"  type="text" class="form-control" pattern="[a-zA-Z0-9]+" minlength=2/>
+                                <input maxlength = "10" name="abbrevation" ng-model="selectedCompany.companyAbbrevation"  type="text" class="form-control" pattern="[a-zA-Z0-9]+" minlength=2/>
                             </div>
 
 
@@ -52,7 +52,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group ">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="city" ng-model="selectedCompany.city" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                <input maxlength = "50" type="text" name="city" ng-model="selectedCompany.city" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
                             </div>
 
                         </div>
@@ -61,7 +61,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedCompany.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                <input maxlength = "50" ng-model="selectedCompany.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
                             </div>
 
                         </div>
@@ -71,7 +71,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedCompany.country" name="country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
+                                <input maxlength = "50" ng-model="selectedCompany.country" name="country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
                             </div>
 
                         </div>
@@ -80,7 +80,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedCompany.pincode" name="pincode" type="text" class="form-control" required minlength=2/>
+                                <input maxlength = "15" ng-model="selectedCompany.pincode" name="pincode" type="text" class="form-control" required minlength=2/>
                             </div>
 
                         </div>
@@ -91,7 +91,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-                                <input type="email" class="form-control" ng-model="selectedCompany.emailId" name="emailId"/>
+                                <input maxlength = "50" type="email" class="form-control" ng-model="selectedCompany.emailId" name="emailId"/>
                             </div>
 
                         </div>
@@ -100,7 +100,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
-                                <input ng-model="selectedCompany.phoneNumber" name="phone" type="text" class="form-control"/>
+                                <input maxlength = "15" ng-model="selectedCompany.phoneNumber" name="phone" type="text" class="form-control"/>
                             </div>
 
                         </div>
