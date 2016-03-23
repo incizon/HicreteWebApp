@@ -36,7 +36,35 @@ myApp.service('AppService', function () {
 
 
     }
+    this.getUsers=function($scope,$http){
+        $scope.leaves={
+            operation:""
+        }
+        $scope.leaves.operation="getEmployees";
+        var config = {
+            params: {
+                details: $scope.leaves
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $scope.employees=data;
+                console.log($scope.users);
+                var user=[];
+                for(var i = 0; i<data.length ; i++){
+                    user.push({
+                        id: data[i].userId,
+                        name: data[i].firstName+" "+data[i].lastName
 
+                    });
+                }
+                $scope.users = user;
+            })
+            .error(function (data, status, headers, config) {
+
+            });
+    }
     this.getProjectManagers=function($http,$projectManagers){
         $('#loader').css("display","block");
         var data = {
@@ -201,5 +229,7 @@ myApp.service('AppService', function () {
             });
 
     }
+
+
 
 });
