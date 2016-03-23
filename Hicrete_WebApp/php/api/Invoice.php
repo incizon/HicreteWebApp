@@ -30,23 +30,21 @@ Class Invoice {
 	}
 
 	public function loadInvoiceFollowups($invoiceid){
-			$object = array();
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
+		$object = array();
 
-			$stmt = $conn->prepare("SELECT * FROM project_payment_followup p,project_payment_followup_details pfd,user_master um WHERE p.FollowupId = pfd.FollowupId AND um.UserId = p.AssignEmployee AND p.InvoiceId = :id");
-			$stmt->bindParam(':id', $invoiceid, PDO::PARAM_STR);
-			
-			if($result = $stmt->execute()){
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-					array_push($object, $row);
-				}
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+
+		$stmt = $conn->prepare("SELECT `project_payment_followup`.`FollowupId`,`FollowupTitle`,`FollowupDate`,`Description`,`ConductDate`,`firstName`,`lastName` FROM `project_payment_followup` ,`project_payment_followup_details`  , usermaster  where `project_payment_followup`.FollowupId = `project_payment_followup_details`.FollowupId AND usermaster.userId = `project_payment_followup`.AssignEmployee AND `project_payment_followup`.`InvoiceId` = :id");
+		$stmt->bindParam(':id', $invoiceid, PDO::PARAM_STR);
+
+		if($result = $stmt->execute()){
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
 			}
-
-		 } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
+		}else{
+			return null;
+		}
 
 		$db = null;
 		return $object ;
@@ -169,5 +167,27 @@ public function loadInvoiceForProject($projid){
 
 
 	}
+
+	public static function getInvoiceListForProject($projectId) {
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `InvoiceNo`,`InvoiceTitle` FROM `invoice` WHERE `QuotationId` IN (SELECT `QuotationId` FROM `quotation` WHERE `ProjectId`=:projectId)");
+		$stmt->bindParam(':projectId',$projectId);
+		if($result = $stmt->execute()) {
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}
+
+		$db = null;
+		return $object;
+
+
+	}
+
+
+
 }
 

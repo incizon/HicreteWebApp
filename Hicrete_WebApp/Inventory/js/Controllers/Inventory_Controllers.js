@@ -1406,9 +1406,11 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
 
 myApp.controller('productionBatchController', function ($scope,$rootScope, $filter, $http,inventoryService, ProductionBatchService) {
 
+    $scope.nextStep =false;
     $scope.qtyError=0;
     $scope.currentPage = 1;
     $scope.prodBatchPerPage = 5;
+    $scope.submitted=false;
 
     $scope.paginate = function(value) {
         //console.log("In Paginate");
@@ -1675,9 +1677,9 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             prodBatchInfo.option = message;
 
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
-            /* setTimeout(function () {
-             window.location="dashboard.php#/Inventory";
-             }, 1000);*/
+             setTimeout(function () {
+             window.location="dashboard.php#/Inventory/prodInit";
+             }, 1000);
         }
         else if (message == 'Modify') {
             console.log(prodBatchInfo);
@@ -1686,7 +1688,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
                 prodBatchInfo.option = message;
                 ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
                 /*setTimeout(function () {
-                 window.location="dashboard.php#/Inventory";
+                 window.location="dashboard.php#/Inventory/prodInit";
                  }, 1000);*/
             }
             else {
@@ -1701,6 +1703,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            $scope.submitted=false;
             setTimeout(function () {
                 window.location="dashboard.php#/Inventory/prodInit";
             }, 1000);

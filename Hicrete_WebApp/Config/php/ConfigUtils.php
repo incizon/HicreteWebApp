@@ -633,7 +633,7 @@ class ConfigUtils
 
         }catch(Exception $e){
      
-                echo AppUtil::getReturnStatus("Exception","Exception occur while getting access permissions");
+                echo AppUtil::getReturnStatus("Exception","Exception Occurred while getting access permission");
         }
            
     }
@@ -704,7 +704,7 @@ class ConfigUtils
             } 
           
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception",$e->getMessage());
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
         }
 
     }
@@ -857,7 +857,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
             } 
           
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception",$e->getMessage());
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
         }
 
     }

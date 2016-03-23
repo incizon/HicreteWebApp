@@ -13,12 +13,25 @@ class QuotationController
      */
 
     public function getQuotationFollow($id = null){
-        
-         if ($id !=null) {
-             $Quotation = Quotation::loadQuotationFollowup($id); // possible user loading method
-         } else {
-             $Quotation = Quotation::loadAllQuotationFollowup();
-         }
+
+        try{
+            if ($id !=null) {
+                $Quotation = Quotation::loadQuotationFollowup($id); // possible user loading method
+            } else {
+                $Quotation = Quotation::loadAllQuotationFollowup();
+            }
+
+            if($Quotation!=null){
+                echo AppUtil::getReturnStatus("Successful",$Quotation);
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
 
          return $Quotation;
     }
@@ -121,5 +134,23 @@ class QuotationController
         $quotation = Quotation::deleteQuotation($id);
         return $quotation;
     }
-  
+
+    /**
+     * delete customer using id
+     *
+     * @url POST /quotationlist/$id
+     *
+     */
+
+    public static function getQuotationList($id){
+        try{
+            $quotation = Quotation::getQuotationListForProject($id);
+            echo AppUtil::getReturnStatus("Successful",$quotation);
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
+
 }

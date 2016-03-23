@@ -79,8 +79,22 @@
                 $productObjSearch = new InwardData($pData);
                // echo $pData->keyword;
                // echo $pData->SearchTerm;
+                if(isset($pData->keyword))
+                {
+                    $keyword=$pData->keyword;
+                }
+                else
+                {
+                    $keyword="";
+                }
 
-                $productObjSearch->getInwardEntries($dbh,$pData->keyword,$pData->SearchTerm,$dbhHicret);
+                if(isset($pData->SearchTerm))
+                {
+                    $SearchTerm = $pData->SearchTerm;
+                }
+                else
+                    $SearchTerm ="";
+                        $productObjSearch->getInwardEntries($dbh,$keyword,$SearchTerm,$dbhHicret);
                 break;
 
             default:
@@ -115,7 +129,22 @@
             case 'search':
                 # code...
                 $productObjSearch = new OutwardData($pData);
-                $productObjSearch->getOutwardEntries($dbh,$pData->keyword,$pData->SearchTerm);
+                if(isset($pData->keyword))
+                {
+                    $keyword=$pData->keyword;
+                }
+                else
+                {
+                    $keyword="";
+                }
+
+                if(isset($pData->SearchTerm))
+                {
+                    $SearchTerm = $pData->SearchTerm;
+                }
+                else
+                    $SearchTerm ="";
+                $productObjSearch->getOutwardEntries($dbh,$keyword,$SearchTerm);
                 break;
             case 'getProductAvailableQty':
 //                echo json_encode($pData->materialId);
