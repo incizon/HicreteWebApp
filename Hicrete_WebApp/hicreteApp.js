@@ -404,7 +404,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ViewQuotation',
             templateUrl:'Process/html/ViewQuotation.html',
             controller:'ViewQuotationDetailsController',
-            params : {quotationToView: null }
+            params : {quotationToView: null,projectName:null}
         })
 
         .state('Process.paymentHistory', {
