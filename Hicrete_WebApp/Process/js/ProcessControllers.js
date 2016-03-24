@@ -102,8 +102,8 @@ myApp.controller('ProjectCreationController',function($scope,$http,$uibModal, $l
 });
 
 
-myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log,$stateParmas){
-
+myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $log){
+/*
     $scope.project=$stateParmas.projectToModify;
 
 
@@ -139,7 +139,7 @@ myApp.controller('ProjectDetailsController',function($scope,$http,$uibModal, $lo
    }
 
     console.log("IN");
-
+*/
 });
 
 myApp.controller('QuotationController',function($scope,$http,$uibModal, $log){
@@ -630,7 +630,7 @@ myApp.controller('viewProjectController',function($scope,$http,$rootScope){
     $scope.searchproject = function(){
         var project = [];
         var expression = $scope.searchBy +""+$scope.searchKeyword;
-
+        $rootScope.projectSearch=[];
 
         if($scope.searchBy!=undefined){
             // alert("nt");
@@ -660,6 +660,7 @@ myApp.controller('viewProjectController',function($scope,$http,$rootScope){
                         });
                         //$scope.Projects = b;
                     }
+
                     $rootScope.projectSearch = project;
                     if($rootScope.projectSearch.length==0){
                         alert("No Data Found For Search Criteria");
@@ -712,8 +713,8 @@ myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,Ap
     $scope.customers=[];
     AppService.getAllCustomers($http,$scope.customers);
 
-    $scope.companies=[];
-    AppService.getCompanyList($http,$scope.companies);
+    $scope.Allcompanies=[];
+    AppService.getCompanyList($http,$scope.Allcompanies);
 
     $scope.projectManagers=[];
     AppService.getProjectManagers($http,$scope.projectManagers);
@@ -737,16 +738,19 @@ myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,Ap
     };
 
     var companiesInvolved;
+    $scope.companies=[];
     $http.get("php/api/projects/companies/"+$scope.projectDetails.projectId).then(function(response) {
         if(response.data.status=="Successful"){
-            for(var i=0;i<response.data.message.length;i++){
-                for(var j=0;j<$scope.companies.length;j++){
-                    if($scope.companies[j].companyId==response.data.message[i].CompanyID){
-                        $scope.companies[j].checkVal=true;
+            for(var j=0;j<$scope.Allcompanies.length;j++){
+                var isExcluded=true;
+                for(var i=0;i<response.data.message.length;i++){
+                    if($scope.Allcompanies[j].companyId==response.data.message[i].companyId){
+                        isExcluded=false;
                         break;
                     }
                 }
-
+                if(isExcluded)
+                    $scope.companies.push($scope.Allcompanies[j]);
             }
 
         }else{
@@ -757,9 +761,6 @@ myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,Ap
 
         $scope.modifyProject = function() {
         console.log("in ");
-        // console.log("in modifyProject ");
-        var date = new Date();
-        var d2 = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
 
         var companiesInvolved=[];
         for(var i=0;i<$scope.companies.length;i++){
@@ -768,7 +769,20 @@ myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,Ap
             }
 
         }
-        var projectBasicDetails = {"ProjectName":$scope.projectDetails.projectName,"ProjectManagerId":$scope.projectDetails.projectManager,"ProjectSource":$scope.projectDetails.projectSource,"IsSiteTrackingProject":$scope.isSiteTracking,"CustomerId":$scope.projectDetails.customerId,"Address":$scope.projectDetails.projectAddress,"City":$scope.projectDetails.projectCity,"State":$scope.projectDetails.projectState,"Country":$scope.projectDetails.projectCountry,"Pincode":$scope.projectDetails.Pincode,"PointContactName":$scope.projectDetails.pointOfConatcName,"MobileNo":$scope.projectDetails.pointofConactMobileNo,"LandlineNo":$scope.projectDetails.pointOfLandlineNo,"EmailId":$scope.projectDetails.pointofConactEmailID};
+        var projectBasicDetails = {
+            ProjectName:$scope.projectDetails.projectName,
+            ProjectManagerId:$scope.projectDetails.projectManagerId,
+            ProjectSource:$scope.projectDetails.projectSource,
+            CustomerId:$scope.projectDetails.customerId,
+            Address:$scope.projectDetails.projectAddress,
+            City:$scope.projectDetails.projectCity,
+            State:$scope.projectDetails.projectState,
+            Country:$scope.projectDetails.projectCountry,
+            Pincode:$scope.projectDetails.Pincode,
+            PointContactName:$scope.projectDetails.pointOfContactName,
+            MobileNo:$scope.projectDetails.pointOfConactMobileNo,
+            LandlineNo:$scope.projectDetails.pointOfContactLandlineNo,
+            EmailId:$scope.projectDetails.pointOfContactEmailID};
         var projectData={
             projectDetails:projectBasicDetails,
             companiesInvolved:companiesInvolved
@@ -778,7 +792,7 @@ myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,Ap
         console.log("data is "+JSON.stringify(projectData));
         $.ajax({
             type: "POST",
-            url: 'php/api/project/update/'+projId,
+            url: 'php/api/project/update/'+$scope.projectDetails.projectId,
             data: JSON.stringify(projectData),
             dataType: 'json',
             cache: false,
@@ -787,12 +801,11 @@ myApp.controller('ModifyProjectController',function($scope,$http,$stateParams,Ap
 
             success:  function(data)
             {
-                alert("success in project updation "+data);
 
-
-            } ,
+                alert(data.message);
+            },
             error: function(data){
-                alert("error in project updation "+JSON.stringify(data));
+                alert(data.message);
             }
         });
 

@@ -156,9 +156,19 @@ class ProjectController
      * @url PUT /project/update/$id
      */
 
-    public function updateProject($id,$data){
-        $project = project::updateProject($id,$data);
-        return $project;
+    public static function updateProject($id,$data){
+        try{
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            $project = $project = project::updateProject($id,$data,$loggedInUserId);;
+            if($project)
+                echo AppUtil::getReturnStatus("Successful","Project updated successfully");
+            else
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
     }
 
     /**

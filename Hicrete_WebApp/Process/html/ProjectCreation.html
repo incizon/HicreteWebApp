@@ -16,13 +16,19 @@
 
                     <div class="col-md-6">
 
-                        <div class="col-md-8">
-                            <select class="form-control select" name="customer" ng-model="projectDetails.customerId">
-                                <option value="" disabled selected>Choose Customer</option>
-                                <option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Customer Name :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <select class="form-control select" name="customer" ng-model="projectDetails.customerId">
+                                        <option value="" disabled selected>Choose Customer</option>
+                                        <option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>
 
-                            </select>
+                                    </select>
 
+                                </div>
+                            </div>
                         <div class="form-group">
                             <div class="col-md-4">
                                 <label class="control-label">Project Name :</label>
