@@ -73,7 +73,7 @@
                         <div class="col-lg-9 col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="paidLeaves" ng-model="yearDetails.paidLeaves" pattern="[0-9]{2}" required/>
+                                <input type="text" class="form-control" name="paidLeaves" ng-model="yearDetails.paidLeaves" pattern="^[0-9]+$" required/>
                             </div>
                             <div class="help-block" ng-messages="createYearForm.paidLeaves.$error" ng-show="formSubmitted">
                                 <span style="color:red" ng-message="required">Number of paid leaves is required..</span>

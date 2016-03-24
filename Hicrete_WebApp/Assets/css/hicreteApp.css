@@ -91,3 +91,8 @@ a.log_out:hover span{ color: #fff !important;}
 .panel .panel-body{
 	z-index: 1;
 }
+
+/*------------------- Disabled Input fields -------------------*/
+.form-control[disabled], .form-control[readonly] {
+	color: #333;
+}
