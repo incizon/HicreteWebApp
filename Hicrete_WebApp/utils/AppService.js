@@ -189,8 +189,8 @@ myApp.service('AppService', function () {
                 }else {
                     for(var i=0;i<data.message.length;i++){
                         $invoices.push({
-                            id: response.data.message[i].InvoiceNo,
-                            name: response.data.message[i].InvoiceTitle
+                            id: data.message[i].InvoiceNo,
+                            name: data.message[i].InvoiceTitle
                         });
                     }
                 }
