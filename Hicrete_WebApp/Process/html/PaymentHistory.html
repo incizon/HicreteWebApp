@@ -39,14 +39,18 @@
                         <!--Start of Sort By feild-->
                         <div class="form-group">
                             <div class="col-md-3">
-                                <label class="control-label">Sort By</label>
+                                <label class="control-label">Total Amount </label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="sortBy">
-                                    <option value="" disabled selected>Sort By..</option>
-                                    <option value="Payment Date">Payment Date</option>
-                                    <option value="Amount">Amount</option>
-                                </select>
+                                <label class="control-label">{{totalPayableAmount}}</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Amount Remaining </label>
+                            </div>
+                            <div class="col-md-9">
+                                <label class="control-label">{{totalPayableAmount - totalAmtPaid}}</label>
                             </div>
                         </div>
                         <!--End of Sort By feild-->
@@ -67,6 +71,15 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Total Amount Paid </label>
+                            </div>
+                            <div class="col-md-9">
+                                <label class="control-label">{{totalAmtPaid}}</label>
+                            </div>
+                        </div>
+
                     </div>
                     <!--End of second column of form-->
                 </form>
@@ -80,20 +93,33 @@
                         <thead>
                         <tr>
                             <th width="5%">Sr.No</th>
-                            <th width="10%">Amount Paid</th>
-                            <th width="10%">Payment Date</th>
-                            <th width="10%">Received By</th>
-                            <th width="15%">Amount Remaining</th>
+                            <th width="10%">
+                                <a ng-click="sortType = 'paymentHistory.amountPaid'; sortReverse = !sortReverse">AmountPaid
+                                    <span ng-show="sortType == 'paymentHistory.amountPaid' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'paymentHistory.amountPaid' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                                </th>
+                            <th width="10%">
+                                <a ng-click="sortType = 'paymentHistory.paymentDate'; sortReverse = !sortReverse">Payment Date
+                                    <span ng-show="sortType == 'paymentHistory.paymentDate' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'paymentHistory.paymentDate' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                                </th>
+                            <th width="10%">
+                                <a ng-click="sortType = 'paymentHistory.recievedBy'; sortReverse = !sortReverse">Received By
+                                    <span ng-show="sortType == 'paymentHistory.recievedBy' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'paymentHistory.recievedBy' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                                </th>
                             <th width="40%"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="paymentHistory in paymentHistoryData">
+                        <tr ng-repeat="paymentHistory in paymentHistoryData | orderBy:sortType:sortReverse">
                             <td>{{$index+1}}</td>
                             <td>{{paymentHistory.amountPaid}}</td>
                             <td>{{paymentHistory.paymentDate}}</td>
                             <td>{{paymentHistory.recievedBy}}</td>
-                            <td>{{paymentHistory.amountRemaining}}</td>
                             <td>
                                 <button class="btn btn-primary btn-sm" data-target="#viewAllHistory"
                                         ng-click="getPaymentHistoryData(paymentHistory)" data-toggle="modal"><span

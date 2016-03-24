@@ -1245,190 +1245,194 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
 
 
 });
-myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal, $log, $filter) {
-    /**************************************************************************/
-    $scope.paymentDetails = {
-        operation: ""
+myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal,$log,$filter,AppService){
+/**************************************************************************/
+ $scope.paymentDetails={
+        operation:""
 
     };
-    $scope.formSubmitted = false;
-    $scope.showPaymentDetails = false;
+    $scope.formSubmitted=false;
+    $scope.showPaymentDetails=false;
     /**********************/
-    $scope.Projects = [];
-    var project = [];
+$scope.Projects = [];
+var project = [];
+AppService.getUsers($scope,$http);
+/****************************/
+            /************* got all project ********************/
+       $http.get("php/api/projects").then(function(response) {
+               //  console.log(response.data.length);
+                if(response.data != null){
+                        for(var i = 0; i<response.data.length ; i++){
+                                    project.push({
+                                                project_id: response.data[i].ProjectId,
+                                                project_name: response.data[i].ProjectName
+                                    });
+                        }
+                }
+               $scope.Projects = project;
+              // console.log("projects scope is "+JSON.stringify($scope.Projects));
+            })
 
-    /****************************/
-    /************* got all project ********************/
-    $http.get("php/api/projects").then(function (response) {
-        console.log(response.data.length);
-        if (response.data != null) {
-            for (var i = 0; i < response.data.length; i++) {
-                project.push({
-                    project_id: response.data[i].ProjectId,
-                    project_name: response.data[i].ProjectName
-                });
-            }
-        }
-        $scope.Projects = project;
-        console.log("projects scope is " + JSON.stringify($scope.Projects));
-    })
-
-    $scope.projectPayment = [];
-    $scope.animationsEnabled = true;
-    $scope.paymentReceivedFor = undefined;
-    var totalAmount = 0;
+        $scope.projectPayment=[];
+    $scope.animationsEnabled=true;
+    $scope.paymentReceivedFor=undefined;
+    var totalAmount  = 0;
     $scope.AssignedPayments = [];
     var AssignedPayment = [];
     var paymentdetails = [];
-    $scope.projectPaymentsInvoice = [];
-    /* $scope.viewProjectPaymentDetails=function(project_id){
+     $scope.projectPaymentsInvoice = [];
+   /* $scope.viewProjectPaymentDetails=function(project_id){
+       
+        console.log("project id is "+project_id);
 
-     console.log("project id is "+project_id);
-
-     $http.get("php/api/payment/assigned/Byproj/"+project_id).then(function(response) {
-     console.log(response.data.length);
-     if(response.data != null){
-     for(var i = 0; i<response.data.length ; i++){
-     AssignedPayment.push({
-     payment_grand_total:response.data[i].GrandTotal
-     });
-     }
-     }
-     $scope.AssignedPayments = AssignedPayment;
-     console.log("AssignedPayment scope is "+JSON.stringify($scope.AssignedPayments));
-     })
-
-
-     }*/
-    $scope.viewProjectPaymentDetails = function (project_id) {
-        $scope.Invoices = [];
-        var invoice = [];
-        $http.get("php/api/projects/invoices/" + project_id).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    invoice.push({
-                        invoice_id: response.data[i].InvoiceNo,
-                        invoice_name: response.data[i].InvoiceTitle,
-                        invoice_date: response.data[i].InvoiceDate
-                    });
+         $http.get("php/api/payment/assigned/Byproj/"+project_id).then(function(response) {
+                console.log(response.data.length);
+                if(response.data != null){
+                        for(var i = 0; i<response.data.length ; i++){
+                                    AssignedPayment.push({
+                                                payment_grand_total:response.data[i].GrandTotal
+                                    });
+                        }
                 }
-            }
-            $scope.Invoices = invoice;
-            console.log("invoices  scope is " + JSON.stringify($scope.Invoices));
-        })
+               $scope.AssignedPayments = AssignedPayment;
+               console.log("AssignedPayment scope is "+JSON.stringify($scope.AssignedPayments));
+            })
+
+         
+    }*/
+    $scope.viewProjectPaymentDetails = function(project_id){
+      $scope.Invoices = [];
+      var invoice = [];
+        AppService.getAllInvoicesOfProject($http,$scope.Invoices,project_id);
+          //$http.get("php/api/invoice/project/"+project_id).then(function(response) {
+          //     // console.log(response.data.length);
+          //      if(response.data != null){
+          //              for(var i = 0; i<response.data.length ; i++){
+          //                          invoice.push({
+          //                                     invoice_id: response.data[i].InvoiceNo,
+          //                                      invoice_name: response.data[i].InvoiceTitle,
+          //                                      invoice_date :response.data[i].InvoiceDate
+          //                          });
+          //              }
+          //      }
+          //     $scope.Invoices = invoice;
+          //   //  console.log("invoices  scope is "+JSON.stringify($scope.Invoices));
+          //  });
 
 
-        $http.get("php/api/payment/allPayment/Byproj/" + project_id).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                paymentdetails = response.data;
-            }
-            $scope.projectPayment = paymentdetails;
-            console.log("project payment new scope is " + JSON.stringify($scope.projectPayment));
-            var pkgamount = 0;
-            var amountPaid = 0;
+            $http.get("php/api/payment/allPayment/Byproj/"+project_id).then(function(response) {
+              //  console.log(response.data.length);
+                if(response.data != null){
+                       paymentdetails = response.data;
+                }
+               $scope.projectPayment = paymentdetails;
+              // console.log("project payment new scope is "+JSON.stringify($scope.projectPayment));
+                    var pkgamount = 0;
+                    var amountPaid = 0;
 
-            for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
-                pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
-                amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
+                    for(var i = 0; i<$scope.projectPayment.Quotation.length;i++){
+                        pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
+                        amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
 
-                for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
-                    console.log("in for");
+                             for(var index1=0;index1<$scope.projectPayment.Quotation[i].paymentDetails.length;index1++){
+                                        //    console.log("in for");
+                                    $scope.projectPaymentsInvoice.push({
+                                        amount_paid:$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
+                                        date_of_payment:$scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceDate,
+                                        paid_to:$scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName+''+$scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
+                                        //payment_mode:$scope.projectPayment.paymentDetails[index1].payment_mode
+                                    });
+                            }
+                    }
+
+               $scope.packageAmount = pkgamount;
+               $scope.projectPayment.total_project_amount = pkgamount;
+             //  console.log("project new package amount scope is  "+JSON.stringify($scope.packageAmount));
+
+                $scope.previousAmountPaid = amountPaid;
+                $scope.projectPayment.total_paid_amount = amountPaid;
+              //  console.log("project package paid amount scope is  "+JSON.stringify($scope.previousAmountPaid));
+
+               /*  for(var index1=0;index1<$scope.projectPayment.paymentDetails.length;index1++){
+                            console.log("in for");
                     $scope.projectPaymentsInvoice.push({
-                        amount_paid: $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
-                        date_of_payment: $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceDate,
-                        paid_to: $scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName + '' + $scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
+                        amount_paid:$scope.projectPayment.paymentDetails[index1].GrandTotal,
+                        date_of_payment:$scope.projectPayment.paymentDetails[index1].InvoiceDate,
+                        paid_to:$scope.projectPayment.paymentDetails[index1].FirstName+''+$scope.projectPayment.paymentDetails[index1].LastName,
                         //payment_mode:$scope.projectPayment.paymentDetails[index1].payment_mode
                     });
-                }
-            }
-
-            $scope.packageAmount = pkgamount;
-            $scope.projectPayment.total_project_amount = pkgamount;
-            console.log("project new package amount scope is  " + JSON.stringify($scope.packageAmount));
-
-            $scope.previousAmountPaid = amountPaid;
-            $scope.projectPayment.total_paid_amount = amountPaid;
-            console.log("project package paid amount scope is  " + JSON.stringify($scope.previousAmountPaid));
-
-            /*  for(var index1=0;index1<$scope.projectPayment.paymentDetails.length;index1++){
-             console.log("in for");
-             $scope.projectPaymentsInvoice.push({
-             amount_paid:$scope.projectPayment.paymentDetails[index1].GrandTotal,
-             date_of_payment:$scope.projectPayment.paymentDetails[index1].InvoiceDate,
-             paid_to:$scope.projectPayment.paymentDetails[index1].FirstName+''+$scope.projectPayment.paymentDetails[index1].LastName,
-             //payment_mode:$scope.projectPayment.paymentDetails[index1].payment_mode
-             });
-             }*/
-            console.log("payments in modal is " + $scope.projectPaymentsInvoice);
-        })
-
-        $scope.showPaymentDetails = true;
+                }*/
+             //   console.log("payments in modal is "+$scope.projectPaymentsInvoice);
+            })
+            
+            $scope.showPaymentDetails=true;
 
     }
 
 
-    $scope.getPendingAmount = function () {
-        // console.log("In Pending amount function");
-        $scope.paymentDetails.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - $scope.previousAmountPaid;
+
+    $scope.getPendingAmount=function(){
+       // console.log("In Pending amount function");
+        $scope.paymentDetails.pendingAmount=parseInt($scope.packageAmount)-parseInt($scope.paymentDetails.amountPaid)-$scope.previousAmountPaid;
 
     }
-    $scope.submitPaymentDetails = function (size, paymentDetails, quotation_id) {
-        console.log("branch number is " + paymentDetails.branchName)
-        var iscash = 0;
+    $scope.submitPaymentDetails=function(size,paymentDetails,quotation_id){
+        console.log("branch number is "+paymentDetails.branchName)
+        var iscash =0;
         var paydate = $filter('date')(paymentDetails.paymentDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        if (paymentDetails.paymentMode == 'cash') {
-            iscash = 1;
+        if(paymentDetails.paymentMode == 'cash'){
+             iscash= 1;
             //var data = '{"AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'"}'
-            var data = '{"InvoiceNo":"' + paymentDetails.InvoiceNo + '","AmountPaid":"' + paymentDetails.amountPaid + '", "PaymentDate":"' + paydate + '", "IsCashPayment":"' + iscash + '", "PaidTo":"' + paymentDetails.paidTo + '","InstrumentOfPayment":"' + paymentDetails.paymentMode + '", "IDOfInstrument":"", "BankName":"", "BranchName":"", "City":""}';
+            var data = '{"InvoiceNo":"'+paymentDetails.InvoiceNo+'","AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo.id+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'", "IDOfInstrument":"", "BankName":"", "BranchName":"", "City":""}';
         }
-        else {
-            var data = '{"InvoiceNo":"' + paymentDetails.InvoiceNo + '","AmountPaid":"' + paymentDetails.amountPaid + '", "PaymentDate":"' + paydate + '", "IsCashPayment":"' + iscash + '", "PaidTo":"' + paymentDetails.paidTo + '","InstrumentOfPayment":"' + paymentDetails.paymentMode + '", "IDOfInstrument":"' + paymentDetails.uniqueNumber + '", "BankName":"' + paymentDetails.bankName + '", "BranchName":"' + paymentDetails.branchName + '", "City":""}';
+        else{
+            var data = '{"InvoiceNo":"'+paymentDetails.InvoiceNo+'","AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo.id+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'", "IDOfInstrument":"'+paymentDetails.uniqueNumber+'", "BankName":"'+paymentDetails.bankName+'", "BranchName":"'+paymentDetails.branchName+'", "City":""}';
         }
-        console.log("dta is " + data);
+        console.log("dta is "+data);
 
-        $.ajax({
-            type: "POST",
-            url: 'php/api/savepayment',
-            data: data,
-            dataType: 'json',
-            cache: false,
-            contentType: 'application/json',
-            processData: false,
-            success: function (data) {
-                alert("success save payment " + data);
-            },
-            error: function (xhr, status, error) {
-                alert(xhr.responseText + " " + error + " AND " + status.code);
-            }
-        });
-        /*$.ajax({
-         type: 'POST',
-         url: 'php/api/savepayment',
-         context: document.body
-         }).done(function() {
-         $( this ).addClass( "done" );
-         });*/
+             $.ajax({
+                            type: "POST",
+                            url: 'php/api/savepayment',
+                            data: data,
+                            dataType: 'json',
+                            cache: false,
+                            contentType: 'application/json',
+                            processData: false,
+                               success:  function(data)
+                            {
+                                alert("success save payment "+data);
+                             } ,
+                               error: function(xhr,status, error) {
+                                alert(xhr.responseText+" "+error+" AND "+status.code);
+                                }
+                            });
+  /*$.ajax({
+    type: 'POST',
+  url: 'php/api/savepayment',
+  context: document.body
+}).done(function() {
+  $( this ).addClass( "done" );
+});*/
 
 
-        $scope.formSubmitted = false;
 
-        if ($scope.paymentDetails.pendingAmount == 0) {
+        $scope.formSubmitted=false;
 
-            paymentDetails.paymentStatus = 'Yes';
+        if($scope.paymentDetails.pendingAmount==0) {
+
+            paymentDetails.paymentStatus='Yes';
             console.log(paymentDetails);
 
         }
-        else if ($scope.paymentDetails.pendingAmount != 0) {
+        else if($scope.paymentDetails.pendingAmount!=0){
 
 
-            paymentDetails.paymentStatus = 'No';
+            paymentDetails.paymentStatus='No';
 
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
-                controller: function ($scope, $uibModalInstance, paymentDetails) {
+                controller:  function ($scope, $uibModalInstance,paymentDetails) {
 
 
                     $scope.paymentDetails = paymentDetails;
@@ -1436,7 +1440,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     $scope.ok = function () {
 
                         console.log($scope.paymentDetails);
-
+                       
                         $uibModalInstance.close();
                     };
 
@@ -2229,73 +2233,87 @@ myApp.controller('ViewQuotationDetailsController', function (setInfo, $scope, $h
 
 });
 
-myApp.controller('PaymentHistoryController', function ($scope, $http) {
+myApp.controller('PaymentHistoryController',function($scope,$http){
 
-    console.log("in payment history controller");
-    $scope.Projects = [];
-    $scope.Invoices = [];
-    $scope.InvoiceDetails = [];
+  console.log("in payment history controller");
+$scope.Projects = [];
+ $scope.Invoices = [];
+  $scope.InvoiceDetails = [];
+    $scope.sortType= 'amountPaid'; // set the default sort type
+    $scope.sortReverse  = false;
     var project = [];
 
-    $http.get("php/api/projects").then(function (response) {
-        console.log(response.data.length);
-        if (response.data != null) {
-            for (var i = 0; i < response.data.length; i++) {
-                project.push({
-                    project_id: response.data[i].ProjectId,
-                    project_name: response.data[i].ProjectName
-                });
-            }
+          $http.get("php/api/projects").then(function(response) {
+                console.log(response.data.length);
+                if(response.data != null){
+                        for(var i = 0; i<response.data.length ; i++){
+                                    project.push({
+                                                project_id: response.data[i].ProjectId,
+                                                project_name: response.data[i].ProjectName
+                                    });
+                        }
+                }
+               $scope.Projects = project;
+               console.log("projects scope is "+JSON.stringify($scope.Projects));
+            })
+
+        $scope.viewProjectInvoices = function(project){
+            $scope.paymentHistoryData=[];
+          $scope.Invoices = [];
+          var invoice = [];
+          console.log("project id is :"+project);
+
+             $http.get("php/api/invoice/project/"+project).then(function(response) {
+                console.log(response.data.length);
+                if(response.data != null){
+                        for(var i = 0; i<response.data.length ; i++){
+                                    invoice.push({
+                                               invoice_id: response.data[i].InvoiceNo,
+                                                invoice_name: response.data[i].InvoiceTitle,
+                                                invoice_date :response.data[i].InvoiceDate
+                                    });
+                        }
+                }
+               $scope.Invoices = invoice;
+               console.log("invoices  scope is "+JSON.stringify($scope.Invoices));
+            })
         }
-        $scope.Projects = project;
-        console.log("projects scope is " + JSON.stringify($scope.Projects));
-    })
 
-    $scope.viewProjectInvoices = function (project) {
-        $scope.paymentHistoryData = [];
-        $scope.Invoices = [];
-        var invoice = [];
-        console.log("project id is :" + project);
+        $scope.getInvoiceDetails = function(invoiceId){
+          $scope.paymentHistoryData=[];
+            $scope.totalAmtPaid="";
+            $scope.totalPayableAmount=0;
+          var invoiceDetail=[];
+            var totalAmountPaid=0;
+            var totalPayableAmt=12000;
+          console.log("invoice id is "+invoiceId);
+                $http.get("php/api/paymentDetails/Invoice/"+invoiceId).then(function(response) {
+                console.log(response.data.length);
+                if(response.data != null){
+                        for(var i = 0; i<response.data.length ; i++){
+                                 invoiceDetail.push({
+                                      amountPaid:response.data[i].AmountPaid,
+                                      paymentDate:response.data[i].PaymentDate,
+                                      recievedBy:response.data[i].FirstName +response.data[i].LastName ,
+                                      amountRemaining:"----",
+                                      grandTotal:response.data[i].GrandTotal,
+                                      paymentMode:response.data[i].InstrumentOfPayment,
+                                      bankName:response.data[i].BankName,
+                                      branchName:response.data[i].BranchName,
+                                      unqiueNo:response.data[i].IDOfInstrument
+                                  });
+                            totalAmountPaid=totalAmountPaid + parseInt(response.data[i].AmountPaid);
 
-        $http.get("php/api/projects/invoices/" + project).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    invoice.push({
-                        invoice_id: response.data[i].InvoiceNo,
-                        invoice_name: response.data[i].InvoiceTitle,
-                        invoice_date: response.data[i].InvoiceDate
-                    });
+                        }
+                    totalPayableAmt=parseInt(response.data[0].GrandTotal);
                 }
-            }
-            $scope.Invoices = invoice;
-            console.log("invoices  scope is " + JSON.stringify($scope.Invoices));
-        })
-    }
-
-    $scope.getInvoiceDetails = function (invoiceId) {
-        $scope.paymentHistoryData = [];
-        var invoiceDetail = [];
-        console.log("invoice id is " + invoiceId);
-        $http.get("php/api/paymentDetails/Invoice/" + invoiceId).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    invoiceDetail.push({
-                        amountPaid: response.data[i].AmountPaid,
-                        paymentDate: response.data[i].PaymentDate,
-                        recievedBy: response.data[i].PaidTo,
-                        amountRemaining: "----",
-                        paymentMode: response.data[i].InstrumentOfPayment,
-                        bankName: response.data[i].BankName,
-                        branchName: response.data[i].BranchName,
-                        unqiueNo: response.data[i].IDOfInstrument
-                    });
-                }
-            }
-            $scope.paymentHistoryData = invoiceDetail;
-            console.log("paymentHistoryData  scope is " + JSON.stringify($scope.paymentHistoryData));
-        })
+                    $scope.totalAmtPaid=totalAmountPaid;
+                    $scope.totalPayableAmount=totalPayableAmt;
+                    console.log("total amount payable="+totalPayableAmt);
+                    console.log("total amount paid="+totalAmountPaid);
+               $scope.paymentHistoryData = invoiceDetail;
+               console.log("paymentHistoryData  scope is "+JSON.stringify($scope.paymentHistoryData));
+            })
 
     }
 
