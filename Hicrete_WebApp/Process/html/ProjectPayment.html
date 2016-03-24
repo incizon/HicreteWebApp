@@ -210,6 +210,25 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Branch City</label>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" name="BranchCity" ng-model="paymentDetails.branchCity" pattern="[a-zA-Z]+"  required />
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="ProjectPaymentDetailsForm.BranchCity.$error"
+                                         ng-show="formSubmitted">
+
+                                        <span style="color:red" ng-message="required">Please provide Branch City</span>
+                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
+
+                                    </div>
+                                </div>
+                            </div>
                             <!--End of Branch Name field-->
                             <!--Start of Unique Number field-->
                             <div class="form-group">

@@ -137,8 +137,8 @@ myApp.service('AppService', function () {
                 }else {
                     for(var i=0;i<data.message.length;i++){
                         $projects.push({
-                            id: response.data.message[i].ProjectId,
-                            name: response.data.message[i].ProjectName
+                            id: data.message[i].ProjectId,
+                            name: data.message[i].ProjectName
 
                         });
                     }
@@ -163,9 +163,9 @@ myApp.service('AppService', function () {
                 }else {
                     for(var i=0;i<data.message.length;i++){
                         $quotations.push({
-                            id: response.data.message[i].QuotationId,
-                            name: response.data.message[i].QuotationTitle,
-                            refNo:response.data.message[i].RefNo
+                            id: data.message[i].QuotationId,
+                            name: data.message[i].QuotationTitle,
+                            refNo:data.message[i].RefNo
                         });
                     }
                 }
@@ -216,8 +216,8 @@ myApp.service('AppService', function () {
                 }else {
                     for(var i=0;i<data.message.length;i++){
                         $projects.push({
-                            id: response.data.message[i].ProjectId,
-                            name: response.data.message[i].ProjectName
+                            id: data.message[i].ProjectId,
+                            name:data.message[i].ProjectName
 
                         });
                     }
