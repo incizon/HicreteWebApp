@@ -15,7 +15,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedWarehouse.wareHouseName" name="warehouseName"type="text" class="form-control" required minlength=2 pattern="[a-zA-Z0-9]+"/>
+                                <input maxlength = "40" ng-model="selectedWarehouse.wareHouseName" name="warehouseName"type="text" class="form-control" required minlength=2 pattern="[a-zA-Z0-9]+"/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.warehouseName.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="required">WareHouse name cannot be blank</p>
@@ -27,7 +27,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedWarehouse.warehouseAbbrevation" name="abbrevation" type="text" class="form-control" minlength=2 pattern="[a-zA-Z0-9]+"/>
+                                <input maxlength = "10" ng-model="selectedWarehouse.warehouseAbbrevation" name="abbrevation" type="text" class="form-control" minlength=2 pattern="[a-zA-Z0-9]+"/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.abbrevation.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="minlength">Abbrevation must have length >2</p>
@@ -54,7 +54,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group ">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedWarehouse.city" name="city" type="text" class="form-control" required minlength=2 pattern="[a-zA-z]+"/>
+                                <input maxlength = "50" ng-model="selectedWarehouse.city" name="city" type="text" class="form-control" required minlength=2 pattern="[a-zA-z]+"/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.city.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -67,7 +67,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedWarehouse.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                <input maxlength = "50" ng-model="selectedWarehouse.state" name="state" type="text" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.state.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="required">State Cannot be blank</p>
@@ -81,7 +81,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedWarehouse.country" name="country"type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                <input maxlength = "50" ng-model="selectedWarehouse.country" name="country"type="text" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.country.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="required">Country Cannot be blank</p>
@@ -94,7 +94,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="selectedWarehouse.pincode" name="pincode" type="text" class="form-control" required minlength=2/>
+                                <input maxlength = "15" ng-model="selectedWarehouse.pincode" name="pincode" type="text" class="form-control" required minlength=2/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.pincode.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="required">Pincode Cannot be blank</p>                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>
@@ -107,7 +107,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-phone-square"></span></span>
-                                <input ng-model="selectedWarehouse.phoneNumber" name="phone" type="text" class="form-control"/>
+                                <input maxlength = "15" ng-model="selectedWarehouse.phoneNumber" name="phone" type="text" class="form-control"/>
                             </div>
                         </div>
                     </div>

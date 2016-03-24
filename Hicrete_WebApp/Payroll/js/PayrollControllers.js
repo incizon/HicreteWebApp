@@ -124,7 +124,6 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
             });
     }
 
-
     $scope.getCurrentYearDetails();
 
 
@@ -743,6 +742,48 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
         begin = ($scope.currentPage - 1) * $scope.leavePerPage;
         end = begin + $scope.leavePerPage;
         index = $scope.leavesDetails.indexOf(value);
+
+        return (begin <= index && index < end);
+    };
+});
+myApp.controller('LeaveApprovalController', function($scope,$http) {
+
+    $scope.currentPage=1;
+    $scope.leaveApprovalPerPage=2;
+
+    $scope.leavesApprovalList=[];
+
+    $scope.approvalleaves={
+        operation:""
+    }
+    $scope.getLeavesApproval=function(){
+
+        $scope.approvalleaves.operation="getLeavesApproval";
+        var config = {
+            params: {
+                details: $scope.approvalleaves
+            }
+        };
+        $http.post("Payroll/php/PayrollFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $scope.leaveApprovalList=data;
+                $scope.totalItems=$scope.leaveApprovalList.length;
+            })
+            .error(function (data, status, headers, config) {
+
+            });
+    }
+
+    $scope.getLeavesApproval();
+
+
+    $scope.paginate = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.leaveApprovalPerPage;
+        end = begin + $scope.leaveApprovalPerPage;
+        index = $scope.leaveApprovalList.indexOf(value);
 
         return (begin <= index && index < end);
     };

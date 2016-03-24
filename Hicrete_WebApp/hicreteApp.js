@@ -447,22 +447,20 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('MainPage', {
             url: '',
             templateUrl: 'MainPage.html'
-
-
         })
-
         .state('billApproval', {
             url: '/BillApproval',
-            templateUrl:'BillApproval/BillApproval.html'
+            templateUrl:'Expense/html/BillApproval.html'
         })
         .state('leaveApproval', {
             url: '/LeaveApproval',
-            templateUrl:'BillApproval/LeaveApp.html'
+            templateUrl:'Payroll/html/LeaveApp.html',
+            controller:'LeaveApprovalController'
         })
         .state('accessApproval', {
             url: '/AccessApproval',
-            templateUrl:'BillApproval/AccessApproval.html'
-
+            templateUrl:'Config/html/AccessApproval.html',
+            controller:'AccessApprovalController'
         })
 
         .state('Payroll', {

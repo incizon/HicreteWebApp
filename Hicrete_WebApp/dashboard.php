@@ -301,7 +301,6 @@ if(!$userObj->init($userId)){
                             <span class=\"contacts-title\">Request for access</span>
                         </a>";
                             }
-
                         ?>
 
 
