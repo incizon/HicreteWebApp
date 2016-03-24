@@ -23,7 +23,7 @@
                                 <label class="control-label">Project Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{{viewQuotationDetail.projectName}}</label>
+                                <label class="control-label">{{projectName}}</label>
 
                             </div>
                         </div>
@@ -144,7 +144,7 @@
                             <label class="control-label">Total Amount :</label>
                         </div>
                         <div class="col-md-5" ng-click="getTotal()">
-                            <label class="control-label">{{ TotalTax }}</label>
+                            <label class="control-label">{{ totalAmount }}</label>
                         </div>
                     </div>
                 </div><br>
@@ -188,7 +188,7 @@
                             <label class="control-label">Total Tax :</label>
                         </div>
                         <div class="col-md-5" >
-                            <label class="control-label"> {{getTotalTax()}}</label>
+                            <label class="control-label"> {{TotalTax}}</label>
                         </div>
                     </div>
                 </div>
@@ -199,18 +199,13 @@
                             <label class="control-label"><strong>GRAND AMOUNT(Amount + Tax) :</strong></label>
                         </div>
                         <div class="col-md-5">
-                            <label class="control-label">{{+getTotalAmount() + +getTotalTax()}}</label>
+                            <label class="control-label">{{totalAmount + TotalTax}}</label>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
-            </button>
-            <button class="btn  btn-default pull-right">Clear Form</button>
-        </div>
     </div>
 
 </div>
