@@ -20,11 +20,11 @@ class TaskController
     /**
      * Gets all task for perticular user
      *
-     * @url GET /assignedtask/$userId
+     * @url GET /assignedtask
      */
 
-    public static function getAllTaskForUser($userId){
-             $task = Task::getAllTaskForUser($userId); 
+    public static function getAllTaskForUser(){
+             $task = Task::getAllTaskForUser();
          return $task;
     }
 

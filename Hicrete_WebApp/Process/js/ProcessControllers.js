@@ -130,7 +130,7 @@ myApp.controller('ProcessWidgetController', function ($scope, $http) {
 
 });
 
-myApp.controller('ProjectCreationController', function ($scope, $http, $httpParamSerializerJQLike, $filter) {
+myApp.controller('ProjectCreationController', function ($scope, $http, $httpParamSerializerJQLike,AppService) {
     $scope.projectDetails = {
         projectName: '',
         state: '',
