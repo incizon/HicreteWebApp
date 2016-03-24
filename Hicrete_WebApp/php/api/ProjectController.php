@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors',1);
-error_reporting(E_ALL);
+//ini_set('display_errors',1);
+//error_reporting(E_ALL);
 use \Jacwright\RestServer\RestException;
 require 'Project.php';
 
@@ -27,12 +27,14 @@ class ProjectController
     /**
      * Gets projet by search terms
      *
-     * @url GET /projects/search/$expression&$searchKeyword
+     * @url GET /projects/search/$expression/$searchKeyword
      */
 
     public function searchProject($expression,$searchKeyword){
 
         try{
+            if(!isset($searchKeyword))
+                $searchKeyword="";
             $project = Project::searchProject($searchKeyword,$expression); // possible user loading method
             echo AppUtil::getReturnStatus("Successful",$project);
 

@@ -67,6 +67,11 @@ myApp.controller('CreateYearController', function($scope,$http) {
                 if(data.msg==""){
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");
+                    setTimeout(function() {
+                        if(data.msg!=""){
+                            $('#error').css("display","none");
+                        }
+                    }, 3000);
                 }
             })
             .error(function (data, status, headers, config) {
@@ -74,6 +79,9 @@ myApp.controller('CreateYearController', function($scope,$http) {
                 $('#loader').css("display","none");
                 $scope.errorMessage=data.error;
                 $('#error').css("display","block");
+                setTimeout(function() {
+                        $('#error').css("display","none");
+                }, 3000);
             });
 
         }

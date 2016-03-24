@@ -488,7 +488,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
 });
 
 
-myApp.controller('QuotationController', function (fileUpload, $scope, $http, $uibModal, $log, $filter) {
+myApp.controller('QuotationController', function (fileUpload, $scope, $http, $uibModal, $log, $filter,AppService) {
     //alert("in quotation");
     $scope.taxSelected = 0;
     $scope.taxableAmount = 0;
@@ -497,7 +497,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.currentItemList = [];
 
     $scope.QuotationDetails = {
-
         quotationItemDetails: []
     };
     $scope.Companies = [];
@@ -505,46 +504,31 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     var totalAmount = 0;
     var remainingTotal = 0;
 
-    $http({
-        method: "GET",
-        url: "php/api/projects"
-    }).then(function mySucces(response) {
-        $scope.qData = response.data;
-        $scope.projects = [];
-        var b = [];
-        var length = $scope.qData.length;
-        //alert("length is "+$scope.qData.length);
-        for (var i = 0; i < length; i++) {
-            b.push({
-                name: $scope.qData[i].ProjectName,
-                id: $scope.qData[i].ProjectId
-            });
-            $scope.projects = b;
-        }
-        $scope.projects;
-    }, function myError(response) {
-        $scope.myWelcome = response.statusText;
-    });
+    $scope.projects=[];
+    AppService.getAllProjects($http,$scope.projects);
 
-
-    $scope.getProjeId = function () {
+    $scope.getCustomerForProject = function () {
         // alert("in chage");
         $scope.Companies = [];
         var company = [];
-        var projectId = $scope.QuotationDetails.projectName.id;
+        var projectId = $scope.QuotationDetails.projectId;
         console.log("proj id is " + projectId);
         $http.get("php/api/projects/companies/" + projectId).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
+            //console.log(response.data.length);
+
+            if (response.data.status =="Successful") {
+                for (var i = 0; i < response.data.message.length; i++) {
                     company.push({
-                        company_id: response.data[i].CompanyID,
-                        company_name: response.data[i].CompanyName
+                        company_id: response.data.message[i].companyId,
+                        company_name: response.data.message[i].companyName
                     });
                 }
+                $scope.Companies = company;
+                console.log("Companies scope is " + JSON.stringify($scope.Companies));
+            }else{
+                alert(response.data.message);
             }
-            $scope.Companies = company;
-            console.log("Companies scope is " + JSON.stringify($scope.Companies));
+
         })
         // alert("in "+projectId);
     }
@@ -552,12 +536,18 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.createQuotation = function () {
         var b = [];
         var data = [];
-        var projectId = $scope.QuotationDetails.projectName.id;
+        var projectId = $scope.QuotationDetails.projectId;
         var companyId = $scope.QuotationDetails.companyName.company_id;
         var companyName = $scope.QuotationDetails.companyName.company_name;
+        var fileName="";
+        if($scope.myFile!=undefined){
+            if($scope.myFile.name!=undefined){
+                var uploadQuotationLocation = "upload/Quotations/";
+                fileName = uploadQuotationLocation + $scope.myFile.name;
+            }
 
-        var uploadQuotationLocation = "upload/Quotations/";
-        var fileName = uploadQuotationLocation + $scope.myFile.name;
+        }
+
         // alert("no of rows"+$scope.noOfRows);
         //alert(JSON.stringify($scope.QuotationDetails.quotationItemDetails));
 
@@ -1475,7 +1465,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope) {
     $scope.ProjectPerPage = 5;
     $scope.currentPage = 1;
 
-    $scope.searchKeyword="";
+    $scope.searchKeyword=null;
 
     $scope.searchproject = function () {
         var project = [];
@@ -1486,7 +1476,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope) {
             // alert("nt");
             console.log($scope.searchBy);
             console.log($scope.searchKeyword);
-            $http.get("php/api/projects/search/" + $scope.searchBy + "&" + $scope.searchKeyword).then(function (response) {
+            $http.get("php/api/projects/search/" + $scope.searchBy + "/" + $scope.searchKeyword).then(function (response) {
 
                 if (response.data.status == "Successful") {
                     for (var i = 0; i < response.data.message.length; i++) {
