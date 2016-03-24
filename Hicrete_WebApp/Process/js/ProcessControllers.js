@@ -297,7 +297,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
         var uploadQuotationLocation = "upload/Workorders/";
         var fileName = uploadQuotationLocation + $scope.myFile.name;
         //console.log("in createWorkorder ");//WorkOrderNo, WorkOrderName, ReceivedDate, WorkOrderBlob, ProjectId, CompanyId
-        var workorderData = '{"ProjectId":"' + $scope.workorder.projId + '","WorkOrderName":"' + $scope.workorder.title + '","ReceivedDate":"' + $scope.workorder.date + '","WorkOrderBlob":"' + fileName + '","CompanyId":"' + " " + '","QuotationId":"' + $scope.workOrderDetails.QuotationId + '"}';
+        var workorderData = '{"ProjectId":"' + $scope.workorder.projId + '","WorkOrderName":"' + $scope.workorder.title + '","ReceivedDate":"' + $scope.workorder.date + '","WorkOrderBlob":"' + fileName + '","CompanyId":"' + $scope.workOrderDetails.CompanyId + '","QuotationId":"' + $scope.workOrderDetails.QuotationId + '"}';
         console.log("workorder data is " + workorderData);
 
         $.ajax({

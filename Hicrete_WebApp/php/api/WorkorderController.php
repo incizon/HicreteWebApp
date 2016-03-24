@@ -33,8 +33,17 @@ class WorkorderController
      */
     public function saveWorkOrder($data)
     {
-        $workorder = Workorder::saveWorkOrder($data); // saving the user to the database
-        return $workorder; // returning the updated or newly created user object
+        try{
+
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+                $workorder = Workorder::saveWorkOrder($data,$loggedInUserId); // saving the user to the database
+                return $workorder; // returning the updated or newly created user object
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
 

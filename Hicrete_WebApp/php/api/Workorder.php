@@ -54,7 +54,7 @@ Class Workorder {
     }
 
    
-    public function saveWorkOrder($data){
+    public function saveWorkOrder($data,$userId){
         $WorkOrderNo = AppUtil::generateId();
         $t=time();
         $current =date("Y-m-d",$t);
@@ -65,7 +65,7 @@ Class Workorder {
             $conn->beginTransaction(); 
             $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
             $stmt = $conn->prepare("INSERT INTO work_order (WorkOrderNo,WorkOrderName,ReceivedDate,WorkOrderBlob,ProjectId, CompanyId,CreationDate,CreatedBy) VALUES (?,?,?,?,?,?,?,?)");
-            if($stmt->execute([$WorkOrderNo, $data->WorkOrderName,$data->ReceivedDate,$data->WorkOrderBlob,$data->ProjectId,$data->CompanyId,$current,1]) === TRUE) {
+            if($stmt->execute([$WorkOrderNo, $data->WorkOrderName,$data->ReceivedDate,$data->WorkOrderBlob,$data->ProjectId,$data->CompanyId,$current,$userId]) === TRUE) {
                 /*$stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE ProjectId = :projId AND CompanyId = :compId");*/
                 $stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE QuotationId = :id");
                 $stmt1->bindParam(':id',$data->QuotationId,PDO::PARAM_STR);

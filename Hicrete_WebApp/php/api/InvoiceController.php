@@ -108,9 +108,18 @@ class InvoiceController
     {
         // ... validate $data properties such as $data->username, $data->firstName, etc.
        // $data->id = $id;
-        $invoice = Invoice::saveInvoice($data); // saving the user to the database
-        
-        return $invoice; // returning the updated or newly created user object
+        try{
+
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+                $invoice = Invoice::saveInvoice($data,$loggedInUserId); // saving the user to the database
+
+                return $invoice; // returning the updated or newly created user object
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
 
