@@ -250,14 +250,12 @@
                     $stmt1->bindParam(':createdBy',$userId);
                     $stmt1->bindParam(':modifiedBy',$userId);
 
-                    if ($stmt1->execute()) {
-                        return true;
-                    }
-                    else{
+                    if (!$stmt1->execute()) {
                         return false;
                     }
-                }
 
+                }
+                return true;
             }
 
             public  function getEmployeeDetailsForLeave($userId){
@@ -297,14 +295,16 @@
                 $stmt4->execute();
                 $result4=$stmt4->fetch(PDO::FETCH_ASSOC);
                 $result_array['caption_of_year']=$result4['caption_of_year'];
+                $captionYear=$result4['caption_of_year'];
 
-                $stmt5=$connect->prepare("SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='2017'
+                $stmt5=$connect->prepare("SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`=:captionYear
                                                   AND `leave_application_master`.`status`!='cancel' AND
                                                    `leave_application_master`.`leave_applied_by`=:userId
                                                     AND `leave_application_master`.`type_of_leaves`='paid'
                                                      group by `leave_application_master`.`leave_applied_by`");
 
                 $stmt5->bindParam(':userId',$userId);
+                $stmt5->bindParam(':captionYear',$captionYear);
                 $stmt5->execute();
                 $result5=$stmt5->fetch();
                 $result_array['leaves_remaining']=$result5[0];

@@ -151,6 +151,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
                     setTimeout(function() {
                         if(data.msg!=""){
                             $('#warning').css("display","none");
+                            window.location.reload(1);
                         }
                     }, 3000);
 
@@ -203,7 +204,7 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         status:"pending",
         fromDate:"",
         toDate:"",
-        remaining:10,
+        remaining:0,
         operation:"",
         hideOption:"",
         numberOfLeaves:0,
@@ -248,7 +249,7 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
                 $scope.leaveDetails.userId=data.userId;
                 $scope.leaveDetails.caption_of_year=data.caption_of_year;
                 $scope.leaveDetails.leaves_remaining=data.leaves_remaining;
-                if(parseInt($scope.leaveDetails.leaves_remaining)==0){
+                if(parseInt($scope.leaveDetails.leaves_remaining)<=0){
                     console.log("In if");
                     $scope.hideOption=true;
                 }
@@ -280,7 +281,7 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
 
                 $http.post("Payroll/php/PayrollFacade.php", null, config)
                     .success(function (data) {
-
+                        console.log(data);
                         $scope.leaveDetails.numberOfLeaves=data;
                         console.log($scope.leaveDetails.numberOfLeaves);
                         console.log($scope.leaveDetails.leaves_remaining);
@@ -327,6 +328,7 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
                     setTimeout(function() {
                         if(data.msg!=""){
                             $('#warning').css("display","none");
+                            window.location.reload(1);
                         }
                     }, 3000);
                 }
@@ -390,6 +392,7 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
        console.log($scope.payrollEmployeeDetails.EmployeeDetails);
 
    }
+
     $scope.AddEmployee=function(){
 
         console.log($scope.payrollEmployeeDetails.EmployeeDetails);
@@ -426,6 +429,7 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
                     setTimeout(function() {
                         if(data.msg!=""){
                             $('#warning').css("display","none");
+                            window.location.reload(1);
                         }
                     }, 3000);
                 }
