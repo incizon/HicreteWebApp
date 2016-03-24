@@ -213,7 +213,7 @@ class ProdBatch
 
                  if($stmt->execute())
                  {
-                     echo "first is complete";
+                     //echo "first is complete";
                      $lastId = $dbh->lastInsertId();
                      //Fetch master id from product master table
                      $this->prodMasterId=$lastId;
