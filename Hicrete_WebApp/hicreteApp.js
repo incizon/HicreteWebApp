@@ -446,7 +446,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('MainPage', {
             url: '',
-            templateUrl: 'MainPage.html'
+            templateUrl: 'MainPage.html',
+            controller:'MainPageController'
         })
         .state('billApproval', {
             url: '/BillApproval',
@@ -513,7 +514,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('SuperDashboard', {
             url: '',
             templateUrl: 'SuperMainPage.html',
-            controller: 'mainPageController'
+            controller: 'MainPageController'
             
         });
         // Package State =================================
@@ -735,7 +736,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     console.log("in main page controller");
     $scope.Tasks = [];
     var task = [];
-    $http.get("php/api/assignedtask/1").then(function(response) {
+    $http.get("php/api/assignedtask").then(function(response) {
         console.log(response.data.length);
         if(response.data != null){
             for(var i = 0; i<response.data.length ; i++){
@@ -749,7 +750,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             }
         }
         $scope.Tasks = task;
-        //console.log("task scope is "+JSON.stringify($scope.Tasks));
+        console.log("task scope is "+JSON.stringify($scope.Tasks));
     })
     $scope.saveScope = function(scope){
         //console.log("scope is "+scope);

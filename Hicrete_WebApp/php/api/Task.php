@@ -34,7 +34,7 @@ Class Task {
     }
 
 
-     public static function getAllTaskForUser($userId){
+     public static function getAllTaskForUser(){
          if (!isset($_SESSION['token'])) {
              session_start();
          }
