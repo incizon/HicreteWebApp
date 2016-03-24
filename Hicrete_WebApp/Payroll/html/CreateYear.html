@@ -45,7 +45,7 @@
                         <div class="col-lg-9 col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                <input type="text" class="form-control" name="startDate" data-ng-click="openStartYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.startDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" show-button-bar="false" required/>
+                                <input type="text" class="form-control" name="startDate" data-ng-click="openStartYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.startDate" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" show-button-bar="false" required readonly/>
                             </div>
                             <div class="help-block" ng-messages="createYearForm.startDate.$error" ng-show="formSubmitted">
                                 <span style="color:red" ng-message="required">Start Date is required..</span>
@@ -59,7 +59,7 @@
                         <div class="col-lg-9 col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                <input type="text" class="form-control" name="endDate" data-ng-click="openEndYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.endDate" show-weeks="false" is-open="popup2.opened" datepicker-options="dateOptions" show-button-bar="false" required/>
+                                <input type="text" class="form-control" name="endDate" data-ng-click="openEndYearDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="yearDetails.endDate" show-weeks="false" is-open="popup2.opened" datepicker-options="dateOptions" show-button-bar="false" required readonly/>
                             </div>
                             <div class="help-block" ng-messages="createYearForm.endDate.$error" ng-show="formSubmitted">
                                 <span style="color:red" ng-message="required">End Date is required..</span>
