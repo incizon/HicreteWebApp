@@ -215,9 +215,9 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 });
 
 
-myApp.controller('ProjectDetailsController', function (myService, setInfo, $scope, $http, $uibModal, $log, $filter) {
+myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, $filter) {
 
-    var detaildata = myService.get();
+    var detaildata = $stateParams.projectToView;
 
 
     //console.log("data 12 "+JSON.stringify(detaildata));
@@ -1475,6 +1475,8 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope) {
     $scope.ProjectPerPage = 5;
     $scope.currentPage = 1;
 
+    $scope.searchKeyword="";
+
     $scope.searchproject = function () {
         var project = [];
         var expression = $scope.searchBy + "" + $scope.searchKeyword;
@@ -1563,7 +1565,7 @@ myApp.controller('ViewCustomerController',function($scope,$http,$rootScope){
     $scope.CustomerPerPage=5;
     $scope.currentPage=1;
 
-
+    $scope.searchKeyword="";
     $scope.searchCustomer = function(){
 
         var cust = [];
