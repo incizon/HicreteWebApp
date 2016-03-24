@@ -1553,6 +1553,124 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope) {
 
 });
 
+
+myApp.controller('ViewCustomerController',function($scope,$http,$rootScope){
+
+    $scope.CustomerPerPage=5;
+    $scope.currentPage=1;
+
+
+    $scope.searchCustomer = function(){
+
+        var cust = [];
+
+        if($scope.searchKeyword==""){
+
+            $http.get("php/api/customer").then(function(response) {
+                console.log(response.data.length);
+                if(response.data.status=="Successful"){
+                    for(var i = 0; i<response.data.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode,
+                            index:i
+                        });
+                    }
+                    $rootScope.customerSearch = cust;
+
+                }else{
+                    alert(response.data.message);
+                }
+
+
+            })
+
+        }
+        else{
+            //alert("in "+searchCity);
+
+            $http.get("php/api/customer/search/"+$scope.searchKeyword+'&'+$scope.searchBy).then(function(response) {
+
+                if(response.data.status=="Successful"){
+                    console.log(response.data.message.length);
+                    for(var i = 0; i<response.data.message.length ; i++){
+                        cust.push({
+                            id:response.data.message[i].CustomerId,
+                            name:response.data.message[i].CustomerName,
+                            address:response.data.message[i].Address,
+                            city:response.data.message[i].City,
+                            state:response.data.message[i].State,
+                            country:response.data.message[i].Country,
+                            mobileNo:response.data.message[i].Mobileno,
+                            contactNo:response.data.message[i].Landlineno,
+                            faxNo:response.data.message[i].FaxNo,
+                            emailId:response.data.message[i].EmailId,
+                            pan:response.data.message[i].PAN,
+                            cstNo:response.data.message[i].CSTNo,
+                            vatNo:response.data.message[i].VATNo,
+                            serviceTaxNo:response.data.message[i].ServiceTaxNo,
+                            pincode:response.data.message[i].Pincode
+                        });
+                    }
+                    $rootScope.customerSearch = cust;
+
+                }else{
+                    alert(response.data.message);
+                }
+
+            })
+
+        }
+    }
+
+
+    $scope.deleteCustomer = function($id){
+        console.log("delete cust id "+$id);
+
+
+        $http({
+            method: 'GET',
+            url: 'php/api/customer/delete/'+$id
+        }).then(function successCallback(response) {
+            alert("in success"+response.status );
+        }, function errorCallback(response) {
+            alert("in error "+response);
+        });
+    }
+
+    $scope.showCustomerDetails=function(customer){
+        $scope.currentCustomer=customer;
+    }
+
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.CustomerPerPage;
+        end = begin + $scope.CustomerPerPage;
+        index = $rootScope.customerSearch.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
+});
+
+
+
+
 myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService) {
 
     $scope.customers = [];
