@@ -94,5 +94,17 @@ a.log_out:hover span{ color: #fff !important;}
 
 /*------------------- Disabled Input fields -------------------*/
 .form-control[disabled], .form-control[readonly] {
-	color: #333;
+	color: #555;
+}
+
+/*--------------- Readonly Input fields for Datepicker -----------------*/
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+	cursor: pointer;
+	background-color: #F9F9F9;
+}
+
+.form-control[disabled]:focus, .form-control[readonly]:focus{
+	border-color: #c1c1c1;
+	color:#555;
+	background: #FFF;
 }

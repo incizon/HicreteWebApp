@@ -2565,7 +2565,28 @@ myApp.controller('ReviseQuotation', function (setInfo, $scope, $http) {
 
 myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter, $rootScope) {
 
+    $scope.today = function(){
+        $scope.actualStartDate = new Date();
+        $scope.actualEndDate = new Date();
+    };
 
+    $scope.today();
+
+    $scope.taskStartDate = function(){
+        $scope.taskStart.opened = true;
+    };
+
+    $scope.taskStart = {
+        opened:false
+    };
+
+    $scope.taskEndDate = function(){
+        $scope.taskEnd.opened = true;
+    };
+
+    $scope.taskEnd = {
+        opened:false
+    };
     var task = setInfo.get();
     console.log("task set is " + JSON.stringify(task));
     $scope.ViewTask = {
