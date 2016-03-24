@@ -26,37 +26,10 @@ class WorkorderController
     }
 
 
-    /**
-     * Gets the projects by id or current user
-     *
-     * @url GET /projects
-     */
-
-    public function getAllProjects()
-    {
-         
-        $project = Project::loadAll();
-         
-
-       // return array("id" => $id, "name" => null); // serializes object into JSON
-         return $project;
-    }
-
 
 
    
 
-    /**
-     * update project
-     *
-     * @url POST /project/update/$id
-     * @url PUT /project/update/$id
-     */
-
-    public function updateProject($id,$data){
-        $project = project::updateProject($id,$data);
-        return $project;
-    }
 
   
 
