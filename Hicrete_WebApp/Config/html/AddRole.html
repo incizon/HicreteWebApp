@@ -22,7 +22,7 @@
             <div class="col-md-6 col-xs-12 col-sm-4">
             <div class="input-group">
                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                <input ng-model="roleName" name="roleName" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
+                <input maxlength = "20" ng-model="roleName" name="roleName" type="text" class="form-control" required pattern="[a-zA-Z0-9]+" minlength=2/>
             </div>
             <div class="help-block" ng-messages="roleForm.roleName.$error" ng-show="roleSubmitted">
             <span style="color:red" ng-message="required">Role name cannot be blank</span> 

@@ -11,17 +11,16 @@
                 <div class="col-md-5">
 
                     <div class="col-md-3">
-                        <label class="control-label">Project  :</label>
+                        <label class="control-label">Project :</label>
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select" name="projects" ng-model="projectID"/>
-                        <option value="" disabled selected>Choose project </option>>
-                        <option value="project1">Project 1</option>
-                        <option value="project2">Project 2</option>
-                        <option value="project3">Project 3</option>
-                        <option value="project4">Project 4</option>
+                        <select class="form-control select"  ng-model= "selectedProjectId" ng-change = "selectProject()" name="projects">
+                            <option value="" disabled selected>Choose project </option>
+                            <option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
+
                         </select>
+
 
                     </div>
 
@@ -29,16 +28,14 @@
                 <div class="col-md-5">
 
                     <div class="col-md-3">
-                        <label class="control-label">Invoice No :</label>
+                        <label class="control-label">Invoice :</label>
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select" name="quotation" ng-model="invoiceID"/>
-                        <option value="" disabled selected>Choose invoice no </option>>
-                        <option value="invoice1">101010</option>
-                        <option value="invoice2">202020</option>
-                        <option value="invoice3">303030</option>
-                        <option value="invoice4">404040</option>
+                        <select class="form-control select" name="invoice" ng-model="selectedInvoiceId"  />
+                        <option value="" disabled selected>Choose Invoice </option>>
+                        <option ng-repeat="invoice in invoices" value="{{invoice.id}}">{{invoice.name}}</option>
+
                         </select>
 
                     </div>
@@ -49,7 +46,7 @@
                     <div class="input-group" >
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary">Show</button>
+                            <button class="btn btn-primary" ng-click= "show()">Show</button>
                         </div>
                     </div>
                 </div>
@@ -77,47 +74,21 @@
                     <thead>
                     <tr>
                         <th>Sr.No</th>
-                        <th>Followup Description</th>
-                        <th>Actual Followup Date</th>
+                        <th>Followup Title</th>
                         <th>Scheduled Followup Date</th>
+                        <th>Followup Note</th>
+                        <th>Actual Followup Date</th>
                         <th>Followup By</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td> Description demo</td>
-                        <td>11-02-2016</td>
-                        <td>05-02-2016</td>
-                        <td>Pranav</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td> Description demo</td>
-                        <td>15-03-2016</td>
-                        <td>05-03-2016</td>
-                        <td>Atul</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td> Description demo</td>
-                        <td>11-04-2016</td>
-                        <td>05-04-2016</td>
-                        <td>Ajit</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td> Description demo</td>
-                        <td>10-01-2016</td>
-                        <td>05-01-2016</td>
-                        <td>Ajit</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td> Description demo</td>
-                        <td>10-06-2016</td>
-                        <td>05-06-2016</td>
-                        <td>Namdev</td>
+                    <tr ng-repeat = "followup in followups">
+                        <td>{{$index+1}}</td>
+                        <td> {{followup.followup_title}}</td>
+                        <td> {{followup.followup_date}}</td>
+                        <td> {{followup.followup_description}}</td>
+                        <td>{{followup.followup_conductionDate}}</td>
+                        <td>{{followup.followup_by}}</td>
                     </tr>
                     </tbody>
                 </table>
@@ -126,9 +97,6 @@
         </div>
 
     </div>
-    <uib-pagination total-items="totalItems" ng-model="currentPage"
-                    max-size="5" boundary-links="true"
-                    items-per-page="PaymentHistoryPerPage" class="pagination-sm">
-    </uib-pagination>
+
 
 </div>

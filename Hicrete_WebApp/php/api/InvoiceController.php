@@ -13,12 +13,24 @@ class InvoiceController
      */
 
     public function getInvoiceTax($id = null){
-        
-         if ($id !=null) {
-             $invoice = Invoice::loadInvoiceTax($id); // possible user loading method
-         } else {
-             $invoice = Invoice::loadAllInvoiceTax();
-         }
+
+        try{
+            if ($id !=null) {
+                $invoice = Invoice::loadInvoiceTax($id); // possible user loading method
+            } else {
+                $invoice = Invoice::loadAllInvoiceTax();
+            }
+
+            if($invoice!=null){
+                echo AppUtil::getReturnStatus("Successful",$invoice);
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
 
          return $invoice;
     }
@@ -30,12 +42,24 @@ class InvoiceController
      */
 
     public function getInvoiceFollowups($invoiceid = null){
-        
-         if ($invoiceid !=null) {
-             $invoice = Invoice::loadInvoiceFollowups($invoiceid); // possible user loading method
-         } else {
-             $invoice = Invoice::loadInvoiceFollowups();
-         }
+
+        try{
+            if ($invoiceid !=null) {
+                $invoice = Invoice::loadInvoiceFollowups($invoiceid); // possible user loading method
+            } else {
+                $invoice = Invoice::loadInvoiceFollowups();
+            }
+
+            if($invoice!=null){
+                echo AppUtil::getReturnStatus("Successful",$invoice);
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
 
          return $invoice;
     }
@@ -95,5 +119,22 @@ class InvoiceController
         return $invoice;
     }
 
+    /**
+     * delete customer using id
+     *
+     * @url POST /invoicelist/$id
+     *
+     */
+
+    public static function getInvoiceList($id){
+        try{
+            $invoice = Invoice::getInvoiceListForProject($id);
+            echo AppUtil::getReturnStatus("Successful",$invoice);
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
   
 }

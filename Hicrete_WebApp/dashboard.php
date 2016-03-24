@@ -289,7 +289,7 @@ if(!$userObj->init($userId)){
 
 
                         <?php
-                            if($userObj->isSuper || true){
+                            if($userObj->isSuper){
                                 echo "<a ui-sref=\"createSuperUser\"  class=\"list-group-item\">
                                  <span class=\"contacts-title\">Create Super User</span>
                                 </a>";
@@ -301,7 +301,6 @@ if(!$userObj->init($userId)){
                             <span class=\"contacts-title\">Request for access</span>
                         </a>";
                             }
-
                         ?>
 
 

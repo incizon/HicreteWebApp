@@ -23,13 +23,19 @@
                                   <label class="control-label">Project Name :</label>
                               </div>
                               <div class="col-md-8">
-                                  <select class="form-control select" name="project" ng-model="QuotationDetails.projectName">
+                                 <!--  <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-change="changevalue()">
                                       <option value="" disabled selected>Choose Project..</option>
                                       <option value="Project1">Project1</option>
                                       <option value="Project2">Project2</option>
                                       <option value="Project3">Project3</option>
                                       <option value="Project4">Project4</option>
                                       <option value="Project5">Project5</option>
+                                  </select> -->
+
+                                    <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-options="project.name for project in projects" ng-change="getProjeId()">
+                                    <option value="" disabled selected>Choose Project..</option>
+                                      <option value="Select Project" disabled selected>Select Project</option>
+                                      <option value="project.id">{{project.name}}</option>
                                   </select>
 
                               </div>
@@ -54,7 +60,7 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="text" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate" ng-click="quotDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="picker.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                      <input type="date" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate"/>
                                   </div>
 
                               </div>
@@ -65,7 +71,7 @@
                               </div>
                               <div class="col-md-8">
                                     <textarea class="form-control" name="subject"
-                                              ng-model="subject" rows="2" QuotationDetails.quotationSubject>
+                                              rows="2" ng-model="QuotationDetails.quotationSubject">
                                     </textarea>
                               </div>
                           </div>
@@ -79,13 +85,18 @@
                                   <label class="control-label">Company Name :</label>
                               </div>
                               <div class="col-md-8">
-                                  <select class="form-control select" name="company" ng-model="QuotationDetails.companyName">
+                                  <select class="form-control select" name="company" ng-options = "company.company_name for company in Companies" ng-model="QuotationDetails.companyName">
                                       <option value="" disabled selected>Choose Company..</option>
-                                      <option value="Project1">Company1</option>
-                                      <option value="Project2">Company2</option>
-                                      <option value="Project3">Company3</option>
+                                      <option  value="company.company_id" >{{company.company_name}}</option>
+                                     <!--  <option value="Project2">Company2</option>
+                                      <option value="Project3">Company3</option> -->
 
                                   </select>
+
+                                  <!-- <select class="form-control select" name="company" ng-model="QuotationDetails.companyName" ng-options="b.name ++ b.id for b in cNames" ng-change="changevalue(cName)">
+                                    <option value="" disabled selected>Choose Company..</option>
+                                      <option value="" ng-bind="b.name" disabled selected></option>
+                                  </select> -->
 
                               </div>
                           </div>
@@ -108,7 +119,8 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="file" class="form-control" name="QuotationBlob" ng-model="QuotationDetails.quotationBlob"/>
+                                      <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
+                                      <!-- <button ng-click = "uploadQuotation()">upload me</button> -->
                                   </div>
 
                               </div>
@@ -206,7 +218,7 @@
                                        class="form-control" ng-model="quotation.quotationUnit"/>
                             </td>
                             <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)"/>
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"/>
                             </td>
                             <td>
                                 {{quotation.amount}}
@@ -228,8 +240,8 @@
                         <div class="col-md-4">
                             <label class="control-label">Total Amount :</label>
                         </div>
-                        <div class="col-md-8">
-                                {{"0"}}
+                        <div class="col-md-8" ng-model="totalAmnt">
+                                {{totalAmnt}}
                         </div>
                     </div>
                 </div><br>
@@ -311,7 +323,7 @@
                             </td>
                             <td>
                                 <input type="text" name="TaxAmount" placeholder="Tax Amount"
-                                       class="form-control" ng-model="tax.amount"/>
+                                       class="form-control" ng-model="tax.amount" ng-change ="totalTaxAmount(tax.amount)"/>
                             </td>
 
                             <td>
@@ -327,8 +339,8 @@
                         <div class="col-md-4">
                             <label class="control-label">Total Tax :</label>
                         </div>
-                        <div class="col-md-8">
-                            {{"0"}}
+                        <div class="col-md-8" ng-model = "TaxAmnt">
+                            {{TaxAmnt}}
                         </div>
                     </div>
                 </div>
@@ -339,7 +351,7 @@
                             <label class="control-label"><strong>Total Amount :</strong></label>
                         </div>
                         <div class="col-md-8">
-                            {{"0"}}
+                            {{totalAmnt + TaxAmnt}}
                         </div>
                     </div>
                 </div>
@@ -348,9 +360,9 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right" ng-click="createQuotation()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
-            <button class="btn  btn-info pull-right">Create Doc</button>
+            <button class="btn  btn-info pull-right" ng-click="createQuotationDoc()">Create Doc</button>
             <button class="btn  btn-default ">Clear Form</button>
         </div>
     </div>

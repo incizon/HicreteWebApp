@@ -82,14 +82,21 @@ class CustomerController
      * @url POST /customer
      * @url PUT /customer/$id
      */
-    public function saveCustomer($id = null, $data)
-    {
-        // ... validate $data properties such as $data->username, $data->firstName, etc.
-        $data->id = $id;
-        $userId="56bb73ed4e7449147";
-        $customer = Customer::saveCustomer($data,$userId); // saving the user to the database
+    public static function saveCustomer($id = null, $data){
 
-        return $customer; // returning the updated or newly created user object
+        try{
+            $userId=AppUtil::getLoggerInUserId();
+            $customer = Customer::saveCustomer($data,$userId); // saving the user to the database
+            if($customer){
+                echo AppUtil::getReturnStatus("Successful","Customer created successfully");
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown error occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
     }
 
     /**
@@ -99,9 +106,22 @@ class CustomerController
      * @url PUT /customer/update/$id
      */
 
-    public function updateCustomer($id,$data){
-        $customer = Customer::updateCustomer($id,$data);
-        return $customer;
+    public static function updateCustomer($id,$data){
+
+        try{
+            $userId=AppUtil::getLoggerInUserId();
+            $customer = Customer::updateCustomer($id, $data,$userId);
+            if($customer){
+                echo AppUtil::getReturnStatus("Successful","Customer updated successfully");
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown error occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
     }
 
     /**
@@ -114,6 +134,24 @@ class CustomerController
     public function deleteCustomer($id){
         $customer = Customer::deleteCustomer($id);
         return $customer;
+    }
+
+    /**
+     * delete customer using id
+     *
+     * @url POST /customerlist
+     *
+     */
+
+    public static function getCustomerList(){
+        try{
+            $customer = Customer::getCustomerList();
+            echo AppUtil::getReturnStatus("Successful",$customer);
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
     }
 
 

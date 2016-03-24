@@ -38,6 +38,28 @@
                             </div>
 
                         </div>
+                         <div class="form-group">
+                                <div class="col-md-3">
+                                    <label class="control-label">Invoice number</label>
+                                </div>
+                                <div class="col-md-9">
+                                   <!--  <div class="input-group"> -->
+                                        <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control"
+                                               name="InvoiceNo"
+                                               ng-model="paymentDetails.InvoiceNo" /> -->
+
+                                <select class="form-control" name="InvoiceName" ng-model="paymentDetails.InvoiceNo"  required/>
+
+                                <option value="" disabled selected>Choose Invoice</option>
+                                <option ng-repeat="invoice in Invoices" value="{{invoice.id }}">{{invoice.name}}</option>
+                                </select>
+                               
+                                   <!--  </div> -->
+                                   
+
+                                </div>
+                            </div>
 
                         <div class="form-group">
                             <div class="col-md-3">
@@ -87,21 +109,11 @@
                                     <label class="control-label">Paid To</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control"
-                                               name="AmountReceiver"
-                                               ng-model="paymentDetails.paidTo"  pattern="[a-zA-Z]+" minlength=2 required />
-                                    </div>
-                                    <div class="help-block"
-                                         ng-messages="ProjectPaymentDetailsForm.AmountReceiver.$error"
-                                         ng-show="formSubmitted">
-
-                                        <span style="color:red" ng-message="required">Please provide name of amount receiver</span>
-                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
-                                        <span style="color:red" ng-message="minlength">Receiver name is too short </span>
-                                    </div>
-
+                                    <select class="btn dropdown-toggle selectpicker btn-default"  ng-model="paymentDetails.paidTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
+                                            required >
+                                        <option value="" disabled selected>------------Select Employee------------</option>
+                                        <option value = {{user.id}}>{{user.name}}</option>
+                                    </select>
                                 </div>
 
                             </div>
@@ -114,7 +126,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" class="form-control" ng-model="paymentDetails.paymentDate" ng-click="openDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showpopup.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                        <input type="date" class="form-control" ng-model="paymentDetails.paymentDate" />
                                     </div>
 
                                 </div>
@@ -227,21 +239,11 @@
                                     <label class="control-label">Paid To</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control"
-                                               name="AmountReceiver"
-                                               ng-model="paymentDetails.paidTo"
-                                               pattern="[a-zA-Z]+" minlength=2 required />
-                                    </div>
-                                    <div class="help-block"
-                                         ng-messages="ProjectPaymentDetailsForm.AmountReceiver.$error"
-                                         ng-show="formSubmitted">
-
-                                        <span style="color:red" ng-message="required">Please provide name of amount receiver</span>
-                                        <span style="color:red" ng-message="pattern">Only  characters are allowed</span>
-                                        <span style="color:red" ng-message="minlength">Receiver name is too short </span>
-                                    </div>
+                                    <select class="btn dropdown-toggle selectpicker btn-default"  ng-model="paymentDetails.paidTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
+                                            required >
+                                        <option value="" disabled selected>------------Select Employee------------</option>
+                                        <option value = {{user.id}}>{{user.name}}</option>
+                                    </select>
                                 </div>
                             </div>
                             <!--End of paid to field-->
@@ -267,7 +269,8 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" class="form-control" ng-model="paymentDetails.paymentDate" ng-click="payDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="datePicker.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                        <input type="date" class="form-control" ng-model="paymentDetails.paymentDate" value=""
+                                        />
                                     </div>
 
                                 </div>
@@ -285,7 +288,7 @@
                                 <label class="control-label">Total Amount :</label>
                             </div>
                             <div class="col-md-6">
-                                <strong>  {{packageAmount}}</strong>
+                                <strong ng-bind="projectPayment.total_project_amount"></strong>
                             </div>
                         </div>
                         <div class="form-group">
@@ -293,7 +296,7 @@
                                 <label class="control-label">Previous Amount Paid :</label>
                             </div>
                             <div class="col-md-6">
-                                <strong> {{previousAmountPaid}} </strong>
+                                <strong ng-bind="projectPayment.total_paid_amount"></strong>
                             </div>
                         </div>
                         <div class="form-group">
@@ -301,12 +304,12 @@
                                 <label class="control-label">Amount Remaining :</label>
                             </div>
                             <div class="col-md-6">
-                                <strong> {{remainingAmount}}</strong>
+                                <strong> {{+projectPayment.total_project_amount - +projectPayment.total_paid_amount}}</strong>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <button ng-click="viewPaymentDetails()" data-toggle="modal" data-target="#viewPaymentDetails" class="btn  btn-default pull-right">View Details</button>
-                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<button ng-click="viewPaymentDetails(projectPayment)" data-toggle="modal" data-target="#viewPaymentDetails" class="btn  btn-default pull-right">View Details</button>-->
+                        <!--</div>-->
                     </div>
                 </form>
 
@@ -326,94 +329,5 @@
     </div>
 </div>
 
-<!--<hicretemodal visible="showModal" title="Schedule Followup">-->
-<!--<div class="modal-body">-->
-<!--<div class="row">-->
-<!--<form  name="applicatorAmountFollowUpForm" class="form-horizontal" novalidate>-->
-<!--<div class="form-group">-->
-<!--<div class="col-md-4">-->
-<!--<label class="control-label">Followup Date</label>-->
-<!--</div>-->
-<!--<div class="col-md-8">-->
-<!--<div class="input-group">-->
-<!--<span class="input-group-addon"><span class="fa fa-calendar"></span></span>-->
-<!--<input type="date" class="form-control" ng-model="applicatorDetails.followupdate">-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="form-group">-->
-<!--<div class="col-md-4">-->
-<!--<label class="control-label">Followup Employee Id</label>-->
-<!--</div>-->
-<!--<div class="col-md-8">-->
-<!--<div class="input-group">-->
-<!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-<!--<input type="text" class="form-control" name="followupEmployeeId" ng-model="applicatorDetails.followupemployeeId">-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</div>-->
-<!--<div class="modal-footer">-->
-<!--<button type="button" class="btn btn-default"-->
-<!--ng-click="processFollowup(applicatorDetails)">Submit</button>-->
-<!--</div>-->
-<!--&lt;!&ndash;End of modal-footer&ndash;&gt;-->
-<!--</hicretemodal>-->
-
-<div class="modal fade" id="viewPaymentDetails" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Payment Details</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-
-                    <div class="table-responsive">
-                        <table class="table table-actions table-striped">
-                            <thead>
-                            <tr>
-                                <th width="15%">Amount Paid</th>
-                                <th width="15%">Date of payment</th>
-                                <th width="15%">Paid to</th>
-                                <th width="15%">Payment Mode</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr ng-repeat="payment in projectPayment">
-                                <td>{{payment.amount_paid}}</td>
-                                <td>{{payment.date_of_payment}}</td>
-                                <td>{{payment.paid_to}}</td>
-                                <td>{{payment.payment_mode}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!--<div class="form-group">-->
-                    <!--<div class="col-md-4">-->
-                    <!--<label class="control-label"><b>Package Total Amount</b></label>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-6">-->
-                    <!--<b> {{selectedTentetiveApplicator.package_total_amount}} </b>-->
-                    <!--</div>-->
-                    <!--</div>-->
-
-                </div>
-
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-            <!--End of modal-footer-->
-        </div>
-        <!--End of Modal Content-->
-    </div>
-    <!--End of modal dialog-->
-</div>
 
 

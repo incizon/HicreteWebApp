@@ -204,11 +204,12 @@ $operationObject=new Payroll();
            $operationObject->getNoOfLeaves($data);
          break;
 
-   }
+     case 'getLeavesApproval':
 
+            $operationObject->getLeavesApproval();
+         break;
 
-
-
+ }
 ?>
 
 

@@ -13,12 +13,25 @@ class QuotationController
      */
 
     public function getQuotationFollow($id = null){
-        
-         if ($id !=null) {
-             $Quotation = Quotation::loadQuotationFollowup($id); // possible user loading method
-         } else {
-             $Quotation = Quotation::loadAllQuotationFollowup();
-         }
+
+        try{
+            if ($id !=null) {
+                $Quotation = Quotation::loadQuotationFollowup($id); // possible user loading method
+            } else {
+                $Quotation = Quotation::loadAllQuotationFollowup();
+            }
+
+            if($Quotation!=null){
+                echo AppUtil::getReturnStatus("Successful",$Quotation);
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
 
          return $Quotation;
     }
@@ -29,17 +42,43 @@ class QuotationController
      * @url GET /quotation/tax/$id
      */
 
-    public function getQuotationTax($id = null){
-        
-         if ($id !=null) {
+    public function getQuotationTax($id){
              $Quotation = Quotation::loadQuotationWithTax($id); // possible user loading method
-         } else {
-             $Quotation = Quotation::loadAllQuotationWithTax();
-         }
-
          return $Quotation;
     }
 
+    /**
+     * Revise quotation
+     *
+     * @url POST /quotation/revise/$qid
+     */
+
+    public function reviseQuotation($qid,$data){
+             $Quotation = Quotation::reviseQuotation($qid,$data); // possible user loading method
+         return $Quotation;
+    }
+
+      /**
+     * Gets the quotation details
+     *
+     * @url GET /quotation/details/$qid
+     */
+
+    public function getQuotationDetails($qid){
+             $Quotation = Quotation::getQuotationDetails($qid); // possible user loading method
+         return $Quotation;
+    }
+
+   /**
+     * Gets the quotation tax detail
+     *
+     * @url GET /quotation/taxDetails/$qid
+     */
+
+    public function getQuotationTaxDetails($qid){
+             $Quotation = Quotation::getQuotationTaxDetails($qid); // possible user loading method
+         return $Quotation;
+    }
 
     /**
      * Gets all quotations
@@ -121,5 +160,22 @@ class QuotationController
         $quotation = Quotation::deleteQuotation($id);
         return $quotation;
     }
-  
+
+    /**
+     * upload quotation
+     *
+     * @url POST /quotation/upload
+     * 
+     */
+
+    public function uploadQuotation($data){
+        $target_dir = "../../upload/Quotations/";
+        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+        $file = $_FILES['file'];
+        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
 }

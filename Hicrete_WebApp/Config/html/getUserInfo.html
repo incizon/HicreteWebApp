@@ -15,7 +15,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="userInfo.firstName" name="firstName" type="text" class="form-control" required minlength=2 />
+                                                    <input maxlength = "30" ng-model="userInfo.firstName" name="firstName" type="text" class="form-control" required minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.firstName.$error" ng-hide="!userInfoSubmitted && !userInfoForm.firstName.$touched">
                                                     <p style="color:red" ng-message="required">Firstname Cannot be blank</p>
@@ -46,7 +46,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group ">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="userInfo.city" name="city" type="text" class="form-control" required  minlength=2/>
+                                                    <input maxlength = "50" ng-model="userInfo.city" name="city" type="text" class="form-control" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.city.$error" ng-hide="!userInfoSubmitted && !userInfoForm.city.$touched">
                                                     <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -61,7 +61,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="userInfo.state" name="state" type="text" class="form-control" required  minlength=2/>
+                                                    <input maxlength = "50" ng-model="userInfo.state" name="state" type="text" class="form-control" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.state.$error" ng-hide="!userInfoSubmitted && !userInfoForm.state.$touched">
                                                     <p style="color:red" ng-message="required">State Cannot be blank</p>
@@ -76,7 +76,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="userInfo.country" name="country" type="text" class="form-control" required  minlength=2/>
+                                                    <input maxlength = "50" ng-model="userInfo.country" name="country" type="text" class="form-control" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.country.$error" ng-hide="!userInfoSubmitted && !userInfoForm.country.$touched">
                                                     <p style="color:red" ng-message="required">Country Cannot be blank</p>
@@ -91,7 +91,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
-                                                    <input type="email" class="form-control" ng-model="userInfo.email" name="emailId"/>
+                                                    <input maxlength = "40" type="email" class="form-control" ng-model="userInfo.email" name="emailId"/>
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.emailId.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="email">Invalid email address</p>
@@ -106,7 +106,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="userInfo.lastName" name="lastName" type="text" class="form-control" required minlength=2 />
+                                                    <input maxlength = "30" ng-model="userInfo.lastName" name="lastName" type="text" class="form-control" required minlength=2 />
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.lastName.$error" ng-hide="!userInfoSubmitted && !userInfoForm.lastName.$touched">
                                                     <p style="color:red" ng-message="required">LastName Cannot be blank</p>
@@ -119,7 +119,7 @@
                                         <div class="form-group">
                                             <label class="col-md-3 col-xs-12 control-label col-sm-4">Address</label>
                                             <div class="col-md-9 col-xs-12 col-sm-8">
-                                                <textarea ng-model="userInfo.address" name="address"class="form-control" rows="6" required minlength=10></textarea>
+                                                <textarea maxlength = "100" ng-model="userInfo.address" name="address"class="form-control" rows="6" required minlength=10></textarea>
 
                                             <div class="help-block" ng-messages="userInfoForm.address.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.address.$touched">
                                                 <p style="color:red" ng-message="required">Address Cannot be blank</p>
@@ -133,7 +133,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input ng-model="userInfo.pincode" name="pincode" type="text" class="form-control" required minlength="2" pattern="[0-9]+"/>
+                                                    <input maxlength = "15" ng-model="userInfo.pincode" name="pincode" type="text" class="form-control" required minlength="2" pattern="[0-9]+"/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.pincode.$error" ng-hide="!userInfoSubmitted && !userInfoForm.pincode.$touched">
                                                     <p style="color:red" ng-message="required">Pincode Cannot be blank</p>
@@ -148,7 +148,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                                    <input ng-model="userInfo.mobile" name="mobile" type="text" class="form-control" minlength="10" pattern="[0-9]+" required/>
+                                                    <input maxlength = "20" ng-model="userInfo.mobile" name="mobile" type="text" class="form-control" minlength="10" pattern="[0-9]+" required/>
                                                 </div>
                                             <div class="help-block" ng-messages="userInfoForm.mobile.$error" ng-hide="!userInfoSubmitted &&!userInfoForm.mobile.$touched">
                                                 <p style="color:red" ng-message="required">Mobile Number cannot be blank</p>

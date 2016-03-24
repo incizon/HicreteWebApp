@@ -572,6 +572,21 @@
                     return false;
                 }
             }
+
+            public  function getLeavesApproval(){
+
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $stmt=$connect->prepare("SELECT usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster JOIN leave_application_master
+                                          ON usermaster.userId=leave_application_master.leave_applied_by WHERE leave_application_master.status='pending'
+                                         ");
+
+                $stmt->execute();
+                $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo json_encode($result);
+            }
         }
 
 ?>

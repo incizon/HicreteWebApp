@@ -81,34 +81,34 @@ Class Customer {
 	}
 
 
-	public function saveCustomer($data,$userId ) {
+	public static function saveCustomer($data,$userId ) {
 		$custnum = AppUtil::generateId();
 		$object = array();
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$t=time();
+		$current =date("Y-m-d",$t);
 
-			if ($stmt->execute([$custnum, $data->CustomerName,$data->Address,$data->City,$data->State,$data->Country,$data->Pincode,$data->Mobileno,$data->Landlineno,$data->FaxNo,$data->EmailId,$data->isDeleted,$data->CreationDate,$userId,$data->LastModificationDate,$userId,$data->VATNo,$data->CSTNo,$data->PAN,$data->ServiceTaxNo]) === TRUE) {
-				return "success";
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-			}
-			else {
-				return "Error: " . $conn->error;
-			}
-		} catch (PDOException $e) {
-			echo $e->getMessage();
+		if ($stmt->execute([$custnum, $data->CustomerName,$data->Address,$data->City,$data->State,$data->Country,$data->Pincode,$data->Mobileno,$data->Landlineno,$data->FaxNo,$data->EmailId,$data->isDeleted,$current,$userId,$current,$userId,$data->VATNo,$data->CSTNo,$data->PAN,$data->ServiceTaxNo]) === TRUE) {
+			return true;
+
 		}
+		else {
+			return false;
+		}
+
 		$conn = null;
 	}
 
 
-	public function updateCustomer($id,$data){
-		try{
+	public static function updateCustomer($id,$data,$userId){
+
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 			$conn->beginTransaction();
-			$stmt = $conn->prepare("UPDATE customer_master SET CustomerName = :customerName, Address=:address, City=:city, State=:state, Country=:country, Mobileno=:mobileno, Landlineno=:landlineno, FaxNo=:faxno, EmailId=:email, LastModificationDate=:modDate, LastModifiedBy=:modBy ,VATNo=:vatno, CSTNo=:cstno, PAN=:pan, ServiceTaxNo=:servicetNo WHERE CustomerId = :id");
+			$stmt = $conn->prepare("UPDATE customer_master SET CustomerName = :customerName, Address=:address, City=:city, State=:state, Country=:country, Mobileno=:mobileno, Landlineno=:landlineno, FaxNo=:faxno, EmailId=:email, LastModificationDate=now(), LastModifiedBy=:modBy ,VATNo=:vatno, CSTNo=:cstno, PAN=:pan, ServiceTaxNo=:servicetNo WHERE CustomerId = :id");
 			$stmt->bindParam(':customerName', $data->CustomerName, PDO::PARAM_STR);
 			$stmt->bindParam(':address', $data->Address, PDO::PARAM_STR);
 			$stmt->bindParam(':city', $data->City, PDO::PARAM_STR);
@@ -118,8 +118,7 @@ Class Customer {
 			$stmt->bindParam(':landlineno', $data->Landlineno, PDO::PARAM_STR);
 			$stmt->bindParam(':faxno', $data->FaxNo, PDO::PARAM_STR);
 			$stmt->bindParam(':email', $data->EmailId, PDO::PARAM_STR);
-			$stmt->bindParam(':modDate', $data->LastModificationDate, PDO::PARAM_STR);
-			$stmt->bindParam(':modBy', $data->LastModifiedBy, PDO::PARAM_STR);
+			$stmt->bindParam(':modBy', $userId, PDO::PARAM_STR);
 			$stmt->bindParam(':vatno', $data->VATNo, PDO::PARAM_STR);
 			$stmt->bindParam(':cstno', $data->CSTNo, PDO::PARAM_STR);
 			$stmt->bindParam(':pan', $data->PAN, PDO::PARAM_STR);
@@ -128,16 +127,11 @@ Class Customer {
 
 			if($stmt->execute() === TRUE){
 				$conn->commit();
-				return "customer updated succesfully";
+				return true;
 			}
 			else{
-				return "Error in updation of customer";
+				return false;
 			}
-		}
-		catch(PDOException $e){
-			return "exception in updation ".$e.getMessage();
-		}
-
 	}
 
 	public function deleteCustomer($id) {
@@ -162,6 +156,23 @@ Class Customer {
 
 	}
 
+	public static function getCustomerList() {
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `CustomerId`,`CustomerName` FROM `customer_master` WHERE `isDeleted`!=1 ");
+		if($result = $stmt->execute()) {
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}
+
+		$db = null;
+		return $object;
+
+
+	}
 
 }
 
