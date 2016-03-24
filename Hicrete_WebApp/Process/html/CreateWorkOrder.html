@@ -1,5 +1,5 @@
 <!--WORK ORDER-->
-<div class="row">
+<div class="row" >
     <div class="col-md-12">
         <form name="userInfoForm" class="form-horizontal" novalidate>
             <div class="panel panel-default">
@@ -9,25 +9,23 @@
                 <div class="panel-body">
 
                     <div class="form-group">
-                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">Select Project</label>
+                        <label class="col-md-1 col-sm-2 col-xs-12 control-label">Quotaion</label>
                         <div class="col-md-3 col-xs-6col-sm-4">
-                            <select class="form-control select">
+                           <!--  <select class="form-control select">
                                 <option>Project 1</option>
                                 <option>Project 2</option>
                                 <option>Project 3</option>
                                 <option>Project 4</option>
                                 <option>Project 5</option>
-                            </select>
+                            </select> -->
+                           {{workorder.QuotationId}}
                         </div>
                         <label class="col-md-1 col-sm-2 col-xs-12 control-label">Select Company     </label>
-                        <div class="col-md-3 col-xs-6col-sm-4">
-                            <select class="form-control select">
-                                <option>Company 1</option>
-                                <option>Company 2</option>
-                                <option>Company 3</option>
-                                <option>Company 4</option>
-                                <option>Company 5</option>
-                            </select>
+                        <div class="col-md-3 col-xs-6col-sm-4">        
+                              <div class="col-md-3 col-xs-6col-sm-4" ng-repeat="c in CompanyName ">
+                            <span ng-bind="c.companyName"></span>
+                        </div>
+                           
                         </div>
                     </div>
                     <div class="form-group">
@@ -35,7 +33,8 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="userInfo.mobile" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/>
+                               <!--  <input ng-model="workorder.title" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/> -->
+                               <input ng-model="workorder.title" name="mobile" type="text" class="form-control"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -43,15 +42,15 @@
                             <div class="col-md-3 col-xs-12 col-sm-4">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                    <input type="text" value="2015-12-01" class="form-control datepicker">
+                                    <input type="text" value="2015-12-01" ng-model="workorder.date" class="form-control datepicker">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-md-1 col-xs-12 control-label">Attach work order</label>
                             <div class="col-md-6 col-xs-12">
-                                <a class="file-input-wrapper btn btn-default  fileinput btn-primary"><span>Browse file</span><input type="file" title="Browse file" id="filename" name="filename" class="fileinput btn-primary" style="left: -162.75px; top: 15.6667px;"></a>
-                                <span class="help-block">Input type file</span>
+                                 <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
+                        
                             </div>
                         </div>
                     </div>
@@ -59,7 +58,7 @@
         </form>
 
         <div class="panel-footer">
-            <button ng-click="" class="btn btn-primary pull-right">Add work order</button>
+            <button ng-click="createWorkorder()" class="btn btn-primary pull-right">Add work order</button>
             <button ng-click="" class="btn btn-default pull-right">Cancel</button>
         </div>
     </div>

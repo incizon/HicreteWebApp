@@ -82,14 +82,21 @@ class CustomerController
      * @url POST /customer
      * @url PUT /customer/$id
      */
-    public function saveCustomer($id = null, $data)
-    {
-        // ... validate $data properties such as $data->username, $data->firstName, etc.
-        $data->id = $id;
-        $userId=AppUtil::getLoggerInUserId();
-        $customer = Customer::saveCustomer($data,$userId); // saving the user to the database
+    public static function saveCustomer($id = null, $data){
 
-        return $customer; // returning the updated or newly created user object
+        try{
+            $userId=AppUtil::getLoggerInUserId();
+            $customer = Customer::saveCustomer($data,$userId); // saving the user to the database
+            if($customer){
+                echo AppUtil::getReturnStatus("Successful","Customer created successfully");
+            }
+            else {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown error occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
     }
 
     /**

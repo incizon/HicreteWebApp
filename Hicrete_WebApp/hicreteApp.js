@@ -367,9 +367,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ProjectDetails',
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController',
-            params : { projectToModify: null }
+            params : { projectToView: null }
         })
-
 
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
@@ -404,7 +403,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.viewQuotation', {
             url: '/ViewQuotation',
             templateUrl:'Process/html/ViewQuotation.html',
-            controller:'ViewQuotationDetailsController'
+            controller:'ViewQuotationDetailsController',
+            params : {quotationToView: null,projectName:null}
         })
 
         .state('Process.paymentHistory', {
@@ -446,7 +446,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('MainPage', {
             url: '',
-            templateUrl: 'MainPage.html'
+            templateUrl: 'MainPage.html',
+            controller:'MainPageController'
         })
         .state('billApproval', {
             url: '/BillApproval',
@@ -513,7 +514,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('SuperDashboard', {
             url: '',
             templateUrl: 'SuperMainPage.html',
-            controller: 'mainPageController'
+            controller: 'MainPageController'
             
         });
         // Package State =================================
@@ -729,4 +730,109 @@ myApp.directive('hicretemodal', function () {
       }
     };
   });
+
+
+myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
+    console.log("in main page controller");
+    $scope.Tasks = [];
+    var task = [];
+    $http.get("php/api/assignedtask").then(function(response) {
+        console.log(response.data.length);
+        if(response.data != null){
+            for(var i = 0; i<response.data.length ; i++){
+                task.push({
+                    TaskID:response.data[i].TaskID,
+                    TaskName: response.data[i].TaskName,
+                    ScheduleStartDate: response.data[i].ScheduleStartDate,
+                    TaskDescripion:response.data[i].TaskDescripion,
+                    ScheduleEndDate:response.data[i].ScheduleEndDate
+                });
+            }
+        }
+        $scope.Tasks = task;
+        console.log("task scope is "+JSON.stringify($scope.Tasks));
+    })
+    $scope.saveScope = function(scope){
+        //console.log("scope is "+scope);
+        setInfo.set(scope);
+    }
+
+
+    /*Payment Followup*/
+
+    $http.get("php/api/followup/payment/2").then(function(response) {
+        //  console.log(response.data.length);
+        $scope.paymentFollowup = [];
+        var b = [];
+        if(response.data != null){
+            for(var i = 0; i<response.data.length ; i++){
+                b.push({
+                    followupId: response.data[i].FollowupId,
+                    invoiceNo: response.data[i].InvoiceNo,
+                    assignEmployee: response.data[i].AssignEmployee,
+                    followupDate: response.data[i].FollowupDate,
+                    invoiceId:response.data[i].InvoiceId,
+                    followupDate:response.data[i].FollowupDate,
+                    followupTitle:response.data[i].FollowupTitle,
+                    creationDateresponse:response.data[i].CreationDateresponse,
+                    createdBy: response.data[i].CreatedBy,
+                    type : 'Payment'
+                });
+            }
+        }
+        $scope.paymentFollowup = b;
+        //console.log("paymentFollowup data  is "+JSON.stringify($scope.paymentFollowup));
+    })
+
+    /*Quotation Followup*/
+
+    $http.get("php/api/followup/quotation/2").then(function(response) {
+        //  console.log(response.data.length);
+        $scope.quotationFollowup = [];
+        var b = [];
+        if(response.data != null){
+            for(var i = 0; i<response.data.length ; i++){
+                b.push({
+                    followupId: response.data[i].FollowupId,
+                    quotationId: response.data[i].QuotationId,
+                    assignEmployee:response.data[i].AssignEmployee,
+                    followupDate:response.data[i].FollowupDate,
+                    followupTitle: response.data[i].FollowupTitle,
+                    creationDate:response.data[i].CreationDate,
+                    createdBy :response.data[i].CreatedBy,
+                    type : 'Quotation'
+                });
+            }
+        }
+        $scope.quotationFollowup = b;
+        //console.log("quotationFollowup data  is "+JSON.stringify($scope.quotationFollowup));
+    })
+
+    /*Site-tracking followup*/
+
+    $http.get("php/api/followup/sitetracking/1").then(function(response) {
+        //  console.log(response.data.length);
+        $scope.sitetrackingFollowup = [];
+        var b = [];
+        if(response.data != null){
+            for(var i = 0; i<response.data.length ; i++){
+                b.push({
+                    followupId: response.data[i].FollowupId,
+                    projectId: response.data[i].ProjectId,
+                    assignEmployee:response.data[i].AssignEmployee,
+                    followupDate:response.data[i].FollowupDate,
+                    followupTitle: response.data[i].FollowupTitle,
+                    creationDate:response.data[i].CreationDate,
+                    createdBy :response.data[i].CreatedBy,
+                    type : 'SiteTracking'
+                });
+            }
+        }
+        $scope.sitetrackingFollowup = b;
+        //console.log("sitetrackingFollowup data  is "+JSON.stringify($scope.sitetrackingFollowup));
+    })
+
+
+
+});
 

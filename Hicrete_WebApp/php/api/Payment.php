@@ -33,7 +33,7 @@ Class Payment {
 
 			$db = Database::getInstance();
 				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceId");
+				$stmt = $conn->prepare("SELECT p.PaymentDate,p.AmountPaid,pd.InstrumentOfPayment,pd.IDOfInstrument,pd.BankName,pd.BranchName,pd.city,um.FirstName,um.LastName,i.GrandTotal FROM project_payment p ,project_payment_mode_details pd, user_master um,invoice i WHERE i.	InvoiceNo=p.InvoiceNo AND p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceId AND um.UserId=p.PaidTo");
 				//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
 				$stmt->bindParam(':invoiceId', $InvoiceId, PDO::PARAM_STR);
 				if($result = $stmt->execute()){
@@ -177,16 +177,24 @@ public function getPaymentByInvoice($invoiceId) {
 public function savePaymentAndDetails($data){
 		//$invoiceNo = AppUtil::generateId();
 		$paymentId = AppUtil::generateId();
+		$instruId = AppUtil::generateId();
 		//print_r($invoiceNo);
 		try{
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 			$conn->beginTransaction();			
 			$stmt = $conn->prepare("INSERT INTO project_payment VALUES(?,?,?,?,?,?)");
-			//print_r($data);
+			//echo "payment mode is "+$data->IsCashPayment;
+			if($data->IsCashPayment == 1){
+				$idOfInstru = $instruId;
+			}
+			else{
+					$idOfInstru = $data->IDOfInstrument;
+			}
 			if($stmt->execute([$paymentId,$data->InvoiceNo,$data->AmountPaid,$data->PaymentDate,$data->IsCashPayment,$data->PaidTo]) === TRUE){
-				$stmt2 = $conn->prepare("INSERT INTO project_payment_mode_details (PaymentId, InstrumentOfPayment, IDOfInstrument, BankName, City) VALUES(?,?,?,?,?)");
-				if($stmt2->execute([$paymentId,$data->InstrumentOfPayment,$data->IDOfInstrument,$data->BankName,$data->City]) === TRUE){
+				$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+				$stmt2 = $conn->prepare("INSERT INTO project_payment_mode_details (PaymentId, InstrumentOfPayment, IDOfInstrument, BankName,BranchName, City) VALUES(?,?,?,?,?,?)");
+				if($stmt2->execute([$paymentId,$data->InstrumentOfPayment,$idOfInstru,$data->BankName,$data->BranchName,$data->City]) === TRUE){
 					$conn->commit();
 					return "success ";
 				}

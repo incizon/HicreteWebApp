@@ -13,6 +13,18 @@ class WorkorderController
          return $workorder;
     }
 
+
+     /**
+     * Gets workorder by quotation id
+     *
+     * @url GET /workorder/$qId/$cId
+     */
+    public function getWokrorderByqId($qId,$cId){
+             $workorder = Workorder::getWokrorderByqId($qId,$cId);
+         return $workorder;
+    }
+
+
     /**
      * Saves a workorder to the database
      *
@@ -21,8 +33,17 @@ class WorkorderController
      */
     public function saveWorkOrder($data)
     {
-        $workorder = Workorder::saveWorkOrder($data); // saving the user to the database
-        return $workorder; // returning the updated or newly created user object
+        try{
+
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+                $workorder = Workorder::saveWorkOrder($data,$loggedInUserId); // saving the user to the database
+                return $workorder; // returning the updated or newly created user object
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
 
@@ -59,6 +80,22 @@ class WorkorderController
     }
 
   
+    /**
+     * upload workorder
+     *
+     * @url POST /workorder/upload
+     * 
+     */
 
+    public function uploadWorkorder($data){
+        $target_dir = "../../upload/Workorders/";
+        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+        $file = $_FILES['file'];
+        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
+    }
   
 }

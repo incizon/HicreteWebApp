@@ -198,7 +198,7 @@
                                                class="form-control" ng-model="quotation.quotationUnit"/>
                                     </td>
                                     <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                               class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)"/>
+                                               class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index); calculateTotal(quotation.amount) "/>
                                     </td>
                                     <td>
                                         {{quotation.amount}}
@@ -214,6 +214,15 @@
                                 </tr>
 
                             </table>
+                              <div class="col-md-offset-7 col-md-5">
+
+                        <div class="col-md-4">
+                            <label class="control-label">Total Amount :</label>
+                        </div>
+                        <div class="col-md-8" ng-model="totalAmnt">
+                                {{totalAmnt}}
+                        </div>
+                    </div>
 
                     </div><br>
 
@@ -251,7 +260,7 @@
                                 </td>
                                 <td>
                                     <input type="text" name="TaxAmount" placeholder="Tax Amount"
-                                           class="form-control" ng-model="tax.amount"/>
+                                           class="form-control" ng-model="tax.amount" ng-change ="totalTaxAmount(tax.amount)"/>
                                 </td>
 
                                 <td>
@@ -271,8 +280,8 @@
                                 <div class="col-md-4">
                                     <label class="control-label"><strong>Total Tax Amount :</strong></label>
                                 </div>
-                                <div class="col-md-8">
-                                    {{"1000"}}
+                                <div class="col-md-8" ng-model="TaxAmnt">
+                                    {{TaxAmnt}}
                                 </div>
                             </div>
                         </div>
@@ -285,8 +294,8 @@
                                 <div class="col-md-4">
                                     <label class="control-label"><strong>Total Amount :</strong></label>
                                 </div>
-                                <div class="col-md-8">
-                                    {{"10000"}}
+                                <div class="col-md-8" ng-model="totalAmount">
+                                    {{+totalAmnt + +TaxAmnt}}
                                 </div>
                             </div>
                         </div>
@@ -313,10 +322,13 @@
                                     <label class="control-label"><strong>Grand  Total :</strong></label>
                                 </div>
                                 <div class="col-md-8">
-                                    <div class="input-group">
+                                    <!-- <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="GrandTotal" ng-model="grandTotal"/>
-                                    </div>
+                                        <input type="text" class="form-control" name="GrandTotal" ng-model="grandTotal">{{(+totalAmnt + +TaxAmnt) - +roundingOff}}</input>
+                                    </div> -->
+                                     <div class="col-md-8" ng-model="totalAmount">
+                                    {{(+totalAmnt + +TaxAmnt) - +roundingOff}}
+                                </div>
                                 </div>
                             </div>
                         </div>
@@ -329,9 +341,9 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right" ng-click="createInvoice()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
-            <button class="btn  btn-info pull-right">Create Doc</button>
+            <button class="btn  btn-info pull-right" ng-click="CreateInvoiceDoc()">Create Doc</button>
             <button class="btn  btn-default">Clear Form</button>
         </div>
 

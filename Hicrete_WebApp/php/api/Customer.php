@@ -81,24 +81,24 @@ Class Customer {
 	}
 
 
-	public function saveCustomer($data,$userId ) {
+	public static function saveCustomer($data,$userId ) {
 		$custnum = AppUtil::generateId();
 		$object = array();
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+		$t=time();
+		$current =date("Y-m-d",$t);
 
-			if ($stmt->execute([$custnum, $data->CustomerName,$data->Address,$data->City,$data->State,$data->Country,$data->Pincode,$data->Mobileno,$data->Landlineno,$data->FaxNo,$data->EmailId,$data->isDeleted,$data->CreationDate,$userId,$data->LastModificationDate,$userId,$data->VATNo,$data->CSTNo,$data->PAN,$data->ServiceTaxNo]) === TRUE) {
-				return "success";
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-			}
-			else {
-				return "Error: " . $conn->error;
-			}
-		} catch (PDOException $e) {
-			echo $e->getMessage();
+		if ($stmt->execute([$custnum, $data->CustomerName,$data->Address,$data->City,$data->State,$data->Country,$data->Pincode,$data->Mobileno,$data->Landlineno,$data->FaxNo,$data->EmailId,$data->isDeleted,$current,$userId,$current,$userId,$data->VATNo,$data->CSTNo,$data->PAN,$data->ServiceTaxNo]) === TRUE) {
+			return true;
+
 		}
+		else {
+			return false;
+		}
+
 		$conn = null;
 	}
 

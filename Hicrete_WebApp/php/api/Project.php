@@ -4,7 +4,7 @@ require_once '../Database.php';
 
 Class Project {
 	
-	public static function load($id) {
+	public function load($id) {
 		$object = array();
 		try {
 			$db = Database::getInstance();
@@ -32,7 +32,7 @@ Class Project {
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT DISTINCT c.CompanyID,c.CompanyName FROM company_master c, companies_involved_in_project cp WHERE cp.CompanyID = c.CompanyID and cp.ProjectId = :projid;");
+		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID = c.companyId and cp.ProjectId =:projid;");
 		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
 		if($result = $stmt->execute()){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -115,9 +115,9 @@ Class Project {
 
 	public static function getProjectSearchQuery($searchBy){
 		if($searchBy=='project_name'){
-			return "SELECT pm.*,pad.*,pc.*,u.FirstName,u.LastName,cm.`CustomerName` from project_master pm,project_address_details pad,usermaster u ,customer_master cm ,`project_point_of_contact_details` pc where (pm.ProjectName LIKE '%test%' AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId` AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` " ;
+			return "SELECT pm.*,pad.*,pc.*,u.FirstName,u.LastName,cm.`CustomerName` from project_master pm,project_address_details pad,usermaster u ,customer_master cm ,`project_point_of_contact_details` pc where (pm.ProjectName LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId` AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` " ;
 		}else if($searchBy=='project_city'){
-			return "SELECT pm.*,pad.*,pc.*,u.FirstName,u.LastName,cm.`CustomerName` from project_master pm,project_address_details pad,usermaster u ,customer_master cm ,`project_point_of_contact_details` pc where (pad.`City` LIKE '%mu%' AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId` AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` " ;
+			return "SELECT pm.*,pad.*,pc.*,u.FirstName,u.LastName,cm.`CustomerName` from project_master pm,project_address_details pad,usermaster u ,customer_master cm ,`project_point_of_contact_details` pc where (pad.`City` LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId` AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` " ;
 		}
 	}
 
@@ -351,45 +351,53 @@ public static function saveProject($data ,$userId){
 
 	}*/
 
-public function updateProject($id,$data){
-		try{
+public static function updateProject($id,$data,$loggedUserId){
+
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
+	//		echo json_encode($data);
+
 			$conn->beginTransaction();
 
-
-
-			$stmt = $conn->prepare("UPDATE project_master SET  ProjectName=:projectName WHERE ProjectId = :id");
-			$stmt->bindParam(':projectName' ,$data->ProjectName ,PDO::PARAM_STR);
-
-			$stmt = $conn->prepare("UPDATE project_address_details SET  Address=:address, City=:city, State=:state, Country=:country, Pincode=:pincode WHERE ProjectId = :id");
+			$stmt = $conn->prepare("UPDATE `project_master` SET `ProjectName`=:projectName,`ProjectManagerId`=:projectManagerId,`CustomerId`=:customerId, `LastModificationDate`=now(),`LastModifiedBy`=:lastModifiedBy WHERE `ProjectId`=:projectId");
+			$stmt->bindParam(':projectName' ,$data->projectDetails->ProjectName ,PDO::PARAM_STR);
+			$stmt->bindParam(':projectManagerId' ,$data->projectDetails->ProjectManagerId ,PDO::PARAM_STR);
+			$stmt->bindParam(':customerId' ,$data->projectDetails->CustomerId ,PDO::PARAM_STR);
+			$stmt->bindParam(':lastModifiedBy' ,$loggedUserId ,PDO::PARAM_STR);
+			$stmt->bindParam(':projectId' ,$id ,PDO::PARAM_STR);
+			$stmt2 = $conn->prepare("UPDATE project_address_details SET  Address=:address, City=:city, State=:state, Country=:country, Pincode=:pincode WHERE ProjectId = :id");
 			//$stmt->bindParam(':projectName', $data->ProjectName, PDO::PARAM_STR);
-			$stmt->bindParam(':address', $data->Address, PDO::PARAM_STR);
-			$stmt->bindParam(':city', $data->City, PDO::PARAM_STR);
-			$stmt->bindParam(':state', $data->State, PDO::PARAM_STR);
-			$stmt->bindParam(':country', $data->Country, PDO::PARAM_STR);
-			$stmt->bindParam(':pincode', $data->Pincode, PDO::PARAM_STR);
-			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+			$stmt2->bindParam(':address', $data->projectDetails->Address, PDO::PARAM_STR);
+			$stmt2->bindParam(':city', $data->projectDetails->City, PDO::PARAM_STR);
+			$stmt2->bindParam(':state', $data->projectDetails->State, PDO::PARAM_STR);
+			$stmt2->bindParam(':country', $data->projectDetails->Country, PDO::PARAM_STR);
+			$stmt2->bindParam(':pincode', $data->projectDetails->Pincode, PDO::PARAM_STR);
+			$stmt2->bindParam(':id', $id, PDO::PARAM_STR);
 			
 			/*update project_point_of_contact_details*/
 			$stmt1 = $conn->prepare("UPDATE project_point_of_contact_details SET PointContactName = :pointContactName, MobileNo=:mobileNo, LandlineNo=:landlineNo, EmailId=:emailId WHERE ProjectId = :id");
-			$stmt1->bindParam(':pointContactName', $data->PointContactName, PDO::PARAM_STR);
-			$stmt1->bindParam(':mobileNo', $data->MobileNo, PDO::PARAM_STR);
-			$stmt1->bindParam(':landlineNo', $data->LandlineNo, PDO::PARAM_STR);
-			$stmt1->bindParam(':emailId', $data->EmailId, PDO::PARAM_STR);
+			$stmt1->bindParam(':pointContactName', $data->projectDetails->PointContactName, PDO::PARAM_STR);
+			$stmt1->bindParam(':mobileNo', $data->projectDetails->MobileNo, PDO::PARAM_STR);
+			$stmt1->bindParam(':landlineNo', $data->projectDetails->LandlineNo, PDO::PARAM_STR);
+			$stmt1->bindParam(':emailId', $data->projectDetails->EmailId, PDO::PARAM_STR);
 			$stmt1->bindParam(':id', $id, PDO::PARAM_STR);
 
-			if($stmt->execute() === TRUE && $stmt1->execute() ===TRUE ){
+
+			if($stmt->execute() === TRUE && $stmt1->execute() ===TRUE && $stmt2->execute() ===TRUE ){
+
+				foreach ($data->companiesInvolved as $company) {
+					$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
+					if (!$stmt4->execute([$id, $company->companyId])) {
+						$conn->rollBack();
+						return false;
+					}
+				}
 				$conn->commit();
-				return "Project updated succesfully";
+				return true;
 			}
 			else{
-				return "Error in updation of Project";
+				return false;
 			}
-		}
-		catch(PDOException $e){
-			return "exception in updation ".$e.getMessage();
-		}
 
 	}
 

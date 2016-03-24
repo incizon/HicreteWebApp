@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors',1);
-error_reporting(E_ALL);
+//ini_set('display_errors',1);
+//error_reporting(E_ALL);
 use \Jacwright\RestServer\RestException;
 require 'Project.php';
 
@@ -27,12 +27,14 @@ class ProjectController
     /**
      * Gets projet by search terms
      *
-     * @url GET /projects/search/$expression&$searchKeyword
+     * @url GET /projects/search/$expression/$searchKeyword
      */
 
     public function searchProject($expression,$searchKeyword){
 
         try{
+            if(!isset($searchKeyword))
+                $searchKeyword="";
             $project = Project::searchProject($searchKeyword,$expression); // possible user loading method
             echo AppUtil::getReturnStatus("Successful",$project);
 
@@ -156,9 +158,19 @@ class ProjectController
      * @url PUT /project/update/$id
      */
 
-    public function updateProject($id,$data){
-        $project = project::updateProject($id,$data);
-        return $project;
+    public static function updateProject($id,$data){
+        try{
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            $project = $project = project::updateProject($id,$data,$loggedInUserId);;
+            if($project)
+                echo AppUtil::getReturnStatus("Successful","Project updated successfully");
+            else
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
     }
 
     /**

@@ -20,7 +20,7 @@
                                      <label class="control-label">Project Name :</label>
                                  </div>
                                  <div class="col-md-8">
-                                        {{project.projectName}}
+                                        {{projDetailsData.project_name}}
                                  </div>
                             </div>
                             <div class="form-group">
@@ -28,7 +28,7 @@
                                     <label class="control-label">Address  :</label>
                                 </div>
                                 <div class="col-md-8">
-                                    {{project.projectAddress}}
+                                    {{projDetailsData.project_Address}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -36,7 +36,7 @@
                                     <label class="control-label">City  :</label>
                                 </div>
                                 <div class="col-md-8">
-                                    {{"Pune"}}
+                                    {{projDetailsData.project_City}}
                                 </div>
                             </div>
 
@@ -48,7 +48,7 @@
                                     <label class="control-label">State :</label>
                                 </div>
                                 <div class="col-md-8">
-                                    {{"Maharashtra"}}
+                                    {{projDetailsData.project_state}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -56,7 +56,7 @@
                                     <label class="control-label">Country  :</label>
                                 </div>
                                 <div class="col-md-8">
-                                    {{"India"}}
+                                    {{projDetailsData.project_Country}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -64,7 +64,7 @@
                                     <!--<label class="control-label"> :</label>-->
                                 </div>
                                 <div class="col-md-8">
-                                    <button class="btn btn-info"  data-toggle="modal" data-target="#viewContactDetails">View Point of Contact</button>
+                                    <button class="btn btn-info"  data-toggle="modal" ng-click="sendProjId(projDetailsData)" data-target="#viewContactDetails">View Point of Contact</button>
                                 </div>
                             </div>
 
@@ -83,14 +83,14 @@
                          <!--<label class="control-label"> :</label>-->
                      </div>
                      <div class="col-md-8">
-                     <a ui-sref="Process.addQuotation"><input type="button" class="btn btn-info" value="Add Quotation"/></a>
+                     <a ui-sref="Process.addQuotation"><input type="button" class="btn btn-info" ng-click="projectName(projDetailsData.project_name)" value="Add Quotation"/></a>
                     </div>
                  </div>
              </div>
              <br>
              <div class="row">
 
-                 <table class="table table-bordered">
+                 <table class="table table-bordered" >
                      <thead>
                      <tr>
                          <th>Sr.No</th>
@@ -101,46 +101,20 @@
                      </tr>
                      </thead>
                      <tbody>
-                     <tr>
-                         <td>1</td>
-                         <td>Quotation1</td>
-                         <td>Company1</td>
-                         <td>10-02-2016</td>
+                     <tr ng-repeat = "q in projectQuotations">
+                         <td>{{$index + 1}}</td>
+                         <td>{{q.QuotationTitle}}</td>
+                         <td>{{q.CompanyName}}</td>
+                         <td>{{q.CreationDate}}</td>
 
                          <td>
-                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                             <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button></a>
-                             <a href="Assets/document/Quotation.docx"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
+                             <a ui-sref="Process.viewQuotation({quotationToView:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
+                             <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o" ></span>Revise</button></a>
+                             <a href="{{q.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',q)"><span class="fa fa-edit"></span>Schedule Followup</button>
+                             <a  data-target="#viewDetails" data-toggle="modal" ><input type="button" class="btn btn-info" ng-click="check(q)" value="Attach Workorder"></a>
                          </td>
                      </tr>
-                     <tr>
-                         <td>2</td>
-                         <td>Quotation2</td>
-                         <td>Company2</td>
-                         <td>10-02-2016</td>
-
-                         <td >
-                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button></a>
-                             <a href="Assets/document/Quotation.docx"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
-                         </td>
-                     </tr>
-                     <tr>
-                         <td >2</td>
-                         <td >Quotation3</td>
-                         <td >Company2</td>
-                         <td >10-02-2016</td>
-
-                         <td>
-                             <a ui-sref="Process.viewQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o"></span>Revise</button></a>
-                             <a href="Assets/document/Quotation.docx"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
-                         </td>
-                     </tr>
-
                      </tbody>
                  </table>
 
@@ -150,22 +124,15 @@
 
              <div id="workorder-details">
                  <div class="row">
-                     <div class="col-md-6">
+                     <div class="col-md-12">
                          <h3 class="panel-title"><strong>Workorder Details</strong></h3>
                      </div>
-                     <div class="col-md-6">
-                         <div class="col-md-4">
-                             <!--<label class="control-label"> :</label>-->
-                         </div>
-                         <div class="col-md-8">
-                             <a ui-sref="Process.AttachWorkorder"><input type="button" class="btn btn-info" value="Attach Workorder"/></a>
-                         </div>
-                     </div>
+                     
                  </div>
                  <br>
                  <div class="row">
 
-                     <table class="table  table-bordered">
+                     <table class="table  table-bordered" >
                          <thead>
                          <tr>
                              <th>Sr.No</th>
@@ -173,42 +140,25 @@
                              <th>Quotation</th>
                              <th>Date</th>
                              <th>Actions</th>
+                           
                          </tr>
                          </thead>
                          <tbody>
-                         <tr>
-                             <td>1</td>
-                             <td>Work order 1</td>
-                             <td>Quotation1</td>
-                             <td>10-02-2016</td>
+                         <tr ng-repeat="wo in projectWorkorders">
+                             <td>{{$index + 1}}</td>
+                             <td>{{wo.workoOrderTitle}}</td>
+                             <td>{{wo.quotationTitle}}</td>
+                             <td>{{wo.receivedDate}}</td>
+
 
                              <td>
 
-                                 <a href="Assets/document/Workorder.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <a href="{{wo.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <a ui-sref="Process.addInvoice"><input type="button" class="btn btn-info" ng-click="passWork(wo)" value="Create Invoice"/></a>
 
                              </td>
                          </tr>
-                         <tr>
-                             <td>2</td>
-                             <td>Quotation2</td>
-                             <td>Company2</td>
-                             <td>10-02-2016</td>
 
-                             <td>
-                                 <a href="Assets/document/Workorder.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-
-                             </td>
-                         </tr>
-                         <tr>
-                             <td>2</td>
-                             <td>Work order 2</td>
-                             <td>Quotation 2</td>
-                             <td>10-02-2016</td>
-
-                             <td>
-                                 <a href="Assets/document/Workorder.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                             </td>
-                         </tr>
 
                          </tbody>
                      </table>
@@ -220,16 +170,10 @@
 
              <div id="invoice-details">
                  <div class="row">
-                     <div class="col-md-6">
+                     <div class="col-md-12">
                          <h3 class="panel-title"><strong>Invoice Details</strong></h3>
                      </div>
-                     <div class="col-md-6">
-                         <div class="col-md-4">
-                             <!--<label class="control-label"> :</label>-->
-                             <a ui-sref="Process.addInvoice"><input type="button" class="btn btn-info" value="Create Invoice"/></a>
-                         </div>
-
-                     </div>
+                    
                  </div>
                  <br>
                  <div class="row">
@@ -245,41 +189,19 @@
                          </tr>
                          </thead>
                          <tbody>
-                         <tr>
-                             <td>1</td>
-                             <td>Invoice 1</td>
-                             <td>Quotation 1</td>
-                             <td>10-02-2016</td>
+                         <tr ng-repeat="iv in projectInvoice">
+                             <td>{{$index + 1}}</td>
+                             <td>{{iv.invoiceTitle}}</td>
+                             <td>{{iv.quotationTitle}}</td>
+                             <td>{{iv.invoiceDate}}</td>
 
                              <td>
-                                 <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
+                                 <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm" ng-click="passInvoice(iv)"><span class="fa fa-eye"></span>View</button></a>
                                  <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
                                  <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
-                         <tr>
-                             <td>3</td>
-                             <td>Invoice 2</td>
-                             <td>Quotation 2</td>
-                             <td>10-02-2016</td>
 
-                             <td>
-                                 <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td >3</td>
-                             <td >Invoice 3</td>
-                             <td>Quotation 3</td>
-                             <td >10-02-2016</td>
-                             <td >
-                                 <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
-                                 <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
-                             </td>
-                         </tr>
 
                          </tbody>
                      </table>
@@ -317,30 +239,23 @@
                          </tr>
                          </thead>
                          <tbody>
-                         <tr1>
-                             <td>1</td>
-                             <td>Invoice 1</td>
-                             <td>10000</td>
-                             <td>20000</td>
-
-
-                         </tr1>
-                         <tr>
-                             <td>2</td>
-                             <td>Invoice 2</td>
-                             <td>50000</td>
-                             <td>10000</td>
+                       
+                      <tr ng-repeat = " payment in projectPaymentsInvoice">
+                             <td>{{$index+1}}</td>
+                             <td>{{payment.invoice_name}}</td>
+                             <td>{{payment.amount_paid}}</td>
+                             <td>{{payment.remaining_amt}}</td>
 
 
                          </tr>
-                         <tr>
+                           <!--  <tr>
                              <td>2</td>
                              <td>Invoice 3</td>
                              <td>100000</td>
                              <td>150000</td>
 
 
-                         </tr>
+                         </tr> -->
 
                          </tbody>
                      </table>
@@ -365,7 +280,7 @@
 
 
 <!--Modal To view Contact details-->
-<div class="modal fade" id="viewContactDetails" role="dialog" data-backdrop="static" keyboard="false">
+<div class="modal fade" id="viewContactDetails" ng-init="projDetailsData" role="dialog" data-backdrop="static" keyboard="false">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
@@ -385,7 +300,7 @@
                                         <label class="control-label">Name :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        {{"Namdev Devmare"}}
+                                        {{projDetailsData.PointContactName}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -393,7 +308,7 @@
                                         <label class="control-label">Email Id :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        {{"namdev@gmail.com"}}
+                                        {{projDetailsData.EmailId}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -401,7 +316,7 @@
                                         <label class="control-label">Landline No :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        {{"020-202021"}}
+                                        {{projDetailsData.LandlineNo}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -409,7 +324,7 @@
                                         <label class="control-label">Mobile No :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        {{"9090220707"}}
+                                        {{projDetailsData.MobileNo}}
                                     </div>
                                 </div>
 
@@ -429,3 +344,156 @@
     </div>
     <!--End of modal dialog-->
 </div>
+
+<!--Modal To view details-->
+<div class="modal fade" id="viewDetails" role="dialog" data-backdrop="static" keyboard="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Attach Workorder</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="form-horizontal">
+
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Quotation :</label>
+                                </div>
+                                <div class="col-md-8">
+                                   <label ng-model="workorder.QuotationId"> {{workOrderDetails.QuotationTitle}}</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Name of work order:</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <!--  <input ng-model="workorder.title" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/> -->
+                                        <input ng-model="workorder.title" name="mobile" type="text" class="form-control"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Date of Work Order :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="date" value="2015-12-01" ng-model="workorder.date" class="form-control datepicker">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Attach Work Order :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                        <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button ng-click="createWorkorder()" class="btn btn-primary pull-right">Add work order</button>
+                <button ng-click="" class="btn btn-default pull-right">Cancel</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
+</div>
+
+<!--<div class="modal fade" id="viewDetails" role="dialog" ng-controller="AttachWorkorderController">-->
+    <!--<div class="modal-dialog">-->
+        <!--&lt;!&ndash; Modal content&ndash;&gt;-->
+        <!--<div class="modal-content">-->
+            <!--<div class="modal-header">-->
+                <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                <!--<h4 class="modal-title">Product Details</h4>-->
+            <!--</div>-->
+            <!--<div class="modal-body">-->
+                <!--<div class="col-md-12">-->
+                    <!--<div class="col-md-6">-->
+                        <!--<div class="form-group">-->
+                            <!--<label class="col-md-6 col-sm-6 col-xs-6control-label">Quotaion</label>-->
+                            <!--<div class="col-md-6 col-sm-6 col-xs-6 ">-->
+                                <!--{{workorder.QuotationId}}-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-6">-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-6 col-sm-6 col-xs-6control-label">Quotaion</label>-->
+                        <!--<div class="col-md-6 col-sm-6 col-xs-6 ">-->
+                            <!--{{workorder.QuotationId}}-->
+                        <!--</div>-->
+                        <!--<label class= "col-md-1 col-sm-2 col-xs-12 control-label">Select Company     </label>-->
+                    <!--<div class="col-md-3 col-xs-6col-sm-4">-->
+                        <!--<div class="col-md-3 col-xs-6col-sm-4" ng-repeat="c in CompanyName ">-->
+                            <!--<span ng-bind="c.companyName"></span>-->
+                        <!--</div>-->
+
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="form-group">-->
+                    <!--<label class="col-md-1 col-sm-2 col-xs-12 control-label">Name of work order</label>-->
+                    <!--<div class="col-md-3 col-xs-12 col-sm-4">-->
+                        <!--<div class="input-group">-->
+                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                            <!--&lt;!&ndash;  <input ng-model="workorder.title" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/> &ndash;&gt;-->
+                            <!--<input ng-model="workorder.title" name="mobile" type="text" class="form-control"/>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-1 col-xs-12 control-label col-sm-2">Date of Workorder</label>-->
+                        <!--<div class="col-md-3 col-xs-12 col-sm-4">-->
+                            <!--<div class="input-group">-->
+                                <!--<span class="input-group-addon"><span class="fa fa-calendar"></span></span>-->
+                                <!--<input type="text" value="2015-12-01" ng-model="workorder.date" class="form-control datepicker">-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="form-group">-->
+                        <!--<label class="col-md-1 col-xs-12 control-label">Attach work order</label>-->
+                        <!--<div class="col-md-6 col-xs-12">-->
+                            <!--<input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="modal-footer">-->
+                <!--<button ng-click="createWorkorder()" class="btn btn-primary pull-right">Add work order</button>-->
+                <!--<button ng-click="" class="btn btn-default pull-right">Cancel</button>-->
+            <!--</div>-->
+            <!--&lt;!&ndash;End of modal-footer&ndash;&gt;-->
+        <!--</div>-->
+        <!--&lt;!&ndash;End of Modal Content&ndash;&gt;-->
+    <!--</div>-->
+    <!--&lt;!&ndash;End of modal dialog&ndash;&gt;-->
+<!--</div>-->

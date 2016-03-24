@@ -77,7 +77,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                     <td width="15%">{{product.color}}</td>
                     <td width="15%">{{product.description}}</td>
                     <td width="35%">
-                        <button data-target="#viewDetails" ng-click="getProduct(product)" data-toggle="modal"
+                        <button data-target="#viewDetails" data-toggle="modal" ng-click="getProduct(product)" data-toggle="modal"
                                 class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View
                         </button>
                         <div class="modal fade" id="viewDetails" role="dialog">
