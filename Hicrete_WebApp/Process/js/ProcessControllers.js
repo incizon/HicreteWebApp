@@ -215,7 +215,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 });
 
 
-myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, $filter) {
+myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, fileUpload) {
 
     var detaildata = $stateParams.projectToView;
 
@@ -283,6 +283,51 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
         LandlineNo: detaildata.LandlineNo,
         EmailId: detaildata.EmailId,
         Pincode: detaildata.Pincode
+    }
+    $scope.workorder = {
+        projId: $scope.projDetailsData.projectId,
+        //porjName: proj.project_name,
+        //quotationId: projDetailsData.QuotationId
+    };
+    console.log("final scope is " + $scope.workorder);
+    $scope.createWorkorder = function () {
+        console.log("IN");
+        console.log("company id is :" + JSON.stringify($scope.CompanyName));
+        var uploadQuotationLocation = "upload/Workorders/";
+        var fileName = uploadQuotationLocation + $scope.myFile.name;
+        //console.log("in createWorkorder ");//WorkOrderNo, WorkOrderName, ReceivedDate, WorkOrderBlob, ProjectId, CompanyId
+        var workorderData = '{"ProjectId":"' + $scope.workorder.projId + '","WorkOrderName":"' + $scope.workorder.title + '","ReceivedDate":"' + $scope.workorder.date + '","WorkOrderBlob":"' + fileName + '","CompanyId":"' + " " + '","QuotationId":"' + $scope.workOrderDetails.QuotationId + '"}';
+        console.log("workorder data is " + workorderData);
+
+        $.ajax({
+            type: "POST",
+            url: 'php/api/workorder',
+            data: workorderData,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json',
+            processData: false,
+
+            success: function (data, status) {
+                alert("success in workorder creation " + data + " status is " + status);
+                alert("status" + JSON.stringify(data));
+                var file = $scope.myFile;
+                var uploadUrl = "php/api/workorder/upload";
+                fileUpload.uploadFileToUrl(file, uploadUrl);
+            },
+            error: function (data) {
+                alert("error in workorder creation " + JSON.stringify(data));
+            }
+        });
+    }
+    $scope.viewProjQuotationDetails = function (q) {
+        setInfo.set(q);
+        //alert("view data in viewProjQuotationDetails "+JSON.stringify(q));
+    }
+    // console.log("data is "+JSON.stringify($scope.projDetailsData));
+    $scope.viewProjQuotationDetails = function (q) {
+        setInfo.set(q);
+        //alert("view data in viewProjQuotationDetails "+JSON.stringify(q));
     }
 
     $scope.sendProjId = function () {
@@ -396,7 +441,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
         var projQId = q;
         console.log("qqqq " + JSON.stringify(projQId));
         setInfo.set(projQId);
-        //alert("checked"+$scope.q.QuotationId);
+        $scope.workOrderDetails=q;
+        console.log("Daya="+$scope.workOrderDetails);
     }
     /*Get Workorder by project id*/
     $http({
