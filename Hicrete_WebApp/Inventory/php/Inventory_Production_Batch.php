@@ -77,19 +77,18 @@ else {
 			} else if ($prodBatchObj->step == '3') {
 
 				if (!$prodBatchObj->checkAvlblBatchNo($dbh)) {
-					if ($message = $prodBatchObj->addToProdBatchMaster($dbh, $userId)) {
+					if ($prodBatchObj->addToProducedGood($dbh, $userId)) {
 						//echo ("Check1");
-						if ($prodBatchObj->addToProducedGood($dbh, $userId)) {
-							//$log->info(" [".$userId."] :"."Production Batch Added successfully");
-							$message = "Data inserted successfully";
-							//echo json_encode($message);
-							$arr = array('msg' => $message, 'error' => "");
-							$jsn = json_encode($arr);
-							echo($jsn);
 
-							//$prodBatchObj->addToInhouseInward($dbh,$userId);
-							//$prodBatchObj->addToInhouseTransport($dbh,$userId);
-						} else {
+						//$log->info(" [".$userId."] :"."Production Batch Added successfully");
+						$message = "Data inserted successfully";
+						//echo json_encode($message);
+						$arr = array('msg' => $message, 'error' => "");
+						$jsn = json_encode($arr);
+						echo($jsn);
+
+					}
+						 else {
 							//$log->error(" [".$userId."] :"."Error while inserting production batch");
 							$message = "Error While adding Produced good ";
 							//echo json_encode($message);
@@ -98,14 +97,7 @@ else {
 							echo($jsn);
 						}
 
-					} else {
-						//$log->error(" [".$userId."] :"."Error while inserting production batch");
-						$message = "Error while Initiating production batch";
-						$arr = array('msg' => '', 'error' => $message);
-						$jsn = json_encode($arr);
-						echo($jsn);
 
-					}
 				} else {
 					//$log->error(" [".$userId."] :"."Error while inserting production batch");
 					$message = "Production Batch no already exists Please Insert new BatchNo";

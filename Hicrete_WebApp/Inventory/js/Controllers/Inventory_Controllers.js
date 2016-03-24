@@ -686,10 +686,13 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
                 qty = $scope.materialsForOutward[i].totalquantity;
                 $scope.availableTotalquantity=qty;
+                console.log("this is actual quantity"+$scope.availableTotalquantity);
                 $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
+                break;
                // qty= $scope.unitofMeasure;
                 //console.log(qty);
             }
+
         }
 
         return qty;
@@ -1507,6 +1510,10 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
                 //console.log(qty);
                 break;
             }
+            else
+            {
+                $scope.availableTotalquantity=0;
+            }
         }
 
         return qty;
@@ -1517,10 +1524,12 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         console.log(quantity);
         console.log($scope.availableTotalquantity);
 
-        if($scope.availableTotalquantity<quantity)
+        if($scope.availableTotalquantity<quantity || $scope.availableTotalquantity == 0)
         {
+
             //console.log("m alo nighalo");
             $scope.qtyError= 1;
+            console.log($scope.qtyError);
         }
         else
         {
@@ -1677,7 +1686,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             prodBatchInfo.option = message;
 
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
-             setTimeout(function () {
+            $scope.submitted=false;
+            setTimeout(function () {
              window.location="dashboard.php#/Inventory/prodInit";
              }, 1000);
         }
@@ -1704,6 +1714,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
             $scope.submitted=false;
+            console.log($scope.submitted);
             setTimeout(function () {
                 window.location="dashboard.php#/Inventory/prodInit";
             }, 1000);
