@@ -24,13 +24,16 @@
                                 <label class="control-label">Project Name</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="projectName" ng-model="project">
+                                <select class="form-control select" name="projectName" ng-model="project" ng-change="viewProjectInvoices(project)" >
                                     <option value="" disabled selected>Choose Project..</option>
-                                    <option value="Project 1">Project 1</option>
-                                    <option value="Project 2">Project 2</option>
+                                    <option ng-repeat="project in Projects" value="{{project.project_id}}" >{{project.project_name}}</option>
+                                   <!--  <option value="Project 2">Project 2</option> -->
                                 </select>
                             </div>
                         </div>
+
+
+
                         <!--End of Project name feild-->
 
                         <!--Start of Sort By feild-->
@@ -58,10 +61,9 @@
                                 <label class="control-label">Invoice Number </label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="invoiceNumber">
+                                <select class="form-control select" ng-change="getInvoiceDetails(invoiceNumber)" ng-model = "invoiceNumber" name="invoiceNumber">
                                     <option value="" disabled selected>All</option>
-                                    <option value="123">123</option>
-                                    <option value="456">456</option>
+                                    <option ng-repeat="invoice in Invoices" value="{{invoice.invoice_id}}" >{{invoice.invoice_id}}</option>
                                 </select>
                             </div>
                         </div>

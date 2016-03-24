@@ -23,7 +23,7 @@
                                 <label class="control-label">Project Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{{"Project 1"}}</label>
+                                <label class="control-label">{{viewQuotationDetail.projectName}}</label>
 
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <label class="control-label">{{"Quotation 1"}}</label>
+                                    <label class="control-label">{{viewQuotationDetail.quotationTitle}}</label>
 
                                 </div>
 
@@ -46,7 +46,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <label class="control-label">{{"10-02-2016"}}</label>
+                                    <label class="control-label">{{viewQuotationDetail.creationDate}}</label>
                                 </div>
 
                             </div>
@@ -56,7 +56,7 @@
                                 <label class="control-label">Quotation Subject :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{{"Demo Quotation"}}</label>
+                                <label class="control-label">{{viewQuotationDetail.subject}}</label>
 
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                 <label class="control-label">Company Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <label class="control-label">{{"Company 1"}}</label>
+                                <label class="control-label">{{viewQuotationDetail.companyId}}</label>
 
                             </div>
                         </div>
@@ -80,7 +80,7 @@
                             </div>
                             <div class="col-md-8">
                                 <div class="input-group">
-                                    <label class="control-label">{{"HE/Namdev/20202/02-02-2016"}}</label>
+                                    <label class="control-label">{{viewQuotationDetail.refNo}}</label>
 
                                 </div>
 
@@ -113,29 +113,29 @@
 
                         </tr>
                         </thead>
-                        <tr>
-                            <td>1</td>
+                        <tr ng-repeat="q in qDetails">
+                            <td>{{$index + 1}}</td>
                             <td>
-                                {{"Quotation For Material"}}
+                                {{q.title}}
                             </td>
                             <td>
-                                {{"Quotation Description demo"}}
+                                {{q.description}}
                             </td>
                             <td>
-                               {{"100"}}
+                               {{q.quantity}}
                             </td>
                             <td>
-                                {{"sqft"}}
+                                {{q.unit}}
                             </td>
                             <td>
-                                {{"100 Rs"}}
+                                {{q.unitRate}}
                             </td>
                             <td>
-                                {{"10000"}}
+                                {{q.amount}}
                             </td>
 
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td>2</td>
                             <td>
                                 {{"Quotation For Material 1"}}
@@ -200,7 +200,7 @@
                                 {{"100"}}
                             </td>
 
-                        </tr>
+                        </tr> -->
                     </table>
 
                     <div class="col-md-offset-7 col-md-5">
@@ -208,8 +208,8 @@
                         <div class="col-md-7">
                             <label class="control-label">Total Amount :</label>
                         </div>
-                        <div class="col-md-5">
-                            <label class="control-label">{{"21100"}}</label>
+                        <div class="col-md-5" ng-click="getTotal()">
+                            <label class="control-label">{{ getTotalAmount() }}</label>
                         </div>
                     </div>
                 </div><br>
@@ -230,14 +230,14 @@
 
                         </tr>
                         </thead>
-                        <tr>
+                        <tr ng-repeat="qt in qTaxDetails">
                             <td>1</td>
-                            <td>{{"VAT"}}</td>
+                            <td>{{qt.taxName}}</td>
                             <td>
-                                {{"1%"}}
+                                {{qt.taxPercentage}}
                             </td>
                             <td>
-                                {{"210"}}
+                                {{qt.taxAmount}}
                             </td>
 
                         </tr>
@@ -248,8 +248,8 @@
                         <div class="col-md-7">
                             <label class="control-label">Total Tax :</label>
                         </div>
-                        <div class="col-md-5">
-                            <label class="control-label"> {{"210"}}</label>
+                        <div class="col-md-5" >
+                            <label class="control-label"> {{getTotalTax()}}</label>
                         </div>
                     </div>
                 </div>
@@ -260,7 +260,7 @@
                             <label class="control-label"><strong>GRAND AMOUNT(Amount + Tax) :</strong></label>
                         </div>
                         <div class="col-md-5">
-                            <label class="control-label">{{"21310"}}</label>
+                            <label class="control-label">{{+getTotalAmount() + +getTotalTax()}}</label>
                         </div>
                     </div>
                 </div>

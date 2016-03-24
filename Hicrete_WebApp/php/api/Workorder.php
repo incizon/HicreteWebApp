@@ -27,23 +27,50 @@ Class Workorder {
         //return "i m in";
     }
 
+
+     public function getWokrorderByqId($qId,$cId) {
+        $object = array();
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();       //SELECT * FROM work_order w where w.CompanyId ="2" AND w.ProjectId  IN (select q.ProjectId from quotation q where q.QuotationId = "56f0ebc92cd043576");
+            $stmt = $conn->prepare("SELECT * from work_order wo where wo.ProjectId  IN (select q.ProjectId from quotation q where q.QuotationId = :qId ) AND  wo.CompanyId = :cId ");
+            //print_r($stmt);
+            $stmt->bindParam(':qId', $qId, PDO::PARAM_STR);
+            $stmt->bindParam(':cId', $cId, PDO::PARAM_STR);            
+            
+            if($result = $stmt->execute()){
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+                    array_push($object, $row);
+                }
+            }
+
+         } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+
+        $db = null;
+        return $object ;
+        //return "i m in";
+    }
+
    
     public function saveWorkOrder($data){
         $WorkOrderNo = AppUtil::generateId();
+        $t=time();
+        $current =date("Y-m-d",$t);
        // $object = array();
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $conn->beginTransaction();                      //WorkOrderNo, WorkOrderName, ReceivedDate, WorkOrderBlob, ProjectId, CompanyId
-            $stmt = $conn->prepare("INSERT INTO work_order (WorkOrderNo,WorkOrderName,ReceivedDate,WorkOrderBlob,ProjectId, CompanyId) VALUES (?,?,?,?,?,?)");
-            //$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            if ($stmt->execute([$WorkOrderNo, $data->WorkOrderName,$data->ReceivedDate,$data->WorkOrderBlob,$data->ProjectId,$data->CompanyId]) === TRUE) {
-//            if ($stmt->execute([$WorkOrderNo, $data->WorkOrderName,$data->ReceivedDate,$data->WorkOrderBlob,$data->ProjectId,$data->CompanyId]) === TRUE) {
-                        
-                $stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE ProjectId = :projId AND CompanyId = :compId");
-                $stmt1->bindParam(':projId',$data->ProjectId,PDO::PARAM_STR);
-                $stmt1->bindParam(':compId',$data->CompanyId,PDO::PARAM_STR);
-                if($stmt1->execute() ===TRUE){
+            $conn->beginTransaction(); 
+            $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+            $stmt = $conn->prepare("INSERT INTO work_order (WorkOrderNo,WorkOrderName,ReceivedDate,WorkOrderBlob,ProjectId, CompanyId,CreationDate,CreatedBy) VALUES (?,?,?,?,?,?,?,?)");
+            if($stmt->execute([$WorkOrderNo, $data->WorkOrderName,$data->ReceivedDate,$data->WorkOrderBlob,$data->ProjectId,$data->CompanyId,$current,1]) === TRUE) {
+                /*$stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE ProjectId = :projId AND CompanyId = :compId");*/
+                $stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE QuotationId = :id");
+                $stmt1->bindParam(':id',$data->QuotationId,PDO::PARAM_STR);
+                //$stmt1->bindParam(':compId',$data->CompanyId,PDO::PARAM_STR);
+                if($stmt1->execute() === TRUE){
                     $conn->commit();
                     return "Quotation Updated succesfully";
                 }

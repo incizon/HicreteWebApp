@@ -16,93 +16,119 @@
                 </div><br>
                 <div class="row">
 
-                    <div class="col-md-6">
+                      <div class="col-md-6">
 
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Project Name :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <label class="control-label">{{Quotation.ProjectName}}</label>
-                            </div>
-                        </div>
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Project Name :</label>
+                              </div>
+                              <div class="col-md-8">
+                                 <!--  <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-change="changevalue()">
+                                      <option value="" disabled selected>Choose Project..</option>
+                                      <option value="Project1">Project1</option>
+                                      <option value="Project2">Project2</option>
+                                      <option value="Project3">Project3</option>
+                                      <option value="Project4">Project4</option>
+                                      <option value="Project5">Project5</option>
+                                  </select> -->
 
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Quotation Title :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="QuotationTitle" ng-model="Quotation.Title"/>
-                                </div>
+                                    <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-options="project.name for project in projects" ng-change="getProjeId()">
+                                    <option value="" disabled selected>Choose Project..</option>
+                                      <option value="Select Project" disabled selected>Select Project</option>
+                                      <option value="project.id">{{project.name}}</option>
+                                  </select>
 
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Quotation Date :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="date" class="form-control" name="QuotationDate" ng-model="Quotation.Date"/>
-                                </div>
+                              </div>
+                          </div>
 
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Quotation Subject :</label>
-                            </div>
-                            <div class="col-md-8">
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Quotation Title :</label>
+                              </div>
+                              <div class="col-md-8">
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                      <input type="text" class="form-control" name="QuotationTitle" ng-model="QuotationDetails.quotationTitle"/>
+                                  </div>
+
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Quotation Date :</label>
+                              </div>
+                              <div class="col-md-8">
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                      <input type="date" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate"/>
+                                  </div>
+
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Quotation Subject :</label>
+                              </div>
+                              <div class="col-md-8">
                                     <textarea class="form-control" name="subject"
-                                              ng-model="Quotation.Subject" rows="2">
+                                              rows="2" ng-model="QuotationDetails.quotationSubject">
                                     </textarea>
-                            </div>
-                        </div>
+                              </div>
+                          </div>
 
-                    </div>
+                      </div>
 
-                    <div class="col-md-6">
+                      <div class="col-md-6">
 
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Company Name :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <label class="control-label">{{Quotation.CompanyName}}</label>
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Company Name :</label>
+                              </div>
+                              <div class="col-md-8">
+                                  <select class="form-control select" name="company" ng-options = "company.company_name for company in Companies" ng-model="QuotationDetails.companyName">
+                                      <option value="" disabled selected>Choose Company..</option>
+                                      <option  value="company.company_id" >{{company.company_name}}</option>
+                                     <!--  <option value="Project2">Company2</option>
+                                      <option value="Project3">Company3</option> -->
 
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Reference No :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="ReferenceNo" ng-model="Quotation.ReferenceNo"/>
-                                </div>
+                                  </select>
 
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-4">
-                                <label class="control-label">Attach Quotation :</label>
-                            </div>
-                            <div class="col-md-8">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="file" class="form-control" name="QuotationBlob" ng-model="Quotation.Blob"/>
-                                </div>
+                                  <!-- <select class="form-control select" name="company" ng-model="QuotationDetails.companyName" ng-options="b.name ++ b.id for b in cNames" ng-change="changevalue(cName)">
+                                    <option value="" disabled selected>Choose Company..</option>
+                                      <option value="" ng-bind="b.name" disabled selected></option>
+                                  </select> -->
 
-                            </div>
-                        </div>
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Reference No :</label>
+                              </div>
+                              <div class="col-md-8">
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                      <input type="text" class="form-control" name="ReferenceNo" ng-model="QuotationDetails.referenceNo"/>
+                                  </div>
+
+                              </div>
+                          </div>
+                          <div class="form-group">
+                              <div class="col-md-4">
+                                  <label class="control-label">Attach Quotation :</label>
+                              </div>
+                              <div class="col-md-8">
+                                  <div class="input-group">
+                                      <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                      <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
+                                      <!-- <button ng-click = "uploadQuotation()">upload me</button> -->
+                                  </div>
+
+                              </div>
+                          </div>
 
 
 
-                    </div>
+                      </div>
 
 
 
@@ -148,7 +174,11 @@
 
 
                     </div>
-
+                    <div class="col-md-6">
+                        <div class="col-md-6">
+                            <button class="btn btn-primary" ng-click="addTax('md')">Add Tax</button>
+                        </div>
+                    </div>
 
                 </div><br>
 
@@ -156,45 +186,50 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>Sr.No</th>
-                            <th>Title</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Unit</th>
-                            <th>Unit rate</th>
-                            <th>Amount</th>
-                            <th>Remove</th>
+                            <th width=7%>Item No</th>
+                            <th width=20%>Title</th>
+                            <th width=23%>Description</th>
+                            <th width=15%>Quantity</th>
+                            <th width=15%>Unit</th>
+                            <th width=15%>Unit rate</th>
+                            <th width=12%>Amount</th>
+                            <th width=2%>Tax</th>
+                            <th width=2%>Remove</th>
                         </tr>
                         </thead>
-                        <tr ng-repeat="quotationEntry in QuotationDetails">
+                        <tr ng-repeat="quotation in QuotationDetails.quotationItemDetails">
                             <td>{{$index+1}}</td>
                             <td>
                                 <input type="text" name="Title" placeholder="Title"
-                                       class="form-control" ng-model="quotationEntry.title"/>
+                                       class="form-control" ng-model="quotation.quotationItem"/>
                             </td>
                             <td>
                                 <input type="text" name="Decription" placeholder="Description"
-                                       class="form-control" ng-model="quotationEntry.description" />
+                                       class="form-control" ng-model="quotation.quotationDescription"/>
                             </td>
                             <td>
                                 <input type="text" name="Quantity" placeholder="Quantity"
-                                       class="form-control" ng-model="quotationEntry.quantity"/>
+                                       class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)"/>
                             </td>
                             <td><input type="text" name="Unit" placeholder="Unit"
-                                       class="form-control" ng-model="quotationEntry.unit"/>
+                                       class="form-control" ng-model="quotation.quotationUnit"/>
                             </td>
                             <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotationEntry.unitrate"/>
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"/>
                             </td>
                             <td>
-                                {{quotationEntry.quantity * quotationEntry.unitrate}}
+                                {{quotation.amount}}
                             </td>
                             <td>
-                                <a ng-click="remove($index)" class="panel-remove">
+                                <input type="checkbox" name="addTax" ng-model="quotation.isTaxAplicable" ng-click="calculateTaxableAmount($index)"/>
+                            </td>
+                            <td>
+                                <a ng-click="removeQuotationItem($index)" class="panel-remove">
                                     <span class="fa fa-times"></span>
                                 </a>
                             </td>
                         </tr>
+
                     </table>
 
                     <div class="col-md-offset-7 col-md-5">
@@ -202,8 +237,8 @@
                         <div class="col-md-4">
                             <label class="control-label">Total Amount :</label>
                         </div>
-                        <div class="col-md-8">
-                            <label class="control-label"><strong>{{Quotation.totalAmount}}</strong></label>
+                        <div class="col-md-8" ng-model="totalAmnt">
+                                {{totalAmnt}}
                         </div>
                     </div>
                 </div><br>
@@ -212,79 +247,84 @@
                 <div class="row">
                     <h3 class="panel-title"><strong>Tax </strong>Details </h3>
                 </div><br>
-                <div class="row">
+                <!--<div class="row">-->
 
-                    <div class="col-md-6">
+                    <!--<div class="col-md-6">-->
 
-                        <div class="form-group">
+                        <!--<div class="form-group">-->
 
-                            <div class="col-md-4">
+                            <!--<div class="col-md-4">-->
 
-                                <label class="control-label">Number of Taxes</label>
+                                <!--<label class="control-label">Number of Taxes</label>-->
 
-                            </div>
-                            <div class="col-md-8">
+                            <!--</div>-->
+                            <!--<div class="col-md-8">-->
 
-                                <div class="col-md-10">
+                                <!--<div class="col-md-10">-->
 
-                                    <div class="input-group">
+                                    <!--<div class="input-group">-->
 
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
 
-                                        <input type="text" name="noOfTaxes" ng-model="noOfTaxes"
-                                               class="form-control">
+                                        <!--<input type="text" name="noOfTaxes" ng-model="noOfTaxes"-->
+                                               <!--class="form-control">-->
 
-                                    </div>
-
-
-
-                                </div>
-
-                                <div class="col-md-2">
-
-                                    <button class="btn btn-primary" ng-click="addTaxes()">Add</button>
-
-                                </div>
-
-                            </div>
-
-                        </div>
+                                    <!--</div>-->
 
 
-                    </div>
+
+                                <!--</div>-->
+
+                                <!--<div class="col-md-2">-->
+
+                                    <!--<button class="btn btn-primary" ng-click="addTaxes()">Add</button>-->
+
+                                <!--</div>-->
+
+                            <!--</div>-->
+
+                        <!--</div>-->
 
 
-                </div><br>
+                    <!--</div>-->
+
+
+                <!--</div><br>-->
 
                 <div class="row">
                     <table class="table table-bordered">
                         <thead>
                         <tr>
                             <th>Sr.No</th>
-                            <th>Name</th>
+                            <th>Tax Title</th>
+                            <th>Applicable To</th>
                             <th>Percentage</th>
                             <th>Tax Amount</th>
                             <th>Remove</th>
 
                         </tr>
                         </thead>
-                        <tr ng-repeat="taxentry in TaxDetails">
+                        <tr ng-repeat="tax in taxDetails">
                             <td>{{$index+1}}</td>
                             <td>
                                 <input type="text" name="TaxTitle" placeholder="Title"
-                                       class="form-control" ng-model="taxentry.name"/>
+                                       class="form-control" ng-model="tax.taxTitle"/>
+                            </td>
+                            <td>
+                                <input type="text" name="TaxTitle" placeholder="Title"
+                                       class="form-control" ng-model="tax.taxApplicableTo"/>
                             </td>
                             <td>
                                 <input type="text" name="TaxPercentage" placeholder="Percentage"
-                                       class="form-control" ng-model="taxentry.percentage"/>
+                                       class="form-control" ng-model="tax.taxPercentage"/>
                             </td>
                             <td>
                                 <input type="text" name="TaxAmount" placeholder="Tax Amount"
-                                       class="form-control" ng-model="taxentry.amount"/>
+                                       class="form-control" ng-model="tax.amount" ng-change ="totalTaxAmount(tax.amount)"/>
                             </td>
 
                             <td>
-                                <a ng-click="remove($index)" class="panel-remove">
+                                <a ng-click="removeTaxItem($index)" class="panel-remove">
                                     <span class="fa fa-times"></span>
                                 </a>
                             </td>
@@ -296,8 +336,8 @@
                         <div class="col-md-4">
                             <label class="control-label">Total Tax :</label>
                         </div>
-                        <div class="col-md-8">
-                            <label class="control-label"><strong>{{Quotation.taxAmount}}</strong></label>
+                        <div class="col-md-8" ng-model = "TaxAmnt">
+                            {{TaxAmnt}}
                         </div>
                     </div>
                 </div>
@@ -308,7 +348,7 @@
                             <label class="control-label"><strong>Total Amount :</strong></label>
                         </div>
                         <div class="col-md-8">
-                            <label class="control-label"><strong>{{Quotation.grandTotal}}</strong></label>
+                            {{totalAmnt + TaxAmnt}}
                         </div>
                     </div>
                 </div>
@@ -317,9 +357,10 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right">Modify<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
-            <button class="btn  btn-default pull-right">Clear Form</button>
+            
+            <button class="btn  btn-default ">Clear Form</button>
         </div>
     </div>
 

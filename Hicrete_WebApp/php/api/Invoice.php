@@ -9,9 +9,9 @@ Class Invoice {
 		$object = array();
 		try {
 			$db = Database::getInstance();
-			$conn = $db->getConnection();
+			$conn = $db->getConnection();//DetailID, InvoiceId, DetailNo, Title, Description, Quantity, UnitRate, Amount
 
-			$stmt = $conn->prepare("SELECT * from invoice i,invoice_tax_details id , invoice_tax_applicable_to at where (i.InvoiceNo = :id AND id.InvoiceId = :id AND id.TaxId = at.TaxId)");
+			$stmt = $conn->prepare("SELECT * from invoice i ,invoice_tax_details itd , invoice_tax_applicable_to at where (i.InvoiceNo = :id AND  itd.InvoiceId = :id AND itd.TaxId = at.TaxId)");
 			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 			
 			if($result = $stmt->execute()){
@@ -30,21 +30,23 @@ Class Invoice {
 	}
 
 	public function loadInvoiceFollowups($invoiceid){
-		$object = array();
+			$object = array();
+		try {
+			$db = Database::getInstance();
+			$conn = $db->getConnection();
 
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-
-		$stmt = $conn->prepare("SELECT `project_payment_followup`.`FollowupId`,`FollowupTitle`,`FollowupDate`,`Description`,`ConductDate`,`firstName`,`lastName` FROM `project_payment_followup` ,`project_payment_followup_details`  , usermaster  where `project_payment_followup`.FollowupId = `project_payment_followup_details`.FollowupId AND usermaster.userId = `project_payment_followup`.AssignEmployee AND `project_payment_followup`.`InvoiceId` = :id");
-		$stmt->bindParam(':id', $invoiceid, PDO::PARAM_STR);
-
-		if($result = $stmt->execute()){
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				array_push($object, $row);
+			$stmt = $conn->prepare("SELECT * FROM project_payment_followup p,project_payment_followup_details pfd,user_master um WHERE p.FollowupId = pfd.FollowupId AND um.UserId = p.AssignEmployee AND p.InvoiceId = :id");
+			$stmt->bindParam(':id', $invoiceid, PDO::PARAM_STR);
+			
+			if($result = $stmt->execute()){
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+					array_push($object, $row);
+				}
 			}
-		}else{
-			return null;
-		}
+
+		 } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
 
 		$db = null;
 		return $object ;
@@ -101,55 +103,99 @@ public function loadInvoiceForProject($projid){
 
 	public function saveInvoice($data){
 		
-		$invoiceNum = AppUtil::generateId();
-		$detailId =  AppUtil::generateId();
-		$detailNo = AppUtil::generateId();
-		$taxid = AppUtil::generateId();
-	
+		//$invoiceNum = AppUtil::generateId();
+		
+		//$detailNo = AppUtil::generateId();
+		$InvoicebasicDetails = $data->Details;
+		$invoiceTaxDetails = $data->taxDetails;
+
+		$details = FALSE;
+		$taxdetail = FALSE;
+		$main = $data->Invoice;
+		$detailIdArray = [];
+		$invoiceIndex = [];
+		//print_r($main);
 		 	try{
 		 		$db = Database::getInstance();
 				$conn = $db->getConnection();
 				$conn->beginTransaction();
-				$stmt = $conn->prepare("INSERT INTO invoice(InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB, isPaymentRetention, PurchasersVATNo, PAN, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-			 			if($stmt->execute([$data->InvoiceNo, $data->QuotationId, $data->InvoiceDate, $data->InvoiceTitle, $data->TotalAmount, $data->RoundingOffFactor, $data->GrandTotal, $data->InvoiceBLOB, $data->isPaymentRetention, $data->PurchasersVATNo, $data->PAN, $data->CreatedBy]) === TRUE)
-			 			{
-			 				for($x = 0 ; $x < sizeOf($data->Quotation); $x++){
-			 				$stmt2 = $conn->prepare("INSERT INTO invoice_details(DetailID, InvoiceId, DetailNo, Title, Description, Quantity, UnitRate, Amount) VALUES(?,?,?,?,?,?,?,?)");
-			 					if($stmt2->execute([$detailId, $data->InvoiceNo, $data->Quotation[$x]->DetailNo, $data->Quotation[$x]->Title, $data->Quotation[$x]->Description, $data->Quotation[$x]->Quantity, $data->Quotation[$x]->UnitRate, $data->Quotation[$x]->Amount]) === TRUE)
-			 					{	
-			 						for($y = 0; $y<sizeOf($data->TaxJson);$y++){															//TaxId, InvoiceId, TaxName, TaxAmount, TaxPercentage
-			 						$stmt3  = $conn->prepare("INSERT INTO invoice_tax_details(TaxId, InvoiceId, TaxName, TaxAmount, TaxPercentage) VALUES(?,?,?,?,?)");
-			 							if($stmt3->execute([$taxid, $data->InvoiceNo, $data->TaxJson[$y]->taxTitle, $data->TaxJson[$y]->amount, $data->TaxJson[$y]->taxPercentage]) === FALSE)
-			 							{
-			 								$stmt4 = $conn->prepare("INSERT INTO invoice_tax_applicable_to(TaxId, DetailsId) VALUES(?,?)");
-			 									if($stmt4->execute([$taxid, $detailId]) === FALSE)
-			 									{
-			 										$conn->commit();
-			 										return "Invoice created succesfully";
-			 									}
-			 									else {
-			 										$conn->rollBack();
-			 										return "Error: invoice_tax_applicable_to<br>" . $conn->errorInfo();
-			 									}
-			 							}
-			 							else {
-			 								$conn->rollBack();
+				$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);//InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB, isPaymentRetention, PurchasersVATNo, PAN, CreatedBy, ContactPerson
+				$stmt = $conn->prepare("INSERT INTO invoice(InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB, isPaymentRetention, PurchasersVATNo, PAN, CreatedBy,ContactPerson) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
+			 			if($stmt->execute([$main->InvoiceNo, $main->QuotationId, $main->InvoiceDate, $main->InvoiceTitle, $main->TotalAmount, $main->RoundingOffFactor, $main->GrandTotal, $main->InvoiceBLOB, $main->isPaymentRetention, $main->PurchasersVATNo, $main->PAN, $main->CreatedBy,$main->ContactPerson]) === TRUE){
+			 						
+			 						for($i = 0;$i<sizeof($InvoicebasicDetails);$i++){
+						#insert  all quotation detail 
+								//print_r($quotationBasicDetails[$i]);
+									//$DetailNo = AppUtil::generateId();
+									$DetailId = AppUtil::generateId();
+									$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+									$stmt1 = $conn->prepare("INSERT INTO invoice_details(DetailID, InvoiceId, DetailNo, Title, Description, Quantity, UnitRate, Amount) VALUES(?,?,?,?,?,?,?,?)");
+										//print_r($InvoicebasicDetails[$i]);
+										if($stmt1->execute([$DetailId,$main->InvoiceNo,$i + 1,$InvoicebasicDetails[$i]->quotationItem,$InvoicebasicDetails[$i]->quotationDescription,$InvoicebasicDetails[$i]->quotationQuantity,$InvoicebasicDetails[$i]->quotationUnitRate,$InvoicebasicDetails[$i]->amount]) === TRUE){
+											//$detailIdArray.push($DetailId);	
+											array_push($detailIdArray,$DetailId);
+											array_push($invoiceIndex,$i+1);
+										}
+										else{
+											return "ERROR in saveInvoice stmt1";
+										}
+							}
 
-			 								return "Error: invoice_tax_details<br>".print_r($conn->errorInfo());
-			 							}
-			 						}
-			 					}
-			 					else {
-			 						$conn->rollBack();
-			 						return "Error: invoice_details<br>";			
-			 					}
-			 				}
-			 			}				
+							for($tx=0;$tx<sizeof($invoiceTaxDetails);$tx++){
+								$TaxId = AppUtil::generateId();
+								$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+								$stmt2 = $conn->prepare("INSERT INTO invoice_tax_details(TaxId, InvoiceId, TaxName, TaxPercentage, TaxAmount) VALUES(?,?,?,?,?)");
+									if($stmt2->execute([$TaxId,$main->InvoiceNo,$invoiceTaxDetails[$tx]->taxTitle,$invoiceTaxDetails[$tx]->taxPercentage,$invoiceTaxDetails[$tx]->amount]) === TRUE){
+										for($s = 0;$s<sizeof($invoiceTaxDetails[$tx]->taxArray);$s++){
+														
+														for($qut = 0;$qut<sizeof($invoiceIndex);$qut++){
+															if($invoiceTaxDetails[$tx]->taxArray[$s] === $invoiceIndex[$qut]){
+																#tax is present for given item of quotation
+																//echo "tax is present for object".$qut."\n";
+																//echo "tax id will be".$TaxId."\n";
+																//echo "detail no wii be ".$detailIdArray[$qut]."\n";
+																$stmt3 = $conn->prepare("INSERT INTO invoice_tax_applicable_to(TaxId, DetailsId) VALUES(?,?)");
+																if($stmt3->execute([$TaxId,$detailIdArray[$qut]]) === TRUE){
+																	$return = TRUE;
+																	//echo "inserted";
+																}
+																else{
+																	$return = FALSE;
+																	//echo "ERROR in saveQuotationDetailsAndTax stmt3";
+																}
+															}
+															else{
+																#tax is not present
+															//echo "Tax is not present \n";
+															}
+														}
+												}
+									}
+									else{
+										return "Error in saveInvoice stmt2 ";
+									}
+						}
+
+							/*echo "Printing values";
+							print_r($detailIdArray);
+							print_r($invoiceIndex);
+*/
+							}				
 		 				else
 		 				{
 							$conn->rollBack();
 							return "Error: <br>";
 		 				}
+		 					if($return === TRUE){
+				#commit
+				$conn->commit();
+				return "Success";
+			}
+			else{
+				#rollback
+				$conn->rollback();
+				return "Error ";
+			}
 
 		 	}
 		 	catch(PDOException $e){

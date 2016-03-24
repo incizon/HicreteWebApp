@@ -4,7 +4,7 @@ require_once '../Database.php';
 
 Class Project {
 	
-	public static function load($id) {
+	public function load($id) {
 		$object = array();
 		try {
 			$db = Database::getInstance();

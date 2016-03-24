@@ -133,19 +133,20 @@ public function generateDocInvoice($data){
 	try{
 			//$InvoiceNo = ;
 			$today = date("Y-m-d");
-			$contacPerson = $data->ContactPerson;
-			$taxSize = sizeof($data->TaxJson);
+			//$contacPerson = $data->ContactPerson;
+			//$taxSize = sizeof($data->TaxJson);
+			$invoiceDetails = $data->Invoice;
 
-			$rownum = sizeof($data->Quotation);
+			$rownum = sizeof($data->Details);
 
 				$templateProcessor = new \PhpOffice\PhpWord\TemplateProcessor('resources/Invoice.docx');
 
-				$templateProcessor->setValue('InvoiceNo', $data->InvoiceNo);
-				$templateProcessor->setValue('InvoiceDate', $data->InvoiceDate);
-				$templateProcessor->setValue('QuotationNo', $data->QuotationId);
-				$templateProcessor->setValue('QuotationDate', $data->QuotationDate);
-				$templateProcessor->setValue('WorkorderDate', $data->WorkOrderDate);
-				$templateProcessor->setValue('ContactPerson', $data->ContactPerson);
+				$templateProcessor->setValue('InvoiceNo', $invoiceDetails->InvoiceNo);
+				$templateProcessor->setValue('InvoiceDate', $invoiceDetails->InvoiceDate);
+				$templateProcessor->setValue('QuotationNo', $invoiceDetails->QuotationId);
+				$templateProcessor->setValue('QuotationDate', $invoiceDetails->QuotationDate);
+				$templateProcessor->setValue('WorkorderDate', $invoiceDetails->WorkOrderDate);
+				$templateProcessor->setValue('ContactPerson', "Technicia");
 
 				$templateProcessor->cloneRow('Description', $rownum);
 					for($i = 0;$i<$rownum;$i++){
@@ -156,18 +157,18 @@ public function generateDocInvoice($data){
 						$rat = "rate#".$y;
 						$amt = "Amount#".$y;
 						$templateProcessor->setValue($sr, htmlspecialchars($y, ENT_COMPAT, 'UTF-8'));
-						$templateProcessor->setValue($des, htmlspecialchars($data->Quotation[$i]->Description, ENT_COMPAT, 'UTF-8'));
-						$templateProcessor->setValue($qt, htmlspecialchars($data->Quotation[$i]->Quantity, ENT_COMPAT, 'UTF-8'));
-						$templateProcessor->setValue($rat, htmlspecialchars($data->Quotation[$i]->UnitRate, ENT_COMPAT, 'UTF-8'));
-						$templateProcessor->setValue($amt, htmlspecialchars($data->Quotation[$i]->Amount, ENT_COMPAT, 'UTF-8'));
+						$templateProcessor->setValue($des, htmlspecialchars($data->Details[$i]->quotationDescription, ENT_COMPAT, 'UTF-8'));
+						$templateProcessor->setValue($qt, htmlspecialchars($data->Details[$i]->quotationQuantity, ENT_COMPAT, 'UTF-8'));
+						$templateProcessor->setValue($rat, htmlspecialchars($data->Details[$i]->quotationUnitRate, ENT_COMPAT, 'UTF-8'));
+						$templateProcessor->setValue($amt, htmlspecialchars($data->Details[$i]->amount, ENT_COMPAT, 'UTF-8'));
 
 				}
 
-			$templateProcessor->setValue('TotalAmount', $data->TotalAmount);
-			$templateProcessor->setValue('RoundOff', $data->RoundingOffFactor);
-			$templateProcessor->setValue('GrandTotal', $data->GrandTotal);
+			$templateProcessor->setValue('TotalAmount', $invoiceDetails->TotalAmount);
+			$templateProcessor->setValue('RoundOff', $invoiceDetails->RoundingOffFactor);
+			$templateProcessor->setValue('GrandTotal', $invoiceDetails->GrandTotal);
 
-			$templateProcessor->saveAs('GeneratedDocs/Invoices/'.$data->InvoiceNo.'.docx');
+			$templateProcessor->saveAs('GeneratedDocs/Invoices/'.$invoiceDetails->InvoiceNo.'.docx');
 
 
 
