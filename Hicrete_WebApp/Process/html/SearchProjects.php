@@ -78,7 +78,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                         <td>{{project.project_manager}}</td>
 
                         <td>
-                            <a ui-sref="Process.ProjectDetails">
+                            <a ui-sref="Process.ProjectDetails({projectToView:project})">
                                 <button class="btn btn-info" title="View project details">
                                     <span class="fa fa-eye"></span>
                                 </button>

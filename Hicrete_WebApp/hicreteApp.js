@@ -367,7 +367,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/ProjectDetails',
             templateUrl:'Process/html/ProjectDetails.html',
             controller:'ProjectDetailsController',
-            params : { projectToModify: null }
+            params : { projectToView: null }
         })
 
 
