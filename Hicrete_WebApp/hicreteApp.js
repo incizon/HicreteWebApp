@@ -370,7 +370,6 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             params : { projectToView: null }
         })
 
-
         .state('Process.quotationFollowupHistory', {
             url: '/QuotationFollowupHistory',
             templateUrl: 'Process/html/QuotationFollowupHistory.html',
@@ -404,7 +403,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.viewQuotation', {
             url: '/ViewQuotation',
             templateUrl:'Process/html/ViewQuotation.html',
-            controller:'ViewQuotationDetailsController'
+            controller:'ViewQuotationDetailsController',
+            params : {quotationToView: null }
         })
 
         .state('Process.paymentHistory', {

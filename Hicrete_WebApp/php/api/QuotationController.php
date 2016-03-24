@@ -65,8 +65,30 @@ class QuotationController
      */
 
     public function getQuotationDetails($qid){
-             $Quotation = Quotation::getQuotationDetails($qid); // possible user loading method
-         return $Quotation;
+
+        try{
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+
+                if ($qid != null) {
+                    $Quotation = Quotation::getQuotationDetails($qid);
+                    if($Quotation!=null) {
+                        echo AppUtil::getReturnStatus("Successful", $Quotation);
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Quotation value is empty");
+                }
+
+
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
     }
 
    /**
@@ -76,8 +98,28 @@ class QuotationController
      */
 
     public function getQuotationTaxDetails($qid){
-             $Quotation = Quotation::getQuotationTaxDetails($qid); // possible user loading method
-         return $Quotation;
+        try{
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+
+                if ($qid != null) {
+                    $Quotation = Quotation::getQuotationTaxDetails($qid); // possible user loading method
+                    if($Quotation!=null) {
+                        echo AppUtil::getReturnStatus("Successful", $Quotation);
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Quotation value is empty");
+                }
+
+
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
     /**
@@ -103,14 +145,30 @@ class QuotationController
 
     public function getQuotationByProjectId($projectId = null)
     {
-          if ($projectId !=null) {
-             $Quotation = Quotation::loadAllQuotationByProjId($projectId); // possible user loading method
-         } else {
-             $Quotation = Quotation::loadAllQuotationByProjId($projectId);
-         }
 
-         return $Quotation;
-       
+        try{
+
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+
+                if ($projectId != null) {
+                    $Quotation = Quotation::loadAllQuotationByProjId($projectId);
+                    if($Quotation!=null) {
+                        echo AppUtil::getReturnStatus("Successful", $Quotation);
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Project value is empty");
+                }
+
+
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
     /**

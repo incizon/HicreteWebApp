@@ -104,11 +104,11 @@
                      <tr ng-repeat = "q in projectQuotations">
                          <td>{{$index + 1}}</td>
                          <td>{{q.QuotationTitle}}</td>
-                         <td>{{q.CompanyId}}</td>
+                         <td>{{q.CompanyName}}</td>
                          <td>{{q.CreationDate}}</td>
 
                          <td>
-                             <a ui-sref="Process.viewQuotation" ng-click="viewProjQuotationDetails(q)"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
+                             <a ui-sref="Process.viewQuotation({quotationToView:q})" ng-click="viewProjQuotationDetails(q)"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
                              <a ui-sref="Process.reviseQuotation" ng-click="viewProjQuotationDetails(q)"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o" ></span>Revise</button></a>
                              <a href="{{q.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
                              <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',q)"><span class="fa fa-edit"></span>Schedule Followup</button>

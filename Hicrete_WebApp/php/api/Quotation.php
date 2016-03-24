@@ -73,71 +73,80 @@ Class Quotation {
 	}
 
 	/*Get quotation by Project Id*/
-	public function loadAllQuotationByProjId($id){
+	public static function loadAllQuotationByProjId($id){
 			$object= array();
-			try{
-				$db = Database:: getInstance();
-				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * from quotation q ,project_master pm WHERE q.ProjectId = pm.ProjectId AND q.ProjectId=:id");
-				$stmt->bindparam(':id',$id ,PDO::PARAM_STR);
-					if($stmt->execute() === TRUE){
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-						array_push($object, $row);
-						}
+
+			$db = Database:: getInstance();
+			$conn = $db->getConnection();
+			$stmt = $conn->prepare("SELECT q.*,cm.`companyId`,cm.`companyName` from quotation q ,`companymaster` cm WHERE q.ProjectId =:id AND q.`companyId`=cm.`companyId`");
+			$stmt->bindparam(':id',$id ,PDO::PARAM_STR);
+				if($stmt->execute() === TRUE){
+					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+					array_push($object, $row);
 					}
-					else{
-						return "error in loadAllQuotationByProjId";
-					}
-			}
-			catch(PDOException $e){
-					return "Exception in loadAllQuotationByProjId".$e->getMessage();
-		    }
+				}
+				else{
+					return null;
+				}
+
 			$db= null;
 			return $object;
 		}
 
-			public function getQuotationDetails($qid){
-			$object= array();
-			try{
-				$db = Database:: getInstance();
-				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM quotation q JOIN quotation_details qd ON q.QuotationId = qd.QuotationId  where q.QuotationId =:id;");
-				$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
-					if($stmt->execute() === TRUE){
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-						array_push($object, $row);
-						}
-					}
-					else{
-						return "error in getQuotationDetails";
-					}
+		public static function getQuotationDetails($qid){
+		$object= array();
+
+		$db = Database:: getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT * FROM quotation q JOIN quotation_details qd ON q.QuotationId = qd.QuotationId  where q.QuotationId =:id;");
+		$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
+		if($stmt->execute() === TRUE){
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+			array_push($object, $row);
 			}
-			catch(PDOException $e){
-					return "Exception in getQuotationDetails".$e->getMessage();
-		    }
-			$db= null;
-			return $object;
 		}
+		else{
+			return null;
+		}
+
+		$db= null;
+		return $object;
+	}
 
 	public function getQuotationTaxDetails($qid){
 			$object= array();
-			try{
-				$db = Database:: getInstance();
-				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM quotation_tax_details q  WHERE q.QuotationId =:id;");
-				$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
-					if($stmt->execute() === TRUE){
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-						array_push($object, $row);
+
+			$db = Database:: getInstance();
+			$conn = $db->getConnection();
+			$stmt = $conn->prepare("SELECT * FROM quotation_tax_details q  WHERE q.QuotationId =:id;");
+			$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
+				if($stmt->execute() === TRUE){
+					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+						$result_array = array();
+						$result_array['TaxID'] = $row['TaxID'];
+						$result_array['TaxAmount'] = $row['TaxAmount'];
+						$result_array['TaxPercentage'] = $row['TaxPercentage'];
+						$result_array['TaxName'] =$row['TaxName'];
+						$stmt1 = $conn->prepare("SELECT `DetailNo` FROM `quotation_details` WHERE `DetailID` IN (SELECT `DetailsID` FROM `quotation_tax_applicable_to` WHERE `TaxID`=:taxId) order by `DetailNo` ASC");
+						$stmt1->bindparam(':taxId',$row['TaxID'] ,PDO::PARAM_STR);
+						if($stmt1->execute()){
+							$tax_array =array();
+							while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)){
+								array_push($tax_array,$row1['DetailNo']);
+							}
+
+						}else{
+							return false;
 						}
+						$result_array['DetailsNo'] =$tax_array;
+
+						array_push($object,$result_array);
 					}
-					else{
-						return "error in getQuotationTaxDetails";
-					}
-			}
-			catch(PDOException $e){
-					return "Exception in getQuotationTaxDetails".$e->getMessage();
-		    }
+				}
+				else{
+					return false;
+				}
+
 			$db= null;
 			return $object;
 		}
