@@ -455,7 +455,7 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
 
 myApp.controller('ShowLeavesController', function($scope,$http) {
 
-    $scope.leavePerPage=1;
+    $scope.leavePerPage=10;
     $scope.currentPage=1;
 
     $scope.leaves={
