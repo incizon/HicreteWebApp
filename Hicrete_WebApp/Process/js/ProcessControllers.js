@@ -215,7 +215,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 });
 
 
-myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, $filter) {
+myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, fileUpload) {
 
     var detaildata = $stateParams.projectToView;
 
@@ -284,8 +284,46 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
         EmailId: detaildata.EmailId,
         Pincode: detaildata.Pincode
     }
+    $scope.workorder = {
+        projId: $scope.projDetailsData.projectId,
+        //porjName: proj.project_name,
+        //quotationId: projDetailsData.QuotationId
+    };
+    console.log("final scope is " + $scope.workorder);
+    $scope.createWorkorder = function () {
+        console.log("IN");
+        console.log("company id is :" + JSON.stringify($scope.CompanyName));
+        var uploadQuotationLocation = "upload/Workorders/";
+        var fileName = uploadQuotationLocation + $scope.myFile.name;
+        //console.log("in createWorkorder ");//WorkOrderNo, WorkOrderName, ReceivedDate, WorkOrderBlob, ProjectId, CompanyId
+        var workorderData = '{"ProjectId":"' + $scope.workorder.projId + '","WorkOrderName":"' + $scope.workorder.title + '","ReceivedDate":"' + $scope.workorder.date + '","WorkOrderBlob":"' + fileName + '","CompanyId":"' + " " + '","QuotationId":"' + $scope.workOrderDetails.QuotationId + '"}';
+        console.log("workorder data is " + workorderData);
 
+        $.ajax({
+            type: "POST",
+            url: 'php/api/workorder',
+            data: workorderData,
+            dataType: 'json',
+            cache: false,
+            contentType: 'application/json',
+            processData: false,
 
+            success: function (data, status) {
+                alert("success in workorder creation " + data + " status is " + status);
+                alert("status" + JSON.stringify(data));
+                var file = $scope.myFile;
+                var uploadUrl = "php/api/workorder/upload";
+                fileUpload.uploadFileToUrl(file, uploadUrl);
+            },
+            error: function (data) {
+                alert("error in workorder creation " + JSON.stringify(data));
+            }
+        });
+    }
+    $scope.viewProjQuotationDetails = function (q) {
+        setInfo.set(q);
+        //alert("view data in viewProjQuotationDetails "+JSON.stringify(q));
+    }
     // console.log("data is "+JSON.stringify($scope.projDetailsData));
     $scope.viewProjQuotationDetails = function (q) {
         setInfo.set(q);
@@ -363,7 +401,13 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
         method: "GET",
         url: "php/api/quotation/" + projId
     }).then(function mySucces(response) {
-        $scope.qData = response.data;
+
+        if(response.data.status!="Successful"){
+            alert(response.data.message);
+            return;
+        }
+
+        $scope.qData = response.data.message;
         $scope.projectQuotations = [];
         var b = [];
         var length = $scope.qData.length;
@@ -372,16 +416,17 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
             b.push({
                 'QuotationTitle': $scope.qData[i].QuotationTitle,
                 'QuotationId': $scope.qData[i].QuotationId,
-                'CompanyId': $scope.qData[i].CompanyId,
-                'CreationDate': $scope.qData[i].CreationDate,
+                'CompanyId': $scope.qData[i].companyId,
+                'CompanyName': $scope.qData[i].companyName,
+                'CreationDate': $scope.qData[i].DateOfQuotation,
                 'ProjectName': $scope.qData[i].ProjectName,
                 'Subject': $scope.qData[i].Subject,
                 'RefNo': $scope.qData[i].RefNo,
                 'title': $scope.qData[i].Title,
                 'description': $scope.qData[i].Description,
-                'quantity': $scope.qData[i].Quantity,
-                'unitRate': $scope.qData[i].UnitRate,
-                'amount': $scope.qData[i].Amount,
+                //'quantity': $scope.qData[i].Quantity,
+                //'unitRate': $scope.qData[i].UnitRate,
+                //'amount': $scope.qData[i].Amount,
                 'isApproved': $scope.qData[i].isApproved,
                 'filePath': $scope.qData[i].QuotationBlob
             });
@@ -396,7 +441,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
         var projQId = q;
         console.log("qqqq " + JSON.stringify(projQId));
         setInfo.set(projQId);
-        //alert("checked"+$scope.q.QuotationId);
+        $scope.workOrderDetails=q;
+        console.log("Daya="+$scope.workOrderDetails);
     }
     /*Get Workorder by project id*/
     $http({
@@ -2128,15 +2174,15 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
 });
 
 
-myApp.controller('ViewQuotationDetailsController', function (setInfo, $scope, $http) {
-    var viewQuotDetail = setInfo.get();
+myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scope, $http) {
+    var viewQuotDetail = $stateParams.quotationToView;
+    $scope.projectName=$stateParams.projectName;
     var qId = viewQuotDetail.QuotationId;
     $scope.viewQuotationDetail = {
-        projectName: viewQuotDetail.ProjectName,
         quotationTitle: viewQuotDetail.QuotationTitle,
         companyId: viewQuotDetail.CompanyId,
+        companyName: viewQuotDetail.CompanyName,
         creationDate: viewQuotDetail.CreationDate,
-        projectName: viewQuotDetail.ProjectName,
         subject: viewQuotDetail.Subject,
         refNo: viewQuotDetail.RefNo
     }
@@ -2145,40 +2191,40 @@ myApp.controller('ViewQuotationDetailsController', function (setInfo, $scope, $h
         method: "GET",
         url: "php/api/quotation/details/" + qId
     }).then(function mySucces(response) {
-        $scope.qData = response.data;
+        if(response.data.status!="Successful"){
+            alert("Error Occurred while fetching quoation data");
+            return;
+        }
+        var qData = response.data.message;
         $scope.qDetails = [];
-        var b = [];
-        var length = $scope.qData.length;
-        //alert("length is "+$scope.qData.length);
-        $scope.getTotalAmount = function () {
-            var total = 0;
-            var amount313 = 0;
-            for (var i = 0; i < $scope.qData.length; i++) {
-                var amount313 = $scope.qData[i].Amount;
-                total = +total + +amount313;
-            }
-            console.log("totalAmount is" + total);
-            return total;
+
+        $scope.totalAmount=0;
+        for (var i = 0; i < qData.length; i++) {
+            $scope.totalAmount =$scope.totalAmount+ parseInt(qData[i].Amount);
+
+        }
+        console.log("totalAmount is" + $scope.totalAmount);
+
+        $scope.qDetails=[];
+        for (var i = 0; i < qData.length; i++) {
+            $scope.qDetails.push({
+                'quotationId': qData[i].QuotationId,
+                'quotationTitle': qData[i].QuotationTitle,
+                'dateOfQuotation':qData[i].DateOfQuotation,
+                'subject': qData[i].Subject,
+                'companyId': qData[i].CompanyId,
+                'refNo': qData[i].RefNo,
+                'title': qData[i].Title,
+                'description': qData[i].Description,
+                'unitRate': qData[i].UnitRate,
+                'amount': qData[i].Amount,
+                'quantity': qData[i].Quantity,
+                'detailNo': qData[i].DetailNo,
+                unit:qData[i].Unit
+            });
+
         }
 
-        for (var i = 0; i < length; i++) {
-            b.push({
-                'quotationId': $scope.qData[i].QuotationId,
-                'quotationTitle': $scope.qData[i].QuotationTitle,
-                'dateOfQuotation': $scope.qData[i].DateOfQuotation,
-                'subject': $scope.qData[i].Subject,
-                'companyId': $scope.qData[i].CompanyId,
-                'refNo': $scope.qData[i].RefNo,
-                'title': $scope.qData[i].Title,
-                'description': $scope.qData[i].Description,
-                'unitRate': $scope.qData[i].UnitRate,
-                'amount': $scope.qData[i].Amount,
-                'quantity': $scope.qData[i].Quantity,
-                'detailNo': $scope.qData[i].DetailNo
-            });
-            $scope.qDetails = b;
-        }
-        $scope.qDetails;
         //console.log("aaaaaaaaa "+JSON.stringify($scope.qDetails));
     }, function myError(response) {
         $scope.error = response.statusText;
@@ -2188,39 +2234,49 @@ myApp.controller('ViewQuotationDetailsController', function (setInfo, $scope, $h
         method: "GET",
         url: "php/api/quotation/taxDetails/" + qId
     }).then(function mySucces(response) {
-        $scope.qtData = response.data;
-        $scope.qTaxDetails = [];
-        var b = [];
-        var length = $scope.qtData.length;
-        //alert("length is "+$scope.qData.length);
-        $scope.getTotalTax = function () {
-            var total = 0;
-            var amount313 = 0;
-            for (var i = 0; i < $scope.qtData.length; i++) {
-                var amount313 = $scope.qtData[i].TaxAmount;
-                total = +total + +amount313;
-            }
-            console.log("totalAmount is" + total);
-            return total;
+        if(response.data.status!="Successful"){
+            alert("Error Occurred while getting tax details");
+            return;
         }
 
-        for (var i = 0; i < length; i++) {
-            b.push({
-                'quotationId': $scope.qtData[i].QuotationId,
-                'taxId': $scope.qtData[i].TaxID,
-                'taxName': $scope.qtData[i].TaxName,
-                'taxPercentage': $scope.qtData[i].TaxPercentage,
-                'taxAmount': $scope.qtData[i].TaxAmount
-            });
-            $scope.qTaxDetails = b;
+        var qtData = response.data.message;
+        $scope.qTaxDetails = [];
+        $scope.TotalTax=0;
+        for (var i = 0; i < qtData.length; i++) {
+            $scope.TotalTax =$scope.TotalTax  +parseInt(qtData[i].TaxAmount);
+
         }
-        $scope.qTaxDetails;
+        console.log("total TaxAmount is" + $scope.TotalTax);
+        $scope.qTaxDetails=[];
+        for (var i = 0; i < length; i++) {
+            var taxApplicableTo='All';
+            if(qtData[i].DetailsNo.length>0){
+                taxApplicableTo="( Item No ";
+                for(var j=0; j<qtData[i].DetailsNo.length;j++){
+                    if(j+1==qtData[i].DetailsNo.length)
+                        taxApplicableTo=taxApplicableTo+qtData[i].DetailsNo[j]+" )";
+                    else
+                        taxApplicableTo=taxApplicableTo+qtData[i].DetailsNo[j]+",";
+                }
+
+            }
+
+            $scope.qTaxDetails.push({
+                'quotationId': qtData[i].QuotationId,
+                'taxId': qtData[i].TaxID,
+                'taxName': qtData[i].TaxName,
+                'taxPercentage':qtData[i].TaxPercentage,
+                'taxAmount': qtData[i].TaxAmount,
+                taxApplicableTo :taxApplicableTo
+            });
+
+        }
+
         console.log("qTaxDetails is " + JSON.stringify($scope.qTaxDetails));
     }, function myError(response) {
         $scope.error = response.statusText;
     });
 
-//myApp.controller('ViewQuotationDetailsController',function($scope,$http){
 
 
 });
