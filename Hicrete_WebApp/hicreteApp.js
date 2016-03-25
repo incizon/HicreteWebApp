@@ -194,7 +194,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.searchExpense', {
             url: '/searchExpense',
             templateUrl: 'Expense/html/ViewCostCenter.html',
-            controller: 'costCenterSearchController'
+            controller: 'costCenterSearchController',
+            params : { costCenterForProject: null }
         })
         .state('Process.searchSegment', {
             url: '/searchSegment',

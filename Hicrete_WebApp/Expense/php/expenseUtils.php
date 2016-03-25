@@ -19,13 +19,13 @@ switch ($data->operation) {
         break;
     case "getExpenseDetails":
 //        getExpenseDetails($data->searchData, $data->searchOn);
-        getExpenseDetails();
+        getExpenseDetails($data->projectId);
         break;
 
 
 }
 
-function getExpenseDetails()
+function getExpenseDetails($projectId)
 {
     $db = Database::getInstance();
     $conn = $db->getConnection();
@@ -39,7 +39,7 @@ function getExpenseDetails()
     $segmentName="";
     $totalSegmentExpense=0;
     $result_array['SegmentExpenseDetails']=array();
-    $stmt = $conn->prepare("SELECT `budget_details`.`projectid`,`budget_details`.`budgetsegmentid`,`budget_details`.`allocatedbudget`,`budget_details`.`alertlevel`,`segmentname`,SUM(`amount`) AS totalExpense FROM `budget_details` LEFT OUTER JOIN `expense_details` ON `expense_details`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` AND `budget_details`.`projectid`='2' JOIN `budget_segment` ON `budget_segment`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` GROUP BY `budget_details`.`budgetsegmentid`");
+    $stmt = $conn->prepare("SELECT `budget_details`.`projectid`,`budget_details`.`budgetsegmentid`,`budget_details`.`allocatedbudget`,`budget_details`.`alertlevel`,`segmentname`,SUM(`amount`) AS totalExpense FROM `budget_details` LEFT OUTER JOIN `expense_details` ON `expense_details`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` AND `budget_details`.`projectid`='$projectId' JOIN `budget_segment` ON `budget_segment`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` GROUP BY `budget_details`.`budgetsegmentid`");
     if ($stmt->execute()) {
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $result_array['projectName'] = $result['projectid'];
@@ -54,7 +54,7 @@ function getExpenseDetails()
                 $segmentWiseExpense['totalSegmentExpense']=0;
             $segmentWiseExpense['alertLevel'] = $result['alertlevel'];
             $totlaAllocatedBudget=$totlaAllocatedBudget+$result['allocatedbudget'];
-            $stmt1 = $conn->prepare("SELECT expensedetailsid,`projectid`,budgetsegmentid,amount,description  FROM `expense_details` WHERE projectid='2' AND budgetsegmentid='$result[budgetsegmentid]'");
+            $stmt1 = $conn->prepare("SELECT expensedetailsid,`projectid`,budgetsegmentid,amount,description  FROM `expense_details` WHERE projectid='$projectId' AND budgetsegmentid='$result[budgetsegmentid]'");
             if ($stmt1->execute()) {
                 $segmentWiseExpense['SegmentExpense'] = array();
 
@@ -108,7 +108,7 @@ function getExpenseDetails()
 
 //    array_push($result_array,$segmentWiseExpense);
     $totalMaterialExpense=0;
-    $stmt2 = $conn->prepare("SELECT materialexpensedetailsid,materialid,amount,description  FROM `material_expense_details` WHERE projectid='2' ");
+    $stmt2 = $conn->prepare("SELECT materialexpensedetailsid,materialid,amount,description  FROM `material_expense_details` WHERE projectid='$projectId' ");
     if ($stmt2->execute()) {
         while ($result = $stmt2->fetch(PDO::FETCH_ASSOC)) {
             //GET BILL DETAILS
