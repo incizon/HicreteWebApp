@@ -405,8 +405,9 @@ myApp.service('outwardService', function () {
 
 myApp.service('ProductionBatchService', function () {
 
-    this.addProdBatchInfo = function ($scope, $http, prodBatchInfo,$rootScope) {
 
+    this.addProdBatchInfo = function ($scope, $http, prodBatchInfo,$rootScope) {
+        console.log("before submitting"+prodBatchInfo);
         //console.log(prodBatchInfo.prodcdMaterial);
         //console.log("inside controller check"+materialType);
         $('#loader').css("display","block");
