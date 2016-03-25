@@ -286,13 +286,13 @@ class ProdBatch
                              $lastId = $dbh->lastInsertId();
                              //Fetch master id from product master table
                              $this->producedGoodId=$lastId;
-                             echo "\n this is warehouse".$this->wareHouse."\n";
+                             //echo "\n this is warehouse".$this->wareHouse."\n";
                              $stmt = $dbh->prepare("INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
                                                           values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())");
                              //echo $this->prodMasterId;
                              $stmt->bindParam(':productionbatchmasterid', $this->prodMasterId, PDO::PARAM_STR,10);
                              $stmt->bindParam(':producedgoodid', $this->producedGoodId, PDO::PARAM_STR,10);
-                             echo "\n Before binding".$this->wareHouse."\n";
+                            //echo "\n Before binding".$this->wareHouse."\n";
                              $stmt->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
                              $stmt->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
                              $stmt->bindParam(':dateOfEntry', $this->dateOfEntryAftrProd, PDO::PARAM_STR, 10);
@@ -414,25 +414,26 @@ class ProdBatch
                                                     else
                                                     {
 
+                                                        //echo "inserting \n";
                                                         $stmt2= $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
                                                             values(:materialid,:warehouseid,:companyid,:totalquantity)");
-                                                        //echo "\n".$this->prodcdMaterial;
-                                                        //echo "\n".$this->wareHouse;
-                                                        //echo "\n".$this->company;
-                                                        //echo "\n".$this->quantityProdMat;
+                                                      /*  echo "\n".$this->prodcdMaterial;
+                                                        echo "\n".$this->wareHouse;
+                                                        echo "\n".$this->company;
+                                                        echo "\n".$this->quantityProdMat;*/
                                                         $stmt2->bindParam(':materialid', $this->prodcdMaterial, PDO::PARAM_STR, 10);
                                                         $stmt2->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
                                                         $stmt2->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
-                                                        $stmt2->bindParam(':quantityProdMat', $this->quantityProdMat, PDO::PARAM_STR, 10);
+                                                        $stmt2->bindParam(':totalquantity', $this->quantityProdMat, PDO::PARAM_STR, 10);
 
                                                         if($stmt2->execute())
                                                         {
-
+                                                            //echo "returning success\n";
                                                                 return 1;
                                                         }
                                                         else
                                                         {
-
+                                                            //echo "returning failure";
                                                                 return 0;
                                                         }
 

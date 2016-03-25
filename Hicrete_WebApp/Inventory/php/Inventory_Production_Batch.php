@@ -8,11 +8,7 @@ $db = Database::getInstance();
 $dbh = $db->getConnection();
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
 session_start();
-/*$hostname = 'localhost';
-$dbname='inventory';
-$username = 'admin';
-$password = 'admin';*/
-//$userId="Pranav";
+
 
 $userId = $_SESSION['token'];
 /*echo $userId;
