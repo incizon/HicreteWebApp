@@ -349,6 +349,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
 
     var projectid=$stateParams.costCenterForProject.projectId;
+    $scope.projectName=$stateParams.costCenterForProject.project_name;
     console.log($stateParams.costCenterForProject);
     $scope.searchKewords=null;
     $scope.costCenterData={};
