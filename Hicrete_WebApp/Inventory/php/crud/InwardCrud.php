@@ -275,10 +275,10 @@ class InwardData extends CommonMethods
                     if ($stmtInwardDetails->execute()) {
                         $isSuccess = true;
                         //Check if material already exist in inventory table if yes update else Insert
-                        $stmtAvailabiltyCheck = $dbh->prepare("SELECT materialid FROM inventory WHERE materialid=:materialid AND packagingType=:packagingType AND packagingSize=:packagingSize");
+                        $stmtAvailabiltyCheck = $dbh->prepare("SELECT materialid FROM inventory WHERE materialid=:materialid ");
                         $stmtAvailabiltyCheck->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
-                        $stmtAvailabiltyCheck->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
-                        $stmtAvailabiltyCheck->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
+                        //$stmtAvailabiltyCheck->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
+                        //$stmtAvailabiltyCheck->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
                         $stmtAvailabiltyCheck->execute();
                         $count = $stmtAvailabiltyCheck->rowcount();
                         if ($count != 0) {

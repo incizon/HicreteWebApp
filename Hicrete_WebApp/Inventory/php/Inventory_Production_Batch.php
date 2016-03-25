@@ -8,11 +8,7 @@ $db = Database::getInstance();
 $dbh = $db->getConnection();
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
 session_start();
-/*$hostname = 'localhost';
-$dbname='inventory';
-$username = 'admin';
-$password = 'admin';*/
-//$userId="Pranav";
+
 
 $userId = $_SESSION['token'];
 /*echo $userId;
@@ -219,14 +215,16 @@ else {
 						);
 
 					}
-					$stmt4 = $dbh->prepare("select inhouseinwardid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid from inhouse_inward_entry where productionbatchmasterid=:productionbatchmasterid");
+
+					//$stmt4 = $dbh->prepare("select inhouseinwardid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid from inhouse_inward_entry where productionbatchmasterid=:productionbatchmasterid");
+					$stmt4 = $dbh->prepare("select inhouseinwardid,producedgoodid,b.warehouseName,c.companyName,dateofentry,supervisorid from inhouse_inward_entry a,warehousemaster b,companymaster c where productionbatchmasterid=:productionbatchmasterid and b.warehouseId=a.warehouseid and a.companyid=c.companyId");
 					$stmt4->bindParam(':productionbatchmasterid', $productionbatchmasterid);
 					$stmt4->execute();
 
 					$result4 = $stmt4->fetch(PDO::FETCH_ASSOC);
 					$result1_array['inhouseinwardid'] = $result4['inhouseinwardid'];
-					$result1_array['wareHouse'] = $result4['warehouseid'];
-					$result1_array['company'] = $result4['companyid'];
+					$result1_array['wareHouse'] = $result4['warehouseName'];
+					$result1_array['company'] = $result4['companyName'];
 					$result1_array['dateOfEntryAftrProd'] = $result4['dateofentry'];
 					$result1_array['supervisorid'] = $result4['supervisorid'];
 
