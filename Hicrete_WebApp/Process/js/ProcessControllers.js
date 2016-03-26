@@ -977,7 +977,8 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
             Details: invoiceDetails,
             taxDetails: taxDetails
         };
-          console.log("Final invoice data is "+JSON.stringify(InvoiceData));
+
+        //  console.log("Final invoice data is "+JSON.stringify(InvoiceData));
         $.ajax({
             type: "POST",
             url: 'php/api/invoice',
@@ -2418,7 +2419,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
 
         $scope.errorMessage="";
         $scope.warningMessage="";
-
+        $('#loader').css("display","block");
 
         var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
 
