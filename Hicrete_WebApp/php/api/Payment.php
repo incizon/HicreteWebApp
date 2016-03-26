@@ -33,7 +33,7 @@ Class Payment {
 
 			$db = Database::getInstance();
 				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT p.PaymentDate,p.AmountPaid,pd.InstrumentOfPayment,pd.IDOfInstrument,pd.BankName,pd.BranchName,pd.city,um.FirstName,um.LastName,i.GrandTotal FROM project_payment p ,project_payment_mode_details pd, user_master um,invoice i WHERE i.InvoiceNo=p.InvoiceNo AND p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceId AND um.UserId=p.PaidTo");
+				$stmt = $conn->prepare("SELECT p.PaymentDate,p.AmountPaid,pd.InstrumentOfPayment,pd.IDOfInstrument,pd.BankName,pd.BranchName,pd.city,um.FirstName,um.LastName,i.GrandTotal FROM project_payment p ,project_payment_mode_details pd, usermaster um,invoice i WHERE i.	InvoiceNo=p.InvoiceNo AND p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceId AND um.UserId=p.PaidTo");
 				//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
 				$stmt->bindParam(':invoiceId', $InvoiceId, PDO::PARAM_STR);
 				if($result = $stmt->execute()){
