@@ -2434,6 +2434,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
                     setTimeout(function() {
                             $('#warning').css("display","none");
                     }, 3000);
+                    window.location.reload(1);
                 } else {
                     //alert(data.message);
                     $('#loader').css("display","block");

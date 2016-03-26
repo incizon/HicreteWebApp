@@ -134,7 +134,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline" pattern="[0-9]"/>
+                                    <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline" pattern="[0-9]+" />
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerLandline.$error"
@@ -179,7 +179,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo" maxlength="12"/>
                                 </div>
 
                             </div>
@@ -191,7 +191,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"  maxlength="12"/>
                                 </div>
 
                             </div>
@@ -203,7 +203,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"  maxlength="15"/>
                                 </div>
 
                             </div>
@@ -215,7 +215,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"  maxlength="10"/>
                                 </div>
 
                             </div>
