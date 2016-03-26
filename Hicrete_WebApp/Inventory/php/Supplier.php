@@ -35,8 +35,14 @@ class Supplier
         $this->pinCode=$supplier->pinCode;
         $this->pointOfContact=$supplier->pointOfContact;
         $this->officeNo=$supplier->officeNo;
+        if(isset($supplier->VATNo))
         $this->vatNo=$supplier->VATNo;
-        $this->cstNo=$supplier->CSTNo;
+        else
+         $this->vatNo="";
+        if(isset($supplier->CSTNo)) {
+            $this->cstNo = $supplier->CSTNo;
+        }else
+            $this->cstNo="";
 
     }
     public function isAvailable($dbh)

@@ -30,25 +30,6 @@
                                 </div>
                             </div>
 
-                           <!-- <div class="form-group" >
-                                <!--<span>{{$index+1}}</span>                                        <label class="col-md-3 col-xs-12 control-label">Material Type</label>
-                                <div class="col-md-6 col-xs-12">
-                                    <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                        <input type="text" name="materialType.type"  ng-model="materialType.type" class="form-control"/>
-
-
-                                        <!-- <button class="btn btn-primary pull-right"  ng-click="remove($index)" >Remove</button> 
-
-
-                                        <!-- <button class="btn btn-primary pull-right"  ng-click="addField()" >Add</button>
-                                         <button class="btn btn-primary pull-right"  ng-click="remove($index)" >Remove</button>
-                                         
-                                    </div>
-
-                                </div>
-                            </div>
--->
                             <div class="form-group" ng-repeat="mat in materialType">
                                 <!-- <span>{{$index+1}}</span> -->
                                 <label class="col-md-3 col-xs-12 control-label">Material Type</label>
@@ -65,8 +46,6 @@
                                         <li><a ng-click="remove($index)" class="panel-remove"><span class="fa fa-times"></span></a></li>
                                         </ul>
 
-                                       <!--  <button class="btn btn-primary pull-right"  ng-click="addField()" >Add</button>
-                                        <button class="btn btn-primary pull-right"  ng-click="remove($index)" >Remove</button>  -->
 
                                     </div>
                                     <div class="help-block" ng-messages="materialTypeAdd.materialType.$error" ng-show="submitted">
@@ -80,7 +59,7 @@
                         </div>
                         <div class="panel-footer" style="text-align: center;">
                             <button class="btn btn-default" type="Clear" ng-click="clear()">Clear Form</button>
-                            <button class="btn btn-primary"  ng-click="(submitted=true) && materialTypeAdd.$valid && submit(materialType)" >Submit</button>
+                            <button class="btn btn-primary"  ng-click="(submitted=true) && sizeCheck() && materialTypeAdd.$valid && submit(materialType)" >Submit</button>
                         </div>
                     </div>
                     </form>
