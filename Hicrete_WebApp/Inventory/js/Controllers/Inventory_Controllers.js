@@ -1658,6 +1658,14 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             opened:false
         }
 
+        $scope.prodDOE = function(){
+            $scope.dateOfEntry.opened = true;
+        };
+
+        $scope.dateOfEntry = {
+            opened:false
+        };
+
         if (prodBatchInfo.option == 'complete' && prodBatchInfo.tranReq != true) {
             prodBatchInfo.modeOfTransport = "";
             prodBatchInfo.vehicleNo = "";
