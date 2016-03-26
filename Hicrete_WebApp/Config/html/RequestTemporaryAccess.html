@@ -45,7 +45,7 @@
                                         <div class="col-md-6 col-xs-12 col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="date" class="form-control datepicker"  ng-model="accessRequest.fromDate" name="fromDate" required>                                            
+                                                <input type="date" class="form-control datepicker"  ng-model="accessRequest.fromDate" name="fromDate" readonly required>
                                             </div>
                                             <div class="help-block" ng-messages="requestAccessForm.fromDate.$error" ng-show="accessRequestSubmitted">
                                               <span style="color:red" ng-message="required">From Date is mandatory</span> 
@@ -57,7 +57,7 @@
                                         <div class="col-md-6 col-xs-12 col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="date" class="form-control datepicker" name="toDate" ng-model="accessRequest.toDate" required>                                            
+                                                <input type="date" class="form-control datepicker" name="toDate" ng-model="accessRequest.toDate" readonly required>
                                             </div>
                                             <div class="help-block" ng-messages="requestAccessForm.toDate.$error" ng-show="accessRequestSubmitted">
                                               <span style="color:red" ng-message="required">To Date is mandatory</span> 

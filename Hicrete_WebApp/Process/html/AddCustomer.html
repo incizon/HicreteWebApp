@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="col-md-12">
 
     <form name="customerModifyForm" class="form-horizontal" novalidate>
@@ -40,15 +49,10 @@
                                 <label class="control-label">City :</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="customerCity" ng-model="customerDetails.customer_city" required />
-                                <option value="" disabled selected>Choose City..</option>
-                                <option value="Pune">Pune</option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Nagar">Nagar</option>
-                                <option value="Nasik">Nasik</option>
-                                <option value="Pandharpur">Pandharpur</option>
-                                </select>
-
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerCity" ng-model="customerDetails.customer_city" required/>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -56,14 +60,10 @@
                                 <label class="control-label">State :</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="firmState"ng-model="customerDetails.customer_state" />
-                                <option value="" disabled selected>Choose State..</option>
-                                <option value="Delhi">Delhi</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Karnataka">Karnataka</option>
-                                <option value="Culcatta">Culcatta</option>
-                                </select>
-
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmState" ng-model="customerDetails.customer_state"/>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -71,15 +71,10 @@
                                 <label class="control-label">Country :</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="customerCountry" ng-model="customerDetails.customer_country" >
-                                    <option value="" disabled selected>Choose Country..</option>
-                                    <option value="India">India</option>
-                                    <option value="America">America</option>
-                                    <option value="South Africa">South Africa</option>
-                                    <option value="Japan">Japan</option>
-                                    <option value="Italy">Italy</option>
-                                </select>
-
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerCountry" ng-model="customerDetails.customer_country"/>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -111,12 +106,12 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-3">
-                                <label class="control-label">Phone No :</label>
+                                <label class="control-label">Mobile No :</label>
                             </div>
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone"/>
+                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone" maxlength="10"/>
                                 </div>
 
                             </div>

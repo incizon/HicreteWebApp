@@ -39,7 +39,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                    <input type="text" name="startdate" ng-model="company.startdate" class="form-control" ng-click="openCompDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="compDate.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true"/>
+                                                    <input type="text" name="startdate" ng-model="company.startdate" class="form-control" ng-click="openCompDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="compDate.opened" datepicker-options="dateOptions" show-button-bar="false"  ng-required="true" readonly/>
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.startdate.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="required">Start Date Cannot be blank</p>
