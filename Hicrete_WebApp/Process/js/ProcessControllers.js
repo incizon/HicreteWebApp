@@ -550,6 +550,14 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     var totalAmount = 0;
     var remainingTotal = 0;
 
+    $scope.quotationDate = function(){
+        $scope.showQdate.opened = true;
+    };
+
+    $scope.showQdate = {
+        opened:false
+    };
+
     $scope.projects=[];
     AppService.getAllProjects($http,$scope.projects);
 
@@ -1292,6 +1300,15 @@ myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal,$log
     /**********************/
 $scope.Projects = [];
 var project = [];
+
+    $scope.dateOfPayment = function(){
+        $scope.payDate.opened = true;
+    };
+
+    $scope.payDate = {
+        opened:false
+    };
+
 AppService.getUsers($scope,$http);
 /****************************/
             /************* got all project ********************/
