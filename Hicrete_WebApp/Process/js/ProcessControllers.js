@@ -1293,6 +1293,15 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
 });
 myApp.controller('ProjectPaymentController',function($scope,$http,$uibModal,$log,$filter,AppService){
 /**************************************************************************/
+
+    $scope.projectPayment=[];
+    $scope.animationsEnabled=true;
+    $scope.paymentReceivedFor=undefined;
+    var totalAmount  = 0;
+    $scope.AssignedPayments = [];
+    var AssignedPayment = [];
+    var paymentdetails = [];
+    $scope.projectPaymentsInvoice = [];
  $scope.paymentDetails={
         operation:""
 
@@ -1329,15 +1338,8 @@ AppService.getUsers($scope,$http);
        //     })
 
     AppService.getAllProjects($http,$scope.Projects);
+    AppService.getAllInvoicesOfProject($http,$scope.Invoices,$scope.paymentDetails.projectID);
 
-        $scope.projectPayment=[];
-    $scope.animationsEnabled=true;
-    $scope.paymentReceivedFor=undefined;
-    var totalAmount  = 0;
-    $scope.AssignedPayments = [];
-    var AssignedPayment = [];
-    var paymentdetails = [];
-     $scope.projectPaymentsInvoice = [];
    /* $scope.viewProjectPaymentDetails=function(project_id){
        
         console.log("project id is "+project_id);
@@ -1443,7 +1445,7 @@ AppService.getUsers($scope,$http);
             var data = '{"InvoiceNo":"'+paymentDetails.InvoiceNo+'","AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo.id+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'", "IDOfInstrument":"", "BankName":"", "BranchName":"", "City":""}';
         }
         else{
-            var data = '{"InvoiceNo":"'+paymentDetails.InvoiceNo+'","AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo.id+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'", "IDOfInstrument":"'+paymentDetails.uniqueNumber+'", "BankName":"'+paymentDetails.bankName+'", "BranchName":"'+paymentDetails.branchName+'", "City":""}';
+            var data = '{"InvoiceNo":"'+paymentDetails.InvoiceNo+'","AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo.id+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'", "IDOfInstrument":"'+paymentDetails.uniqueNumber+'", "BankName":"'+paymentDetails.bankName+'", "BranchName":"'+paymentDetails.branchName+'", "City":"'+paymentDetails.branchCity+'"}';
         }
         console.log("dta is "+data);
 
@@ -1489,8 +1491,8 @@ AppService.getUsers($scope,$http);
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
-                controller:  function ($scope, $uibModalInstance,paymentDetails) {
-
+                controller:  function ($scope, $uibModalInstance,paymentDetails,AppService) {
+                    AppService.getUsers($scope,$http);
 
                     $scope.paymentDetails = paymentDetails;
 

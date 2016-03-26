@@ -920,6 +920,15 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
         type: ""
     });
 
+    $scope.sizeCheck=function()
+    {
+        if($scope.materialType.length==0)
+        {
+            return 0;
+        }
+        else
+            return 1;
+    }
 
     $scope.submit = function (materialType) {
         console.log($scope.materialType);

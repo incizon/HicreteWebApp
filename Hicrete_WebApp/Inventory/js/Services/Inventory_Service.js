@@ -188,7 +188,7 @@ myApp.service('addSupplierService', function () {
                 console.log(data);
                 //$scope.warningMessage="Success";
                 if(data.msg!=""){
-                    $scope.warningMessage="Supplier Added Successfully..";
+                    $scope.warningMessage=data.msg;
                     $("#warning").css("display","block");
                     setTimeout(function () {
                         if (data.msg != ""){
@@ -204,12 +204,12 @@ myApp.service('addSupplierService', function () {
                 }
 
                 $('#loader').css("display","none");
-                //if (data.error != ""){
-                //    $scope.errorMessage=data.error;
-                //    //$('#error').css("display","block");
-                //}
-                //$scope.messages.push(data.msg);
-                //$scope.clearData(supplier, 'submit');
+                if (data.error != ""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+                $scope.messages.push(data.msg);
+                $scope.clearData(supplier, 'submit');
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
@@ -441,7 +441,9 @@ myApp.service('ProductionBatchService', function () {
                     //doShowAlert("Success", data.msg);
                     if(prodBatchInfo.option=='complete')
                     {
-                        alert(data.msg);
+                        //alert(data.msg);
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","block");
                         $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
 
                     }
