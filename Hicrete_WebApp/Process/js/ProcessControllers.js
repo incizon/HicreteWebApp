@@ -1313,20 +1313,22 @@ var project = [];
 
 AppService.getUsers($scope,$http);
 /****************************/
-            /************* got all project ********************/
-       $http.get("php/api/projects").then(function(response) {
-               //  console.log(response.data.length);
-                if(response.data != null){
-                        for(var i = 0; i<response.data.length ; i++){
-                                    project.push({
-                                                project_id: response.data[i].ProjectId,
-                                                project_name: response.data[i].ProjectName
-                                    });
-                        }
-                }
-               $scope.Projects = project;
-              // console.log("projects scope is "+JSON.stringify($scope.Projects));
-            })
+       //     /************* got all project ********************/
+       //$http.get("php/api/projects").then(function(response) {
+       //        //  console.log(response.data.length);
+       //         if(response.data != null){
+       //                 for(var i = 0; i<response.data.length ; i++){
+       //                             project.push({
+       //                                         project_id: response.data[i].ProjectId,
+       //                                         project_name: response.data[i].ProjectName
+       //                             });
+       //                 }
+       //         }
+       //        $scope.Projects = project;
+       //       // console.log("projects scope is "+JSON.stringify($scope.Projects));
+       //     })
+
+    AppService.getAllProjects($http,$scope.Projects);
 
         $scope.projectPayment=[];
     $scope.animationsEnabled=true;
