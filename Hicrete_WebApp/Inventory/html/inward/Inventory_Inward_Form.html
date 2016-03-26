@@ -185,7 +185,7 @@
                                     <td>
 
 
-                                        <input type="number" class="form-control" ng-model="materials.materialQuantity"
+                                        <input maxlength="11" type="number" class="form-control" ng-model="materials.materialQuantity"
                                                name="materialQuantity" min="1" required/>
 
                                         <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"
@@ -205,7 +205,7 @@
                                     </td>
                                     <td>
 
-                                        <input type="text" class="form-control" ng-model="materials.packagesize"
+                                        <input maxlength="20" type="text" class="form-control" ng-model="materials.packagesize"
                                                name="size"  />
 
                                         <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"

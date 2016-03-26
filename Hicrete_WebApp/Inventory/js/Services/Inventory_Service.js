@@ -441,7 +441,9 @@ myApp.service('ProductionBatchService', function () {
                     //doShowAlert("Success", data.msg);
                     if(prodBatchInfo.option=='complete')
                     {
-                        alert(data.msg);
+                        //alert(data.msg);
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","block");
                         $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
 
                     }
