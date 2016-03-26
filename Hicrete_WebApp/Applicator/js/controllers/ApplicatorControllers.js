@@ -207,8 +207,8 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
-                controller:  function ($scope, $uibModalInstance,applicatorDetails) {
-
+                controller:  function ($scope, $uibModalInstance,applicatorDetails,AppService) {
+                    AppService.getUsers($scope,$http);
                     $scope.openFollowDate = function() {
                         $scope.followup.opened = true;
                     };
