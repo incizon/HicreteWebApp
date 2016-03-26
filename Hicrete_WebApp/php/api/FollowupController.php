@@ -88,7 +88,7 @@ class FollowupController
                 return $followup;
             }
             else{
-                echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+                echo AppUtil::getReturnStatus("Unsuccessful","User Id is null");
             }
 
 
