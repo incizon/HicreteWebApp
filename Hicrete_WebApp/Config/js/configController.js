@@ -1387,6 +1387,9 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.access=[];
     $scope.roleAccessList=[];
 
+    $scope.errorMessage="";
+    $scope.warningMessage="";
+
     var data={
         operation :"getAccessForRole",
         roleId: $scope.roleId
@@ -1439,7 +1442,14 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
 
     $scope.modifyRole=function(){
         if($scope.modifyRoleForm.$pristine){
-            alert("Fields not modified");
+            //alert("Fields not modified");
+            $scope.errorMessage = "Fields not modified..";
+            $('#error').css("display","block");
+            setTimeout(function() {
+                $scope.$apply(function() {
+                        $('#error').css("display","none");
+                });
+            }, 3000);
             return;
         }
         var data={
