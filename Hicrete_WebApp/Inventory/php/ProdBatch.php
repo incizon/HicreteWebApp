@@ -105,13 +105,11 @@ class ProdBatch
 
             if($stmt->execute())
             {
-                echo "first is complete";
+               // echo "first is complete";
                    $lastId = $dbh->lastInsertId();
             //Fetch master id from product master table
                     $this->prodMasterId=$lastId;
-                /*$message="User Created successfully";
-                return $message;*/
-                //Raw material start
+                
                 for ($i=0; $i < sizeof($this->rawMaterial); $i++) 
                 {
                     $stmt2 = $dbh->prepare("select count(1) as count from inventory where materialid=:material");
@@ -119,8 +117,6 @@ class ProdBatch
                     $stmt2 ->execute();
                     $result=$stmt2->fetch(PDO::FETCH_ASSOC);
                     $count=$result['count'];
-                    //echo "count:".$count."\n";
-                    echo $this->rawMaterial[$i]->material;
                     if($count == 1)
                     {
                         $stmt2= $dbh->prepare("UPDATE inventory SET totalquantity=totalquantity- :quantity where materialid=:material");
@@ -198,176 +194,102 @@ class ProdBatch
 
                  $dbh->beginTransaction();
 
-                 $stmt = $dbh->prepare("INSERT INTO production_batch_master (BATCHNO,BATCHCODENAME,DATEOFENTRY,PRODUCTIONSTARTDATE,PRODUCTIONENDDATE,PRODUCTIONSUPERVISORID,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
-              values (:batchNo,:batchCodeName,:dateOfEntry,:startDate,:endDate,:supervisor,:lchngUserId,now(),:creUserId,now())");
 
-                 $stmt->bindParam(':batchNo', $this->batchNo, PDO::PARAM_STR,10);
-                 $stmt->bindParam(':batchCodeName', $this->batchCodeName, PDO::PARAM_STR, 10);
-                 $stmt->bindParam(':dateOfEntry', $this->dateOfEntry, PDO::PARAM_STR, 10);
-                 $stmt->bindParam(':startDate', $this->startDate, PDO::PARAM_STR, 10);
-                 $stmt->bindParam(':endDate', $this->endDate, PDO::PARAM_STR, 10);
-                 $stmt->bindParam(':supervisor', $this->supervisor, PDO::PARAM_STR, 10);
+
+                 $stmt = $dbh->prepare("INSERT INTO produced_good (productionbatchmasterid,materialproducedid,QUANTITY,PACKAGEDUNITS,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
+                                          values (:productionbatchmasterid,:prodcdMaterial,:quantityProdMat,:pckgdUnits,:lchngUserId,now(),:creUserId,now())");
+
+                 $stmt->bindParam(':productionbatchmasterid', $this->prodMasterId, PDO::PARAM_STR,10);
+                 //echo ("This is the produced material".$this->prodcdMaterial);
+                 $stmt->bindParam(':prodcdMaterial', $this->prodcdMaterial, PDO::PARAM_STR, 10);
+                 $stmt->bindParam(':quantityProdMat', $this->quantityProdMat, PDO::PARAM_STR, 10);
+                 $stmt->bindParam(':pckgdUnits', $this->pckgdUnits, PDO::PARAM_STR, 10);
+
 
                  $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
                  $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
+
+
+
 
                  if($stmt->execute())
                  {
                      //echo "first is complete";
                      $lastId = $dbh->lastInsertId();
                      //Fetch master id from product master table
-                     $this->prodMasterId=$lastId;
+                     $this->producedGoodId=$lastId;
+                     //echo "\n this is warehouse".$this->wareHouse."\n";
+                     $stmt = $dbh->prepare("INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
+                                                          values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())");
+                     //echo $this->prodMasterId;
+                     $stmt->bindParam(':productionbatchmasterid', $this->prodMasterId, PDO::PARAM_STR,10);
+                     $stmt->bindParam(':producedgoodid', $this->producedGoodId, PDO::PARAM_STR,10);
+                     //echo "\n Before binding".$this->wareHouse."\n";
+                     $stmt->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
+                     $stmt->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
+                     $stmt->bindParam(':dateOfEntry', $this->dateOfEntryAftrProd, PDO::PARAM_STR, 10);
+                     $stmt->bindParam(':supervisorid', $this->supervisor, PDO::PARAM_STR, 10);
 
-                     for ($i=0; $i < sizeof($this->rawMaterial); $i++)
+
+                     $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
+                     $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
+
+                     //$stmt->execute();
+
+
+                     if($stmt->execute())
                      {
-                         $stmt2 = $dbh->prepare("select count(1) as count from inventory where materialid=:material");
-                         $stmt2->bindParam(':material', $this->rawMaterial[$i]->material, PDO::PARAM_STR,10);
-                         $stmt2 ->execute();
-                         $result=$stmt2->fetch(PDO::FETCH_ASSOC);
-                         $count=$result['count'];
-                         //echo "count:".$count."\n";
-                         //echo $this->rawMaterial[$i]->material;
-                         if($count == 1)
-                         {
-                             $stmt2= $dbh->prepare("UPDATE inventory SET totalquantity=totalquantity- :quantity where materialid=:material");
-                             $stmt2->bindParam(':quantity', $this->rawMaterial[$i]->quantity, PDO::PARAM_STR,10);
-                             $stmt2->bindParam(':material', $this->rawMaterial[$i]->material, PDO::PARAM_STR,10);
-                             $stmt2->execute();
+                         //echo "\n dusra zalai bgh";
+                         $lastId = $dbh->lastInsertId();
+                         //Fetch master id from product master table
+                         $this->inhouseInwardId=$lastId;
+
+                         if ($this->tranReq) {
+                             //echo "\nthis is transport";
+                             if($this->addToInhouseTransport($dbh,$userId)){
+
+                             }
+                             else{
+
+                                 $dbh->rollBack();
+                                 return 0;
+                             }
+                             # code...
                          }
-                         else
+                         if($this->insertToInventory($dbh,$userId))
                          {
-                             //echo "not done yar";
+                             // echo "\n Inventory zala na bhau";
+                             $dbh->commit();
+                             return 1;
+                         }
+                         else {
+
                              $dbh->rollBack();
                              return 0;
                          }
+                         $dbh->commit();
+                         return 1;
 
-
-                         $stmt1 = $dbh->prepare("INSERT INTO production_raw_materials_details (productionbatchmasterid,materialid,quantity,lchnguserid,lchngtime,creuserid,cretime)
-                         values (:prodMasterId,:material,:quantity,:lchnguserid,now(),:creuserid,now())");
-
-                         $stmt1->bindParam(':prodMasterId', $this->prodMasterId, PDO::PARAM_STR,10);
-                         $stmt1->bindParam(':material', $this->rawMaterial[$i]->material, PDO::PARAM_STR,10);
-                         $stmt1->bindParam(':quantity', $this->rawMaterial[$i]->quantity, PDO::PARAM_STR,10);
-                         $stmt1->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-                         $stmt1->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
-                         if(!$stmt1->execute())
-                             break;
                      }
-                     if ($i!=(sizeof($this->rawMaterial)))
+                     else
                      {
 
                          $dbh->rollBack();
                          return 0;
                      }
-                     else
-                     {
-
-                         //$dbh->commit();
-                        // return 1;
-                         $stmt = $dbh->prepare("INSERT INTO produced_good (productionbatchmasterid,materialproducedid,QUANTITY,PACKAGEDUNITS,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
-                                          values (:productionbatchmasterid,:prodcdMaterial,:quantityProdMat,:pckgdUnits,:lchngUserId,now(),:creUserId,now())");
-
-                         $stmt->bindParam(':productionbatchmasterid', $this->prodMasterId, PDO::PARAM_STR,10);
-                         //echo ("This is the produced material".$this->prodcdMaterial);
-                         $stmt->bindParam(':prodcdMaterial', $this->prodcdMaterial, PDO::PARAM_STR, 10);
-                         $stmt->bindParam(':quantityProdMat', $this->quantityProdMat, PDO::PARAM_STR, 10);
-                         $stmt->bindParam(':pckgdUnits', $this->pckgdUnits, PDO::PARAM_STR, 10);
-
-
-                         $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
-                         $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
 
 
 
-
-                         if($stmt->execute())
-                         {
-                             //echo "first is complete";
-                             $lastId = $dbh->lastInsertId();
-                             //Fetch master id from product master table
-                             $this->producedGoodId=$lastId;
-                             //echo "\n this is warehouse".$this->wareHouse."\n";
-                             $stmt = $dbh->prepare("INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
-                                                          values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())");
-                             //echo $this->prodMasterId;
-                             $stmt->bindParam(':productionbatchmasterid', $this->prodMasterId, PDO::PARAM_STR,10);
-                             $stmt->bindParam(':producedgoodid', $this->producedGoodId, PDO::PARAM_STR,10);
-                            //echo "\n Before binding".$this->wareHouse."\n";
-                             $stmt->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
-                             $stmt->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
-                             $stmt->bindParam(':dateOfEntry', $this->dateOfEntryAftrProd, PDO::PARAM_STR, 10);
-                             $stmt->bindParam(':supervisorid', $this->supervisor, PDO::PARAM_STR, 10);
-
-
-                             $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
-                             $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
-
-                             //$stmt->execute();
-
-
-                             if($stmt->execute())
-                             {
-                                 //echo "\n dusra zalai bgh";
-                                 $lastId = $dbh->lastInsertId();
-                                 //Fetch master id from product master table
-                                 $this->inhouseInwardId=$lastId;
-
-                                 if ($this->tranReq) {
-                                     //echo "\nthis is transport";
-                                     if($this->addToInhouseTransport($dbh,$userId)){
-
-                                     }
-                                     else{
-
-                                         $dbh->rollBack();
-                                         return 0;
-                                     }
-                                     # code...
-                                 }
-                                 if($this->insertToInventory($dbh,$userId))
-                                 {
-                                     // echo "\n Inventory zala na bhau";
-                                     $dbh->commit();
-                                     return 1;
-                                 }
-                                 else {
-
-                                     $dbh->rollBack();
-                                     return 0;
-                                 }
-                                 $dbh->commit();
-                                 return 1;
-
-                             }
-                             else
-                             {
-
-                                 $dbh->rollBack();
-                                 return 0;
-                             }
-
-
-
-                             //Inhouse Inward End
-                             $dbh->commit();
-                             return 1;
-                         }
-                         else
-                         {
-                             $dbh->rollBack();
-                             return 0;
-                         }
-                     }
-                     //Raw maaterial end
-
+                     //Inhouse Inward End
+                     $dbh->commit();
+                     return 1;
                  }
                  else
                  {
-                     /*$message="Issues while adding Initial details of Production Batch ";
-                     return $message;*/
                      $dbh->rollBack();
                      return 0;
                  }
+
 
 
 

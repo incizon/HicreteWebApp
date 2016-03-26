@@ -1512,6 +1512,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             }
             else
             {
+                qty=0;
                 $scope.availableTotalquantity=0;
             }
         }
@@ -1657,6 +1658,14 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         $scope.showPicker = {
             opened:false
         }
+
+        $scope.prodDOE = function(){
+            $scope.dateOfEntry.opened = true;
+        };
+
+        $scope.dateOfEntry = {
+            opened:false
+        };
 
         if (prodBatchInfo.option == 'complete' && prodBatchInfo.tranReq != true) {
             prodBatchInfo.modeOfTransport = "";
