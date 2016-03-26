@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
         <div class="row">
                         <div class="col-md-12">
                             
@@ -8,7 +17,6 @@
                                     <h3 class="panel-title"><strong>Material</strong> Expenses</h3>
                                 </div>
                                 <!--End of form heading section-->
-                                
                                 <div class="panel-body">                              
                                     <form name="materialExpenseForm" class="form-horizontal" novalidate>  
                                                                   
@@ -142,7 +150,7 @@
                                                     <div class="col-md-7">                                       
                                                     <div class="input-group col-md-8">
                                                      <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                        <input   name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control datepicker" required/>
+                                                        <input  name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control" ng-click="billDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="dateOfBill.opened" datepicker-options="dateOptions" show-button-bar="true"  ng-required="true" readonly/>
                                                     </div> 
                                                         <div class="help-block" ng-messages="materialBillForm.billDate.$error" ng-show="materialExpenseClicked">
                                                             <p style="color:red" ng-message="required">Date Of Bill cannot be blank</p>
@@ -160,17 +168,18 @@
                                 
                                 <!--End of form container row-->
 
+
+                            </div>
                                 <!--Start of buttons section-->
                                 <div class="panel-footer">
                                     <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true) &&  ( materialExpenseForm.$valid && (!expenseDetails.isBillApplicable || materialBillForm.$valid ))  &&  addMaterialExpense()">Submit</button>
-                                        
-                                    <button class="btn  btn-default pull-right">Clear Form</button> 
+
+                                    <button class="btn  btn-default pull-right">Clear Form</button>
                                 </div>
                                 <!--End of buttons section-->
-                            </div>
-                            <!--End of form section-->
+
                              </form>
-                            
+                                <!--End of form section-->
                         </div>
                     </div>
             </div>
