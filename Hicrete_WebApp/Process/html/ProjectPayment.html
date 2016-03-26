@@ -27,7 +27,7 @@
                                 <select class="form-control" name="ProjectName" ng-model="paymentDetails.projectID" ng-change="viewProjectPaymentDetails(paymentDetails.projectID)" required/>
 
                                 <option value="" disabled selected>Choose Project</option>
-                                <option ng-repeat="project in Projects" value="{{project.project_id }}">{{project.project_name}}</option>
+                                <option ng-repeat="project in Projects" value="{{project.id }}">{{project.name}}</option>
                                 </select>
                                 <div class="help-block"
                                      ng-messages="ProjectPaymentDetailsForm.ProjectName.$error"

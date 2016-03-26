@@ -80,8 +80,24 @@ class FollowupController
      */
 
     public function CreateQuotationFollowup($quotationId,$data){
-             $followup = Followup::CreateQuotationFollowup($quotationId,$data); // possible user loading method
-         return $followup;
+        try{
+
+            $userId=AppUtil::getLoggerInUserId();
+            if($userId!=null){
+                $followup = Followup::CreateQuotationFollowup($quotationId,$data,$userId); // possible user loading method
+                return $followup;
+            }
+            else{
+                echo AppUtil::getReturnStatus("Unsuccessful","User Id is null");
+            }
+
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
     }
 
 }

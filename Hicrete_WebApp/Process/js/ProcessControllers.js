@@ -348,7 +348,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
                     // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
                     var FollowupDate = $filter('date')($scope.applicatorDetails.followupdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
                     var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
-                    var FollowupTitle = "Quotation followup";
+                    var FollowupTitle = $scope.applicatorDetails.followTitle;
+
                     var CreatedBy = 1;
                     var date = new Date();
                     var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
@@ -1312,20 +1313,22 @@ var project = [];
 
 AppService.getUsers($scope,$http);
 /****************************/
-            /************* got all project ********************/
-       $http.get("php/api/projects").then(function(response) {
-               //  console.log(response.data.length);
-                if(response.data != null){
-                        for(var i = 0; i<response.data.length ; i++){
-                                    project.push({
-                                                project_id: response.data[i].ProjectId,
-                                                project_name: response.data[i].ProjectName
-                                    });
-                        }
-                }
-               $scope.Projects = project;
-              // console.log("projects scope is "+JSON.stringify($scope.Projects));
-            })
+       //     /************* got all project ********************/
+       //$http.get("php/api/projects").then(function(response) {
+       //        //  console.log(response.data.length);
+       //         if(response.data != null){
+       //                 for(var i = 0; i<response.data.length ; i++){
+       //                             project.push({
+       //                                         project_id: response.data[i].ProjectId,
+       //                                         project_name: response.data[i].ProjectName
+       //                             });
+       //                 }
+       //         }
+       //        $scope.Projects = project;
+       //       // console.log("projects scope is "+JSON.stringify($scope.Projects));
+       //     })
+
+    AppService.getAllProjects($http,$scope.Projects);
 
         $scope.projectPayment=[];
     $scope.animationsEnabled=true;
@@ -2048,46 +2051,48 @@ myApp.controller('AttachWorkorderController', function ($scope, $http, myService
 });
 
 
-myApp.controller('QuotationFollowupHistoryController', function ($scope, $http) {
+myApp.controller('QuotationFollowupHistoryController', function ($scope, $http,AppService) {
     $scope.projects = [];
     var project = [];
 
-    $http.get("php/api/projects").then(function (response) {
-        // console.log(response.data.length);
-        if (response.data != null) {
-            for (var i = 0; i < response.data.length; i++) {
-                project.push({
-                    id: response.data[i].ProjectId,
-                    name: response.data[i].ProjectName
-
-                });
-            }
-        }
-
-        $scope.projects = project;
-        // console.log("projects scope is "+JSON.stringify($scope.projects));
-
-    })
+    AppService.getAllProjects($http,$scope.projects);
+    //$http.get("php/api/projects").then(function (response) {
+    //    // console.log(response.data.length);
+    //    if (response.data != null) {
+    //        for (var i = 0; i < response.data.length; i++) {
+    //            project.push({
+    //                id: response.data[i].ProjectId,
+    //                name: response.data[i].ProjectName
+    //
+    //            });
+    //        }
+    //    }
+    //
+    //    $scope.projects = project;
+    //    // console.log("projects scope is "+JSON.stringify($scope.projects));
+    //
+    //})
 
 //console.log("in QuotationFollowupHistoryController");
-    $scope.selectProject = function () {
+    $scope.selectProject = function (projectId) {
         $scope.quotations = [];
         var quotation = [];
 
-        //console.log("changed"+$scope.projectID.id);
-        $http.get("php/api/quotation/" + $scope.projectID.id).then(function (response) {
-            // console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    quotation.push({
-                        id: response.data[i].ProjectId,
-                        name: response.data[i].ProjectName
-                    });
-                }
-            }
-            $scope.quotations = quotation;
-            // console.log("quotation scope is "+JSON.stringify($scope.quotations));
-        })
+        console.log("changed"+projectId);
+        AppService.getAllQuotationOfProject($http,$scope.quotations,projectId);
+        //$http.get("php/api/quotation/" + $scope.projectID.id).then(function (response) {
+        //    // console.log(response.data.length);
+        //    if (response.data != null) {
+        //        for (var i = 0; i < response.data.length; i++) {
+        //            quotation.push({
+        //                id: response.data[i].ProjectId,
+        //                name: response.data[i].ProjectName
+        //            });
+        //        }
+        //    }
+        //    $scope.quotations = quotation;
+        //    // console.log("quotation scope is "+JSON.stringify($scope.quotations));
+        //})
     }
 
     $scope.selectQuotation = function () {
@@ -2155,7 +2160,7 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
 
 });
 
-myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $http) {
+myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $http,AppService) {
 
     $scope.projects = [];
 
