@@ -229,6 +229,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
+        console.log($scope.selectedProduct);
     }
     /**********************************************************************************
      *End of Getter
@@ -1322,6 +1323,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
         $scope.viewMaterials = $scope.selectedProduct.materialDetails;
+        console.log($scope.selectedProduct);
 
     }
     /*************************************************

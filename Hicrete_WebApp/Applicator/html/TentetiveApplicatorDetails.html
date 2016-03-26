@@ -171,7 +171,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="vatNumber" ng-model="applicatorDetails.vatnumber" pattern="[0-9]{11}(V)" maxlength=12 required />
+                                <input type="text" class="form-control" name="vatNumber" ng-model="applicatorDetails.vatnumber" pattern="[0-9]{11}(V)" maxlength=12  />
                             </div> 
                              <div class="help-block"
                                  ng-messages="applicatorForm.vatNumber.$error"
@@ -192,7 +192,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber"  maxlength=12  required />
+                                <input type="text" class="form-control" name="cstNumber" ng-model="applicatorDetails.cstnumber"  maxlength=12   />
                             </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.cstNumber.$error"
@@ -213,7 +213,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="seviceTaxNumber" ng-model="applicatorDetails.servicetaxnumber"  maxlength=15   required />
+                                <input type="text" class="form-control" name="seviceTaxNumber" ng-model="applicatorDetails.servicetaxnumber"  maxlength=15  />
                             </div>            
                             <div class="help-block"
                                  ng-messages="applicatorForm.seviceTaxNumber.$error"
@@ -234,7 +234,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                 <input type="text" class="form-control" name="panNumber" ng-model="applicatorDetails.pannumber"
-                                       maxlength=10  required />
+                                       maxlength=10  />
                             </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.panNumber.$error"
@@ -254,7 +254,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="pointOfContact" ng-model="applicatorDetails.pointofcontact" pattern="[a-zA-Z0-9 ]+" minlength=2  required/>
+                                <input type="text" class="form-control" name="pointOfContact" ng-model="applicatorDetails.pointofcontact" pattern="[a-zA-Z0-9 ]+" minlength=2 />
                             </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.pointOfContact.$error"
@@ -275,7 +275,7 @@
                         <div class="col-md-9"><gf></gf>
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno" pattern="[0-9]+" maxlength=10  minlength=10 required />
+                                <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno" pattern="[0-9]+" maxlength=10  minlength=10  />
                             </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.pointContactNo.$error"
