@@ -2418,13 +2418,14 @@ myApp.controller('CustomerController', function ($scope, $http) {
 
         $scope.errorMessage="";
         $scope.warningMessage="";
-        $('#loader').css("display","block");
+
 
         var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
 
         $http.post('php/api/customer', custData)
             .success(function (data, status, headers) {
                 if (data.status == "Successful") {
+                    $('#loader').css("display","block");
                     $scope.postCustData = data;
                     $('#loader').css("display","none");
                     //alert("Customer created Successfully");
@@ -2435,6 +2436,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
                     }, 3000);
                 } else {
                     //alert(data.message);
+                    $('#loader').css("display","block");
                     $('#loading').css("display","none");
                     $scope.errorMessage = data.message;
                     $('#error').css("display","block");
@@ -2444,6 +2446,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
                 }
             })
             .error(function (data, status, header) {
+                $('#loader').css("display","block");
                 $scope.ResponseDetails = "Data: " + data;
                 $('#loading').css("display","none");
                 $scope.errorMessage = "Customer not created..";
