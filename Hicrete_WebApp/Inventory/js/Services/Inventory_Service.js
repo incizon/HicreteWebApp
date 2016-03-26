@@ -297,7 +297,7 @@ myApp.service('inwardService', function () {
                 $scope.warningMessage=data.msg;
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
+                    //$('#warning').css("display","block");
                     alert(data.msg);
                 }
 
@@ -405,8 +405,9 @@ myApp.service('outwardService', function () {
 
 myApp.service('ProductionBatchService', function () {
 
-    this.addProdBatchInfo = function ($scope, $http, prodBatchInfo,$rootScope) {
 
+    this.addProdBatchInfo = function ($scope, $http, prodBatchInfo,$rootScope) {
+        console.log("before submitting"+prodBatchInfo);
         //console.log(prodBatchInfo.prodcdMaterial);
         //console.log("inside controller check"+materialType);
         $('#loader').css("display","block");
@@ -446,12 +447,16 @@ myApp.service('ProductionBatchService', function () {
                     }
                     if(data.msg!=""){
                         $scope.warningMessage=data.msg;
+                        alert(data.msg);
                         $('#warning').css("display","block");
+                        $scope.submitted=false;
+                        window.location="dashboard.php#/Inventory";
                     }
                     setTimeout(function() {
                         $scope.$apply(function() {
                             if(data.msg!=""){
                                 $('#warning').css("display","none");
+
                             }
                         });
                     }, 3000);
@@ -460,9 +465,14 @@ myApp.service('ProductionBatchService', function () {
                 else if (data.error != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlertFailure("Failure", data.error);
                     $scope.errorMessage=data.error;
+                    alert(data.error);
                     $('#error').css("display","block");
+                    $scope.submitted=false;
 
+                    window.location="dashboard.php#/Inventory";
                 }
+                $scope.submitted=false;
+
                 $scope.step = 1;
                 $scope.clear('All');
 

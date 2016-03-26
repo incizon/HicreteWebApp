@@ -22,7 +22,7 @@
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
                                                         <select style="width: 133%;" class="btn dropdown-toggle selectpicker btn-default" name="materialProduced" ng-model="prodBatchInfo.prodcdMaterial" required>
-                                                            <option value="" disabled selected>Select</option>
+                                                            <option value="" disabled selected>Select Material</option>
                                                             <option ng-repeat="x in existingMaterials" 
                                                                       value={{x.materialid}}>{{x.productname}}
                                                                    </option>
@@ -39,7 +39,7 @@
                                                 <div class="col-md-9">                                            
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input maxlength="11" style="width: 66%;" type="text" name="quantity" ng-model="prodBatchInfo.quantityProdMat" class="form-control" required/>
+                                                        <input maxlength="11" style="width: 66%;" type="number" name="quantity" ng-model="prodBatchInfo.quantityProdMat" class="form-control" required/>
                                                     </div>
                                                     <div class="help-block" ng-messages="prodBatchOutwardForm.quantity.$error" ng-show="submitted">
                                                         <p style="color:red" ng-message="required">Please enter quantity</p>

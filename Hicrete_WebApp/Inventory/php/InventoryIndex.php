@@ -217,8 +217,8 @@
                 $inventoryData['materialName']=$material;
                 $warehouseId=$result2['warehouseid'];
                 $companyId=$result2['companyid'];
-                $inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($warehouseId);
-                $inventoryData['warehouseName']=DatabaseCommonOperations::getWarehouseName($companyId);
+                $inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
+                $inventoryData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
 
                 array_push($json_array,$inventoryData);
             }

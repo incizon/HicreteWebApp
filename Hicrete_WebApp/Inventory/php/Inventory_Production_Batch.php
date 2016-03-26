@@ -8,11 +8,7 @@ $db = Database::getInstance();
 $dbh = $db->getConnection();
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
 session_start();
-/*$hostname = 'localhost';
-$dbname='inventory';
-$username = 'admin';
-$password = 'admin';*/
-//$userId="Pranav";
+
 
 $userId = $_SESSION['token'];
 /*echo $userId;
@@ -77,35 +73,36 @@ else {
 			} else if ($prodBatchObj->step == '3') {
 
 				if (!$prodBatchObj->checkAvlblBatchNo($dbh)) {
-					if ($message = $prodBatchObj->addToProdBatchMaster($dbh, $userId)) {
-						//echo ("Check1");
-						if ($prodBatchObj->addToProducedGood($dbh, $userId)) {
-							//$log->info(" [".$userId."] :"."Production Batch Added successfully");
-							$message = "Data inserted successfully";
-							//echo json_encode($message);
-							$arr = array('msg' => $message, 'error' => "");
-							$jsn = json_encode($arr);
-							echo($jsn);
 
-							//$prodBatchObj->addToInhouseInward($dbh,$userId);
-							//$prodBatchObj->addToInhouseTransport($dbh,$userId);
-						} else {
-							//$log->error(" [".$userId."] :"."Error while inserting production batch");
-							$message = "Error While adding Produced good ";
-							//echo json_encode($message);
-							$arr = array('msg' => '', 'error' => $message);
-							$jsn = json_encode($arr);
-							echo($jsn);
-						}
+					if($prodBatchObj->addToProdBatchMaster($dbh, $userId)) {
+								if ($prodBatchObj->addToProducedGood($dbh, $userId)) {
+									//echo ("Check1");
 
-					} else {
-						//$log->error(" [".$userId."] :"."Error while inserting production batch");
-						$message = "Error while Initiating production batch";
+									//$log->info(" [".$userId."] :"."Production Batch Added successfully");
+									$message = "Data inserted successfully";
+									//echo json_encode($message);
+									$arr = array('msg' => $message, 'error' => "");
+									$jsn = json_encode($arr);
+									echo($jsn);
+
+								} else {
+									//$log->error(" [".$userId."] :"."Error while inserting production batch");
+									$message = "Error While adding Produced good Please check incomplete production batch for initialised production batch";
+									//echo json_encode($message);
+									$arr = array('msg' => '', 'error' => $message);
+									$jsn = json_encode($arr);
+									echo($jsn);
+								}
+					}
+					else
+					{
+						$message = "Error while initialising production batch";
 						$arr = array('msg' => '', 'error' => $message);
 						$jsn = json_encode($arr);
 						echo($jsn);
 
 					}
+
 				} else {
 					//$log->error(" [".$userId."] :"."Error while inserting production batch");
 					$message = "Production Batch no already exists Please Insert new BatchNo";
@@ -227,14 +224,16 @@ else {
 						);
 
 					}
-					$stmt4 = $dbh->prepare("select inhouseinwardid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid from inhouse_inward_entry where productionbatchmasterid=:productionbatchmasterid");
+
+					//$stmt4 = $dbh->prepare("select inhouseinwardid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid from inhouse_inward_entry where productionbatchmasterid=:productionbatchmasterid");
+					$stmt4 = $dbh->prepare("select inhouseinwardid,producedgoodid,b.warehouseName,c.companyName,dateofentry,supervisorid from inhouse_inward_entry a,warehousemaster b,companymaster c where productionbatchmasterid=:productionbatchmasterid and b.warehouseId=a.warehouseid and a.companyid=c.companyId");
 					$stmt4->bindParam(':productionbatchmasterid', $productionbatchmasterid);
 					$stmt4->execute();
 
 					$result4 = $stmt4->fetch(PDO::FETCH_ASSOC);
 					$result1_array['inhouseinwardid'] = $result4['inhouseinwardid'];
-					$result1_array['wareHouse'] = $result4['warehouseid'];
-					$result1_array['company'] = $result4['companyid'];
+					$result1_array['wareHouse'] = $result4['warehouseName'];
+					$result1_array['company'] = $result4['companyName'];
 					$result1_array['dateOfEntryAftrProd'] = $result4['dateofentry'];
 					$result1_array['supervisorid'] = $result4['supervisorid'];
 

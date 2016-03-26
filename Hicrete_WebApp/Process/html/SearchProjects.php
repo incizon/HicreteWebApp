@@ -48,15 +48,15 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
         </div><br>
         <div class="row">
 
-                <div class="col-md-4">
-                    <input type="checkbox" ng-model="sortByPayment" name="sort" value="true"> Payment
-                </div>
-                <div class="col-md-4">
-                    <input type="checkbox" ng-model="sortByQuotation" name="sort" value="true" >  Quotation
-                </div>
-                <div class="col-md-4">
-                    <input type="checkbox" ng-model="sortByCurrentWorking" name="sort" value="true">  Currently Working
-                </div>
+<!--                <div class="col-md-4">-->
+<!--                    <input type="checkbox" ng-model="sortByPayment" name="sort" value="true"> Payment-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <input type="checkbox" ng-model="sortByQuotation" name="sort" value="true" >  Quotation-->
+<!--                </div>-->
+<!--                <div class="col-md-4">-->
+<!--                    <input type="checkbox" ng-model="sortByCurrentWorking" name="sort" value="true">  Currently Working-->
+<!--                </div>-->
             </div><br>
 
             <div class="table-responsive push-up-10">
@@ -99,7 +99,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                                 }
                             ?>
 
-                            <a ui-sref="Process.searchExpense">
+                            <a ui-sref="Process.searchExpense({costCenterForProject:project})">
                                 <button class="btn btn-primary" title="View cost center">
                                     <span class="fa fa-eye"></span>
                                     Cost center
