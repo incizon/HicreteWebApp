@@ -1512,6 +1512,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             }
             else
             {
+                qty=0;
                 $scope.availableTotalquantity=0;
             }
         }
