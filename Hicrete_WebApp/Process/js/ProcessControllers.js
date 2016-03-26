@@ -38,7 +38,12 @@ myApp.directive('fileModel', ['$parse', function ($parse) {
 myApp.service('fileUpload', ['$http', function ($http) {
 
     this.uploadFileToUrl = function (file, uploadUrl) {
-        alert("File upload started");
+        //alert("File upload started");
+        $scope.warningMessage = "File upload started..";
+        $('#warning').css("display", "block");
+        setTimeout(function () {
+            $('#warning').css("display", "none");
+        }, 1000);
         var fd = new FormData();
         fd.append('file', file);
 
@@ -200,14 +205,28 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 
         $http.post('php/api/projects', projectData)
             .success(function (data, status, headers) {
+                $('#loader').css("display", "block");
                 //$scope.PostDataResponse = data;
-                alert(data.message);
+                $('#loader').css("display", "none");
+                $scope.warningMessage = data.message;
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                    window.location.reload(1);
+                }, 3000);
+
+                //alert(data.message);
 
             })
             .error(function (data, status, header) {
                 //$scope.ResponseDetails = "Data: " + data;
                 console.log(data);
-                alert(data);
+                $scope.errorMessage = data;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
+                //alert(data);
             });
     }
 
@@ -657,7 +676,17 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             processData: false,
 
             success: function (data) {
-                alert("status" + JSON.stringify(data));
+                $('#loader').css("display", "block");
+                //$scope.PostDataResponse = data;
+                $('#loader').css("display", "none");
+                $scope.warningMessage = JSON.stringify(data);
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                    window.location.reload(1);
+                }, 3000);
+
+                //alert("status" + JSON.stringify(data));
                 var file = $scope.myFile;
                 var uploadUrl = "php/api/quotation/upload";
                 fileUpload.uploadFileToUrl(file, uploadUrl);
@@ -2366,7 +2395,9 @@ myApp.controller('CustomerController', function ($scope, $http) {
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                         $('#warning').css("display", "none");
+                        window.location.reload(1);
                     }, 3000);
+
                 } else {
                     //alert(data.message);
                     $('#loader').css("display", "block");
