@@ -2416,20 +2416,42 @@ myApp.controller('CustomerController', function ($scope, $http) {
     $scope.createCustomer = function () {
         var date = new Date();
 
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
 
         $http.post('php/api/customer', custData)
             .success(function (data, status, headers) {
                 if (data.status == "Successful") {
                     $scope.postCustData = data;
-                    alert("Customer created Successfully");
+                    $('#loader').css("display","none");
+                    //alert("Customer created Successfully");
+                    $scope.warningMessage = "Customer created Successfully";
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                            $('#warning').css("display","none");
+                    }, 3000);
                 } else {
-                    alert(data.message);
+                    //alert(data.message);
+                    $('#loading').css("display","none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $('#error').css("display","none");
+                    }, 3000);
                 }
             })
             .error(function (data, status, header) {
                 $scope.ResponseDetails = "Data: " + data;
-                alert("Error Occurred:" + data);
+                $('#loading').css("display","none");
+                $scope.errorMessage = "Customer not created..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                }, 3000);
+                //alert("Error Occurred:" + data);
             });
     }
 

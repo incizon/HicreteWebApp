@@ -21,7 +21,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.OutwardNumber"
+                                            <input maxlength="50" type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.OutwardNumber"
                                                    name="OutwardNumber" required/>
                                         </div>
                                         <div class="help-block" ng-messages="outwardMaterialForm.OutwardNumber.$error" ng-show="submitted">
@@ -49,7 +49,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.suppervisor" name="suppervisor" required/>
+                                            <input maxlength="20" type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.suppervisor" name="suppervisor" required/>
                                         </div>
                                         <div class="help-block" ng-messages="outwardMaterialForm.suppervisor.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please enter suppervisor name</p>
@@ -153,7 +153,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <input type="number" min="1" ng-disabled="availableTotalquantity==0" class="form-control"
+                                        <input maxlength ="11" type="number" min="1" ng-disabled="availableTotalquantity==0" class="form-control"
                                                ng-model="materials.materialQuantity" name="materialQuantity" required/>
                                         <div class="help-block" ng-messages="outwardMaterialForm.materialQuantity.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please enter material quantity</p>
@@ -167,7 +167,7 @@
                                     </td>
                                     <td>
 
-                                        <input type="text" class="form-control" ng-model="materials.packagesize"
+                                        <input maxlength="20" type="text" class="form-control" ng-model="materials.packagesize"
                                                name="size"  />
 
                                         <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"

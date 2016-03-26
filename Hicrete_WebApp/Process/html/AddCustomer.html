@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="col-md-12">
 
     <form name="customerModifyForm" class="form-horizontal" novalidate>
@@ -97,12 +106,12 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-3">
-                                <label class="control-label">Phone No :</label>
+                                <label class="control-label">Mobile No :</label>
                             </div>
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone"/>
+                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone" maxlength="10"/>
                                 </div>
 
                             </div>
