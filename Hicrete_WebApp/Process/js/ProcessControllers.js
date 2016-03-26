@@ -215,7 +215,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 });
 
 
-myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, fileUpload) {
+myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, fileUpload,AppService) {
 
     var detaildata = $stateParams.projectToView;
 
@@ -343,6 +343,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
 
             controller: function ($scope, $uibModalInstance, $filter) {
                 // console.log("quotation is "+JSON.stringify(q));
+                AppService.getUsers($scope,$http);
                 $scope.ok = function () {
                     // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
                     var FollowupDate = $filter('date')($scope.applicatorDetails.followupdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
