@@ -86,13 +86,13 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
 });
 
 
-myApp.controller('costCenterController', function ($scope, $http) {
+myApp.controller('costCenterController', function ($scope, $http,AppService) {
     $scope.createCostCenterClicked = false;
 
     $scope.projectList = [];
-    $scope.projectList.push({name: "Project1", id: "1"});
-    $scope.projectList.push({name: "Project2", id: "2"});
-
+    //$scope.projectList.push({name: "Project1", id: "1"});
+    //$scope.projectList.push({name: "Project2", id: "2"});
+    AppService.getAllProjects($http,$scope.projectList);
 
     $scope.segmentList = [];
 
@@ -171,7 +171,7 @@ myApp.controller('costCenterController', function ($scope, $http) {
 });
 
 
-myApp.controller('expenseEntryController', function ($scope, $http) {
+myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
 
     $scope.otherExpenseClicked = false;
     $scope.materialExpenseClicked = false;
@@ -190,8 +190,9 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
     };
 
      $scope.projectList=[];
-     $scope.projectList.push({name:"project1",id:"1"});
-     $scope.projectList.push({name:"project2",id:"2"});
+    AppService.getAllProjects($http,$scope.projectList);
+     //$scope.projectList.push({name:"project1",id:"1"});
+     //$scope.projectList.push({name:"project2",id:"2"});
 
     // $scope.segmentList=[];
     // $scope.segmentList.push({name:"Transport",id:"1"});
@@ -344,8 +345,12 @@ myApp.controller('expenseEntryController', function ($scope, $http) {
 });
 
 
-myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http) {
+myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
 
+
+    var projectid=$stateParams.costCenterForProject.projectId;
+    $scope.projectName=$stateParams.costCenterForProject.project_name;
+    console.log($stateParams.costCenterForProject);
     $scope.searchKewords=null;
     $scope.costCenterData={};
 
@@ -388,7 +393,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
         //console.log(keyword);
         var data = {
             operation: "getExpenseDetails",
-            //searchData:keyword,
+            projectId:projectid,
             //searchOn:$scope.Searchfilter
         };
 
