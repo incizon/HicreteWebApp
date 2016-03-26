@@ -148,14 +148,14 @@ public function UpdateSiteTrackingFollowup($Followupid,$data){
 	}
 }
 
-public function CreateQuotationFollowup($quotationId,$data){
+public function CreateQuotationFollowup($quotationId,$data,$userId){
 	$FollowupId = AppUtil::generateId();
 	try {
 		$db = Database::getInstance();
 				$conn = $db->getConnection();
 				$conn->beginTransaction();
 				$stmt = $conn->prepare("INSERT INTO quotation_followup(FollowupId, QuotationId, AssignEmployee, FollowupDate, FollowupTitle, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?);");
-						if($stmt->execute([$FollowupId,$quotationId,$data->AssignEmployee,$data->FollowupDate,$data->FollowupTitle,$data->CreationDate,$data->CreatedBy]) === TRUE){
+						if($stmt->execute([$FollowupId,$quotationId,$data->AssignEmployee,$data->FollowupDate,$data->FollowupTitle,$data->CreationDate,$userId]) === TRUE){
 								$conn->commit();
 								return "Success in CreateQuotationFollowup";
 						}

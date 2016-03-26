@@ -348,7 +348,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
                     // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
                     var FollowupDate = $filter('date')($scope.applicatorDetails.followupdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
                     var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
-                    var FollowupTitle = "Quotation followup";
+                    var FollowupTitle = $scope.applicatorDetails.followTitle;
+
                     var CreatedBy = 1;
                     var date = new Date();
                     var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
