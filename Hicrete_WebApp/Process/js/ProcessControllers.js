@@ -977,6 +977,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
             Details: invoiceDetails,
             taxDetails: taxDetails
         };
+
         //  console.log("Final invoice data is "+JSON.stringify(InvoiceData));
         $.ajax({
             type: "POST",
@@ -2306,7 +2307,7 @@ myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scop
 
 });
 
-myApp.controller('PaymentHistoryController',function($scope,$http){
+myApp.controller('PaymentHistoryController',function($scope,$http,AppService){
 
   console.log("in payment history controller");
 $scope.Projects = [];
@@ -2315,20 +2316,20 @@ $scope.Projects = [];
     $scope.sortType= 'amountPaid'; // set the default sort type
     $scope.sortReverse  = false;
     var project = [];
-
-          $http.get("php/api/projects").then(function(response) {
-                console.log(response.data.length);
-                if(response.data != null){
-                        for(var i = 0; i<response.data.length ; i++){
-                                    project.push({
-                                                project_id: response.data[i].ProjectId,
-                                                project_name: response.data[i].ProjectName
-                                    });
-                        }
-                }
-               $scope.Projects = project;
-               console.log("projects scope is "+JSON.stringify($scope.Projects));
-            })
+AppService.getAllProjects($http,$scope.Projects);
+          //$http.get("php/api/projects").then(function(response) {
+          //      console.log(response.data.length);
+          //      if(response.data != null){
+          //              for(var i = 0; i<response.data.length ; i++){
+          //                          project.push({
+          //                                      project_id: response.data[i].ProjectId,
+          //                                      project_name: response.data[i].ProjectName
+          //                          });
+          //              }
+          //      }
+          //     $scope.Projects = project;
+          //     console.log("projects scope is "+JSON.stringify($scope.Projects));
+          //  })
 
         $scope.viewProjectInvoices = function(project){
             $scope.paymentHistoryData=[];
@@ -2418,7 +2419,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
 
         $scope.errorMessage="";
         $scope.warningMessage="";
-
+        $('#loader').css("display","block");
 
         var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
 

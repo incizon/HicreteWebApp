@@ -346,10 +346,12 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
 
 
 myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
+    var projectid="";
+    if($stateParams.costCenterForProject!=null){
+        $scope.projectName=$stateParams.costCenterForProject.project_name;
+        projectid=$stateParams.costCenterForProject.projectId;
+    }
 
-
-    var projectid=$stateParams.costCenterForProject.projectId;
-    $scope.projectName=$stateParams.costCenterForProject.project_name;
     console.log($stateParams.costCenterForProject);
     $scope.searchKewords=null;
     $scope.costCenterData={};
