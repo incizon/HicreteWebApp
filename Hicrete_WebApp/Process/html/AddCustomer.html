@@ -45,7 +45,7 @@
                             </div>
                             <div class="col-md-9">
                               <textarea class="form-control" name="customerAddress"
-                                        ng-model="customerDetails.customer_address" rows="2" required>
+                                        ng-model="customerDetails.customer_address" rows="2" pattern="[a-zA-Z0-9 ]+" required>
                               </textarea>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerAddress.$error"
@@ -62,12 +62,11 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerCity" ng-model="customerDetails.customer_city" required/>
+                                    <input type="text" class="form-control" name="customerCity" ng-model="customerDetails.customer_city" pattern="[a-zA-Z]+" required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerCity.$error"
                                      ng-show="formSubmitted">
-
                                     <span style="color:red" ng-message="required">Customer City is required</span>
                                     <span style="color:red" ng-message="pattern">Should contain only alphabets</span>
                                 </div>
@@ -97,7 +96,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerCountry" ng-model="customerDetails.customer_country" required/>
+                                    <input type="text" class="form-control" name="customerCountry" ng-model="customerDetails.customer_country"  pattern="[a-zA-Z]+" required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerCountry.$error"
