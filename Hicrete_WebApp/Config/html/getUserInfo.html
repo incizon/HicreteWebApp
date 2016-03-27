@@ -31,7 +31,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                    <input ng-model="userInfo.dob" name="dob" type="text" class="form-control" ng-click="openDob()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showPicker.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" />
+                                                    <input ng-model="userInfo.dob" name="dob" type="text" class="form-control" ng-click="openDob()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showPicker.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true" readonly/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.dob.$error" ng-hide="!userInfoSubmitted && !userInfoForm.dob.$touched">
                                                     <p style="color:red" ng-message="required">Date Of Birth Cannot be blank</p>
@@ -93,7 +93,7 @@
                                                     <span class="input-group-addon"><span class="fa fa-envelope"></span></span>
                                                     <input maxlength = "40" type="email" class="form-control" ng-model="userInfo.email" name="emailId"/>
                                                 </div>
-                                                <div class="help-block" ng-messages="companyForm.emailId.$error" ng-show="submitted">
+                                                <div class="help-block" ng-messages="userInfoForm.emailId.$error" ng-show="userInfoSubmitted">
                                                     <p style="color:red" ng-message="email">Invalid email address</p>
                                                 </div>
                                             </div>

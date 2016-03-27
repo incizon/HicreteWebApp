@@ -471,18 +471,18 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
     $scope.showFromDate=function(){
 
         $scope.showFrom.opened=true;
-    }
+    };
 
     $scope.showToDate=function(){
         $scope.showTo.opened=true;
-    }
+    };
 
     $scope.showTo={
         opened:false
-    }
+    };
     $scope.showFrom={
         opened:false
-    }
+    };
 
     $scope.SearchLeave=function(){
 
@@ -711,6 +711,24 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
         }
     }
 
+    $scope.leaveFromDate=function(){
+
+        $scope.leaveFrom.opened=true;
+    };
+
+    $scope.leaveToDate=function(){
+        $scope.leaveTo.opened=true;
+    };
+
+    $scope.leaveTo={
+        opened:false
+    }
+
+    $scope.leaveFrom={
+        opened:false
+    }
+
+
     $scope.searchByDate=function(){
 
         console.log($scope.searchDetails);
@@ -739,6 +757,9 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
                     $('#loader').css("display","none");
                     $scope.errorMessage=data.message;
                     $('#error').css("display","block");
+                    setTimeout(function() {
+                        $('#errror').css("display","none");
+                    }, 3000);
                 }
             })
             .error(function (data, status, headers) {
@@ -746,6 +767,9 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
                 $('#loader').css("display","none");
                 $scope.errorMessage="Could not send ";
                 $('#error').css("display","block");
+                setTimeout(function() {
+                        $('#errror').css("display","none");
+                }, 3000);
             });
     }
     $scope.paginate = function(value) {
@@ -761,7 +785,7 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
 myApp.controller('LeaveApprovalController', function($scope,$http) {
 
     $scope.currentPage=1;
-    $scope.leaveApprovalPerPage=2;
+    $scope.leaveApprovalPerPage=10;
 
     $scope.leavesApprovalList=[];
 

@@ -206,7 +206,7 @@ $operationObject=new Payroll();
 
      case 'getLeavesApproval':
 
-            $operationObject->getLeavesApproval();
+            $operationObject->getLeavesApproval($userId);
          break;
 
  }

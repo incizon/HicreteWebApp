@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="col-md-12">
 
     <div class="panel panel-default">
@@ -60,7 +69,7 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="date" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate"/>
+                                      <input type="text" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate" ng-click="quotationDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showQdate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
                                   </div>
 
                               </div>

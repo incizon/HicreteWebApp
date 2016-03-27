@@ -300,9 +300,10 @@ class InwardData extends CommonMethods
                         }else{
                             //Insert
                             $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
-                                                      values (:materialid,:companyid,:warehouseid,:totalquantity)");
+                                                      values (:materialid,:warehouseid,:companyid,:totalquantity)");
 
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
+
                             $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);

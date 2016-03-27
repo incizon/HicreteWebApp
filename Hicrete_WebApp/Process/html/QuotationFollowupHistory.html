@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select"  ng-model= "selectedProjectId" ng-change = "selectProject()" name="projects">
+                        <select class="form-control select"  ng-model= "selectedProjectId" ng-change = "selectProject(selectedProjectId)" name="projects">
                             <option value="" disabled selected>Choose project </option>
                             <option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
 
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select" name="quotation" ng-model="selectedQuotationId"  />
+                        <select class="form-control select" name="quotation" ng-change="selectQuotation(selectedQuotationId)" ng-model="selectedQuotationId"  />
                         <option value="" disabled selected>Choose quotation </option>>
                         <option ng-repeat="quotation in quotations" value="{{quotation.id}}">{{quotation.name}}</option>
 

@@ -27,7 +27,7 @@
                                 <select class="form-control" name="ProjectName" ng-model="paymentDetails.projectID" ng-change="viewProjectPaymentDetails(paymentDetails.projectID)" required/>
 
                                 <option value="" disabled selected>Choose Project</option>
-                                <option ng-repeat="project in Projects" value="{{project.project_id }}">{{project.project_name}}</option>
+                                <option ng-repeat="project in Projects" value="{{project.id }}">{{project.name}}</option>
                                 </select>
                                 <div class="help-block"
                                      ng-messages="ProjectPaymentDetailsForm.ProjectName.$error"
@@ -109,7 +109,7 @@
                                     <label class="control-label">Paid To</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="btn dropdown-toggle selectpicker btn-default"  ng-model="paymentDetails.paidTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
+                                    <select class="btn dropdown-toggle selectpicker btn-default col-md-12"  ng-model="paymentDetails.paidTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
                                             required >
                                         <option value="" disabled selected>------------Select Employee------------</option>
                                         <option value = {{user.id}}>{{user.name}}</option>
@@ -126,7 +126,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="date" class="form-control" ng-model="paymentDetails.paymentDate" />
+                                        <input type="text" class="form-control" ng-model="paymentDetails.paymentDate"  ng-click="dateOfPayment()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="payDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
                                     </div>
 
                                 </div>
@@ -217,7 +217,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="BranchCity" ng-model="paymentDetails.branchCity" pattern="[a-zA-Z]+"  required />
+                                        <input type="text" class="form-control" name="BranchCity" ng-model="paymentDetails.branchCity   " pattern="[a-zA-Z]+"  required />
                                     </div>
                                     <div class="help-block"
                                          ng-messages="ProjectPaymentDetailsForm.BranchCity.$error"
@@ -258,7 +258,7 @@
                                     <label class="control-label">Paid To</label>
                                 </div>
                                 <div class="col-md-9">
-                                    <select class="btn dropdown-toggle selectpicker btn-default"  ng-model="paymentDetails.paidTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
+                                    <select class="btn dropdown-toggle selectpicker btn-default col-md-12"  ng-model="paymentDetails.paidTo"  ng-options="user.name for user in users" ng-change =" " name="companyName"
                                             required >
                                         <option value="" disabled selected>------------Select Employee------------</option>
                                         <option value = {{user.id}}>{{user.name}}</option>
@@ -288,8 +288,8 @@
                                 <div class="col-md-9">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="date" class="form-control" ng-model="paymentDetails.paymentDate" value=""
-                                        />
+                                        <input type="text" class="form-control" ng-model="paymentDetails.paymentDate" value=""
+                                               ng-click="dateOfPayment()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="payDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
                                     </div>
 
                                 </div>

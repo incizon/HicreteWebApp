@@ -373,9 +373,12 @@
                 if(!empty($data->fromDate) && !empty($data->toDate)){
                     $date1 = new DateTime($data->fromDate);
                     $fromDate = $date1->format('Y-m-d');
+                    //echo "\n".$fromDate;
                     $date2 = new DateTime($data->toDate);
                     $toDate = $date2->format('Y-m-d');
-                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate AND leave_applied_by=:userId");
+                    //echo "\n".$toDate;
+                    //echo "\n".$userId;
+                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date >= :fromDate AND to_date <= :toDate AND leave_applied_by=:userId");
 
                     $stmt1->bindParam(':userId',$userId);
                     $stmt1->bindParam(':fromDate',$fromDate);
@@ -573,15 +576,16 @@
                 }
             }
 
-            public  function getLeavesApproval(){
+            public  function getLeavesApproval($userId){
 
 
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
 
                 $stmt=$connect->prepare("SELECT usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster JOIN leave_application_master
-                                          ON usermaster.userId=leave_application_master.leave_applied_by WHERE leave_application_master.status='pending'
+                                          ON usermaster.userId=leave_application_master.leave_applied_by JOIN employee_on_payroll ON employee_on_payroll.employee_id=leave_application_master.leave_applied_by WHERE leave_application_master.status='pending' AND employee_on_payroll.leave_approver_id=:userId
                                          ");
+                $stmt->bindParam(':userId',$userId);
 
                 $stmt->execute();
                 $result=$stmt->fetchAll(PDO::FETCH_ASSOC);

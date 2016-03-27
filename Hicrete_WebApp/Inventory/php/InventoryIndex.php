@@ -192,15 +192,21 @@
     function getInventory()
     {
         global $dbh;
-        $material=InventoryUtils::getProductById('97');
+        //$material=InventoryUtils::getProductById('97');
         $stmt = $dbh->prepare(
-            "SELECT * FROM inventory
+            "SELECT inventory.warehouseid,inventory.companyid,material.abbrevation,material.materialid,materialtype.materialtype,
+                    product_master.productname,inventory.totalquantity,warehousemaster.wareHouseName,companymaster.companyName,inventory.inventoryid
+                FROM inventory
                 JOIN material ON
                 inventory.materialid=material.materialid
                 JOIN product_master ON
                 product_master.productmasterid=material.productmasterid
                 JOIN materialtype ON
                 materialtype.materialtypeid=product_master.materialtypeid
+                JOIN companymaster ON
+                companymaster.companyid=inventory.companyid
+                JOIN warehousemaster on
+                warehousemaster.warehouseid=inventory.warehouseid
                 ");
         if($stmt->execute()){
             $json_array=array();
@@ -214,11 +220,13 @@
                 $inventoryData['materialtype']=$result2['materialtype'];
                 $inventoryData['productname']=$result2['productname'];
                 $inventoryData['totalquantity']=$result2['totalquantity'];
-                $inventoryData['materialName']=$material;
+               // $inventoryData['materialName']=$material;
                 $warehouseId=$result2['warehouseid'];
                 $companyId=$result2['companyid'];
-                $inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
-                $inventoryData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
+                //$inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($warehouseId);
+                //$inventoryData['warehouseName']=DatabaseCommonOperations::getWarehouseName($companyId);
+                $inventoryData['warehouseName']=$result2['wareHouseName'];
+                $inventoryData['companyName']=$result2['companyName'];
 
                 array_push($json_array,$inventoryData);
             }

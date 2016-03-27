@@ -1,22 +1,21 @@
 <?php
 
+    require_once 'Database/Database.php';
+    $db = Database::getInstance();
+    $dbh = $db->getConnection();
     $materialType = json_decode(file_get_contents('php://input'));
-    /* $db = Database::getInstance();
-     $this->_dbh = $db->getConnection();*/
-    $hostname = 'localhost';
-    $dbname = 'hicrete';
-    $username = 'hicreteRoot';
-    $password = 'hicrete@123';
-    $userId = "Pranav";
 
-    $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
-    #fetching veriables from front end and initializing
-    ###################################################################
+    session_start();
+
+
+$userId = $_SESSION['token'];
+
 
 
     //echo $materialType[0]->type;
     $dfltDelFlg = 'N';
-    $userId = "Pranav";
+    $count=0;
+
     //echo sizeof($materialType);
     for ($i = 0; $i < sizeof($materialType); $i++) {
         # code...
@@ -29,17 +28,20 @@
         $stmt->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
         $stmt->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
 
-        $stmt->execute();
+        if($stmt->execute())
+        {
+            $count++;
+        }
 
 
     }
-    if ($stmt) {
+    if ($count == sizeof($materialType)) {
         $arr = array('msg' => "Material type added Successfully!!!", 'error' => '');
         $jsn = json_encode($arr);
         echo($jsn);
 
     } else {
-        $arr = array('msg' => '', 'error' => "Supplier not added due to technical reasons Please try after some time ");
+        $arr = array('msg' => '', 'error' => "Material Type not added due to technical reasons Please try after some time ");
         $jsn = json_encode($arr);
         echo($jsn);
     }

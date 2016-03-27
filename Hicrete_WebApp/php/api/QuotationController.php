@@ -35,7 +35,23 @@ class QuotationController
 
          return $Quotation;
     }
+    /**
+     *
+     *
+     * @url POST /quotationlist/$id
+     *
+     */
 
+    public static function getQuotationList($id){
+        try{
+            $quotation = Quotation::getQuotationListForProject($id);
+            echo AppUtil::getReturnStatus("Successful",$quotation);
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
     /**
      * Gets the quotation with tax details
      *

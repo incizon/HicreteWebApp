@@ -33,7 +33,7 @@ Class Payment {
 
 			$db = Database::getInstance();
 				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT p.PaymentDate,p.AmountPaid,pd.InstrumentOfPayment,pd.IDOfInstrument,pd.BankName,pd.BranchName,pd.city,um.FirstName,um.LastName,i.GrandTotal FROM project_payment p ,project_payment_mode_details pd, user_master um,invoice i WHERE i.	InvoiceNo=p.InvoiceNo AND p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceId AND um.UserId=p.PaidTo");
+				$stmt = $conn->prepare("SELECT p.PaymentDate,p.AmountPaid,pd.InstrumentOfPayment,pd.IDOfInstrument,pd.BankName,pd.BranchName,pd.city,um.FirstName,um.LastName,i.GrandTotal FROM project_payment p ,project_payment_mode_details pd, usermaster um,invoice i WHERE i.	InvoiceNo=p.InvoiceNo AND p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceId AND um.UserId=p.PaidTo");
 				//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
 				$stmt->bindParam(':invoiceId', $InvoiceId, PDO::PARAM_STR);
 				if($result = $stmt->execute()){
@@ -88,7 +88,7 @@ Class Payment {
 												$row2Total = $stmt2->fetch(PDO::FETCH_ASSOC);
 												$ProjectAmount = $row2Total['Amount'];
 												$quotationObject['total_project_amount'] = $ProjectAmount;
-													$stmt3 = $conn->prepare("SELECT i.InvoiceNo,i.InvoiceDate,i.GrandTotal,u.FirstName,u.LastName,i.InvoiceTitle FROM invoice i,user_master u WHERE i.QuotationId = :qid AND u.UserId=i.CreatedBy ;");
+													$stmt3 = $conn->prepare("SELECT i.InvoiceNo,i.InvoiceDate,i.GrandTotal,u.FirstName,u.LastName,i.InvoiceTitle FROM invoice i,usermaster u WHERE i.QuotationId = :qid AND u.UserId=i.CreatedBy ;");
 													$stmt3->bindParam(':qid',$qid,PDO::PARAM_STR);
 														if($stmt3->execute() === TRUE){
 															$paymentDetails = [];
@@ -157,7 +157,7 @@ public function getPaymentByInvoice($invoiceId) {
 			try {
 				$db = Database::getInstance();
 				$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd ,user_master u where u.UserId = p.PaidTo AND p.paymentId = pd.paymentId AND p.InvoiceNo  =:invoiceId ;");
+				$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd ,usermaster u where u.UserId = p.PaidTo AND p.paymentId = pd.paymentId AND p.InvoiceNo  =:invoiceId ;");
 				$stmt->bindParam(':invoiceId', $invoiceId, PDO::PARAM_STR);
 				if($result = $stmt->execute()){
 					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){

@@ -81,7 +81,7 @@
                                     <div class="col-md-7">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" name="noOfElement" ng-model="noOfElement"
+                                            <input type="number" name="noOfElement" ng-model="noOfElement"
                                                    class="form-control" pattern="[0-9]+">
                                         </div>
                                         <div class="help-block" ng-messages="inwardEntryForm.noOfElement.$error"
@@ -103,7 +103,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                            <input type="text" class="form-control datepicker" ng-model="InwardData.date"
+                                            <input readonly type="text" class="form-control datepicker" ng-model="InwardData.date"
                                                    name="date" ng-click="openDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions" show-button-bar="false" ng-required="true">
                                         </div>
                                         <div class="help-block" ng-messages="inwardEntryForm.date.$error"
@@ -185,7 +185,7 @@
                                     <td>
 
 
-                                        <input type="number" class="form-control" ng-model="materials.materialQuantity"
+                                        <input maxlength="11" type="number" class="form-control" ng-model="materials.materialQuantity"
                                                name="materialQuantity" min="1" required/>
 
                                         <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"
@@ -205,7 +205,7 @@
                                     </td>
                                     <td>
 
-                                        <input type="text" class="form-control" ng-model="materials.packagesize"
+                                        <input maxlength="20" type="text" class="form-control" ng-model="materials.packagesize"
                                                name="size"  />
 
                                         <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"

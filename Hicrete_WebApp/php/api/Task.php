@@ -76,7 +76,7 @@ Class Task {
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-                $stmt = $conn->prepare("SELECT * FROM task_master tm , user_master um  WHERE tm.TaskID = :id AND um.UserId = tm.TaskAssignedTo AND tm.isDeleted = 0");
+                $stmt = $conn->prepare("SELECT * FROM task_master tm , usermaster um  WHERE tm.TaskID = :id AND um.UserId = tm.TaskAssignedTo AND tm.isDeleted = 0");
                        $stmt->bindParam(':id', $id, PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
                         {

@@ -126,7 +126,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                    <input type="text" class="form-control" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="showPopup.opened" datepicker-options="dateOptions" ng-click="openPayDate()" show-button-bar="false"  ng-required="true" />
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="showPopup.opened" datepicker-options="dateOptions" ng-click="openPayDate()" show-button-bar="false"  ng-required="true" readonly />
                                 </div>
                                  
                             </div>
@@ -141,7 +141,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                     <input type="text" class="form-control" 
-                                    name="cashPendingAmount"  ng-model="applicatorDetails.pendingAmount">
+                                    name="cashPendingAmount"  ng-model="applicatorDetails.pendingAmount" ng-disabled/>
                                 </div>            
                             </div>
                         </div>
@@ -283,7 +283,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
 
-                                    <input type="text" class="form-control" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="showPopup.opened" datepicker-options="dateOptions" ng-click="openPayDate()" show-button-bar="false"  ng-required="true" />
+                                    <input type="text" class="form-control" uib-datepicker-popup="{{'dd-MM-yyyy'}}" ng-model="applicatorDetails.paymentDate" show-weeks="false" is-open="showPopup.opened" datepicker-options="dateOptions" ng-click="openPayDate()" show-button-bar="false"  ng-required="true" readonly />
                                 </div>
                                 
                             </div>

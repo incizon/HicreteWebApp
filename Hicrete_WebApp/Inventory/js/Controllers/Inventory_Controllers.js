@@ -229,6 +229,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
+        console.log($scope.selectedProduct);
     }
     /**********************************************************************************
      *End of Getter
@@ -920,6 +921,15 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
         type: ""
     });
 
+    $scope.sizeCheck=function()
+    {
+        if($scope.materialType.length==0)
+        {
+            return 0;
+        }
+        else
+            return 1;
+    }
 
     $scope.submit = function (materialType) {
         console.log($scope.materialType);
@@ -1313,6 +1323,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
         $scope.viewMaterials = $scope.selectedProduct.materialDetails;
+        console.log($scope.selectedProduct);
 
     }
     /*************************************************
@@ -1512,6 +1523,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             }
             else
             {
+                qty=0;
                 $scope.availableTotalquantity=0;
             }
         }
