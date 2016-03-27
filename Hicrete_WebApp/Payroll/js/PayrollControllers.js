@@ -785,7 +785,7 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
 myApp.controller('LeaveApprovalController', function($scope,$http) {
 
     $scope.currentPage=1;
-    $scope.leaveApprovalPerPage=2;
+    $scope.leaveApprovalPerPage=10;
 
     $scope.leavesApprovalList=[];
 

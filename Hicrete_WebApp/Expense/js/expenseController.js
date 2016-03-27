@@ -189,6 +189,22 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
         dateOfBill: ""
     };
 
+    $scope.billDate=function(){
+        $scope.dateOfBill.opened=true;
+    };
+
+    $scope.dateOfBill={
+        opened:false
+    };
+
+    $scope.otherBillDate=function(){
+        $scope.otherDateOfBill.opened=true;
+    };
+
+    $scope.otherDateOfBill={
+        opened:false
+    };
+
      $scope.projectList=[];
     AppService.getAllProjects($http,$scope.projectList);
      //$scope.projectList.push({name:"project1",id:"1"});

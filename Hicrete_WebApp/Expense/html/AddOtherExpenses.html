@@ -130,7 +130,7 @@
                                                     <div class="col-md-7">                                       
                                                     <div class="input-group col-md-8">
                                                      <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                        <input   name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control datepicker" required/>
+                                                        <input   name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control" ng-click="otherBillDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="otherDateOfBill.opened" datepicker-options="dateOptions" show-button-bar="true"  ng-required="true" readonly/>
                                                     </div> 
                                                         <div class="help-block" ng-messages="billForm.billDate.$error" ng-show="otherExpenseClicked">
                                                             <p style="color:red" ng-message="required">Date Of Bill cannot be blank</p>
@@ -148,14 +148,15 @@
                                 
                                 <!--End of form container row-->
 
+
+                            </div>
                                 <!--Start of buttons section-->
                                 <div class="panel-footer">
                                     <button class="btn  btn-primary pull-right" ng-click="(otherExpenseClicked=true) &&  ( otherExpenseForm.$valid && (!expenseDetails.isBillApplicable || billForm.$valid ) ) &&addOtherExpense()">Submit</button>
-                                        
-                                    <button class="btn  btn-default pull-right">Clear Form</button> 
+
+                                    <button class="btn  btn-default pull-right">Clear Form</button>
                                 </div>
                                 <!--End of buttons section-->
-                            </div>
                             <!--End of form section-->
                              </form>
                             
