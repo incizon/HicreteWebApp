@@ -1223,6 +1223,21 @@ $scope.accessRequest={
   toDate:new Date(),
   description:""
 };
+    $scope.requestFromDate=function(){
+        $scope.from.opened=true;
+    };
+
+    $scope.from={
+        opened:false
+    };
+
+    $scope.requestToDate=function(){
+        $scope.to.opened=true;
+    };
+
+    $scope.to={
+        opened:false
+    };
 $scope.exemptedAccessList=[];
 
                 var data={
@@ -1290,22 +1305,44 @@ $scope.exemptedAccessList=[];
                 $http.post("Config/php/configFacade.php",null, config)
                      .success(function (data)
                      {
-                        
+                         $('#loading').css("display","block");
                        if(data.status!="Successful"){
-
-                           alert(data.message);
+                           $('#loading').css("display","none");
+                           $scope.errorMessage = data.message;
+                           console.log($scope.errorMessage);
+                           $("#error").css("display", "block");
+                           setTimeout(function () {
+                               $("#error").css("display", "none");
+                           }, 3000);
+                           //alert(data.message);
                            $scope.submitDisable=false;
                           $scope.clearDisable=false;
                        }else{
-                          alert("Access Request Added");
+                           $('#loading').css("display","none");
+                           $scope.warningMessage = "Access Request Added..";
+                           console.log($scope.warningMessage);
+                           $("#warning").css("display", "block");
+                           setTimeout(function () {
+                               $("#warning").css("display", "none");
+                               window.location="dashboard.php#/Config";
+                           }, 3000);
+                          //alert("Access Request Added");
                           $scope.clearForm();
-                          window.location="dashboard.php#/Config";
+                          //window.location="dashboard.php#/Config";
                        }
 
                      })
                      .error(function (data, status, headers, config)
                      {
-                         alert("Error Occured"+data);
+                         $('#loading').css("display","none");
+                         $scope.errorMessage = "Access Request Not Added..";
+                         console.log($scope.errorMessage);
+                         $("#error").css("display", "block");
+                         setTimeout(function () {
+                             $("#error").css("display", "none");
+                             window.location.reload(1);
+                         }, 3000);
+                         //alert("Error Occured"+data);
                        $scope.submitDisable=false;
                         $scope.clearDisable=false;
                      });
@@ -1609,6 +1646,15 @@ myApp.controller('MyProfileController',function($scope,$http) {
             data: data
         }
     };
+
+    $scope.showDOB = function () {
+        $scope.pickDOB.opened = true;
+    };
+
+    $scope.pickDOB = {
+        opened: false
+    };
+
     $http.post("Config/php/configFacade.php", null, config)
         .success(function (data) {
 
@@ -1647,21 +1693,44 @@ myApp.controller('MyProfileController',function($scope,$http) {
                     data: data
                 }
             };
+            $('#loading').css("display","block");
 
             $http.post("Config/php/configFacade.php", null, config)
                 .success(function (data) {
                     console.log(data);
-                       alert(data);
+                    $('#loading').css("display","none");
+                    $scope.warningMessage = data;
+                    console.log($scope.warningMessage);
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location.reload(1);
+                    }, 3000);
+                       //alert(data);
 
                 })
                 .error(function (data, status, headers, config) {
-                    alert("Error Occurred");
+                    $('#loading').css("display","none");
+                    $scope.errorMessage = "Fields not updated..";
+                    console.log($scope.errorMessage);
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                    }, 3000);
+                   // alert("Error Occurred");
                 });
 
 
         }else{
 
-            alert("Fields not updated");
+            $('#loading').css("display","none");
+            $scope.errorMessage = "Fields not updated";
+            console.log($scope.errorMessage);
+            $("#error").css("display", "block");
+            setTimeout(function () {
+                $("#error").css("display", "none");
+            }, 3000);
+           // alert("Fields not updated");
         }
 
     }
