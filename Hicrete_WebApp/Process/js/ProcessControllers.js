@@ -234,7 +234,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 });
 
 
-myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $scope, $http, $uibModal, $log, fileUpload, AppService) {
+myApp.controller('ProjectDetailsController', function ($stateParams,myService ,setInfo, $scope, $http, $uibModal, $log, fileUpload, AppService) {
 
     var detaildata = $stateParams.projectToView;
 
@@ -452,7 +452,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
                 'filePath': $scope.qData[i].QuotationBlob
             });
             $scope.projectQuotations = b;
-            //myService.set($scope.projectQuotations);
+            myService.set($scope.projectQuotations);
         }
     }, function myError(response) {
         $scope.myWelcome = response.statusText;
@@ -493,7 +493,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
 
             });
             $scope.projectWorkorders = b;
-            //myService.set($scope.projectQuotations);
+            myService.set($scope.projectQuotations);
         }
         $scope.projectWorkorders;
         //console.log("work order data is "+JSON.stringify($scope.projectWorkorders));
@@ -531,7 +531,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, setInfo, $s
                 'companyId': $scope.qData[i].CompanyId
             });
             $scope.projectInvoice = b;
-            //myService.set($scope.projectQuotations);
+            myService.set($scope.projectQuotations);
         }
         console.log("Invoice data is " + JSON.stringify($scope.projectInvoice));
     }, function myError(response) {
@@ -916,7 +916,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, $filter, setInfo) {
 
     console.log("in add invoice");
-    var workDetail = setInfo.get();
+    //var workDetail = setInfo.get();
     //console.log("workorder no is "+JSON.stringify(workDetail));
     $scope.taxSelected = 0;
     $scope.taxableAmount = 0;
@@ -1369,7 +1369,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 paymentdetails = response.data;
             }
             $scope.projectPayment = paymentdetails;
-            // console.log("project payment new scope is "+JSON.stringify($scope.projectPayment));
+             console.log("project payment new scope is "+JSON.stringify($scope.projectPayment));
             var pkgamount = 0;
             var amountPaid = 0;
 
@@ -1510,7 +1510,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
 
 });
 
-myApp.controller('viewProjectController', function ($scope, $http, $rootScope) {
+myApp.controller('viewProjectController', function ($scope, $http, $rootScope,myService) {
 
     $scope.ProjectPerPage = 5;
     $scope.currentPage = 1;
@@ -2076,11 +2076,11 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
         //})
     }
 
-    $scope.selectQuotation = function () {
+    $scope.selectQuotation = function (quotationId) {
         //  console.log("quotation id is "+$scope.quotationID.id);
         $scope.followups = [];
         var followup = [];
-        $http.get("php/api/quotation/followup/" + $scope.quotationID.id).then(function (response) {
+        $http.get("php/api/quotation/followup/" + quotationId).then(function (response) {
             //   console.log(response.data.length);
             for (var i = 0; i < response.data.length; i++) {
                 followup.push({
@@ -2103,17 +2103,18 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
 myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, AppService) {
 
     $scope.projects = [];
-
+    $scope.selectedProjectId="";
     AppService.getAllProjects($http, $scope.projects);
 
     $scope.selectProject = function () {
-        $scope.invoicess = [];
-        AppService.getAllInvoicesOfProject($http, $scope.invoicess, $scope.selectedProjectId);
+        $scope.invoices = [];
+        console.log("In payment followup history");
+        AppService.getAllInvoicesOfProject($http, $scope.invoices, $scope.selectedProjectId);
     }
 
     $scope.show = function () {
 
-        $http.post("php/api/invoice/followup/" + $scope.selectedInvoiceId, null)
+        $http.post("php/api/invoice/followup/" + $scope.selectedInvoiceId)
             .success(function (data) {
 
                 console.log(data);
@@ -2838,7 +2839,22 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
 
 });
 
+myApp.factory('myService', function() {
+    var savedData = {}
+    //alert("in myService");
+    function set(data) {
+        savedData = data;
+    }
+    function get() {
+        return savedData;
+    }
 
+    return {
+        set: set,
+        get: get
+    }
+
+});
 
 
 
