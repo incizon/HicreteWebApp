@@ -309,23 +309,23 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $('#loading').css('display','block');
+                $("#loading").css("display","block");
                 if (data == "0") {
-                    $('#loading').css('display','none');
+                    $('#loading').css("display","none");
                     $scope.warningMessage = "Other Expense Details Added successfully";
-                    $('#warning').css("display", "block");
+                    console.log($scope.warningMessage);
+                    $("#warning").css("display", "block");
                     setTimeout(function () {
-                        $('#warning').css("display", "none");
+                        $("#warning").css("display", "none");
                         window.location = "dashboard.php#/Process";
                     }, 3000);
                     //doShowAlert("Success", "Other Expense Details Added successfully");
                 } else {
-                    $('#loading').css('display','none');
+                    $("#loading").css("display","none");
                     $scope.errorMessage = "Other Expense Details Not Added";
-                    $('#error').css("display", "block");
+                    $("#error").css("display", "block");
                     setTimeout(function () {
-                        $('#error').css("display", "none");
-                        window.location = "dashboard.php#/Process";
+                        $("#error").css("display", "none");
                     }, 3000);
                     //doShowAlert("Failure", "Cannot connect to database");
                 }
@@ -333,12 +333,11 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
             })
             .error(function (data, status, headers, config) {
                 //doShowAlert("Failure", "Error Occurred");
-                $('#loading').css('display','none');
+                $("#loading").css("display","none");
                 $scope.errorMessage = "Other Expense Details Not Added";
-                $('#error').css("display", "block");
+                $("#error").css("display", "block");
                 setTimeout(function () {
-                    $('#error').css("display", "none");
-                    window.location = "dashboard.php#/Process";
+                    $("#error").css("display", "none");
                 }, 3000);
             });
         //alert($scope.expenseDetails.costCenter);
