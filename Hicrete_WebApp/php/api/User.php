@@ -9,7 +9,7 @@ Class User {
 		try {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT * from user_master um where um.UserId = :id AND um.isDeleted = 0");
+			$stmt = $conn->prepare("SELECT * from usermaster um where um.UserId = :id AND um.isDeleted = 0");
 			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 			
 			if($result = $stmt->execute()){
@@ -55,7 +55,7 @@ Class User {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 			$conn->beginTransaction();
-			$stmt = $conn->prepare("INSERT INTO user_master(UserId, FirstName, LastName, isDeleted) VALUES(?,?,?,?)");
+			$stmt = $conn->prepare("INSERT INTO usermaster(UserId, FirstName, LastName, isDeleted) VALUES(?,?,?,?)");
 				if($stmt->execute([$usernum,$data->FirstName,$data->LastName,0]) === TRUE){
 						$conn->commit();
 						return "User created succesfully ";
@@ -79,7 +79,7 @@ Class User {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 			$conn->beginTransaction();
-			$stmt = $conn->prepare("UPDATE user_master um SET um.isDeleted = 1 WHERE um.UserId = :id");
+			$stmt = $conn->prepare("UPDATE usermaster um SET um.isDeleted = 1 WHERE um.UserId = :id");
 			$stmt->bindParam(':id',$id,PDO::PARAM_STR);
 				if($stmt->execute() === TRUE){
 					$conn->commit();

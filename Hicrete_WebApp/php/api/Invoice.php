@@ -35,7 +35,7 @@ Class Invoice {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 
-			$stmt = $conn->prepare("SELECT * FROM project_payment_followup p,project_payment_followup_details pfd,user_master um WHERE p.FollowupId = pfd.FollowupId AND um.UserId = p.AssignEmployee AND p.InvoiceId = :id");
+			$stmt = $conn->prepare("SELECT * FROM project_payment_followup p,project_payment_followup_details pfd,usermaster um WHERE p.FollowupId = pfd.FollowupId AND um.UserId = p.AssignEmployee AND p.InvoiceId = :id");
 			$stmt->bindParam(':id', $invoiceid, PDO::PARAM_STR);
 			
 			if($result = $stmt->execute()){

@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select" name="quotation" ng-model="selectedQuotationId"  />
+                        <select class="form-control select" name="quotation" ng-change="selectQuotation(selectedQuotationId)" ng-model="selectedQuotationId"  />
                         <option value="" disabled selected>Choose quotation </option>>
                         <option ng-repeat="quotation in quotations" value="{{quotation.id}}">{{quotation.name}}</option>
 

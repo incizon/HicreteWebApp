@@ -50,6 +50,7 @@ myApp.service('AppService', function () {
             .success(function (data) {
                 console.log(data);
                 $scope.employees=data;
+
                 var user=[];
                 for(var i = 0; i<data.length ; i++){
                     user.push({
