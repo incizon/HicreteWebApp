@@ -1,6 +1,6 @@
 <?php
 
-use \Jacwright\RestServer\RestException;
+//use \Jacwright\RestServer\RestException;
 require 'Customer.php';
 
 class CustomerController
@@ -85,9 +85,12 @@ class CustomerController
     public static function saveCustomer($id = null, $data){
 
         try{
+            //echo(json_encode($data));
             $userId=AppUtil::getLoggerInUserId();
-            $customer = Customer::saveCustomer($data,$userId); // saving the user to the database
-            if($customer){
+            //$customer = Customer::saveCustomer($data,$userId); // saving the user to the database
+            //Customer::saveCustomer($data,$userId); // saving the user to the database
+
+            if(Customer::saveCustomer($data,$userId)){
                 echo AppUtil::getReturnStatus("Successful","Customer created successfully");
             }
             else {

@@ -39,11 +39,7 @@ myApp.service('fileUpload', ['$http', function ($http) {
 
     this.uploadFileToUrl = function (file, uploadUrl) {
         //alert("File upload started");
-        $scope.warningMessage = "File upload started..";
-        $('#warning').css("display", "block");
-        setTimeout(function () {
-            $('#warning').css("display", "none");
-        }, 1000);
+
         var fd = new FormData();
         fd.append('file', file);
 
@@ -53,10 +49,20 @@ myApp.service('fileUpload', ['$http', function ($http) {
             })
 
             .success(function (status) {
+                $scope.warningMessage = "File upload started..";
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                }, 1000);
                 console.log("in upload successs" + status);
             })
 
             .error(function () {
+                $scope.errorMessage = "File upload not started..";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 1000);
                 console.log("In file upload error");
             });
     }
@@ -615,6 +621,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         var companyId = $scope.QuotationDetails.companyName.company_id;
         var companyName = $scope.QuotationDetails.companyName.company_name;
         var fileName = "";
+        $scope.warningMessage = "";
+        $scope.errorMessage = "";
         if ($scope.myFile != undefined) {
             if ($scope.myFile.name != undefined) {
                 var uploadQuotationLocation = "upload/Quotations/";
@@ -678,12 +686,15 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             success: function (data) {
                 $('#loader').css("display", "block");
                 //$scope.PostDataResponse = data;
-                $('#loader').css("display", "none");
-                $scope.warningMessage = JSON.stringify(data);
+                setTimeout(function () {
+                    $('#loader').css("display", "none");
+                }, 1000);
+                $scope.warningMessage = "Quotation is Created Successfully...'";
+                console.log($scope.warningMessage);
                 $('#warning').css("display", "block");
                 setTimeout(function () {
                     $('#warning').css("display", "none");
-                    window.location.reload(1);
+                    window.location.reload(true);
                 }, 3000);
 
                 //alert("status" + JSON.stringify(data));
@@ -692,7 +703,16 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 fileUpload.uploadFileToUrl(file, uploadUrl);
             },
             error: function (data) {
-                alert("Status" + data);
+                //alert("Status" + data);
+                $('#loader').css("display", "block");
+                $('#loader').css("display", "none");
+                $scope.errorMessage = "Quotation is Not Created...'";
+                console.log($scope.errorMessage);
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                    window.location.reload(1);
+                }, 3000);
                 //var file = $scope.myFile;
                 //  var uploadUrl = "php/api/quotation/upload";
                 //fileUpload.uploadFileToUrl(file, uploadUrl);
@@ -928,13 +948,36 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
     var totalAmount = 0;
 
     $scope.InvoiceDetails = {
-
         invoiceItemDetails: [],
         workOrderNumber: workDetail.workOrderNo,
         quotationNumber: workDetail.quotationId,
         quotationDate: workDetail.dateOfQuotation,
         workOrderDate: workDetail.creationDate
     }
+
+    $scope.invoiceDate=function(){
+        $scope.inDate.opened=true;
+    };
+
+    $scope.inDate={
+        opened:false
+    };
+
+    $scope.quotationDate=function(){
+        $scope.quotDate.opened=true;
+    };
+
+    $scope.quotDate={
+        opened:false
+    };
+
+    $scope.workOrderDate=function(){
+        $scope.workDate.opened=true;
+    };
+
+    $scope.workDate={
+        opened:false
+    };
 
 
     $scope.createInvoice = function () {
@@ -1610,76 +1653,69 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 
         var cust = [];
 
-        if ($scope.searchKeyword == "") {
 
-            $http.get("php/api/customer").then(function (response) {
-                console.log(response.data.length);
-                if (response.data.status == "Successful") {
-                    for (var i = 0; i < response.data.length; i++) {
-                        cust.push({
-                            id: response.data.message[i].CustomerId,
-                            name: response.data.message[i].CustomerName,
-                            address: response.data.message[i].Address,
-                            city: response.data.message[i].City,
-                            state: response.data.message[i].State,
-                            country: response.data.message[i].Country,
-                            mobileNo: response.data.message[i].Mobileno,
-                            contactNo: response.data.message[i].Landlineno,
-                            faxNo: response.data.message[i].FaxNo,
-                            emailId: response.data.message[i].EmailId,
-                            pan: response.data.message[i].PAN,
-                            cstNo: response.data.message[i].CSTNo,
-                            vatNo: response.data.message[i].VATNo,
-                            serviceTaxNo: response.data.message[i].ServiceTaxNo,
-                            pincode: response.data.message[i].Pincode,
-                            index: i
-                        });
-                    }
-                    $rootScope.customerSearch = cust;
+        if($scope.searchBy!=undefined)
+        {
+            var data={
+                operation:"getCustomerDetails",
+                searchKeyword:$scope.searchKeyword,
+                searchBy:$scope.searchBy
 
-                } else {
-                    alert(response.data.message);
+            };
+            var config = {
+                params: {
+                    data: data
                 }
+            };
+
+            $http.post("Process/php/customerFacade.php",null, config)
+                .success(function (data)
+                {
+                    console.log(data);
+                  if(data.status=="Successful"){
+                      for (var i = 0; i < data.message.length; i++) {
+
+                          cust.push({
+                              id: data.message[i].CustomerId,
+                              name: data.message[i].CustomerName,
+                              address: data.message[i].Address,
+                              city: data.message[i].City,
+                              state: data.message[i].State,
+                              country: data.message[i].Country,
+                              mobileNo: data.message[i].Mobileno,
+                              contactNo: data.message[i].Landlineno,
+                              faxNo: data.message[i].FaxNo,
+                              emailId: data.message[i].EmailId,
+                              pan: data.message[i].PAN,
+                              cstNo: data.message[i].CSTNo,
+                              vatNo: data.message[i].VATNo,
+                              serviceTaxNo: data.message[i].ServiceTaxNo,
+                              pincode: data.message[i].Pincode,
+                              index: i
+                          });
+                      }
 
 
-            })
+                      $rootScope.customerSearch = cust;
 
-        }
-        else {
-            //alert("in "+searchCity);
+                    }else{
 
-            $http.get("php/api/customer/search/" + $scope.searchKeyword + '&' + $scope.searchBy).then(function (response) {
+                      alert(response.data.message);
 
-                if (response.data.status == "Successful") {
-                    console.log(response.data.message.length);
-                    for (var i = 0; i < response.data.message.length; i++) {
-                        cust.push({
-                            id: response.data.message[i].CustomerId,
-                            name: response.data.message[i].CustomerName,
-                            address: response.data.message[i].Address,
-                            city: response.data.message[i].City,
-                            state: response.data.message[i].State,
-                            country: response.data.message[i].Country,
-                            mobileNo: response.data.message[i].Mobileno,
-                            contactNo: response.data.message[i].Landlineno,
-                            faxNo: response.data.message[i].FaxNo,
-                            emailId: response.data.message[i].EmailId,
-                            pan: response.data.message[i].PAN,
-                            cstNo: response.data.message[i].CSTNo,
-                            vatNo: response.data.message[i].VATNo,
-                            serviceTaxNo: response.data.message[i].ServiceTaxNo,
-                            pincode: response.data.message[i].Pincode
-                        });
+
                     }
-                    $rootScope.customerSearch = cust;
 
-                } else {
-                    alert(response.data.message);
-                }
-
-            })
-
+                })
+                .error(function (data, status, headers, config)
+                {
+                    alert("Error Occured"+data);
+                });
         }
+        else{
+            alert("Please select search by list");
+        }
+
+
     }
 
 
@@ -1702,12 +1738,12 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
     }
 
     $scope.paginate = function (value) {
-        //console.log("In Paginate");
+
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.CustomerPerPage;
         end = begin + $scope.CustomerPerPage;
         index = $rootScope.customerSearch.indexOf(value);
-        //console.log(index);
+
         return (begin <= index && index < end);
     };
 
@@ -2377,16 +2413,32 @@ myApp.controller('CustomerController', function ($scope, $http) {
     $scope.submitted = false;
 
     $scope.createCustomer = function () {
+        console.log("Inside create customer");
+        console.log($scope.customerDetails);
         var date = new Date();
 
         $scope.errorMessage = "";
         $scope.warningMessage = "";
-        $('#loader').css("display", "block");
+        //$('#loader').css("display", "block");
 
-        var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
+       // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
 
-        $http.post('php/api/customer', custData)
+       // console.log(custData);
+        var data={
+            operation :"addCustomer",
+            data : $scope.customerDetails
+
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/customerFacade.php',null,config)
             .success(function (data, status, headers) {
+                console.log(data);
                 if (data.status == "Successful") {
                     $('#loader').css("display", "block");
                     $scope.postCustData = data;
@@ -2411,6 +2463,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
                 }
             })
             .error(function (data, status, header) {
+                console.log(data);
                 $('#loader').css("display", "block");
                 $scope.ResponseDetails = "Data: " + data;
                 $('#loading').css("display", "none");
@@ -2450,10 +2503,93 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
     };
 
     $scope.modifyCustomer = function () {
+        console.log($scope.customerDetails);
         $custId = $scope.customerDetails.customer_id;
         var custUpdate = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '"}';
         //  console.log("update data is ::"+custUpdate);
-        $http.post('php/api/customer/update/' + $custId, custUpdate)
+        $scope.errorMessage = "";
+        $scope.warningMessage = "";
+        $('#loader').css("display", "block");
+
+        // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
+
+        // console.log(custData);
+        var data={
+            operation :"modifyCustomer",
+            data : $scope.customerDetails
+
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/customerFacade.php',null,config)
+            .success(function (data, status, headers) {
+                console.log(data);
+                if (data.status == "Successful") {
+                    $('#loader').css("display", "block");
+                    $scope.postCustData = data;
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $scope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    console.log($scope.customerDetails);
+                    console.log($stateParams.customerToModify);
+                    //$rootScope.customerSearch[$scope.customerDetails.index]=$stateParams.customerToModify;
+                        $rootScope.customerSearch[$scope.customerDetails.index].id= $scope.customerDetails.customer_id;
+                        $rootScope.customerSearch[$scope.customerDetails.index].name=$scope.customerDetails.customer_name;
+                        $rootScope.customerSearch[$scope.customerDetails.index].address=$scope.customerDetails.customer_address;
+                        $rootScope.customerSearch[$scope.customerDetails.index].city=$scope.customerDetails.customer_city;
+                        $rootScope.customerSearch[$scope.customerDetails.index].state=$scope.customerDetails.customer_state;
+                        $rootScope.customerSearch[$scope.customerDetails.index].country=$scope.customerDetails.customer_country;
+                        $rootScope.customerSearch[$scope.customerDetails.index].mobileNo=$scope.customerDetails.customer_phone;
+                        $rootScope.customerSearch[$scope.customerDetails.index].contactNo=$scope.customerDetails.customer_landline;
+                        $rootScope.customerSearch[$scope.customerDetails.index].faxNo=$scope.customerDetails.customer_faxNo;
+                        $rootScope.customerSearch[$scope.customerDetails.index].emailId=$scope.customerDetails.customer_emailId;
+                        $rootScope.customerSearch[$scope.customerDetails.index].pan=$scope.customerDetails.customer_panNo;
+                        $rootScope.customerSearch[$scope.customerDetails.index].cstNo=$scope.customerDetails.customer_cstNo;
+                        $rootScope.customerSearch[$scope.customerDetails.index].vatNo=$scope.customerDetails.customer_vatNo;
+                        $rootScope.customerSearch[$scope.customerDetails.index].serviceTaxNo=$scope.customerDetails.customer_serviceTaxNo;
+                        //$rootScope.customerSearch[$scope.customerDetails.index].pincode=data.message[i].Pincode;
+
+                    //$rootScope.customerSearch[ $scope.customerDetails.index]=$scope.customerDetails;
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location="dashboard.php#/Process/Customers";
+                    }, 3000);
+
+                } else {
+                    //alert(data.message);
+                    $('#loader').css("display", "block");
+                    $('#loading').css("display", "none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+                }
+            })
+            .error(function (data, status, header) {
+                console.log(data);
+                $('#loader').css("display", "block");
+                $scope.ResponseDetails = "Data: " + data;
+                $('#loading').css("display", "none");
+                $scope.errorMessage = "Customer not Updated..";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
+                //alert("Error Occurred:" + data);
+            });
+
+
+
+
+
+       /* $http.post('php/api/customer/update/' + $custId, custUpdate)
             .success(function (data, status) {
                 if (data.status == "Successful") {
                     alert(data.message);
@@ -2465,7 +2601,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
             .error(function (data, status) {
 
                 alert(data.message);
-            });
+            });*/
 
     }
 
