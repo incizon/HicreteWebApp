@@ -208,8 +208,55 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
         }
         // console.log("data is "+projectData);
         console.log("Posting");
+        var data={
+            operation :"createProject",
+            data : projectData
 
-        $http.post('php/api/projects', projectData)
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/projectFacade.php',null,config)
+            .success(function (data, status, headers) {
+                console.log(data);
+                if(data.status == "Successful") {
+                    $('#loader').css("display", "block");
+                    //$scope.PostDataResponse = data;
+                    $('#loader').css("display", "none");
+                    $scope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                }
+                else
+                {
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+                }
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                    window.location.reload(1);
+                }, 3000);
+
+                //alert(data.message);
+
+            })
+            .error(function (data, status, header) {
+                //$scope.ResponseDetails = "Data: " + data;
+                console.log(data);
+                $scope.errorMessage = data;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
+                //alert(data);
+            });
+     /*   $http.post('php/api/projects', projectData)
             .success(function (data, status, headers) {
                 $('#loader').css("display", "block");
                 //$scope.PostDataResponse = data;
@@ -233,7 +280,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
                     $('#error').css("display", "none");
                 }, 3000);
                 //alert(data);
-            });
+            });*/
     }
 
 
@@ -1558,7 +1605,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope,my
     $scope.ProjectPerPage = 5;
     $scope.currentPage = 1;
 
-    $scope.searchKeyword = null;
+    $scope.searchKeyword = "";
 
     $scope.searchproject = function () {
         var project = [];
@@ -1569,28 +1616,42 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope,my
             // alert("nt");
             console.log($scope.searchBy);
             console.log($scope.searchKeyword);
-            $http.get("php/api/projects/search/" + $scope.searchBy + "/" + $scope.searchKeyword).then(function (response) {
 
-                if (response.data.status == "Successful") {
-                    for (var i = 0; i < response.data.message.length; i++) {
+            var data={
+                operation :"searchProject",
+                searchBy : $scope.searchBy,
+                searchKeyword :$scope.searchKeyword
+            };
+
+            var config = {
+                params: {
+                    data: data
+                }
+            };
+
+            $http.post('Process/php/projectFacade.php',null,config)
+            .success(function (data, status, headers) {
+                console.log(data);
+                if (data.status == "Successful") {
+                    for (var i = 0; i < data.message.length; i++) {
                         project.push({
-                            'project_name': response.data.message[i].ProjectName,
-                            'projectId': response.data.message[i].ProjectId,
-                            'project_status': response.data.message[i].ProjectStatus,
-                            'project_manager': response.data.message[i].FirstName + " " + response.data.message[i].LastName,
-                            'project_id': response.data.message[i].ProjectId,
-                            'project_Address': response.data.message[i].Address,
-                            'project_City': response.data.message[i].City,
-                            'project_State': response.data.message[i].State,
-                            'project_Country': response.data.message[i].Country,
-                            'PointContactName': response.data.message[i].PointContactName,
-                            'MobileNo': response.data.message[i].MobileNo,
-                            'LandlineNo': response.data.message[i].LandlineNo,
-                            'EmailId': response.data.message[i].EmailId,
-                            'Pincode': response.data.message[i].Pincode,
-                            'customerId': response.data.message[i].CustomerId,
-                            'customerName': response.data.message[i].CustomerName,
-                            projectManagerId: response.data.message[i].ProjectManagerId
+                            'project_name': data.message[i].ProjectName,
+                            'projectId': data.message[i].ProjectId,
+                            'project_status': data.message[i].ProjectStatus,
+                            'project_manager': data.message[i].FirstName + " " + data.message[i].LastName,
+                            'project_id': data.message[i].ProjectId,
+                            'project_Address': data.message[i].Address,
+                            'project_City': data.message[i].City,
+                            'project_State': data.message[i].State,
+                            'project_Country': data.message[i].Country,
+                            'PointContactName': data.message[i].PointContactName,
+                            'MobileNo': data.message[i].MobileNo,
+                            'LandlineNo': data.message[i].LandlineNo,
+                            'EmailId': data.message[i].EmailId,
+                            'Pincode': data.message[i].Pincode,
+                            'customerId': data.message[i].CustomerId,
+                            'customerName': data.message[i].CustomerName,
+                            projectManagerId: data.message[i].ProjectManagerId
                         });
                         //$scope.Projects = b;
                     }
@@ -1600,11 +1661,18 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope,my
                         alert("No Data Found For Search Criteria");
                     }
                 } else {
-                    alert(response.data.message);
+                    alert(data.message);
                 }
 
+            }).error(function (data, status, headers) {
 
-            })
+            });
+           // $http.get("php/api/projects/search/" + $scope.searchBy + "/" + $scope.searchKeyword).then(function (response) {
+
+
+
+
+
         } else {
 
             alert("Please Select Search By From SelectList");
@@ -1804,7 +1872,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
 
     $scope.modifyProject = function () {
         console.log("in ");
-
+        console.log($scope.projectDetails);
         var companiesInvolved = [];
         for (var i = 0; i < $scope.companies.length; i++) {
             if ($scope.companies[i].checkVal) {
@@ -1825,7 +1893,8 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             PointContactName: $scope.projectDetails.pointOfContactName,
             MobileNo: $scope.projectDetails.pointOfConactMobileNo,
             LandlineNo: $scope.projectDetails.pointOfContactLandlineNo,
-            EmailId: $scope.projectDetails.pointOfContactEmailID
+            EmailId: $scope.projectDetails.pointOfContactEmailID,
+            projectId:$scope.projectDetails.projectId
         };
         var projectData = {
             projectDetails: projectBasicDetails,
@@ -1833,7 +1902,52 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
         }
         // console.log("data is "+projectData);
         console.log("Posting");
-        console.log("data is " + JSON.stringify(projectData));
+        var data={
+            operation:"modifyProject",
+            data:projectData
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/projectFacade.php",null, config)
+            .success(function (data)
+            {
+                console.log(data);
+                if(data.status == "Successful") {
+                    alert(data.message);
+
+                    /*projectSearch[]projectId,
+                 $stateParams.projectToModify.project_name,
+                       $stateParams.projectToModify.project_Address,
+                 $stateParams.projectToModify.project_City,
+                         $stateParams.projectToModify.project_State,
+                     $stateParams.projectToModify.project_Country,
+                        $stateParams.projectToModify.Pincode,
+                        $stateParams.projectToModify.PointContactName,
+                        $stateParams.projectToModify.EmailId,
+                        $stateParams.projectToModify.LandlineNo,
+                        $stateParams.projectToModify.MobileNo,
+                        $stateParams.projectToModify.project_manager,
+                        $stateParams.projectToModify.projectManagerId,
+                        $stateParams.projectToModify.customerId*/
+                }
+
+
+            })
+            .error(function (data)
+            {
+                console.log(data);
+            });
+
+
+
+
+
+        /*console.log("data is " + JSON.stringify(projectData));
         $.ajax({
             type: "POST",
             url: 'php/api/project/update/' + $scope.projectDetails.projectId,
@@ -1850,7 +1964,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             error: function (data) {
                 alert(data.message);
             }
-        });
+        });*/
 
 
     }
