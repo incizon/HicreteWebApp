@@ -1,6 +1,6 @@
 <?php
 require_once '/../../php/appUtil.php';
-require_once '../Database.php';
+require_once '/../Database.php';
 
 Class Customer {
 
@@ -86,16 +86,22 @@ Class Customer {
 		$object = array();
 		$t=time();
 		$current =date("Y-m-d",$t);
-
+		$isDeleted='0';
+		$pincode="";
+		//echo "nside save customer";
+		//echo json_encode($data);
+		//echo json_encode($data);
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
 		$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-		if ($stmt->execute([$custnum, $data->CustomerName,$data->Address,$data->City,$data->State,$data->Country,$data->Pincode,$data->Mobileno,$data->Landlineno,$data->FaxNo,$data->EmailId,$data->isDeleted,$current,$userId,$current,$userId,$data->VATNo,$data->CSTNo,$data->PAN,$data->ServiceTaxNo]) === TRUE) {
+		if ($stmt->execute([$custnum, $data->customer_name,$data->customer_address,$data->customer_city,$data->customer_state,$data->customer_country,$pincode,$data->customer_phone,$data->customer_landline,$data->customer_faxNo,$data->customer_emailId,$isDeleted,$current,$userId,$current,$userId,$data->customer_vatNo,$data->customer_cstNo,$data->customer_panNo,$data->customer_serviceTaxNo]) === TRUE) {
+			//echo "\nit true";
 			return true;
 
 		}
 		else {
+			//echo "\n its false";
 			return false;
 		}
 
@@ -105,24 +111,25 @@ Class Customer {
 
 	public static function updateCustomer($id,$data,$userId){
 
+			//echo json_encode($data);
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 			$conn->beginTransaction();
 			$stmt = $conn->prepare("UPDATE customer_master SET CustomerName = :customerName, Address=:address, City=:city, State=:state, Country=:country, Mobileno=:mobileno, Landlineno=:landlineno, FaxNo=:faxno, EmailId=:email, LastModificationDate=now(), LastModifiedBy=:modBy ,VATNo=:vatno, CSTNo=:cstno, PAN=:pan, ServiceTaxNo=:servicetNo WHERE CustomerId = :id");
-			$stmt->bindParam(':customerName', $data->CustomerName, PDO::PARAM_STR);
-			$stmt->bindParam(':address', $data->Address, PDO::PARAM_STR);
-			$stmt->bindParam(':city', $data->City, PDO::PARAM_STR);
-			$stmt->bindParam(':state', $data->State, PDO::PARAM_STR);
-			$stmt->bindParam(':country', $data->Country, PDO::PARAM_STR);
-			$stmt->bindParam(':mobileno', $data->Mobileno, PDO::PARAM_STR);
-			$stmt->bindParam(':landlineno', $data->Landlineno, PDO::PARAM_STR);
-			$stmt->bindParam(':faxno', $data->FaxNo, PDO::PARAM_STR);
-			$stmt->bindParam(':email', $data->EmailId, PDO::PARAM_STR);
+			$stmt->bindParam(':customerName', $data->customer_name, PDO::PARAM_STR);
+			$stmt->bindParam(':address', $data->customer_address, PDO::PARAM_STR);
+			$stmt->bindParam(':city', $data->customer_city, PDO::PARAM_STR);
+			$stmt->bindParam(':state', $data->customer_state, PDO::PARAM_STR);
+			$stmt->bindParam(':country', $data->customer_country, PDO::PARAM_STR);
+			$stmt->bindParam(':mobileno', $data->customer_phone, PDO::PARAM_STR);
+			$stmt->bindParam(':landlineno', $data->customer_landline, PDO::PARAM_STR);
+			$stmt->bindParam(':faxno', $data->customer_faxNo, PDO::PARAM_STR);
+			$stmt->bindParam(':email', $data->customer_emailId, PDO::PARAM_STR);
 			$stmt->bindParam(':modBy', $userId, PDO::PARAM_STR);
-			$stmt->bindParam(':vatno', $data->VATNo, PDO::PARAM_STR);
-			$stmt->bindParam(':cstno', $data->CSTNo, PDO::PARAM_STR);
-			$stmt->bindParam(':pan', $data->PAN, PDO::PARAM_STR);
-			$stmt->bindParam(':servicetNo', $data->ServiceTaxNo, PDO::PARAM_STR);
+			$stmt->bindParam(':vatno', $data->customer_vatNo, PDO::PARAM_STR);
+			$stmt->bindParam(':cstno', $data->customer_cstNo, PDO::PARAM_STR);
+			$stmt->bindParam(':pan', $data->customer_panNo, PDO::PARAM_STR);
+			$stmt->bindParam(':servicetNo', $data->customer_serviceTaxNo, PDO::PARAM_STR);
 			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
 
 			if($stmt->execute() === TRUE){
