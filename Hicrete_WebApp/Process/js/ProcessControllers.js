@@ -936,6 +936,30 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
         workOrderDate: workDetail.creationDate
     }
 
+    $scope.invoiceDate=function(){
+        $scope.inDate.opened=true;
+    };
+
+    $scope.inDate={
+        opened:false
+    };
+
+    $scope.quotationDate=function(){
+        $scope.quotDate.opened=true;
+    };
+
+    $scope.quotDate={
+        opened:false
+    };
+
+    $scope.workOrderDate=function(){
+        $scope.workDate.opened=true;
+    };
+
+    $scope.workDate={
+        opened:false
+    };
+
 
     $scope.createInvoice = function () {
         //console.log("roundingOff is "+$scope.roundingOff);

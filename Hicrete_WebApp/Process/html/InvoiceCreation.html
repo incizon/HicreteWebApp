@@ -96,7 +96,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="date" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.invoiceDate"/>
+                                            <input type="text" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.invoiceDate" ng-click="invoiceDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="inDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
                                         </div>
 
                                     </div>
@@ -108,7 +108,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="date" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.quotationDate"/>
+                                            <input type="text" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.quotationDate" ng-click="quotationDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="quotDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
                                         </div>
 
                                     </div>
@@ -120,7 +120,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="date" class="form-control" name="WorkorderDate" ng-model="InvoiceDetails.workOrderDate"/>
+                                            <input type="text" class="form-control" name="WorkorderDate" ng-model="InvoiceDetails.workOrderDate" ng-click="workOrderDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="workDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
                                         </div>
 
                                     </div>
