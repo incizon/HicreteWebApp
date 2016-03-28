@@ -1,7 +1,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form class="form-horizontal" name="assignTasksForm" novalidate>
+        <form class="form-horizontal assignTaskForm" name="assignTasksForm" novalidate>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title"><strong>Assign Task</strong></h3>
@@ -25,7 +25,7 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="taskName" ng-model="task.taskname" class="form-control" maxlength="100" required/>
+                                <input type="text" name="taskName" ng-model="task.taskname" class="form-control" maxlength="100" title="Please enter task name" required/>
                             </div>
                             <div class="help-block" ng-messages="addtaskForm.taskName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter task name</p>
@@ -68,7 +68,7 @@
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button class="btn btn-default" data-ng-click="clearFields(task)">Cancel</button>
-                    <button class="btn btn-primary" name="Assign" ng-click = "assignTask()">Assign</button>
+                    <button class="btn btn-primary" name="Assign" data-ng-click="assignTask() && (submitted=true) && assignTaskForm.$valid">Assign</button>
                 </div>
             </div>
         </form>
