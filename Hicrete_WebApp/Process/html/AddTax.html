@@ -4,7 +4,7 @@
 </div>
 <div class="modal-body">
     <div class="row">
-        <form  name="applicatorPaymentFollowUpForm" class="form-horizontal" novalidate>
+        <form  name="addTaxForm" class="form-horizontal" novalidate>
             <div class="form-group">
                 <div class="col-md-4">
                     <label class="control-label">Tax Title</label>
@@ -12,7 +12,12 @@
                 <div class="col-md-8">
                     <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                        <input type="text" class="form-control" ng-model="tax.taxTitle">
+                        <input type="text" class="form-control" ng-model="tax.taxTitle" name="taxTitle" required/>
+                    </div>
+                    <div class="help-block"
+                         ng-messages="addTaxForm.taxTitle.$error"
+                         ng-show="formSubmitted">
+                        <span style="color:red" ng-message="required">Tax Title is required</span>
                     </div>
                 </div>
             </div>
@@ -43,7 +48,7 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-default"
-            ng-click="ok()">Submit</button>
+            ng-click="(formSubmitted=true) && addTaxForm.$valid && ok()">Submit</button>
     <button type="button" class="btn btn-default"
             ng-click="cancel()">Cancel</button>
 </div>

@@ -899,7 +899,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                     $scope.ok = function () {
 
                         console.log($scope.tax);
-                        $uibModalInstance.close($scope.tax);
+                        //$uibModalInstance.close($scope.tax);
                     };
 
                     $scope.cancel = function () {
@@ -960,7 +960,13 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
         }
         else {
-            alert("Please Select Checkbox");
+            //alert("Please Select Checkbox");
+            $scope.errorMessage = "Please Select Checkbox for Tax..";
+            console.log($scope.errorMessage);
+            $('#error').css('display','block');
+            setTimeout(function(){
+                $('#error').css('display','none');
+            },3000);
         }
 
     }
@@ -1232,7 +1238,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
                     $scope.ok = function () {
 
                         console.log($scope.tax);
-                        $uibModalInstance.close($scope.tax);
+                        //$uibModalInstance.close($scope.tax);
                     };
 
                     $scope.cancel = function () {
@@ -1292,7 +1298,13 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
 
         }
         else {
-            alert("Please Select Checkbox");
+            //alert("Please Select Checkbox");
+            $scope.errorMessage = "Please Select Checkbox for Tax..";
+            console.log($scope.errorMessage);
+            $('#error').css('display','block');
+            setTimeout(function(){
+                $('#error').css('display','none');
+            },3000);
         }
 
     }
