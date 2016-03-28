@@ -39,11 +39,7 @@ myApp.service('fileUpload', ['$http', function ($http) {
 
     this.uploadFileToUrl = function (file, uploadUrl) {
         //alert("File upload started");
-        $scope.warningMessage = "File upload started..";
-        $('#warning').css("display", "block");
-        setTimeout(function () {
-            $('#warning').css("display", "none");
-        }, 1000);
+
         var fd = new FormData();
         fd.append('file', file);
 
@@ -53,10 +49,20 @@ myApp.service('fileUpload', ['$http', function ($http) {
             })
 
             .success(function (status) {
+                $scope.warningMessage = "File upload started..";
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                }, 1000);
                 console.log("in upload successs" + status);
             })
 
             .error(function () {
+                $scope.errorMessage = "File upload not started..";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 1000);
                 console.log("In file upload error");
             });
     }
@@ -615,6 +621,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         var companyId = $scope.QuotationDetails.companyName.company_id;
         var companyName = $scope.QuotationDetails.companyName.company_name;
         var fileName = "";
+        $scope.warningMessage = "";
+        $scope.errorMessage = "";
         if ($scope.myFile != undefined) {
             if ($scope.myFile.name != undefined) {
                 var uploadQuotationLocation = "upload/Quotations/";
@@ -678,12 +686,15 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             success: function (data) {
                 $('#loader').css("display", "block");
                 //$scope.PostDataResponse = data;
-                $('#loader').css("display", "none");
-                $scope.warningMessage = JSON.stringify(data);
+                setTimeout(function () {
+                    $('#loader').css("display", "none");
+                }, 1000);
+                $scope.warningMessage = "Quotation is Created Successfully...'";
+                console.log($scope.warningMessage);
                 $('#warning').css("display", "block");
                 setTimeout(function () {
                     $('#warning').css("display", "none");
-                    window.location.reload(1);
+                    window.location.reload(true);
                 }, 3000);
 
                 //alert("status" + JSON.stringify(data));
@@ -692,7 +703,16 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 fileUpload.uploadFileToUrl(file, uploadUrl);
             },
             error: function (data) {
-                alert("Status" + data);
+                //alert("Status" + data);
+                $('#loader').css("display", "block");
+                $('#loader').css("display", "none");
+                $scope.errorMessage = "Quotation is Not Created...'";
+                console.log($scope.errorMessage);
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                    window.location.reload(1);
+                }, 3000);
                 //var file = $scope.myFile;
                 //  var uploadUrl = "php/api/quotation/upload";
                 //fileUpload.uploadFileToUrl(file, uploadUrl);
@@ -928,7 +948,6 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
     var totalAmount = 0;
 
     $scope.InvoiceDetails = {
-
         invoiceItemDetails: [],
         workOrderNumber: workDetail.workOrderNo,
         quotationNumber: workDetail.quotationId,
