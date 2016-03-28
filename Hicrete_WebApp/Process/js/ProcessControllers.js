@@ -994,14 +994,6 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
     $scope.roundingOff = 0;
     var totalAmount = 0;
 
-    $scope.InvoiceDetails = {
-        invoiceItemDetails: [],
-        workOrderNumber: workDetail.workOrderNo,
-        quotationNumber: workDetail.quotationId,
-        quotationDate: workDetail.dateOfQuotation,
-        workOrderDate: workDetail.creationDate
-    }
-
     $scope.invoiceDate=function(){
         $scope.inDate.opened=true;
     };
@@ -1025,6 +1017,16 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $log, 
     $scope.workDate={
         opened:false
     };
+
+
+    $scope.InvoiceDetails = {
+        invoiceItemDetails: [],
+        //following lines are commented by surabhi as it was giving error that workDetail is not defined
+        //workOrderNumber: workDetail.workOrderNo,
+        //quotationNumber: workDetail.quotationId,
+        //quotationDate: workDetail.dateOfQuotation,
+        //workOrderDate: workDetail.creationDate
+    }
 
 
     $scope.createInvoice = function () {
