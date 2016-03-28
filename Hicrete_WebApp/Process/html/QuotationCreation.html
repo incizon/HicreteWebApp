@@ -18,7 +18,7 @@
         </div>
         <div class="panel-body">
 
-            <form name="QuotationForm" class="form-horizontal">
+            <form name="QuotationForm" class="form-horizontal" novalidate>
 
                 <div class="row">
                     <h3 class="panel-title"><strong>Create</strong> Quotation </h3>
@@ -236,28 +236,40 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="text" name="Decription" placeholder="Description"
+                                <input type="text" name="Description" placeholder="Description"
                                        class="form-control" ng-model="quotation.quotationDescription"  pattern="[a-zA-Z0-9 ]+"/>
                                 <div class="help-block"
-                                     ng-messages="QuotationForm.Decription.$error"
+                                     ng-messages="QuotationForm.Description.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="pattern">Alphnumeric values are allowed</span>
                                 </div>
                             </td>
                             <td>
                                 <input type="text" name="Quantity" placeholder="Quantity"
-                                       class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)"/>
+                                       class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)" pattern="[0-9]+"/>
                                 <div class="help-block"
-                                     ng-messages="QuotationForm.Decription.$error"
+                                     ng-messages="QuotationForm.Quantity.$error"
                                      ng-show="formSubmitted">
-                                    <span style="color:red" ng-message="pattern">Alphnumeric values are allowed</span>
+                                    <span style="color:red" ng-message="pattern">Only digits are allowed</span>
                                 </div>
                             </td>
                             <td><input type="text" name="Unit" placeholder="Unit"
-                                       class="form-control" ng-model="quotation.quotationUnit"/>
+                                       class="form-control" ng-model="quotation.quotationUnit" pattern="[a-zA-Z]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.Unit.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Only alphabets are allowed</span>
+                                </div>
                             </td>
-                            <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"/>
+                            <td>
+                                <input type="text" name="UnitRate" placeholder="Unit Rate"
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"
+                                       pattern="[0-9]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.UnitRate.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                </div>
                             </td>
                             <td>
                                 {{quotation.amount}}
