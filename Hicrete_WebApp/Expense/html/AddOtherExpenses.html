@@ -1,3 +1,12 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="row" ng-controller="expenseEntryController">
                         <div class="col-md-12">
                             
@@ -23,12 +32,12 @@
                                                     <select class="form-control" name="projectName" required  ng-model="expenseDetails.project">
                                                         <option value="" disabled>Select</option>
                                                         <option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>
-                                                        
-                                                    </select> 
-                                            </div>
-                                            <div class="help-block" ng-messages="otherExpenseForm.projectName.$error" ng-show="otherExpenseClicked">
+                                                    </select>
+                                                <div class="help-block" ng-messages="otherExpenseForm.projectName.$error" ng-show="otherExpenseClicked">
                                                     <p style="color:red" ng-message="required">Select Project Name</p>
+                                                </div>
                                             </div>
+
                                         </div>
 
                                         <div class="form-group">
@@ -38,10 +47,10 @@
                                                     <option value="" disabled>Select</option>
                                                        <option  ng-repeat="segmentEntry in segmentList" value="{{segmentEntry.id}}">{{segmentEntry.name}}</option>
                                                 </select>
+                                                    <div class="help-block" ng-messages="otherExpenseForm.segmentName.$error" ng-show="otherExpenseClicked">
+                                                        <p style="color:red" ng-message="required">Select Segment Name</p>
+                                                    </div>
                                                 </div>
-                                                <div class="help-block" ng-messages="otherExpenseForm.segmentName.$error" ng-show="otherExpenseClicked">
-                                                    <p style="color:red" ng-message="required">Select Segment Name</p>     
-                                            </div>
                                         </div>
 
 
@@ -66,8 +75,11 @@
                                                 
                                                 <label class="col-md-2 col-xs-12 control-label">Description</label>
                                                 <div class="col-md-7 col-xs-12">                                            
-                                                    <textarea name="description" class="form-control" rows="5" ng-model="expenseDetails.desc"></textarea>
-                                                    <span class="help-block"></span>
+                                                    <textarea name="description" class="form-control" rows="5" ng-model="expenseDetails.desc" pattern="[a-zA-Z0-9 ]+" required></textarea>
+                                                    <div class="help-block" ng-messages="otherExpenseForm.description.$error" ng-show="otherExpenseClicked">
+                                                        <p style="color:red" ng-message="required">Amount cannot be blank</p>
+                                                        <p style="color:red" ng-message="pattern">Aplhanumeric values are allowed</p>
+                                                    </div>
                                                 </div>
                                            
                                         </div></br/>
@@ -96,11 +108,11 @@
                                                         <div class="col-md-7">                                       
                                                             <div class="input-group col-md-8">
                                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control" required/>
+                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control" pattern="[a-zA-Z0-9 ]+" required/>
                                                             </div>  
                                                              <div class="help-block" ng-messages="billForm.billNo.$error" ng-show="otherExpenseClicked">
                                                                 <p style="color:red" ng-message="required">BillNo cannot be blank</p>
-                                                                      
+                                                                 <p style="color:red" ng-message="required">Only Aplhanumeric values are allowed</p>
                                                             </div>
                                                         </div>  
                                                 
@@ -152,7 +164,7 @@
                             </div>
                                 <!--Start of buttons section-->
                                 <div class="panel-footer">
-                                    <button class="btn  btn-primary pull-right" ng-click="(otherExpenseClicked=true) &&  ( otherExpenseForm.$valid && (!expenseDetails.isBillApplicable || billForm.$valid ) ) &&addOtherExpense()">Submit</button>
+                                    <button class="btn  btn-primary pull-right" ng-click="(otherExpenseClicked=true) &&  ( otherExpenseForm.$valid && (!expenseDetails.isBillApplicable || billForm.$valid ) ) && addOtherExpense()">Submit</button>
 
                                     <button class="btn  btn-default pull-right">Clear Form</button>
                                 </div>

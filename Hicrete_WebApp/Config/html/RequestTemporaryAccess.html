@@ -1,4 +1,12 @@
-        
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
             <!-- PAGE CONTENT -->
 
                 <!-- PAGE CONTENT WRAPPER -->
@@ -45,7 +53,7 @@
                                         <div class="col-md-6 col-xs-12 col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="date" class="form-control datepicker"  ng-model="accessRequest.fromDate" name="fromDate" readonly required>
+                                                <input type="text" class="form-control"  ng-model="accessRequest.fromDate" name="fromDate" ng-click="requestFromDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="from.opened" datepicker-options="dateOptions" show-button-bar="false" readonly required>
                                             </div>
                                             <div class="help-block" ng-messages="requestAccessForm.fromDate.$error" ng-show="accessRequestSubmitted">
                                               <span style="color:red" ng-message="required">From Date is mandatory</span> 
@@ -57,7 +65,7 @@
                                         <div class="col-md-6 col-xs-12 col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                <input type="date" class="form-control datepicker" name="toDate" ng-model="accessRequest.toDate" readonly required>
+                                                <input type="text" class="form-control" name="toDate" ng-model="accessRequest.toDate" ng-click="requestToDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="to.opened" datepicker-options="dateOptions" show-button-bar="false" readonly required>
                                             </div>
                                             <div class="help-block" ng-messages="requestAccessForm.toDate.$error" ng-show="accessRequestSubmitted">
                                               <span style="color:red" ng-message="required">To Date is mandatory</span> 
