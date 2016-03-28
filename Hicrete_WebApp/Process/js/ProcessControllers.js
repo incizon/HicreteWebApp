@@ -718,9 +718,59 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             Details: quotationDetails,
             taxDetails: taxDetails
         };
+
+        var data={
+            operation:"createQuotation",
+            data:QuotationData
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/quotationFacade.php",null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "block");
+                //$scope.PostDataResponse = data;
+                setTimeout(function () {
+                    $('#loader').css("display", "none");
+                }, 1000);
+                $scope.warningMessage = "Quotation is Created Successfully...'";
+                console.log($scope.warningMessage);
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                    window.location.reload(true);
+                }, 3000);
+            })
+            .error(function(data)
+            {
+                $('#loader').css("display", "block");
+                $('#loader').css("display", "none");
+                $scope.errorMessage = "Quotation is Not Created...'";
+                console.log($scope.errorMessage);
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                    window.location.reload(1);
+                }, 3000);
+                console.log(data);
+            });
+
+
+
+
+
+
+
+
+
         //var quotationAllData = quotationData+" "+jsonData+""+taxJson;
         console.log("data is " + JSON.stringify(QuotationData));
-
+/*
         $.ajax({
             type: "POST",
             url: 'php/api/quotation/tax',
@@ -764,7 +814,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 //  var uploadUrl = "php/api/quotation/upload";
                 //fileUpload.uploadFileToUrl(file, uploadUrl);
             }
-        });
+        });*/
 
 
     }
