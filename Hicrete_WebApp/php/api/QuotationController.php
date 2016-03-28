@@ -261,15 +261,15 @@ class QuotationController
      *
      */
 
-    public static function getQuotationList($id){
-        try{
-            $quotation = Quotation::getQuotationListForProject($id);
-            echo AppUtil::getReturnStatus("Successful",$quotation);
-
-        }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
-        }
-
-    }
+//    public static function getQuotationList($id){
+//        try{
+//            $quotation = Quotation::getQuotationListForProject($id);
+//            echo AppUtil::getReturnStatus("Successful",$quotation);
+//
+//        }catch(Exception $e){
+//            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+//        }
+//
+//    }
 
 }
