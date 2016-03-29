@@ -36,6 +36,9 @@
         case 'getAllTaskForUser':
             TaskController::getAllTaskForUser();
             break;
+        case 'deleteTask':
+            TaskController::deleteTask($data->taskId);
+            break;
 
 
     }

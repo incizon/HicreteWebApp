@@ -3486,30 +3486,6 @@ myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $
         });
 
 
-    //$http.get("php/api/task").then(function (response) {
-    //    console.log(response);
-    //    for (var i = 0; i < response.data.length; i++) {
-    //
-    //        task.push({
-    //            "TaskID": response.data[i].TaskID,
-    //            "TaskName": response.data[i].TaskName,
-    //            "TaskDescripion": response.data[i].TaskDescripion,
-    //            "ScheduleStartDate": response.data[i].ScheduleStartDate,
-    //            "ScheduleEndDate": response.data[i].ScheduleEndDate,
-    //            "CompletionPercentage": response.data[i].CompletionPercentage,
-    //            "TaskAssignedTo": response.data[i].TaskAssignedTo,
-    //            "isCompleted": response.data[i].isCompleted,
-    //            "CreationDate": response.data[i].CreationDate,
-    //            "CreatedBy": response.data[i].CreatedBy,
-    //            "ActualStartDate": response.data[i].ActualStartDate,
-    //            "AcutalEndDate": response.data[i].AcutalEndDate,
-    //            "UserId": response.data[i].UserId,
-    //            "UserName": response.data[i].firstName + " " + response.data[i].lastName
-    //
-    //        });
-    //    }
-    //    // setInfo.set($scope.customers);
-    //})
 
     $scope.totalItems = $rootScope.tasks.length;
     $scope.currentPage = 1;
@@ -3529,14 +3505,63 @@ myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $
 
     $scope.deleteTask = function (taskid) {
         console.log("delete task " + taskid);
-        $http({
-            method: 'GET',
-            url: 'php/api/task/delete/' + taskid
-        }).then(function successCallback(response) {
-            alert("in success :::" + response);
-        }, function errorCallback(response) {
-            alert("in error ::" + response);
-        });
+        var data = {
+            operation: "deleteTask",
+            taskId:taskid
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Process/php/TaskFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                if (data.status != "sucess") {
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                } else {
+                    $scope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+
+                }
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        $('#warning').css("display", "none");
+                        window.location.reload(true);
+                    });
+                }, 3000);
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+
+                $('#loader').css("display", "none");
+                $scope.errorMessage = data.message;
+                $('#error').css("display", "block");
+            });
+
+
+
+
+
+        //$http({
+        //    method: 'GET',
+        //    url: 'php/api/task/delete/' + taskid
+        //}).then(function successCallback(response) {
+        //    alert("in success :::" + response);
+        //}, function errorCallback(response) {
+        //    alert("in error ::" + response);
+        //});
+
+
+
+
+
+
     }
 
 });
