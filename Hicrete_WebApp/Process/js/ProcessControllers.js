@@ -778,7 +778,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.noOfRows = 0;
     $scope.taxDetails = [];
     $scope.currentItemList = [];
-
+    $scope.totalAmnt=0;
     $scope.QuotationDetails = {
         quotationItemDetails: []
     };
@@ -837,24 +837,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
             });
 
-        /*$http.get("php/api/projects/companies/" + projectId).then(function (response) {
-            //console.log(response.data.length);
-
-            if (response.data.status == "Successful") {
-                for (var i = 0; i < response.data.message.length; i++) {
-                    company.push({
-                        company_id: response.data.message[i].companyId,
-                        company_name: response.data.message[i].companyName
-                    });
-                }
-                $scope.Companies = company;
-                console.log("Companies scope is " + JSON.stringify($scope.Companies));
-            } else {
-                alert(response.data.message);
-            }
-
-        })*/
-        // alert("in "+projectId);
     }
 
     $scope.createQuotation = function () {
@@ -874,8 +856,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
         }
 
-        // alert("no of rows"+$scope.noOfRows);
-        //alert(JSON.stringify($scope.QuotationDetails.quotationItemDetails));
 
         for (var i = 0; i < $scope.noOfRows; i++) {
             b.push({
@@ -962,62 +942,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 fileUpload.uploadFileToUrl(file, uploadUrl);
             });
 
-
-
-
-
-
-
-
-
         //var quotationAllData = quotationData+" "+jsonData+""+taxJson;
         console.log("data is " + JSON.stringify(QuotationData));
-/*
-        $.ajax({
-            type: "POST",
-            url: 'php/api/quotation/tax',
-            data: JSON.stringify(QuotationData),
-            dataType: 'json',
-            cache: false,
-            contentType: 'application/json',
-            processData: false,
-
-            success: function (data) {
-                $('#loader').css("display", "block");
-                //$scope.PostDataResponse = data;
-                setTimeout(function () {
-                    $('#loader').css("display", "none");
-                }, 1000);
-                $scope.warningMessage = "Quotation is Created Successfully...'";
-                console.log($scope.warningMessage);
-                $('#warning').css("display", "block");
-                setTimeout(function () {
-                    $('#warning').css("display", "none");
-                    window.location.reload(true);
-                }, 3000);
-
-                //alert("status" + JSON.stringify(data));
-                var file = $scope.myFile;
-                var uploadUrl = "php/api/quotation/upload";
-                fileUpload.uploadFileToUrl(file, uploadUrl);
-            },
-            error: function (data) {
-                //alert("Status" + data);
-                $('#loader').css("display", "block");
-                $('#loader').css("display", "none");
-                $scope.errorMessage = "Quotation is Not Created...'";
-                console.log($scope.errorMessage);
-                $('#error').css("display", "block");
-                setTimeout(function () {
-                    $('#error').css("display", "none");
-                    window.location.reload(1);
-                }, 3000);
-                //var file = $scope.myFile;
-                //  var uploadUrl = "php/api/quotation/upload";
-                //fileUpload.uploadFileToUrl(file, uploadUrl);
-            }
-        });*/
-
 
     }
 
@@ -1112,10 +1038,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     }
 
     $scope.calculateTotal = function (amount) {
-
-        totalAmount = totalAmount + amount;
         console.log("amount is " + amount);
-        $scope.totalAmnt = totalAmount;
+        $scope.totalAmnt =$scope.totalAmnt+amount;
     }
 
     $scope.totalTaxAmount = function (amount) {
@@ -1124,7 +1048,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.removeQuotationItem = function (index) {
         var amount = $scope.QuotationDetails.quotationItemDetails[index].amount;
         totalAmount = +totalAmount - +amount;
-        $scope.totalAmnt = totalAmount;
+        $scope.totalAmnt =$scope.totalAmnt-amount;
         //alert("remainingTotal is "+$scope.totalAmnt);
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
 
@@ -1134,7 +1058,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         $scope.taxDetails.splice(index, 1); //remove item by index
 
     };
-
 
     $scope.addTax = function (size) {
 
@@ -1151,7 +1074,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                     $scope.ok = function () {
 
                         console.log($scope.tax);
-                        //$uibModalInstance.close($scope.tax);
+                        $uibModalInstance.close($scope.tax);
                     };
 
                     $scope.cancel = function () {
@@ -1215,26 +1138,13 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             //alert("Please Select Checkbox");
             $scope.errorMessage = "Please Select Checkbox for Tax..";
             console.log($scope.errorMessage);
-            $('#error').css('display','block');
-            setTimeout(function(){
-                $('#error').css('display','none');
-            },3000);
+            $('#error').css('display', 'block');
+            setTimeout(function () {
+                $('#error').css('display', 'none');
+            }, 3000);
         }
 
     }
-
-    /*$scope.uploadQuotation = function(){
-     console.log("in upload file function");
-     //var file = $scope.QuotationDetails.quotationBlob;
-     var file = $scope.myFile;
-     console.log('file is '+file);
-     console.dir(file);
-
-     var uploadUrl = "../App/upload";
-     console.log("Upload url is "+uploadUrl);
-     fileUpload.uploadFileToUrl(file, uploadUrl);
-     }*/
-
 
 });
 
