@@ -38,6 +38,15 @@ switch($data->operation) {
     case "getCompaniesForProject":
         ProjectController::getCompaniesForProject($data->data);
         break;
+    case "getProjectList":
+        ProjectController::getProjectList();
+        break;
+    case "getSiteTrackingProjectList":
+        ProjectController::getSiteTrackingProjectList();
+        break;
+    case "getInvoiceOfProject":
+        ProjectController::getInvoicesByProject($data->data);
+        break;
 }
 
 

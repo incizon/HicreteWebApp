@@ -1,4 +1,12 @@
-
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="row">
     <div class="col-md-12">
         <form class="form-horizontal" name="assignTasksForm" novalidate>
@@ -73,7 +81,7 @@
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button class="btn btn-default" data-ng-click="clearFields(task)">Cancel</button>
-                    <button class="btn btn-primary" name="Assign" data-ng-click="(formSubmitted=true) && assignTaskForm.$valid && assignTask()">Assign</button>
+                    <button class="btn btn-primary" name="Assign" data-ng-click="(formSubmitted=true) && assignTask()">Assign</button>
                 </div>
             </div>
         </form>

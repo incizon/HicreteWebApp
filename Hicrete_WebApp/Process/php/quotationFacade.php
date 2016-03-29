@@ -27,6 +27,9 @@ switch($data->operation)
     case "getQuotationByProjectId":
         QuotationController::getQuotationByProjectId($data->data);
         break;
+    case "getQuotationList":
+        QuotationController::getQuotationList($data->data);
+        break;
 }
 
 

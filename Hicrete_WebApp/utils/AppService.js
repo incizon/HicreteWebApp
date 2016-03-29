@@ -102,7 +102,34 @@ myApp.service('AppService', function () {
     this.getAllCustomers=function($http,$customers){
         $('#loader').css("display","block");
 
-        $http.post("php/api/customerlist", null)
+        var data={
+            operation:"getCustomerList",
+
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/customerFacade.php",null, config)
+            .success(function (data) {
+                $('#loader').css("display","none");
+                console.log("IN Company Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $customers.push({checkVal:false,customerId:data.message[i].CustomerId,customerName:data.message[i].CustomerName});
+                    }
+                }
+            })
+            .error(function(data){
+                alert("Error  Occurred:"+data);
+            });
+        /*$http.post("php/api/customerlist", null)
             .success(function (data) {
                 $('#loader').css("display","none");
                 console.log("IN Company Get");
@@ -118,7 +145,7 @@ myApp.service('AppService', function () {
             .error(function (data, status, headers, config) {
                 alert("Error  Occurred:"+data);
 
-            });
+            });*/
 
 
 
@@ -127,7 +154,36 @@ myApp.service('AppService', function () {
 
     this.getAllProjects=function($http,$projects){
 
-        $http.post("php/api/projectlist", null)
+        var data={
+            operation:"getProjectList",
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/projectFacade.php",null, config)
+            .success(function (data) {
+                console.log("IN Project Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $projects.push({
+                            id: data.message[i].ProjectId,
+                            name: data.message[i].ProjectName
+
+                        });
+                    }
+                }
+
+            })
+            .error(function(data){
+                alert("Error  Occurred:"+data);
+            });
+       /* $http.post("php/api/projectlist", null)
             .success(function (data) {
 
                 console.log("IN Project Get");
@@ -147,13 +203,44 @@ myApp.service('AppService', function () {
             .error(function (data, status, headers, config) {
                 alert("Error  Occurred:"+data);
 
-            });
+            });*/
 
     }
 
     this.getAllQuotationOfProject=function($http,$quotations,$projectId){
 
-        $http.post("php/api/quotationlist/"+$projectId, null)
+        var data={
+            operation:"getQuotationList",
+            data:$projectId
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/quotationFacade.php",null, config)
+            .success(function (data) {
+                console.log("IN Project Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $quotations.push({
+                            id: data.message[i].QuotationId,
+                            name: data.message[i].QuotationTitle,
+                            refNo:data.message[i].RefNo
+                        });
+                    }
+                }
+            })
+            .error(function(data){
+                alert("Error  Occurred:"+data);
+            });
+
+        /*$http.post("php/api/quotationlist/"+$projectId, null)
             .success(function (data) {
 
                 console.log("IN Project Get");
@@ -173,13 +260,42 @@ myApp.service('AppService', function () {
             .error(function (data, status, headers, config) {
                 alert("Error  Occurred:"+data);
 
-            });
+            });*/
 
     }
 
     this.getAllInvoicesOfProject=function($http,$invoices,$projectId){
 
-        $http.post("php/api/invoicelist/"+$projectId, null)
+        var data={
+            operation:"getInvoiceOfProject",
+            data:$projectId
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/projectFacade.php",null, config)
+            .success(function (data) {
+                console.log("IN Invoice Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $invoices.push({
+                            id: data.message[i].InvoiceNo,
+                            name: data.message[i].InvoiceTitle
+                        });
+                    }
+                }
+            })
+            .error(function(data){
+                alert("Error  Occurred:"+data);
+            });
+       /* $http.post("php/api/invoicelist/"+$projectId, null)
             .success(function (data) {
 
                 console.log("IN Invoice Get");
@@ -198,7 +314,7 @@ myApp.service('AppService', function () {
             .error(function (data, status, headers, config) {
                 alert("Error  Occurred:"+data);
 
-            });
+            });*/
 
     }
 
@@ -206,7 +322,37 @@ myApp.service('AppService', function () {
 
     this.getAllSiteTrackingProjects=function($http,$projects){
 
-        $http.post("php/api/sitetrackingprojectlist", null)
+        var data={
+            operation:"getSiteTrackingProjectList",
+
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/projectFacade.php",null, config)
+            .success(function (data) {
+                console.log("IN Project Get");
+                console.log(data);
+                if(data.status!="Successful"){
+                    alert("Failed:"+data.message);
+                }else {
+                    for(var i=0;i<data.message.length;i++){
+                        $projects.push({
+                            id: data.message[i].ProjectId,
+                            name:data.message[i].ProjectName
+
+                        });
+                    }
+                }
+            })
+            .error(function(data){
+                alert("Error  Occurred:"+data);
+            });
+       /* $http.post("php/api/sitetrackingprojectlist", null)
             .success(function (data) {
 
                 console.log("IN Project Get");
@@ -226,7 +372,7 @@ myApp.service('AppService', function () {
             .error(function (data, status, headers, config) {
                 alert("Error  Occurred:"+data);
 
-            });
+            });*/
 
     }
 

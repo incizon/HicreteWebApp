@@ -569,6 +569,7 @@ myApp.run(function($rootScope,$http) {
     $rootScope.prodInqAll=[];
     $rootScope.customerSearch=[];
     $rootScope.projectSearch=[];
+    $rootScope.tasks=[];
 });
 
 
@@ -737,22 +738,72 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     console.log("in main page controller");
     $scope.Tasks = [];
     var task = [];
-    $http.get("php/api/assignedtask").then(function(response) {
-        console.log(response.data.length);
-        if(response.data != null){
-            for(var i = 0; i<response.data.length ; i++){
+
+    var data = {
+        operation: "getAllTaskForUser"
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    console.log(config);
+    $('#loader').css("display", "block");
+    $http.post("Process/php/TaskFacade.php", null, config)
+        .success(function (data) {
+            console.log(data);
+            $('#loader').css("display", "none");
+
+            for (var i = 0; i < data.message.length; i++) {
+
                 task.push({
-                    TaskID:response.data[i].TaskID,
-                    TaskName: response.data[i].TaskName,
-                    ScheduleStartDate: response.data[i].ScheduleStartDate,
-                    TaskDescripion:response.data[i].TaskDescripion,
-                    ScheduleEndDate:response.data[i].ScheduleEndDate
+                    "TaskID": data.message[i].TaskID,
+                    "TaskName": data.message[i].TaskName,
+                    "TaskDescripion": data.message[i].TaskDescripion,
+                    "ScheduleStartDate": data.message[i].ScheduleStartDate,
+                    "ScheduleEndDate": data.message[i].ScheduleEndDate,
+                    "CompletionPercentage": data.message[i].CompletionPercentage,
+                    "TaskAssignedTo": data.message[i].TaskAssignedTo,
+                    "isCompleted": data.message[i].isCompleted,
+                    "CreationDate": data.message[i].CreationDate,
+                    "CreatedBy": data.message[i].CreatedBy,
+                    "ActualStartDate": data.message[i].ActualStartDate,
+                    "AcutalEndDate": data.message[i].AcutalEndDate,
+                    "UserId": data.message[i].UserId,
+                    "UserName": data.message[i].firstName + " " + data.message[i].lastName
+
                 });
             }
-        }
-        $scope.Tasks = task;
-        console.log("task scope is "+JSON.stringify($scope.Tasks));
-    })
+            $scope.Tasks = task;
+            console.log("get task on dashboard");
+
+        })
+        .error(function (data, status, headers, config) {
+            console.log(data.error);
+
+            $('#loader').css("display", "none");
+            $scope.errorMessage = data.message;
+            $('#error').css("display", "block");
+        });
+
+
+
+    //$http.get("php/api/assignedtask").then(function(response) {
+    //    console.log(response.data.length);
+    //    if(response.data != null){
+    //        for(var i = 0; i<response.data.length ; i++){
+    //            task.push({
+    //                TaskID:response.data[i].TaskID,
+    //                TaskName: response.data[i].TaskName,
+    //                ScheduleStartDate: response.data[i].ScheduleStartDate,
+    //                TaskDescripion:response.data[i].TaskDescripion,
+    //                ScheduleEndDate:response.data[i].ScheduleEndDate
+    //            });
+    //        }
+    //    }
+    //    $scope.Tasks = task;
+    //    console.log("task scope is "+JSON.stringify($scope.Tasks));
+    //})
     $scope.saveScope = function(scope){
         //console.log("scope is "+scope);
         setInfo.set(scope);
