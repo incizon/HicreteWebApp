@@ -1,6 +1,6 @@
 <?php
 
-use \Jacwright\RestServer\RestException;
+//use \Jacwright\RestServer\RestException;
 require 'Payment.php';
 
 class PaymentController

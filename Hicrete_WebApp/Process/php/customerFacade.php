@@ -32,6 +32,9 @@ switch($data->operation)
         //echo(json_encode($data->custId));
         CustomerController::updateCustomer($data->data->customer_id,$data->data);
         break;
+    case "getCustomerList":
+        CustomerController::getCustomerList();
+        break;
 }
 
 

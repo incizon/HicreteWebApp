@@ -24,6 +24,12 @@ switch($data->operation)
     case "createQuotation":
         QuotationController::saveQuotationDetailsAndTax($data->data);
         break;
+    case "getQuotationByProjectId":
+        QuotationController::getQuotationByProjectId($data->data);
+        break;
+    case "getQuotationList":
+        QuotationController::getQuotationList($data->data);
+        break;
 }
 
 
