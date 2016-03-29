@@ -11,10 +11,16 @@ class FollowupController
      *
      * @url GET /followup/payment/$id
      */
-
     public function getPaymentFollowup($id){
-             $followup = Followup::getPaymentFollowup($id); // possible user loading method
-         return $followup;
+        try{
+            $followup = Followup::getPaymentFollowup($id); // possible user loading method
+            echo AppUtil::getReturnStatus("Successful",$followup);
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
      /**
@@ -22,11 +28,16 @@ class FollowupController
      *
      * @url GET /followup/quotation/$id
      */
-
     public function getQuotationFollowup($id){
-        
-             $followup = Followup::getQuotationFollowup($id); // possible user loading method
-         return $followup;
+        try{
+            $followup = Followup::getQuotationFollowup($id); // possible user loading method
+            echo AppUtil::getReturnStatus("Successful",$followup);
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
     /**
@@ -36,8 +47,15 @@ class FollowupController
      */
 
     public function getSitetrackingFollowup($id){
-             $followup = Followup::getSitetrackingFollowup($id); // possible user loading method
-         return $followup;
+        try{
+            $followup = Followup::getSitetrackingFollowup($id); // possible user loading method
+                echo AppUtil::getReturnStatus("Successful",$followup);
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
     }
 
      /**
@@ -84,8 +102,11 @@ class FollowupController
 
             $userId=AppUtil::getLoggerInUserId();
             if($userId!=null){
-                $followup = Followup::CreateQuotationFollowup($quotationId,$data,$userId); // possible user loading method
-                return $followup;
+                if(Followup::CreateQuotationFollowup($quotationId,$data,$userId)){
+                    echo AppUtil::getReturnStatus("Successful","Quotation Followup is created");
+                } else{
+                    echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+                }
             }
             else{
                 echo AppUtil::getReturnStatus("Unsuccessful","User Id is null");
@@ -97,7 +118,52 @@ class FollowupController
             echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }
 
+    }
 
+
+    /**
+     * Schedule payment followup by followup id
+     *
+     * @url POST /schedule/followup/payment/$followupId
+     */
+
+    public function schedulePaymentFollowup($followupId,$data){
+        $followup = Followup::schedulePaymentFollowup($followupId,$data); // possible user loading method
+        return $followup;
+    }
+
+    /**
+     * Schedule quotation followup by followup id
+     *
+     * @url POST /schedule/followup/quotation/$followupId
+     */
+
+    public function scheduleQuotationFollowup($followupId,$data){
+        $followup = Followup::scheduleQuotationFollowup($followupId,$data); // possible user loading method
+        return $followup;
+    }
+
+    /**
+     * Schedule Sitetraking followup by followup id
+     *
+     * @url POST /schedule/followup/siteTracking/$followupId
+     */
+
+    public function schedulesiteTrackingFollowup($followupId,$data){
+        $followup = Followup::schedulesiteTrackingFollowup($followupId,$data); // possible user loading method
+        return $followup;
+    }
+
+
+    /**
+     * Create payment followup by invoice id
+     *
+     * @url POST /followup/payment/create/$invoiceId
+     */
+
+    public function CreatePaymentFollowup($invoiceId,$data){
+        $followup = Followup::CreatePaymentFollowup($invoiceId,$data); // possible user loading method
+        return $followup;
     }
 
 }

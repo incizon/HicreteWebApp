@@ -759,81 +759,134 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     }
 
 
-    /*Payment Followup*/
 
-    $http.get("php/api/followup/payment/2").then(function(response) {
-        //  console.log(response.data.length);
-        $scope.paymentFollowup = [];
-        var b = [];
-        if(response.data != null){
-            for(var i = 0; i<response.data.length ; i++){
-                b.push({
-                    followupId: response.data[i].FollowupId,
-                    invoiceNo: response.data[i].InvoiceNo,
-                    assignEmployee: response.data[i].AssignEmployee,
-                    followupDate: response.data[i].FollowupDate,
-                    invoiceId:response.data[i].InvoiceId,
-                    followupDate:response.data[i].FollowupDate,
-                    followupTitle:response.data[i].FollowupTitle,
-                    creationDateresponse:response.data[i].CreationDateresponse,
-                    createdBy: response.data[i].CreatedBy,
-                    type : 'Payment'
-                });
-            }
+
+    var data={
+        operation :"getPaymentFollowup"
+    };
+
+    var config = {
+        params: {
+            data: data
         }
-        $scope.paymentFollowup = b;
-        //console.log("paymentFollowup data  is "+JSON.stringify($scope.paymentFollowup));
-    })
+    };
 
-    /*Quotation Followup*/
+    $http.post('Process/php/followupFacade.php',null,config)
+        .success(function (data, status, headers) {
+            console.log(data);
 
-    $http.get("php/api/followup/quotation/2").then(function(response) {
-        //  console.log(response.data.length);
-        $scope.quotationFollowup = [];
-        var b = [];
-        if(response.data != null){
-            for(var i = 0; i<response.data.length ; i++){
-                b.push({
-                    followupId: response.data[i].FollowupId,
-                    quotationId: response.data[i].QuotationId,
-                    assignEmployee:response.data[i].AssignEmployee,
-                    followupDate:response.data[i].FollowupDate,
-                    followupTitle: response.data[i].FollowupTitle,
-                    creationDate:response.data[i].CreationDate,
-                    createdBy :response.data[i].CreatedBy,
-                    type : 'Quotation'
-                });
+            if(data.status == "Successful") {
+                $scope.paymentFollowup = [];
+                var b = [];
+
+                for(var i = 0; i<data.message.length ; i++){
+                    b.push({
+                        followupId: data.message[i].FollowupId,
+                        invoiceNo: data.message[i].InvoiceNo,
+                        assignEmployee: data.message[i].AssignEmployee,
+                        followupDate: data.message[i].FollowupDate,
+                        invoiceId:data.message[i].InvoiceId,
+                        followupDate:data.message[i].FollowupDate,
+                        followupTitle:data.message[i].FollowupTitle,
+                        creationDateresponse:data.message[i].CreationDateresponse,
+                        createdBy: data.message[i].CreatedBy,
+                        type : 'Payment'
+                    });
+                }
+
+                $scope.paymentFollowup = b;
+            }else{
+                alert("Database error occurred while fetching payment followup");
             }
+
+        })
+        .error(function (data, status, header) {
+            alert("Error Occured while fetching payment followup");
+        });
+
+
+    var data={
+        operation :"getQuotationFollowup"
+    };
+
+    var config = {
+        params: {
+            data: data
         }
-        $scope.quotationFollowup = b;
-        //console.log("quotationFollowup data  is "+JSON.stringify($scope.quotationFollowup));
-    })
+    };
 
-    /*Site-tracking followup*/
+    $http.post('Process/php/followupFacade.php',null,config)
+        .success(function (data, status, headers) {
+            console.log(data);
 
-    $http.get("php/api/followup/sitetracking/1").then(function(response) {
-        //  console.log(response.data.length);
-        $scope.sitetrackingFollowup = [];
-        var b = [];
-        if(response.data != null){
-            for(var i = 0; i<response.data.length ; i++){
-                b.push({
-                    followupId: response.data[i].FollowupId,
-                    projectId: response.data[i].ProjectId,
-                    assignEmployee:response.data[i].AssignEmployee,
-                    followupDate:response.data[i].FollowupDate,
-                    followupTitle: response.data[i].FollowupTitle,
-                    creationDate:response.data[i].CreationDate,
-                    createdBy :response.data[i].CreatedBy,
-                    type : 'SiteTracking'
-                });
+            if(data.status == "Successful") {
+                $scope.quotationFollowup = [];
+                var b = [];
+
+                for(var i = 0; i<data.message.length ; i++){
+                    b.push({
+                        followupId: data.message[i].FollowupId,
+                        quotationId: data.message[i].QuotationId,
+                        assignEmployee:data.message[i].AssignEmployee,
+                        followupDate:data.message[i].FollowupDate,
+                        followupTitle: data.message[i].FollowupTitle,
+                        creationDate:data.message[i].CreationDate,
+                        createdBy :data.message[i].CreatedBy,
+                        type : 'Quotation'
+                    });
+                }
+
+                $scope.quotationFollowup = b;
+            }else{
+                alert("Database error occurred while fetching Quotation followup");
             }
+
+        })
+        .error(function (data, status, header) {
+            alert("Error Occured while fetching Quotation followup");
+        });
+
+
+    var data={
+        operation :"getSitetrackingFollowup"
+    };
+
+    var config = {
+        params: {
+            data: data
         }
-        $scope.sitetrackingFollowup = b;
-        //console.log("sitetrackingFollowup data  is "+JSON.stringify($scope.sitetrackingFollowup));
-    })
+    };
 
+    $http.post('Process/php/followupFacade.php',null,config)
+        .success(function (data, status, headers) {
+            console.log(data);
 
+            if(data.status == "Successful") {
+                $scope.sitetrackingFollowup = [];
+                var b = [];
+
+                for(var i = 0; i<data.message.length ; i++){
+                    b.push({
+                        followupId: data.message[i].FollowupId,
+                        projectId: data.message[i].ProjectId,
+                        assignEmployee:data.message[i].AssignEmployee,
+                        followupDate:data.message[i].FollowupDate,
+                        followupTitle: data.message[i].FollowupTitle,
+                        creationDate:data.message[i].CreationDate,
+                        createdBy :data.message[i].CreatedBy,
+                        type : 'SiteTracking'
+                    });
+                }
+
+                $scope.sitetrackingFollowup = b;
+            }else{
+                alert("Database error occurred while fetching SiteTracking followup");
+            }
+
+        })
+        .error(function (data, status, header) {
+            alert("Error Occured while fetching SiteTracking followup");
+        });
 
 });
 

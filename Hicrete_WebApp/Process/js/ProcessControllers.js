@@ -422,31 +422,58 @@ myApp.controller('ProjectDetailsController', function ($stateParams,myService ,s
                     var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
                     var FollowupTitle = $scope.applicatorDetails.followTitle;
 
-                    var CreatedBy = 1;
-                    var date = new Date();
-                    var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
+                    var followupData = {FollowupDate: FollowupDate ,AssignEmployee:  AssignEmployee ,FollowupTitle:FollowupTitle };
+                    var data={
+                        operation :"CreateQuotationFollowup",
+                        id : q.QuotationId,
+                        data:followupData
 
-                    var data = '{"FollowupDate":"' + FollowupDate + '","AssignEmployee":"' + AssignEmployee + '","FollowupTitle":"' + FollowupTitle + '","CreatedBy":"' + CreatedBy + '","CreationDate":"' + creationDate + '"}';
-                    console.log("q id is " + q.QuotationId);
-                    console.log(" postdata for quotation followup is " + data);
-                    $.ajax({
-                        type: "POST",
-                        url: 'php/api/followup/quotation/create/' + q.QuotationId,
-                        data: data,
-                        dataType: 'json',
-                        cache: false,
-                        contentType: 'application/json',
-                        processData: false,
+                    };
 
-                        success: function (data) {
-                            alert("success Followup creation " + data);
-
-
-                        },
-                        error: function (data) {
-                            alert("error in Followup creation " + data);
+                    var config = {
+                        params: {
+                            data: data
                         }
-                    });
+                    };
+
+                    $http.post('Process/php/followupFacade.php',null,config)
+                        .success(function (data, status, headers) {
+                            console.log(data);
+                            alert("Stop");
+                            if(data.status == "Successful") {
+                                $('#loader').css("display", "block");
+                                //$scope.PostDataResponse = data;
+                                $('#loader').css("display", "none");
+                                $scope.warningMessage = "Followup Created Successfully";
+                                $('#warning').css("display", "block");
+                            }
+                            else
+                            {
+                                $scope.errorMessage = data.message;
+                                $('#error').css("display", "block");
+                                setTimeout(function () {
+                                    $('#error').css("display", "none");
+                                }, 3000);
+                            }
+                            setTimeout(function () {
+                                $('#warning').css("display", "none");
+
+                            }, 3000);
+
+                            //alert(data.message);
+
+                        })
+                        .error(function (data, status, header) {
+                            //$scope.ResponseDetails = "Data: " + data;
+                            console.log(data);
+                            $scope.errorMessage = data;
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 3000);
+                            //alert(data);
+                        });
+
                     $uibModalInstance.close();
                 };
 
@@ -2292,8 +2319,15 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
 
     $scope.selectQuotation = function (quotationId) {
         //  console.log("quotation id is "+$scope.quotationID.id);
+
+
+
+
+
+
         $scope.followups = [];
         var followup = [];
+
         $http.get("php/api/quotation/followup/" + quotationId).then(function (response) {
             //   console.log(response.data.length);
             for (var i = 0; i < response.data.length; i++) {
