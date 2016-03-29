@@ -54,7 +54,7 @@ class PaymentController
 
     public function getAllPayment($projid){
              $payment = Payment::getAllPayment($projid); // possible user loading method
-         return $payment;
+         echo AppUtil::getReturnStatus("sucess",$payment);
     }
 
    /**
@@ -98,7 +98,7 @@ class PaymentController
     public function savePaymentAndDetails($data)
     {
         $Payment = Payment::savePaymentAndDetails($data); // saving the user to the database
-        return $Payment; // returning the updated or newly created user object
+        echo AppUtil::getReturnStatus("sucess",$Payment); // returning the updated or newly created user object
     }
 
 
