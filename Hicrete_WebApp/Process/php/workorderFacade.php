@@ -3,10 +3,9 @@
  * Created by IntelliJ IDEA.
  * User: Pranav
  * Date: 29-03-2016
- * Time: 00:36
+ * Time: 21:43
  */
-
-require_once '../../php/api/QuotationController.php';
+require_once '../../php/api/WorkorderController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {
@@ -21,13 +20,11 @@ $opt = array(
 
 switch($data->operation)
 {
-    case "createQuotation":
-        QuotationController::saveQuotationDetailsAndTax($data->data);
+    case "createWorkorder":
+        echo(json_encode(WorkorderController::saveWorkOrder($data->data)));
         break;
-    case "getQuotationByProjectId":
-        QuotationController::getQuotationByProjectId($data->data);
+    case "getWorkorderByProjectId":
+
+        echo (json_encode(WorkorderController::getWokrorderByProject($data->data)));
         break;
 }
-
-
-?>

@@ -29,6 +29,12 @@ switch($data->operation) {
     case "modifyProject":
         ProjectController::updateProject($data->data->projectDetails->projectId,$data->data);
         break;
+    case "getCompaniesForProject":
+        ProjectController::getCompaniesForProject($data->data);
+        break;
+    case "closeProject":
+        echo(json_encode(ProjectController::closeProject($data->data)));
+        break;
 }
 
 

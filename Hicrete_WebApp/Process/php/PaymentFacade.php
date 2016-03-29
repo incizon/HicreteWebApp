@@ -3,10 +3,10 @@
  * Created by IntelliJ IDEA.
  * User: Pranav
  * Date: 29-03-2016
- * Time: 00:36
+ * Time: 20:55
  */
 
-require_once '../../php/api/QuotationController.php';
+require_once '../../php/api/PaymentController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {
@@ -21,13 +21,7 @@ $opt = array(
 
 switch($data->operation)
 {
-    case "createQuotation":
-        QuotationController::saveQuotationDetailsAndTax($data->data);
-        break;
-    case "getQuotationByProjectId":
-        QuotationController::getQuotationByProjectId($data->data);
+    case 'AllPaymentForProject':
+        echo json_encode(PaymentController::getAllPayment($data->data));
         break;
 }
-
-
-?>
