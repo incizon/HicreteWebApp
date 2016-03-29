@@ -301,44 +301,64 @@ myApp.controller('ProjectDetailsController', function ($stateParams,myService ,s
     /*********************************************************/
     $scope.projectPaymentsInvoice = [];
     var paymentinvoice = [];
+    var data={
+        operation :"AllPaymentForProject",
+        data : projId
 
+    };
 
-    $http.get("php/api/payment/allPayment/Byproj/" + projId).then(function (response) {
-        // console.log(response.data.length);
-        if (response.data != null) {
-            paymentdetails = response.data;
+    var config = {
+        params: {
+            data: data
         }
-        $scope.projectPayment = paymentdetails;
-        // console.log("project payment new scope is "+JSON.stringify($scope.projectPayment));
-        var pkgamount = 0;
-        var amountPaid = 0;
-        var remaining = 0;
-        var remaining2 = 0;
-        for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
-            pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
-            amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
-            // console.log("pkg amnt is "+pkgamount);
-            for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
-                remaining = 0;
-                console.log("in for");
-                console.log("remaining " + remaining);
-                console.log("grand total is " + $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal);
-                // remaining = +pkgamount - +$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal;
-                remaining = +pkgamount - ( +remaining2 + +$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal);
-                remaining2 = +remaining2 + +$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal
-                paymentinvoice.push({
-                    'amount_paid': $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
-                    'invoice_name': $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceTitle,
-                    'remaining_amt': remaining
-                    //paid_to:$scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName+''+$scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
-                    //remaining_amount: remaining
-                });
+    };
+
+
+    $http.post("Process/php/PaymentFacade.php",null, config)
+     .success(function (data) {
+            //$http.get("php/api/payment/allPayment/Byproj/" + projId).then(function (response) {
+            // console.log(response.data.length);
+            console.log(data);
+            if (data != null) {
+                paymentdetails =data;
             }
-            $scope.projectPaymentsInvoice = paymentinvoice;
-        }
-        $scope.projectPaymentsInvoice;
+            $scope.projectPayment = paymentdetails;
+            // console.log("project payment new scope is "+JSON.stringify($scope.projectPayment));
+            var pkgamount = 0;
+            var amountPaid = 0;
+            var remaining = 0;
+            var remaining2 = 0;
+            for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
+                pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
+                amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
+                // console.log("pkg amnt is "+pkgamount);
+                for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
+                    remaining = 0;
+                    console.log("in for");
+                    console.log("remaining " + remaining);
+                    console.log("grand total is " + $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal);
+                    // remaining = +pkgamount - +$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal;
+                    remaining = +pkgamount - ( +remaining2 + +$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal);
+                    remaining2 = +remaining2 + +$scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal
+                    paymentinvoice.push({
+                        'amount_paid': $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
+                        'invoice_name': $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceTitle,
+                        'remaining_amt': remaining
+                        //paid_to:$scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName+''+$scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
+                        //remaining_amount: remaining
+                    });
+                }
+                $scope.projectPaymentsInvoice = paymentinvoice;
+            }
+            $scope.projectPaymentsInvoice;
+
+        })
+        .error(function (data) {
+            console.log(data)
+
+        });
         // console.log("see here "+pkgamount+" total "+JSON.stringify($scope.projectPaymentsInvoice));
-    })
+    //})
     /*******************************************************************************/
     // console.log("iddddddddd "+projId);
 
@@ -368,10 +388,38 @@ myApp.controller('ProjectDetailsController', function ($stateParams,myService ,s
         var uploadQuotationLocation = "upload/Workorders/";
         var fileName = uploadQuotationLocation + $scope.myFile.name;
         //console.log("in createWorkorder ");//WorkOrderNo, WorkOrderName, ReceivedDate, WorkOrderBlob, ProjectId, CompanyId
-        var workorderData = '{"ProjectId":"' + $scope.workorder.projId + '","WorkOrderName":"' + $scope.workorder.title + '","ReceivedDate":"' + $scope.workorder.date + '","WorkOrderBlob":"' + fileName + '","CompanyId":"' + $scope.workOrderDetails.CompanyId + '","QuotationId":"' + $scope.workOrderDetails.QuotationId + '"}';
+        var workorderData = {
+            ProjectId: $scope.workorder.projId,
+            WorkOrderName:$scope.workorder.title,
+            ReceivedDate:$scope.workorder.date,
+            WorkOrderBlob:fileName,
+            CompanyId:$scope.workOrderDetails.CompanyId,
+            QuotationId:$scope.workOrderDetails.QuotationId
+        };
         console.log("workorder data is " + workorderData);
+        var data={
+            operation :"createWorkorder",
+            data : workorderData
 
-        $.ajax({
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Process/php/workorderFacade.php",null, config)
+            .success(function (data) {
+                alert("success in workorder creation " + data + " status is " + status);
+                alert("status" + JSON.stringify(data));
+                var file = $scope.myFile;
+                var uploadUrl = "php/api/workorder/upload";
+                fileUpload.uploadFileToUrl(file, uploadUrl);
+            })
+            .error(function (data){
+                alert("error in workorder creation " + JSON.stringify(data));
+            })
+        /*$.ajax({
             type: "POST",
             url: 'php/api/workorder',
             data: workorderData,
@@ -390,7 +438,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams,myService ,s
             error: function (data) {
                 alert("error in workorder creation " + JSON.stringify(data));
             }
-        });
+        });*/
     }
     $scope.viewProjQuotationDetails = function (q) {
         setInfo.set(q);
@@ -1914,7 +1962,44 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
 
     var companiesInvolved;
     $scope.companies = [];
-    $http.get("php/api/projects/companies/" + $scope.projectDetails.projectId).then(function (response) {
+    var data={
+        operation:"getCompaniesForProject",
+        data:$scope.projectDetails.projectId
+
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    console.log("before posting");
+    $http.post("Process/php/projectFacade.php",null, config)
+        .success(function (data){
+            console.log(data);
+            if (data.status == "Successful") {
+                for (var j = 0; j < $scope.Allcompanies.length; j++) {
+                    var isExcluded = true;
+                    for (var i = 0; i < data.message.length; i++) {
+                        if ($scope.Allcompanies[j].companyId == data.message[i].companyId) {
+                            isExcluded = false;
+                            break;
+                        }
+                    }
+                    if (isExcluded)
+                        $scope.companies.push($scope.Allcompanies[j]);
+                }
+
+            } else {
+                alert("Error Occurred Getting Company Information For This Project");
+            }
+        })
+        .error(function(data){
+            console.log(data);
+        });
+
+
+
+/*    $http.get("php/api/projects/companies/" + $scope.projectDetails.projectId).then(function (response) {
         if (response.data.status == "Successful") {
             for (var j = 0; j < $scope.Allcompanies.length; j++) {
                 var isExcluded = true;
@@ -1931,7 +2016,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
         } else {
             alert("Error Occurred Getting Company Information For This Project");
         }
-    });
+    });*/
 
 
     $scope.modifyProject = function () {
