@@ -1,7 +1,7 @@
 <?php
 require_once '/../../php/appUtil.php';
 require_once 'PhpWord/TemplateProcessor.php';
-require_once '../Database.php';
+require_once '/../../php/Database.php';
 //include_once 'Sample_Header.php';
 //include_once 'Sample_Footer.php';
 
