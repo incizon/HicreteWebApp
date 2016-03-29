@@ -859,7 +859,40 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         var company = [];
         var projectId = $scope.QuotationDetails.projectId;
         console.log("proj id is " + projectId);
-        $http.get("php/api/projects/companies/" + projectId).then(function (response) {
+
+        var data={
+            operation :"getCompaniesForProject",
+            data : projectId
+
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/projectFacade.php",null, config)
+            .success(function (data) {
+                console.log(data);
+                if (data.status == "Successful") {
+                    for (var i = 0; i < data.message.length; i++) {
+                        company.push({
+                            company_id: data.message[i].companyId,
+                            company_name: data.message[i].companyName
+                        });
+                    }
+                    $scope.Companies = company;
+                    console.log("Companies scope is " + JSON.stringify($scope.Companies));
+                } else {
+                    alert(data.message);
+                }
+            })
+            .error(function(data){
+
+            });
+
+        /*$http.get("php/api/projects/companies/" + projectId).then(function (response) {
             //console.log(response.data.length);
 
             if (response.data.status == "Successful") {
@@ -875,7 +908,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 alert(response.data.message);
             }
 
-        })
+        })*/
         // alert("in "+projectId);
     }
 
@@ -963,6 +996,9 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                     $('#warning').css("display", "none");
                     window.location.reload(true);
                 }, 3000);
+                var file = $scope.myFile;
+                var uploadUrl = "php/api/quotation/upload";
+                fileUpload.uploadFileToUrl(file, uploadUrl);
             })
             .error(function(data)
             {
@@ -976,6 +1012,9 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                     window.location.reload(1);
                 }, 3000);
                 console.log(data);
+                var file = $scope.myFile;
+                var uploadUrl = "php/api/quotation/upload";
+                fileUpload.uploadFileToUrl(file, uploadUrl);
             });
 
 
