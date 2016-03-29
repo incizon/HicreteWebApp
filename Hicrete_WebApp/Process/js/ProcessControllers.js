@@ -2204,7 +2204,7 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
 
 
 myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scope, $http) {
-    var viewQuotDetail = $stateParams.quotationToView;
+    var viewQuotDetail = $state1Params.quotationToView;
     $scope.projectName = $stateParams.projectName;
     var qId = viewQuotDetail.QuotationId;
     $scope.viewQuotationDetail = {
