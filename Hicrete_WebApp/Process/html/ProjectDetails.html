@@ -111,7 +111,7 @@
                              <a ui-sref="Process.viewQuotation({quotationToView:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
                              <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o" ></span>Revise</button></a>
                              <a href="{{q.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',q)"><span class="fa fa-edit"></span>Schedule Followup</button>
+                             <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',q,'Quoatation')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              <a  data-target="#viewDetails" data-toggle="modal" ><input type="button" class="btn btn-info" ng-click="check(q)" value="Attach Workorder"></a>
                          </td>
                      </tr>
@@ -198,7 +198,7 @@
                              <td>
                                  <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm" ng-click="passInvoice(iv)"><span class="fa fa-eye"></span>View</button></a>
                                  <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg')"><span class="fa fa-edit"></span>Schedule Followup</button>
+                                 <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',iv,'invoice')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
 

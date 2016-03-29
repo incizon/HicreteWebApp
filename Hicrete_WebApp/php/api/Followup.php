@@ -160,71 +160,60 @@ public function CreateQuotationFollowup($quotationId,$data,$userId){
 }
 
 	public function schedulePaymentFollowup($followupId,$data){
-		try{
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$conn->beginTransaction();
-			$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-			$stmt = $conn->prepare("INSERT INTO project_payment_followup_details (FollowupId, Description, ConductDate) VALUES(?,?,?)");
-			if($stmt->execute([$followupId,$data->Description,$data->ConductDate]) === TRUE){
-				$conn->commit();
-				return "payment scheduled succesfully";
-			}
-			else{
-				return " Error in payment scheduled";
-			}
 
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+
+		$stmt = $conn->prepare("INSERT INTO project_payment_followup_details (FollowupId, Description, ConductDate) VALUES(?,?,?)");
+		if($stmt->execute([$followupId,$data->Description,$data->ConductDate]) === TRUE){
+			$conn->commit();
+			return true;
 		}
-		catch(PDOException $e){
-			return "In Exception schedulePaymentFollowup".$e->getMessage();
+		else{
+			return false;
 		}
+
+
 	}
 
 	public function scheduleQuotationFollowup($followupId,$data){
-		try{
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$conn->beginTransaction();
-			$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-			$stmt = $conn->prepare("INSERT INTO quotation_followup_details (FollowupId, Description, ConductDate) VALUES(?,?,?)");
-			if($stmt->execute([$followupId,$data->Description,$data->ConductDate]) === TRUE){
-				$conn->commit();
-				return "quotation scheduled succesfully";
-			}
-			else{
-				return " Error in quotation scheduled";
-			}
 
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+
+		$stmt = $conn->prepare("INSERT INTO quotation_followup_details (FollowupId, Description, ConductDate) VALUES(?,?,?)");
+		if($stmt->execute([$followupId,$data->Description,$data->ConductDate]) === TRUE){
+			$conn->commit();
+			return true;
 		}
-		catch(PDOException $e){
-			return "In Exception scheduleQuotationFollowup".$e->getMessage();
+		else{
+			return false;
 		}
+
 	}
 
 
 
-	public function CreatePaymentFollowup($invoiceId,$data){
+	public function CreatePaymentFollowup($invoiceId,$data,$userId){
 		$FollowupId = AppUtil::generateId();
 		$t=time();
 		$today =date("Y-m-d",$t);
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$conn->beginTransaction();
-			$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-			$stmt = $conn->prepare("INSERT INTO project_payment_followup(FollowupId, InvoiceId, AssignEmployee, FollowupDate, FollowupTitle, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?);");
-			if($stmt->execute([$FollowupId,$invoiceId,$data->AssignEmployee,$data->FollowupDate,$data->FollowupTitle,$today,$data->CreatedBy]) === TRUE){
-				$conn->commit();
-				return "Success in CreatePaymentFollowup";
-			}
-			else{
-				$conn->rollBack();
-				return "Error in CreatePaymentFollowup in stmt";
-			}
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+
+		$stmt = $conn->prepare("INSERT INTO project_payment_followup(FollowupId, InvoiceId, AssignEmployee, FollowupDate, FollowupTitle, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?);");
+		if($stmt->execute([$FollowupId,$invoiceId,$data->AssignEmployee,$data->FollowupDate,$data->FollowupTitle,$today,$userId]) === TRUE){
+			$conn->commit();
+			return true;
 		}
-		catch(PDOException $e){
-			return "Exception in CreateQuotationFollowup".$e->getMessage();
+		else{
+			$conn->rollBack();
+			return false;
 		}
+
 		$db = null;
 	}
 

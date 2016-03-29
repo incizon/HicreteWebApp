@@ -61,7 +61,7 @@ switch($data->operation)
         break;
     case 'CreatePaymentFollowup':
         //echo(json_encode($data->custId));
-        FollowupController::CreatePaymentFollowup($data->id,$data->data);
+        FollowupController::CreatePaymentFollowup($data->id,$data->data,$userId);
         break;
 
 

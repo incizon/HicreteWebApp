@@ -128,8 +128,16 @@ class FollowupController
      */
 
     public function schedulePaymentFollowup($followupId,$data){
-        $followup = Followup::schedulePaymentFollowup($followupId,$data); // possible user loading method
-        return $followup;
+        try{
+            if(Followup::schedulePaymentFollowup($followupId,$data)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
     /**
@@ -139,8 +147,16 @@ class FollowupController
      */
 
     public function scheduleQuotationFollowup($followupId,$data){
-        $followup = Followup::scheduleQuotationFollowup($followupId,$data); // possible user loading method
-        return $followup;
+        try{
+            if(Followup::scheduleQuotationFollowup($followupId,$data)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
     /**
@@ -150,8 +166,16 @@ class FollowupController
      */
 
     public function schedulesiteTrackingFollowup($followupId,$data){
-        $followup = Followup::schedulesiteTrackingFollowup($followupId,$data); // possible user loading method
-        return $followup;
+        try{
+            if(Followup::schedulesiteTrackingFollowup($followupId,$data)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
 
@@ -161,9 +185,17 @@ class FollowupController
      * @url POST /followup/payment/create/$invoiceId
      */
 
-    public function CreatePaymentFollowup($invoiceId,$data){
-        $followup = Followup::CreatePaymentFollowup($invoiceId,$data); // possible user loading method
-        return $followup;
+    public function CreatePaymentFollowup($invoiceId,$data,$userId){
+        try{
+            if(Followup::CreatePaymentFollowup($invoiceId,$data,$userId)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
 }
