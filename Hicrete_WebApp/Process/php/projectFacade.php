@@ -35,6 +35,9 @@ switch($data->operation) {
     case "closeProject":
         echo(json_encode(ProjectController::closeProject($data->data)));
         break;
+    case "getCompaniesForProject":
+        ProjectController::getCompaniesForProject($data->data);
+        break;
 }
 
 
