@@ -13,8 +13,8 @@ class TaskController
      */
 
     public static function getAllTask(){
-             $task = Task::getAllTask(); 
-         return $task;
+             $task = Task::getAllTask();
+        echo AppUtil::getReturnStatus("sucess",$task);
     }
 
     /**
@@ -25,7 +25,7 @@ class TaskController
 
     public static function getAllTaskForUser(){
              $task = Task::getAllTaskForUser();
-         return $task;
+         echo AppUtil::getReturnStatus("sucess",$task);
     }
 
     /**
@@ -50,8 +50,8 @@ class TaskController
         // ... validate $data properties such as $data->username, $data->firstName, etc.
         $data->projid = $projid;
         $task = Task::saveTask($data); // saving the user to the database
-        
-        echo json_encode($task); // returning the updated or newly created user object
+       echo AppUtil::getReturnStatus("sucess",$task);
+      //  echo json_encode($task); // returning the updated or newly created user object
     }
 
 
@@ -63,7 +63,7 @@ class TaskController
 
     public static function editTask($taskId,$data){
              $task = Task::editTask($taskId,$data); 
-         return $task;
+         echo AppUtil::getReturnStatus("sucess",$task);
     }
 
      /**
@@ -85,7 +85,7 @@ class TaskController
 
     public static function getNotes($taskId){
              $task = Task::getNotes($taskId); 
-         return $task;
+         echo AppUtil::getReturnStatus("sucess",$task);
     }
   
 
