@@ -18,7 +18,7 @@
         </div>
         <div class="panel-body">
 
-            <form name="QuotationForm" class="form-horizontal">
+            <form name="QuotationForm" class="form-horizontal" novalidate>
 
                 <div class="row">
                     <h3 class="panel-title"><strong>Create</strong> Quotation </h3>
@@ -32,21 +32,16 @@
                                   <label class="control-label">Project Name :</label>
                               </div>
                               <div class="col-md-8">
-                                 <!--  <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-change="changevalue()">
-                                      <option value="" disabled selected>Choose Project..</option>
-                                      <option value="Project1">Project1</option>
-                                      <option value="Project2">Project2</option>
-                                      <option value="Project3">Project3</option>
-                                      <option value="Project4">Project4</option>
-                                      <option value="Project5">Project5</option>
-                                  </select> -->
-
-                                    <select class="form-control select" name="project" ng-model="QuotationDetails.projectId"  ng-change="getCustomerForProject()">
+                                    <select class="form-control select" name="project" ng-model="QuotationDetails.projectId"  ng-change="getCustomerForProject()" required>
                                     <option value="" disabled selected>Choose Project..</option>
                                       <option value="Select Project" disabled selected>Select Project</option>
                                       <option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
                                   </select>
-
+                                  <div class="help-block"
+                                       ng-messages="QuotationForm.project.$error"
+                                       ng-show="formSubmitted">
+                                      <span style="color:red" ng-message="required">Project Name is required</span>
+                                  </div>
                               </div>
                           </div>
 
@@ -57,9 +52,14 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="text" class="form-control" name="QuotationTitle" ng-model="QuotationDetails.quotationTitle"/>
+                                      <input type="text" class="form-control" name="QuotationTitle" ng-model="QuotationDetails.quotationTitle" pattern="[a-zA-Z0-9 ]+" required/>
                                   </div>
-
+                                  <div class="help-block"
+                                       ng-messages="QuotationForm.QuotationTitle.$error"
+                                       ng-show="formSubmitted">
+                                      <span style="color:red" ng-message="required">Quotation Title is required</span>
+                                      <span style="color:red" ng-message="pattern">Alphanumeric value is allowed</span>
+                                  </div>
                               </div>
                           </div>
                           <div class="form-group">
@@ -69,9 +69,13 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="text" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate" ng-click="quotationDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showQdate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
+                                      <input type="text" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate" ng-click="quotationDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showQdate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly required/>
                                   </div>
-
+                                  <div class="help-block"
+                                       ng-messages="QuotationForm.QuotationDate.$error"
+                                       ng-show="formSubmitted">
+                                      <span style="color:red" ng-message="required">Quotation Date is required</span>
+                                  </div>
                               </div>
                           </div>
                           <div class="form-group">
@@ -80,8 +84,14 @@
                               </div>
                               <div class="col-md-8">
                                     <textarea class="form-control" name="subject"
-                                              rows="2" ng-model="QuotationDetails.quotationSubject">
+                                              rows="2" ng-model="QuotationDetails.quotationSubject" pattern="[a-zA-Z0-9 ]+" required>
                                     </textarea>
+                                  <div class="help-block"
+                                       ng-messages="QuotationForm.subject.$error"
+                                       ng-show="formSubmitted">
+                                      <span style="color:red" ng-message="required">Quotation Subject is required</span>
+                                      <span style="color:red" ng-message="pattern">Alphanumeric values are allowed</span>
+                                  </div>
                               </div>
                           </div>
 
@@ -94,19 +104,15 @@
                                   <label class="control-label">Company Name :</label>
                               </div>
                               <div class="col-md-8">
-                                  <select class="form-control select" name="company" ng-options = "company.company_name for company in Companies" ng-model="QuotationDetails.companyName">
+                                  <select class="form-control select" name="company" ng-options = "company.company_name for company in Companies" ng-model="QuotationDetails.companyName" required>
                                       <option value="" disabled selected>Choose Company..</option>
                                       <option  value="company.company_id" >{{company.company_name}}</option>
-                                     <!--  <option value="Project2">Company2</option>
-                                      <option value="Project3">Company3</option> -->
-
                                   </select>
-
-                                  <!-- <select class="form-control select" name="company" ng-model="QuotationDetails.companyName" ng-options="b.name ++ b.id for b in cNames" ng-change="changevalue(cName)">
-                                    <option value="" disabled selected>Choose Company..</option>
-                                      <option value="" ng-bind="b.name" disabled selected></option>
-                                  </select> -->
-
+                                  <div class="help-block"
+                                       ng-messages="QuotationForm.company.$error"
+                                       ng-show="formSubmitted">
+                                      <span style="color:red" ng-message="required">Company Name is required</span>
+                                  </div>
                               </div>
                           </div>
                           <div class="form-group">
@@ -116,9 +122,14 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="text" class="form-control" name="ReferenceNo" ng-model="QuotationDetails.referenceNo"/>
+                                      <input type="text" class="form-control" name="ReferenceNo" ng-model="QuotationDetails.referenceNo" pattern="[a-zA-Z0-9 ]+" required/>
                                   </div>
-
+                                  <div class="help-block"
+                                       ng-messages="QuotationForm.ReferenceNo.$error"
+                                       ng-show="formSubmitted">
+                                      <span style="color:red" ng-message="required">Reference Number is required</span>
+                                      <span style="color:red" ng-message="pattern">Alphanumeric values are allowed</span>
+                                  </div>
                               </div>
                           </div>
                           <div class="form-group">
@@ -129,7 +140,6 @@
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                       <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
-                                      <!-- <button ng-click = "uploadQuotation()">upload me</button> -->
                                   </div>
 
                               </div>
@@ -165,8 +175,13 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
 
                                         <input type="text" name="noOfRows" ng-model="noOfRows"
-                                               class="form-control">
+                                               class="form-control" pattern="[0-9]+" maxlength="2">
 
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="QuotationForm.noOfRows.$error"
+                                         ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="pattern">Please Enter only digits</span>
                                     </div>
 
                                 </div>
@@ -213,21 +228,48 @@
                             <td>{{$index+1}}</td>
                             <td>
                                 <input type="text" name="Title" placeholder="Title"
-                                       class="form-control" ng-model="quotation.quotationItem"/>
+                                       class="form-control" ng-model="quotation.quotationItem" pattern="[a-zA-Z0-9 ]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.Title.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Alphnumeric values are allowed</span>
+                                </div>
                             </td>
                             <td>
-                                <input type="text" name="Decription" placeholder="Description"
-                                       class="form-control" ng-model="quotation.quotationDescription"/>
+                                <input type="text" name="Description" placeholder="Description"
+                                       class="form-control" ng-model="quotation.quotationDescription"  pattern="[a-zA-Z0-9 ]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.Description.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Alphnumeric values are allowed</span>
+                                </div>
                             </td>
                             <td>
                                 <input type="text" name="Quantity" placeholder="Quantity"
-                                       class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)"/>
+                                       class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)" pattern="[0-9]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.Quantity.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                </div>
                             </td>
                             <td><input type="text" name="Unit" placeholder="Unit"
-                                       class="form-control" ng-model="quotation.quotationUnit"/>
+                                       class="form-control" ng-model="quotation.quotationUnit" pattern="[a-zA-Z]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.Unit.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Only alphabets are allowed</span>
+                                </div>
                             </td>
-                            <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"/>
+                            <td>
+                                <input type="text" name="UnitRate" placeholder="Unit Rate"
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"
+                                       pattern="[0-9]+"/>
+                                <div class="help-block"
+                                     ng-messages="QuotationForm.UnitRate.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                </div>
                             </td>
                             <td>
                                 {{quotation.amount}}
@@ -369,7 +411,7 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right" ng-click="createQuotation()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right" ng-click="(formSubmitted=true) && QuotationForm.$valid && createQuotation()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
             <button class="btn  btn-info pull-right" ng-click="createQuotationDoc()">Create Doc</button>
             <button class="btn  btn-default ">Clear Form</button>

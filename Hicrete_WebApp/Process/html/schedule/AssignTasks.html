@@ -18,6 +18,11 @@
                                 <option value="" disabled selected>------------Select Employee------------</option>
                                 <option value = {{user.id}}>{{user.name}}</option>
                             </select>
+                            <div class="help-block"
+                                 ng-messages="assignTasksForm.companyName.$error"
+                                 ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">Task assigned to should be selected</span>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -25,9 +30,9 @@
                         <div class="col-md-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="taskName" ng-model="task.taskname" class="form-control" maxlength="100" required/>
+                                <input type="text" name="taskName" ng-model="task.taskname" class="form-control" maxlength="100" title="Please enter task name" required/>
                             </div>
-                            <div class="help-block" ng-messages="addtaskForm.taskName.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="assignTasksForm.taskName.$error" ng-show="formSubmitted">
                                 <p style="color:red" ng-message="required">Please enter task name</p>
                                 <p style="color:red" ng-message="maxlength">Maximum 100 character allowed</p>
                             </div>
@@ -37,7 +42,7 @@
                         <label class="col-md-3 control-label">Description</label>
                         <div class="col-md-4">
                             <textarea class="form-control" maxlength="150" ng-model="task.description" name="taskDescription" rows="5" required></textarea>
-                            <div class="help-block" ng-messages="addtaskForm.taskDescription.$error" ng-show="submitted">
+                            <div class="help-block" ng-messages="assignTasksForm.taskDescription.$error" ng-show="formSubmitted">
                                 <p style="color:red" ng-message="required">Please enter task description</p>
                                 <p style="color:red" ng-message="maxlength">Maximum 150 character allowed</p>
                             </div>
@@ -68,7 +73,7 @@
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button class="btn btn-default" data-ng-click="clearFields(task)">Cancel</button>
-                    <button class="btn btn-primary" name="Assign" ng-click = "assignTask()">Assign</button>
+                    <button class="btn btn-primary" name="Assign" data-ng-click="(formSubmitted=true) && assignTaskForm.$valid && assignTask()">Assign</button>
                 </div>
             </div>
         </form>
