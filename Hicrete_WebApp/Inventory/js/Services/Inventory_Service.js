@@ -297,23 +297,30 @@ myApp.service('inwardService', function () {
                 $scope.warningMessage=data.msg;
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
-                    //$('#warning').css("display","block");
-                    alert(data.msg);
+                    $('#warning').css("display","block");
+                    setTimeout(function () {
+                        $('#warning').css("display","none");
+                        window.location="dashboard.php#/Inventory";
+                    }, 3000);
+                    //alert(data.msg);
                 }
 
-                setTimeout(function () {
-                    if (data.msg != ""){
-                        $('#warning').css("display","none");
-                    }
-                }, 3000);
+                //setTimeout(function () {
+                //    if (data.msg != ""){
+                //        $('#warning').css("display","none");
+                //    }
+                //}, 3000);
                 $('#loader').css("display","none");
-                if (data.error != ""){
+                if (data.error == ""){
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");
-                    alert(data.error);
+                    //alert(data.error);
+                    setTimeout(function () {
+                        $('#error').css("display","none");
+                    }, 3000);
                 }
 
-                window.location="dashboard.php#/Inventory";
+                //window.location="dashboard.php#/Inventory";
 
                 //$scope.inwardData=[];
                 setTimeout(function(){
@@ -357,14 +364,36 @@ myApp.service('outwardService', function () {
                 console.log(outwardData);
                 $scope.outwardData = data;
                 if (data.msg != "") {
-                    doShowAlert("Success", data.msg);
+                    //doShowAlert("Success", data.msg);
                     $scope.clearFields(outwardData);
-                } else if (data.error != "")
-                    doShowAlert("Failure", data.error);
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                    setTimeout(function () {
+                        $('#warning').css("display","none");
+                        window.location="dashboard.php#/Inventory";
+                    }, 3000);
+                } else if (data.error == ""){
+                    $scope.errorMessage="Outward Details not added successfully..";
+                    $('#error').css("display","block");
+                    setTimeout(function () {
+                        $('#error').css("display","none");
+                    }, 3000);
+                }else{
+                    $scope.errorMessage="Outward Details not added successfully..";
+                    $('#error').css("display","block");
+                    setTimeout(function () {
+                        $('#error').css("display","none");
+                    }, 3000);
+                }
+                   // doShowAlert("Failure", data.error);
             })
             .error(function (data, status, headers) {
                 console.log(data);
-
+                $scope.errorMessage="Outward Details not added successfully..";
+                $('#error').css("display","block");
+                setTimeout(function () {
+                    $('#error').css("display","none");
+                }, 3000);
             });
     };
 
