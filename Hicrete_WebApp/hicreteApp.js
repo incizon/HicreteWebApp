@@ -569,6 +569,7 @@ myApp.run(function($rootScope,$http) {
     $rootScope.prodInqAll=[];
     $rootScope.customerSearch=[];
     $rootScope.projectSearch=[];
+    $rootScope.tasks=[];
 });
 
 

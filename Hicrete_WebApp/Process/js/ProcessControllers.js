@@ -3431,10 +3431,10 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 });
 
 
-myApp.controller('SearchTaskController', function (setInfo, $scope, $http) {
+myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $http) {
 
 
-    $scope.tasks = [];
+    //$scope.tasks = [];
     var task = [];
 
 
@@ -3473,7 +3473,8 @@ myApp.controller('SearchTaskController', function (setInfo, $scope, $http) {
 
                 });
             }
-            $scope.tasks = task;
+            $rootScope.tasks = task;
+            console.log($rootScope.tasks);
 
         })
         .error(function (data, status, headers, config) {
@@ -3510,7 +3511,7 @@ myApp.controller('SearchTaskController', function (setInfo, $scope, $http) {
     //    // setInfo.set($scope.customers);
     //})
 
-    $scope.totalItems = $scope.tasks.length;
+    $scope.totalItems = $rootScope.tasks.length;
     $scope.currentPage = 1;
     $scope.tasksPerPage = 10;
     $scope.paginateTasksDetails = function (value) {
@@ -3518,7 +3519,7 @@ myApp.controller('SearchTaskController', function (setInfo, $scope, $http) {
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.tasksPerPage;
         end = begin + $scope.tasksPerPage;
-        index = $scope.tasks.indexOf(value);
+        index = $rootScope.tasks.indexOf(value);
         //console.log(index);
         return (begin <= index && index < end);
     };
