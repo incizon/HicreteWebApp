@@ -12,6 +12,16 @@ $userId=$_SESSION['token'];
 $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
 ?>
+
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
 <div class="col-md-12">
 
     <div class="panel panel-default">
