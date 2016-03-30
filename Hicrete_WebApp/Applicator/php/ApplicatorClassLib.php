@@ -134,7 +134,7 @@
                 {
                     global $connect;
 
-                    $companyId=1;
+                    $companyId=0;
                     $firmName = $data->firmname;
                     $applicatorAddressLine1 = $data->addressline1;
                     $applicatorAddressLine2 = $data->addressline2;
@@ -251,21 +251,18 @@
                     $stmt5->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
                     $stmt5->bindParam(':createdBy', $userId);
 
-                    $stmt6 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
-									  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId)");
+
+                    $stmt6 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id, `followup_title`,`assignEmployeeId`)
+                                  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
 
                     $stmt6->bindParam(':followupDate', $followupDate);
                     $stmt6->bindParam(':lastEnrollmentId', $this->lastInsertedEnrollmentId);
                     $stmt6->bindParam(':lastModifiedBy', $userId);
                     $stmt6->bindParam(':createdBy', $userId);
+                    $stmt6->bindParam(':followupTitle', $data->followTitle);
+                    $stmt6->bindParam(':assignEmployeeId', $data->followupemployeeId);
 
-                    $stmt7=$connect->prepare("INSERT INTO follow_up_employee(employee_id,date_of_assignment,last_modification_date,last_modified_by,created_by,creation_date,follow_up_id)
-									  VALUES(:followupEmployeeId,NOW(),NOW(),:lastModifiedBy,:createdBy,NOW(),:lastFollowupId)");
 
-                    $stmt7->bindParam(':followupEmployeeId',$followupEmployeeId);
-                    $stmt7->bindParam(':lastFollowupId', $this->lastInsertedFollowupId);
-                    $stmt7->bindParam(':lastModifiedBy', $userId);
-                    $stmt7->bindParam(':createdBy', $userId);
 
                     /* Update status of applicator */
                     $stmt8=$connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
@@ -314,20 +311,17 @@
                                 }
                                 if($paymentReceived == 'No' && $paymentStatus == 'No'){
 
-                                    if($stmt6->execute()){
-
-                                        $this->lastInsertedFollowupId=$connect->lastInsertId();
-
-                                        if($stmt7->execute()){
+                                    if($data->isFollowup){
+                                        if($stmt6->execute()){
                                             return true;
+
                                         }
                                         else{
                                             return false;
                                         }
-                                    }
-                                    else{
-                                        return false;
-                                    }
+                                    }else
+                                        return true;
+
                                 }
                                 if($paymentReceived == 'Yes' && $paymentStatus == 'No'){
 
@@ -340,21 +334,16 @@
                                             $this->lastInsertedPaymentId=$connect->lastInsertId();
 
                                             if($stmt5->execute()){
-
-                                                if($stmt6->execute()){
-
-                                                    $this->lastInsertedFollowupId=$connect->lastInsertId();
-
-                                                    if($stmt7->execute()){
+                                                if($data->isFollowup){
+                                                    if($stmt6->execute()){
                                                         return true;
                                                     }
                                                     else{
                                                         return false;
                                                     }
-                                                }
-                                                else{
-                                                    return false;
-                                                }
+                                                }else
+                                                    return true;
+
                                             }
                                             else{
                                                 return false;
@@ -362,20 +351,15 @@
                                         }
                                         else{
 
-                                            if($stmt6->execute()){
-
-                                                $this->lastInsertedFollowupId=$connect->lastInsertId();
-
-                                                if($stmt7->execute()){
+                                            if($data->isFollowup){
+                                                if($stmt6->execute()){
                                                     return true;
                                                 }
                                                 else{
                                                     return false;
                                                 }
                                             }
-                                            else{
-                                                return false;
-                                            }
+
                                         }
                                     }
                                     else{

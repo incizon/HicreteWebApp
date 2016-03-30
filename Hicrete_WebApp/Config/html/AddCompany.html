@@ -12,12 +12,17 @@
                         <div class="col-md-12">
                             
                             <form name="companyForm" class="form-horizontal" role="companyForm" novalidate>
+
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title"><strong>Add </strong>Company</h3>
                                 </div>
-                                <div class="panel-body">                                                                        
+                                <div class="panel-body">
 
+                                    <div class="row">
+                                        <h3 class="panel-title"><strong>Basic</strong> Information </h3>
+                                    </div><br>
+                                    <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="col-md-4 col-sm-4 col-xs-12 control-label">Company Name</label>
@@ -160,6 +165,109 @@
                                             </div>
                                         </div>
                                     </div>
+                                    </div><br>
+                                    <div class="row">
+                                        <h3 class="panel-title"><strong>Bank</strong> Details </h3>
+                                    </div><br>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-sm-4 col-xs-12 control-label">Bank Name</label>
+                                                <div class="col-md-8 col-xs-12 col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input maxlength = "50" name="bankName" ng-model="company.bankName" type="text" class="form-control" required minlength=2/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="companyForm.bankName.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Bank name cannot be blank</p>
+                                                        <p style="color:red" ng-message="pattern">Only alphanumeric characters are allowed</p>
+                                                        <p style="color:red" ng-message="minlength">Bank name must have length > 2 </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-xs-12 control-label col-sm-4">Account Name</label>
+                                                <div class="col-md-8 col-xs-12 col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input maxlength = "15" ng-model="company.accountName" name="accountName" type="text" class="form-control" required minlength=2/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="companyForm.accountName.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Account Name Cannot be blank</p>
+                                                        <p style="color:red" ng-message="minlength">Account Name must have more than 2 character</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-xs-12 control-label col-sm-4">Account Type</label>
+                                                <div class="col-md-8 col-xs-12 col-sm-8">
+                                                    <div class="input-group ">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input maxlength = "50" type="text" name="accountType" ng-model="company.accountType" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="companyForm.accountType.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Account Type Cannot be blank</p>
+                                                        <p style="color:red" ng-message="pattern">Only aplhabets(a-z) are allowed</p>
+                                                        <p style="color:red" ng-message="minlength">Account Type must have more than 2 character</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-sm-4 col-xs-12 control-label">Bank Branch Name</label>
+                                                <div class="col-md-8 col-xs-12 col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input maxlength = "10" name="bankBranch" ng-model="company.bankBranch"  type="text" class="form-control" minlength=2 required/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="companyForm.bankBranch.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Bank Branch Cannot be blank</p>
+                                                        <p style="color:red" ng-message="minlength">Bank Branch Name must have length >2</p>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-xs-12 control-label col-sm-4">Account Number</label>
+                                                <div class="col-md-8 col-xs-12 col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input maxlength = "15" ng-model="company.accountNo" name="accountNo" type="text" class="form-control" required minlength=2/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="companyForm.accountNo.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">Account Number Cannot be blank</p>
+                                                        <p style="color:red" ng-message="minlength">Account Number must have more than 2 character</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-md-4 col-xs-12 control-label col-sm-4">IFSC Code</label>
+                                                <div class="col-md-8 col-xs-12 col-sm-8">
+                                                    <div class="input-group">
+                                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                        <input maxlength = "15" ng-model="company.IFSCCode" name="IFSCCode" type="text" class="form-control" required minlength=2/>
+                                                    </div>
+                                                    <div class="help-block" ng-messages="companyForm.IFSCCode.$error" ng-show="submitted">
+                                                        <p style="color:red" ng-message="required">IFSC Code Cannot be blank</p>
+                                                        <p style="color:red" ng-message="minlength">IFSC Code must have more than 2 character</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div><br>
+
 
                                 </div>
                                 <div class="panel-footer">

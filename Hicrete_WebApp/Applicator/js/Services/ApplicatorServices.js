@@ -12,6 +12,7 @@ myApp.service('ApplicatorService',function(){
 								
 					.success(function (data, status, headers, config){	
 						console.log(data);
+						alert("");
 						$scope.loading=false;
 						$('#loader').css("display","none");
 						//if(data.msg!=""){
@@ -23,7 +24,7 @@ myApp.service('ApplicatorService',function(){
 										$('#warning').css("display","none");
 									}
 								});
-							}, 3000);
+							}, 1000);
 						//}
 
 
@@ -37,11 +38,11 @@ myApp.service('ApplicatorService',function(){
 										$('#error').css("display","none");
 									}
 								});
-							}, 3000);
+							}, 1000);
 						}
 							setTimeout(function(){
 									window.location.reload(true);
-							},6000);
+							},1000);
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
@@ -53,7 +54,7 @@ myApp.service('ApplicatorService',function(){
 										$('#error').css("display","none");
 									}
 								});
-							}, 3000);
+							}, 1000);
                         			console.log(data);
 
 						});			
@@ -170,7 +171,7 @@ myApp.service('PackageService',function(){
 									$('#warning').css("display","none");
 								}
 							});
-						}, 3000);
+						}, 1000);
 
 						$scope.loading=false;
 						$('#loader').css("display","none");
@@ -185,7 +186,7 @@ myApp.service('PackageService',function(){
 
 						setTimeout(function(){
 										window.location.reload(true);
-									},2000);
+									},1000);
 					})
 					.error(function (data, status, headers, config){
 									

@@ -22,7 +22,7 @@
                                 <div class="col-md-7">
                                     <div class="input-group" style="margin-top:8px">
 
-                                        <label value="Title">Title</label>
+                                        <label value="">{{payment.followupTitle}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -31,7 +31,7 @@
                                 <div class="col-md-7">
                                     <div class="input-group" style="margin-top:8px">
 
-                                        <label value="12/12/2016">12/12/2016</label>
+                                        <label value="12/12/2016">{{payment.followupDate}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -39,22 +39,31 @@
 
                             <!--start-->
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Start Date : </label>
+                                <label class="col-md-3 control-label">Followup Conduction Date : </label>
 
-                                <div class="col-md-6">
+                                <div class="col-md-2">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" class="form-control" ng-model="task.startDate" name="date" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="taskStart.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                        <input type="date" class="form-control datepicker" ng-model="payment.startDate"
+                                               name="date" required>
                                     </div>
+                                </div>
+                                <div class="help-block" ng-messages="followupForm.date.$error">
+                                <p style="color:red" ng-message="required">Conduction Date cannot be blank</p>
+
                                 </div>
                             </div>
                             <div class="form-group">
 
                                 <label class="col-md-3 control-label">Note : </label>
-                                <div class="col-md-6 ">
-                                    <textarea name="note" class="form-control" rows="2" ng-model="paymentFollowUp.note"></textarea>
+                                <div class="col-md-4 ">
+                                    <textarea name="note" class="form-control" rows="2" ng-model="payment.note" required></textarea>
                                     <span class="help-block"></span>
                                 </div>
+
+                            </div>
+                            <div class="help-block" ng-messages="followupForm.note.$error">
+                                <p style="color:red" ng-message="required">Note cannot be blank</p>
 
                             </div>
                             <!--end-->
@@ -66,7 +75,7 @@
                                 <div class="col-md-7">
                                     <div class="input-group col-md-8">
                                         <label class="check">
-                                            <input type="checkbox" class="mycheck" ng-model="paymentFollowUp.isRescheduleFollowup"/> Check this to reschedule followup</label>
+                                            <input type="checkbox" class="mycheck" ng-model="payment.isRescheduleFollowup"/> Check this to reschedule followup</label>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +83,7 @@
                     </form>
                     <!--end-->
 
-                    <div class="row" id="paymentmode" ng-show="paymentFollowUp.isRescheduleFollowup">
+                    <div class="row" id="paymentmode" ng-show="payment.isRescheduleFollowup">
                         <!--start-->
                         <form name="rescheduleFollowup" class="form-horizontal" novalidate>
                             <div class="form-group">
@@ -82,12 +91,12 @@
                                 <div class="col-md-7">
                                     <div class="input-group col-md-8">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text"  name="title"  ng-model="followup.title" class="form-control" required/>
+                                        <input type="text"  name="title"  ng-model="payment.newFollowupTitle" class="form-control" required/>
                                     </div>
-                                    <!--<div class="help-block" ng-messages="rescheduleFollowup.title.$error"">-->
-                                    <!--<p style="color:red" ng-message="required">Title cannot be blank</p>-->
+                                    <div class="help-block" ng-messages="rescheduleFollowup.title.$error">
+                                    <p style="color:red" ng-message="required">Title cannot be blank</p>
 
-                                    <!--</div>-->
+                                    </div>
                                 </div>
 
                             </div>
@@ -99,13 +108,18 @@
                                 <div class="col-md-7">
                                     <div class="input-group col-md-8">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text"  name="firmName"  ng-model="followup.assignee" class="form-control" required/>
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="payment.assignee" name="assignee">                                               name="followupEmployeeId" required>
+                                            <option value="" disabled selected>Select Employee Id</option>
+                                            <option ng-repeat="x in users"
+                                                    value={{x.id}}>{{x.name}}
+                                            </option>
+                                        </select>
 
                                     </div>
-                                    <!--<div class="help-block" ng-messages="rescheduleFollowup.firmName.$error" ng-show="otherExpenseClicked">-->
-                                        <!--<p style="color:red" ng-message="required">Assigne Name cannot be blank</p>-->
+                                    <div class="help-block" ng-messages="rescheduleFollowup.assignee.$error" >
+                                    <p style="color:red" ng-message="required">Assigned To cannot be blank</p>
 
-                                    <!--</div>-->
+                                    </div>
                                 </div>
                             </div>
                             <!--end-->
@@ -116,12 +130,12 @@
                                 <div class="col-md-7">
                                     <div class="input-group col-md-8">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input  type="type" name="dateOfBill"  class="form-control" ng-model="followup.dateOfBill"  ng-click="reFollowupDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="reFollowup.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                        <input  type="date" name="date" ng-model="payment.dateOfBill" type="text" class="form-control datepicker" required/>
                                     </div>
-                                    <!--<div class="help-block" ng-messages="rescheduleFollowup.billDate.$error">-->
-                                        <!--<p style="color:red" ng-message="required"> Followup Date cannot be blank</p>-->
+                                    <div class="help-block" ng-messages="rescheduleFollowup.date.$error">
+                                    <p style="color:red" ng-message="required"> Followup Date cannot be blank</p>
 
-                                    <!--</div>-->
+                                    </div>
                                 </div>
                             </div>
                             <!--end-->

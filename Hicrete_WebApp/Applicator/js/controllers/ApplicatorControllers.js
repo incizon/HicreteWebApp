@@ -1,4 +1,4 @@
-myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,PackageService,$uibModal, $log) {
+myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,PackageService,$uibModal, $log,AppService) {
 
     $scope.step=1;
     $scope.editPackage=false;
@@ -207,7 +207,8 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
-                controller:  function ($scope, $uibModalInstance,applicatorDetails,AppService) {
+                controller:  function ($scope,$uibModalInstance,applicatorDetails) {
+                    console.log("Inside Followup");
                     AppService.getUsers($scope,$http);
                     $scope.openFollowDate = function() {
                         $scope.followup.opened = true;
@@ -220,12 +221,14 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
 
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
-
+                        applicatorDetails.isFollowup=true;
                         ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
+                        applicatorDetails.isFollowup=false;
+                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -254,6 +257,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+                    AppService.getUsers($scope,$http);
                     $scope.openFollowDate = function() {
                         $scope.followup.opened = true;
                     };
@@ -265,12 +269,14 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                     $scope.applicatorDetails = applicatorDetails;
 
                     $scope.ok = function () {
-
+                        applicatorDetails.isFollowup=true;
                         ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
+                        applicatorDetails.isFollowup=followup;
+                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },

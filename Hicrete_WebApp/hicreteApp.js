@@ -526,34 +526,34 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
 myApp.run(function($rootScope,$http) {
     
-    var data={
-            operation :"getAccessPermission"
-            
-          };        
-
-          var config = {
-                     params: {
-                           data: data
-
-            }
-          };
-
-
-    $http.post("php/DashboardRenderer.php", null,config)
-           .success(function (data)
-           {
-            if(data.status=="Successful"){
-                $rootScope.accessPermission=data.message;
-                //console.log($rootScope.accessPermission);
-             }else{
-                  doShowAlert("Failure",data.message);
-             }         
-            
-           })
-           .error(function (data, status, headers, config)
-           {
-             doShowAlert("Failure",data.error);     
-           });            
+    //var data={
+    //        operation :"getAccessPermission"
+    //
+    //      };
+    //
+    //      var config = {
+    //                 params: {
+    //                       data: data
+    //
+    //        }
+    //      };
+    //
+    //
+    //$http.post("php/DashboardRenderer.php", null,config)
+    //       .success(function (data)
+    //       {
+    //        if(data.status=="Successful"){
+    //            $rootScope.accessPermission=data.message;
+    //            //console.log($rootScope.accessPermission);
+    //         }else{
+    //              alert("Unable To Render Database:"+data.message);
+    //         }
+    //
+    //       })
+    //       .error(function (data, status, headers, config)
+    //       {
+    //         alert("Error Occurred:"+data);
+    //       });
 
     //Applicator variables
     $rootScope.tentativeApplicators=[];
@@ -578,7 +578,7 @@ myApp.run(function($rootScope,$http) {
 
 // create the controller and inject Angular's $scope
 // set for Route Controller
-myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log) {
+myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService) {
   /** create $scope.template **/
 
  $scope.logout=function(){
@@ -601,57 +601,292 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
 
 
   /** now after this ng-include in uirouter.html set and take template from their respective path **/
+  $scope.saveFollowupDetails=function(size,followupDetails,type){
 
-        $scope.saveFollowupDetails=function(size,followupDetails){
+      var paymentFollowupdata =followupDetails;
+      console.log("data sis "+JSON.stringify(paymentFollowupdata));
+      $scope.payment = paymentFollowupdata;
 
-            var modalInstance = $uibModal.open({
-                animation: $scope.animationsEnabled,
-                templateUrl: 'FollowupForm.html',
-                controller:  function ($scope, $uibModalInstance,followupDetails) {
 
-                    $scope.taskStartDate = function(){
-                        $scope.taskStart.opened = true;
-                    };
+      var modalInstance = $uibModal.open({
+          animation: $scope.animationsEnabled,
+          controller: 'dashboardController',
+          templateUrl: 'FollowupForm.html',
+          scope:$scope,
+          controller:  function ($scope, $uibModalInstance,followupDetails,$filter) {
 
-                    $scope.taskStart = {
-                        opened:false
-                    };
+              AppService.getUsers($scope,$http);
+              $scope.followupDetails = followupDetails;
+              console.log("in uibModal "+JSON.stringify($scope.payment));
+              $scope.Save = function () {
+                  var conductDate = $filter('date')($scope.payment.startDate, 'yyyy/MM/dd', '+0530');
+                  var followupData= {Description:$scope.payment.note,ConductDate:conductDate};
 
-                    $scope.followupDetails = followupDetails;
+                  var followupTitle = $scope.payment.newFollowupTitle;
+                  var assignedTo = $scope.payment.assignee;
+                  var followupDate = $filter('date')($scope.payment.dateOfBill, 'yyyy/MM/dd', '+0530');
+                  var scheduledata = {AssignEmployee:assignedTo,FollowupDate:followupDate,FollowupTitle:followupTitle};
 
-                    $scope.reFollowupDate = function(){
-                        $scope.reFollowup.opened = true;
-                    };
+                  if($scope.payment.type == 'Payment'){
+                      console.log("In payment followup schedule");
+                      var data={
+                          operation :"ConductPaymentFollowup",
+                          id:$scope.payment.followupId,
+                          data:followupData
+                      };
 
-                    $scope.reFollowup = {
-                        opened:false
-                    };
+                      var config = {
+                          params: {
+                              data: data
+                          }
+                      };
 
-                    $scope.Save = function () {
-                        $uibModalInstance.close();
-                    };
+                      $http.post('Process/php/followupFacade.php',null,config)
+                          .success(function (data, status, headers) {
 
-                    $scope.Cancel = function () {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-                },
-                size: size,
-                resolve: {
-                    followupDetails: function () {
-                        return $scope.followupDetails;
-                    }
-                }
-            });
+                              if(data.status=="Successful"){
+                                  if($scope.payment.isRescheduleFollowup){
 
-            modalInstance.result.then(function (followupDetails) {
-                $scope.followupDetails = followupDetails;
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-            $scope.toggleAnimation = function () {
-                $scope.animationsEnabled = !$scope.animationsEnabled;
-            };
-        }
+                                      console.log("Posting data is "+data);
+                                      var data={
+                                          operation :"CreatePaymentFollowup",
+                                          id:$scope.payment.invoiceId,
+                                          data:scheduledata
+                                      };
+
+                                      var config = {
+                                          params: {
+                                              data: data
+                                          }
+                                      };
+
+                                      $http.post('Process/php/followupFacade.php',null,config)
+                                          .success(function (data, status, headers) {
+                                              if(data.status=="Successful"){
+                                                  alert("Operation Successful");
+                                              }else{
+                                                  alert(data.message);
+                                              }
+
+                                          })
+                                          .error(function (data, status) {
+
+                                              alert($scope.ResponseDetails );
+                                          });
+                                  }
+
+                              }else{
+                                  alert(data.message);
+                              }
+
+                          })
+                          .error(function (data, status) {
+
+                              alert(data );
+                          });
+
+
+
+                  }
+                  else if($scope.payment.type == 'Quotation'){
+                      console.log("In payment followup schedule");
+                      var data={
+                          operation :"ConductQuotationFollowup",
+                          id:$scope.payment.followupId,
+                          data:followupData
+                      };
+
+                      var config = {
+                          params: {
+                              data: data
+                          }
+                      };
+
+                      $http.post('Process/php/followupFacade.php',null,config)
+                          .success(function (data, status, headers) {
+                              if(data.status=="Successful") {
+                                  if ($scope.payment.isRescheduleFollowup) {
+
+                                      console.log("Posting data is " + data);
+                                      var data = {
+                                          operation: "CreateQuotationFollowup",
+                                          id: $scope.payment.quotationId,
+                                          data: scheduledata
+                                      };
+
+                                      var config = {
+                                          params: {
+                                              data: data
+                                          }
+                                      };
+
+                                      $http.post('Process/php/followupFacade.php', null, config)
+                                          .success(function (data, status, headers) {
+                                              if (data.status == "Successful") {
+                                                  alert("Operation Successful");
+                                              } else {
+                                                  alert(data.message);
+                                              }
+
+                                          })
+                                          .error(function (data, status) {
+
+                                              alert($scope.ResponseDetails);
+                                          });
+                                  }
+                              }else{
+                                  alert(data.message);
+                              }
+
+                          })
+                          .error(function (data, status) {
+
+                              alert(data );
+                          });
+
+
+
+
+                  }
+                  else if($scope.payment.type == 'SiteTracking'){
+                      console.log("In payment followup schedule");
+                      var data={
+                          operation :"ConductSiteTrackingFollowup",
+                          id:$scope.payment.followupId,
+                          data:followupData
+                      };
+
+                      var config = {
+                          params: {
+                              data: data
+                          }
+                      };
+
+                      $http.post('Process/php/followupFacade.php',null,config)
+                          .success(function (data, status, headers) {
+                              if(data.status=="Successful") {
+
+                                  if ($scope.payment.isRescheduleFollowup) {
+
+                                      console.log("Posting data is " + data);
+                                      var data = {
+                                          operation: "CreateSiteTrackingFollowup",
+                                          id: $scope.payment.projectId,
+                                          data: scheduledata
+                                      };
+
+                                      var config = {
+                                          params: {
+                                              data: data
+                                          }
+                                      };
+
+                                      $http.post('Process/php/followupFacade.php', null, config)
+                                          .success(function (data, status, headers) {
+                                              if (data.status == "Successful") {
+                                                  alert("Operation Successful");
+                                              } else {
+                                                  alert(data.message);
+                                              }
+
+                                          })
+                                          .error(function (data, status) {
+
+                                              alert($scope.ResponseDetails);
+                                          });
+                                  }
+                              }else{
+                                  alert(data.message);
+                              }
+
+                          })
+                          .error(function (data, status) {
+
+                              alert(data);
+                          });
+
+
+                  }else{
+                      console.log("In Applicator followup schedule");
+                      var data={
+                          operation :"ConductApplicatorFollowup",
+                          id:$scope.payment.followupId,
+                          data:followupData
+                      };
+
+                      var config = {
+                          params: {
+                              data: data
+                          }
+                      };
+
+                      $http.post('Process/php/followupFacade.php',null,config)
+                          .success(function (data, status, headers) {
+                              if(data.status=="Successful") {
+                                  if ($scope.payment.isRescheduleFollowup) {
+
+                                      console.log("Posting data is " + data);
+                                      var data = {
+                                          operation: "CreateApplicatorFollowup",
+                                          id: $scope.payment.ApplicatorId,
+                                          data: scheduledata
+                                      };
+
+                                      var config = {
+                                          params: {
+                                              data: data
+                                          }
+                                      };
+
+                                      $http.post('Process/php/followupFacade.php', null, config)
+                                          .success(function (data, status, headers) {
+                                              if (data.status == "Successful") {
+                                                  alert("Operation Successful");
+                                              } else {
+                                                  alert(data.message);
+                                              }
+
+                                          })
+                                          .error(function (data, status) {
+
+                                              alert($scope.ResponseDetails);
+                                          });
+                                  }
+                              }else{
+                                  alert(data.messsage);
+                              }
+
+                          })
+                          .error(function (data, status) {
+                              alert(data);
+                          });
+
+
+                  }
+                  $uibModalInstance.close();
+              };
+
+              $scope.Cancel = function () {
+                  $uibModalInstance.dismiss('cancel');
+              };
+          },
+          size: size,
+          resolve: {
+              followupDetails: function () {
+                  return $scope.followupDetails;
+              }
+          }
+      });
+
+      modalInstance.result.then(function (followupDetails) {
+          $scope.followupDetails = followupDetails;
+      }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+      });
+      $scope.toggleAnimation = function () {
+          $scope.animationsEnabled = !$scope.animationsEnabled;
+      };
+  }
 
 
 });
@@ -833,13 +1068,12 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
                 for(var i = 0; i<data.message.length ; i++){
                     b.push({
                         followupId: data.message[i].FollowupId,
-                        invoiceNo: data.message[i].InvoiceNo,
                         assignEmployee: data.message[i].AssignEmployee,
                         followupDate: data.message[i].FollowupDate,
                         invoiceId:data.message[i].InvoiceId,
                         followupDate:data.message[i].FollowupDate,
                         followupTitle:data.message[i].FollowupTitle,
-                        creationDateresponse:data.message[i].CreationDateresponse,
+                        creationDate:data.message[i].CreationDate,
                         createdBy: data.message[i].CreatedBy,
                         type : 'Payment'
                     });
@@ -938,6 +1172,52 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
         .error(function (data, status, header) {
             alert("Error Occured while fetching SiteTracking followup");
         });
+
+
+    var data={
+        operation :"getApplicatorFollowup"
+    };
+
+    var config = {
+        params: {
+            data: data
+        }
+    };
+
+    $http.post('Process/php/followupFacade.php',null,config)
+        .success(function (data, status, headers) {
+            console.log(data);
+
+            if(data.status == "Successful") {
+                $scope.ApplicatorPaymentFollowup = [];
+                var b = [];
+
+                for(var i = 0; i<data.message.length ; i++){
+                    b.push({
+                        followupId: data.message[i].follow_up_id,
+                        ApplicatorId: data.message[i].enrollment_id,
+                        assignEmployee:data.message[i].assignEmployeeId,
+                        followupDate:data.message[i].date_of_follow_up,
+                        followupTitle: data.message[i].followup_title,
+                        creationDate:data.message[i].creation_date,
+                        createdBy :data.message[i].created_by,
+                        type : 'Applicator'
+                    });
+                }
+
+                $scope.ApplicatorPaymentFollowup = b;
+            }else{
+                alert("Database error occurred while fetching Applicator followup");
+            }
+
+        })
+        .error(function (data, status, header) {
+            alert("Error Occured while fetching Applicator followup");
+        });
+
+
+
+
 
 });
 

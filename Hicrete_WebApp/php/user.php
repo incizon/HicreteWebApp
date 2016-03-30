@@ -40,11 +40,11 @@ class User
 
     }
 
-	public function isSuperUser($userId){
+	public function loadSuperUserDesignation($userId){
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
 
-		$stmt = $conn->prepare("SELECT `firstName`,`lastName`,`designation`,`emailId` FROM `superuser` WHERE `superUserId` =:userId");
+		$stmt = $conn->prepare("SELECT `designation` FROM `superuserdesignation` WHERE `userId` =:userId");
 		$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 		$stmt->execute();
 		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -52,8 +52,6 @@ class User
 		if (count($result) <= 0) {
 			return false;
 		}else {
-			$this->username = $result[0]['firstName'] . " " . $result[0]['lastName'];
-			$this->emailId = $result[0]['emailId'];
 			$this->designation = $result[0]['designation'];
 			return true;
 		}
@@ -67,14 +65,7 @@ class User
     	$db = Database::getInstance();
         $conn = $db->getConnection();
 
-
-		$this->isSuper=$this->isSuperUser($userId);
-		if($this->isSuper)
-			return true;
-
-    	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,userroleinfo.designation,userroleinfo.userType,userroleinfo.roleId
-			FROM    `usermaster` INNER JOIN `userroleinfo` ON userroleinfo.userId=usermaster.userId
-			WHERE   usermaster.userId =:userId"); 
+    	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,`isSuperUser` FROM  `usermaster` where `userId`=:userId AND `isDeleted`=0");
     	$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
     	$stmt->execute();
     	$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -84,15 +75,24 @@ class User
 		}else{
 			$this->username=$result[0]['firstName']." ".$result[0]['lastName'];
 			$this->emailId=$result[0]['emailId'];
-			$this->designation=$result[0]['designation'];
-			$userType=$result[0]['userType'];
-            $roleId=$result[0]['roleId'];
-			if(strcasecmp($userType,"Admin")==0){
-				$this->isAdmin=true;
+			$this->isSuper=$result[0]['isSuperUser'];
+			if($this->isSuper){
+				return $this->loadSuperUserDesignation($userId);
+			}else{
+				$stmt = $conn->prepare("SELECT `designation`,`roleId`,`userType` FROM `userroleinfo` WHERE `userId`=:userId");
+				$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+				$stmt->execute();
+				$this->designation=$result[0]['designation'];
+				$userType=$result[0]['userType'];
+				$roleId=$result[0]['roleId'];
+				if(strcasecmp($userType,"Admin")==0){
+					$this->isAdmin=true;
+				}
+
+				$this->populateAccessRights($roleId);
+				return true;
 			}
-			
-			$this->populateAccessRights($roleId);
-			return true;
+
 		}
     }
 

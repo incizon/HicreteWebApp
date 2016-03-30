@@ -12,6 +12,7 @@ class Config
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            $conn->beginTransaction();
             $companyId = AppUtil::generateId();
 
 		
@@ -34,12 +35,29 @@ class Config
             $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             if ($stmt->execute()) {
-                echo AppUtil::getReturnStatus("Successful", "failure in stmt1");
+                $stmt = $conn->prepare("INSERT INTO `company_bank_details`(`companyId`, `BankName`, `BankBranch`, `AccountName`, `AccountNo`, `AccountType`, `IFSCCode`)
+                        VALUES (:id,:bankName,:bankBranch,:accountName,:accountNo,:accountType,:ifscCode)");
+                $stmt->bindParam(':id', $companyId, PDO::PARAM_STR);
+                $stmt->bindParam(':bankName', $data->bankName, PDO::PARAM_STR);
+                $stmt->bindParam(':bankBranch', $data->bankBranch, PDO::PARAM_STR);
+                $stmt->bindParam(':accountName', $data->accountName, PDO::PARAM_STR);
+                $stmt->bindParam(':accountNo', $data->accountNo, PDO::PARAM_STR);
+                $stmt->bindParam(':accountType', $data->accountType, PDO::PARAM_STR);
+                $stmt->bindParam(':ifscCode', $data->IFSCCode, PDO::PARAM_STR);
+                if($stmt->execute()){
+                    $conn->commit();
+                    echo AppUtil::getReturnStatus("Successful", "Company Created Successfully");
+                }else{
+                    $conn->rollBack();
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Cannot Add Bank Details");
+                }
+
+
 
 
             } else {
 
-                echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed".$userId);
+                echo AppUtil::getReturnStatus("Unsuccessful", "Cannot Create Company");
 
             }
 
@@ -187,10 +205,11 @@ class Config
             $date = new DateTime($data->superUserInfo->dateOfBirth);
             $dob = $date->format('Y-m-d');
 
-            $stmt = $conn->prepare("INSERT INTO `superuser`(`superUserId`,`designation`,`firstName`, `lastName`,dateOfBirth, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)
-                VALUES (:userId,:designation,:firstName,:lastName,:dob,:address,:city,:state,:country,:pincode,:mobileNumber,:emailId,:createdBy,now(),:lastModifiedBy,now())");
+            $stmt = $conn->prepare("INSERT INTO `usermaster`(`userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`,`isSuperUser`)
+                VALUES (:userId,:firstName,:lastName,:dob,:address,:city,:state,:country,:pincode,:mobileNumber,:emailId,:createdBy,now(),:lastModifiedBy,now(),1)");
+
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':designation', $data->superUserInfo->designation, PDO::PARAM_STR);
+           // $stmt->bindParam(':designation', $data->superUserInfo->designation, PDO::PARAM_STR);
             $stmt->bindParam(':firstName', $data->superUserInfo->firstName, PDO::PARAM_STR);
             $stmt->bindParam(':lastName', $data->superUserInfo->lastName, PDO::PARAM_STR);
             $stmt->bindParam(':dob', $dob, PDO::PARAM_STR);
@@ -206,31 +225,38 @@ class Config
 
 
             if ($stmt->execute()) {
-                $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`)
-                            VALUES (:userId,:userName,:password)");
+                $stmt = $conn->prepare("INSERT INTO `superuserdesignation`(`userId`, `designation`) VALUES (:userId,:designation)");
                 $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-                $stmt->bindParam(':userName', $data->superUserInfo->email, PDO::PARAM_STR);
-                $password = mt_rand(1000000, 9999999);
-                $hash = sha1($password);
-                $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+                $stmt->bindParam(':designation', $data->superUserInfo->designation, PDO::PARAM_STR);
                 if($stmt->execute()){
-                    echo AppUtil::getReturnStatus("Success","Super User created successfully. Username is :".$data->superUserInfo->email.
-                    "  Password is:".$password);
-                    $conn->commit();
-                    AppUtil::sendMail($data->superUserInfo->email,$password,$data->superUserInfo->email,$data->superUserInfo->firstName);
+                    $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`)
+                            VALUES (:userId,:userName,:password)");
+                    $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                    $stmt->bindParam(':userName', $data->superUserInfo->email, PDO::PARAM_STR);
+                    $password = mt_rand(1000000, 9999999);
+                    $hash = sha1($password);
+                    $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+                    if($stmt->execute()){
+                        echo AppUtil::getReturnStatus("Success","Super User created successfully. Username is :".$data->superUserInfo->email.
+                            "  Password is:".$password);
+                        $conn->commit();
+                        AppUtil::sendMail($data->superUserInfo->email,$password,$data->superUserInfo->email,$data->superUserInfo->firstName);
+                    }else{
+                        echo AppUtil::getReturnStatus("fail","Database Error Occurred");
+                        $conn->rollBack();
+                    }
+
                 }else{
-                    echo AppUtil::getReturnStatus("fail","Something Went Wrong");
+                    echo AppUtil::getReturnStatus("fail","Database Error Occurred");
                     $conn->rollBack();
                 }
-
-
             }else{
-                echo AppUtil::getReturnStatus("fail","Something Went Wrong");
+                echo AppUtil::getReturnStatus("fail","Database Error Occurred");
                 $conn->rollBack();
             }
 
         }catch(Exception $e){
-
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred");
         }
     }
 
