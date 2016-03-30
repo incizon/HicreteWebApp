@@ -48,8 +48,16 @@
                                     <label class="col-md-3 control-label">Suppervisor</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input maxlength="20" type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.suppervisor" name="suppervisor" required/>
+                                            <select class="select btn dropdown-toggle selectpicker" ng-disabled="availableTotalquantity==0" ng-model="OutwardData.suppervisor" name="suppervisor"
+                                                    required>
+                                                <option value="" disabled selected>Select supervisor</option>
+                                                <option ng-repeat="x in users"
+                                                        value={{x.id}}>{{x.name}}
+                                                </option>
+                                            </select>
+
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input maxlength="20" type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardData.suppervisor" name="suppervisor" required/>-->
                                         </div>
                                         <div class="help-block" ng-messages="outwardMaterialForm.suppervisor.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please enter suppervisor name</p>

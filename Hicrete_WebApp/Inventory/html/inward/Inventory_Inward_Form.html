@@ -66,9 +66,16 @@
 
                                     <div class="col-md-9">
                                         <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input maxlength="20" type="text" class="form-control" ng-model="InwardData.suppervisor"
-                                                   name="suppervisor" required/>
+                                            <select class="select btn dropdown-toggle selectpicker" ng-model="InwardData.suppervisor" name="suppervisor"
+                                                    required>
+                                                <option value="" disabled selected>Select supervisor</option>
+                                                <option ng-repeat="x in users"
+                                                        value={{x.id}}>{{x.name}}
+                                                </option>
+                                            </select>
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input maxlength="20" type="text" class="form-control" ng-model="InwardData.suppervisor"-->
+                                                   <!--name="suppervisor" required/>-->
                                         </div>
                                         <div class="help-block" ng-messages="inwardEntryForm.suppervisor.$error"
                                              ng-show="submitted">
