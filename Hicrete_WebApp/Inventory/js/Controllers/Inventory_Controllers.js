@@ -1058,7 +1058,7 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
  * START OF SUPPLIER CONTROLLER
  *Add Supplier controller
  **************************************************************************************************/
-myApp.controller('addSupplierController', function ($scope, $http, addSupplierService) {
+myApp.controller('addSupplierController', function ($scope,$rootScope, $http, addSupplierService) {
 
     $scope.submitted=false;
     $scope.supplier = {
@@ -1070,8 +1070,8 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         pinCode: ""
 
     };
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.messages = [];
     //for clearing the fields
     $scope.clearData = function (supplier, msg) {
@@ -1102,7 +1102,7 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         console.log(supplier.country);
         console.log(supplier.pinCode);
 
-        addSupplierService.addSupplier($scope, $http, supplier);
+        addSupplierService.addSupplier($scope,$rootScope,$http, supplier);
     };
 
 
