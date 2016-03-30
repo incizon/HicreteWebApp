@@ -803,16 +803,57 @@ myApp.controller('LeaveApprovalController', function($scope,$http) {
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $scope.leaveApprovalList=data;
-                $scope.totalItems=$scope.leaveApprovalList.length;
+                if(data.status=="fail"){
+                    alert(data.message);
+                }
+                else {
+                    console.log(data.message);
+                    $scope.leaveApprovalList = data.message;
+                    $scope.totalItems = $scope.leaveApprovalList.length;
+                }
+
             })
             .error(function (data, status, headers, config) {
 
+                alert("Error Occured..."+data);
             });
     }
 
     $scope.getLeavesApproval();
 
+    $scope.processLeaveApproval=function(actionStatus,applicationId){
+
+        console.log(actionStatus);
+        console.log(applicationId);
+        var data={
+            operation :"LeaveApprovalAction",
+            applicationId : applicationId,
+            status:actionStatus
+        };
+
+        var config = {
+            params: {
+                details: data
+            }
+        };
+
+        $http.post("Payroll/php/PayrollFacade.php",null, config)
+
+            .success(function (data)
+            {
+                console.log(data);
+                if(data.status!="successful"){
+                    alert(data.message);
+                }else{
+                    alert("Status Updated Successfully");
+                }
+            })
+            .error(function (data, status, headers, config)
+            {
+                alert("Error Occured"+data);
+            });
+
+    }
 
     $scope.paginate = function(value) {
 

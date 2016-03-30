@@ -280,7 +280,7 @@ myApp.service('addMaterialTypeService', function () {
  ****************************************************************************/
 myApp.service('inwardService', function () {
 
-    this.inwardEntry = function ($scope, $http, inwardData) {
+    this.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
         console.log("IN SERVICE OF INWARD=");
         $('#loader').css("display","block");
         var data = {
@@ -299,9 +299,9 @@ myApp.service('inwardService', function () {
                 $('#loader').css("display","none");
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
-                $scope.warningMessage=data.msg;
+                $rootScope.warningMessage=data.msg;
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
                     setTimeout(function () {
                         $('#warning').css("display","none");
@@ -311,7 +311,7 @@ myApp.service('inwardService', function () {
 
                 $('#loader').css("display","none");
                 if (data.error == ""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                 }
             })
