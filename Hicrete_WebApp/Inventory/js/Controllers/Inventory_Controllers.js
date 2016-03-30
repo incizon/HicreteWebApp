@@ -779,17 +779,31 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             }
         };
         console.log(config);
+        $('#loader').css("display","block");
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 console.log("In Post of outward entry success:");
                 console.log(data);
                 if(data.msg!=""){
-                    alert(data.msg);
-                    setTimeout(function(){
+                    //alert(data.msg);
+                    $('#loader').css("display","none");
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                    setTimeout(function () {
+                        $('#warning').css("display","none");
                         window.location="dashboard.php#/Inventory";
-                    },1000);
+                    }, 3000);
+                    //setTimeout(function(){
+                    //    window.location="dashboard.php#/Inventory";
+                    //},1000);
                 }else{
-                    alert(data.error);
+                    //alert(data.error);
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                    setTimeout(function () {
+                        $('#error').css("display","none");
+                    }, 3000);
                 }
 
                 //$scope.clearFields($scope.OutwardData);
@@ -798,8 +812,13 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
             })
             .error(function (data, status, headers) {
                 console.log(data);
-                alert(data);
-
+                //alert(data);
+                $('#loader').css("display","none");
+                $scope.errorMessage=data.error;
+                $('#error').css("display","block");
+                setTimeout(function () {
+                    $('#error').css("display","none");
+                }, 3000);
             });
     }
     /***********************************************
