@@ -576,20 +576,47 @@
                 }
             }
 
-            public  function getLeavesApproval($userId){
+            public function getLeavesApproval(){
 
 
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
 
-                $stmt=$connect->prepare("SELECT usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster JOIN leave_application_master
-                                          ON usermaster.userId=leave_application_master.leave_applied_by JOIN employee_on_payroll ON employee_on_payroll.employee_id=leave_application_master.leave_applied_by WHERE leave_application_master.status='pending' AND employee_on_payroll.leave_approver_id=:userId
+                $stmt=$connect->prepare("SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster JOIN leave_application_master
+                                          ON usermaster.userId=leave_application_master.leave_applied_by WHERE leave_application_master.status='pending'
                                          ");
-                $stmt->bindParam(':userId',$userId);
 
                 $stmt->execute();
                 $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
-                echo json_encode($result);
+                echo AppUtil::getReturnStatus("success", $result);
+                return true;
+            }
+
+            public function updateLeaveApprovalStatus($userId,$data){
+
+                $db = Database::getInstance();
+                $connect = $db->getConnection();
+
+                $status=$data->status;
+                $applicationId=$data->applicationId;
+
+                $stmt=$connect->prepare("UPDATE leave_application_master SET
+                                         status=:status,
+                                         action_by=:actionBy,
+                                         action_date=NOW()
+                                         WHERE application_id=:applicationId");
+
+                $stmt->bindParam(':status',$status);
+                $stmt->bindParam(':actionBy',$userId);
+                $stmt->bindParam(':applicationId',$applicationId);
+
+                $connect->beginTransaction();
+                if($stmt->execute()){
+                    echo AppUtil::getReturnStatus("success", "Status Updated Successfully");
+                    $connect->commit();
+                    return true;
+                }
+
             }
         }
 
