@@ -839,6 +839,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                     $uibModalInstance.dismiss('cancel');
                 };
                 $scope.outwardEntry = function ($scope, $http, outwardData) {
+                    $('#loader').css("display","block");
                     var data = {
                         outwardData: outwardData,
                         module: 'outward',
@@ -852,13 +853,21 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                     console.log(config);
                     $http.post("Inventory/php/InventoryIndex.php", null, config)
                         .success(function (data) {
+                            $('#loader').css("display","none");
                             console.log("In Post of outward entry success:");
                             console.log(data);
                             if(data.msg!=""){
+                                $scope.warningMessage=data.msg;
+                                $('#warning').css("display","block");
                                 setTimeout(function(){
+                                    $('#warning').css("display","none");
                                     window.location="dashboard.php#/Inventory";
                                 },1000);
                             }else{
+                                $('#error').css("display","block");
+                                setTimeout(function () {
+                                    $('#error').css("display","none");
+                                }, 3000);
                             }
                             $scope.submitted = false;
 
