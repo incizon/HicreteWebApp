@@ -1,6 +1,6 @@
 myApp.service('ApplicatorService',function(){
 
-	this.submitApplicatorDetails=function($scope,$http,applicatorDetails){
+	this.submitApplicatorDetails=function($scope,$rootScope,$http,applicatorDetails){
 		applicatorDetails.operation='createApplicator';
 		 var config = {
 						params: {
@@ -14,8 +14,11 @@ myApp.service('ApplicatorService',function(){
 						console.log(data);
 						$scope.loading=false;
 						$('#loader').css("display","none");
-						//if(data.msg!=""){
-							$scope.warningMessage="Applicator Created Successfully...";
+						console.log(data.msg);
+						if(data.msg!=""){
+
+							$rootScope.warningMessage=data.msg;
+							//console.log($scope.warningMessage);
 							$('#warning').css("display","block");
 							setTimeout(function() {
 								$scope.$apply(function() {
@@ -24,12 +27,12 @@ myApp.service('ApplicatorService',function(){
 									}
 								});
 							}, 3000);
-						//}
+						}
 
 
 
 						if(data.msg==""){
-							$scope.errorMessage="Unable to create Applicator...";
+							$rootScope.errorMessage="Unable to create Applicator...";
 							$('#error').css("display","block");
 							setTimeout(function() {
 								$scope.$apply(function() {
@@ -39,13 +42,13 @@ myApp.service('ApplicatorService',function(){
 								});
 							}, 3000);
 						}
-							setTimeout(function(){
+							/*setTimeout(function(){
 									window.location.reload(true);
-							},6000);
+							},6000);*/
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
-							$scope.errorMessage="Unable to create Applicator...";
+							$rootScope.errorMessage="Unable to create Applicator...";
 							$('#error').css("display","block");
 							setTimeout(function() {
 								$scope.$apply(function() {
