@@ -334,8 +334,8 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
 
          console.log($scope.applicatorDetails);
              $scope.loading=true;
-             $scope.errorMessage="";
-             $scope.warningMessage="";
+             //$scope.errorMessage="";
+             //$scope.warningMessage="";
 
              $('#loader').css("display","block");
 
@@ -359,7 +359,7 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                          else{
                              $scope.loading=false;
                              $('#loader').css("display","none");
-                             $scope.errorMessage=data.message;
+                             $rootScope.errorMessage=data.message;
                              $('#error').css("display","block");
                              setTimeout(function() {
                                  $scope.$apply(function() {
@@ -374,7 +374,7 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
                      .error(function (data, status, headers) {
                          $scope.loading=false;
                          $('#loader').css("display","none");
-                         $scope.errorMessage="Could Not Fetch Data";
+                         $rootScope.errorMessage="Could Not Fetch Data";
                          $('#error').css("display","block");
                      });
 
@@ -487,7 +487,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
                 $('#loader').css("display","none");
                 console.log(data);
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
                 }
                 setTimeout(function() {
@@ -498,7 +498,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
                     });
                 }, 3000);
                 if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
@@ -515,7 +515,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
                 $scope.loading=false;
                 $('#loader').css("display","none");
                 if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
@@ -555,8 +555,8 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
         $scope.applicatorDetails.searchKeyword=$scope.searchKeyword;
         $scope.applicatorDetails.operation='viewPermanentApplicators';
         $scope.loading=true;
-        $scope.errorMessage="";
-        $scope.warningMessage="";
+        //$scope.errorMessage="";
+        //$scope.warningMessage="";
         $('#loader').css("display","block");
         var config = {
             params: {
@@ -576,7 +576,7 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                     else{
                         $scope.loading=false;
                         $('#loader').css("display","none");
-                        $scope.errorMessage=data.message;
+                        $rootScope.errorMessage=data.message;
                         $('#error').css("display","block");
                         setTimeout(function() {
                             $scope.$apply(function() {
@@ -590,7 +590,7 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
                 .error(function (data, status, headers) {
                     $scope.loading=false;
                     $('#loader').css("display","none");
-                    $scope.errorMessage="Could Not Fetch Data";
+                    $rootScope.errorMessage="Could Not Fetch Data";
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
@@ -709,7 +709,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
                 $('#loader').css("display","none");
                 console.log(data);
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
                 }
                 setTimeout(function() {
@@ -720,7 +720,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
                     });
                 }, 3000);
                 if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
@@ -738,7 +738,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
                 $scope.loading=false;
                 $('#loader').css("display","none");
                 if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
@@ -756,7 +756,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
 
 /* start of applicator payment controller*/
 
-myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorService,$uibModal, $log){
+myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,ApplicatorService,$uibModal, $log){
 
     $scope.applicatorDetails={
         operation:""
@@ -835,7 +835,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
 
             applicatorDetails.paymentStatus='Yes';
             console.log(applicatorDetails);
-            ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+            ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
         }
         else if($scope.applicatorDetails.pendingAmount!=0){
 
@@ -892,7 +892,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$http,ApplicatorS
 start of package controller
 
  */
-myApp.controller('PackageController',function($scope,$http,PackageService){
+myApp.controller('PackageController',function($scope,$rootScope,$http,PackageService){
 
     $scope.packageDetails={
 
@@ -950,7 +950,7 @@ myApp.controller('PackageController',function($scope,$http,PackageService){
         $scope.packageFormSubmitted=false;
         $scope.packageDetails.packageEdited='false';
         console.log(packageDetails);
-        PackageService.createPackage($scope,$http,packageDetails);
+        PackageService.createPackage($scope,$rootScope,$http,packageDetails);
 
     };
 

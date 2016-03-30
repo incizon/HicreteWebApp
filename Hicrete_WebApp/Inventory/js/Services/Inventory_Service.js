@@ -284,7 +284,7 @@ myApp.service('inwardService', function () {
         console.log("IN SERVICE OF INWARD=");
         $('#loader').css("display","block");
         var data = {
-            inwardData: $scope.InwardData,
+            inwardData: inwardData,
             module: 'inward',
             operation: 'insert'
         }
@@ -306,36 +306,18 @@ myApp.service('inwardService', function () {
                     setTimeout(function () {
                         $('#warning').css("display","none");
                         window.location="dashboard.php#/Inventory";
-                    }, 3000);
-                    //alert(data.msg);
+                    }, 2000);
                 }
 
-                //setTimeout(function () {
-                //    if (data.msg != ""){
-                //        $('#warning').css("display","none");
-                //    }
-                //}, 3000);
                 $('#loader').css("display","none");
                 if (data.error == ""){
                     $scope.errorMessage=data.error;
                     $('#error').css("display","block");
-                    //alert(data.error);
-                    setTimeout(function () {
-                        $('#error').css("display","none");
-                    }, 3000);
                 }
-
-                //window.location="dashboard.php#/Inventory";
-
-                //$scope.inwardData=[];
-                setTimeout(function(){
-                    //window.location.reload(true);
-                    // window.location="dashboard.php#/Inventory";
-                },1000);
             })
             .error(function (data, status, headers) {
-                console.log(data);
-                alert(data);
+                $('#loader').css("display","none");
+                $('#error').css("display","block");
             });
     };
 
