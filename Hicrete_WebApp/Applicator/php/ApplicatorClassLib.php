@@ -146,9 +146,15 @@
                     $applicatorCstNumber = $data->cstnumber;
                     $applicatorServiceTaxNumber = $data->servicetaxnumber;
                     $applicatorPanNumber = $data->pannumber;
-
-                    $pointOfContact = $data->pointofcontact;
-                    $pointContactNo = $data->pointcontactno;
+                    if(isset($data->pointofcontact)) {
+                        $pointOfContact = $data->pointofcontact;
+                    }
+                    else
+                        $pointOfContact="";
+                    if(isset($data->pointcontactno)) {
+                        $pointContactNo = $data->pointcontactno;
+                    }else
+                        $pointContactNo="";
 
                     if($data->packageEdited=="false") {
                         $MasterPackageId = $data->packageID;

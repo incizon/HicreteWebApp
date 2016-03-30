@@ -570,6 +570,8 @@ myApp.run(function($rootScope,$http) {
     $rootScope.customerSearch=[];
     $rootScope.projectSearch=[];
     $rootScope.tasks=[];
+    $rootScope.warningMessage="";
+    $rootScope.errorMessage="";
 });
 
 

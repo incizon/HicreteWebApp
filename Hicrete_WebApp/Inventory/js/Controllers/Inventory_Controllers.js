@@ -34,14 +34,8 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     var isPrductDetailsTable = false;
     var isProductPkgingTable = false;
 
-    //Available Products
-    //inventoryService.getProducts($scope, $http);
-
-    //inventoryService.getSavedProducts($scope);
-
-
     inventoryService.getProducts($scope, $http);
-    // inventoryService.getSavedProducts($scope);
+
     /*
      Start of Pagination Function
      */
@@ -286,7 +280,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService) {
+myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$uibModal,AppService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
@@ -317,8 +311,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -330,8 +324,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
-    //inventoryService.getSavedCompanys($scope);
-    //inventoryService.getSavedWarehouses($scope);
+    //GetUsers
+    AppService.getUsers($scope,$http);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -410,9 +404,7 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         //alert("next step:"+$scope.InwardData.hasTransportDetails);
 
         if ($scope.InwardData.hasTransportDetails == 'No') {
-            // $scope.showModal=true;
-            //alert("if");
-            $scope.addInwardDetails();
+            $scope.addInwardDetails($scope.InwardData);
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.step++;
             console.log("Step Value:" + $scope.step);
@@ -441,11 +433,80 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
         opened: false
     };
 
-    $scope.addInwardDetails = function () {
+    $scope.addInwardDetails = function (inwardData) {
 
-        console.log("in next step data before class =");
+        console.log("Add inwardDetails function =");
         console.log($scope.InwardData);
-        inwardService.inwardEntry($scope, $http, $scope.InwardData);
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'utils/ConfirmDialog.html',
+            controller:  function ($scope,$rootScope,$uibModalInstance,inwardData) {
+                $scope.save = function () {
+                    console.log("Ok clicked");
+                    console.log(inwardData);
+                    $scope.inwardEntry($scope,$rootScope, $http,inwardData);
+                    $uibModalInstance.close();
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
+                    console.log("IN SERVICE OF INWARD=");
+                    $('#loader').css("display","block");
+                    var data = {
+                        inwardData: inwardData,
+                        module: 'inward',
+                        operation: 'insert'
+                    }
+                    var config = {
+                        params: {
+                            data: data
+                        }
+                    };
+                    console.log(config);
+                    $http.post("Inventory/php/InventoryIndex.php", null, config)
+                        .success(function (data) {
+                            $('#loader').css("display","none");
+                            console.log(data);
+                            if(data.msg!=""){
+                                $rootScope.warningMessage=data.msg;
+                                $('#warning').css("display","block");
+                                setTimeout(function () {
+                                    $('#warning').css("display","none");
+                                    window.location="dashboard.php#/Inventory";
+                                }, 2000);
+                            }else{
+                                $rootScope.errorMessage=data.error;
+                                $('#error').css("display","block");
+                            }
+                            $('#loader').css("display","none");
+
+                        })
+                        .error(function (data, status, headers) {
+                            $('#loader').css("display","none");
+                            $('#error').css("display","block");
+                        });
+                };
+            },
+            resolve: {
+                inwardData: function () {
+                    return $scope.InwardData;
+                }
+            }
+
+        });
+
+        modalInstance.result.then(function () {
+           console.log("In result");
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+        $scope.toggleAnimation = function () {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        };
+
+
+        //inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
     }
 
@@ -580,9 +641,9 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
  *
  ************************************************************************************************************/
 
-myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService) {
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+myApp.controller('outwardController', function ($scope,$rootScope, $http, outwardService, inventoryService,AppService,$uibModal) {
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.productsToModify = [];
     $scope.productAvailable=[];
     $scope.OutwardData = {
@@ -600,6 +661,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
     $scope.step = 1;
     $scope.submitted = false;
 
+    AppService.getUsers($scope,$http);
     $scope.getNoOfMaterials=function(){
 
         return $scope.OutwardData.outwardMaterials.length;
@@ -741,14 +803,9 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
      * Return- Nothing
      *************************************************************/
     $scope.nextStep = function () {
-        //alert("next step:"+$scope.OutwardData.hasTransportDetails);
         if ($scope.OutwardData.hasTransportDetails == 'No') {
-            // $scope.showModal=true;
-            //alert("if");
-            $scope.addOutwardDetails();
+            $scope.addOutwardDetails($scope.OutwardData);
         } else if ($scope.OutwardData.hasTransportDetails == 'Yes') {
-            // $scope.showModal=false;
-            //alert("else");
             $scope.step = 2;
             $scope.submitted = false;
 
@@ -766,41 +823,90 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
      * @param1- outward data
      * Return- success or failure
      *************************************************************/
-    $scope.addOutwardDetails = function () {
+    $scope.addOutwardDetails = function (outwardData) {
 
-        var data = {
-            outwardData: $scope.OutwardData,
-            module: 'outward',
-            operation: 'insert'
-        }
-        var config = {
-            params: {
-                data: data
-            }
-        };
-        console.log(config);
-        $http.post("Inventory/php/InventoryIndex.php", null, config)
-            .success(function (data) {
-                console.log("In Post of outward entry success:");
-                console.log(data);
-                if(data.msg!=""){
-                    alert(data.msg);
-                    setTimeout(function(){
-                        window.location="dashboard.php#/Inventory";
-                    },1000);
-                }else{
-                    alert(data.error);
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'utils/ConfirmDialog.html',
+            controller:  function ($scope,$rootScope,$uibModalInstance,outwardData) {
+                $scope.save = function () {
+                    console.log("Ok clicked");
+                    console.log(outwardData);
+                    $scope.outwardEntry($scope, $http,outwardData);
+                    $uibModalInstance.close();
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.outwardEntry = function ($scope, $http, outwardData) {
+                    $('#loader').css("display","block");
+                    var data = {
+                        outwardData: outwardData,
+                        module: 'outward',
+                        operation: 'insert'
+                    }
+                    var config = {
+                        params: {
+                            data: data
+                        }
+                    };
+                    console.log(config);
+                    $http.post("Inventory/php/InventoryIndex.php", null, config)
+                        .success(function (data) {
+                            $('#loader').css("display","none");
+                            console.log("In Post of outward entry success:");
+                            console.log(data);
+                            if(data.msg!=""){
+                                $('#loader').css("display","none");
+                                $rootScope.warningMessage=data.msg;
+                                $('#warning').css("display","block");
+                                setTimeout(function () {
+                                    $('#warning').css("display","none");
+                                    window.location="dashboard.php#/Inventory";
+                                }, 3000);
+                                //setTimeout(function(){
+                                //    window.location="dashboard.php#/Inventory";
+                                //},1000);
+                            }else{
+                                $('#loader').css("display","none");
+                                $rootScope.errorMessage=data.error;
+                                $('#error').css("display","block");
+                                setTimeout(function () {
+                                    $('#error').css("display","none");
+                                }, 3000);
+                            }
+                            $scope.submitted = false;
+
+                        })
+                        .error(function (data, status, headers) {
+                            console.log(data);
+                            $('#loader').css("display","none");
+                            $rootScope.errorMessage=data.error;
+                            $('#error').css("display","block");
+                            setTimeout(function () {
+                                $('#error').css("display","none");
+                            }, 3000);
+                        });
+                };
+            },
+            resolve: {
+                outwardData: function () {
+                    return $scope.OutwardData;
                 }
+            }
 
-                //$scope.clearFields($scope.OutwardData);
-                $scope.submitted = false;
+        });
 
-            })
-            .error(function (data, status, headers) {
-                console.log(data);
-                alert(data);
+        modalInstance.result.then(function () {
+            console.log("In result");
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+        $scope.toggleAnimation = function () {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        };
 
-            });
+
     }
     /***********************************************
      *End of add Outward function
@@ -973,7 +1079,7 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
  * START OF SUPPLIER CONTROLLER
  *Add Supplier controller
  **************************************************************************************************/
-myApp.controller('addSupplierController', function ($scope, $http, addSupplierService) {
+myApp.controller('addSupplierController', function ($scope,$rootScope, $http, addSupplierService) {
 
     $scope.submitted=false;
     $scope.supplier = {
@@ -985,8 +1091,8 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         pinCode: ""
 
     };
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.messages = [];
     //for clearing the fields
     $scope.clearData = function (supplier, msg) {
@@ -1017,7 +1123,7 @@ myApp.controller('addSupplierController', function ($scope, $http, addSupplierSe
         console.log(supplier.country);
         console.log(supplier.pinCode);
 
-        addSupplierService.addSupplier($scope, $http, supplier);
+        addSupplierService.addSupplier($scope,$rootScope,$http, supplier);
     };
 
 

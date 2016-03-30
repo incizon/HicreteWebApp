@@ -378,21 +378,18 @@ class Config
             $date = new DateTime($data->userInfo->newDate);
             $dob = $date->format('Y-m-d');
             $userId=$data->userInfo->userId;
-//            ,lchnguserid=:lchnguserid,lchngtime=now()
             $stmt=$conn->prepare("UPDATE usermaster SET firstName=:firstName,
-            lastName=:lastName,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,mobileNumber=:mobileNumber,lastModifiedBy=:lastModifiedBy,lastModificationDate=now() WHERE userId = :userId");
+            lastName=:lastName,dateOfBirth=:dateOfBirth,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,mobileNumber=:mobileNumber,lastModifiedBy=:lastModifiedBy,lastModificationDate=now() WHERE userId = :userId");
 
             $stmt->bindParam(':firstName', $data->userInfo->firstName, PDO::PARAM_STR);
             $stmt->bindParam(':lastName', $data->userInfo->lastName, PDO::PARAM_STR);
-//            $stmt->bindParam(':dateOfBirth', $dob, PDO::PARAM_STR);
+            $stmt->bindParam(':dateOfBirth', $dob, PDO::PARAM_STR);
             $stmt->bindParam(':address', $data->userInfo->address, PDO::PARAM_STR);
             $stmt->bindParam(':city', $data->userInfo->city, PDO::PARAM_STR);
             $stmt->bindParam(':state', $data->userInfo->state, PDO::PARAM_STR);
             $stmt->bindParam(':country', $data->userInfo->country, PDO::PARAM_STR);
             $stmt->bindParam(':pincode', $data->userInfo->pincode, PDO::PARAM_STR);
             $stmt->bindParam(':mobileNumber', $data->userInfo->mobileNumber, PDO::PARAM_STR);
-//            $stmt->bindParam(':emailId', $data->userInfo->email, PDO::PARAM_STR);
-//            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 
@@ -404,7 +401,7 @@ class Config
                 echo "Something went wrong.Please try again";
             }
         }catch(Exception $e) {
-            echo "Exception Occured";
+            echo $e->getMessage();
         }
 
     }
