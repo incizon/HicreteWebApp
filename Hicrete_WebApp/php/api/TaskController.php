@@ -74,7 +74,7 @@ class TaskController
 
     public  static function deleteTask($taskId){
              $task = Task::deleteTask($taskId); 
-         return $task;
+         echo AppUtil::getReturnStatus("sucess",$task);
     }
 
       /**

@@ -263,7 +263,7 @@
                             </td>
                             <td>
                                 <input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)" ng-blur="calculateTotal(quotation.amount)"
                                        pattern="[0-9]+"/>
                                 <div class="help-block"
                                      ng-messages="QuotationForm.UnitRate.$error"
@@ -413,7 +413,7 @@
 
             <button class="btn  btn-danger pull-right" ng-click="(formSubmitted=true) && QuotationForm.$valid && createQuotation()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
-            <button class="btn  btn-info pull-right" ng-click="createQuotationDoc()">Create Doc</button>
+            <!--<button class="btn  btn-info pull-right" ng-click="createQuotationDoc()">Create Doc</button>-->
             <button class="btn  btn-default ">Clear Form</button>
         </div>
     </div>

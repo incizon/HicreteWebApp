@@ -1,6 +1,6 @@
 <?php
 require_once '/../../php/appUtil.php';
-require_once '/../Database.php';
+require_once '/../../php/Database.php';
 
 Class Quotation {
 	protected $db;
@@ -329,4 +329,5 @@ public function saveQuotationDetailsAndTax($data){
 
 
 	}
+
 }

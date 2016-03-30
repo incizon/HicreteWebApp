@@ -132,15 +132,15 @@ if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
                 </li>";
             }
 
-            echo "<li><a>Payment</a>
-                    <ul>";
-            if ($hasWrite == 1)
-                echo "<li><a ui-sref=\"Process.addPayment\">Add Payment</a></li>";
-            if ($hasRead == 1)
-                echo "<li><a ui-sref=\"Process.paymentHistory\">Payment History</a></li>";
-
-              echo  "</ul>
-                </li>";
+//            echo "<li><a>Payment</a>
+//                    <ul>";
+//            if ($hasWrite == 1)
+//                echo "<li><a ui-sref=\"Process.addPayment\">Add Payment</a></li>";
+//            if ($hasRead == 1)
+//                echo "<li><a ui-sref=\"Process.paymentHistory\">Payment History</a></li>";
+//
+//              echo  "</ul>
+//                </li>";
 
 
                 echo "<li><a>Task</a>

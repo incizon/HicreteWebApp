@@ -252,4 +252,24 @@ class QuotationController
             echo "Sorry, there was an error uploading your file.";
         }
     }
+
+
+    /**
+     * delete customer using id
+     *
+     * @url POST /quotationlist/$id
+     *
+     */
+
+//    public static function getQuotationList($id){
+//        try{
+//            $quotation = Quotation::getQuotationListForProject($id);
+//            echo AppUtil::getReturnStatus("Successful",$quotation);
+//
+//        }catch(Exception $e){
+//            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+//        }
+//
+//    }
+
 }

@@ -1,4 +1,4 @@
-myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,PackageService,$uibModal, $log) {
+myApp.controller('ApplicatorController',function($scope,$rootScope,$http,ApplicatorService,PackageService,$uibModal, $log) {
 
     $scope.step=1;
     $scope.editPackage=false;
@@ -7,7 +7,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     $scope.editPackage=false;
     $scope.package_total_amount=0;
     $scope.packageDetailsShow='No';
-
+    //$scope.warningMessage="";
     /* applicator details object */
 
     $scope.applicatorDetails={
@@ -183,7 +183,7 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
     $scope.processForm = function(size,applicatorDetails) {
         $scope.loading=true;
         $scope.errorMessage="";
-        $scope.warningMessage="";
+        //$scope.warningMessage="";
         $('#loader').css("display","block");
         $scope.formSubmitted=false;
          console.log("In process form");
@@ -221,8 +221,9 @@ myApp.controller('ApplicatorController',function($scope,$http,ApplicatorService,
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
 
-                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                       ApplicatorService.submitApplicatorDetails($scope,$rootScope, $http, applicatorDetails);
                         $uibModalInstance.close();
+
                     };
 
                     $scope.cancel = function () {

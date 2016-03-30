@@ -169,7 +169,7 @@ myApp.service('inventoryService', function () {
  ****************************************************************************/
 myApp.service('addSupplierService', function () {
 
-    this.addSupplier = function ($scope, $http, supplier) {
+    this.addSupplier = function ($scope,$rootScope, $http, supplier) {
 
         $('#loader').css("display","block");
         var config = {
@@ -178,8 +178,8 @@ myApp.service('addSupplierService', function () {
             }
         };
 
-        $scope.errorMessage = "";
-        $scope.warningMessage = "";
+       // $scope.errorMessage = "";
+        //$scope.warningMessage = "";
         console.log("supllier");
         console.log(supplier);
         $http.post("Inventory/php/supplierSubmit.php", null, config)
@@ -187,15 +187,17 @@ myApp.service('addSupplierService', function () {
                 console.log("Supplier Data=");
                 console.log(data);
                 //$scope.warningMessage="Success";
+                console.log(data.msg);
+                //$scope.warningMessage=data.msg;
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $("#warning").css("display","block");
                     setTimeout(function () {
                         if (data.msg != ""){
                             $("#warning").css("display","none");
                         }
                     }, 3000);
-                    console.log( $scope.warningMessage);
+                    console.log( $rootScope.warningMessage);
                     //alert(data.msg);
                     window.location="dashboard.php#/Inventory/addSupplier";
                     $scope.submitted=false;
@@ -205,10 +207,13 @@ myApp.service('addSupplierService', function () {
 
                 $('#loader').css("display","none");
                 if (data.error != ""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
+                    window.location="dashboard.php#/Inventory/addSupplier";
+                    $scope.submitted=false;
+                    $scope.clearData(supplier,'clear');
                 }
-                $scope.messages.push(data.msg);
+               // $scope.messages.push(data.msg);
                 $scope.clearData(supplier, 'submit');
             })
             .error(function (data, status, headers, config) {
