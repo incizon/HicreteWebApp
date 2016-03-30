@@ -206,7 +206,17 @@ $operationObject=new Payroll();
 
      case 'getLeavesApproval':
 
-            $operationObject->getLeavesApproval($userId);
+            if(!$operationObject->getLeavesApproval($userId)){
+                $message = "Leave Approval details not available...!!!";
+                echo AppUtil::getReturnStatus("fail",$message);
+            }
+         break;
+     case 'LeaveApprovalAction':
+
+         if(!$operationObject->updateLeaveApprovalStatus($userId,$data)){
+             $message = "Could not update status...!!!";
+             echo AppUtil::getReturnStatus("fail",$message);
+         }
          break;
 
  }

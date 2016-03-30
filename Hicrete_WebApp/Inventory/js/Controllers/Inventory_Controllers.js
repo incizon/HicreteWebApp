@@ -280,7 +280,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService,$uibModal,AppService) {
+myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$uibModal,AppService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
@@ -311,8 +311,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -444,13 +444,13 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
                 $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(inwardData);
-                    $scope.inwardEntry($scope, $http,inwardData);
+                    $scope.inwardEntry($scope,$rootScope, $http,inwardData);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
-                $scope.inwardEntry = function ($scope, $http, inwardData) {
+                $scope.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
                     console.log("IN SERVICE OF INWARD=");
                     $('#loader').css("display","block");
                     var data = {
@@ -641,9 +641,9 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
  *
  ************************************************************************************************************/
 
-myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService,AppService,$uibModal) {
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+myApp.controller('outwardController', function ($scope,$rootScope, $http, outwardService, inventoryService,AppService,$uibModal) {
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.productsToModify = [];
     $scope.productAvailable=[];
     $scope.OutwardData = {
