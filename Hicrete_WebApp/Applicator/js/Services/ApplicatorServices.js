@@ -25,10 +25,11 @@ myApp.service('ApplicatorService',function(){
 								$scope.$apply(function () {
 									if (data.msg != "") {
 										$('#warning').css("display", "none");
-									}
+                                        window.location.reload(true);
+                                    }
 								});
 							}, 1000);
-						//}
+							//}
 
 							}
 
@@ -99,12 +100,11 @@ myApp.service('ApplicatorService',function(){
 				data: applicatorDetails
 			}
 		};
-		console.log(applicatorDetails);
+
 		$http.post("Applicator/php/Applicator.php", null,config)
 				.success(function (data, status, headers, config){
 					$('#loader').css("display","none");
 					console.log(data.msg);
-					alert("asdasd");
 					if(data.msg!=""){
 						$rootScope.warningMessage = "Payment Details Added Successfully..";
 						$('#warning').css("display","block");
@@ -113,9 +113,10 @@ myApp.service('ApplicatorService',function(){
 						$scope.$apply(function() {
 							if(data.msg!=""){
 								$('#warning').css("display","none");
-							}
+                                window.location.reload(true);
+                            }
 						});
-					}, 3000);
+					}, 1000);
 
 					$scope.loading=false;
 					$('#loader').css("display","none");
@@ -138,11 +139,7 @@ myApp.service('ApplicatorService',function(){
 				});
 	}
 
-	this.modifyApplicatorDetails=function($scope,$http,applicatorDetails){
 
-
-
-	}
 
 
 });

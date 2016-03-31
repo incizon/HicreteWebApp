@@ -12,7 +12,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     //Pagination variables
     $scope.totalItems = 0;
     $scope.currentPage = 1;
-    $scope.InventoryItemsPerPage =10;
+    $scope.InventoryItemsPerPage = 10;
     //Initialize all the variables
     $scope.data = {};
     //Init product object
