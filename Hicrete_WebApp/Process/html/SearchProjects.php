@@ -1,11 +1,11 @@
 <?php
 
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 require_once '../../php/appUtil.php';
 if (!isset($_SESSION['token'])) {
     session_start();
 }else{
-    header("Location: index.html");
+    header("Location: ../../index.html");
     exit();
 }
 $userId=$_SESSION['token'];

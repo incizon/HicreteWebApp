@@ -25,7 +25,8 @@ myApp.service('ApplicatorService',function(){
 								$scope.$apply(function () {
 									if (data.msg != "") {
 										$('#warning').css("display", "none");
-									}
+                                        window.location.reload(true);
+                                    }
 								});
 							}, 1000);
 							//}
@@ -112,9 +113,10 @@ myApp.service('ApplicatorService',function(){
 						$scope.$apply(function() {
 							if(data.msg!=""){
 								$('#warning').css("display","none");
-							}
+                                window.location.reload(true);
+                            }
 						});
-					}, 3000);
+					}, 1000);
 
 					$scope.loading=false;
 					$('#loader').css("display","none");
@@ -137,11 +139,7 @@ myApp.service('ApplicatorService',function(){
 				});
 	}
 
-	this.modifyApplicatorDetails=function($scope,$http,applicatorDetails){
 
-
-
-	}
 
 
 });

@@ -321,7 +321,7 @@ userType:""
                      {
                      
                        if(data.status!="Successful"){
-                        //  alert(data.message);
+                          alert(data.message);
                        }else{
                            $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -330,7 +330,7 @@ userType:""
                      })
                      .error(function (data, status, headers, config)
                      {
-                      // alert("Error Occured");
+                       alert("Error Occured");
                      });
             }
 
@@ -413,7 +413,7 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
 
                 })
                 .error(function (data, status, headers, config) {
-               //     alert("Error Occurred:"+data);
+                    alert("Error Occurred:"+data);
 
 
                 });
@@ -563,11 +563,11 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 if(data.status=="Successful"){
                     var index = $rootScope.Users.indexOf(user);
                     $rootScope.Users.splice(index, 1);
-                   // alert("Deleted successfully");
+                    alert("Deleted successfully");
                 }
                 else
                 {
-                 //  alert(data.message);
+                   alert(data.message);
 
 
                 }
@@ -575,7 +575,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             })
             .error(function (data, status, headers, config)
             {
-               // alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
 
 
@@ -622,7 +622,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                   // alert("Error Occured"+data.message);
+                    alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -631,7 +631,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             })
             .error(function (data, status, headers, config)
             {
-              //  alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
     }
     $scope.loadAccessPermission();
@@ -640,7 +640,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
     $scope.modifyUser=function(){
 
         if($scope.modifyUserForm.$pristine){
-           // alert("Fields are not modified");
+            alert("Fields are not modified");
             return;
         }
 
@@ -1173,81 +1173,6 @@ var clearWarehouseForm=function(){
 
 });        
 
-myApp.controller('tempAccessController',function($scope,$http,configService){
-
-$scope.requestId="56929ff47e6183070";
-$scope.tempSubmitted=false;
-$scope.accessRequested=[];
-$scope.tempAccess={};
-$scope.remark="";
-$scope.buttonDisabled=true;	
-        var data={
-                      operation :"getTempAccessRequestDetails",
-                      requestId : $scope.requestId 
-                };        
-
-                var config = {
-                           params: {
-                                 data: data
-                               }
-                };
-
-                $http.post("Config/php/configFacade.php",null, config)
-                     .success(function (data)
-                     {
-                     
-                       if(data.status!="Successful"){
-                           alert(data.message);
-                       }else{
-                            
-                            $scope.tempAccess=data.message.requestDetails;
-                            configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
-                            $scope.buttonDisabled=false;  
-                       }
-
-                     })
-                     .error(function (data, status, headers, config)
-                     {
-                         alert("Error Occured"+data);
-                     });
-
-
- 	$scope.AddAccessRequestAction=function(actionStatus){
-      $scope.buttonDisabled=true;
-        $scope.tempSubmitted=false;
-   		 var data={
-                      operation :"TempAccessRequestAction",
-                      requestId : $scope.requestId,
-                      remark:$scope.remark,
-                      status:actionStatus,
-                      
-
-                };        
-
-                var config = {
-                           params: {
-                                 data: data
-                               }
-                };
-
-                $http.post("Config/php/configFacade.php",null, config)
-                     .success(function (data)
-                     {
-                     
-                       if(data.status!="Successful"){
-                           alert(data.message);
-                       }else{
-                          alert("Request Added Successfully");
-                       }
-
-                     })
-                     .error(function (data, status, headers, config)
-                     {
-                         alert("Error Occured"+data);
-                     });
- 	          }
-
-});  
 
 myApp.controller('requestTempAccessController',function($scope,$http,configService){
 
@@ -1848,7 +1773,7 @@ myApp.controller('MyProfileController',function($scope,$http,$filter,AppService)
 myApp.controller('AccessApprovalController',function($scope,$http,configService) {
 
     console.log("In");
-    $scope.AccessApprovalPerPage=2;
+    $scope.AccessApprovalPerPage=10;
     $scope.currentPage=1;
     $scope.ApprovalList=[];
 
@@ -1856,7 +1781,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
     $scope.getAccessApprovals=function(){
 
         var data = {
-            operation: "getAccessApprovals",
+            operation: "getAccessApprovals"
         };
 
         var config = {
@@ -1901,7 +1826,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                   // alert(data.message);
+                    alert(data.message);
                 }else{
 
                     $scope.tempAccess=data.message.requestDetails;
@@ -1912,7 +1837,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             })
             .error(function (data, status, headers, config)
             {
-              // alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
 
     }
@@ -1937,15 +1862,22 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                 //   alert(data.message);
+                    alert(data.message);
                 }else{
-                  //  alert("Request Added Successfully");
+
+                    for(var i=0;i<$scope.ApprovalList.length;i++){
+                        if($scope.ApprovalList[i].requestId==$scope.requestId){
+                            $scope.ApprovalList.splice(i,1);
+                            break;
+                        }
+                    }
+                    alert("Request Added Successfully");
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-               // alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
     }
 

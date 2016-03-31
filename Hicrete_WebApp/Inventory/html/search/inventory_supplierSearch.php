@@ -1,3 +1,18 @@
+<?php
+
+//error_reporting(E_ERROR | E_PARSE);
+require_once '../../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: ../../index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
+
+?>
+
 <div>
     <div ng-include="'utils/loader.html'"></div>
 </div>
@@ -7,20 +22,7 @@
 <div>
     <div ng-include="'utils/WarningMessage.html'"></div>
 </div>
-<?php
 
-error_reporting(E_ERROR | E_PARSE);
-require_once '../../../php/appUtil.php';
-if (!isset($_SESSION['token'])) {
-    session_start();
-}else{
-    header("Location: index.html");
-    exit();
-}
-$userId=$_SESSION['token'];
-$hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
-
-?>
 
     <!-- END TEMPLATE -->
    
@@ -76,7 +78,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                                 <button ng-click="getSupplier(supplier)" data-target="#modifySupplierDetails" data-toggle="modal"
                                         class="btn btn-info btn-sm"><span class="fa fa-floppy"></span> Modify</button>
 
-                                <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span> Delete</button></td>
+<!--                                <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span> Delete</button></td>-->
                         </tr>
 
 
