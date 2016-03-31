@@ -91,7 +91,7 @@ class Supplier
             }
             else
             {
-                $message="Issues while adding supplier.Please contact administrator :P";
+                $message="Issues while adding supplier.Please contact administrator ";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
                 echo($jsn);

@@ -30,6 +30,7 @@ myApp.service('ApplicatorService',function(){
 							}, 1000);
 							//}
 
+							}
 
 							if (data.msg == "") {
 								$rootScope.errorMessage = "Unable to create Applicator...";
@@ -45,7 +46,7 @@ myApp.service('ApplicatorService',function(){
 							/*setTimeout(function(){
 							 window.location.reload(true);
 							 },6000);*/
-						}
+
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
