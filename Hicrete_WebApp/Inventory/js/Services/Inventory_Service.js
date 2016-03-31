@@ -455,16 +455,18 @@ myApp.service('ProductionBatchService', function () {
                 //$scope.clear();
                 if (data.msg != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlert("Success", data.msg);
-                    if(prodBatchInfo.option=='complete')
-                    {
+                   /* if(prodBatchInfo.option=='complete')
+                    {*/
                         //alert(data.msg);
                         $rootScope.warningMessage=data.msg;
+                        console.log($rootScope.warningMessage);
                         $('#warning').css("display","block");
                         setTimeout(function() {
                             $('#warning').css("display","none");
                             window.location="dashboard.php#/Inventory";
                         }, 3000);
-
+                    if(prodBatchInfo.option=='complete')
+                    {
                         $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
 
                     }
@@ -496,9 +498,13 @@ myApp.service('ProductionBatchService', function () {
                 }
                 $scope.submitted=false;
 
-                $scope.step = 1;
-                $scope.clear('All');
+                //$scope.step = 1;
+                //$scope.clear('All');
 
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                    window.location="dashboard.php#/Inventory";
+                }, 3000);
 
                 //$scope.messages.push(data.msg);
                 // $scope.clearData(supplier,'submit');
@@ -507,7 +513,7 @@ myApp.service('ProductionBatchService', function () {
                 console.log("Error calling php");
                 //$scope.messages=data.error;
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+                $rootScope.errorMessage=data.error;
                 $('#error').css("display","block");
                 setTimeout(function() {
                     $('#error').css("display","none");

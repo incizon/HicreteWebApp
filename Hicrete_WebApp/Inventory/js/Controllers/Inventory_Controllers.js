@@ -755,6 +755,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                // qty= $scope.unitofMeasure;
                 //console.log(qty);
             }
+            else
+                $scope.availableTotalquantity=0;
 
         }
 
@@ -1623,17 +1625,26 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         for (var i = 0; i < $scope.inventoryData.length; i++) {
             if (pMaterialId == $scope.inventoryData[i].materialid) {
                 qty = $scope.inventoryData[i].totalquantity;
-                $scope.availableTotalquantity=qty;
+                if(qty!="undefined") {
+                    console.log("here");
+                    $scope.availableTotalquantity = qty;
+                }
+                else {
+                    $scope.availableTotalquantity = 0;
+                    qty=0;
+                }
                 //console.log(qty);
+                console.log($scope.availableTotalquantity);
                 break;
             }
             else
             {
                 qty=0;
                 $scope.availableTotalquantity=0;
+
             }
         }
-
+        console.log($scope.availableTotalquantity);
         return qty;
     };
 
@@ -1642,7 +1653,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         console.log(quantity);
         console.log($scope.availableTotalquantity);
 
-        if($scope.availableTotalquantity<quantity || $scope.availableTotalquantity == 0)
+        if($scope.availableTotalquantity<quantity || $scope.availableTotalquantity == 0 )
         {
 
             //console.log("m alo nighalo");
@@ -1667,7 +1678,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
     //$scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     //$scope.today1 = Date();
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
-    console.log($scope.today);
+    console.log($scope.today1);
     $scope.submitted = false;
     $scope.prodBatchInfo = {};
 
@@ -1811,7 +1822,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             prodBatchInfo.step = $scope.step;
             prodBatchInfo.option = message;
 
-            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
             $scope.submitted=false;
             setTimeout(function () {
              window.location="dashboard.php#/Inventory/prodInit";
@@ -1822,7 +1833,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             if (page == 'final') {
                 prodBatchInfo.step = $scope.step;
                 prodBatchInfo.option = message;
-                ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+                ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
                 /*setTimeout(function () {
                  window.location="dashboard.php#/Inventory/prodInit";
                  }, 1000);*/
@@ -1838,7 +1849,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             $scope.prodBatchInfo.step = $scope.step;
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
-            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo);
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
             $scope.submitted=false;
             console.log($scope.submitted);
             setTimeout(function () {
