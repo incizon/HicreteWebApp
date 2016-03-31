@@ -501,10 +501,10 @@ myApp.service('ProductionBatchService', function () {
                 //$scope.step = 1;
                 //$scope.clear('All');
 
-                setTimeout(function() {
+              /*  setTimeout(function() {
                     $('#error').css("display","none");
                     window.location="dashboard.php#/Inventory";
-                }, 3000);
+                }, 3000);*/
 
                 //$scope.messages.push(data.msg);
                 // $scope.clearData(supplier,'submit');
