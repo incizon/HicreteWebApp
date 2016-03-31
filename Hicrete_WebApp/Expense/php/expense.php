@@ -177,8 +177,16 @@ class Expense
 //        }else{
 //            echo "0";
 //        }
-    }
 
+    }
+    public static  function getBillApproval(){
+
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+
+
+    }
 }
 
 ?>
