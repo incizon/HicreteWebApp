@@ -1289,7 +1289,7 @@ myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
 myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) {
     $scope.totalItems = 0;
     $scope.currentPage = 1;
-    $scope.InventoryItemsPerPage = 5;
+    $scope.InventoryItemsPerPage = 10;
     $scope.keyword="";
 
     $scope.paginate = function (value) {
@@ -1531,7 +1531,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
     $scope.nextStep =false;
     $scope.qtyError=0;
     $scope.currentPage = 1;
-    $scope.prodBatchPerPage = 5;
+    $scope.prodBatchPerPage = 10;
     $scope.submitted=false;
 
     $scope.paginate = function(value) {
