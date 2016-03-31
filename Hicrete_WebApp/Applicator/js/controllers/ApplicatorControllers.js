@@ -280,7 +280,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     };
 
                     $scope.cancel = function () {
-                        applicatorDetails.isFollowup=followup;
+                        applicatorDetails.isFollowup=false;
                         ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -326,7 +326,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
 
     $scope.currentPage = 1;
-    $scope.ApplicatorPerPage = 5;
+    $scope.ApplicatorPerPage = 10;
     $scope.searchExpression;
     $scope.searchKeyword;
 
@@ -549,7 +549,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
 myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
 
     $scope.currentPage = 1;
-    $scope.ApplicatorPerPage = 5;
+    $scope.ApplicatorPerPage = 10;
     $scope.searchExpression=undefined;
     $scope.searchKeyword=undefined;
 
@@ -869,7 +869,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
 
                     $scope.ok = function () {
 
-                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.savePaymentDetails($scope,$rootScope,$http, applicatorDetails);
                         $uibModalInstance.close();
                     };
 
@@ -979,7 +979,7 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
     $scope.packages = [];
 
     $scope.totalPackages =0;
-    $scope.packagePerPage=5;
+    $scope.packagePerPage=10;
     $scope.currentPackagePage = 1;
 
     $scope.packageDetails={

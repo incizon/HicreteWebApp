@@ -445,7 +445,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
         userType:""
     };
 
-    $scope.UserPerPage=5;
+    $scope.UserPerPage=10;
     $scope.currentPage=1;
 
     $scope.selectUser = function(user)
@@ -1819,7 +1819,7 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
 myApp.controller('AccessApprovalController',function($scope,$http,configService) {
 
     console.log("In");
-    $scope.AccessApprovalPerPage=2;
+    $scope.AccessApprovalPerPage=10;
     $scope.currentPage=1;
     $scope.ApprovalList=[];
 

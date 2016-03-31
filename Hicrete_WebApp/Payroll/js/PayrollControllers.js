@@ -579,7 +579,7 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
 
 myApp.controller('SearchLeaveByEmployeeController', function($scope,$http) {
 
-    $scope.leavePerPage=5;
+    $scope.leavePerPage=10;
     $scope.currentPage=1;
 
     $scope.leaveDetails=[];
@@ -668,7 +668,7 @@ myApp.controller('SearchLeaveByEmployeeController', function($scope,$http) {
 myApp.controller('SearchLeaveByDateController', function($scope,$http) {
 
     $scope.currentPage=1;
-    $scope.leavePerPage=5;
+    $scope.leavePerPage=10;
     $scope.hide=false;
     $scope.leavesDetails=[];
 
