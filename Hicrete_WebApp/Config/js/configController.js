@@ -1829,7 +1829,6 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
                     alert(data.message);
                 }else{
 
-
                     $scope.tempAccess=data.message.requestDetails;
                     configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
                     $scope.buttonDisabled=false;

@@ -64,7 +64,7 @@ myApp.service('configService', function(){
            })
            .error(function(data, status, headers, config)
            {
-             doShowAlert("Failure","Error Occured");
+           //  doShowAlert("Failure","Error Occured");
              $scope.loaded=true;
            });
     }
@@ -92,7 +92,7 @@ myApp.service('configService', function(){
                      {
                      
                        if(data.status!="Successful"){
-                          doShowAlert("Failure",data.message);
+                       //   doShowAlert("Failure",data.message);
                        }else{
                           $scope.roleList=data.message;                
                        }
@@ -100,7 +100,7 @@ myApp.service('configService', function(){
                      })
                      .error(function (data, status, headers, config)
                      {
-                       doShowAlert("Failure","Error Occured");
+                      // doShowAlert("Failure","Error Occured");
                        
                      });
         }      

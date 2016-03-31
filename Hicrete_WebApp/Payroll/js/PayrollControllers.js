@@ -87,7 +87,7 @@ myApp.controller('CreateYearController', function($scope,$http) {
         }
 });
 
-myApp.controller('ConfigureHolidaysController', function($scope,$http) {
+myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http) {
 
     $scope.holidaysDetails={
         operation:""
@@ -137,9 +137,9 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
 
     $scope.addHoliday=function(){
 
-
-        $scope.errorMessage="";
-        $scope.warningMessage="";
+        //
+        //$scope.errorMessage="";
+        //$scope.warningMessage="";
         $('#loader').css("display","block");
 
         $scope.configureHoliday.operation="createHoliday";
@@ -153,7 +153,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
             .success(function (data) {
 
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
 
                     setTimeout(function() {
@@ -165,7 +165,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
 
                     console.log(data);
                 }
-                $scope.loading=false;
+                //$scope.loading=false;
                 $('#loader').css("display","none");
                 if(data.msg==""){
                     $scope.errorMessage=data.error;
@@ -175,7 +175,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$http) {
             .error(function (data, status, headers, config) {
 
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
+                $rootScope.errorMessage=data.error;
                 $('#error').css("display","block");
 
             });
