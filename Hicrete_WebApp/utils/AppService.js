@@ -377,6 +377,34 @@ myApp.service('AppService', function () {
 
     }
 
+    this.uploadFileToUrl = function ($http,file, $scope) {
+       console.log("File upload started");
 
+        var fd = new FormData();
+        fd.append('file', file);
+        $http.post("Config/php/upload.php", fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+
+            .success(function (status) {
+                $scope.warningMessage = status;
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                    window.location.reload(1);
+                }, 1500);
+                console.log("in upload successs" + status);
+            })
+
+            .error(function () {
+                $scope.errorMessage = "Something went wrong.File not uploaded";
+                $('#error').css("display", "block");
+                //setTimeout(function () {
+                //    $('#error').css("display", "none");
+                //}, 1000);
+                console.log("In file upload error");
+            });
+    }
 
 });

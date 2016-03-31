@@ -65,16 +65,21 @@ class User
     	$db = Database::getInstance();
         $conn = $db->getConnection();
 
-    	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,`isSuperUser` FROM  `usermaster` where `userId`=:userId AND `isDeleted`=0");
+    	$stmt = $conn->prepare("SELECT  usermaster.firstName, usermaster.lastName, usermaster.emailId,`isSuperUser`,usermaster.profilePicPath FROM  `usermaster` where `userId`=:userId AND `isDeleted`=0");
     	$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
     	$stmt->execute();
     	$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
-		
+
 		if (count($result) <= 0) {
 			return false;
 		}else{
+
 			$this->username=$result[0]['firstName']." ".$result[0]['lastName'];
 			$this->emailId=$result[0]['emailId'];
+			$this->profilePicPath=$result[0]['profilePicPath'];
+			if($this->profilePicPath==null){
+				$this->profilePicPath="upload/ProfilePictures/no-image.jpg";
+			}
 			$this->isSuper=$result[0]['isSuperUser'];
 			if($this->isSuper){
 				return $this->loadSuperUserDesignation($userId);
