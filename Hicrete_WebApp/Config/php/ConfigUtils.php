@@ -664,11 +664,14 @@ class ConfigUtils
             $stmt->bindParam(':requestId', $requestId, PDO::PARAM_STR);
             $stmt->bindParam(':requestedBy', $userId, PDO::PARAM_STR);
             $date = new DateTime($data->accessRequest->fromDate);
-            $fromDate= $date->format('Y-m-d');
+            $fromDate= $date->format('Y-m-d H:i:s');
+
             $stmt->bindParam(':fromDate', $fromDate, PDO::PARAM_STR);
             $date = new DateTime($data->accessRequest->toDate);
-            $toDate= $date->format('Y-m-d');
-            $stmt->bindParam(':toDate', $toDate, PDO::PARAM_STR);
+
+           $toDate= $date->format('Y-m-d H:i:s');
+
+           $stmt->bindParam(':toDate', $toDate, PDO::PARAM_STR);
             $stmt->bindParam(':description', $data->accessRequest->description, PDO::PARAM_STR);
                 
                 
@@ -704,7 +707,7 @@ class ConfigUtils
             } 
           
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while requesting access");
         }
 
     }
@@ -767,31 +770,34 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
     private static function addTemporaryAccessPermission($conn,$requestId){
         $stmt = $conn->prepare("SELECT `requestedBy`, `fromDate`, `toDate` FROM `tempaccessrequest` WHERE `requestId`=:requestId");
         $stmt->bindParam(':requestId', $requestId, PDO::PARAM_STR);
+
         if($stmt->execute()){
 
             $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
       
             if (count($result) > 0) {
-                $requestedBy = $result[0]['requestedBy'];        
+
+                $requestedBy = $result[0]['requestedBy'];
                 $fromDate = $result[0]['fromDate'];
                 $toDate = $result[0]['toDate'];
                 $stmt = $conn->prepare("SELECT `accessId` FROM `accesserequested` WHERE `requestId`=:requestId");
                 $stmt->bindParam(':requestId', $requestId, PDO::PARAM_STR);
                 if($stmt->execute()){
-                  
+
                   $flag=true;
                   while ( $result=$stmt->fetch(PDO::FETCH_ASSOC))
                       {
-                              
-                         $stmt = $conn->prepare("INSERT INTO `tempaccesspermissions`(`requestId`, `userId`, `accessId`, `fromDate`, `toDate`) 
+
+                         $stmt1 = $conn->prepare("INSERT INTO `tempaccesspermissions`(`requestId`, `userId`, `accessId`, `fromDate`, `toDate`)
                           VALUES (:requestId,:userId,:accessId,:fromDate,:toDate)");
-                          $stmt->bindParam(':requestId', $requestId, PDO::PARAM_STR);
-                          $stmt->bindParam(':userId', $requestedBy, PDO::PARAM_STR);
-                          $stmt->bindParam(':accessId', $result['accessId'], PDO::PARAM_STR);
-                          $stmt->bindParam(':fromDate', $fromDate, PDO::PARAM_STR);
-                          $stmt->bindParam(':toDate', $toDate, PDO::PARAM_STR);
-                          if(!$stmt->execute()){
-                            $flag=false;
+                          $stmt1->bindParam(':requestId', $requestId, PDO::PARAM_STR);
+                          $stmt1->bindParam(':userId', $requestedBy, PDO::PARAM_STR);
+                          $stmt1->bindParam(':accessId', $result['accessId'], PDO::PARAM_STR);
+                          $stmt1->bindParam(':fromDate', $fromDate, PDO::PARAM_STR);
+                          $stmt1->bindParam(':toDate', $toDate, PDO::PARAM_STR);
+                          if(!$stmt1->execute()){
+
+                              $flag=false;
                             break;
                           }
 
@@ -826,21 +832,24 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
             $stmt->bindParam(':actionBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':remark', $data->remark, PDO::PARAM_STR);
               
-                
+
             $rollback=true;
             if($stmt->execute()){
 
-              $stmt = $conn->prepare("UPDATE `tempaccessrequest` SET `status`=:status WHERE `requestId`=:requestId");
-              $stmt->bindParam(':requestId', $data->requestId, PDO::PARAM_STR);
+                $stmt = $conn->prepare("UPDATE `tempaccessrequest` SET `status`=:status WHERE `requestId`=:requestId");
+                $stmt->bindParam(':requestId', $data->requestId, PDO::PARAM_STR);
               $stmt->bindParam(':status', $data->status, PDO::PARAM_STR);
               if($stmt->execute()){
-                
+
                 if(strcasecmp($data->status,"Accepted")==0){
+
                     if(ConfigUtils::addTemporaryAccessPermission($conn,$data->requestId)){
-                       $rollback=false;
+
+                        $rollback=false;
                     }
-                }
-              } 
+                }else
+                    $rollback=false;
+              }
               
             }else{
               
@@ -849,15 +858,17 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
           
 
             if($rollback){
-              $conn->rollback();
+
+                $conn->rollback();
               echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
             } else{
+
               $conn->commit();
               echo AppUtil::getReturnStatus("Successful","Access Request Added");
             } 
           
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while creating role");
+            echo AppUtil::getReturnStatus("Exception",$e->getMessage());
         }
 
     }
@@ -989,7 +1000,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
         $conn = $db->getConnection();
 
         try {
-            $stmt = $conn->prepare("SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster` JOIN   `tempaccessrequest` ON usermaster.userId=tempaccessrequest.requestedBy");
+            $stmt = $conn->prepare("SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)");
             if ($stmt->execute()) {
                 $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 echo  AppUtil::getReturnStatus("Successful",$result);

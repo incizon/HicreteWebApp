@@ -234,11 +234,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'userController'    
         })
         
-        .state('Config.scheduleTempAccess', {
-            url: '/scheduleTempAccess',
-            templateUrl: 'Config/html/ScheduleTemporaryAccess.html',
-            controller:'tempAccessController'    
-        })
+
 
         .state('Config.viewRole', {
             url: '/SearchRole',

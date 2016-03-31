@@ -280,7 +280,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     };
 
                     $scope.cancel = function () {
-                        applicatorDetails.isFollowup=followup;
+                        applicatorDetails.isFollowup=false;
                         ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -326,7 +326,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
 
     $scope.currentPage = 1;
-    $scope.ApplicatorPerPage = 5;
+    $scope.ApplicatorPerPage = 10;
     $scope.searchExpression;
     $scope.searchKeyword;
 
@@ -549,7 +549,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
 myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
 
     $scope.currentPage = 1;
-    $scope.ApplicatorPerPage = 5;
+    $scope.ApplicatorPerPage = 10;
     $scope.searchExpression=undefined;
     $scope.searchKeyword=undefined;
 
@@ -766,7 +766,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
 
 /* start of applicator payment controller*/
 
-myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,ApplicatorService,$uibModal, $log){
+myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,ApplicatorService,$uibModal, $log,AppService){
 
     $scope.applicatorDetails={
         operation:""
@@ -855,6 +855,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+                    AppService.getUsers($scope,$http);
 
                     //date picker for followup date
                     $scope.openFollowDate = function() {
@@ -868,12 +869,14 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
                     $scope.applicatorDetails = applicatorDetails;
 
                     $scope.ok = function () {
-
-                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+                        applicatorDetails.isFollowup=true;
+                        ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
+                        applicatorDetails.isFollowup=false;
+                        ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -979,7 +982,7 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
     $scope.packages = [];
 
     $scope.totalPackages =0;
-    $scope.packagePerPage=5;
+    $scope.packagePerPage=10;
     $scope.currentPackagePage = 1;
 
     $scope.packageDetails={

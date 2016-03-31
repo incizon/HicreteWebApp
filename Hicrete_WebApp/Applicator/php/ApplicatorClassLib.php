@@ -838,23 +838,18 @@
                     $stmt3->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
                     $stmt2->bindParam(':createdBy', $userId);
 
-                    $stmt4=$connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id)
-									  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:enrollment_id)");
+
+
+                    $stmt4 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id, `followup_title`,`assignEmployeeId`)
+                                  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
 
                     $stmt4->bindParam(':followupDate', $followupDate);
-                    $stmt4->bindParam(':enrollment_id', $enrollment_id);
+                    $stmt4->bindParam(':lastEnrollmentId', $enrollment_id);
                     $stmt4->bindParam(':lastModifiedBy', $userId);
                     $stmt4->bindParam(':createdBy', $userId);
+                    $stmt4->bindParam(':followupTitle', $data->followTitle);
+                    $stmt4->bindParam(':assignEmployeeId', $data->followupemployeeId);
 
-
-
-                    $stmt5=$connect->prepare("INSERT INTO follow_up_employee(employee_id,date_of_assignment,last_modification_date,last_modified_by,created_by,creation_date,follow_up_id)
-									  VALUES(:followupEmployeeId,NOW(),NOW(),:lastModifiedBy,:createdBy,NOW(),:lastFollowupId)");
-
-                    $stmt5->bindParam(':followupEmployeeId',$followupEmployeeId);
-                    $stmt5->bindParam(':lastFollowupId', $this->lastInsertedFollowupId);
-                    $stmt5->bindParam(':lastModifiedBy', $userId);
-                    $stmt5->bindParam(':createdBy', $userId);
 
                     $stmt6=$connect->prepare("SELECT  applicator_master_id FROM applicator_enrollment WHERE enrollment_id=:enrollmentID ");
                     $stmt6->bindParam(':enrollmentID',$enrollment_id);
@@ -936,41 +931,32 @@
 
                                     if($stmt3->execute()){
 
-                                        if($stmt4->execute()){
-
-                                            $this->lastInsertedFollowupId=$connect->lastInsertId();
-
-                                             if($stmt5->execute()){
-                                                 return false;
-                                             }
+                                        if($data->isFollowup){
+                                            if($stmt4->execute()){
+                                                return true;
+                                            }
                                             else{
                                                 return false;
                                             }
+
                                         }
-                                        else{
-                                            return false;
-                                        }
-                                    }
+
+                                                                            }
                                     else{
                                         return false;
                                     }
                                 }
                                 else{
 
-                                    if($stmt4->execute()){
-
-                                        $this->lastInsertedFollowupId=$connect->lastInsertId();
-
-                                        if($stmt5->execute()){
+                                    if($data->isFollowup){
+                                        if($stmt4->execute()){
                                             return true;
                                         }
                                         else{
                                             return false;
                                         }
                                     }
-                                    else{
-                                        return false;
-                                    }
+
                                 }
                             }
                             else{
@@ -981,6 +967,7 @@
                            return false;
                        }
                     }
+                    return false;
                 }
 
                 public function modifyApplicatorDetails($data,$userId){
@@ -1005,6 +992,7 @@
 
                     $stmt1=$connect->prepare("UPDATE applicator_master SET
                                               applicator_name=:applicatorName,
+                                              applicator_contact=:applicatorContactNo,
                                               applicator_contact=:applicatorContactNo,
                                               applicator_address_line1=:applicatorAddressLine1,
                                               applicator_address_line2=:applicatorAddressLine2,

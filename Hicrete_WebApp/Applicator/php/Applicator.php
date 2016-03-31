@@ -55,6 +55,7 @@
 
                         $connect->beginTransaction();
 
+
 				       if($data->packageEdited=="true") {
 
 						   if($operationObject->createPackage($data,$userId)) {
