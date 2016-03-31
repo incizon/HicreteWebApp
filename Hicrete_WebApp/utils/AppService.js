@@ -377,6 +377,34 @@ myApp.service('AppService', function () {
 
     }
 
+    this.uploadFileToUrl = function ($http,file, uploadUrl) {
+        //alert("File upload started");
 
+        var fd = new FormData();
+        fd.append('file', file);
+
+        $http.post(uploadUrl, fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+
+            .success(function (status) {
+                $scope.warningMessage = "File upload started..";
+                $('#warning').css("display", "block");
+                setTimeout(function () {
+                    $('#warning').css("display", "none");
+                }, 1000);
+                console.log("in upload successs" + status);
+            })
+
+            .error(function () {
+                $scope.errorMessage = "File upload not started..";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 1000);
+                console.log("In file upload error");
+            });
+    }
 
 });

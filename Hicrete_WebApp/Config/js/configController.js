@@ -1671,7 +1671,7 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
 
 });
 
-myApp.controller('MyProfileController',function($scope,$http,$filter) {
+myApp.controller('MyProfileController',function($scope,$http,$filter,AppService) {
 
 
     var data = {
@@ -1719,9 +1719,20 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
 
     $scope.modifyUser = function () {
         console.log("in Modifu user");
+        var fileName = "";
+        $scope.userInfo.profilePic="";
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadLocation = "upload/ProfilePictures/";
+                fileName = uploadLocation + $scope.myFile.name;
+                $scope.userInfo.profilePic=fileName;
+            }
+
+        }
         if(!$scope.userForm.$pristine){
             console.log($scope.userInfo);
             $scope.userInfo.newDate = $filter('date')($scope.userInfo.newDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
             console.log($scope.userInfo);
             var data = {
                 operation: "modifyUserDetails",
@@ -1744,9 +1755,11 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
-                        window.location.reload(1);
+                      //  window.location.reload(1);
                     }, 3000);
-                       //alert(data);
+                    var file = $scope.myFile;
+                    var uploadUrl = "php/upload/profilepictures";
+                    AppService.uploadFileToUrl($http,file, uploadUrl);
 
                 })
                 .error(function (data, status, headers, config) {
