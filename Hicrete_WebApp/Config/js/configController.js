@@ -1173,81 +1173,6 @@ var clearWarehouseForm=function(){
 
 });        
 
-myApp.controller('tempAccessController',function($scope,$http,configService){
-
-$scope.requestId="56929ff47e6183070";
-$scope.tempSubmitted=false;
-$scope.accessRequested=[];
-$scope.tempAccess={};
-$scope.remark="";
-$scope.buttonDisabled=true;	
-        var data={
-                      operation :"getTempAccessRequestDetails",
-                      requestId : $scope.requestId 
-                };        
-
-                var config = {
-                           params: {
-                                 data: data
-                               }
-                };
-
-                $http.post("Config/php/configFacade.php",null, config)
-                     .success(function (data)
-                     {
-                     
-                       if(data.status!="Successful"){
-                           alert(data.message);
-                       }else{
-                            
-                            $scope.tempAccess=data.message.requestDetails;
-                            configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
-                            $scope.buttonDisabled=false;  
-                       }
-
-                     })
-                     .error(function (data, status, headers, config)
-                     {
-                         alert("Error Occured"+data);
-                     });
-
-
- 	$scope.AddAccessRequestAction=function(actionStatus){
-      $scope.buttonDisabled=true;
-        $scope.tempSubmitted=false;
-   		 var data={
-                      operation :"TempAccessRequestAction",
-                      requestId : $scope.requestId,
-                      remark:$scope.remark,
-                      status:actionStatus,
-                      
-
-                };        
-
-                var config = {
-                           params: {
-                                 data: data
-                               }
-                };
-
-                $http.post("Config/php/configFacade.php",null, config)
-                     .success(function (data)
-                     {
-                     
-                       if(data.status!="Successful"){
-                           alert(data.message);
-                       }else{
-                          alert("Request Added Successfully");
-                       }
-
-                     })
-                     .error(function (data, status, headers, config)
-                     {
-                         alert("Error Occured"+data);
-                     });
- 	          }
-
-});  
 
 myApp.controller('requestTempAccessController',function($scope,$http,configService){
 
@@ -1819,7 +1744,7 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
 myApp.controller('AccessApprovalController',function($scope,$http,configService) {
 
     console.log("In");
-    $scope.AccessApprovalPerPage=2;
+    $scope.AccessApprovalPerPage=10;
     $scope.currentPage=1;
     $scope.ApprovalList=[];
 
@@ -1827,7 +1752,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
     $scope.getAccessApprovals=function(){
 
         var data = {
-            operation: "getAccessApprovals",
+            operation: "getAccessApprovals"
         };
 
         var config = {
@@ -1875,6 +1800,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
                     alert(data.message);
                 }else{
 
+
                     $scope.tempAccess=data.message.requestDetails;
                     configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
                     $scope.buttonDisabled=false;
@@ -1910,6 +1836,13 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
                 if(data.status!="Successful"){
                     alert(data.message);
                 }else{
+
+                    for(var i=0;i<$scope.ApprovalList.length;i++){
+                        if($scope.ApprovalList[i].requestId==$scope.requestId){
+                            $scope.ApprovalList.splice(i,1);
+                            break;
+                        }
+                    }
                     alert("Request Added Successfully");
                 }
 

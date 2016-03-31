@@ -264,9 +264,15 @@ if(!$userObj->init($userId)){
             <li class="xn-icon-button">
                 <a ui-sref="billApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>
             </li>
-            <li class="xn-icon-button">
-                <a ui-sref="accessApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Access Approval"><span class="fa fa-check-square-o"></span></a>
-            </li>
+
+            <?php
+                if($userObj->isSuper){
+
+                        echo "<li class=\"xn-icon-button\">
+                <a ui-sref=\"accessApproval\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"\" data-original-title=\"Access Approval\"><span class=\"fa fa-check-square-o\"></span></a>
+            </li>";
+                }
+            ?>
             <li class="xn-icon-button">
                 <a ui-sref="leaveApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Leave Approval"><span class="fa fa-thumbs-o-up"></span></a>
             </li>

@@ -5,7 +5,7 @@ require_once '../../../php/appUtil.php';
 if (!isset($_SESSION['token'])) {
     session_start();
 }else{
-    header("Location: index.html");
+    header("Location: ../../index.html");
     exit();
 }
 $userId=$_SESSION['token'];
@@ -357,7 +357,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
                         <?php
                         if($hasWrite==1){
-                            echo "<button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
+//                            echo "<button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
                         }
                         ?>
 

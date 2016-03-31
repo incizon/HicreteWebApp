@@ -69,7 +69,13 @@ switch ($data->operation) {
     case "getAllProcessUser" : ConfigUtils::getAllProcessUser($userId);
         break;
 
-    case "getAccessApprovals" : ConfigUtils::getAccessApprovals();
+    case "getAccessApprovals" : if(appUtil::isSuperUser($userId)){
+                                    ConfigUtils::getAccessApprovals();
+                                }else{
+                                    echo appUtil::getReturnStatus("Unsuccessful","You Do not have authority to view");
+                                }
+
+
         break;
 
 }

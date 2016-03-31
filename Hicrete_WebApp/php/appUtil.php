@@ -24,6 +24,28 @@ class AppUtil
          return $id.$rand;
     }
 
+    public static function isSuperUser($userId){
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+
+            $stmt = $conn->prepare("SELECT `isSuperUser` FROM `usermaster` WHERE `userId` =:userId");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+            $isSuperUser=$result[0]['isSuperUser'];
+            if ($isSuperUser) {
+                return true;
+            }
+
+        }catch(Exception $e){
+            return false;
+        }
+        return false;
+    }
+
+
+
     public static function doesUserHasAccess($moduleName,$userId,$accessType){
         try{
 

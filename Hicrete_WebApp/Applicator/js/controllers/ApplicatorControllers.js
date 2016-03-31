@@ -1,4 +1,4 @@
-myApp.controller('ApplicatorController',function($scope,$rootScope,$http,ApplicatorService,PackageService,$uibModal, $log) {
+myApp.controller('ApplicatorController',function($scope,$rootScope,$http,ApplicatorService,PackageService,$uibModal, $log,AppService) {
 
     $scope.step=1;
     $scope.editPackage=false;
@@ -275,7 +275,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     };
 
                     $scope.cancel = function () {
-                        applicatorDetails.isFollowup=followup;
+                        applicatorDetails.isFollowup=false;
                         ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
@@ -761,7 +761,7 @@ myApp.controller('ModifyPermanentApplicatorController',function($scope,$http,$ro
 
 /* start of applicator payment controller*/
 
-myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,ApplicatorService,$uibModal, $log){
+myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,ApplicatorService,$uibModal, $log,AppService){
 
     $scope.applicatorDetails={
         operation:""
@@ -850,6 +850,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
+                    AppService.getUsers($scope,$http);
 
                     //date picker for followup date
                     $scope.openFollowDate = function() {
@@ -863,12 +864,14 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
                     $scope.applicatorDetails = applicatorDetails;
 
                     $scope.ok = function () {
-
+                        applicatorDetails.isFollowup=true;
                         ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
+                        applicatorDetails.isFollowup=true;
+                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },

@@ -1,12 +1,11 @@
 <!-- START WIDGETS -->
 <?php
-
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 require_once '../../php/appUtil.php';
 if (!isset($_SESSION['token'])) {
     session_start();
 }else{
-    header("Location: index.html");
+    header("Location: ../../index.html");
     exit();
 }
 $userId=$_SESSION['token'];
@@ -14,7 +13,7 @@ $hasRead=appUtil::doesUserHasAccess("Inventory",$userId,"Read");
 $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
 if(!$hasRead && !$hasWrite){
-    header("Location: Dashboard.php");
+    header("Location: ../../Dashboard.php");
     exit();
 }
 ?>
