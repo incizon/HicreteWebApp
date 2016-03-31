@@ -1,4 +1,4 @@
-myApp.controller('roleController',function($scope,$http,configService,$uibModal){
+myApp.controller('roleController',function($scope,$rootScope,$http,configService,$uibModal){
  $scope.roleSubmitted=false;
  $scope.showAccessError=false;
  $scope.roleDisabled=false;
@@ -6,8 +6,8 @@ myApp.controller('roleController',function($scope,$http,configService,$uibModal)
 configService.getAllAccessPermission($http,$scope);
 
     $scope.loading=true;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.showAccessError=false;
     $scope.roleSubmitted=false;
 
@@ -61,7 +61,7 @@ configService.getAllAccessPermission($http,$scope);
                                 if(data.status=="Successful"){
                                     $scope.loading=false;
                                     $('#loader').css("display","none");
-                                    $scope.warningMessage="Role added Successfully..";
+                                    $rootScope.warningMessage="Role added Successfully..";
                                     console.log($scope.warningMessage);
                                     $('#warning').css("display","block");
 
@@ -73,7 +73,7 @@ configService.getAllAccessPermission($http,$scope);
                                 }else if(data.status=="Unsuccessful"){
                                     $scope.loading=false;
                                     $('#loader').css("display","none");
-                                    $scope.errorMessage="Role not added..";
+                                    $rootScope.errorMessage="Role not added..";
                                     $('#error').css("display","block");
                                     setTimeout(function() {
                                         $scope.$apply(function() {
@@ -86,7 +86,7 @@ configService.getAllAccessPermission($http,$scope);
                                     $scope.roleSubmitted=true;
                                     $scope.loading=false;
                                     $('#loader').css("display","none");
-                                    $scope.errorMessage="Role not added..";
+                                    $rootScope.errorMessage="Role not added..";
                                     $('#error').css("display","block");
                                     setTimeout(function() {
                                         $scope.$apply(function() {
@@ -101,7 +101,7 @@ configService.getAllAccessPermission($http,$scope);
                             {
                                 $scope.loading=false;
                                 $('#loader').css("display","none");
-                                $scope.errorMessage="Role not added..";
+                                $rootScope.errorMessage="Role not added..";
                                 $('#error').css("display","block");
                             });
 
