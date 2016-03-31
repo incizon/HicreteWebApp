@@ -83,7 +83,7 @@ class Supplier
 
             if($stmt->execute())
             {
-                $message="User Created successfully";
+                $message="Supplier Created successfully";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
                 echo($jsn);
