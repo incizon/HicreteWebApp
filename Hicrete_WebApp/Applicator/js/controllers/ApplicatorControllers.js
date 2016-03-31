@@ -1,4 +1,4 @@
-myApp.controller('ApplicatorController',function($scope,$rootScope,$http,ApplicatorService,PackageService,$uibModal, $log) {
+myApp.controller('ApplicatorController',function($scope,$rootScope,$http,ApplicatorService,AppService,PackageService,$uibModal, $log) {
 
     $scope.step=1;
     $scope.editPackage=false;
