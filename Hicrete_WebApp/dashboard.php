@@ -160,11 +160,15 @@ if(!$userObj->init($userId)){
             </li>
             <li class="xn-profile">
                 <a href="#" class="profile-mini">
-                    <img src="Assets/images/users/avatar.jpg" alt="John Doe"/>
+                    <?php
+                        echo "<img src=".$userObj->profilePicPath." ></img>";
+                    ?>
                 </a>
                 <div class="profile">
                     <div class="profile-image">
-                        <img src="Assets/images/users/avatar.jpg" alt="John Doe"/>
+                        <?php
+                        echo "<img src=".$userObj->profilePicPath."></img>";
+                        ?>
                     </div>
                     <div class="profile-data">
 
@@ -190,11 +194,11 @@ if(!$userObj->init($userId)){
                     </li>";
             }
 
-            if($userObj->isSuper or $userObj->isBusinessProcess){
-                echo "<li ng-class=\"{active:tab.isSet(3)}\">
-                            <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
-                    </li>";
-            }
+//            if($userObj->isSuper or $userObj->isBusinessProcess){
+//                echo "<li ng-class=\"{active:tab.isSet(3)}\">
+//                            <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+//                    </li>";
+//            }
 
             if($userObj->isSuper or $userObj->isExpense){
 //                echo "<li class=\"\">
@@ -262,7 +266,7 @@ if(!$userObj->init($userId)){
                 <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
             </li>
             <li class="xn-icon-button">
-                <a ui-sref="billApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>
+<!--                <a ui-sref="billApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>-->
             </li>
 
             <?php

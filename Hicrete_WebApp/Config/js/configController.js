@@ -1,4 +1,4 @@
-myApp.controller('roleController',function($scope,$http,configService,$uibModal){
+myApp.controller('roleController',function($scope,$rootScope,$http,configService,$uibModal){
  $scope.roleSubmitted=false;
  $scope.showAccessError=false;
  $scope.roleDisabled=false;
@@ -6,8 +6,8 @@ myApp.controller('roleController',function($scope,$http,configService,$uibModal)
 configService.getAllAccessPermission($http,$scope);
 
     $scope.loading=true;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.showAccessError=false;
     $scope.roleSubmitted=false;
 
@@ -61,7 +61,7 @@ configService.getAllAccessPermission($http,$scope);
                                 if(data.status=="Successful"){
                                     $scope.loading=false;
                                     $('#loader').css("display","none");
-                                    $scope.warningMessage="Role added Successfully..";
+                                    $rootScope.warningMessage="Role added Successfully..";
                                     console.log($scope.warningMessage);
                                     $('#warning').css("display","block");
 
@@ -73,7 +73,7 @@ configService.getAllAccessPermission($http,$scope);
                                 }else if(data.status=="Unsuccessful"){
                                     $scope.loading=false;
                                     $('#loader').css("display","none");
-                                    $scope.errorMessage="Role not added..";
+                                    $rootScope.errorMessage="Role not added..";
                                     $('#error').css("display","block");
                                     setTimeout(function() {
                                         $scope.$apply(function() {
@@ -86,7 +86,7 @@ configService.getAllAccessPermission($http,$scope);
                                     $scope.roleSubmitted=true;
                                     $scope.loading=false;
                                     $('#loader').css("display","none");
-                                    $scope.errorMessage="Role not added..";
+                                    $rootScope.errorMessage="Role not added..";
                                     $('#error').css("display","block");
                                     setTimeout(function() {
                                         $scope.$apply(function() {
@@ -101,7 +101,7 @@ configService.getAllAccessPermission($http,$scope);
                             {
                                 $scope.loading=false;
                                 $('#loader').css("display","none");
-                                $scope.errorMessage="Role not added..";
+                                $rootScope.errorMessage="Role not added..";
                                 $('#error').css("display","block");
                             });
 
@@ -271,8 +271,8 @@ userType:""
                  }, 3000);
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
-                //     window.location.reload(true);
-                 },8000);
+                    window.location.reload(true);
+                 },5000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
@@ -445,7 +445,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
         userType:""
     };
 
-    $scope.UserPerPage=5;
+    $scope.UserPerPage=10;
     $scope.currentPage=1;
 
     $scope.selectUser = function(user)
@@ -1386,9 +1386,6 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.access=[];
     $scope.roleAccessList=[];
 
-    $scope.errorMessage="";
-    $scope.warningMessage="";
-
     var data={
         operation :"getAccessForRole",
         roleId: $scope.roleId
@@ -1442,7 +1439,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.modifyRole=function(){
         if($scope.modifyRoleForm.$pristine){
             //alert("Fields not modified");
-            $scope.errorMessage = "Fields not modified..";
+            $rootScope.errorMessage = "Fields not modified..";
             $('#error').css("display","block");
             setTimeout(function() {
                 $scope.$apply(function() {
@@ -1470,18 +1467,39 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
 
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
                     window.location="dashboard.php#/Config/SearchRole";
                 }else{
-                    alert(data.message);
+                    //alert(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                        });
+                    }, 3000);
                 }
 
             })
             .error(function (data, status, headers, config)
             {
                 console.log(data);
-                alert("Error Occured");
+                //alert("Error Occured");
+                $rootScope.errorMessage = "Error Occured..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
 
@@ -1596,7 +1614,7 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
 
 });
 
-myApp.controller('MyProfileController',function($scope,$http,$filter) {
+myApp.controller('MyProfileController',function($scope,$http,$filter,AppService) {
 
 
     var data = {
@@ -1641,10 +1659,20 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
             alert("Error Occured");
         });
 
-
     $scope.modifyUser = function () {
-        console.log("in Modifu user");
-        if(!$scope.userForm.$pristine){
+        console.log("in ModifY user");
+        var fileName = "";
+        $scope.userInfo.profilePic="";
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadLocation = "upload/ProfilePictures/";
+                fileName = uploadLocation + $scope.myFile.name;
+                $scope.userInfo.profilePic=fileName;
+            }
+
+        }
+
+        if(!$scope.userForm.$pristine ||$scope.myFile != undefined ){
             console.log($scope.userInfo);
             $scope.userInfo.newDate = $filter('date')($scope.userInfo.newDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
             console.log($scope.userInfo);
@@ -1669,9 +1697,10 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
-                        window.location.reload(1);
-                    }, 3000);
-                       //alert(data);
+                      //  window.location.reload(1);
+                    }, 1500);
+                    var file = $scope.myFile;
+                    AppService.uploadFileToUrl($http,file, $scope);
 
                 })
                 .error(function (data, status, headers, config) {

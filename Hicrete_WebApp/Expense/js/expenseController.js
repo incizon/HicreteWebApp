@@ -492,3 +492,48 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
     };
 
 });
+
+myApp.controller('BillApprovalController', function ($scope, $rootScope,$http,$stateParams) {
+
+
+    $scope.currentPage=1;
+    $scope.billApprovalPerPage=10;
+
+    $scope.billApprovalList=[];
+
+    $scope.getBillApproval=function(){
+
+        var data = {
+            operation: "getBillApproval"
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Expense/php/expenseUtils.php", null, config)
+            .success(function (data) {
+                console.log(data);
+
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error Occured..."+data);
+            });
+    }
+
+    $scope.getBillApproval();
+
+
+    $scope.paginate = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.billApprovalPerPage;
+        end = begin + $scope.billApprovalPerPage;
+        index = $scope.billApprovalList.indexOf(value);
+
+        return (begin <= index && index < end);
+    };
+
+
+});

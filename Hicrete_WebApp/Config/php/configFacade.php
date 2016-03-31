@@ -13,6 +13,9 @@ switch ($data->operation) {
 
 	case "addSuperUser":  Config::addSuperUser($data,$userId);
 						break;
+
+    case "uploadProfilePicture":Config::uploadProfilePicture();
+                        break;
     case "addCompany":  Config::addCompany($data->data,$userId);
     				    break;
     case "addWarehouse":  Config::addWarehouse($data->data,$userId);

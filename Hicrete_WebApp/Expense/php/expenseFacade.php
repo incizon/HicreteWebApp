@@ -21,7 +21,9 @@
         case "addMaterialExpense":
             Expense::addMaterialExpense($data->materialExpenseData, $data->billDetails, $userId);
             break;
-
+        case 'getBillApproval':
+            Expense::getBillApproval();
+            break;
     }
 
 ?>

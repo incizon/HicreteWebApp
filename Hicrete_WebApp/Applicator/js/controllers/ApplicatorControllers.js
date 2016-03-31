@@ -180,7 +180,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
         /* to check payment status and according call to service to submit data */
 
-    $scope.processForm = function(size,applicatorDetails) {
+    $scope.processForm = function(size) {
         $scope.loading=true;
         $scope.errorMessage="";
         //$scope.warningMessage="";
@@ -190,19 +190,22 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
         if($scope.applicatorDetails.pendingAmount==0 && $scope.applicatorDetails.received=='Yes' ){
 
             console.log("Full Amount Paid ");
-            applicatorDetails.operation='createApplicator';
-            applicatorDetails.paymentStatus='Yes';
-            console.log(applicatorDetails);
+            $scope.applicatorDetails.operation='createApplicator';
+            $scope.applicatorDetails.paymentStatus='Yes';
+            console.log($scope.applicatorDetails);
 
-            ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
+            ApplicatorService.submitApplicatorDetails($scope,$http,$rootScope,$scope.applicatorDetails);
         }
+
         if(($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes')){
             $scope.loading = false;
             $('#loading').css('display','none');
 
-            //$scope.showModal = true;
+
             console.log("Half Amount Paid");
-            applicatorDetails.paymentStatus="No";
+
+            $scope.applicatorDetails.operation='createApplicator';
+            $scope.applicatorDetails.paymentStatus="No";
 
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
@@ -222,13 +225,13 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
                         applicatorDetails.isFollowup=true;
-                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -252,7 +255,9 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
         if($scope.applicatorDetails.received=='No'){
 
             console.log("No Amount paid");
-            applicatorDetails.paymentStatus="No";
+            $scope.applicatorDetails.paymentStatus="No";
+            $scope.applicatorDetails.operation='createApplicator';
+
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
@@ -270,13 +275,13 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
                     $scope.ok = function () {
                         applicatorDetails.isFollowup=true;
-                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.submitApplicatorDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -303,11 +308,11 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
     /* if not amount is paid or half amount is paid */
 
-    $scope.processFollowup=function(applicatorDetails){
+    $scope.processFollowup=function(){
 
-        applicatorDetails.operation='createApplicator';
-        console.log(applicatorDetails);
-        ApplicatorService.submitApplicatorDetails($scope,$http,applicatorDetails);
+        $scope.applicatorDetails.operation='createApplicator';
+        console.log($scope.applicatorDetails);
+        ApplicatorService.submitApplicatorDetails($scope,$http,$scope.applicatorDetails);
 
     };
 
