@@ -30,12 +30,12 @@ class AppUtil
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $stmt = $conn->prepare("SELECT `firstName`,`lastName`,`designation`,`emailId` FROM `superuser` WHERE `superUserId` =:userId");
+            $stmt = $conn->prepare("SELECT `isSuperUser` FROM `usermaster` WHERE `userId` =:userId");
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
             $stmt->execute();
             $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
-
-            if (count($result) > 0) {
+            $isSuperUser=$result[0]['isSuperUser'];
+            if ($isSuperUser) {
                 return true;
             }
 
