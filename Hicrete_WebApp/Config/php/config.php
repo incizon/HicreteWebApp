@@ -379,7 +379,7 @@ class Config
             $dob = $date->format('Y-m-d');
             $userId=$data->userInfo->userId;
             $stmt=$conn->prepare("UPDATE usermaster SET firstName=:firstName,
-            lastName=:lastName,dateOfBirth=:dateOfBirth,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,mobileNumber=:mobileNumber,lastModifiedBy=:lastModifiedBy,lastModificationDate=now() WHERE userId = :userId");
+            lastName=:lastName,dateOfBirth=:dateOfBirth,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,mobileNumber=:mobileNumber,lastModifiedBy=:lastModifiedBy,lastModificationDate=now(),profilePicPath=:profilePicPath WHERE userId = :userId");
 
             $stmt->bindParam(':firstName', $data->userInfo->firstName, PDO::PARAM_STR);
             $stmt->bindParam(':lastName', $data->userInfo->lastName, PDO::PARAM_STR);
@@ -392,11 +392,11 @@ class Config
             $stmt->bindParam(':mobileNumber', $data->userInfo->mobileNumber, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            $stmt->bindParam(':profilePicPath', $data->userInfo->profilePic, PDO::PARAM_STR);
 
             if($stmt->execute()){
                 $conn->commit();
                 echo "Profile Modified successfully";
-
             }else{
                 echo "Something went wrong.Please try again";
             }
@@ -404,6 +404,16 @@ class Config
             echo $e->getMessage();
         }
 
+    }
+    public static function uploadProfilePicture(){
+        $target_dir = "../../upload/Workorders/";
+        $target_file = $target_dir . basename($_FILES["file"]["name"]);
+        $file = $_FILES['file'];
+        if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_file)) {
+            echo "The file ". basename( $_FILES["file"]["name"]). " has been uploaded.";
+        } else {
+            echo "Sorry, there was an error uploading your file.";
+        }
     }
     public static function getCompanys($userId)
     {

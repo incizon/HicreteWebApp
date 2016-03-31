@@ -160,11 +160,15 @@ if(!$userObj->init($userId)){
             </li>
             <li class="xn-profile">
                 <a href="#" class="profile-mini">
-                    <img src="Assets/images/users/avatar.jpg" alt="John Doe"/>
+                    <?php
+                        echo "<img src=".$userObj->profilePicPath." ></img>";
+                    ?>
                 </a>
                 <div class="profile">
                     <div class="profile-image">
-                        <img src="Assets/images/users/avatar.jpg" alt="John Doe"/>
+                        <?php
+                        echo "<img src=".$userObj->profilePicPath."></img>";
+                        ?>
                     </div>
                     <div class="profile-data">
 
