@@ -844,7 +844,7 @@
                                   VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
 
                     $stmt4->bindParam(':followupDate', $followupDate);
-                    $stmt4->bindParam(':lastEnrollmentId', $this->lastInsertedEnrollmentId);
+                    $stmt4->bindParam(':lastEnrollmentId', $enrollment_id);
                     $stmt4->bindParam(':lastModifiedBy', $userId);
                     $stmt4->bindParam(':createdBy', $userId);
                     $stmt4->bindParam(':followupTitle', $data->followTitle);
@@ -967,6 +967,7 @@
                            return false;
                        }
                     }
+                    return false;
                 }
 
                 public function modifyApplicatorDetails($data,$userId){

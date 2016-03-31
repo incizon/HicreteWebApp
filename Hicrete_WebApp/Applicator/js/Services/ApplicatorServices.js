@@ -99,11 +99,12 @@ myApp.service('ApplicatorService',function(){
 				data: applicatorDetails
 			}
 		};
-
+		console.log(applicatorDetails);
 		$http.post("Applicator/php/Applicator.php", null,config)
 				.success(function (data, status, headers, config){
 					$('#loader').css("display","none");
 					console.log(data.msg);
+					alert("asdasd");
 					if(data.msg!=""){
 						$rootScope.warningMessage = "Payment Details Added Successfully..";
 						$('#warning').css("display","block");

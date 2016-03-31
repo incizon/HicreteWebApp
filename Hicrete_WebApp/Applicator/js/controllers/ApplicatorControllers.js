@@ -870,13 +870,13 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
 
                     $scope.ok = function () {
                         applicatorDetails.isFollowup=true;
-                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+                        ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
-                        applicatorDetails.isFollowup=true;
-                        ApplicatorService.savePaymentDetails($scope, $http, applicatorDetails);
+                        applicatorDetails.isFollowup=false;
+                        ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
