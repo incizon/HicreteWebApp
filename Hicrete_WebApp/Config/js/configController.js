@@ -271,8 +271,8 @@ userType:""
                  }, 3000);
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
-                //     window.location.reload(true);
-                 },8000);
+                    window.location.reload(true);
+                 },5000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
