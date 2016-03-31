@@ -280,7 +280,7 @@ myApp.service('addMaterialTypeService', function () {
  ****************************************************************************/
 myApp.service('inwardService', function () {
 
-    this.inwardEntry = function ($scope, $http, inwardData) {
+    this.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
         console.log("IN SERVICE OF INWARD=");
         $('#loader').css("display","block");
         var data = {
@@ -299,9 +299,9 @@ myApp.service('inwardService', function () {
                 $('#loader').css("display","none");
                 console.log("IN SERVICE OF INWARD=");
                 console.log(data);
-                $scope.warningMessage=data.msg;
+                $rootScope.warningMessage=data.msg;
                 if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                    $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
                     setTimeout(function () {
                         $('#warning').css("display","none");
@@ -311,7 +311,7 @@ myApp.service('inwardService', function () {
 
                 $('#loader').css("display","none");
                 if (data.error == ""){
-                    $scope.errorMessage=data.error;
+                    $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
                 }
             })
@@ -458,36 +458,41 @@ myApp.service('ProductionBatchService', function () {
                     if(prodBatchInfo.option=='complete')
                     {
                         //alert(data.msg);
-                        $scope.warningMessage=data.msg;
+                        $rootScope.warningMessage=data.msg;
                         $('#warning').css("display","block");
+                        setTimeout(function() {
+                            $('#warning').css("display","none");
+                            window.location="dashboard.php#/Inventory";
+                        }, 3000);
+
                         $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
 
                     }
-                    if(data.msg!=""){
-                        $scope.warningMessage=data.msg;
-                        alert(data.msg);
-                        $('#warning').css("display","block");
-                        $scope.submitted=false;
-                        window.location="dashboard.php#/Inventory";
-                    }
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.msg!=""){
-                                $('#warning').css("display","none");
+                    if(data.error!=""){
+                        $rootScope.errorMessage=data.msg;
+                        //alert(data.msg);
+                        $('#error').css("display","block");
+                        setTimeout(function() {
+                            $('#error').css("display","none");
+                            window.location="dashboard.php#/Inventory";
+                        }, 3000);
 
-                            }
-                        });
-                    }, 3000);
+                        $scope.submitted=false;
+                    }
+
 
                 }
                 else if (data.error != "" && prodBatchInfo.option != 'Inquiry' && prodBatchInfo.option != 'InquiryAll') {
                     //doShowAlertFailure("Failure", data.error);
-                    $scope.errorMessage=data.error;
-                    alert(data.error);
+                    $rootScope.errorMessage=data.error;
+                    //alert(data.error);
                     $('#error').css("display","block");
+                    setTimeout(function() {
+                        $('#error').css("display","none");
+                        window.location="dashboard.php#/Inventory";
+                    }, 3000);
                     $scope.submitted=false;
-
-                    window.location="dashboard.php#/Inventory";
+                    //window.location="dashboard.php#/Inventory";
                 }
                 $scope.submitted=false;
 
@@ -501,9 +506,12 @@ myApp.service('ProductionBatchService', function () {
             .error(function (data, status, headers, config) {
                 console.log("Error calling php");
                 //$scope.messages=data.error;
+                $('#loader').css("display","none");
                 $scope.errorMessage=data.error;
                 $('#error').css("display","block");
-                $('#loader').css("display","none");
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                }, 3000);
                 //$scope.messages.push(data.error);
             });
     };

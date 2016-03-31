@@ -254,7 +254,7 @@
                         <div class="col-md-9">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" class="form-control" name="pointOfContact" ng-model="applicatorDetails.pointofcontact" pattern="[a-zA-Z0-9 ]+" minlength=2 />
+                                <input type="text" class="form-control" name="pointOfContact" ng-model="applicatorDetails.pointofcontact" pattern="[a-zA-Z0-9 ]+" minlength=2 required/>
                             </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.pointOfContact.$error"
@@ -275,7 +275,7 @@
                         <div class="col-md-9"><gf></gf>
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-phone"></span></span>
-                                <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno" pattern="[0-9]+" maxlength=10  minlength=10  />
+                                <input type="text" class="form-control" name="pointContactNo" ng-model="applicatorDetails.pointcontactno" pattern="[0-9]+" maxlength=10  minlength=10 required />
                             </div>
                             <div class="help-block"
                                  ng-messages="applicatorForm.pointContactNo.$error"

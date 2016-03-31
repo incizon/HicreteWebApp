@@ -280,7 +280,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope, $http, inwardService, inventoryService,$uibModal,AppService) {
+myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$uibModal,AppService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
@@ -311,8 +311,8 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
     $scope.step = 1;
     $scope.showModal = false;
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -444,13 +444,13 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
                 $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(inwardData);
-                    $scope.inwardEntry($scope, $http,inwardData);
+                    $scope.inwardEntry($scope,$rootScope, $http,inwardData);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
-                $scope.inwardEntry = function ($scope, $http, inwardData) {
+                $scope.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
                     console.log("IN SERVICE OF INWARD=");
                     $('#loader').css("display","block");
                     var data = {
@@ -641,9 +641,9 @@ myApp.controller('inwardController', function ($scope, $http, inwardService, inv
  *
  ************************************************************************************************************/
 
-myApp.controller('outwardController', function ($scope, $http, outwardService, inventoryService,AppService,$uibModal) {
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+myApp.controller('outwardController', function ($scope,$rootScope, $http, outwardService, inventoryService,AppService,$uibModal) {
+    //$scope.errorMessage="";
+    //$scope.warningMessage="";
     $scope.productsToModify = [];
     $scope.productAvailable=[];
     $scope.OutwardData = {
@@ -839,6 +839,7 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                     $uibModalInstance.dismiss('cancel');
                 };
                 $scope.outwardEntry = function ($scope, $http, outwardData) {
+                    $('#loader').css("display","block");
                     var data = {
                         outwardData: outwardData,
                         module: 'outward',
@@ -852,19 +853,39 @@ myApp.controller('outwardController', function ($scope, $http, outwardService, i
                     console.log(config);
                     $http.post("Inventory/php/InventoryIndex.php", null, config)
                         .success(function (data) {
+                            $('#loader').css("display","none");
                             console.log("In Post of outward entry success:");
                             console.log(data);
                             if(data.msg!=""){
-                                setTimeout(function(){
+                                $('#loader').css("display","none");
+                                $rootScope.warningMessage=data.msg;
+                                $('#warning').css("display","block");
+                                setTimeout(function () {
+                                    $('#warning').css("display","none");
                                     window.location="dashboard.php#/Inventory";
-                                },1000);
+                                }, 3000);
+                                //setTimeout(function(){
+                                //    window.location="dashboard.php#/Inventory";
+                                //},1000);
                             }else{
+                                $('#loader').css("display","none");
+                                $rootScope.errorMessage=data.error;
+                                $('#error').css("display","block");
+                                setTimeout(function () {
+                                    $('#error').css("display","none");
+                                }, 3000);
                             }
                             $scope.submitted = false;
 
                         })
                         .error(function (data, status, headers) {
                             console.log(data);
+                            $('#loader').css("display","none");
+                            $rootScope.errorMessage=data.error;
+                            $('#error').css("display","block");
+                            setTimeout(function () {
+                                $('#error').css("display","none");
+                            }, 3000);
                         });
                 };
             },

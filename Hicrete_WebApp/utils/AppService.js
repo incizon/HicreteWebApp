@@ -65,6 +65,7 @@ myApp.service('AppService', function () {
 
             });
     }
+
     this.getProjectManagers=function($http,$projectManagers){
         $('#loader').css("display","block");
         var data = {

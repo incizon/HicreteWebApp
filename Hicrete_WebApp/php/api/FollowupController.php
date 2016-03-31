@@ -23,6 +23,26 @@ class FollowupController
 
     }
 
+
+    /**
+     * Gets followup for project payment by project id
+     *
+     * @url GET /followup/payment/$id
+     */
+    public function getApplicatorFollowup($id){
+        try{
+            $followup = Followup::getApplicatorFollowup($id); // possible user loading method
+            echo AppUtil::getReturnStatus("Successful",$followup);
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+
+
      /**
      * Gets followup quotation 
      *
@@ -167,7 +187,7 @@ class FollowupController
 
     public function schedulesiteTrackingFollowup($followupId,$data){
         try{
-            if(Followup::schedulesiteTrackingFollowup($followupId,$data)){
+            if(Followup::scheduleSiteTrackingFollowup($followupId,$data)){
                 echo AppUtil::getReturnStatus("Successful","Conduction Successful");
             } else{
                 echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
@@ -197,5 +217,65 @@ class FollowupController
         }
 
     }
+
+
+    /**
+     * Create payment followup by invoice id
+     *
+     * @url POST /followup/sitetracking/create/$projectId
+     */
+
+    public function CreateSiteTrackingFollowup($projectId,$data,$userId){
+        try{
+            if(Followup::CreateSiteTrackingFollowup($projectId,$data,$userId)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+
+    /**
+     * Create payment followup by invoice id
+     *
+     * @url POST /followup/sitetracking/create/$projectId
+     */
+
+    public function CreateApplicatorFollowup($applicatorId,$data,$userId){
+        try{
+            if(Followup::CreateApplicatorFollowup($applicatorId,$data,$userId)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+    /**
+     * Schedule quotation followup by followup id
+     *
+     * @url POST /schedule/followup/quotation/$followupId
+     */
+
+    public function ConductApplicatorFollowup($followupId,$data){
+        try{
+            if(Followup::ConductApplicatorFollowup($followupId,$data)){
+                echo AppUtil::getReturnStatus("Successful","Conduction Successful");
+            } else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
 
 }
