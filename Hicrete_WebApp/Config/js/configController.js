@@ -1422,16 +1422,34 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             .success(function (data)
             {
 
+                $('#loader').css("display","none");
                 if(data.status!="Successful"){
 
                     console.log(data);
-                    alert(data.message);
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
-                    $rootScope.Companies[$scope.companyIndex]=$scope.selectedCompany;
-                    alert(data.message);
-                    window.location= "dashboard.php#/Config/SearchCompany";
+                    $scope.Companies[$scope.companyIndex]=$scope.selectedCompany;
+                    //alert(data.message);
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage=data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                            window.location= "dashboard.php#/Config/SearchCompany";
+                        });
+                    }, 3000);
+
 
 
 
@@ -1440,7 +1458,18 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+                $('#loader').css("display","block");
+                if(data.status != "Successfull") {
+                    $('#loader').css("display", "none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $('#error').css("display", "none");
+                        });
+                    }, 3000);
+                }
+                //alert("Error Occured"+data);
             });
 
     };
@@ -1609,6 +1638,7 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
                 data: data
             }
         };
+        $('#loader').css("display","block");
         //console.log($scope.selectedCompany);
         $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
@@ -1616,13 +1646,30 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    alert(data.message);
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
 
-                    alert(data.message);
-                    window.location= "dashboard.php#/Config/SearchWarehouse";
+                    //alert(data.message);
+                    $('#loader').css("display","none");
+                    $scope.warningMessage=data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                            window.location= "dashboard.php#/Config/SearchWarehouse";
+                        });
+                    }, 3000);
+
 
 
                 }
@@ -1630,7 +1677,16 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+                //alert("Error Occured"+data);
+                $('#loader').css("display","none");
+                $scope.errorMessage="Error Occurred";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
+
             });
 
     }
