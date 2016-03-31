@@ -321,7 +321,7 @@ userType:""
                      {
                      
                        if(data.status!="Successful"){
-                          alert(data.message);
+                        //  alert(data.message);
                        }else{
                            $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -330,7 +330,7 @@ userType:""
                      })
                      .error(function (data, status, headers, config)
                      {
-                       alert("Error Occured");
+                      // alert("Error Occured");
                      });
             }
 
@@ -413,7 +413,7 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
 
                 })
                 .error(function (data, status, headers, config) {
-                    alert("Error Occurred:"+data);
+               //     alert("Error Occurred:"+data);
 
 
                 });
@@ -563,11 +563,11 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 if(data.status=="Successful"){
                     var index = $rootScope.Users.indexOf(user);
                     $rootScope.Users.splice(index, 1);
-                    alert("Deleted successfully");
+                   // alert("Deleted successfully");
                 }
                 else
                 {
-                   alert(data.message);
+                 //  alert(data.message);
 
 
                 }
@@ -575,7 +575,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+               // alert("Error Occured"+data);
             });
 
 
@@ -622,7 +622,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                    alert("Error Occured"+data.message);
+                   // alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -631,7 +631,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+              //  alert("Error Occured"+data);
             });
     }
     $scope.loadAccessPermission();
@@ -640,7 +640,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
     $scope.modifyUser=function(){
 
         if($scope.modifyUserForm.$pristine){
-            alert("Fields are not modified");
+           // alert("Fields are not modified");
             return;
         }
 
@@ -1461,9 +1461,6 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.access=[];
     $scope.roleAccessList=[];
 
-    $scope.errorMessage="";
-    $scope.warningMessage="";
-
     var data={
         operation :"getAccessForRole",
         roleId: $scope.roleId
@@ -1517,7 +1514,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.modifyRole=function(){
         if($scope.modifyRoleForm.$pristine){
             //alert("Fields not modified");
-            $scope.errorMessage = "Fields not modified..";
+            $rootScope.errorMessage = "Fields not modified..";
             $('#error').css("display","block");
             setTimeout(function() {
                 $scope.$apply(function() {
@@ -1545,18 +1542,39 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
 
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
                     window.location="dashboard.php#/Config/SearchRole";
                 }else{
-                    alert(data.message);
+                    //alert(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                        });
+                    }, 3000);
                 }
 
             })
             .error(function (data, status, headers, config)
             {
                 console.log(data);
-                alert("Error Occured");
+                //alert("Error Occured");
+                $rootScope.errorMessage = "Error Occured..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
 
@@ -1671,7 +1689,7 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
 
 });
 
-myApp.controller('MyProfileController',function($scope,$http,$filter) {
+myApp.controller('MyProfileController',function($scope,$http,$filter,AppService) {
 
 
     var data = {
@@ -1716,10 +1734,20 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
             alert("Error Occured");
         });
 
-
     $scope.modifyUser = function () {
-        console.log("in Modifu user");
-        if(!$scope.userForm.$pristine){
+        console.log("in ModifY user");
+        var fileName = "";
+        $scope.userInfo.profilePic="";
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadLocation = "upload/ProfilePictures/";
+                fileName = uploadLocation + $scope.myFile.name;
+                $scope.userInfo.profilePic=fileName;
+            }
+
+        }
+
+        if(!$scope.userForm.$pristine ||$scope.myFile != undefined ){
             console.log($scope.userInfo);
             $scope.userInfo.newDate = $filter('date')($scope.userInfo.newDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
             console.log($scope.userInfo);
@@ -1744,9 +1772,10 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
-                        window.location.reload(1);
-                    }, 3000);
-                       //alert(data);
+                      //  window.location.reload(1);
+                    }, 1500);
+                    var file = $scope.myFile;
+                    AppService.uploadFileToUrl($http,file, $scope);
 
                 })
                 .error(function (data, status, headers, config) {
@@ -1872,7 +1901,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                   // alert(data.message);
                 }else{
 
                     $scope.tempAccess=data.message.requestDetails;
@@ -1883,7 +1912,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+              // alert("Error Occured"+data);
             });
 
     }
@@ -1908,15 +1937,15 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                 //   alert(data.message);
                 }else{
-                    alert("Request Added Successfully");
+                  //  alert("Request Added Successfully");
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+               // alert("Error Occured"+data);
             });
     }
 
