@@ -46,7 +46,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group ">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input maxlength = "50" ng-model="userInfo.city" name="city" type="text" class="form-control" required  minlength=2/>
+                                                    <input maxlength = "50" ng-model="userInfo.city" name="city" type="text" class="form-control" pattern="[a-zA-Z]+" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.city.$error" ng-hide="!userInfoSubmitted && !userInfoForm.city.$touched">
                                                     <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -61,7 +61,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input maxlength = "50" ng-model="userInfo.state" name="state" type="text" class="form-control" required  minlength=2/>
+                                                    <input maxlength = "50" ng-model="userInfo.state" name="state" type="text" class="form-control" pattern="[a-zA-Z]+" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.state.$error" ng-hide="!userInfoSubmitted && !userInfoForm.state.$touched">
                                                     <p style="color:red" ng-message="required">State Cannot be blank</p>
@@ -76,7 +76,7 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input maxlength = "50" ng-model="userInfo.country" name="country" type="text" class="form-control" required  minlength=2/>
+                                                    <input maxlength = "50" ng-model="userInfo.country" name="country" type="text" class="form-control" pattern="[a-zA-Z]+" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.country.$error" ng-hide="!userInfoSubmitted && !userInfoForm.country.$touched">
                                                     <p style="color:red" ng-message="required">Country Cannot be blank</p>
