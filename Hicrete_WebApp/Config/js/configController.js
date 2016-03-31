@@ -1689,7 +1689,7 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
 
 });
 
-myApp.controller('MyProfileController',function($scope,$http,$filter) {
+myApp.controller('MyProfileController',function($scope,$http,$filter,AppService) {
 
 
     var data = {
@@ -1734,10 +1734,20 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
             alert("Error Occured");
         });
 
-
     $scope.modifyUser = function () {
-        console.log("in Modifu user");
-        if(!$scope.userForm.$pristine){
+        console.log("in ModifY user");
+        var fileName = "";
+        $scope.userInfo.profilePic="";
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadLocation = "upload/ProfilePictures/";
+                fileName = uploadLocation + $scope.myFile.name;
+                $scope.userInfo.profilePic=fileName;
+            }
+
+        }
+
+        if(!$scope.userForm.$pristine ||$scope.myFile != undefined ){
             console.log($scope.userInfo);
             $scope.userInfo.newDate = $filter('date')($scope.userInfo.newDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
             console.log($scope.userInfo);
@@ -1762,9 +1772,10 @@ myApp.controller('MyProfileController',function($scope,$http,$filter) {
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
-                        window.location.reload(1);
-                    }, 3000);
-                       //alert(data);
+                      //  window.location.reload(1);
+                    }, 1500);
+                    var file = $scope.myFile;
+                    AppService.uploadFileToUrl($http,file, $scope);
 
                 })
                 .error(function (data, status, headers, config) {
