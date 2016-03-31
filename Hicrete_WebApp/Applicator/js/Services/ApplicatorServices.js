@@ -1,50 +1,51 @@
 myApp.service('ApplicatorService',function(){
 
-	this.submitApplicatorDetails=function($scope,$rootScope,$http,applicatorDetails){
-		applicatorDetails.operation='createApplicator';
+	this.submitApplicatorDetails=function($scope,$http,$rootScope,applicatorDetails){
+
 		 var config = {
 						params: {
 									data: applicatorDetails
 								}
 					};
 
+
 					$http.post("Applicator/php/Applicator.php", null, config)
 								
 					.success(function (data, status, headers, config){	
-						console.log(data);
+
 						$scope.loading=false;
 						$('#loader').css("display","none");
 						console.log(data.msg);
-						if(data.msg!=""){
+						if(data.msg!="") {
 
-							$rootScope.warningMessage=data.msg;
+							$rootScope.warningMessage = data.msg;
 							//console.log($scope.warningMessage);
-							$('#warning').css("display","block");
-							setTimeout(function() {
-								$scope.$apply(function() {
-									if(data.msg!=""){
-										$('#warning').css("display","none");
+							$('#warning').css("display", "block");
+							setTimeout(function () {
+								$scope.$apply(function () {
+									if (data.msg != "") {
+										$('#warning').css("display", "none");
 									}
 								});
 							}, 1000);
-						//}
+							//}
 
 
-
-						if(data.msg==""){
-							$rootScope.errorMessage="Unable to create Applicator...";
-							$('#error').css("display","block");
-							setTimeout(function() {
-								$scope.$apply(function() {
-									if(data.msg!=""){
-										$('#error').css("display","none");
-									}
-								});
-							}, 1000);
-						}
+							if (data.msg == "") {
+								$rootScope.errorMessage = "Unable to create Applicator...";
+								$('#error').css("display", "block");
+								setTimeout(function () {
+									$scope.$apply(function () {
+										if (data.msg != "") {
+											$('#error').css("display", "none");
+										}
+									});
+								}, 1000);
+							}
 							/*setTimeout(function(){
-									window.location.reload(true);
-							},6000);*/
+							 window.location.reload(true);
+							 },6000);*/
+						}
 						})
 						.error(function (data, status, headers, config){
 							$('#loader').css("display","none");
