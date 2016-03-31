@@ -15,34 +15,33 @@ myApp.service('ApplicatorService',function(){
 						$scope.loading=false;
 						$('#loader').css("display","none");
 						console.log(data.msg);
-						if(data.msg!=""){
+						if(data.msg!="") {
 
-							$rootScope.warningMessage=data.msg;
+							$rootScope.warningMessage = data.msg;
 							//console.log($scope.warningMessage);
-							$('#warning').css("display","block");
-							setTimeout(function() {
-								$scope.$apply(function() {
-									if(data.msg!=""){
-										$('#warning').css("display","none");
+							$('#warning').css("display", "block");
+							setTimeout(function () {
+								$scope.$apply(function () {
+									if (data.msg != "") {
+										$('#warning').css("display", "none");
 									}
 								});
 							}, 1000);
-						//}
+							}
 
 
-
-						if(data.msg==""){
-							$rootScope.errorMessage="Unable to create Applicator...";
-							$('#error').css("display","block");
-							setTimeout(function() {
-								$scope.$apply(function() {
-									if(data.msg!=""){
-										$('#error').css("display","none");
-									}
-								});
-							}, 1000);
-						}
-							/*setTimeout(function(){
+							if (data.msg == "") {
+								$rootScope.errorMessage = "Unable to create Applicator...";
+								$('#error').css("display", "block");
+								setTimeout(function () {
+									$scope.$apply(function () {
+										if (data.msg != "") {
+											$('#error').css("display", "none");
+										}
+									});
+								}, 1000);
+							}
+						/*setTimeout(function(){
 									window.location.reload(true);
 							},6000);*/
 						})
