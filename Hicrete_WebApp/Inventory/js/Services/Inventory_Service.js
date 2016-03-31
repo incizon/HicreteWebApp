@@ -209,12 +209,12 @@ myApp.service('addSupplierService', function () {
                 if (data.error != ""){
                     $rootScope.errorMessage=data.error;
                     $('#error').css("display","block");
-                    window.location="dashboard.php#/Inventory/addSupplier";
+                    //window.location="dashboard.php#/Inventory/addSupplier";
                     $scope.submitted=false;
-                    $scope.clearData(supplier,'clear');
+                   //$scope.clearData(supplier,'clear');
                 }
                // $scope.messages.push(data.msg);
-                $scope.clearData(supplier, 'submit');
+               // $scope.clearData(supplier, 'submit');
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
