@@ -289,14 +289,15 @@ if(!$userObj->init($userId)){
 
 
                         <?php
+
+                        echo "<a ui-sref=\"myProfile\" class=\"list-group-item\">
+                            <span class=\"contacts-title\">My Profile</span>
+                        </a>";
                             if($userObj->isSuper){
                                 echo "<a ui-sref=\"createSuperUser\"  class=\"list-group-item\">
                                  <span class=\"contacts-title\">Create Super User</span>
                                 </a>";
                             }else{
-                                echo "<a ui-sref=\"myProfile\" class=\"list-group-item\">
-                            <span class=\"contacts-title\">My Profile</span>
-                        </a>";
                                 echo "<a ui-sref=\"RequestAccess\" class=\"list-group-item\">
                             <span class=\"contacts-title\">Request for access</span>
                         </a>";
@@ -317,18 +318,19 @@ if(!$userObj->init($userId)){
             </li>
             <!-- END SIGN OUT -->
             <!-- MESSAGES -->
-            <li class="xn-icon-button pull-right">
-                <a href="#"><span class="fa fa-bell"></span></a>
-                <div class="informer informer-danger">4</div>
-                <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"><span class="fa fa-comments"></span>Notifications</h3>
-                        <div class="pull-right">
-                            <span class="label label-danger">4 new</span>
-                        </div>
-                    </div>
-                </div>
-            </li>
+
+<!--            <li class="xn-icon-button pull-right">-->
+<!--                <a href="#"><span class="fa fa-bell"></span></a>-->
+<!--                <div class="informer informer-danger">4</div>-->
+<!--                <div class="panel panel-primary animated zoomIn xn-drop-left xn-panel-dragging">-->
+<!--                    <div class="panel-heading">-->
+<!--                        <h3 class="panel-title"><span class="fa fa-comments"></span>Notifications</h3>-->
+<!--                        <div class="pull-right">-->
+<!--                            <span class="label label-danger">4 new</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </li>-->
                     <!-- END SIGN OUT -->
 
 

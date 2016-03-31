@@ -9,10 +9,14 @@ Class Followup {
 
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-			/*$stmt = $conn->prepare("SELECT * FROM payment_retention_followup prf ,project_payment_followup ppf where q.AssignEmployee = :id");*/
-			$stmt = $conn->prepare("SELECT * FROM project_payment_followup ppf where ppf.AssignEmployee = :id AND ppf.FollowupId NOT IN (SELECT `FollowupId` FROM `project_payment_followup_details`)");
 
+		$t=time();
+		$current =date("Y-m-d",$t);
+			$stmt = $conn->prepare("SELECT * FROM project_payment_followup ppf where ppf.AssignEmployee = :id AND ppf.`FollowupDate`<=:currentDate AND ppf.FollowupId NOT IN (SELECT `FollowupId` FROM `project_payment_followup_details`)");
+			//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
 			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+			$stmt->bindParam(':currentDate', $current, PDO::PARAM_STR);
+
 			if($stmt->execute()){
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 					array_push($object, $row);
@@ -28,14 +32,51 @@ Class Followup {
 		//return "i m in";
 	}
 
+
+	public function getApplicatorFollowup($id) {
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+
+		$t=time();
+		$current =date("Y-m-d",$t);
+		/*$stmt = $conn->prepare("SELECT * FROM payment_retention_followup prf ,project_payment_followup ppf where q.AssignEmployee = :id");*/
+		$stmt = $conn->prepare("SELECT * FROM `applicator_follow_up` af WHERE `assignEmployeeId`= :id AND af.`date_of_follow_up`<=:currentDate AND af.`follow_up_id` NOT IN (SELECT `follow_up_id` FROM `applicator_payment_follow_up_info`)");
+		//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
+		$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+		$stmt->bindParam(':currentDate', $current, PDO::PARAM_STR);
+
+		if($stmt->execute()){
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}else{
+
+			return null;
+		}
+
+
+		$db = null;
+		return $object ;
+		//return "i m in";
+	}
+
+
 	public function getQuotationFollowup($id){
 		$object = array();
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();//SELECT * FROM project_payment_followup ppf ,project_payment_followup_details ppfd where ppf.FollowupId = ppfd.FollowupId  AND ppf.AssignEmployee = :id");
-		$stmt = $conn->prepare("SELECT * FROM quotation_followup qf where qf.AssignEmployee = :id  AND qf.FollowupId NOT IN (SELECT `FollowupId` FROM `quotation_followup_details`)");
+
+		$t=time();
+		$current =date("Y-m-d",$t);
+
+		$stmt = $conn->prepare("SELECT * FROM quotation_followup qf where qf.AssignEmployee = :id AND qf.`FollowupDate`<=:currentDate AND qf.FollowupId NOT IN (SELECT `FollowupId` FROM `quotation_followup_details`)");
 		//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
 		$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+		$stmt->bindParam(':currentDate', $current, PDO::PARAM_STR);
+
 		if($stmt->execute()){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 				array_push($object, $row);
@@ -54,9 +95,12 @@ public function getSitetrackingFollowup($id){
 		$object = array();
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT * FROM site_tracking_followup_schedule stf , site_tracking_followup_details stfd where stf.AssignEmployee = :id AND stf.FollowupId NOT IN (SELECT `FollowupId` FROM `site_tracking_followup_details`)");
+		$t=time();
+		$current =date("Y-m-d",$t);
+		$stmt = $conn->prepare("SELECT * FROM site_tracking_followup_schedule stf  where stf.AssignEmployee = :id AND stf.`FollowupDate`<=:currentDate AND stf.FollowupId NOT IN (SELECT `FollowupId` FROM `site_tracking_followup_details`)");
 		//$stmt = $conn->prepare("SELECT * FROM project_payment p ,project_payment_mode_details pd WHERE p.InvoiceNo = :invoiceId  AND p.PaymentId = pd.PaymentId");
 		$stmt->bindParam(':id', $id, PDO::PARAM_STR);
+		$stmt->bindParam(':currentDate', $current, PDO::PARAM_STR);
 		if($stmt->execute()){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 				array_push($object, $row);
@@ -138,6 +182,8 @@ public function UpdateSiteTrackingFollowup($Followupid,$data){
 	}
 }
 
+
+
 public function CreateQuotationFollowup($quotationId,$data,$userId){
 	$FollowupId = AppUtil::generateId();
 	$t=time();
@@ -195,6 +241,25 @@ public function CreateQuotationFollowup($quotationId,$data,$userId){
 	}
 
 
+	public function scheduleSiteTrackingFollowup($followupId,$data){
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+
+		$stmt = $conn->prepare("INSERT INTO `site_tracking_followup_details`(`FollowupId`, `Description`, `ConductDate`) VALUES (?,?,?)");
+		if($stmt->execute([$followupId,$data->Description,$data->ConductDate]) === TRUE){
+			$conn->commit();
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
+
+
+
 
 	public function CreatePaymentFollowup($invoiceId,$data,$userId){
 		$FollowupId = AppUtil::generateId();
@@ -218,6 +283,73 @@ public function CreateQuotationFollowup($quotationId,$data,$userId){
 	}
 
 
+	public function CreateSiteTrackingFollowup($projectId,$data,$userId){
+		$FollowupId = AppUtil::generateId();
+		$t=time();
+		$current =date("Y-m-d",$t);
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+		$stmt = $conn->prepare("INSERT INTO `site_tracking_followup_schedule`(`FollowupId`, `ProjectId`, `AssignEmployee`, `FollowupDate`, `FollowupTitle`, `CreationDate`, `CreatedBy`) VALUES (?,?,?,?,?,?,?)");
+		if($stmt->execute([$FollowupId,$projectId,$data->AssignEmployee,$data->FollowupDate,$data->FollowupTitle,$current,$userId]) === TRUE){
+			$conn->commit();
+			return true;
+		}
+		else{
+			$conn->rollBack();
+			return false;
+		}
+
+
+	}
+
+
+	public function CreateApplicatorFollowup($ApplicatorId,$data,$userId){
+		$FollowupId = AppUtil::generateId();
+		$t=time();
+		$current =date("Y-m-d",$t);
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+		$stmt = $conn->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id, `followup_title`,`assignEmployeeId`)
+                                  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
+
+		$stmt->bindParam(':followupDate', $data->FollowupDate);
+		$stmt->bindParam(':lastEnrollmentId', $ApplicatorId);
+		$stmt->bindParam(':lastModifiedBy', $userId);
+		$stmt->bindParam(':createdBy', $userId);
+		$stmt->bindParam(':followupTitle', $data->FollowupTitle);
+		$stmt->bindParam(':assignEmployeeId',$data->AssignEmployee);
+
+		if($stmt->execute()){
+			$conn->commit();
+			return true;
+		}
+		else{
+			$conn->rollBack();
+			return false;
+		}
+	}
+
+
+	public function ConductApplicatorFollowup($followupId,$data){
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
+
+		$stmt = $conn->prepare("INSERT INTO `applicator_payment_follow_up_info`(`follow_up_id`, `desciption`, `conductDate`) VALUES (?,?,?)");
+		if($stmt->execute([$followupId,$data->Description,$data->ConductDate]) === TRUE){
+			$conn->commit();
+			return true;
+		}
+		else{
+			return false;
+		}
+
+	}
 
 
 }

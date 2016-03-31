@@ -818,15 +818,22 @@ myApp.controller('companyController',function($scope,$rootScope,$http){
     $scope.searchkeyword="";
  $scope.company={
  	name:"",
-  abbrevation:"",
-  startdate:"",
-  address:"",
-  city:"",
-  state:"",
-  country:"",
-  pincode:"",
-  email:"",
-  phone:""
+    abbrevation:"",
+    startdate:"",
+    address:"",
+    city:"",
+    state:"",
+    country:"",
+    pincode:"",
+    email:"",
+    phone:"",
+     bankName:"",
+     accountName:"",
+     accountType:"",
+     bankBranch:"",
+     accountNo:"",
+     IFSCCode:""
+
  };
     console.log("Inside company controller");
 
@@ -1043,7 +1050,7 @@ $scope.addCompany=function(){
                }else{
                    $scope.loading=false;
                    $('#loader').css("display","none");
-                   $scope.errorMessage="Role not added..";
+                   $scope.errorMessage="Company not added..";
                    $('#error').css("display","block");
                    setTimeout(function() {
                        $scope.$apply(function() {
@@ -1647,7 +1654,8 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
                 console.log(data);
 
                 if (data.status == "Success") {
-                    alert("Super User Created...Credentials Sent to "+$scope.superUserInfo.email);
+                    //alert("Super User Created...Credentials Sent to "+$scope.superUserInfo.email);
+                    alert(data.message);
                 } else {
                     alert(data.message);
                 }

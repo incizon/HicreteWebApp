@@ -70,7 +70,21 @@
                                             <!-- <button class="btn btn-primary btn-rounded"><span class="fa fa-pencil"></span></button> -->
                                         </div>
                                     </a>
-                                    </div>                              
+                                    </div>
+
+                                    <div ng-repeat="followupDetails in ApplicatorPaymentFollowup">
+                                        <a href="#" ng-click="saveFollowupDetails('lg',followupDetails,'Applicator')" class="list-group-item">
+                                            <!-- <img src="assets/images/users/user2.jpg" class="pull-left" alt="John Doe"> -->
+                                            <span class="contacts-title">{{followupDetails.followupTitle}}</span>
+                                            <p>{{followupDetails.followupDate}}</p>
+                                            <div class="list-group-controls">
+                                                <p>Applicator</p>
+                                                <!-- <button class="btn btn-primary btn-rounded"><span class="fa fa-pencil"></span></button> -->
+                                            </div>
+                                        </a>
+                                    </div>
+
+
                                        
 
                                 </div>

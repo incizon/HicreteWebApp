@@ -31,6 +31,9 @@ switch($data->operation)
     case 'getSitetrackingFollowup':
         FollowupController::getSitetrackingFollowup($userId);
         break;
+    case 'getApplicatorFollowup':
+        FollowupController::getApplicatorFollowup($userId);
+        break;
     case 'UpdatePaymentFollowup':
         //echo(json_encode($data->custId));
         FollowupController::UpdatePaymentFollowup($data->id,$data->data);
@@ -59,13 +62,22 @@ switch($data->operation)
         //echo(json_encode($data->custId));
         FollowupController::schedulesiteTrackingFollowup($data->id,$data->data);
         break;
+    case 'ConductApplicatorFollowup':
+        //echo(json_encode($data->custId));
+        FollowupController::ConductApplicatorFollowup($data->id,$data->data);
+        break;
     case 'CreatePaymentFollowup':
         //echo(json_encode($data->custId));
         FollowupController::CreatePaymentFollowup($data->id,$data->data,$userId);
         break;
-
-
-
+    case 'CreateSiteTrackingFollowup':
+        //echo(json_encode($data->custId));
+        FollowupController::CreateSiteTrackingFollowup($data->id,$data->data,$userId);
+        break;
+    case 'CreateApplicatorFollowup':
+        //echo(json_encode($data->custId));
+        FollowupController::CreateApplicatorFollowup($data->id,$data->data,$userId);
+        break;
 
 }
 
