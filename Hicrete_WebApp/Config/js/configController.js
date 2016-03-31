@@ -321,7 +321,7 @@ userType:""
                      {
                      
                        if(data.status!="Successful"){
-                          alert(data.message);
+                        //  alert(data.message);
                        }else{
                            $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -330,7 +330,7 @@ userType:""
                      })
                      .error(function (data, status, headers, config)
                      {
-                       alert("Error Occured");
+                      // alert("Error Occured");
                      });
             }
 
@@ -413,7 +413,7 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
 
                 })
                 .error(function (data, status, headers, config) {
-                    alert("Error Occurred:"+data);
+               //     alert("Error Occurred:"+data);
 
 
                 });
@@ -563,11 +563,11 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 if(data.status=="Successful"){
                     var index = $rootScope.Users.indexOf(user);
                     $rootScope.Users.splice(index, 1);
-                    alert("Deleted successfully");
+                   // alert("Deleted successfully");
                 }
                 else
                 {
-                   alert(data.message);
+                 //  alert(data.message);
 
 
                 }
@@ -575,7 +575,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+               // alert("Error Occured"+data);
             });
 
 
@@ -622,7 +622,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                    alert("Error Occured"+data.message);
+                   // alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -631,7 +631,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+              //  alert("Error Occured"+data);
             });
     }
     $scope.loadAccessPermission();
@@ -640,7 +640,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
     $scope.modifyUser=function(){
 
         if($scope.modifyUserForm.$pristine){
-            alert("Fields are not modified");
+           // alert("Fields are not modified");
             return;
         }
 
@@ -1901,7 +1901,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                   // alert(data.message);
                 }else{
 
                     $scope.tempAccess=data.message.requestDetails;
@@ -1912,7 +1912,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+              // alert("Error Occured"+data);
             });
 
     }
@@ -1937,15 +1937,15 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                 //   alert(data.message);
                 }else{
-                    alert("Request Added Successfully");
+                  //  alert("Request Added Successfully");
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+               // alert("Error Occured"+data);
             });
     }
 
