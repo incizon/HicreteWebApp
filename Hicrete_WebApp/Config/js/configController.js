@@ -1461,9 +1461,6 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.access=[];
     $scope.roleAccessList=[];
 
-    $scope.errorMessage="";
-    $scope.warningMessage="";
-
     var data={
         operation :"getAccessForRole",
         roleId: $scope.roleId
@@ -1517,7 +1514,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
     $scope.modifyRole=function(){
         if($scope.modifyRoleForm.$pristine){
             //alert("Fields not modified");
-            $scope.errorMessage = "Fields not modified..";
+            $rootScope.errorMessage = "Fields not modified..";
             $('#error').css("display","block");
             setTimeout(function() {
                 $scope.$apply(function() {
@@ -1545,18 +1542,39 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
 
 
                 if(data.status!="Successful"){
-                    alert(data.message);
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
                     window.location="dashboard.php#/Config/SearchRole";
                 }else{
-                    alert(data.message);
+                    //alert(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                        });
+                    }, 3000);
                 }
 
             })
             .error(function (data, status, headers, config)
             {
                 console.log(data);
-                alert("Error Occured");
+                //alert("Error Occured");
+                $rootScope.errorMessage = "Error Occured..";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
             });
 
 
