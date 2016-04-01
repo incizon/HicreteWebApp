@@ -231,28 +231,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 
 
 
-    /**********************************************************************************
-     *Setters to set true/false for tables to modify
-     **********************************************************************************/
-    $scope.setMasterTable = function () {
-        isProductMasterTable = true;
-        console.log("IN ng CHANGE");
-    }
-    $scope.setProductDetailsTable = function () {
-        isPrductDetailsTable = true;
-        console.log("IN ng CHANGE");
-    }
-    $scope.setProductPackagingTable = function () {
-        isProductPkgingTable = true;
-        console.log("IN ng CHANGE");
-    }
-    $scope.setProductMaterialTable = function () {
-        isMaterialTable = true;
-        console.log("IN ng CHANGE");
-    }
-    /**********************************************************************************
-     *End of Setters
-     **********************************************************************************/
 
 
     /***************************************************************************
@@ -553,11 +531,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
     /***************************************************************************
      * End of update inward entry function
      ****************************************************************************/
-//Get Material from DB
-        // inventoryService.getProductsForInwardandOutward($scope,$http);
 
-        //Available Products
-    //inventoryService.getProducts($scope, $http);
     inventoryService.getSavedProducts($scope);
     /**********************************************************************************
      *Setters to set true/false for tables to modify
@@ -685,7 +659,6 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
         opened: false
     };
 
-
     //Get Warehouses
     inventoryService.getWarehouses($scope,$http);
     // Get Company
@@ -752,11 +725,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                 console.log("this is actual quantity"+$scope.availableTotalquantity);
                 $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
                 break;
-               // qty= $scope.unitofMeasure;
-                //console.log(qty);
             }
-            else
-                $scope.availableTotalquantity=0;
 
         }
 
@@ -1291,7 +1260,17 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
     $scope.keyword="";
+    var isProductMasterTable = false;
+    var isMaterialTable = false;
+    var isPrductDetailsTable = false;
+    var isProductPkgingTable = false;
 
+    $http.get("Inventory/php/Material.php")
+        .success(function (data) {
+            console.log("IN MATERIAL");
+            $scope.materialNames = data;
+            console.log(data);
+        });
     $scope.paginate = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1337,7 +1316,109 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
     }
 
 
+    /**********************************************************************************
+     *Setters to set true/false for tables to modify
+     **********************************************************************************/
+    $scope.setMasterTable = function () {
+        isProductMasterTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductDetailsTable = function () {
+        isPrductDetailsTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductPackagingTable = function () {
+        isProductPkgingTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductMaterialTable = function () {
+        isMaterialTable = true;
+        console.log("IN ng CHANGE");
+    }
+    /**********************************************************************************
+     *End of Setters
+     **********************************************************************************/
+    /**********************************************************************************
+     * Purpose- This function will Update the product details
+     * @param1- product (all product details)
+     * Return- Success or Failure
+     ***********************************************************************************/
+    $scope.updateProductInfo = function (product) {
+        console.log("Product in Update Info function");
+        //Set Extra attribute in object to identify operation to be performed as update
+        product.opertaion = "modify";
+        //Check which tables should get affected
+        product.isProductMasterTable = isProductMasterTable;
+        product.isProductDetailsTable = isPrductDetailsTable;
+        product.isProductPackagingTable = isProductPkgingTable;
+        product.isProductMaterialTable = isMaterialTable;
+        $scope.loading = "";
+        $scope.warningMessage = "";
+        $scope.errorMessage = "";
 
+        // Create json object
+        var config = {
+            params: {
+                product: product
+            }
+        };
+        $scope.loading = true;
+        $('#loader').css("display","block");
+        //call add product service
+        $http.post("Inventory/php/InventoryProduct.php", null, config)
+            .success(function (data) {
+                console.log("IN POST UPDATE OPERATION:");
+                console.log(data);
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+                if(data.msg!="") {
+                    //alert("Success", data.msg);
+                    $scope.warningMessage = data.msg;
+                    $('#warning').css("display", "block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.message!=""){
+                                $('#warning').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
+                else {
+                    //alert("Success", data.error);
+                    $scope.errorMessage = data.error;
+                    $('#error').css("display", "block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.message!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
+
+                window.location.reload = true;
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+                //alert(data);
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+                $scope.errorMessage = data.error;
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if(data.message!=""){
+                            $('#error').css("display","none");
+                        }
+                    });
+                }, 3000);
+            });
+
+    }
+    /**********************************************************************************
+     *End of Update product function
+     **********************************************************************************/
 
 
 });

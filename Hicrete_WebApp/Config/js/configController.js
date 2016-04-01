@@ -253,7 +253,7 @@ userType:""
              console.log(data.status);
              console.log(data.message);
              if(data.status=="Successful"){
-                alert("User added successfully. Password is :"+data.message);
+                //alert("User added successfully. Password is :"+data.message);
                  setTimeout(function(){
                      $scope.loading=false;
                      $('#loader').css("display","none");

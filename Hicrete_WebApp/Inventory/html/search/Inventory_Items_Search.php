@@ -80,68 +80,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                         <button data-target="#viewDetails" data-toggle="modal" ng-click="getProduct(product)" data-toggle="modal"
                                 class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View
                         </button>
-                        <div class="modal fade" id="viewDetails" role="dialog">
-                            <div class="modal-dialog">
-                                <!-- Modal content-->
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                        <h4 class="modal-title">Product Details</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table class="table">
 
-                                            <tr>
-                                                <th>Product Name :</th>
-                                                <td>{{selectedProduct.productname}}</td>
-
-                                            </tr>
-                                            <tr>
-                                                <th>Unit Of Measure :</th>
-                                                <td>{{selectedProduct.unitofmeasure}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Color :</th>
-                                                <td>{{selectedProduct.color}}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Alert Qty :</th>
-                                                <td>{{selectedProduct.alertquantity}}</td>
-
-                                            </tr>
-                                            <tr>
-                                                <th>Description :</th>
-                                                <td>{{selectedProduct.description}}</td>
-
-                                            </tr>
-                                            <tr>
-                                                <th>Material Type :</th>
-                                                <td>{{selectedProduct.materialtype}}</td>
-
-                                            </tr>
-                                            <tr>
-                                                <th>Packaging :</th>
-                                                <td>{{selectedProduct.packaging}}</td>
-
-                                            </tr>
-                                            <tr>
-                                                <th>Abbrevations :</th>
-                                                <td>{{selectedProduct.abbrevation}}</td>
-
-                                            </tr>
-                                        </table>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
-                                        </button>
-                                    </div>
-                                    <!--End of modal-footer-->
-                                </div>
-                                <!--End of Modal Content-->
-                            </div>
-                            <!--End of modal dialog-->
-                        </div>
                         <?php
                             if($hasWrite==1){
                                 echo "<button class=\"btn btn-info btn-sm\" data-target=\"#modifyDetails\" data-toggle=\"modal\"
@@ -281,7 +220,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
                                                         <div class="col-md-8">
                                                             <select class="form-control" ng-change="setMasterTable()"
-                                                                    ng-model="selectedProduct.materialtypeid"
+                                                                    ng-model="selectedProduct.materialtype"
                                                                     name="materialType" required>
                                                                 <option ng-repeat="x in materialNames "
                                                                         value={{x.materialtypeid}}>{{x.materialtype}}
@@ -376,4 +315,67 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
     </uib-pagination>
 
 </div>
+</div>
+
+<div class="modal fade" id="viewDetails" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Product Details</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+
+                    <tr>
+                        <th>Product Name :</th>
+                        <td>{{selectedProduct.productname}}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Unit Of Measure :</th>
+                        <td>{{selectedProduct.unitofmeasure}}</td>
+                    </tr>
+                    <tr>
+                        <th>Color :</th>
+                        <td>{{selectedProduct.color}}</td>
+                    </tr>
+                    <tr>
+                        <th>Alert Qty :</th>
+                        <td>{{selectedProduct.alertquantity}}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Description :</th>
+                        <td>{{selectedProduct.description}}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Material Type :</th>
+                        <td>{{selectedProduct.materialtype}}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Packaging :</th>
+                        <td>{{selectedProduct.packaging}}</td>
+
+                    </tr>
+                    <tr>
+                        <th>Abbrevations :</th>
+                        <td>{{selectedProduct.abbrevation}}</td>
+
+                    </tr>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                </button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
 </div>
