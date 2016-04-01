@@ -58,7 +58,7 @@
                                             <div class="col-md-8 col-xs-12 col-sm-8">
                                                 <div class="input-group ">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input maxlength = "50" type="text" name="city" ng-model="company.city" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                    <input maxlength = "50" type="text" name="city" ng-model="company.city" class="form-control" required  minlength=2/>
                                                 </div>
                                                 <div class="help-block" ng-messages="companyForm.city.$error" ng-show="submitted">
                                                     <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -206,7 +206,7 @@
                                                 <div class="col-md-8 col-xs-12 col-sm-8">
                                                     <div class="input-group ">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input maxlength = "50" type="text" name="accountType" ng-model="company.accountType" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                                        <input maxlength = "50" type="text" name="accountType" ng-model="company.accountType" class="form-control" required   minlength=2/>
                                                     </div>
                                                     <div class="help-block" ng-messages="companyForm.accountType.$error" ng-show="submitted">
                                                         <p style="color:red" ng-message="required">Account Type Cannot be blank</p>

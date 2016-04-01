@@ -399,7 +399,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                             <div class="col-md-8 col-xs-12">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" required pattern="[a-zA-Z]+" ng-model="selectedSupplier.suppliername" class="form-control"/>
+                                    <input type="text" required   ng-model="selectedSupplier.suppliername" class="form-control"/>
                                 </div>
                                 <!--<span style="color:RED" class="help-block" ng-show="supplierAdd.supplierName.$invalid
                                && supplierAdd.supplierName.$dirty && submitted">Please only characters in Supplier name</span>-->
