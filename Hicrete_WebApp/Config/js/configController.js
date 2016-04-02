@@ -1135,10 +1135,13 @@ $scope.addCompany=function(){
                            $('#warning').css("display","none");
                        });
                    }, 3000);
+                   $scope.submitted=false;
+                   clearCompanyForm();
                }else if(data.status=="Unsuccessful"){
                    $scope.loading=false;
                    $('#loader').css("display","none");
-                   $scope.errorMessage="Company not added..";
+                   //$scope.errorMessage="Company not added..";
+                   $scope.errorMessage=data.message;
                    $('#error').css("display","block");
                    setTimeout(function() {
                        $scope.$apply(function() {
@@ -1163,8 +1166,7 @@ $scope.addCompany=function(){
                alert("Error Occured"+data);
              
            });
-      $scope.submitted=false;
-      clearCompanyForm();
+
       return true;
 }
 
