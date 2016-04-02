@@ -234,11 +234,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller: 'userController'    
         })
         
-        .state('Config.scheduleTempAccess', {
-            url: '/scheduleTempAccess',
-            templateUrl: 'Config/html/ScheduleTemporaryAccess.html',
-            controller:'tempAccessController'    
-        })
+
 
         .state('Config.viewRole', {
             url: '/SearchRole',
@@ -583,6 +579,8 @@ myApp.run(function($rootScope,$http) {
 myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService) {
   /** create $scope.template **/
 
+
+
  $scope.logout=function(){
 
 
@@ -615,10 +613,25 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
           controller: 'dashboardController',
           templateUrl: 'FollowupForm.html',
           scope:$scope,
-          controller:  function ($scope, $uibModalInstance,followupDetails,$filter) {
+          controller:  function ($scope,$rootScope, $uibModalInstance,followupDetails,$filter) {
 
+              $scope.followupFormDate = function(){
+                  $scope.followup.opened = true;
+              };
+
+              $scope.followup = {
+                  opened:false
+              };
               AppService.getUsers($scope,$http);
               $scope.followupDetails = followupDetails;
+              $scope.reFollowupDate = function(){
+                  $scope.reFollowup.opened = true;
+              };
+
+              $scope.reFollowup = {
+                  opened:false
+              };
+
               console.log("in uibModal "+JSON.stringify($scope.payment));
               $scope.Save = function () {
                   var conductDate = $filter('date')($scope.payment.startDate, 'yyyy/MM/dd', '+0530');
@@ -665,26 +678,54 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                                       $http.post('Process/php/followupFacade.php',null,config)
                                           .success(function (data, status, headers) {
                                               if(data.status=="Successful"){
-                                                  alert("Operation Successful");
+                                                  $rootScope.warningMessage = "Operation Successful";
+                                                  $('#warning').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#warning').css('display','none');
+                                                  },1000);
+                                                  console.log("Pahila if cha success if status is successful");
+                                                  //alert("Operation Successful");
                                               }else{
-                                                  alert(data.message);
+                                                  $rootScope.errorMessage = data.message;
+                                                  $('#error').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#error').css('display','none');
+                                                  },1000);
+                                                  console.log("Pahila if cha error if status is not successful");
+                                                  //alert(data.message);
                                               }
 
                                           })
                                           .error(function (data, status) {
-
-                                              alert($scope.ResponseDetails );
+                                              $rootScope.errorMessage = $scope.ResponseDetails ;
+                                              $('#error').css('display','block');
+                                              setTimeout(function(){
+                                                  $('#error').css('display','none');
+                                              },1000);
+                                              console.log("Pahila if chya atla  error");
+                                              //alert($scope.ResponseDetails );
                                           });
                                   }
 
                               }else{
-                                  alert(data.message);
+                                  $rootScope.errorMessage = data.message;
+                                  $('#error').css('display','block');
+                                  setTimeout(function(){
+                                      $('#error').css('display','none');
+                                  },1000);
+                                  console.log("Pahila else if status is not successful");
+                                  //alert(data.message);
                               }
 
                           })
                           .error(function (data, status) {
-
-                              alert(data );
+                              $rootScope.errorMessage = data;
+                              $('#error').css('display','block');
+                              setTimeout(function(){
+                                  $('#error').css('display','none');
+                              },1000);
+                              console.log("Pahila if cha error");
+                              //alert(data );
                           });
 
 
@@ -725,25 +766,53 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                                       $http.post('Process/php/followupFacade.php', null, config)
                                           .success(function (data, status, headers) {
                                               if (data.status == "Successful") {
-                                                  alert("Operation Successful");
+                                                  $rootScope.warningMessage = "Operation Successful";
+                                                  $('#warning').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#warning').css('display','none');
+                                                  },1000);
+                                                  console.log("payment followup schedule cha pahila success chya atla if");
+                                                  //alert("Operation Successful");
                                               } else {
-                                                  alert(data.message);
+                                                  $rootScope.errrorMessage = data.message;
+                                                  $('#error').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#error').css('display','none');
+                                                  },1000);
+                                                  console.log("payment followup schedule cha pahila success chya atla else");
+                                                  //alert(data.message);
                                               }
 
                                           })
                                           .error(function (data, status) {
-
-                                              alert($scope.ResponseDetails);
+                                              $rootScope.errrorMessage = $scope.ResponseDetails;
+                                              $('#error').css('display','block');
+                                              setTimeout(function(){
+                                                  $('#error').css('display','none');
+                                              },1000);
+                                              console.log("payment followup schedule cha pahila error");
+                                              //alert($scope.ResponseDetails);
                                           });
                                   }
                               }else{
-                                  alert(data.message);
+                                  $rootScope.errorMessage = data.message;
+                                  $('#error').css('display','block');
+                                  setTimeout(function(){
+                                      $('#error').css('display','none');
+                                  },1000);
+                                  console.log("payment followup schedule cha pahila success chya atla if");
+                                  //alert(data.message);
                               }
 
                           })
                           .error(function (data, status) {
-
-                              alert(data );
+                              $rootScope.errorMessage = data;
+                              $('#error').css('display','block');
+                              setTimeout(function(){
+                                  $('#error').css('display','none');
+                              },1000);
+                              console.log("payment followup schedule cha pahila error");
+                              //alert(data );
                           });
 
 
@@ -786,25 +855,53 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                                       $http.post('Process/php/followupFacade.php', null, config)
                                           .success(function (data, status, headers) {
                                               if (data.status == "Successful") {
-                                                  alert("Operation Successful");
+                                                  $rootScope.warningMessage = "Operation Successful";
+                                                  $('#warning').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#warning').css('display','none');
+                                                  },1000);
+                                                  console.log("Sitetracking cha pahila success chya atla if");
+                                                  //alert("Operation Successful");
                                               } else {
-                                                  alert(data.message);
+                                                  $rootScope.errorMessage = data.message;
+                                                  $('#error').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#error').css('display','none');
+                                                  },1000);
+                                                  console.log("Sitetracking cha pahila success chya atla else");
+                                                  //alert(data.message);
                                               }
 
                                           })
                                           .error(function (data, status) {
-
-                                              alert($scope.ResponseDetails);
+                                              $rootScope.errorMessage = $scope.ResponseDetails;
+                                              $('#error').css('display','block');
+                                              setTimeout(function(){
+                                                  $('#error').css('display','none');
+                                              },1000);
+                                              console.log("Sitetracking cha pahila error");
+                                              //alert($scope.ResponseDetails);
                                           });
                                   }
                               }else{
-                                  alert(data.message);
+                                  $rootScope.errorMessage = data.message;
+                                  $('#error').css('display','block');
+                                  setTimeout(function(){
+                                      $('#error').css('display','none');
+                                  },3000);
+                                  console.log("Sitetracking cha pahila success chya atla last else");
+                                  //alert(data.message);
                               }
 
                           })
                           .error(function (data, status) {
-
-                              alert(data);
+                              $rootScope.errorMessage = data;
+                              $('#error').css('display','block');
+                              setTimeout(function(){
+                                  $('#error').css('display','none');
+                              },3000);
+                              console.log("Sitetracking cha pahila error");
+                              //alert(data);
                           });
 
 
@@ -843,29 +940,61 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                                       $http.post('Process/php/followupFacade.php', null, config)
                                           .success(function (data, status, headers) {
                                               if (data.status == "Successful") {
-                                                  alert("Operation Successful");
+                                                  $rootScope.warningMessage = "Operation Successful";
+                                                  $('#warning').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#warning').css('display','none');
+                                                  },3000);
+                                                  console.log("Applicator Followup schedule cha pahila success chya atla if");
+                                                  //alert("Operation Successful");
                                               } else {
-                                                  alert(data.message);
+                                                  $rootScope.errorMessage = data.message;
+                                                  $('#error').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#error').css('display','none');
+                                                  },3000);
+                                                  console.log("Applicator Followup schedule cha pahila success chya atla else");
+                                                  //alert(data.message);
                                               }
 
                                           })
                                           .error(function (data, status) {
-
-                                              alert($scope.ResponseDetails);
+                                              $rootScope.errorMessage = $scope.ResponseDetails;
+                                              $('#error').css('display','block');
+                                              setTimeout(function(){
+                                                  $('#error').css('display','none');
+                                              },3000);
+                                              console.log("Applicator Followup schedule cha pahila error");
+                                              //alert($scope.ResponseDetails);
                                           });
                                   }
                               }else{
-                                  alert(data.messsage);
+                                  $rootScope.errorMessage = data.message;
+                                  $('#error').css('display','block');
+                                  setTimeout(function(){
+                                      $('#error').css('display','none');
+                                  },3000);
+                                  console.log("Applicator Followup schedule cha else");
+                                  //alert(data.messsage);
                               }
 
                           })
                           .error(function (data, status) {
-                              alert(data);
+                              $rootScope.errorMessage = data;
+                              $('#error').css('display','block');
+                              setTimeout(function(){
+                                  $('#error').css('display','none');
+                              },3000);
+                              console.log("Applicator Followup schedule cha pahila error chya atla if");
+                              //alert(data);
                           });
 
 
                   }
-                  $uibModalInstance.close();
+                  setTimeout(function(){
+                      $uibModalInstance.close();
+                  },3000);
+
               };
 
               $scope.Cancel = function () {
@@ -977,7 +1106,8 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     var task = [];
 
     var data = {
-        operation: "getAllTaskForUser"
+        operation: "getAllTaskForUser",
+        includeCompleted:false
     };
     var config = {
         params: {
@@ -1066,7 +1196,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             if(data.status == "Successful") {
                 $scope.paymentFollowup = [];
                 var b = [];
-
+                console.log("Success");
                 for(var i = 0; i<data.message.length ; i++){
                     b.push({
                         followupId: data.message[i].FollowupId,
@@ -1107,6 +1237,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             console.log(data);
 
             if(data.status == "Successful") {
+                console.log("Success");
                 $scope.quotationFollowup = [];
                 var b = [];
 
@@ -1146,9 +1277,11 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
 
     $http.post('Process/php/followupFacade.php',null,config)
         .success(function (data, status, headers) {
+
             console.log(data);
 
             if(data.status == "Successful") {
+                console.log("Success");
                 $scope.sitetrackingFollowup = [];
                 var b = [];
 
@@ -1191,6 +1324,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             console.log(data);
 
             if(data.status == "Successful") {
+                console.log("Success");
                 $scope.ApplicatorPaymentFollowup = [];
                 var b = [];
 

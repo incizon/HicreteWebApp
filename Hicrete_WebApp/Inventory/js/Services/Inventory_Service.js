@@ -199,7 +199,8 @@ myApp.service('addSupplierService', function () {
                     }, 3000);
                     console.log( $rootScope.warningMessage);
                     //alert(data.msg);
-                    window.location="dashboard.php#/Inventory/addSupplier";
+                   // window.location="dashboard.php#/Inventory/addSupplier";
+                    console.log("clearing ");
                     $scope.submitted=false;
                     $scope.clearData(supplier,'clear');
 
@@ -257,6 +258,7 @@ myApp.service('addMaterialTypeService', function () {
                  }
 
                 console.log(data);
+                $scope.submitted = false;
                 $scope.clear();
             })
             .error(function (data, status, headers, config) {
@@ -463,8 +465,12 @@ myApp.service('ProductionBatchService', function () {
                         $('#warning').css("display","block");
                         setTimeout(function() {
                             $('#warning').css("display","none");
-                            window.location="dashboard.php#/Inventory";
+                            //window.location="dashboard.php#/Inventory";
                         }, 3000);
+                        $scope.step=1;
+                        $submitted=false;
+
+
                     if(prodBatchInfo.option=='complete')
                     {
                         $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
@@ -491,7 +497,7 @@ myApp.service('ProductionBatchService', function () {
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $('#error').css("display","none");
-                        window.location="dashboard.php#/Inventory";
+                        //window.location="dashboard.php#/Inventory";
                     }, 3000);
                     $scope.submitted=false;
                     //window.location="dashboard.php#/Inventory";

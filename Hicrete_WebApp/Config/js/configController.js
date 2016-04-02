@@ -31,98 +31,158 @@ configService.getAllAccessPermission($http,$scope);
                 roleName:$scope.roleName,
                 accessPermissions: $scope.accessList
             };
-            var modalInstance = $uibModal.open({
-                animation: $scope.animationsEnabled,
-                templateUrl: 'utils/ConfirmDialog.html',
-                controller:  function ($scope,$rootScope,$uibModalInstance,roleData) {
-                    $scope.save = function () {
-                        console.log("Ok clicked");
-                        console.log(roleData);
-                        $scope.createRole($scope, $http,roleData);
-                        $uibModalInstance.close();
-                    };
-                    $scope.cancel = function () {
-                        $uibModalInstance.dismiss('cancel');
-                    };
-                    $scope.createRole = function ($scope, $http, roleData) {
-                        var config = {
-                            params: {
-                                data: roleData
+            var config = {
+                params: {
+                    data: data
 
-                            }
-                        };
-
-                        $http.post("Config/php/configFacade.php",null, config)
-                            .success(function (data)
-                            {
-                                $scope.roleDisabled=false;
-                                $scope.showAccessError=true;
-                                $scope.roleSubmitted=true;
-                                if(data.status=="Successful"){
-                                    $scope.loading=false;
-                                    $('#loader').css("display","none");
-                                    $rootScope.warningMessage="Role added Successfully..";
-                                    console.log($scope.warningMessage);
-                                    $('#warning').css("display","block");
-
-                                    setTimeout(function() {
-                                        $scope.$apply(function() {
-                                            $('#warning').css("display","none");
-                                        });
-                                    }, 3000);
-                                }else if(data.status=="Unsuccessful"){
-                                    $scope.loading=false;
-                                    $('#loader').css("display","none");
-                                    $rootScope.errorMessage="Role not added..";
-                                    $('#error').css("display","block");
-                                    setTimeout(function() {
-                                        $scope.$apply(function() {
-                                            $('#error').css("display","none");
-                                        });
-                                    }, 3000);
-                                }else{
-                                    $scope.roleDisabled=false;
-                                    $scope.showAccessError=true;
-                                    $scope.roleSubmitted=true;
-                                    $scope.loading=false;
-                                    $('#loader').css("display","none");
-                                    $rootScope.errorMessage="Role not added..";
-                                    $('#error').css("display","block");
-                                    setTimeout(function() {
-                                        $scope.$apply(function() {
-                                            $('#error').css("display","none");
-                                        });
-                                    }, 3000);
-                                }
-                                window.location.reload(true);
-
-                            })
-                            .error(function (data, status, headers, config)
-                            {
-                                $scope.loading=false;
-                                $('#loader').css("display","none");
-                                $rootScope.errorMessage="Role not added..";
-                                $('#error').css("display","block");
-                            });
-
-                    };
-                },
-                resolve: {
-                    roleData: function () {
-                        return data;
-                    }
                 }
-
-            });
-
-            modalInstance.result.then(function () {
-                console.log("In result");
-            }, function () {
-                $log.info('Modal dismissed at: ' + new Date());
-            });
-            $scope.toggleAnimation = function () {
-                $scope.animationsEnabled = !$scope.animationsEnabled;
             };
+
+            $http.post("Config/php/configFacade.php",null, config)
+                .success(function (data)
+                {
+                    $scope.roleDisabled=false;
+                    $scope.showAccessError=true;
+                    $scope.roleSubmitted=true;
+                    if(data.status=="Successful"){
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $rootScope.warningMessage="Role added Successfully..";
+                        console.log($scope.warningMessage);
+                        $('#warning').css("display","block");
+
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $('#warning').css("display","none");
+                            });
+                        }, 3000);
+                    }else if(data.status=="Unsuccessful"){
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $rootScope.errorMessage="Role not added..";
+                        $('#error').css("display","block");
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $('#error').css("display","none");
+                            });
+                        }, 3000);
+                    }else{
+                        $scope.roleDisabled=false;
+                        $scope.showAccessError=true;
+                        $scope.roleSubmitted=true;
+                        $scope.loading=false;
+                        $('#loader').css("display","none");
+                        $rootScope.errorMessage="Role not added..";
+                        $('#error').css("display","block");
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $('#error').css("display","none");
+                            });
+                        }, 3000);
+                    }
+                    window.location.reload(true);
+
+                })
+                .error(function (data, status, headers, config)
+                {
+                    $scope.loading=false;
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage="Role not added..";
+                    $('#error').css("display","block");
+                });
+
+            //var modalInstance = $uibModal.open({
+            //    animation: $scope.animationsEnabled,
+            //    templateUrl: 'utils/ConfirmDialog.html',
+            //    controller:  function ($scope,$rootScope,$uibModalInstance,roleData) {
+            //        $scope.save = function () {
+            //            console.log("Ok clicked");
+            //            console.log(roleData);
+            //            $scope.createRole($scope, $http,roleData);
+            //            $uibModalInstance.close();
+            //        };
+            //        $scope.cancel = function () {
+            //            $uibModalInstance.dismiss('cancel');
+            //        };
+            //        $scope.createRole = function ($scope, $http, roleData) {
+            //            var config = {
+            //                params: {
+            //                    data: roleData
+            //
+            //                }
+            //            };
+            //
+            //            $http.post("Config/php/configFacade.php",null, config)
+            //                .success(function (data)
+            //                {
+            //                    $scope.roleDisabled=false;
+            //                    $scope.showAccessError=true;
+            //                    $scope.roleSubmitted=true;
+            //                    if(data.status=="Successful"){
+            //                        $scope.loading=false;
+            //                        $('#loader').css("display","none");
+            //                        $rootScope.warningMessage="Role added Successfully..";
+            //                        console.log($scope.warningMessage);
+            //                        $('#warning').css("display","block");
+            //
+            //                        setTimeout(function() {
+            //                            $scope.$apply(function() {
+            //                                $('#warning').css("display","none");
+            //                            });
+            //                        }, 3000);
+            //                    }else if(data.status=="Unsuccessful"){
+            //                        $scope.loading=false;
+            //                        $('#loader').css("display","none");
+            //                        $rootScope.errorMessage="Role not added..";
+            //                        $('#error').css("display","block");
+            //                        setTimeout(function() {
+            //                            $scope.$apply(function() {
+            //                                $('#error').css("display","none");
+            //                            });
+            //                        }, 3000);
+            //                    }else{
+            //                        $scope.roleDisabled=false;
+            //                        $scope.showAccessError=true;
+            //                        $scope.roleSubmitted=true;
+            //                        $scope.loading=false;
+            //                        $('#loader').css("display","none");
+            //                        $rootScope.errorMessage="Role not added..";
+            //                        $('#error').css("display","block");
+            //                        setTimeout(function() {
+            //                            $scope.$apply(function() {
+            //                                $('#error').css("display","none");
+            //                            });
+            //                        }, 3000);
+            //                    }
+            //                    window.location.reload(true);
+            //
+            //                })
+            //                .error(function (data, status, headers, config)
+            //                {
+            //                    $scope.loading=false;
+            //                    $('#loader').css("display","none");
+            //                    $rootScope.errorMessage="Role not added..";
+            //                    $('#error').css("display","block");
+            //                });
+            //
+            //        };
+            //    },
+            //    resolve: {
+            //        roleData: function () {
+            //            return data;
+            //        }
+            //    }
+            //
+            //});
+
+            //modalInstance.result.then(function () {
+            //    console.log("In result");
+            //}, function () {
+            //    $log.info('Modal dismissed at: ' + new Date());
+            //});
+            //$scope.toggleAnimation = function () {
+            //    $scope.animationsEnabled = !$scope.animationsEnabled;
+            //};
 
         }
 
@@ -253,7 +313,7 @@ userType:""
              console.log(data.status);
              console.log(data.message);
              if(data.status=="Successful"){
-                alert("User added successfully. Password is :"+data.message);
+                //alert("User added successfully. Password is :"+data.message);
                  setTimeout(function(){
                      $scope.loading=false;
                      $('#loader').css("display","none");
@@ -321,7 +381,7 @@ userType:""
                      {
                      
                        if(data.status!="Successful"){
-                        //  alert(data.message);
+                          alert(data.message);
                        }else{
                            $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -330,7 +390,7 @@ userType:""
                      })
                      .error(function (data, status, headers, config)
                      {
-                      // alert("Error Occured");
+                       alert("Error Occured");
                      });
             }
 
@@ -413,7 +473,7 @@ myApp.controller('chngPassController',function($scope,$rootScope,$http,configSer
 
                 })
                 .error(function (data, status, headers, config) {
-               //     alert("Error Occurred:"+data);
+                    alert("Error Occurred:"+data);
 
 
                 });
@@ -563,11 +623,11 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 if(data.status=="Successful"){
                     var index = $rootScope.Users.indexOf(user);
                     $rootScope.Users.splice(index, 1);
-                   // alert("Deleted successfully");
+                    alert("Deleted successfully");
                 }
                 else
                 {
-                 //  alert(data.message);
+                   alert(data.message);
 
 
                 }
@@ -575,7 +635,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
             })
             .error(function (data, status, headers, config)
             {
-               // alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
 
 
@@ -622,7 +682,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                   // alert("Error Occured"+data.message);
+                    alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -631,7 +691,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             })
             .error(function (data, status, headers, config)
             {
-              //  alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
     }
     $scope.loadAccessPermission();
@@ -640,7 +700,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
     $scope.modifyUser=function(){
 
         if($scope.modifyUserForm.$pristine){
-           // alert("Fields are not modified");
+            alert("Fields are not modified");
             return;
         }
 
@@ -1173,81 +1233,6 @@ var clearWarehouseForm=function(){
 
 });        
 
-myApp.controller('tempAccessController',function($scope,$http,configService){
-
-$scope.requestId="56929ff47e6183070";
-$scope.tempSubmitted=false;
-$scope.accessRequested=[];
-$scope.tempAccess={};
-$scope.remark="";
-$scope.buttonDisabled=true;	
-        var data={
-                      operation :"getTempAccessRequestDetails",
-                      requestId : $scope.requestId 
-                };        
-
-                var config = {
-                           params: {
-                                 data: data
-                               }
-                };
-
-                $http.post("Config/php/configFacade.php",null, config)
-                     .success(function (data)
-                     {
-                     
-                       if(data.status!="Successful"){
-                           alert(data.message);
-                       }else{
-                            
-                            $scope.tempAccess=data.message.requestDetails;
-                            configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
-                            $scope.buttonDisabled=false;  
-                       }
-
-                     })
-                     .error(function (data, status, headers, config)
-                     {
-                         alert("Error Occured"+data);
-                     });
-
-
- 	$scope.AddAccessRequestAction=function(actionStatus){
-      $scope.buttonDisabled=true;
-        $scope.tempSubmitted=false;
-   		 var data={
-                      operation :"TempAccessRequestAction",
-                      requestId : $scope.requestId,
-                      remark:$scope.remark,
-                      status:actionStatus,
-                      
-
-                };        
-
-                var config = {
-                           params: {
-                                 data: data
-                               }
-                };
-
-                $http.post("Config/php/configFacade.php",null, config)
-                     .success(function (data)
-                     {
-                     
-                       if(data.status!="Successful"){
-                           alert(data.message);
-                       }else{
-                          alert("Request Added Successfully");
-                       }
-
-                     })
-                     .error(function (data, status, headers, config)
-                     {
-                         alert("Error Occured"+data);
-                     });
- 	          }
-
-});  
 
 myApp.controller('requestTempAccessController',function($scope,$http,configService){
 
@@ -1422,16 +1407,34 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             .success(function (data)
             {
 
+                $('#loader').css("display","none");
                 if(data.status!="Successful"){
 
                     console.log(data);
-                    alert(data.message);
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
-                    $rootScope.Companies[$scope.companyIndex]=$scope.selectedCompany;
-                    alert(data.message);
-                    window.location= "dashboard.php#/Config/SearchCompany";
+                    $scope.Companies[$scope.companyIndex]=$scope.selectedCompany;
+                    //alert(data.message);
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage=data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                            window.location= "dashboard.php#/Config/SearchCompany";
+                        });
+                    }, 3000);
+
 
 
 
@@ -1440,7 +1443,18 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+                $('#loader').css("display","block");
+                if(data.status != "Successfull") {
+                    $('#loader').css("display", "none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $('#error').css("display", "none");
+                        });
+                    }, 3000);
+                }
+                //alert("Error Occured"+data);
             });
 
     };
@@ -1609,6 +1623,7 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
                 data: data
             }
         };
+        $('#loader').css("display","block");
         //console.log($scope.selectedCompany);
         $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
@@ -1616,13 +1631,30 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    alert(data.message);
+                    $('#loader').css("display","none");
+                    $scope.errorMessage=data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert(data.message);
                     //doShowAlert("Failure",data.message);
                 }else{
                     console.log(data);
 
-                    alert(data.message);
-                    window.location= "dashboard.php#/Config/SearchWarehouse";
+                    //alert(data.message);
+                    $('#loader').css("display","none");
+                    $scope.warningMessage=data.message;
+                    $('#warning').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                            window.location= "dashboard.php#/Config/SearchWarehouse";
+                        });
+                    }, 3000);
+
 
 
                 }
@@ -1630,7 +1662,16 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+                //alert("Error Occured"+data);
+                $('#loader').css("display","none");
+                $scope.errorMessage="Error Occurred";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        $('#error').css("display","none");
+                    });
+                }, 3000);
+
             });
 
     }
@@ -1856,7 +1897,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
     $scope.getAccessApprovals=function(){
 
         var data = {
-            operation: "getAccessApprovals",
+            operation: "getAccessApprovals"
         };
 
         var config = {
@@ -1901,7 +1942,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                   // alert(data.message);
+                    alert(data.message);
                 }else{
 
                     $scope.tempAccess=data.message.requestDetails;
@@ -1912,7 +1953,7 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             })
             .error(function (data, status, headers, config)
             {
-              // alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
 
     }
@@ -1937,15 +1978,22 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
             {
 
                 if(data.status!="Successful"){
-                 //   alert(data.message);
+                    alert(data.message);
                 }else{
-                  //  alert("Request Added Successfully");
+
+                    for(var i=0;i<$scope.ApprovalList.length;i++){
+                        if($scope.ApprovalList[i].requestId==$scope.requestId){
+                            $scope.ApprovalList.splice(i,1);
+                            break;
+                        }
+                    }
+                    alert("Request Added Successfully");
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-               // alert("Error Occured"+data);
+                alert("Error Occured"+data);
             });
     }
 

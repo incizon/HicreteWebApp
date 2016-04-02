@@ -15,11 +15,11 @@ myApp.service('ApplicatorService',function(){
 
 						$scope.loading=false;
 						$('#loader').css("display","none");
-
+						console.log(data.msg);
 						if(data.msg!="") {
 
 							$rootScope.warningMessage = data.msg;
-
+							//console.log($scope.warningMessage);
 							$('#warning').css("display", "block");
 							setTimeout(function () {
 								$scope.$apply(function () {
@@ -29,7 +29,7 @@ myApp.service('ApplicatorService',function(){
                                     }
 								});
 							}, 1000);
-
+							//}
 
 							}
 
@@ -44,9 +44,9 @@ myApp.service('ApplicatorService',function(){
 									});
 								}, 1000);
 							}
-							//setTimeout(function(){
-							// window.location.reload(true);
-							// },1000);
+							/*setTimeout(function(){
+							 window.location.reload(true);
+							 },6000);*/
 
 						})
 						.error(function (data, status, headers, config){

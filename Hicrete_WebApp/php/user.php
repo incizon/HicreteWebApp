@@ -82,11 +82,15 @@ class User
 			}
 			$this->isSuper=$result[0]['isSuperUser'];
 			if($this->isSuper){
+
+				//echo "is Super User ".$this->isSuper;
 				return $this->loadSuperUserDesignation($userId);
 			}else{
+				//echo "No Super User";
 				$stmt = $conn->prepare("SELECT `designation`,`roleId`,`userType` FROM `userroleinfo` WHERE `userId`=:userId");
 				$stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
 				$stmt->execute();
+				$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
 				$this->designation=$result[0]['designation'];
 				$userType=$result[0]['userType'];
 				$roleId=$result[0]['roleId'];

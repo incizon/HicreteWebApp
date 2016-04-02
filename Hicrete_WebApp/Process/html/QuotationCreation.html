@@ -34,7 +34,6 @@
                               <div class="col-md-8">
                                     <select class="form-control select" name="project" ng-model="QuotationDetails.projectId"  ng-change="getCustomerForProject()" required>
                                     <option value="" disabled selected>Choose Project..</option>
-                                      <option value="Select Project" disabled selected>Select Project</option>
                                       <option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
                                   </select>
                                   <div class="help-block"
@@ -254,7 +253,7 @@
                                 </div>
                             </td>
                             <td><input type="text" name="Unit" placeholder="Unit"
-                                       class="form-control" ng-model="quotation.quotationUnit" pattern="[a-zA-Z]+"/>
+                                       class="form-control" ng-model="quotation.quotationUnit"  />
                                 <div class="help-block"
                                      ng-messages="QuotationForm.Unit.$error"
                                      ng-show="formSubmitted">

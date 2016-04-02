@@ -1,11 +1,11 @@
 <?php
 
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 require_once '../../php/appUtil.php';
 if (!isset($_SESSION['token'])) {
     session_start();
 }else{
-    header("Location: index.html");
+    header("Location: ../../index.html");
     exit();
 }
 $userId=$_SESSION['token'];
@@ -13,7 +13,7 @@ $hasRead=appUtil::doesUserHasAccess("Applicator",$userId,"Read");
 $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
 
 if(!$hasRead && !$hasWrite){
-    header("Location: Dashboard.php");
+    header("Location: ../../Dashboard.php");
     exit();
 }
 ?>
@@ -124,8 +124,8 @@ if(!$hasRead && !$hasWrite){
                 <ul>";
                 if($hasWrite==1)
                     echo "<li><a ui-sref=\"Applicator.addPayment\">Add Payment</a></li>";
-                if($hasRead==1)
-                    echo "<li><a ui-sref=\"Applicator.paymentHistory\">Show Payment History</a></li>";
+//                if($hasRead==1)
+//                    echo "<li><a ui-sref=\"Applicator.paymentHistory\">Show Payment History</a></li>";
 
             echo "</ul>
             </li>";

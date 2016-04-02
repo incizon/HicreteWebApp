@@ -23,7 +23,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="userName" pattern="[a-zA-Z0-9]+" ng-model="userInfo.firstName" type="text" class="form-control" placeholder="Enter user Name"  required minlength=2/>
+                                <input name="userName"   ng-model="userInfo.firstName" type="text" class="form-control" placeholder="Enter user Name"  required minlength=2/>
                             </div>
                             <div class="help-block" ng-messages="userForm.userName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Your name is too short.</p>
@@ -35,7 +35,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input name="lastName" pattern="[a-zA-Z0-9]+" ng-model="userInfo.lastName" type="text" class="form-control" placeholder="Enter user Name"  required minlength=2/>
+                                <input name="lastName"   ng-model="userInfo.lastName" type="text" class="form-control" placeholder="Enter user Name"  required minlength=2/>
                             </div>
                             <div class="help-block" ng-messages="userForm.lastName.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Your name is too short.</p>
@@ -80,7 +80,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group ">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="city" ng-model="userInfo.city" placeholder="Enter user City" class="form-control" required pattern="[a-zA-Z]+" minlength=2/>
+                                <input type="text" name="city" ng-model="userInfo.city" placeholder="Enter user City" class="form-control" required   minlength=2/>
                             </div>
                             <div class="help-block" ng-messages="userForm.city.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">City Cannot be blank</p>
@@ -93,7 +93,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="userInfo.state" name="state" type="text" placeholder="Enter user State" class="form-control" required minlength=2 pattern="[a-zA-Z]+"/>
+                                <input ng-model="userInfo.state" name="state" type="text" placeholder="Enter user State" class="form-control" required minlength=2  />
                             </div>
                             <div class="help-block" ng-messages="userForm.state.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">State Cannot be blank</p>
@@ -107,7 +107,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input ng-model="userInfo.country" name="country" placeholder="Enter user Country" type="text" class="form-control" minlength=2 required pattern="[a-zA-Z]+"/>
+                                <input ng-model="userInfo.country" name="country" placeholder="Enter user Country" type="text" class="form-control" minlength=2 required  />
                             </div>
                             <div class="help-block" ng-messages="userForm.country.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Country Cannot be blank</p>

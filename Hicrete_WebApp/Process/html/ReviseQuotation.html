@@ -32,12 +32,16 @@
                                       <option value="Project5">Project5</option>
                                   </select> -->
 
-                                    <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-options="project.name for project in projects" ng-change="getProjeId()">
+                                    <!-- <select class="form-control select" name="project" ng-model="QuotationDetails.projectName" ng-options="project.name for project in projects" ng-change="getProjeId()">
                                     <option value="" disabled selected>Choose Project..</option>
                                       <option value="Select Project" disabled selected>Select Project</option>
                                       <option value="project.id">{{project.name}}</option>
-                                  </select>
+                                  </select> -->
 
+
+                                  <div class="col-md-8">
+                                    <label class="control-label">{{Quotation.ProjectName}}</label>
+                                </div>
                               </div>
                           </div>
 
@@ -60,7 +64,7 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="date" class="form-control" name="QuotationDate" ng-model="QuotationDetails.quotationDate"/>
+                                      <input type="text" class="form-control" name="QuotationDate" ng-model="Quotation.DateOfQuotation"/>
                                   </div>
 
                               </div>
@@ -71,7 +75,7 @@
                               </div>
                               <div class="col-md-8">
                                     <textarea class="form-control" name="subject"
-                                              rows="2" ng-model="QuotationDetails.quotationSubject">
+                                              rows="2" ng-model="Quotation.Subject">
                                     </textarea>
                               </div>
                           </div>
@@ -85,13 +89,10 @@
                                   <label class="control-label">Company Name :</label>
                               </div>
                               <div class="col-md-8">
-                                  <select class="form-control select" name="company" ng-options = "company.company_name for company in Companies" ng-model="QuotationDetails.companyName">
-                                      <option value="" disabled selected>Choose Company..</option>
-                                      <option  value="company.company_id" >{{company.company_name}}</option>
-                                     <!--  <option value="Project2">Company2</option>
-                                      <option value="Project3">Company3</option> -->
-
-                                  </select>
+                                  <div class="form-control select" name="company" ng-repeat = "company in Companies" ng-model="QuotationDetails.companyName">
+                                      <!-- <option value="" disabled >Choose Company..</option> -->
+                                      <label  value="company.CompanyId">{{company.companyName}}</label>
+                                  </div>
 
                                   <!-- <select class="form-control select" name="company" ng-model="QuotationDetails.companyName" ng-options="b.name ++ b.id for b in cNames" ng-change="changevalue(cName)">
                                     <option value="" disabled selected>Choose Company..</option>
@@ -101,17 +102,17 @@
                               </div>
                           </div>
                           <div class="form-group">
-                              <div class="col-md-4">
-                                  <label class="control-label">Reference No :</label>
-                              </div>
-                              <div class="col-md-8">
-                                  <div class="input-group">
-                                      <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="text" class="form-control" name="ReferenceNo" ng-model="QuotationDetails.referenceNo"/>
-                                  </div>
+                            <div class="col-md-4">
+                                <label class="control-label">Reference No :</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="ReferenceNo" ng-model="Quotation.RefNo"/>
+                                </div>
 
-                              </div>
-                          </div>
+                            </div>
+                        </div>
                           <div class="form-group">
                               <div class="col-md-4">
                                   <label class="control-label">Attach Quotation :</label>
@@ -119,7 +120,7 @@
                               <div class="col-md-8">
                                   <div class="input-group">
                                       <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                      <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
+                                      <input type="file" class="form-control" name="QuotationBlob" file-model="myFile" ng-model="Quotation.RefNo" />
                                       <!-- <button ng-click = "uploadQuotation()">upload me</button> -->
                                   </div>
 
@@ -197,7 +198,7 @@
                             <th width=2%>Remove</th>
                         </tr>
                         </thead>
-                        <tr ng-repeat="quotation in QuotationDetails.quotationItemDetails">
+                        <tr ng-repeat="quotation in QuotationDetails">
                             <td>{{$index+1}}</td>
                             <td>
                                 <input type="text" name="Title" placeholder="Title"
@@ -209,16 +210,16 @@
                             </td>
                             <td>
                                 <input type="text" name="Quantity" placeholder="Quantity"
-                                       class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)"/>
+                                       class="form-control" ng-model="quotation.quotationQuantity" />
                             </td>
                             <td><input type="text" name="Unit" placeholder="Unit"
                                        class="form-control" ng-model="quotation.quotationUnit"/>
                             </td>
                             <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.amount)"/>
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index);calculateTotal(quotation.quotationQuantity * quotation.quotationUnitRate)"/>
                             </td>
-                            <td>
-                                {{quotation.amount}}
+                            <td ng-model="quotation.amount">
+                                {{quotation.quotationQuantity * quotation.quotationUnitRate}}
                             </td>
                             <td>
                                 <input type="checkbox" name="addTax" ng-model="quotation.isTaxAplicable" ng-click="calculateTaxableAmount($index)"/>
@@ -238,7 +239,7 @@
                             <label class="control-label">Total Amount :</label>
                         </div>
                         <div class="col-md-8" ng-model="totalAmnt">
-                                {{totalAmnt}}
+                                {{+getTotalAmount() + +totalAmnt}}
                         </div>
                     </div>
                 </div><br>
@@ -337,7 +338,7 @@
                             <label class="control-label">Total Tax :</label>
                         </div>
                         <div class="col-md-8" ng-model = "TaxAmnt">
-                            {{TaxAmnt}}
+                            {{getTotalTaxAmount()}}
                         </div>
                     </div>
                 </div>
@@ -348,7 +349,7 @@
                             <label class="control-label"><strong>Total Amount :</strong></label>
                         </div>
                         <div class="col-md-8">
-                            {{totalAmnt + TaxAmnt}}
+                            {{+totalAmnt + +getTotalTaxAmount() + +getTotalAmount()}}
                         </div>
                     </div>
                 </div>
@@ -357,7 +358,7 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right" ng-click="ModifyQuotation()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
             
             <button class="btn  btn-default ">Clear Form</button>

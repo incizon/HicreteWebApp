@@ -231,28 +231,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 
 
 
-    /**********************************************************************************
-     *Setters to set true/false for tables to modify
-     **********************************************************************************/
-    $scope.setMasterTable = function () {
-        isProductMasterTable = true;
-        console.log("IN ng CHANGE");
-    }
-    $scope.setProductDetailsTable = function () {
-        isPrductDetailsTable = true;
-        console.log("IN ng CHANGE");
-    }
-    $scope.setProductPackagingTable = function () {
-        isProductPkgingTable = true;
-        console.log("IN ng CHANGE");
-    }
-    $scope.setProductMaterialTable = function () {
-        isMaterialTable = true;
-        console.log("IN ng CHANGE");
-    }
-    /**********************************************************************************
-     *End of Setters
-     **********************************************************************************/
 
 
     /***************************************************************************
@@ -313,6 +291,45 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
     $scope.submitted = false;
     //$scope.errorMessage="";
     //$scope.warningMessage="";
+
+    /***********************************************
+     *Start of Clear Fields Function
+     ************************************************/
+    $scope.clearFields = function (InwardData) {
+
+        console.log("clearing");
+        $scope.InwardData.inwardNumber = "";
+        $scope.InwardData.material = "";
+        $scope.InwardData.packageUnit = "";
+        $scope.InwardData.companyName = "";
+        $scope.InwardData.suppplierName = "";
+        $scope.InwardData.date = "";
+        $scope.InwardData.materialQuantity = "";
+        $scope.InwardData.warehouseName = "";
+        $scope.InwardData.suppervisor = "";
+
+        $scope.InwardData.transportMode = "";
+        $scope.InwardData.vehicleNumber = "";
+        $scope.InwardData.transportCost = "";
+        $scope.InwardData.transportRemark = "";
+        $scope.InwardData.transportAgency = "";
+        $scope.InwardData.driver = "";
+        $scope.InwardData.transportPayable = "";
+        $scope.InwardData.hasTransportDetails="";
+        $scope.InwardData.inwardMaterials.splice(0, $scope.InwardData.inwardMaterials.length);
+        $scope.InwardData.inwardMaterials.push({
+            material: "",
+            materialQuantity: "",
+            packageUnit: "",
+            suppplierName: "",
+            size:""
+        });
+    };
+
+    /*************************************************
+     *End of Clear Fields Function
+     **************************************************/
+
 
     $scope.getNoOfMaterials=function(){
         //console.log($scope.InwardData.inwardMaterials.length);
@@ -441,6 +458,40 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
             controller:  function ($scope,$rootScope,$uibModalInstance,inwardData) {
+
+                $scope.clearFields = function (InwardData) {
+
+                    console.log("clearing");
+                    InwardData.inwardNumber = "";
+                    InwardData.material = "";
+                    InwardData.packageUnit = "";
+                    InwardData.companyName = "";
+                    InwardData.suppplierName = "";
+                    InwardData.date = "";
+                    InwardData.materialQuantity = "";
+                    InwardData.warehouseName = "";
+                    InwardData.suppervisor = "";
+
+                    InwardData.transportMode = "";
+                    InwardData.vehicleNumber = "";
+                    InwardData.transportCost = "";
+                    InwardData.transportRemark = "";
+                    InwardData.transportAgency = "";
+                    InwardData.driver = "";
+                    InwardData.transportPayable = "";
+                    InwardData.hasTransportDetails="";
+                    InwardData.inwardMaterials.splice(0, InwardData.inwardMaterials.length);
+                    InwardData.inwardMaterials.push({
+                        material: "",
+                        materialQuantity: "",
+                        packageUnit: "",
+                        suppplierName: "",
+                        size:""
+                    });
+
+
+                };
+
                 $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(inwardData);
@@ -452,6 +503,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                 };
                 $scope.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
                     console.log("IN SERVICE OF INWARD=");
+                    console.log(inwardData);
                     $('#loader').css("display","block");
                     var data = {
                         inwardData: inwardData,
@@ -473,8 +525,11 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                                 $('#warning').css("display","block");
                                 setTimeout(function () {
                                     $('#warning').css("display","none");
-                                    window.location="dashboard.php#/Inventory";
+                                    //window.location="dashboard.php#/Inventory";
                                 }, 2000);
+                                $scope.clearFields(inwardData);
+                                $scope.submitted= false;
+                                $scope.step=1;
                             }else{
                                 $rootScope.errorMessage=data.error;
                                 $('#error').css("display","block");
@@ -553,11 +608,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
     /***************************************************************************
      * End of update inward entry function
      ****************************************************************************/
-//Get Material from DB
-        // inventoryService.getProductsForInwardandOutward($scope,$http);
 
-        //Available Products
-    //inventoryService.getProducts($scope, $http);
     inventoryService.getSavedProducts($scope);
     /**********************************************************************************
      *Setters to set true/false for tables to modify
@@ -579,33 +630,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
      **********************************************************************************/
 
 
-    /***********************************************
-     *Start of Clear Fields Function
-     ************************************************/
-    $scope.clearFields = function (InwardData) {
 
-        InwardData.inwardNumber = "";
-        InwardData.material = "";
-        InwardData.packageUnit = "";
-        InwardData.companyName = "";
-        InwardData.suppplierName = "";
-        InwardData.date = "";
-        InwardData.materialQuantity = "";
-        InwardData.warehouseName = "";
-        InwardData.suppervisor = "";
-
-        InwardData.transportMode = "";
-        InwardData.vehicleNumber = "";
-        InwardData.transportCost = "";
-        InwardData.transportRemark = "";
-        InwardData.transportAgency = "";
-        InwardData.driver = "";
-        InwardData.transportPayable = "";
-    };
-
-    /*************************************************
-     *End of Clear Fields Function
-     **************************************************/
 
 // inventoryService.getProducts($scope,$http);
 // Get Suppliers From DB
@@ -685,7 +710,6 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
         opened: false
     };
 
-
     //Get Warehouses
     inventoryService.getWarehouses($scope,$http);
     // Get Company
@@ -752,11 +776,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                 console.log("this is actual quantity"+$scope.availableTotalquantity);
                 $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
                 break;
-               // qty= $scope.unitofMeasure;
-                //console.log(qty);
             }
-            else
-                $scope.availableTotalquantity=0;
 
         }
 
@@ -831,6 +851,34 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
             controller:  function ($scope,$rootScope,$uibModalInstance,outwardData) {
+
+                $scope.clearFields = function (OutwardData) {
+                    OutwardData.OutwardNumber = "";
+                    OutwardData.material = "";
+                    OutwardData.packageUnit = "";
+                    OutwardData.companyName = "";
+                    OutwardData.date = "";
+                    OutwardData.materialQuantity = "";
+                    OutwardData.warehouseName = "";
+                    OutwardData.suppervisor = "";
+
+                    OutwardData.transportMode = "";
+                    OutwardData.vehicleNumber = "";
+                    OutwardData.transportCost = "";
+                    OutwardData.transportRemark = "";
+                    OutwardData.transportAgency = "";
+                    OutwardData.driver = "";
+                    OutwardData.transportPayable = "";
+                    OutwardData.hasTransportDetails="";
+                    OutwardData.outwardMaterials.splice(0, OutwardData.outwardMaterials.length);
+                    OutwardData.outwardMaterials.push({
+                        material: "",
+                        materialQuantity: "",
+                        packageUnit: "",
+                        suppplierName: "",
+                        size:""
+                    });
+                };
                 $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(outwardData);
@@ -864,8 +912,13 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                                 $('#warning').css("display","block");
                                 setTimeout(function () {
                                     $('#warning').css("display","none");
-                                    window.location="dashboard.php#/Inventory";
+                                    //window.location="dashboard.php#/Inventory";
                                 }, 3000);
+                                $scope.submitted = false;
+                                console.log($scope.submitted);
+                                $scope.clearFields(outwardData);
+                                $scope.submitted = false;
+                                $scope.step=1;
                                 //setTimeout(function(){
                                 //    window.location="dashboard.php#/Inventory";
                                 //},1000);
@@ -878,6 +931,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                                 }, 3000);
                             }
                             $scope.submitted = false;
+
 
                         })
                         .error(function (data, status, headers) {
@@ -968,7 +1022,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
      * STart of clear field controller
      *************************************************/
     $scope.clearFields = function (OutwardData) {
-        OutwardData.inwardNumber = "";
+        //console.log("clearing");
+        OutwardData.OutwardNumber = "";
         OutwardData.material = "";
         OutwardData.packageUnit = "";
         OutwardData.companyName = "";
@@ -984,6 +1039,15 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
         OutwardData.transportAgency = "";
         OutwardData.driver = "";
         OutwardData.transportPayable = "";
+        OutwardData.hasTransportDetails="";
+        OutwardData.outwardMaterials.splice(0, OutwardData.outwardMaterials.length);
+        OutwardData.outwardMaterials.push({
+            material: "",
+            materialQuantity: "",
+            packageUnit: "",
+            suppplierName: "",
+            size:""
+        });
     };
     /***********************************************
      * END of clear field controller
@@ -1291,7 +1355,17 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
     $scope.keyword="";
+    var isProductMasterTable = false;
+    var isMaterialTable = false;
+    var isPrductDetailsTable = false;
+    var isProductPkgingTable = false;
 
+    $http.get("Inventory/php/Material.php")
+        .success(function (data) {
+            console.log("IN MATERIAL");
+            $scope.materialNames = data;
+            console.log(data);
+        });
     $scope.paginate = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1337,7 +1411,109 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
     }
 
 
+    /**********************************************************************************
+     *Setters to set true/false for tables to modify
+     **********************************************************************************/
+    $scope.setMasterTable = function () {
+        isProductMasterTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductDetailsTable = function () {
+        isPrductDetailsTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductPackagingTable = function () {
+        isProductPkgingTable = true;
+        console.log("IN ng CHANGE");
+    }
+    $scope.setProductMaterialTable = function () {
+        isMaterialTable = true;
+        console.log("IN ng CHANGE");
+    }
+    /**********************************************************************************
+     *End of Setters
+     **********************************************************************************/
+    /**********************************************************************************
+     * Purpose- This function will Update the product details
+     * @param1- product (all product details)
+     * Return- Success or Failure
+     ***********************************************************************************/
+    $scope.updateProductInfo = function (product) {
+        console.log("Product in Update Info function");
+        //Set Extra attribute in object to identify operation to be performed as update
+        product.opertaion = "modify";
+        //Check which tables should get affected
+        product.isProductMasterTable = isProductMasterTable;
+        product.isProductDetailsTable = isPrductDetailsTable;
+        product.isProductPackagingTable = isProductPkgingTable;
+        product.isProductMaterialTable = isMaterialTable;
+        $scope.loading = "";
+        $scope.warningMessage = "";
+        $scope.errorMessage = "";
 
+        // Create json object
+        var config = {
+            params: {
+                product: product
+            }
+        };
+        $scope.loading = true;
+        $('#loader').css("display","block");
+        //call add product service
+        $http.post("Inventory/php/InventoryProduct.php", null, config)
+            .success(function (data) {
+                console.log("IN POST UPDATE OPERATION:");
+                console.log(data);
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+                if(data.msg!="") {
+                    //alert("Success", data.msg);
+                    $scope.warningMessage = data.msg;
+                    $('#warning').css("display", "block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.message!=""){
+                                $('#warning').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
+                else {
+                    //alert("Success", data.error);
+                    $scope.errorMessage = data.error;
+                    $('#error').css("display", "block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            if(data.message!=""){
+                                $('#error').css("display","none");
+                            }
+                        });
+                    }, 3000);
+                }
+
+                window.location.reload = true;
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+                //alert(data);
+                $scope.lodaing = false;
+                $('#loader').css("display","none");
+                $scope.errorMessage = data.error;
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $scope.$apply(function() {
+                        if(data.message!=""){
+                            $('#error').css("display","none");
+                        }
+                    });
+                }, 3000);
+            });
+
+    }
+    /**********************************************************************************
+     *End of Update product function
+     **********************************************************************************/
 
 
 });
@@ -1852,9 +2028,10 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
             $scope.submitted=false;
             console.log($scope.submitted);
-            setTimeout(function () {
+           /* setTimeout(function () {
                 window.location="dashboard.php#/Inventory/prodInit";
-            }, 1000);
+            }, 1000);*/
+
 
         }
         else if (page == "Search" || page == 'Complete') {
@@ -1882,6 +2059,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
     };
 
     $scope.clear = function (page) {
+        $scope.submitted=false;
+        console.log('inside clear'+$scope.submitted);
         if (page == 'Init') {
             $scope.prodBatchInfo.batchNo = "";
             $scope.prodBatchInfo.batchCodeName = "";

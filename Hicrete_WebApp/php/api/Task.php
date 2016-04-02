@@ -34,7 +34,7 @@ Class Task {
     }
 
 
-     public static function getAllTaskForUser(){
+     public static function getAllTaskForUser($includeCompleted){
          if (!isset($_SESSION['token'])) {
              session_start();
          }
@@ -44,7 +44,11 @@ Class Task {
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
+            if($includeCompleted)
                 $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId");
+            else
+                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId AND t.	isCompleted!=1");
+
                     $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
                         {
@@ -98,13 +102,26 @@ Class Task {
         return $object;
     }
 
-    public static function getAllTask(){
+    public static function getAllTask($sortBy,$keyword){
         $object  = array();
         try{
                 $db = Database::getInstance();
                 $conn = $db->getConnection();
                 $conn->beginTransaction();
+                if($keyword!='undefined' && $keyword!=="")
+                    $searchKeyword = '%' .$keyword. '%';
+                else
+                    $searchKeyword = '%' ."". '%';
+
+                if($sortBy=="TaskName"){
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword");
+                    $stmt->bindParam(':searchKeyword',$searchKeyword);
+                }else if($sortBy=="CompleteTask"){
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1");
+                }else{
                     $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
+                }
+//                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {
                              while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
                              {

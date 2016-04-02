@@ -1,11 +1,11 @@
 <?php
 
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 require_once '../../php/appUtil.php';
 if (!isset($_SESSION['token'])) {
     session_start();
 }else{
-    header("Location: index.html");
+    header("Location: ../../index.html");
     exit();
 }
 $userId=$_SESSION['token'];
@@ -15,7 +15,7 @@ $hasReadForExpense=appUtil::doesUserHasAccess("Expense",$userId,"Read");
 $hasWriteForExpense=appUtil::doesUserHasAccess("Expense",$userId,"Write");
 
 if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
-    header("Location: Dashboard.php");
+    header("Location: ../../Dashboard.php");
     exit();
 }
 ?>
@@ -132,15 +132,15 @@ if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
                 </li>";
             }
 
-//            echo "<li><a>Payment</a>
-//                    <ul>";
-//            if ($hasWrite == 1)
-//                echo "<li><a ui-sref=\"Process.addPayment\">Add Payment</a></li>";
-//            if ($hasRead == 1)
-//                echo "<li><a ui-sref=\"Process.paymentHistory\">Payment History</a></li>";
-//
-//              echo  "</ul>
-//                </li>";
+            echo "<li><a>Payment</a>
+                    <ul>";
+            if ($hasWrite == 1)
+                echo "<li><a ui-sref=\"Process.addPayment\">Add Payment</a></li>";
+            if ($hasRead == 1)
+                echo "<li><a ui-sref=\"Process.paymentHistory\">Payment History</a></li>";
+
+              echo  "</ul>
+                </li>";
 
 
                 echo "<li><a>Task</a>

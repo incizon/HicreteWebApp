@@ -45,7 +45,8 @@ switch($data->operation) {
         ProjectController::getSiteTrackingProjectList();
         break;
     case "getInvoiceOfProject":
-       // ProjectController::getInvoicesByProject($data->data);
+
+        ProjectController::getInvoicesByProject($data->projectId);
         break;
 }
 
