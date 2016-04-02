@@ -238,6 +238,29 @@ designation:"",
 userType:""
 };
 
+    $scope.clearFields= function(page)
+    {
+        if(page=='init')
+        {
+            $scope.userInfo.firstName="";
+            $scope.userInfo.lastName="";
+            $scope.userInfo.dob="";
+            $scope.userInfo.address="";
+            $scope.userInfo.city="";
+            $scope.userInfo.state="";
+            $scope.userInfo.country="";
+            $scope.userInfo.email="";
+            $scope.userInfo.mobile="";
+
+        }
+        else if(page=='Access')
+        {
+            $scope.userInfo.designation="";
+            $scope.userInfo.userType="";
+        }
+
+    }
+
     configService.getRoleList($http,$scope);
 
 
@@ -282,6 +305,7 @@ userType:""
               $scope.roleAccessList=[];
               $scope.otherAccessList=[];
               $scope.selectedRole={"roleId":""};
+            $scope.userInfoSubmitted=false;
               //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser"; 
   
         }
@@ -329,10 +353,17 @@ userType:""
                          }
                      });
                  }, 3000);
+
+                /* $scope.clearUserForm();
+
+                 $scope.userInfoSubmitted= false;
+                 $scope.step=1;
+*/
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
-                    window.location.reload(true);
-                 },5000);
+                    //window.location.reload(true);
+                     window.location = "dashboard.php#/Config";
+                 },1000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
@@ -344,7 +375,7 @@ userType:""
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
              } 
-             window.location.reload=true;
+             //window.location.reload=true;
             // $scope.clearUserForm();
                      
            })
