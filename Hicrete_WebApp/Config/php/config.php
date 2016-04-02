@@ -275,6 +275,32 @@ class Config
     }
 
 
+    public static function isUserAvailable($emailId)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("select count(1) as count from usermaster where emailId=:emailId");
+            $stmt->bindParam(':emailId', $emailId, PDO::PARAM_STR);
+            $stmt ->execute();
+            $result=$stmt->fetch(PDO::FETCH_ASSOC);
+            $count=$result['count'];
+
+            if($count!=0)
+            {
+                return 0;
+            }
+            else
+                return 1;
+
+
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
     public static function addUser($data, $requestUserId)
     {
 
@@ -284,33 +310,34 @@ class Config
 
             $conn->beginTransaction();
 
-            $password="";
-            $userId = AppUtil::generateId();
-            $date = new DateTime($data->userInfo->dob);
-            $dob = $date->format('Y-m-d');
-            $stmt = $conn->prepare("INSERT INTO `usermaster`(`userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) 
+            if(Config::isUserAvailable($data->userInfo->email)) {
+                $password = "";
+                $userId = AppUtil::generateId();
+                $date = new DateTime($data->userInfo->dob);
+                $dob = $date->format('Y-m-d');
+                $stmt = $conn->prepare("INSERT INTO `usermaster`(`userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)
                 VALUES (:userId,:firstName,:lastName,:dob,:address,:city,:state,:country,:pincode,:mobileNumber,:emailId,:createdBy,now(),:lastModifiedBy,now())");
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':firstName', $data->userInfo->firstName, PDO::PARAM_STR);
-            $stmt->bindParam(':lastName', $data->userInfo->lastName, PDO::PARAM_STR);
-            $stmt->bindParam(':dob', $dob, PDO::PARAM_STR);
-            $stmt->bindParam(':address', $data->userInfo->address, PDO::PARAM_STR);
-            $stmt->bindParam(':city', $data->userInfo->city, PDO::PARAM_STR);
-            $stmt->bindParam(':state', $data->userInfo->state, PDO::PARAM_STR);
-            $stmt->bindParam(':country', $data->userInfo->country, PDO::PARAM_STR);
-            $stmt->bindParam(':pincode', $data->userInfo->pincode, PDO::PARAM_STR);
-            $stmt->bindParam(':mobileNumber', $data->userInfo->mobile, PDO::PARAM_STR);
-            $stmt->bindParam(':emailId', $data->userInfo->email, PDO::PARAM_STR);
-            $stmt->bindParam(':createdBy', $requestUserId, PDO::PARAM_STR);
-            $stmt->bindParam(':lastModifiedBy', $requestUserId, PDO::PARAM_STR);
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':firstName', $data->userInfo->firstName, PDO::PARAM_STR);
+                $stmt->bindParam(':lastName', $data->userInfo->lastName, PDO::PARAM_STR);
+                $stmt->bindParam(':dob', $dob, PDO::PARAM_STR);
+                $stmt->bindParam(':address', $data->userInfo->address, PDO::PARAM_STR);
+                $stmt->bindParam(':city', $data->userInfo->city, PDO::PARAM_STR);
+                $stmt->bindParam(':state', $data->userInfo->state, PDO::PARAM_STR);
+                $stmt->bindParam(':country', $data->userInfo->country, PDO::PARAM_STR);
+                $stmt->bindParam(':pincode', $data->userInfo->pincode, PDO::PARAM_STR);
+                $stmt->bindParam(':mobileNumber', $data->userInfo->mobile, PDO::PARAM_STR);
+                $stmt->bindParam(':emailId', $data->userInfo->email, PDO::PARAM_STR);
+                $stmt->bindParam(':createdBy', $requestUserId, PDO::PARAM_STR);
+                $stmt->bindParam(':lastModifiedBy', $requestUserId, PDO::PARAM_STR);
 
-            $rollback = false;
-            if ($stmt->execute()) {
+                $rollback = false;
+                if ($stmt->execute()) {
 
-                if (!Config::insertRoleInfo($conn, $userId, $data->userInfo->designation, $data->roleId, $data->userInfo->userType, $requestUserId)) {
+                    if (!Config::insertRoleInfo($conn, $userId, $data->userInfo->designation, $data->roleId, $data->userInfo->userType, $requestUserId)) {
 
-                    $rollback = true;
-                } else {
+                        $rollback = true;
+                    } else {
 //                    foreach ($data->accessPermissions as $accessEntry) {
 //                        if ($accessEntry->read->ispresent) {
 //                            if (!Config::insertUserAccessPermission($conn, $userId, $requestUserId, $accessEntry->read->accessId)) {
@@ -331,7 +358,7 @@ class Config
 //                    }
 
 
-                    //if (!$rollback) {
+                        //if (!$rollback) {
                         $str = $data->userInfo->email . $userId;
 
                         $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`) 
@@ -345,21 +372,26 @@ class Config
 
                             $rollback = true;
                         }
-                    //}
+                        //}
 
+                    }
+                } else {
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
                 }
-            } else {
-                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+
+
+                if ($rollback) {
+                    $conn->rollback();
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+                } else {
+                    $conn->commit();
+                    echo AppUtil::getReturnStatus("Successful", $password);
+                    AppUtil::sendMail($data->userInfo->email, $password, $data->userInfo->email, $data->userInfo->firstName);
+                }
             }
-
-
-            if ($rollback) {
-                $conn->rollback();
-                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
-            } else {
-                $conn->commit();
-                echo AppUtil::getReturnStatus("Successful", $password);
-                AppUtil::sendMail($data->userInfo->email,$password,$data->userInfo->email,$data->userInfo->firstName);
+            else
+            {
+                echo AppUtil::getReturnStatus("Unsuccessful", "User Already Available");
             }
 
         } catch (Exception $e) {

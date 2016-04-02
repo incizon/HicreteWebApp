@@ -366,12 +366,14 @@ userType:""
                  },1000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
-                 $scope.errorMessage="User not Added";
+                 $scope.errorMessage=data.message;
+                 $('#loader').css("display","none");
                  $('#error').css("display","block");
                  console.log($scope.errorMessage);
              }else{
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
+                 $('#loader').css("display","none");
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
              } 
@@ -384,6 +386,7 @@ userType:""
              //doShowAlert("Failure","Error Occurred");
              $scope.clearUserForm();
                $scope.errorMessage="User not Added";
+               $('#loader').css("display","none");
                $('#error').css("display","block");
                console.log($scope.errorMessage);
            });
