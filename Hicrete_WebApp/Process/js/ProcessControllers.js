@@ -287,7 +287,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
 });
 
 
-myApp.controller('ProjectDetailsController', function ($stateParams, myService, setInfo, $scope, $http, $uibModal, $log, fileUpload, AppService) {
+myApp.controller('ProjectDetailsController', function ($stateParams, myService, setInfo, $scope,$rootScope, $http, $uibModal, $log, fileUpload, AppService) {
 
     var detaildata = $stateParams.projectToView;
 
@@ -298,6 +298,14 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     $scope.PymentDetails = [];
     var paymentdetail = [];
     // console.log("project id"+projId);
+
+    $scope.workOrderDate = function () {
+        $scope.workOrder.opened = true;
+    };
+
+    $scope.workOrder = {
+        opened: false
+    };
     /*********************************************************/
     $scope.projectPaymentsInvoice = [];
     var paymentinvoice = [];
@@ -467,8 +475,13 @@ $scope.setScope = function(scope){
         $http.post("Process/php/workorderFacade.php",null, config)
             .success(function (data) {
                 console.log(data);
-                alert("success in workorder creation " + data + " status is " + status);
-                alert("status" + JSON.stringify(data));
+                $rootScope.warningMessage = "success in work order creation"+data;
+                $('#warning').css('display','block');
+                setTimeout(function(){
+                    $('#warning').css('display','none');
+                },3000);
+                //alert("success in workorder creation " + data + " status is " + status);
+                //alert("status" + JSON.stringify(data));
                 var file = $scope.myFile;
                 var uploadUrl = "php/api/workorder/upload";
                 fileUpload.uploadFileToUrl(file, uploadUrl);
@@ -476,7 +489,12 @@ $scope.setScope = function(scope){
                 $scope.getWorkorderByProject(projId);
             })
             .error(function (data){
-                alert("error in workorder creation " + JSON.stringify(data));
+                $rootScope.errorMessage = "Error in work order creation"+data;
+                $('#error').css('display','block');
+                setTimeout(function(){
+                    $('#error').css('display','none');
+                },3000);
+                //alert("error in workorder creation " + JSON.stringify(data));
             })
     }
     $scope.viewProjQuotationDetails = function (q) {

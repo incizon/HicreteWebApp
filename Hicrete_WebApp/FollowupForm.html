@@ -56,10 +56,10 @@
                                         <input type="text" class="form-control" ng-model="payment.startDate"
                                                name="date" ng-click="followupFormDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="followup.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true" readonly/>
                                     </div>
-                                </div>
-                                <div class="help-block" ng-messages="followupForm.date.$error">
-                                <p style="color:red" ng-message="required">Conduction Date cannot be blank</p>
+                                    <div class="help-block" ng-messages="followupForm.date.$error">
+                                        <p style="color:red" ng-message="required">Conduction Date cannot be blank</p>
 
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -67,13 +67,11 @@
                                 <label class="col-md-3 control-label">Note : </label>
                                 <div class="col-md-7">
                                     <textarea name="note" class="form-control" rows="2" ng-model="payment.note" required></textarea>
-                                    <span class="help-block"></span>
+                                    <div class="help-block" ng-messages="followupForm.note.$error">
+                                        <p style="color:red" ng-message="required">Note cannot be blank</p>
+
+                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="help-block" ng-messages="followupForm.note.$error">
-                                <p style="color:red" ng-message="required">Note cannot be blank</p>
-
                             </div>
                             <!--end-->
 
@@ -103,7 +101,7 @@
                                         <input type="text"  name="title"  ng-model="payment.newFollowupTitle" class="form-control" required/>
                                     </div>
                                     <div class="help-block" ng-messages="rescheduleFollowup.title.$error">
-                                    <p style="color:red" ng-message="required">Title cannot be blank</p>
+                                        <p style="color:red" ng-message="required">Title cannot be blank</p>
 
                                     </div>
                                 </div>
@@ -123,10 +121,9 @@
                                                     value={{x.id}}>{{x.name}}
                                             </option>
                                         </select>
-
                                     </div>
                                     <div class="help-block" ng-messages="rescheduleFollowup.assignee.$error" >
-                                    <p style="color:red" ng-message="required">Assigned To cannot be blank</p>
+                                        <p style="color:red" ng-message="required">Assigned To cannot be blank</p>
 
                                     </div>
                                 </div>
