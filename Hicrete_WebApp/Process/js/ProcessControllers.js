@@ -472,6 +472,8 @@ $scope.setScope = function(scope){
                 var file = $scope.myFile;
                 var uploadUrl = "php/api/workorder/upload";
                 fileUpload.uploadFileToUrl(file, uploadUrl);
+                $('#viewDetails').modal('hide');
+                $scope.getWorkorderByProject(projId);
             })
             .error(function (data){
                 alert("error in workorder creation " + JSON.stringify(data));
@@ -662,53 +664,57 @@ $scope.setScope = function(scope){
     }
     /*Get Workorder by project id*/
 
-    var data={
-        operation :"getWorkorderByProjectId",
-        data : projId
+    $scope.getWorkorderByProject=function(projId){
 
-    };
+        var data={
+            operation :"getWorkorderByProjectId",
+            data : projId
 
-    var config = {
-        params: {
-            data: data
-        }
-    };
+        };
 
-    $http.post("Process/php/workorderFacade.php",null, config)
-        .success(function (data) {
-            console.log(data);
-            $scope.qData = data;
-            $scope.projectWorkorders = [];
-            var b = [];
-            var length = $scope.qData.length;
-            //alert("length is "+$scope.qData.length);
-            for (var i = 0; i < length; i++) {
-                b.push({
-                    'workOrderNo': $scope.qData[i].WorkOrderNo,
-                    'workoOrderTitle': $scope.qData[i].WorkOrderName,
-                    'receivedDate': $scope.qData[i].ReceivedDate,
-                    'workOrderBlob': $scope.qData[i].WorkOrderBlob,
-                    'projectId': $scope.qData[i].ProjectId,
-                    'companyId': $scope.qData[i].CompanyId,
-                    'isApproved': $scope.qData[i].isApproved,
-                    'quotationTitle': $scope.qData[i].QuotationTitle,
-                    'workOrderNo': $scope.qData[i].WorkOrderNo,
-                    'quotationId': $scope.qData[i].QuotationId,
-                    'creationDate': $scope.qData[i].CreationDate,
-                    'dateOfQuotation': $scope.qData[i].DateOfQuotation,
-		     'refNo' :$scope.qData[i].RefNo,	
-                    'filePath': $scope.qData[i].WorkOrderBlob
-
-                });
-                $scope.projectWorkorders = b;
-                myService.set($scope.projectQuotations);
+        var config = {
+            params: {
+                data: data
             }
-            $scope.projectWorkorders;
-        })
-        .error(function(data){
-            $scope.myWelcome = response.statusText;
-        });
+        };
 
+        $http.post("Process/php/workorderFacade.php",null, config)
+            .success(function (data) {
+                console.log(data);
+                $scope.qData = data;
+                $scope.projectWorkorders = [];
+                var b = [];
+                var length = $scope.qData.length;
+                //alert("length is "+$scope.qData.length);
+                for (var i = 0; i < length; i++) {
+                    b.push({
+                        'workOrderNo': $scope.qData[i].WorkOrderNo,
+                        'workoOrderTitle': $scope.qData[i].WorkOrderName,
+                        'receivedDate': $scope.qData[i].ReceivedDate,
+                        'workOrderBlob': $scope.qData[i].WorkOrderBlob,
+                        'projectId': $scope.qData[i].ProjectId,
+                        'companyId': $scope.qData[i].CompanyId,
+                        'isApproved': $scope.qData[i].isApproved,
+                        'quotationTitle': $scope.qData[i].QuotationTitle,
+                        'workOrderNo': $scope.qData[i].WorkOrderNo,
+                        'quotationId': $scope.qData[i].QuotationId,
+                        'creationDate': $scope.qData[i].CreationDate,
+                        'dateOfQuotation': $scope.qData[i].DateOfQuotation,
+                        'refNo' :$scope.qData[i].RefNo,
+                        'filePath': $scope.qData[i].WorkOrderBlob
+
+                    });
+                    $scope.projectWorkorders = b;
+                    myService.set($scope.projectQuotations);
+                }
+                $scope.projectWorkorders;
+            })
+            .error(function(data){
+                $scope.myWelcome = response.statusText;
+            });
+    }
+
+    $scope.getWorkorderByProject(projId);
 
     $scope.passWork = function (wo) {
         setInfo.set(wo);
@@ -2690,7 +2696,7 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
 
 
 myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scope, $http) {
-    var viewQuotDetail = $state1Params.quotationToView;
+    var viewQuotDetail = $stateParams.quotationToView;
     $scope.projectName = $stateParams.projectName;
     var qId = viewQuotDetail.QuotationId;
     $scope.viewQuotationDetail = {

@@ -23,8 +23,8 @@ class TaskController
      * @url GET /assignedtask
      */
 
-    public static function getAllTaskForUser(){
-             $task = Task::getAllTaskForUser();
+    public static function getAllTaskForUser($includeCompleted){
+             $task = Task::getAllTaskForUser($includeCompleted);
          echo AppUtil::getReturnStatus("sucess",$task);
     }
 

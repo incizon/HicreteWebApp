@@ -973,7 +973,8 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     var task = [];
 
     var data = {
-        operation: "getAllTaskForUser"
+        operation: "getAllTaskForUser",
+        includeCompleted:false
     };
     var config = {
         params: {

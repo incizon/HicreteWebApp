@@ -36,7 +36,7 @@ Class Workorder {
                             $WorkOrderNo = $row['WorkOrderNo'];
                             $WorkOrderName = $row['WorkOrderName'];
                             $ReceivedDate = $row['ReceivedDate'];
-                            $CompanyId = $row['CompanyId'];
+                            $CompanyId = $row['companyId'];
                              $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
                              $stmt1 = $conn->prepare("SELECT q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation from quotation q WHERE q.ProjectId =:projId AND q.CompanyId = :companyId");
                               $stmt1->bindParam(':projId',$projId,PDO::PARAM_STR);
