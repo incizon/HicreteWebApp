@@ -12,8 +12,8 @@ class TaskController
      * @url GET /task
      */
 
-    public static function getAllTask(){
-             $task = Task::getAllTask();
+    public static function getAllTask($sortBy,$keyword){
+             $task = Task::getAllTask($sortBy,$keyword);
         echo AppUtil::getReturnStatus("sucess",$task);
     }
 

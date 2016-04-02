@@ -36,6 +36,48 @@ myApp.service('AppService', function () {
 
 
     }
+    /*
+        get Payment details of invoice
+     */
+    this.getInvoicePaymentDetails = function (invoiceId,$scope,$http) {
+        $scope.paymentHistoryData = [];
+        $scope.totalAmtPaid = "";
+        $scope.totalPayableAmount = 0;
+        var invoiceDetail = [];
+        var totalAmountPaid = 0;
+        var totalPayableAmt = 12000;
+        console.log("invoice id is " + invoiceId);
+        $http.get("php/api/paymentDetails/Invoice/" + invoiceId).then(function (response) {
+            console.log(response.data.length);
+            if (response.data != null) {
+                for (var i = 0; i < response.data.length; i++) {
+                    invoiceDetail.push({
+                        amountPaid: response.data[i].AmountPaid,
+                        paymentDate: response.data[i].PaymentDate,
+                        recievedBy: response.data[i].FirstName + response.data[i].LastName,
+                        amountRemaining: "----",
+                        grandTotal: response.data[i].GrandTotal,
+                        paymentMode: response.data[i].InstrumentOfPayment,
+                        bankName: response.data[i].BankName,
+                        branchName: response.data[i].BranchName,
+                        unqiueNo: response.data[i].IDOfInstrument
+                    });
+                    totalAmountPaid = totalAmountPaid + parseInt(response.data[i].AmountPaid);
+
+                }
+                totalPayableAmt = parseInt(response.data[0].GrandTotal);
+            }
+            $scope.totalAmtPaid = totalAmountPaid;
+            $scope.totalPayableAmount = totalPayableAmt;
+            console.log("total amount payable=" + totalPayableAmt);
+            console.log("total amount paid=" + totalAmountPaid);
+           // $scope.paymentHistoryData = invoiceDetail;
+            console.log("paymentHistoryData  scope is " + JSON.stringify($scope.paymentHistoryData));
+        })
+
+    }
+
+
     this.getUsers=function($scope,$http){
         $scope.leaves={
             operation:""
@@ -266,10 +308,10 @@ myApp.service('AppService', function () {
     }
 
     this.getAllInvoicesOfProject=function($http,$invoices,$projectId){
-
+        console.log($projectId);
         var data={
             operation:"getInvoiceOfProject",
-            data:$projectId
+            projectId:$projectId
 
         };
         var config = {
@@ -282,15 +324,18 @@ myApp.service('AppService', function () {
             .success(function (data) {
                 console.log("IN Invoice Get");
                 console.log(data);
-                if(data.status!="Successful"){
-                    alert("Failed:"+data.message);
-                }else {
+                if(data.status=="success"){
+                    //alert("Failed:"+data.message);
+                    console.log("else block");
                     for(var i=0;i<data.message.length;i++){
                         $invoices.push({
                             id: data.message[i].InvoiceNo,
                             name: data.message[i].InvoiceTitle
                         });
+                        console.log(JSON.stringify(data.message).length);
                     }
+                }else {
+                  //  alert("Failed:"+data.message);
                 }
             })
             .error(function(data){

@@ -725,7 +725,6 @@ $scope.setScope = function(scope){
     var data={
         operation :"getInvoicesByProjectId",
         data : projId
-
     };
 
     var config = {
@@ -755,7 +754,7 @@ $scope.setScope = function(scope){
                     'quotationTitle': $scope.qData[i].QuotationTitle,
                     'quotationDate': $scope.qData[i].DateOfQuotation,
                     'companyId': $scope.qData[i].CompanyId,
-		     'contactPerson':$scope.qData[i].ContactPerson
+		            'contactPerson':$scope.qData[i].ContactPerson
                 });
                 $scope.projectInvoice = b;
                 myService.set($scope.projectQuotations);
@@ -1671,11 +1670,13 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
     //     /************* got all project ********************/
 
     AppService.getAllProjects($http, $scope.Projects);
+
     AppService.getAllInvoicesOfProject($http, $scope.Invoices, $scope.paymentDetails.projectID);
 
     $scope.viewProjectPaymentDetails = function (project_id) {
         $scope.Invoices = [];
         var invoice = [];
+        console.log(project_id);
         AppService.getAllInvoicesOfProject($http, $scope.Invoices, project_id);
         var data = {
             operation: "getProjectPayment",
@@ -1717,11 +1718,13 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                             });
                         }
                     }
-
+                    $scope.totalPayableAmount = pkgamount;
+                    $scope.totalAmtPaid = amountPaid;
                     $scope.packageAmount = pkgamount;
                     $scope.projectPayment.total_project_amount = pkgamount;
                     $scope.previousAmountPaid = amountPaid;
                     $scope.projectPayment.total_paid_amount = amountPaid;
+
                 }
 
             })
@@ -1733,45 +1736,15 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 $('#error').css("display", "block");
             });
 
-
-
-
-
-        //$http.get("php/api/payment/allPayment/Byproj/" + project_id).then(function (response) {
-        //    //  console.log(response.data.length);
-        //    if (response.data != null) {
-        //        paymentdetails = response.data;
-        //    }
-        //    $scope.projectPayment = paymentdetails;
-        //    console.log("project payment new scope is " + JSON.stringify($scope.projectPayment));
-        //    var pkgamount = 0;
-        //    var amountPaid = 0;
-        //
-        //    for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
-        //        pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
-        //        amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
-        //
-        //        for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
-        //            //    console.log("in for");
-        //            $scope.projectPaymentsInvoice.push({
-        //                amount_paid: $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
-        //                date_of_payment: $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceDate,
-        //                paid_to: $scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName + '' + $scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
-        //            });
-        //        }
-        //    }
-        //
-        //    $scope.packageAmount = pkgamount;
-        //    $scope.projectPayment.total_project_amount = pkgamount;
-        //    $scope.previousAmountPaid = amountPaid;
-        //    $scope.projectPayment.total_paid_amount = amountPaid;
-        //})
-
         $scope.showPaymentDetails = true;
 
     }
 
+    $scope.getInvoicePayment=function(invoicenumber){
+        console.log("In get Invoice payment");
+        AppService.getInvoicePaymentDetails(invoicenumber,$scope,$http);
 
+    }
     $scope.getPendingAmount = function () {
         // console.log("In Pending amount function");
         $scope.paymentDetails.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - $scope.previousAmountPaid;
@@ -1831,23 +1804,6 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 $('#error').css("display", "block");
             });
 
-        //$.ajax({
-        //    type: "POST",
-        //    url: 'php/api/savepayment',
-        //    data: data,
-        //    dataType: 'json',
-        //    cache: false,
-        //    contentType: 'application/json',
-        //    processData: false,
-        //    success: function (data) {
-        //        alert("success save payment " + data);
-        //    },
-        //    error: function (xhr, status, error) {
-        //        alert(xhr.responseText + " " + error + " AND " + status.code);
-        //    }
-        //});
-
-
         $scope.formSubmitted = false;
 
         if ($scope.paymentDetails.pendingAmount == 0) {
@@ -1872,8 +1828,8 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     $scope.ok = function () {
 
                         console.log($scope.paymentDetails);
-
                         $uibModalInstance.close();
+
                     };
 
                     $scope.cancel = function () {
@@ -3634,10 +3590,16 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 
 myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $http) {
 
+    $scope.sortBy="";
+    $scope.searchKeyword=""
+
     $scope.getAllTasks=function(){
         var task = [];
         var data = {
-            operation: "getTasks"
+            operation: "getTasks",
+            keyword:$scope.searchKeyword,
+            sortBy:$scope.sortBy
+
         };
         var config = {
             params: {
