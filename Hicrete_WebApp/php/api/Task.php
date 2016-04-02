@@ -34,7 +34,7 @@ Class Task {
     }
 
 
-     public static function getAllTaskForUser(){
+     public static function getAllTaskForUser($includeCompleted){
          if (!isset($_SESSION['token'])) {
              session_start();
          }
@@ -44,7 +44,11 @@ Class Task {
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
+            if($includeCompleted)
                 $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId");
+            else
+                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId AND t.	isCompleted!=1");
+
                     $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
                         {

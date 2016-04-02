@@ -579,6 +579,8 @@ myApp.run(function($rootScope,$http) {
 myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService) {
   /** create $scope.template **/
 
+
+
  $scope.logout=function(){
 
 
@@ -611,10 +613,25 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
           controller: 'dashboardController',
           templateUrl: 'FollowupForm.html',
           scope:$scope,
-          controller:  function ($scope, $uibModalInstance,followupDetails,$filter) {
+          controller:  function ($scope,$rootScope, $uibModalInstance,followupDetails,$filter) {
 
+              $scope.followupFormDate = function(){
+                  $scope.followup.opened = true;
+              };
+
+              $scope.followup = {
+                  opened:false
+              };
               AppService.getUsers($scope,$http);
               $scope.followupDetails = followupDetails;
+              $scope.reFollowupDate = function(){
+                  $scope.reFollowup.opened = true;
+              };
+
+              $scope.reFollowup = {
+                  opened:false
+              };
+
               console.log("in uibModal "+JSON.stringify($scope.payment));
               $scope.Save = function () {
                   var conductDate = $filter('date')($scope.payment.startDate, 'yyyy/MM/dd', '+0530');
@@ -661,15 +678,29 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                                       $http.post('Process/php/followupFacade.php',null,config)
                                           .success(function (data, status, headers) {
                                               if(data.status=="Successful"){
-                                                  alert("Operation Successful");
+                                                  $rootScope.warningMessage = "Operation Successful";
+                                                  $('#warning').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#warning').css('display','none');
+                                                  },1000);
+                                                  //alert("Operation Successful");
                                               }else{
-                                                  alert(data.message);
+                                                  $rootScope.errorMessage = data.message;
+                                                  $('#error').css('display','block');
+                                                  setTimeout(function(){
+                                                      $('#error').css('display','none');
+                                                  },1000);
+                                                  //alert(data.message);
                                               }
 
                                           })
                                           .error(function (data, status) {
-
-                                              alert($scope.ResponseDetails );
+                                              $rootScope.errorMessage = $scope.ResponseDetails ;
+                                              $('#error').css('display','block');
+                                              setTimeout(function(){
+                                                  $('#error').css('display','none');
+                                              });
+                                              //alert($scope.ResponseDetails );
                                           });
                                   }
 
@@ -973,7 +1004,8 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     var task = [];
 
     var data = {
-        operation: "getAllTaskForUser"
+        operation: "getAllTaskForUser",
+        includeCompleted:false
     };
     var config = {
         params: {
