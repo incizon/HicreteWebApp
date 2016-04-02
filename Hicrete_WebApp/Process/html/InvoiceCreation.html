@@ -51,10 +51,10 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="QuotationNumber" ng-model="InvoiceDetails.quotationNumber" required/>
+                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="InvoiceDetails.refNo" required/>
                                         </div>
                                         <div class="help-block"
-                                             ng-messages="createInvoice.QuotationNumber.$error"
+                                             ng-messages="createInvoice.InvoiceNumber.$error"
                                              ng-show="formSubmitted">
                                             <span style="color:red" ng-message="required">Quotation number is required</span>
                                         </div>
@@ -68,7 +68,7 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="WorkorderNumber" ng-model="InvoiceDetails.workOrderNumber"/>
+                                            <input type="text" class="form-control" name="WorkorderNumber" ng-model="InvoiceDetails.workoOrderTitle"/>
                                         </div>
                                         <div class="help-block"
                                              ng-messages="createInvoice.WorkorderNumber.$error"
@@ -229,7 +229,7 @@
                                     <td><input type="text" name="UnitRate" placeholder="Unit Rate"
                                                class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index); calculateTotal(quotation.amount) "/>
                                     </td>
-                                    <td>
+                                    <td ng-model="quotation.Totalamount">
                                         {{quotation.amount}}
                                     </td>
                                     <td>
@@ -248,8 +248,8 @@
                         <div class="col-md-4">
                             <label class="control-label">Total Amount :</label>
                         </div>
-                        <div class="col-md-8" ng-model="totalAmnt">
-                                {{totalAmnt}}
+                        <div class="col-md-8" ng-model="totalAmnt11">
+                                {{getTotalAmount()}}
                         </div>
                     </div>
 
@@ -309,8 +309,8 @@
                                 <div class="col-md-4">
                                     <label class="control-label"><strong>Total Tax Amount :</strong></label>
                                 </div>
-                                <div class="col-md-8" ng-model="TaxAmnt">
-                                    {{TaxAmnt}}
+                                <div class="col-md-8" ng-model="TaxAmnt11">
+                                    {{getTotalTaxAmount()}}
                                 </div>
                             </div>
                         </div>

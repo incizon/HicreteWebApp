@@ -34,7 +34,7 @@
             TaskController::editTask($data->taskId,$data->data);
             break;
         case 'getAllTaskForUser':
-            TaskController::getAllTaskForUser();
+            TaskController::getAllTaskForUser($data->includeCompleted);
             break;
         case 'deleteTask':
             TaskController::deleteTask($data->taskId);

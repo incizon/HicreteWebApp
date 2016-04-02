@@ -50,7 +50,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                         <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary">Search</button>
+                            <button class="btn btn-primary" data-ng-click="getAllTasks()">Search</button>
                         </div>
                     </div>
                 </div>

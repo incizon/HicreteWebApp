@@ -106,12 +106,15 @@ public function loadInvoiceForProject($projid){
 		//$invoiceNum = AppUtil::generateId();
 		
 		//$detailNo = AppUtil::generateId();
+		
+
+		$main = $data->Invoice;
 		$InvoicebasicDetails = $data->Details;
 		$invoiceTaxDetails = $data->taxDetails;
 
 		$details = FALSE;
 		$taxdetail = FALSE;
-		$main = $data->Invoice;
+		$return = FALSE;
 		$detailIdArray = [];
 		$invoiceIndex = [];
 		//print_r($main);
@@ -121,7 +124,7 @@ public function loadInvoiceForProject($projid){
 				$conn->beginTransaction();
 				$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);//InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB, isPaymentRetention, PurchasersVATNo, PAN, CreatedBy, ContactPerson
 				$stmt = $conn->prepare("INSERT INTO invoice(InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB, isPaymentRetention, PurchasersVATNo, PAN, CreatedBy,ContactPerson) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)");
-			 			if($stmt->execute([$main->InvoiceNo, $main->QuotationId, $main->InvoiceDate, $main->InvoiceTitle, $main->TotalAmount, $main->RoundingOffFactor, $main->GrandTotal, $main->InvoiceBLOB, $main->isPaymentRetention, $main->PurchasersVATNo, $main->PAN, $userId,$main->ContactPerson]) === TRUE){
+			 			if($stmt->execute([$main->InvoiceNo, $main->QuotationId, $main->InvoiceDate, $main->InvoiceTitle, $main->TotalAmount, $main->RoundingOffFactor, $main->GrandTotal, $main->InvoiceBLOB, $main->isPaymentRetention, $main->PurchasersVATNo, $main->PAN, $main->CreatedBy,$main->ContactPerson]) === TRUE){
 			 						
 			 						for($i = 0;$i<sizeof($InvoicebasicDetails);$i++){
 						#insert  all quotation detail 
@@ -187,15 +190,15 @@ public function loadInvoiceForProject($projid){
 							return "Error: <br>";
 		 				}
 		 					if($return === TRUE){
-				#commit
-				$conn->commit();
-				return "Success";
-			}
-			else{
-				#rollback
-				$conn->rollback();
-				return "Error ";
-			}
+								#commit
+								$conn->commit();
+								return "Success";
+							}
+							else{
+								#rollback
+								$conn->rollback();
+								return "Error ";
+							}
 
 		 	}
 		 	catch(PDOException $e){
