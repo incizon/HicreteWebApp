@@ -49,6 +49,7 @@ myApp.service('AppService', function () {
         var totalAmountPaid = 0;
         var totalPayableAmt = 12000;
         console.log("invoice id is " + invoiceId);
+
         $http.get("php/api/paymentDetails/Invoice/" + invoiceId).then(function (response) {
             console.log(response.data.length);
             if (response.data != null) {

@@ -57,6 +57,10 @@ class PaymentController
          echo AppUtil::getReturnStatus("sucess",$payment);
     }
 
+    public function getAllPaymentForProject($projid){
+        $payment = Payment::getAllPaymentForProject($projid);
+        echo AppUtil::getReturnStatus("sucess",$payment);
+    }
    /**
      * Gets payment by project id and invoice id
      *
