@@ -220,7 +220,7 @@
                     </div>
 
                     <div class="panel-footer" style="text-align:center">
-                        <button class="btn btn-default" ng-disabled="availableTotalquantity==0" ng-click="clearFields(OutwardData)">Clear Form</button>
+                        <button class="btn btn-default" ng-disabled="availableTotalquantity==0" ng-click="(submitted=false) && clearFields(OutwardData)">Clear Form</button>
                         <button class="btn btn-primary" ng-disabled="availableTotalquantity==0"
                                 data-ng-click="(submitted=true) && getNoOfMaterials()>0 && outwardMaterialForm.$valid && nextStep()">Submit</button>
                     </div>
