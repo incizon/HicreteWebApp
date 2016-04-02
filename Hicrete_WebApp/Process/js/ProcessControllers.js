@@ -3634,58 +3634,56 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 
 myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $http) {
 
-
-    //$scope.tasks = [];
-    var task = [];
-
-
-    var data = {
-        operation: "getTasks"
-    };
-    var config = {
-        params: {
-            data: data
-        }
-    };
-    console.log(config);
-    $('#loader').css("display", "block");
-    $http.post("Process/php/TaskFacade.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            $('#loader').css("display", "none");
-
-            for (var i = 0; i < data.message.length; i++) {
-
-                task.push({
-                    "TaskID": data.message[i].TaskID,
-                    "TaskName": data.message[i].TaskName,
-                    "TaskDescripion": data.message[i].TaskDescripion,
-                    "ScheduleStartDate": data.message[i].ScheduleStartDate,
-                    "ScheduleEndDate": data.message[i].ScheduleEndDate,
-                    "CompletionPercentage": data.message[i].CompletionPercentage,
-                    "TaskAssignedTo": data.message[i].TaskAssignedTo,
-                    "isCompleted": data.message[i].isCompleted,
-                    "CreationDate": data.message[i].CreationDate,
-                    "CreatedBy": data.message[i].CreatedBy,
-                    "ActualStartDate": data.message[i].ActualStartDate,
-                    "AcutalEndDate": data.message[i].AcutalEndDate,
-                    "UserId": data.message[i].UserId,
-                    "UserName": data.message[i].firstName + " " + data.message[i].lastName
-
-                });
+    $scope.getAllTasks=function(){
+        var task = [];
+        var data = {
+            operation: "getTasks"
+        };
+        var config = {
+            params: {
+                data: data
             }
-            $rootScope.tasks = task;
-            console.log($rootScope.tasks);
+        };
+        console.log(config);
+        $('#loader').css("display", "block");
+        $http.post("Process/php/TaskFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
 
-        })
-        .error(function (data, status, headers, config) {
-            console.log(data.error);
+                for (var i = 0; i < data.message.length; i++) {
 
-            $('#loader').css("display", "none");
-            $scope.errorMessage = data.message;
-            $('#error').css("display", "block");
-        });
+                    task.push({
+                        "TaskID": data.message[i].TaskID,
+                        "TaskName": data.message[i].TaskName,
+                        "TaskDescripion": data.message[i].TaskDescripion,
+                        "ScheduleStartDate": data.message[i].ScheduleStartDate,
+                        "ScheduleEndDate": data.message[i].ScheduleEndDate,
+                        "CompletionPercentage": data.message[i].CompletionPercentage,
+                        "TaskAssignedTo": data.message[i].TaskAssignedTo,
+                        "isCompleted": data.message[i].isCompleted,
+                        "CreationDate": data.message[i].CreationDate,
+                        "CreatedBy": data.message[i].CreatedBy,
+                        "ActualStartDate": data.message[i].ActualStartDate,
+                        "AcutalEndDate": data.message[i].AcutalEndDate,
+                        "UserId": data.message[i].UserId,
+                        "UserName": data.message[i].firstName + " " + data.message[i].lastName
 
+                    });
+                }
+                $rootScope.tasks = task;
+                console.log($rootScope.tasks);
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+
+                $('#loader').css("display", "none");
+                $scope.errorMessage = data.message;
+                $('#error').css("display", "block");
+            });
+
+    }
 
 
     $scope.totalItems = $rootScope.tasks.length;
