@@ -1692,7 +1692,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
         console.log(project_id);
         AppService.getAllInvoicesOfProject($http, $scope.Invoices, project_id);
         var data = {
-            operation: "getProjectPayment",
+            operation: "getAllPaymentForProject",
             projectId: project_id
 
         };
@@ -1704,6 +1704,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
         console.log(config);
         $http.post("Process/php/ProjectPaymentFacade.php", null, config)
             .success(function (data) {
+                console.log("in PAYMENTSJKNSFK");
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
@@ -1713,30 +1714,11 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     if (data.message != null) {
                         paymentdetails =data.message;
                     }
-                    $scope.projectPayment = paymentdetails;
-                    console.log("project payment new scope is " + JSON.stringify($scope.projectPayment));
-                    var pkgamount = 0;
-                    var amountPaid = 0;
 
-                    for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
-                        pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
-                        amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
-
-                        for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
-                            //    console.log("in for");
-                            $scope.projectPaymentsInvoice.push({
-                                amount_paid: $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
-                                date_of_payment: $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceDate,
-                                paid_to: $scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName + '' + $scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
-                            });
-                        }
-                    }
-                    $scope.totalPayableAmount = pkgamount;
-                    $scope.totalAmtPaid = amountPaid;
-                    $scope.packageAmount = pkgamount;
-                    $scope.projectPayment.total_project_amount = pkgamount;
-                    $scope.previousAmountPaid = amountPaid;
-                    $scope.projectPayment.total_paid_amount = amountPaid;
+                    $scope.totalPayableAmount = data.message.total_project_amount;
+                    $scope.totalAmtPaid = data.message.total_project_amount_paid;
+                    $scope.projectPayment.total_project_amount = data.message.total_project_amount;
+                    $scope.previousAmountPaid = data.message.total_project_amount_paid;
 
                 }
 
@@ -2787,7 +2769,7 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
         $scope.Invoices = [];
         var invoice = [];
         console.log("project id is :" + project);
-
+        $scope.viewProjectPayment(project);
         $http.get("php/api/invoice/project/" + project).then(function (response) {
             console.log(response.data.length);
             if (response.data != null) {
@@ -2803,6 +2785,55 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
             console.log("invoices  scope is " + JSON.stringify($scope.Invoices));
         })
     }
+
+
+    $scope.viewProjectPayment = function (project_id) {
+        $scope.Invoices = [];
+        var invoice = [];
+        console.log(project_id);
+        var data = {
+            operation: "getAllPaymentForProject",
+            projectId: project_id
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Process/php/ProjectPaymentFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                if (data.status != "sucess") {
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                } else {
+                    if (data.message != null) {
+                        paymentdetails =data.message;
+                    }
+                    $scope.totalPayableAmount = data.message.total_project_amount;
+                    $scope.totalAmtPaid = data.message.total_project_amount_paid;
+                    $scope.projectPayment.total_project_amount = data.message.total_project_amount;
+                    $scope.previousAmountPaid = data.message.total_project_amount_paid;
+
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+
+                $('#loader').css("display", "none");
+                $scope.errorMessage = data.message;
+                $('#error').css("display", "block");
+            });
+
+        $scope.showPaymentDetails = true;
+
+    }
+
+
 
     $scope.getInvoiceDetails = function (invoiceId) {
         $scope.paymentHistoryData = [];
