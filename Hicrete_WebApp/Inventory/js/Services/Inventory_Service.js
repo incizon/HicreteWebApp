@@ -491,7 +491,7 @@ myApp.service('ProductionBatchService', function () {
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $('#error').css("display","none");
-                        window.location="dashboard.php#/Inventory";
+                        //window.location="dashboard.php#/Inventory";
                     }, 3000);
                     $scope.submitted=false;
                     //window.location="dashboard.php#/Inventory";

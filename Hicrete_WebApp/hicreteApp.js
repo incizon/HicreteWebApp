@@ -1062,7 +1062,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             if(data.status == "Successful") {
                 $scope.paymentFollowup = [];
                 var b = [];
-
+                console.log("Success");
                 for(var i = 0; i<data.message.length ; i++){
                     b.push({
                         followupId: data.message[i].FollowupId,
@@ -1103,6 +1103,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             console.log(data);
 
             if(data.status == "Successful") {
+                console.log("Success");
                 $scope.quotationFollowup = [];
                 var b = [];
 
@@ -1142,9 +1143,11 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
 
     $http.post('Process/php/followupFacade.php',null,config)
         .success(function (data, status, headers) {
+
             console.log(data);
 
             if(data.status == "Successful") {
+                console.log("Success");
                 $scope.sitetrackingFollowup = [];
                 var b = [];
 
@@ -1187,6 +1190,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             console.log(data);
 
             if(data.status == "Successful") {
+                console.log("Success");
                 $scope.ApplicatorPaymentFollowup = [];
                 var b = [];
 
