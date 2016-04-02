@@ -206,7 +206,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
     $scope.processForm = function(size) {
         $scope.loading=true;
-        $scope.errorMessage="";
+        //$scope.errorMessage="";
         //$scope.warningMessage="";
         $('#loader').css("display","block");
         $scope.formSubmitted=false;
@@ -219,7 +219,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             console.log($scope.applicatorDetails);
 
             ApplicatorService.submitApplicatorDetails($scope,$http,$rootScope,$scope.applicatorDetails);
-            $scope.formSubmitted=false;
+           // $scope.formSubmitted=false;
         }
         $scope.formSubmitted=false;
         console.log($scope.formSubmitted);
@@ -367,10 +367,10 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             modalInstance.result.then(function (applicatorDetails) {
                 $scope.applicatorDetails = applicatorDetails;
                 //$scope.step=step;
-                $scope.formSubmitted= false;
-                $scope.clearFields(applicatorDetails,'initiate');
+                //$scope.formSubmitted= false;
+               // $scope.clearFields(applicatorDetails,'initiate');
                 //window.location="dashboard.php#/Applicator/AddApplicator";
-                $scope.step=1;
+                //$scope.step=1;
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -380,8 +380,8 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             };
         }
         $('#loader').css("display","none");
-        $scope.formSubmitted=false;
-        $scope.clearFields($scope.applicatorDetails,'initiate');
+       // $scope.formSubmitted=false;
+        //$scope.clearFields($scope.applicatorDetails,'initiate');
     };
 
     /* if not amount is paid or half amount is paid */

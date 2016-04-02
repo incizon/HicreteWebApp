@@ -15,7 +15,7 @@ myApp.service('ApplicatorService',function(){
 
 						$scope.loading=false;
 						$('#loader').css("display","none");
-						console.log(data.msg);
+						console.log(data);
 						if(data.msg!="") {
 
 							$rootScope.warningMessage = data.msg;
@@ -25,26 +25,27 @@ myApp.service('ApplicatorService',function(){
 								$scope.$apply(function () {
 									if (data.msg != "") {
 										$('#warning').css("display", "none");
-                                        //window.location.reload(true);
+                                        window.location ="dashboard.php#/Applicator";
                                     }
 								});
 							}, 1000);
 
-							$scope.step=1;
+							//$scope.step=1;
 							//console.log("Done");
 
 							//}
 
 							}
 
-							if (data.msg == "") {
-								$rootScope.errorMessage = "Unable to create Applicator...";
+							if (data.error != "") {
+								//$rootScope.errorMessage = "Unable to create Applicator...";
+								$rootScope.errorMessage = data.error;
 								$('#error').css("display", "block");
 								setTimeout(function () {
 									$scope.$apply(function () {
-										if (data.msg != "") {
+
 											$('#error').css("display", "none");
-										}
+
 									});
 								}, 1000);
 							}
