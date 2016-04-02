@@ -590,11 +590,6 @@ $scope.setScope = function(scope){
                             //alert(data);
                         });
 
-
-
-
-
-
                     $uibModalInstance.close();
                 };
 
@@ -1840,12 +1835,12 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller: function ($scope, $uibModalInstance, paymentDetails, AppService) {
                     AppService.getUsers($scope, $http);
-
                     $scope.paymentDetails = paymentDetails;
-
                     $scope.ok = function () {
+                        //console.log($scope.paymentDetails);
+                        console.log("on Ok click");
+                        AppService.schedulePaymentFollowup($http,$scope,$filter,paymentDetails.InvoiceNo);
 
-                        console.log($scope.paymentDetails);
                         $uibModalInstance.close();
 
                     };
