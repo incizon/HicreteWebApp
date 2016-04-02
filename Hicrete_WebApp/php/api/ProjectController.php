@@ -74,7 +74,7 @@ class ProjectController
     public function getInvoicesByProject($projid){
         
              $project = Project::getInvoicesByProject($projid); // possible user loading method
-         return $project;
+
     }
 
  /**

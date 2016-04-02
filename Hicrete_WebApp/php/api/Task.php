@@ -102,13 +102,26 @@ Class Task {
         return $object;
     }
 
-    public static function getAllTask(){
+    public static function getAllTask($sortBy,$keyword){
         $object  = array();
         try{
                 $db = Database::getInstance();
                 $conn = $db->getConnection();
                 $conn->beginTransaction();
+                if($keyword!='undefined' && $keyword!=="")
+                    $searchKeyword = '%' .$keyword. '%';
+                else
+                    $searchKeyword = '%' ."". '%';
+
+                if($sortBy=="TaskName"){
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword");
+                    $stmt->bindParam(':searchKeyword',$searchKeyword);
+                }else if($sortBy=="CompleteTask"){
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1");
+                }else{
                     $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
+                }
+//                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {
                              while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
                              {

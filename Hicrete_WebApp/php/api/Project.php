@@ -50,15 +50,17 @@ Class Project {
 		try{
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = :projId  AND q.isApproved = 1)");
-				$stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
+				$stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = '56ff6150e7e925762'  AND q.isApproved = 1)");
+				//$stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
 					if($result = $stmt->execute()){
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 							array_push($object, $row);
 						}
+						echo AppUtil::getReturnStatus("success",$object);
 					}
 					else{
-						return "Error in stmt in getInvoicesByProject";
+						echo AppUtil::getReturnStatus("unsuccessful","Error in stmt in getInvoicesByProject");
+//						return "Error in stmt in getInvoicesByProject";
 					}
 		}
 		catch(PDOException $e){

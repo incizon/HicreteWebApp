@@ -25,7 +25,7 @@
             TaskController::saveTask(null, $data->data);
             break;
         case 'getTasks':
-            TaskController::getAllTask();
+            TaskController::getAllTask($data->sortBy,$data->keyword);
             break;
         case 'getNotes':
             TaskController::getNotes($data->taskId);

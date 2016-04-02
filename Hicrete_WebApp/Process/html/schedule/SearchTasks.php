@@ -4,12 +4,12 @@ error_reporting(E_ERROR | E_PARSE);
 require_once '../../../php/appUtil.php';
 if (!isset($_SESSION['token'])) {
     session_start();
-}else{
+} else {
     header("Location: ../../index.html");
     exit();
 }
-$userId=$_SESSION['token'];
-$hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
+$userId = $_SESSION['token'];
+$hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
 
 ?>
 
@@ -34,27 +34,29 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
             <div class="row">
                 <div class="col-md-4">
 
-                    <select class="form-control select" name="searchBy" ng-model="sortExpression"/>
-                    <option value="" disabled selected>Search by </option>>
-
-                    <option value="TaskID">TaskID</option>
+                    <select class="form-control select" name="searchBy" ng-model="sortBy"/>
+                    <option value="" disabled selected>Search by</option>
+                    >
                     <option value="TaskName">TaskName</option>
-                    <option value="Assign To">Assign To</option>
+                    <option>CompleteTask</option>
                     </select>
 
                 </div>
                 <div class="col-md-8">
-                    <div class="input-group" >
+                    <div class="input-group">
                         <span class="input-group-addon"><span class="fa fa-search"></span></span>
 
-                        <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="searchKeyword.$"/>
+                        <input type="text" class="form-control" placeholder="Keywords..." value=""
+                               ng-model="searchKeyword"/>
 
                         <div class="input-group-btn">
                             <button class="btn btn-primary" data-ng-click="getAllTasks()">Search</button>
                         </div>
                     </div>
                 </div>
-            </div><br>
+            </div>
+            <br>
+
             <div class="table-responsive push-up-10">
                 <table class="table table-bordered">
                     <thead>
@@ -68,7 +70,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat = "task in tasks | filter:paginateTasksDetails">
+                    <tr ng-repeat="task in tasks | filter:paginateTasksDetails">
                         <td>{{task.TaskID}}</td>
                         <td>{{task.TaskName}}</td>
                         <td>{{task.TaskDescripion}}</td>
@@ -76,11 +78,15 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                         <td>{{task.UserName}}</td>
                         <td>
 
-                            <a ui-sref="Process.viewTask" > <button class="btn btn-info" ng-click="setTask(task)"><span class="fa fa-pencil-square-o"></span>View</button></a>
+                            <a ui-sref="Process.viewTask">
+                                <button class="btn btn-info" ng-click="setTask(task)"><span
+                                        class="fa fa-pencil-square-o"></span>View
+                                </button>
+                            </a>
                             <?php
-                                if($hasWrite==1){
-                                 echo"<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID)\">Delete</button>";
-                                }
+                            if ($hasWrite == 1) {
+                                echo "<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID)\">Delete</button>";
+                            }
                             ?>
 
                         </td>

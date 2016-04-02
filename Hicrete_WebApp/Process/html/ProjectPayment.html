@@ -57,7 +57,7 @@
                                 <div class="input-group">
 
 
-                                    <select class="form-control" name="InvoiceName" ng-model="paymentDetails.InvoiceNo"
+                                    <select class="form-control" name="InvoiceName" ng-change="getInvoicePayment(paymentDetails.InvoiceNo)" ng-model="paymentDetails.InvoiceNo"
                                             required/>
 
                                     <option value="" disabled selected>Choose Invoice</option>
@@ -277,7 +277,7 @@
                             <!--Start of paid to field-->
                             <div class="form-group">
                                 <div class="col-md-3">
-                                    <label class="control-label">Paid To</label>
+                                    <label class="control-label">Recieve By</label>
                                 </div>
                                 <div class="col-md-9">
                                     <select class="btn dropdown-toggle selectpicker btn-default col-md-12"
@@ -294,7 +294,7 @@
                             <!--Start of pending amount field-->
                             <div class="form-group">
                                 <div class="col-md-3 ">
-                                    <label class="control-label">Pending Amount</label>
+                                    <label class="control-label">Pending Amount of Project</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
@@ -336,15 +336,15 @@
                                 <label class="control-label">Total Amount :</label>
                             </div>
                             <div class="col-md-6">
-                                <strong ng-bind="projectPayment.total_project_amount"></strong>
+                                <strong ng-bind="totalPayableAmount"></strong>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-6">
-                                <label class="control-label">Previous Amount Paid :</label>
+                                <label class="control-label">Amount Paid :</label>
                             </div>
                             <div class="col-md-6">
-                                <strong ng-bind="projectPayment.total_paid_amount"></strong>
+                                <strong ng-bind="totalAmtPaid"></strong>
                             </div>
                         </div>
                         <div class="form-group">
@@ -352,8 +352,7 @@
                                 <label class="control-label">Amount Remaining :</label>
                             </div>
                             <div class="col-md-6">
-                                <strong> {{+projectPayment.total_project_amount -
-                                    +projectPayment.total_paid_amount}}</strong>
+                                <strong> {{totalPayableAmount - totalAmtPaid}}</strong>
                             </div>
                         </div>
                         <!--<div class="form-group">-->
