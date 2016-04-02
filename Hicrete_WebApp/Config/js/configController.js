@@ -54,12 +54,16 @@ configService.getAllAccessPermission($http,$scope);
                         setTimeout(function() {
                             $scope.$apply(function() {
                                 $('#warning').css("display","none");
+                                window.location = "dashboard.php#/Config";
+
                             });
-                        }, 3000);
+                        }, 1000);
+                        //window.location="dashboard.php#/Config/";
+
                     }else if(data.status=="Unsuccessful"){
                         $scope.loading=false;
                         $('#loader').css("display","none");
-                        $rootScope.errorMessage="Role not added..";
+                        $rootScope.errorMessage=data.message;
                         $('#error').css("display","block");
                         setTimeout(function() {
                             $scope.$apply(function() {
@@ -78,9 +82,9 @@ configService.getAllAccessPermission($http,$scope);
                             $scope.$apply(function() {
                                 $('#error').css("display","none");
                             });
-                        }, 3000);
+                        }, 1000);
                     }
-                    window.location.reload(true);
+                    //window.location.reload(true);
 
                 })
                 .error(function (data, status, headers, config)

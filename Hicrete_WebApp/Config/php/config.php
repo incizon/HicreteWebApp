@@ -113,6 +113,33 @@ class Config
 
     }
 
+    public static function isRoleAvailable($roleName)
+    {
+        try{
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("select count(1) as count from rolemaster where roleName=:roleName");
+            $stmt->bindParam(':roleName', $roleName, PDO::PARAM_STR);
+            $stmt ->execute();
+            $result=$stmt->fetch(PDO::FETCH_ASSOC);
+            $count=$result['count'];
+
+            if($count!=0)
+            {
+                return 0;
+            }
+            else
+                return 1;
+
+
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
+
 
     public static function addRole($data, $userId)
     {
@@ -121,47 +148,51 @@ class Config
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $conn->beginTransaction();
+            if(config::isRoleAvailable($data->roleName)) {
+                $conn->beginTransaction();
 
 
-            $roleId = AppUtil::generateId();
-            $stmt = $conn->prepare("INSERT INTO `rolemaster`(`roleId`, `roleName`, `createdBy`, `creationDate`) 
+                $roleId = AppUtil::generateId();
+                $stmt = $conn->prepare("INSERT INTO `rolemaster`(`roleId`, `roleName`, `createdBy`, `creationDate`)
                     VALUES (:roleId,:roleName,:createdBy,now())");
-            $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
-            $stmt->bindParam(':roleName', $data->roleName, PDO::PARAM_STR);
-            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+                $stmt->bindParam(':roleName', $data->roleName, PDO::PARAM_STR);
+                $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
 
-            $rollback = false;
-            if ($stmt->execute()) {
+                $rollback = false;
+                if ($stmt->execute()) {
 
-                foreach ($data->accessPermissions as $accessEntry) {
+                    foreach ($data->accessPermissions as $accessEntry) {
 
-                    if ($accessEntry->read->val) {
-                        if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->read->accessId)) {
-                            $rollback = true;
+                        if ($accessEntry->read->val) {
+                            if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->read->accessId)) {
+                                $rollback = true;
+                            }
+
                         }
 
-                    }
-
-                    if ($accessEntry->write->val) {
-                        if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->write->accessId)) {
-                            $rollback = true;
+                        if ($accessEntry->write->val) {
+                            if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->write->accessId)) {
+                                $rollback = true;
+                            }
                         }
                     }
+                } else {
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
                 }
-            } else {
-                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+
+
+                if ($rollback) {
+                    $conn->rollback();
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+                } else {
+                    $conn->commit();
+                    echo AppUtil::getReturnStatus("Successful", "Role created successfully");
+                }
             }
-
-
-            if ($rollback) {
-                $conn->rollback();
-                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
-            } else {
-                $conn->commit();
-                echo AppUtil::getReturnStatus("Successful", "Role created successfully");
+            else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Role is Already Available");
             }
-
         } catch (Exception $e) {
             echo AppUtil::getReturnStatus("Exception", "Exception Occurred while creating role");
         }
@@ -308,9 +339,10 @@ class Config
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $conn->beginTransaction();
+
 
             if(Config::isUserAvailable($data->userInfo->email)) {
+                $conn->beginTransaction();
                 $password = "";
                 $userId = AppUtil::generateId();
                 $date = new DateTime($data->userInfo->dob);
