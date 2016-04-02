@@ -25,10 +25,14 @@ myApp.service('ApplicatorService',function(){
 								$scope.$apply(function () {
 									if (data.msg != "") {
 										$('#warning').css("display", "none");
-                                        window.location.reload(true);
+                                        //window.location.reload(true);
                                     }
 								});
 							}, 1000);
+
+							$scope.step=1;
+							//console.log("Done");
+
 							//}
 
 							}

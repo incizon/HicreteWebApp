@@ -528,7 +528,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                                     //window.location="dashboard.php#/Inventory";
                                 }, 2000);
                                 $scope.clearFields(inwardData);
-                                $scope.submitted= false;
+                               // $scope.submitted= false;
                                 $scope.step=1;
                             }else{
                                 $rootScope.errorMessage=data.error;
@@ -563,6 +563,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
 
         //inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
+        $scope.step=1;
     }
 
     /***************************************************************************
@@ -962,7 +963,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
 
-
+        $scope.submitted= false;
+        $scope.step=1;
     }
     /***********************************************
      *End of add Outward function
@@ -2026,7 +2028,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
-            $scope.submitted=false;
+            //$scope.submitted=false;
             console.log($scope.submitted);
            /* setTimeout(function () {
                 window.location="dashboard.php#/Inventory/prodInit";
@@ -2045,7 +2047,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
                  }, 1000);*/
             }
         }
-        $scope.submitted = false;
+        //$scope.submitted = false;
     };
 
 
@@ -2059,7 +2061,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
     };
 
     $scope.clear = function (page) {
-        $scope.submitted=false;
+
         console.log('inside clear'+$scope.submitted);
         if (page == 'Init') {
             $scope.prodBatchInfo.batchNo = "";
@@ -2123,6 +2125,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
 
         }
+        //$scope.submitted=false;
 
     };
 

@@ -54,12 +54,16 @@ configService.getAllAccessPermission($http,$scope);
                         setTimeout(function() {
                             $scope.$apply(function() {
                                 $('#warning').css("display","none");
+                                window.location = "dashboard.php#/Config";
+
                             });
-                        }, 3000);
+                        }, 1000);
+                        //window.location="dashboard.php#/Config/";
+
                     }else if(data.status=="Unsuccessful"){
                         $scope.loading=false;
                         $('#loader').css("display","none");
-                        $rootScope.errorMessage="Role not added..";
+                        $rootScope.errorMessage=data.message;
                         $('#error').css("display","block");
                         setTimeout(function() {
                             $scope.$apply(function() {
@@ -78,9 +82,9 @@ configService.getAllAccessPermission($http,$scope);
                             $scope.$apply(function() {
                                 $('#error').css("display","none");
                             });
-                        }, 3000);
+                        }, 1000);
                     }
-                    window.location.reload(true);
+                    //window.location.reload(true);
 
                 })
                 .error(function (data, status, headers, config)
@@ -238,6 +242,29 @@ designation:"",
 userType:""
 };
 
+    $scope.clearFields= function(page)
+    {
+        if(page=='init')
+        {
+            $scope.userInfo.firstName="";
+            $scope.userInfo.lastName="";
+            $scope.userInfo.dob="";
+            $scope.userInfo.address="";
+            $scope.userInfo.city="";
+            $scope.userInfo.state="";
+            $scope.userInfo.country="";
+            $scope.userInfo.email="";
+            $scope.userInfo.mobile="";
+
+        }
+        else if(page=='Access')
+        {
+            $scope.userInfo.designation="";
+            $scope.userInfo.userType="";
+        }
+
+    }
+
     configService.getRoleList($http,$scope);
 
 
@@ -282,6 +309,7 @@ userType:""
               $scope.roleAccessList=[];
               $scope.otherAccessList=[];
               $scope.selectedRole={"roleId":""};
+            $scope.userInfoSubmitted=false;
               //window.location="http://localhost/Hicrete_webapp/dashboard.php#/Config/addUser"; 
   
         }
@@ -329,22 +357,31 @@ userType:""
                          }
                      });
                  }, 3000);
+
+                /* $scope.clearUserForm();
+
+                 $scope.userInfoSubmitted= false;
+                 $scope.step=1;
+*/
                 //doShowAlert("Success","User created successfully");
                  setTimeout(function(){
-                    window.location.reload(true);
-                 },5000);
+                    //window.location.reload(true);
+                     window.location = "dashboard.php#/Config";
+                 },1000);
              }else if(data.status=="Unsuccessful"){
                   //doShowAlert("Failure",data.message);
-                 $scope.errorMessage="User not Added";
+                 $scope.errorMessage=data.message;
+                 $('#loader').css("display","none");
                  $('#error').css("display","block");
                  console.log($scope.errorMessage);
              }else{
                   //doShowAlert("Failure",data.message);
                  $scope.errorMessage="User not Added";
+                 $('#loader').css("display","none");
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
              } 
-             window.location.reload=true;
+             //window.location.reload=true;
             // $scope.clearUserForm();
                      
            })
@@ -353,6 +390,7 @@ userType:""
              //doShowAlert("Failure","Error Occurred");
              $scope.clearUserForm();
                $scope.errorMessage="User not Added";
+               $('#loader').css("display","none");
                $('#error').css("display","block");
                console.log($scope.errorMessage);
            });
@@ -1097,10 +1135,13 @@ $scope.addCompany=function(){
                            $('#warning').css("display","none");
                        });
                    }, 3000);
+                   $scope.submitted=false;
+                   clearCompanyForm();
                }else if(data.status=="Unsuccessful"){
                    $scope.loading=false;
                    $('#loader').css("display","none");
-                   $scope.errorMessage="Company not added..";
+                   //$scope.errorMessage="Company not added..";
+                   $scope.errorMessage=data.message;
                    $('#error').css("display","block");
                    setTimeout(function() {
                        $scope.$apply(function() {
@@ -1125,8 +1166,7 @@ $scope.addCompany=function(){
                alert("Error Occured"+data);
              
            });
-      $scope.submitted=false;
-      clearCompanyForm();
+
       return true;
 }
 
