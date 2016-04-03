@@ -1,5 +1,6 @@
 <?php
 
+//error_reporting(E_ERROR | E_PARSE);
 require_once 'php/user.php';
 if (!isset($_SESSION['token'])) {
     session_start();

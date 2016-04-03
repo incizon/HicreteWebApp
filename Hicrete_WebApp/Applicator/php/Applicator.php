@@ -55,53 +55,59 @@
 
                         $connect->beginTransaction();
 
+					if(Applicator::isApplicatorAvailable($data->firmname)) {
+						if ($data->packageEdited == "true") {
 
-				       if($data->packageEdited=="true") {
+							if ($operationObject->createPackage($data, $userId)) {
 
-						   if($operationObject->createPackage($data,$userId)) {
+								if ($operationObject->createApplicator($data, $userId)) {
 
-							    if ($operationObject->createApplicator($data,$userId)) {
-
-                                    $connect->commit();
+									$connect->commit();
 									$message = "Applicator Created Successfully...!!!";
 									$arr = array('msg' => $message, 'error' => '');
 									$jsn = json_encode($arr);
 									echo($jsn);
-							   }
-                               else{
-                                   $connect->rollBack();
-                                   $message = "Unable to Create Applicator.Please try again...!!!";
-                                   $arr = array('msg' => '' , 'error' => $message);
-                                   $jsn = json_encode($arr);
-                                   echo($jsn);
-                               }
-						   }
-                           else{
+								} else {
+									$connect->rollBack();
+									$message = "Unable to Create Applicator.Please try again...!!!";
+									$arr = array('msg' => '', 'error' => $message);
+									$jsn = json_encode($arr);
+									echo($jsn);
+								}
+							} else {
 
-                               $connect->rollBack();
-                               $message = "Unable to Create Applicator.Please try again...!!!";
-                               $arr = array('msg' => '' , 'error' => $message);
-                               $jsn = json_encode($arr);
-                               echo($jsn);
-                           }
-					   }
-					   if($data->packageEdited=="false"){
-
-						   if ($operationObject->createApplicator($data,$userId)) {
-                               $connect->commit();
-							   $message = "Applicator Created Successfully...!!!";
-							   $arr = array('msg' => $message, 'error' => '');
-							   $jsn = json_encode($arr);
-							   echo($jsn);
-						   }
-                           else{
-                               $connect->rollBack();
-                               $message = "Unable to Create Applicator.Please try again...!!!";
-                               $arr = array('msg' => '' , 'error' => $message);
-                               $jsn = json_encode($arr);
-                               echo($jsn);
-                           }
+								$connect->rollBack();
+								$message = "Unable to Create Applicator.Please try again...!!!";
+								$arr = array('msg' => '', 'error' => $message);
+								$jsn = json_encode($arr);
+								echo($jsn);
+							}
 						}
+						if ($data->packageEdited == "false") {
+
+							if ($operationObject->createApplicator($data, $userId)) {
+								$connect->commit();
+								$message = "Applicator Created Successfully...!!!";
+								$arr = array('msg' => $message, 'error' => '');
+								$jsn = json_encode($arr);
+								echo($jsn);
+							} else {
+								$connect->rollBack();
+								$message = "Unable to Create Applicator.Please try again...!!!";
+								$arr = array('msg' => '', 'error' => $message);
+								$jsn = json_encode($arr);
+								echo($jsn);
+							}
+						}
+					}
+					else
+					{
+						$message = "Applicator Already Exists";
+						$arr = array('msg' => "", 'error' => $message);
+						$jsn = json_encode($arr);
+						echo($jsn);
+
+					}
 				break;
 
 			case 'viewTentativeApplicators':

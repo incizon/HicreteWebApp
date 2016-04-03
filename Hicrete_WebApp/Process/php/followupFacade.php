@@ -6,6 +6,7 @@
  * Time: 16:03
  */
 require_once '../../php/api/FollowupController.php';
+require_once '../../php/api/InvoiceController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {
@@ -22,6 +23,9 @@ $opt = array(
 
 switch($data->operation)
 {
+    case 'getPaymentFollowup':
+        InvoiceController::getInvoiceFollowups($data->invoiceId);
+        break;
     case 'getPaymentFollowup':
         FollowupController::getPaymentFollowup($userId);
         break;

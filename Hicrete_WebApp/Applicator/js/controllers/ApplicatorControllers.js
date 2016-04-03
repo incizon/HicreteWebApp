@@ -28,6 +28,30 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
     };
 
+
+    $scope.clearFields = function(applicatorDetails,page)
+    {
+        if(page=='initial')
+        {
+            applicatorDetails.firmname="";
+            applicatorDetails.addressline1="";
+            applicatorDetails.addressline2="";
+            applicatorDetails.contactno="";
+            applicatorDetails.country="";
+            applicatorDetails.state="";
+            applicatorDetails.city="";
+            applicatorDetails.vatnumber="";
+            applicatorDetails.cstnumber="";
+            applicatorDetails.servicetaxnumber="";
+            applicatorDetails.pannumber="";
+            applicatorDetails.pointofcontact="";
+            applicatorDetails.pointcontactno="";
+        }
+        $scope.formSubmitted=false;
+        console.log($scope.formSubmitted);
+    }
+
+
     /*to store all packages from return from  server */
 
     $scope.packages=[];
@@ -182,7 +206,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
     $scope.processForm = function(size) {
         $scope.loading=true;
-        $scope.errorMessage="";
+        //$scope.errorMessage="";
         //$scope.warningMessage="";
         $('#loader').css("display","block");
         $scope.formSubmitted=false;
@@ -195,8 +219,10 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             console.log($scope.applicatorDetails);
 
             ApplicatorService.submitApplicatorDetails($scope,$http,$rootScope,$scope.applicatorDetails);
+           // $scope.formSubmitted=false;
         }
-
+        $scope.formSubmitted=false;
+        console.log($scope.formSubmitted);
         if(($scope.applicatorDetails.pendingAmount!=0 && $scope.applicatorDetails.received=='Yes')){
             $scope.loading = false;
             $('#loading').css('display','none');
@@ -212,6 +238,28 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope,$uibModalInstance,applicatorDetails) {
                     console.log("Inside Followup");
+                    $scope.clearFields = function(applicatorDetails,page)
+                    {
+                        if(page=='initial')
+                        {
+                            applicatorDetails.firmname="";
+                            applicatorDetails.addressline1="";
+                            applicatorDetails.addressline2="";
+                            applicatorDetails.contactno="";
+                            applicatorDetails.country="";
+                            applicatorDetails.state="";
+                            applicatorDetails.city="";
+                            applicatorDetails.vatnumber="";
+                            applicatorDetails.cstnumber="";
+                            applicatorDetails.servicetaxnumber="";
+                            applicatorDetails.pannumber="";
+                            applicatorDetails.pointofcontact="";
+                            applicatorDetails.pointcontactno="";
+                        }
+                        $scope.formSubmitted=false;
+                    }
+
+
                     AppService.getUsers($scope,$http);
                     $scope.openFollowDate = function() {
                         $scope.followup.opened = true;
@@ -251,6 +299,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             $scope.toggleAnimation = function () {
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
+            $scope.formSubmitted=false;
         }
         if($scope.applicatorDetails.received=='No'){
 
@@ -263,6 +312,28 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
                     AppService.getUsers($scope,$http);
+
+                    $scope.clearFields = function(applicatorDetails,page)
+                    {
+                        if(page=='initial')
+                        {
+                            applicatorDetails.firmname="";
+                            applicatorDetails.addressline1="";
+                            applicatorDetails.addressline2="";
+                            applicatorDetails.contactno="";
+                            applicatorDetails.country="";
+                            applicatorDetails.state="";
+                            applicatorDetails.city="";
+                            applicatorDetails.vatnumber="";
+                            applicatorDetails.cstnumber="";
+                            applicatorDetails.servicetaxnumber="";
+                            applicatorDetails.pannumber="";
+                            applicatorDetails.pointofcontact="";
+                            applicatorDetails.pointcontactno="";
+                        }
+                        $scope.formSubmitted=false;
+                    }
+
                     $scope.openFollowDate = function() {
                         $scope.followup.opened = true;
                     };
@@ -295,15 +366,22 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
             modalInstance.result.then(function (applicatorDetails) {
                 $scope.applicatorDetails = applicatorDetails;
+                //$scope.step=step;
+                //$scope.formSubmitted= false;
+               // $scope.clearFields(applicatorDetails,'initiate');
+                //window.location="dashboard.php#/Applicator/AddApplicator";
+                //$scope.step=1;
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
+            $scope.formSubmitted=false;
             $scope.toggleAnimation = function () {
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
         }
         $('#loader').css("display","none");
-
+       // $scope.formSubmitted=false;
+        //$scope.clearFields($scope.applicatorDetails,'initiate');
     };
 
     /* if not amount is paid or half amount is paid */
