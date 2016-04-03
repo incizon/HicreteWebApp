@@ -1,16 +1,10 @@
 <?php
 
-//use \Jacwright\RestServer\RestException;
 require 'Customer.php';
 
 class CustomerController
 {
 
-    /**
-     * Gets the customer by id
-     *
-     * @url GET /customer/$id
-     */
 
     public function getCustomer($id = null){
 
@@ -23,11 +17,6 @@ class CustomerController
         return $customer;
     }
 
-    /**
-     * Gets all customer
-     *
-     * @url GET /customer
-     */
 
     public function getAllCustomer()
     {
@@ -49,11 +38,7 @@ class CustomerController
     }
 
 
-    /**
-     * Gets customers by search
-     *
-     * @url GET /customer/search/$searchterm&$searchBy
-     */
+
 
     public static function getAllCustomerBySearch($searchterm,$searchBy)
     {
@@ -76,12 +61,7 @@ class CustomerController
     }
 
 
-    /**
-     * Saves a customer to the database
-     *
-     * @url POST /customer
-     * @url PUT /customer/$id
-     */
+
     public static function saveCustomer($id = null, $data){
 
         try{
@@ -104,12 +84,6 @@ class CustomerController
         }
     }
 
-    /**
-     * update customer
-     *
-     * @url POST /customer/update/$id
-     * @url PUT /customer/update/$id
-     */
 
     public static function updateCustomer($id,$data){
 
@@ -131,24 +105,11 @@ class CustomerController
 
     }
 
-    /**
-     * delete customer using id
-     *
-     * @url GET /customer/delete/$id
-     *
-     */
 
     public function deleteCustomer($id){
         $customer = Customer::deleteCustomer($id);
         return $customer;
     }
-
-    /**
-     * delete customer using id
-     *
-     * @url POST /customerlist
-     *
-     */
 
     public static function getCustomerList(){
         try{

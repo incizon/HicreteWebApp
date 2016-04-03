@@ -1,13 +1,8 @@
 <?php
-use \Jacwright\RestServer\RestException;
+
 require 'Workorder.php';
 class WorkorderController
 {
-    /**
-     * Gets workorder by project id
-     *
-     * @url GET /workorder/$projId
-     */
     public function getWokrorderByProject($projId){
         try{
 
@@ -27,24 +22,12 @@ class WorkorderController
 
     }
 
-
-     /**
-     * Gets workorder by quotation id
-     *
-     * @url GET /workorder/$qId/$cId
-     */
     public function getWokrorderByqId($qId,$cId){
              $workorder = Workorder::getWokrorderByqId($qId,$cId);
          return $workorder;
     }
 
 
-    /**
-     * Saves a workorder to the database
-     *
-     * @url POST /workorder
-     * @url PUT /workorder
-     */
     public function saveWorkOrder($data)
     {
         try{
@@ -85,11 +68,6 @@ class WorkorderController
     }
 
 
-    /**
-     * Gets the projects by id or current user
-     *
-     * @url GET /projects
-     */
 
     public function getAllProjects()
     {
@@ -102,28 +80,11 @@ class WorkorderController
     }
 
 
-
-   
-
-    /**
-     * update project
-     *
-     * @url POST /project/update/$id
-     * @url PUT /project/update/$id
-     */
-
     public function updateProject($id,$data){
         $project = project::updateProject($id,$data);
         return $project;
     }
 
-  
-    /**
-     * upload workorder
-     *
-     * @url POST /workorder/upload
-     * 
-     */
 
     public function uploadWorkorder($data){
         $target_dir = "../../upload/Workorders/";
