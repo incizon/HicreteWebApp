@@ -63,25 +63,36 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                <input type="text" class="form-control" ng-model="task.startDate" name="date" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="show.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true" readonly/>
+                                <input required name="startDate"  type="text" class="form-control" ng-model="task.startDate" name="date" ng-click="taskStartDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="show.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true" readonly/>
+                            </div>
+                            <div class="help-block" ng-messages="assignTasksForm.startDate.$error" ng-show="formSubmitted">
+                                <p style="color:red" ng-message="required">Please enter Start date </p>
+
                             </div>
                         </div>
+
+
                     </div>
+
                     <div class="form-group">
                         <label class="col-md-3 control-label">End Date</label>
 
                         <div class="col-md-3">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                <input type="text" class="form-control" ng-model="task.endDate"
-                                       name="date" ng-click="taskEndDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showEnd.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true" readonly/>
+                                <input required  type="text" class="form-control" ng-model="task.endDate"
+                                       name="endDate" ng-click="taskEndDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="showEnd.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true" readonly/>
+                            </div>
+                            <div class="help-block" ng-messages="assignTasksForm.endDate.$error" ng-show="formSubmitted">
+                                <p style="color:red" ng-message="required">Please enter End date </p>
+
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="panel-footer" style="text-align: center;">
                     <button class="btn btn-default" data-ng-click="clearFields(task)">Cancel</button>
-                    <button class="btn btn-primary" name="Assign" data-ng-click="(formSubmitted=true) && assignTask()">Assign</button>
+                    <button class="btn btn-primary" name="Assign" data-ng-click="(formSubmitted=true) && assignTasksForm.$valid && assignTask()">Assign</button>
                 </div>
             </div>
         </form>

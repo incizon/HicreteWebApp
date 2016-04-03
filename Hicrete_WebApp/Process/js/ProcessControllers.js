@@ -3770,14 +3770,14 @@ myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $
 });
 
 
-myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter) {
+myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter,$rootScope) {
 
     console.log("in AssignTaskController");
     $scope.users = [];
     AppService.getUsers($scope, $http);
 
     $scope.assignTask = function () {
-        $('#loader').css("display", "block");
+
         console.log("IN ASSIGN TASK");
         var date = new Date();
         var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
@@ -3796,6 +3796,18 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
             "CreationDate": creationDate
         };
         console.log("Task data is " + JSON.stringify(Taskdata));
+        $('#loader').css("display", "block");
+
+        $scope.clearData= function()
+        {
+            $scope.task.taskname="";
+            $scope.task.description="";
+            $scope.task.startDate="";
+            $scope.task.endDate="";
+            $scope.task.assignedTo="";
+
+
+        }
 
         var data = {
             operation: "saveTask",
@@ -3813,19 +3825,22 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                 } else {
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
 
                 }
                 setTimeout(function () {
-                    $scope.$apply(function () {
+                    //$scope.$apply(function () {
                         $('#warning').css("display", "none");
-                        window.location.reload(true);
-                    });
+
+                        //window.location.reload(true);
+                    //});
                 }, 3000);
+                $scope.clearData();
+                $scope.formSubmitted= false;
 
 
             })
@@ -3833,7 +3848,7 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 console.log(data.error);
 
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
             });
 
