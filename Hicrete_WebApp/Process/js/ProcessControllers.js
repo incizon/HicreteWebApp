@@ -1694,114 +1694,114 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     }
 
 
-    $scope.CreateInvoiceDoc = function () {
-        // console.log("in createInvoice DOc generation");
-        var d1 = $filter('date')($scope.InvoiceDetails.invoiceDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        var d2 = $filter('date')($scope.InvoiceDetails.quotationDate, 'yyyy/MM/dd', '+0530');
-        var d3 = $filter('date')($scope.InvoiceDetails.workOrderDate, 'yyyy/MM/dd', '+0530');
-        //var grandTotal = (+$scope.totalAmnt + +$scope.TaxAmnt) - +$scope.roundingOff;
-        var totalAt = $scope.totalAmnt;
-        var totalTat = $scope.TaxAmnt;
-        var totalAmount = +totalAt + +totalTat;
-        var roundingOff = $scope.roundingOff;
-        var grandTotal = +totalAmount - +roundingOff;
-        /* var invoicData = '{"InvoiceNo":"'+$scope.InvoiceDetails.invoiceNumber+'","InvoiceTitle":"Invoice Title","TotalAmount":"1000","RoundingOffFactor":"10","GrandTotal":"1000","InvoiceBLOB":" ","isPaymentRetention":"1","PurchasersVATNo":"11","PAN":"123456","CreatedBy":"1","QuotationId":"'+$scope.InvoiceDetails.quotationNumber+'","WorkOrderNumber":"'+$scope.InvoiceDetails.workOrderNumber+'","ContactPerson":"'+$scope.InvoiceDetails.contactPerson+'","InvoiceDate":"'+d1+'","QuotationDate":"'+d2+'","WorkOrderDate":"'+d3+'"';
-         var b = [];
-         var data = [];
-         console.log("row size is "+$scope.noOfRows);
-         for(var i=0; i<$scope.noOfRows;i++){
-
-         // b.push({'Title': $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem, 'Decription': $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription,'Quantity': $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity,'Unit': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit,'UnitRate': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate,'Amount': $scope.InvoiceDetails.invoiceItemDetails[i].amount});
-         data[i] = '{"DetailNo":"'+i+'","Title":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationItem+'","Description":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription+'","Quantity":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity+'","UnitRate":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit+'","Amount":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate+'"}';
-         console.log("data is "+data[i]);
-         }
-         var taxDetails =JSON.stringify($scope.taxDetails);
-         console.log("tax is  data "+taxDetails);
-
-         var jsonData = [];
-         jsonData = ',"Quotation":['+data+']';
-         var taxData =[];
-         var taxJson = [];
-         taxData =JSON.stringify($scope.taxDetails);
-         taxJson = ', "TaxJson":'+taxData+' }';
-         var invoiceAllData = invoicData+" "+jsonData+""+taxJson;
-         //console.log("Final invoice data is "+invoiceAllData);*/
-        var invoicData = {
-            "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
-            "InvoiceTitle": "Invoice Title",
-            "TotalAmount": totalAmount,
-            "RoundingOffFactor": $scope.roundingOff,
-            "GrandTotal": grandTotal,
-            "InvoiceBLOB": " ",
-            "isPaymentRetention": "1",
-            "PurchasersVATNo": "11",
-            "PAN": "123456",
-            "CreatedBy": "1",
-            "QuotationId": $scope.InvoiceDetails.quotationNumber,
-            "WorkOrderNumber": $scope.InvoiceDetails.workOrderNumber,
-            "ContactPerson": $scope.InvoiceDetails.contactPerson,
-            "InvoiceDate": d1,
-            "QuotationDate": d2,
-            "WorkOrderDate": d3
-        };
-        //var invoiceAbstract = '{"TaxName":"'+$scope.InvoiceDetails.invoiceItemDetails.quotationItem+'","Description":"'+$scope.InvoiceDetails.invoiceItemDetails.quotationDescription+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'"}';
-        var b = [];
-        var data = [];
-        //console.log("data is "+invoicData);
-        //console.log("noOfRows "+$scope.noOfRows);
-        for (var i = 0; i < $scope.noOfRows; i++) {
-
-            b.push({
-                'Title': $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem,
-                'Decription': $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription,
-                'Quantity': $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity,
-                'Unit': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit,
-                'UnitRate': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate
-            });
-            data[i] = '{"DetailNo":"1","Title":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem + '","Description":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription + '","Quantity":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity + '","UnitRate":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit + '","Amount":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate + '"}';
-            //  console.log("data is "+data[i]);
-        }
-        var taxDetails = JSON.stringify($scope.taxDetails);
-        // console.log("tax is  data "+taxDetails);
-
-        var jsonData = [];
-        jsonData = ',"Details":[' + data + ']';
-        var taxData = [];
-        var taxJson = [];
-        taxData = JSON.stringify($scope.taxDetails);
-        taxJson = ', "taxDetails":' + taxData + ' }';
-        var invoiceAllData = invoicData + " " + jsonData + "" + taxJson;
-        //console.log("111 "+invoiceAllData);
-
-        var invoiceDetails = $scope.InvoiceDetails.invoiceItemDetails;
-        //console.log("invoice details is313 "+invoiceDetails);
-        var taxDetails = $scope.taxDetails;
-        var InvoiceData = {
-            Invoice: invoicData,
-            Details: invoiceDetails,
-            taxDetails: taxDetails
-        };
-        //console.log("doc gen is"+JSON.stringify(InvoiceData));
-
-        $.ajax({
-            type: "POST",
-            url: 'php/api/GenDoc/Invoice',
-            data: JSON.stringify(InvoiceData),
-            dataType: 'json',
-            cache: false,
-            contentType: 'application/json',
-            processData: false,
-            success: function (data) {
-                alert("success gen doc invoice " + JSON.stringify(data));
-
-            },
-            error: function (data) {
-                alert("error in gen doc invoice " + JSON.stringify(data));
-            }
-        });
-
-
-    };
+    //$scope.CreateInvoiceDoc = function () {
+    //    // console.log("in createInvoice DOc generation");
+    //    var d1 = $filter('date')($scope.InvoiceDetails.invoiceDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+    //    var d2 = $filter('date')($scope.InvoiceDetails.quotationDate, 'yyyy/MM/dd', '+0530');
+    //    var d3 = $filter('date')($scope.InvoiceDetails.workOrderDate, 'yyyy/MM/dd', '+0530');
+    //    //var grandTotal = (+$scope.totalAmnt + +$scope.TaxAmnt) - +$scope.roundingOff;
+    //    var totalAt = $scope.totalAmnt;
+    //    var totalTat = $scope.TaxAmnt;
+    //    var totalAmount = +totalAt + +totalTat;
+    //    var roundingOff = $scope.roundingOff;
+    //    var grandTotal = +totalAmount - +roundingOff;
+    //    /* var invoicData = '{"InvoiceNo":"'+$scope.InvoiceDetails.invoiceNumber+'","InvoiceTitle":"Invoice Title","TotalAmount":"1000","RoundingOffFactor":"10","GrandTotal":"1000","InvoiceBLOB":" ","isPaymentRetention":"1","PurchasersVATNo":"11","PAN":"123456","CreatedBy":"1","QuotationId":"'+$scope.InvoiceDetails.quotationNumber+'","WorkOrderNumber":"'+$scope.InvoiceDetails.workOrderNumber+'","ContactPerson":"'+$scope.InvoiceDetails.contactPerson+'","InvoiceDate":"'+d1+'","QuotationDate":"'+d2+'","WorkOrderDate":"'+d3+'"';
+    //     var b = [];
+    //     var data = [];
+    //     console.log("row size is "+$scope.noOfRows);
+    //     for(var i=0; i<$scope.noOfRows;i++){
+    //
+    //     // b.push({'Title': $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem, 'Decription': $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription,'Quantity': $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity,'Unit': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit,'UnitRate': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate,'Amount': $scope.InvoiceDetails.invoiceItemDetails[i].amount});
+    //     data[i] = '{"DetailNo":"'+i+'","Title":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationItem+'","Description":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription+'","Quantity":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity+'","UnitRate":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit+'","Amount":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate+'"}';
+    //     console.log("data is "+data[i]);
+    //     }
+    //     var taxDetails =JSON.stringify($scope.taxDetails);
+    //     console.log("tax is  data "+taxDetails);
+    //
+    //     var jsonData = [];
+    //     jsonData = ',"Quotation":['+data+']';
+    //     var taxData =[];
+    //     var taxJson = [];
+    //     taxData =JSON.stringify($scope.taxDetails);
+    //     taxJson = ', "TaxJson":'+taxData+' }';
+    //     var invoiceAllData = invoicData+" "+jsonData+""+taxJson;
+    //     //console.log("Final invoice data is "+invoiceAllData);*/
+    //    var invoicData = {
+    //        "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
+    //        "InvoiceTitle": "Invoice Title",
+    //        "TotalAmount": totalAmount,
+    //        "RoundingOffFactor": $scope.roundingOff,
+    //        "GrandTotal": grandTotal,
+    //        "InvoiceBLOB": " ",
+    //        "isPaymentRetention": "1",
+    //        "PurchasersVATNo": "11",
+    //        "PAN": "123456",
+    //        "CreatedBy": "1",
+    //        "QuotationId": $scope.InvoiceDetails.quotationNumber,
+    //        "WorkOrderNumber": $scope.InvoiceDetails.workOrderNumber,
+    //        "ContactPerson": $scope.InvoiceDetails.contactPerson,
+    //        "InvoiceDate": d1,
+    //        "QuotationDate": d2,
+    //        "WorkOrderDate": d3
+    //    };
+    //    //var invoiceAbstract = '{"TaxName":"'+$scope.InvoiceDetails.invoiceItemDetails.quotationItem+'","Description":"'+$scope.InvoiceDetails.invoiceItemDetails.quotationDescription+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'"}';
+    //    var b = [];
+    //    var data = [];
+    //    //console.log("data is "+invoicData);
+    //    //console.log("noOfRows "+$scope.noOfRows);
+    //    for (var i = 0; i < $scope.noOfRows; i++) {
+    //
+    //        b.push({
+    //            'Title': $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem,
+    //            'Decription': $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription,
+    //            'Quantity': $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity,
+    //            'Unit': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit,
+    //            'UnitRate': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate
+    //        });
+    //        data[i] = '{"DetailNo":"1","Title":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem + '","Description":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription + '","Quantity":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity + '","UnitRate":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit + '","Amount":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate + '"}';
+    //        //  console.log("data is "+data[i]);
+    //    }
+    //    var taxDetails = JSON.stringify($scope.taxDetails);
+    //    // console.log("tax is  data "+taxDetails);
+    //
+    //    var jsonData = [];
+    //    jsonData = ',"Details":[' + data + ']';
+    //    var taxData = [];
+    //    var taxJson = [];
+    //    taxData = JSON.stringify($scope.taxDetails);
+    //    taxJson = ', "taxDetails":' + taxData + ' }';
+    //    var invoiceAllData = invoicData + " " + jsonData + "" + taxJson;
+    //    //console.log("111 "+invoiceAllData);
+    //
+    //    var invoiceDetails = $scope.InvoiceDetails.invoiceItemDetails;
+    //    //console.log("invoice details is313 "+invoiceDetails);
+    //    var taxDetails = $scope.taxDetails;
+    //    var InvoiceData = {
+    //        Invoice: invoicData,
+    //        Details: invoiceDetails,
+    //        taxDetails: taxDetails
+    //    };
+    //    //console.log("doc gen is"+JSON.stringify(InvoiceData));
+    //
+    //    $.ajax({
+    //        type: "POST",
+    //        url: 'php/api/GenDoc/Invoice',
+    //        data: JSON.stringify(InvoiceData),
+    //        dataType: 'json',
+    //        cache: false,
+    //        contentType: 'application/json',
+    //        processData: false,
+    //        success: function (data) {
+    //            alert("success gen doc invoice " + JSON.stringify(data));
+    //
+    //        },
+    //        error: function (data) {
+    //            alert("error in gen doc invoice " + JSON.stringify(data));
+    //        }
+    //    });
+    //
+    //
+    //};
 
 
 
