@@ -385,7 +385,8 @@ public static function updateProject($id,$data,$loggedUserId){
 
 			$conn->beginTransaction();
 
-			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE `ProjectId`!= :projectId");
+			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE ProjectName=:ProjectName AND `ProjectId`!= :projectId");
+			$stmt->bindParam(':ProjectName',$data->projectDetails->ProjectName, PDO::PARAM_STR);
 			$stmt->bindParam(':projectId',$id, PDO::PARAM_STR);
 
 			$stmt->execute();

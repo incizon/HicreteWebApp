@@ -1983,7 +1983,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 });
 
 
-myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService) {
+myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService,$rootScope) {
 
     $scope.customers = [];
     AppService.getAllCustomers($http, $scope.customers);
@@ -2077,6 +2077,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             companiesInvolved: companiesInvolved
         }
         // console.log("data is "+projectData);
+        $('#loader').css("display", "block");
         console.log("Posting");
         var data = {
             operation: "modifyProject",
@@ -2093,14 +2094,44 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             .success(function (data) {
                 console.log(data);
                 if (data.status == "Successful") {
-                    alert("Project Updated Successfully");
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        //window.location.reload(1);
+                        window.location="dashboard.php#/Process/viewProjects";
+                    }, 1000);
+
+                    //alert("Project Updated Successfully");
                 }else{
+
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                        //window.location.reload(1);
+                    }, 3000);
+
+
+
                     alert(data.message);
                 }
 
 
             })
             .error(function (data) {
+                $('#loader').css("display", "none");
+                //alert("Customer created Successfully");
+                $rootScope.errorMessage = "Technical error Occured Please contact administrator";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                    //window.location.reload(1);
+                }, 3000);
                 console.log(data);
             });
 
