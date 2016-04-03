@@ -74,7 +74,7 @@
                     }
                 }
 
-                public function getYearDetails(){
+                public function getCurrentYearHolidayDetails(){
 
 
                     $db = Database::getInstance();
@@ -106,8 +106,20 @@
                                         array_push($result_array['holidaysList'],$holidaysList);
                                 }
                             }
+
+                            if(sizeof($result_array)>0){
+
+                                echo AppUtil::getReturnStatus("success",$result_array);
+                            }
+                            else{
+                                echo AppUtil::getReturnStatus("failure","Holidays Details Not Available");
+                            }
                         }
-                        echo json_encode($result_array);
+                    else{
+                        echo AppUtil::getReturnStatus("failure","Holidays Details Not Available");
+                    }
+
+
 
             }
 
@@ -201,9 +213,8 @@
                 }
                 else{
                     return false;
-                    echo $stmt1->errorInfo();
-                }
 
+                }
             }
 
             public function getEmployeeDetails(){

@@ -58,11 +58,12 @@ myApp.controller('budgetSegmentController', function ($scope, $http,$rootScope) 
             }
         };
 
+        $("#loader").css("display","block");
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
-                console.log("Dataa");
+
                 console.log(data);
-                $("#loader").css("display","block");
+
                 if (data.status == "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
@@ -163,11 +164,12 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
                 data: data
             }
         };
-        console.log(config);
+
+        $("#loader").css("display","block");
+
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $("#loader").css("display","block");
                 if (data.status == "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
@@ -327,11 +329,10 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
                 data: data
             }
         };
-
+        $("#loader").css("display","block");
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $("#loader").css("display","block");
                 if (data.status == "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
@@ -379,11 +380,10 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
             }
         };
 
+        $("#loader").css("display","block");
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-
-                $("#loader").css("display","block");
                 if (data.status == "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
@@ -402,7 +402,6 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
                         window.location = "dashboard.php#/Process";
                     }, 1000);
                 }
-
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display","none");
@@ -419,6 +418,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 });
 
 myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
+
     var projectid="";
     if($stateParams.costCenterForProject!=null){
         $scope.projectName=$stateParams.costCenterForProject.project_name;
@@ -531,16 +531,15 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
                 data: data
             }
         };
+        $("#loader").css("display","block");
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
-
-                $("#loader").css("display","block");
                 if (data.status == "success"){
+                    $('#loader').css("display","none");
                     $scope.billApprovalList=data.message;
                     $scope.totalItems=$scope.billApprovalList.length;
                 }
                 if(data.status=="failure"){
-                    console.log("In Fail");
                     $('#loader').css("display","none");
                     $rootScope.errorMessage =data.message;
                     $("#error").css("display", "block");
@@ -570,13 +569,13 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
                 data: data
             }
         };
-        console.log(config);
+
+        $("#loader").css("display","block");
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-
-                $("#loader").css("display","block");
                 if (data.status == "success"){
+                    $('#loader').css("display","none");
                     $scope.billDetails=data.message;
                 }
                 if(data.status=="failure"){
@@ -595,7 +594,6 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
                 $("#error").css("display", "block");
             });
     }
-
     $scope.billAction=function(billId,status){
 
         var data = {
@@ -603,17 +601,14 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
             billId:billId,
             status:status
         };
-
         var config = {
             params: {
                 data: data
             }
         };
-        console.log(config);
+        $("#loader").css("display","block");
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
-
-                $("#loader").css("display","block");
                 if (data.status == "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
@@ -632,30 +627,24 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
                         window.location = "dashboard.php#/Process";
                     }, 1000);
                 }
-
             })
             .error(function (data, status, headers, config) {
-
                 $('#loader').css("display","none");
                 $rootScope.errorMessage ="Error Occur While Updating Bill Status";
-
                 $("#error").css("display", "block");
                 setTimeout(function () {
                     $("#error").css("display", "none");
                     window.location = "dashboard.php#/Process";
                 },1000);
-
             });
-    }
+        }
     $scope.paginate = function(value) {
 
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.billApprovalPerPage;
         end = begin + $scope.billApprovalPerPage;
         index = $scope.billApprovalList.indexOf(value);
-
         return (begin <= index && index < end);
     };
-
 
 });
