@@ -25,6 +25,6 @@ switch($data->operation)
         break;
     case "getWorkorderByProjectId":
 
-        echo (json_encode(WorkorderController::getWokrorderByProject($data->data)));
+        WorkorderController::getWokrorderByProject($data->data);
         break;
 }

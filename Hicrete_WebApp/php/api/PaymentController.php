@@ -23,6 +23,48 @@ class PaymentController
          return $payment;
     }
 
+	/**
+     * Gets payment amount paid  and total amount for project by project id
+     *
+     * @url GET /payment/paid/TotalAmount/$projid
+     */
+
+    public function getPaymentPaidAndTotalAmount($projid = null){
+
+        try{
+            if($projid==null){
+                $payment = Payment::getPaymentPaidAndTotalAmount($projid); // possible user loading method
+
+                if($payment!==null) {
+                    echo AppUtil::getReturnStatus("Successful", $payment);
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Project Value is empty");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
+    }
+
+     /**
+     * Gets payment amount paid  and total amount for project by project id and invoice details(Actual payment from ProjectPayment table)
+     *
+     * @url GET /payment/$projid/$invoiceid
+     */
+
+    public function getProjectPayment($projid,$invoiceid){
+        
+             $payment = Payment::getProjectPayment($projid,$invoiceid); // possible user loading method
+         return $payment;
+    }
+
+
      /**
      * Gets payment amount paid for project by project id
      *

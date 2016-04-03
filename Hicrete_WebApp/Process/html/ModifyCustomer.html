@@ -10,176 +10,205 @@
             </div>
             <div class="panel-body">
                 <div class="row">
-                   <div class="col-md-6">
-                       <div class="form-group">
-                           <div class="col-md-3">
-                               <label class="control-label">Name :</label>
-                           </div>
-                           <div class="col-md-9">
-                               <div class="input-group">
-                                   <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                   <input type="text" class="form-control" name="customerName" ng-model="customerDetails.customer_name"/>
-                               </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Name :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerName" ng-model="customerDetails.customer_name"  maxlenght="50"  required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerName.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Customer Name is required</span>
 
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <div class="col-md-3">
-                               <label class="control-label">Address :</label>
-                           </div>
-                           <div class="col-md-9">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Address :</label>
+                            </div>
+                            <div class="col-md-9">
                               <textarea class="form-control" name="customerAddress"
-                                        ng-model="customerDetails.customer_address" rows="2">
+                                        ng-model="customerDetails.customer_address" rows="2" maxlength="80" required>
                               </textarea>
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <div class="col-md-3">
-                               <label class="control-label">City :</label>
-                           </div>
-                           <div class="col-md-9">
-                               <select class="form-control select" name="customerCity" ng-model="customerDetails.customer_city" required />
-                                   <option value="" disabled selected>Choose City..</option>
-                                   <option value="Pune">Pune</option>
-                                   <option value="Mumbai">Mumbai</option>
-                                   <option value="Nagar">Nagar</option>
-                                   <option value="Nasik">Nasik</option>
-                                   <option value="Pandharpur">Pandharpur</option>
-                               </select>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerAddress.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Customer Address is required</span>
 
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <div class="col-md-3">
-                               <label class="control-label">State :</label>
-                           </div>
-                           <div class="col-md-9">
-                               <select class="form-control select" name="firmState"ng-model="customerDetails.customer_state" />
-                                   <option value="" disabled selected>Choose State..</option>
-                                   <option value="Delhi">Delhi</option>
-                                   <option value="Maharashtra">Maharashtra</option>
-                                   <option value="Karnataka">Karnataka</option>
-                                   <option value="Culcatta">Culcatta</option>
-                               </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">City :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerCity" ng-model="customerDetails.customer_city" maxlength="50"  required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerCity.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Customer City is required</span>
 
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <div class="col-md-3">
-                               <label class="control-label">Country :</label>
-                           </div>
-                           <div class="col-md-9">
-                               <select class="form-control select" name="customerCountry" ng-model="customerDetails.customer_country" >
-                                   <option value="" disabled selected>Choose Country..</option>
-                                   <option value="India">India</option>
-                                   <option value="America">America</option>
-                                   <option value="South Africa">South Africa</option>
-                                   <option value="Japan">Japan</option>
-                                   <option value="Italy">Italy</option>
-                               </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">State :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="firmState" ng-model="customerDetails.customer_state"  maxlength="50" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.firmState.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">State is required</span>
 
-                           </div>
-                       </div>
-                       <div class="form-group">
-                           <div class="col-md-3">
-                               <label class="control-label">Email Id :</label>
-                           </div>
-                           <div class="col-md-9">
-                               <div class="input-group">
-                                   <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                   <input type="text" class="form-control" name="customerEmailId" ng-model="customerDetails.customer_emailId"/>
-                               </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Country :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerCountry" ng-model="customerDetails.customer_country" maxlength="50"   required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerCountry.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Country is required</span>
 
-                           </div>
-                       </div>
-                   </div>
-                  <div class="col-md-6">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Email Id :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="email" class="form-control" name="customerEmailId" ng-model="customerDetails.customer_emailId" maxlength="60" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerEmailId.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Email Id is required</span>
+                                    <span style="color:red" ng-message="email">Enter Valid Email Id</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
 
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">Land-line No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline"/>
-                              </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Land-line No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline" maxlength="20" />
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerLandline.$error"
+                                     ng-show="formSubmitted">
 
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">Phone No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone"/>
-                              </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Mobile No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone"  maxlength="15" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="customerModifyForm.customerPhoneNo.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Customer Mobile Number is required</span>
 
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">Fax No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerFaxNo" ng-model="customerDetails.customer_faxNo"/>
-                              </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Fax No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerFaxNo" ng-model="customerDetails.customer_faxNo" maxlength="20"/>
+                                </div>
 
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">VAT No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo"/>
-                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">VAT No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo" maxlength="20"/>
+                                </div>
 
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">CST No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"/>
-                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">CST No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"  maxlength="20"/>
+                                </div>
 
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">Service Tax No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"/>
-                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">Service Tax No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"  maxlength="20"/>
+                                </div>
 
-                          </div>
-                      </div>
-                      <div class="form-group">
-                          <div class="col-md-3">
-                              <label class="control-label">PAN No :</label>
-                          </div>
-                          <div class="col-md-9">
-                              <div class="input-group">
-                                  <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                  <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"/>
-                              </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <label class="control-label">PAN No :</label>
+                            </div>
+                            <div class="col-md-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"  maxlength="20"/>
+                                </div>
 
-                          </div>
-                      </div>
-                  </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
 
@@ -187,7 +216,7 @@
 
             <div class="panel-footer">
                 <button class="btn btn-default pull-left">Clear Form</button>
-                <button class="btn btn-danger pull-right" ng-click="modifyCustomer()">Submit</button>
+                <button class="btn btn-danger pull-right" ng-click="(formSubmitted=true) && customerModifyForm.$valid && modifyCustomer()">Submit</button>
 
             </div>
         </div>

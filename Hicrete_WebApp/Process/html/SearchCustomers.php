@@ -26,7 +26,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
                     <select class="form-control select" name="searchBy" ng-model="searchBy"/>
                     <option value="" disabled selected>Search by </option>>
-
+                    <option value="name">Name</option>
                     <option value="city">City</option>
                     <option value="state">State</option>
                     </select>

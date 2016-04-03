@@ -98,6 +98,28 @@ class Config
 
     }
 
+    public static function isWarehouseAvailable($warehouseName)
+    {
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("select count(1) as count from warehousemaster where wareHouseName=:wareHouseName");
+            $stmt->bindParam(':wareHouseName', $warehouseName, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $result['count'];
+
+            if ($count != 0) {
+                return 0;
+            } else
+                return 1;
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
 
     public static function addWarehouse($data, $userId)
     {
@@ -105,33 +127,38 @@ class Config
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $warehouseId = AppUtil::generateId();
+
+            if(config::isWarehouseAvailable($data->name)) {
+                $warehouseId = AppUtil::generateId();
 
 
-            $stmt = $conn->prepare("INSERT INTO `warehousemaster`(`warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) 
+                $stmt = $conn->prepare("INSERT INTO `warehousemaster`(`warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)
                 VALUES (:id,:name,:abbrevation,:address,:city,:state,:country,:pincode,:phone,:createdBy,now(),:lastModifiedBy,now())");
 
-            $stmt->bindParam(':id', $warehouseId, PDO::PARAM_STR);
-            $stmt->bindParam(':name', $data->name, PDO::PARAM_STR);
-            $stmt->bindParam(':abbrevation', $data->abbrevation, PDO::PARAM_STR);
-            $stmt->bindParam(':address', $data->address, PDO::PARAM_STR);
-            $stmt->bindParam(':city', $data->city, PDO::PARAM_STR);
-            $stmt->bindParam(':state', $data->state, PDO::PARAM_STR);
-            $stmt->bindParam(':country', $data->country, PDO::PARAM_STR);
-            $stmt->bindParam(':pincode', $data->pincode, PDO::PARAM_STR);
-            $stmt->bindParam(':phone', $data->phone, PDO::PARAM_STR);
-            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-            if ($stmt->execute()) {
-                echo AppUtil::getReturnStatus("Successful", "");
+                $stmt->bindParam(':id', $warehouseId, PDO::PARAM_STR);
+                $stmt->bindParam(':name', $data->name, PDO::PARAM_STR);
+                $stmt->bindParam(':abbrevation', $data->abbrevation, PDO::PARAM_STR);
+                $stmt->bindParam(':address', $data->address, PDO::PARAM_STR);
+                $stmt->bindParam(':city', $data->city, PDO::PARAM_STR);
+                $stmt->bindParam(':state', $data->state, PDO::PARAM_STR);
+                $stmt->bindParam(':country', $data->country, PDO::PARAM_STR);
+                $stmt->bindParam(':pincode', $data->pincode, PDO::PARAM_STR);
+                $stmt->bindParam(':phone', $data->phone, PDO::PARAM_STR);
+                $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+                if ($stmt->execute()) {
+                    echo AppUtil::getReturnStatus("Successful", "");
 
 
-            } else {
+                } else {
 
-                echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
 
+                }
             }
-
+            else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Warehouse is Already Available");
+            }
 
         } catch (Exception $e) {
 

@@ -29,13 +29,13 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerName" ng-model="customerDetails.customer_name" pattern="[a-zA-Z0-9 ]+" required/>
+                                    <input type="text" class="form-control" name="customerName" ng-model="customerDetails.customer_name"  maxlenght="50"  required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerName.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">Customer Name is required</span>
-                                    <span style="color:red" ng-message="pattern">Should contain only alphanumeric values </span>
+
                                 </div>
                             </div>
                         </div>
@@ -45,13 +45,13 @@
                             </div>
                             <div class="col-md-9">
                               <textarea class="form-control" name="customerAddress"
-                                        ng-model="customerDetails.customer_address" rows="2" pattern="[a-zA-Z0-9 ]+" required>
+                                        ng-model="customerDetails.customer_address" rows="2" maxlength="80" required>
                               </textarea>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerAddress.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">Customer Address is required</span>
-                                    <span style="color:red" ng-message="pattern">Should contain only alphanumeric values</span>
+
                                 </div>
                             </div>
                         </div>
@@ -62,13 +62,13 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerCity" ng-model="customerDetails.customer_city"   required/>
+                                    <input type="text" class="form-control" name="customerCity" ng-model="customerDetails.customer_city" maxlength="50"  required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerCity.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">Customer City is required</span>
-                                    <span style="color:red" ng-message="pattern">Should contain only alphabets</span>
+
                                 </div>
                             </div>
                         </div>
@@ -79,13 +79,13 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="firmState" ng-model="customerDetails.customer_state"   required/>
+                                    <input type="text" class="form-control" name="firmState" ng-model="customerDetails.customer_state"  maxlength="50" required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.firmState.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">State is required</span>
-                                    <span style="color:red" ng-message="pattern">Should contain only alphabets</span>
+
                                 </div>
                             </div>
                         </div>
@@ -96,13 +96,13 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerCountry" ng-model="customerDetails.customer_country"    required/>
+                                    <input type="text" class="form-control" name="customerCountry" ng-model="customerDetails.customer_country" maxlength="50"   required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerCountry.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">Country is required</span>
-                                    <span style="color:red" ng-message="pattern">Should contain only alphabets</span>
+
                                 </div>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="email" class="form-control" name="customerEmailId" ng-model="customerDetails.customer_emailId" required/>
+                                    <input type="email" class="form-control" name="customerEmailId" ng-model="customerDetails.customer_emailId" maxlength="60" required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerEmailId.$error"
@@ -133,12 +133,12 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline" pattern="[0-9]+" />
+                                    <input type="text" class="form-control" name="customerLandline" ng-model="customerDetails.customer_landline" maxlength="20" />
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerLandline.$error"
                                      ng-show="formSubmitted">
-                                    <span style="color:red" ng-message="pattern">Landline Number should contain only digits</span>
+
                                 </div>
                             </div>
                         </div>
@@ -149,13 +149,13 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone" pattern="[0-9]+" maxlength="10" required/>
+                                    <input type="text" class="form-control" name="customerPhoneNo" ng-model="customerDetails.customer_phone"  maxlength="15" required/>
                                 </div>
                                 <div class="help-block"
                                      ng-messages="customerModifyForm.customerPhoneNo.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">Customer Mobile Number is required</span>
-                                    <span style="color:red" ng-message="pattern">Customer Mobile Number should contain only digits</span>
+
                                 </div>
                             </div>
                         </div>
@@ -166,7 +166,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerFaxNo" ng-model="customerDetails.customer_faxNo"/>
+                                    <input type="text" class="form-control" name="customerFaxNo" ng-model="customerDetails.customer_faxNo" maxlength="20"/>
                                 </div>
 
                             </div>
@@ -178,7 +178,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo" maxlength="12"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_vatNo" maxlength="20"/>
                                 </div>
 
                             </div>
@@ -190,7 +190,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"  maxlength="12"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_cstNo"  maxlength="20"/>
                                 </div>
 
                             </div>
@@ -202,7 +202,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"  maxlength="15"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_serviceTaxNo"  maxlength="20"/>
                                 </div>
 
                             </div>
@@ -214,7 +214,7 @@
                             <div class="col-md-9">
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"  maxlength="10"/>
+                                    <input type="text" class="form-control" name="customerVatNo" ng-model="customerDetails.customer_panNo"  maxlength="20"/>
                                 </div>
 
                             </div>

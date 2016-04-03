@@ -151,73 +151,117 @@ Class Quotation {
 			return $object;
 		}
 
-		/*************************************************/
-			public function reviseQuotation($qid,$data){
-				//echo "Qid is ".$qid;
-				try{
-					$db = Database::getInstance();
-					$conn = $db->getConnection();
-					$conn->beginTransaction();
-					$data1 =$data->Quotation;
-					//print_r($data1);
-					$data2 = $data->Details;
-					//print_r($data2);
-					$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-					$stmt1 = $conn->prepare("DELETE FROM quotation_tax_applicable_to  WHERE TaxID IN (SELECT TaxID FROM quotation_tax_details  WHERE QuotationId = :qid)");
-					$stmt1->bindParam(':qid',$qid,PDO::PARAM_STR);
-					if($stmt1->execute() === TRUE){
+	public static function modifyQuotation($data){
+		$QuotationId = AppUtil::generateId();
+		$quotation = $data->Quotation;
+		$quotationBasicDetails = $data->Details;
+		$quotationTaxDetails = $data->taxDetails;
+		$detailIdArray = [];
+		$quotationIndex = [];
 
-						$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-						$stmt2 = $conn->prepare("DELETE FROM quotation_tax_details  WHERE QuotationId = :qid");
-						$stmt2->bindParam(':qid',$qid,PDO::PARAM_STR);
-						if($stmt2->execute() === TRUE){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
 
-							$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-							$stmt3 = $conn->prepare("DELETE FROM quotation_details  WHERE QuotationId = :qid");
-							$stmt3->bindParam(':qid',$qid,PDO::PARAM_STR);
-							
 
-								if($stmt3->execute() ===TRUE){
-									//echo "Deleted data .";
+		$stmt = $conn->prepare("INSERT INTO quotation(QuotationId, QuotationTitle, RefNo, DateOfQuotation, Subject, ProjectId, CompanyId, QuotationBlob, isApproved, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?);");
+		if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotation->DateOfQuotation,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
 
-										$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-										$stmt4 = $conn->prepare("DELETE FROM quotation WHERE QuotationId = :qid");
-										$stmt4->bindParam(':qid',$qid,PDO::PARAM_STR);
-											if($stmt4->execute() ===TRUE){
-												
-												$conn->commit();
-												//echo "Deleted data .";
-												$result = $this->saveQuotationDetailsAndTax($data);
-												if($result === "Success"){
-													return "Quotation revise succesfully .";
-												}else{
-													return "Error in Quotation revise .";
-												}
-												
-											}else{
-												return "Error in Delete.";
-											}
-									//$conn->commit();
-									//echo "Quotation data update succesfully.";
-									//echo "quotation_details data deleted succesfully.";
-								}else{
-									return "Error in Deletation";
-								}
-									
-						}else{
-							return "Error in Deletation of quotation_tax_details.";
-						}
+			for($i = 0;$i<sizeof($quotationBasicDetails);$i++){
 
-					}
-					else
-					{
-						return "Error in deletion";
-					}
+				$DetailId = AppUtil::generateId();
+				$stmt1 = $conn->prepare("INSERT INTO quotation_details(DetailID, QuotationId, Title, Description, Quantity, UnitRate, Amount, DetailNo,unit) VALUES(?,?,?,?,?,?,?,?,?)");
+				if($stmt1->execute([$DetailId,$QuotationId,$quotationBasicDetails[$i]->quotationItem,$quotationBasicDetails[$i]->quotationDescription,$quotationBasicDetails[$i]->quotationQuantity,$quotationBasicDetails[$i]->quotationUnitRate,$quotationBasicDetails[$i]->amount,$i+1,$quotationBasicDetails[$i]->quotationUnit]) === TRUE){
+					//$detailIdArray.push($DetailId);
+					array_push($detailIdArray,$DetailId);
+					array_push($quotationIndex,$i+1);
 				}
-				catch(PDOException $e){
-					return "Exception in revisesQuotationById".$e->getMessage();
+				else{
+					return false;
 				}
 			}
+
+
+			for($tx=0;$tx<sizeof($quotationTaxDetails);$tx++){
+				$TaxId = AppUtil::generateId();
+				$stmt2 = $conn->prepare("INSERT INTO quotation_tax_details(TaxID, QuotationId, TaxName, TaxPercentage, TaxAmount) VALUES(?,?,?,?,?)");
+				if($stmt2->execute([$TaxId,$QuotationId,$quotationTaxDetails[$tx]->taxTitle,$quotationTaxDetails[$tx]->taxPercentage,$quotationTaxDetails[$tx]->amount]) === TRUE){
+
+					for($s = 0;$s<sizeof($quotationTaxDetails[$tx]->taxArray);$s++){
+
+						for($qut = 0;$qut<sizeof($quotationIndex);$qut++){
+							if($quotationTaxDetails[$tx]->taxArray[$s] === $quotationIndex[$qut]){
+								$stmt3 = $conn->prepare("INSERT INTO quotation_tax_applicable_to(TaxID, DetailsID) VALUES(?,?)");
+								if($stmt3->execute([$TaxId,$detailIdArray[$qut]]) ===FALSE){
+
+									return false;
+								}
+							}
+						}
+					}
+				}
+				else{
+
+					return false;
+				}
+			}
+		}
+
+
+
+		return true;
+
+
+	}
+
+
+	public function reviseQuotation($qid,$data){
+			$db = Database::getInstance();
+			$conn = $db->getConnection();
+			$conn->beginTransaction();
+		try {
+			$stmt1 = $conn->prepare("DELETE FROM quotation_tax_applicable_to  WHERE TaxID IN (SELECT TaxID FROM quotation_tax_details  WHERE QuotationId = :qid)");
+			$stmt1->bindParam(':qid',$qid,PDO::PARAM_STR);
+			if($stmt1->execute() === TRUE){
+
+				$stmt2 = $conn->prepare("DELETE FROM quotation_tax_details  WHERE QuotationId = :qid");
+				$stmt2->bindParam(':qid',$qid,PDO::PARAM_STR);
+				if($stmt2->execute() === TRUE){
+					$stmt3 = $conn->prepare("DELETE FROM quotation_details  WHERE QuotationId = :qid");
+					$stmt3->bindParam(':qid',$qid,PDO::PARAM_STR);
+
+					if($stmt3->execute() ===TRUE){
+
+						$stmt4 = $conn->prepare("DELETE FROM quotation WHERE QuotationId = :qid");
+						$stmt4->bindParam(':qid',$qid,PDO::PARAM_STR);
+						if($stmt4->execute() ===TRUE){
+							if(Quotation::isRefNoPresent($data->Quotation->RefNo)){
+								$conn->rollback();
+								return 2;
+							}
+							if(Quotation::isQuotationTitlePresent($data->Quotation->ProjectId,$data->Quotation->QuotationTitle)){
+								$conn->rollback();
+								return 3;
+							}
+
+							$result = Quotation::modifyQuotation($data);
+								if ($result) {
+									$conn->commit();
+									return 1;
+								}
+
+
+						}
+					}
+				}
+			}
+		}catch(Exception $exception){
+			$conn->rollBack();
+			throw $exception;
+		}
+		$conn->rollback;
+		return 0;
+
+	}
 
 		/*------------------------------------------------*/
 
@@ -312,111 +356,99 @@ Class Quotation {
 		}
 	
 }*/
-	
-public function saveQuotationDetailsAndTax($data){
+
+public static function isRefNoPresent($refNo){
+	$db = Database::getInstance();
+	$conn = $db->getConnection();
+	$stmt = $conn->prepare("SELECT `RefNo` FROM `quotation` WHERE `RefNo`=:refNo ");
+	$stmt->bindParam(':refNo',$refNo, PDO::PARAM_STR);
+
+	$stmt->execute();
+	$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+	if (count($result) > 0) {
+		return true;
+	}
+	return false;
+}
+
+	public static function isQuotationTitlePresent($projectId,$title){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `QuotationTitle` FROM `quotation` WHERE `ProjectId`=:projectId AND `QuotationTitle`=:title");
+		$stmt->bindParam(':projectId',$projectId, PDO::PARAM_STR);
+		$stmt->bindParam(':title',$title, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+
+
+public static  function saveQuotationDetailsAndTax($data){
 	$QuotationId = AppUtil::generateId();
 	$quotation = $data->Quotation;
 	$quotationBasicDetails = $data->Details;
 	$quotationTaxDetails = $data->taxDetails;
 	 $detailIdArray = [];
 	 $quotationIndex = [];
-	 $return = FALSE;
 
-	//print_r($quotation);
-	//print_r($quotationBasicDetails);
-	//print_r($quotationTaxDetails);
-	try{
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-		$conn->beginTransaction();
-		$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
+	$db = Database::getInstance();
+	$conn = $db->getConnection();
+	$conn->beginTransaction();
+
 		$stmt = $conn->prepare("INSERT INTO quotation(QuotationId, QuotationTitle, RefNo, DateOfQuotation, Subject, ProjectId, CompanyId, QuotationBlob, isApproved, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?);");
-			if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotation->DateOfQuotation,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
-				/*foreach ($quotation as $quot) {*/
-						for($i = 0;$i<sizeof($quotationBasicDetails);$i++){
-						#insert  all quotation detail 
-							//print_r($quotationBasicDetails[$i]);
-								$DetailNo = AppUtil::generateId();
-								$DetailId = AppUtil::generateId();
-								$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-								$stmt1 = $conn->prepare("INSERT INTO quotation_details(DetailID, QuotationId, Title, Description, Quantity, UnitRate, Amount, DetailNo,unit) VALUES(?,?,?,?,?,?,?,?,?)");
-									if($stmt1->execute([$DetailId,$QuotationId,$quotationBasicDetails[$i]->quotationItem,$quotationBasicDetails[$i]->quotationDescription,$quotationBasicDetails[$i]->quotationQuantity,$quotationBasicDetails[$i]->quotationUnitRate,$quotationBasicDetails[$i]->amount,$i+1,$quotationBasicDetails[$i]->quotationUnit]) === TRUE){
-										//$detailIdArray.push($DetailId);	
-										array_push($detailIdArray,$DetailId);
-										array_push($quotationIndex,$i+1);
-									}
-									else{
-										return "ERROR in saveQuotationDetailsAndTax stmt1";
-									}
-						}
-//echo"index array is ";
-//print_r($quotationIndex);
-//print_r($detailIdArray);
-						if(sizeof($quotationTaxDetails) === 0){
-							//echo "size 0";
-							$return = TRUE;
+		if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotation->DateOfQuotation,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
+
+			for($i = 0;$i<sizeof($quotationBasicDetails);$i++){
+
+					$DetailId = AppUtil::generateId();
+					$stmt1 = $conn->prepare("INSERT INTO quotation_details(DetailID, QuotationId, Title, Description, Quantity, UnitRate, Amount, DetailNo,unit) VALUES(?,?,?,?,?,?,?,?,?)");
+						if($stmt1->execute([$DetailId,$QuotationId,$quotationBasicDetails[$i]->quotationItem,$quotationBasicDetails[$i]->quotationDescription,$quotationBasicDetails[$i]->quotationQuantity,$quotationBasicDetails[$i]->quotationUnitRate,$quotationBasicDetails[$i]->amount,$i+1,$quotationBasicDetails[$i]->quotationUnit]) === TRUE){
+							//$detailIdArray.push($DetailId);
+							array_push($detailIdArray,$DetailId);
+							array_push($quotationIndex,$i+1);
 						}
 						else{
-							//echo "size more";
-							for($tx=0;$tx<sizeof($quotationTaxDetails);$tx++){
-								$TaxId = AppUtil::generateId();
-								$conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-								$stmt2 = $conn->prepare("INSERT INTO quotation_tax_details(TaxID, QuotationId, TaxName, TaxPercentage, TaxAmount) VALUES(?,?,?,?,?)");
-									if($stmt2->execute([$TaxId,$QuotationId,$quotationTaxDetails[$tx]->taxTitle,$quotationTaxDetails[$tx]->taxPercentage,$quotationTaxDetails[$tx]->amount]) === TRUE){
-										for($s = 0;$s<sizeof($quotationTaxDetails[$tx]->taxArray);$s++){
-														
-														for($qut = 0;$qut<sizeof($quotationIndex);$qut++){
-															if($quotationTaxDetails[$tx]->taxArray[$s] === $quotationIndex[$qut]){
-																#tax is present for given item of quotation
-																//echo "tax is present for object".$qut."\n";
-																//echo "tax id will be".$TaxId."\n";
-																//echo "detail no wii be ".$detailIdArray[$qut]."\n";
-																$stmt3 = $conn->prepare("INSERT INTO quotation_tax_applicable_to(TaxID, DetailsID) VALUES(?,?)");
-																if($stmt3->execute([$TaxId,$detailIdArray[$qut]]) === TRUE){
-																	$return = TRUE;
-																	//echo "inserted";
-																}
-																else{
-																	$return = FALSE;
-																	//echo "ERROR in saveQuotationDetailsAndTax stmt3";
-																}
-															}
-															else{
-																#tax is not present
-															//echo "Tax is not present \n";
-															}
-														}
-												}
-									}
-									else{
-										return "Error in saveQuotationDetailsAndTax stmt2 ";
-									}
+							$conn->rollBack();
+							return false;
 						}
-						}
-						
-
-					
-			}
-			else{
-				return "Error in saveQuotationDetailsAndTax in stmt";
 			}
 
-			if($return === TRUE){
-				#commit
-				$conn->commit();
-				return "Success";
+
+			for($tx=0;$tx<sizeof($quotationTaxDetails);$tx++){
+				$TaxId = AppUtil::generateId();
+				$stmt2 = $conn->prepare("INSERT INTO quotation_tax_details(TaxID, QuotationId, TaxName, TaxPercentage, TaxAmount) VALUES(?,?,?,?,?)");
+				if($stmt2->execute([$TaxId,$QuotationId,$quotationTaxDetails[$tx]->taxTitle,$quotationTaxDetails[$tx]->taxPercentage,$quotationTaxDetails[$tx]->amount]) === TRUE){
+
+					for($s = 0;$s<sizeof($quotationTaxDetails[$tx]->taxArray);$s++){
+
+						for($qut = 0;$qut<sizeof($quotationIndex);$qut++){
+							if($quotationTaxDetails[$tx]->taxArray[$s] === $quotationIndex[$qut]){
+								$stmt3 = $conn->prepare("INSERT INTO quotation_tax_applicable_to(TaxID, DetailsID) VALUES(?,?)");
+								if($stmt3->execute([$TaxId,$detailIdArray[$qut]]) ===FALSE){
+									$conn->rollBack();
+									return false;
+								}
+							}
+						}
+					}
+				}
+				else{
+					$conn->rollBack();
+					return false;
+				}
 			}
-			else{
-				#rollback
-				$conn->rollback();
-				return "Error ";
-			}
-		//print_r($data);
-	}
-	catch(PDOException $e){
-		return "Exception in saveQuotationDetailsAndTax".$e->getMessage();
-	}
+		}
+
+
+		$conn->commit();
+		return true;
 }
+
+
 
 
 

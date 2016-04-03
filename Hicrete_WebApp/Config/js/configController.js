@@ -1205,10 +1205,13 @@ $scope.addWarehouse=function(){
                            $('#warning').css("display","none");
                        });
                    }, 3000);
+                   $scope.warehouseSubmitted=false;
+                   clearWarehouseForm();
                }else if(data.status=="Unsuccessful"){
                    $scope.loading=false;
                    $('#loader').css("display","none");
-                   $scope.errorMessage="Warehouse not created..";
+                   //$scope.errorMessage="Warehouse not created..";
+                   $scope.errorMessage=data.message;
                    $('#error').css("display","block");
                    setTimeout(function() {
                        $scope.$apply(function() {
@@ -1233,8 +1236,7 @@ $scope.addWarehouse=function(){
                alert("Error Occured"+data);
              
            });
-      $scope.warehouseSubmitted=false;
-      clearWarehouseForm();
+
       return true;
 
   }

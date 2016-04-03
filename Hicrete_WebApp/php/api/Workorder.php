@@ -7,79 +7,24 @@ Class Workorder {
     public function getWokrorderByProject($projId) {
         $object = array();
         $final = array();
-       /* try {
-            $db = Database::getInstance();
-            $conn = $db->getConnection();                                          //where q.ProjectId=wo.ProjectId AND q.isApproved = 1
-            $stmt = $conn->prepare("SELECT * from work_order wo,quotation q where wo.ProjectId =q.ProjectId AND (wo.ProjectId = :projId AND q.isApproved=1)");
-            $stmt->bindParam(':projId', $projId, PDO::PARAM_STR);
-            
-            if($result = $stmt->execute()){
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                    array_push($object, $row);
-                }
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT w.*,q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation FROM work_order w ,quotation q WHERE w.ProjectId =:projId AND q.QuotationId=w.`quotationId`");
+        $stmt->bindParam(':projId',$projId,PDO::PARAM_STR);
+        if($result = $stmt->execute()){
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+              $final['WorkOrderNo'] = $row['WorkOrderNo'];
+              $final['WorkOrderName'] = $row['WorkOrderName'];
+              $final['ReceivedDate'] = $row['ReceivedDate'];
+              $final['QuotationTitle'] = $row['QuotationTitle'];
+              $final['QuotationId']  =  $row['QuotationId'] ;
+              $final['RefNo'] =$row['RefNo'] ;
+              $final['DateOfQuotation'] = $row['DateOfQuotation'];
+              array_push($object, $final);
             }
-
-         } catch (PDOException $e) {
-            echo $e->getMessage();
-        }*/
-        try{
-            $db = Database::getInstance();
-            $conn = $db->getConnection(); 
-            $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-            $stmt = $conn->prepare("SELECT * FROM work_order w WHERE w.ProjectId =:projId");
-            $stmt->bindParam(':projId',$projId,PDO::PARAM_STR);
-                  if($result = $stmt->execute()){
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-                           // array_push($object, $row);
-                           
-                           // print_r($row);
-                            $WorkOrderNo = $row['WorkOrderNo'];
-                            $WorkOrderName = $row['WorkOrderName'];
-                            $ReceivedDate = $row['ReceivedDate'];
-                            $CompanyId = $row['companyId'];
-                             $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-                             $stmt1 = $conn->prepare("SELECT q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation from quotation q WHERE q.ProjectId =:projId AND q.CompanyId = :companyId");
-                              $stmt1->bindParam(':projId',$projId,PDO::PARAM_STR);
-                              $stmt1->bindParam(':companyId',$CompanyId,PDO::PARAM_STR);
-                              if($result1 = $stmt1->execute()){
-                                  /*  while (){
-                                       // print_r($row1);
-                                        echo "quotation name is ".$row1['QuotationTitle'];
-                                    }*/
-                                    $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                                    $QuotationTitle = $row1['QuotationTitle'];
-                                    $QuotationId = $row1['QuotationId'];
-                                    $RefNo = $row1['RefNo'];
-                                    $DateOfQuotation = $row1['DateOfQuotation'];
-                                    
-                                    //echo "quotation name is ".$row1['QuotationTitle']."\n";
-
-                              }
-                              else{
-                                return "error in stmt2 getWokrorderByProject";
-                              }
-                             //echo "work order is ".$WorkOrderNo;
-                              //echo "WorkOrderNo is ".$WorkOrderNo."\n";
-                              //echo "WorkOrderName is ".$WorkOrderName."\n";
-                              //echo "ReceivedDate is ".$ReceivedDate."\n";
-                              //echo "QuotationTitle is ".$QuotationTitle."\n";
-                              $final['WorkOrderNo'] = $WorkOrderNo;
-                              $final['WorkOrderName'] = $WorkOrderName;
-                              $final['ReceivedDate'] = $ReceivedDate;
-                              $final['QuotationTitle'] = $QuotationTitle;
-                              $final['QuotationId']  =  $QuotationId ;
-                              $final['RefNo'] = $RefNo;
-                              $final['DateOfQuotation'] = $DateOfQuotation;
-                              array_push($object, $final);
-                        }
-                    }
-                    else{
-                        return "Error in execute getWokrorderByProject";
-                    }
-
         }
-        catch(PDOException $e){
-            return "Exception in getWokrorderByProject".$e->getMessage();
+        else{
+            return null;
         }
 
         $db = null;

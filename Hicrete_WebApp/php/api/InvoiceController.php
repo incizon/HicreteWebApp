@@ -21,7 +21,7 @@ class InvoiceController
                 $invoice = Invoice::loadAllInvoiceTax();
             }
 
-            if($invoice!=null){
+            if($invoice!==null){
                 echo AppUtil::getReturnStatus("Successful",$invoice);
             }
             else {
@@ -50,7 +50,7 @@ class InvoiceController
                 $invoice = Invoice::loadInvoiceFollowups($invoiceid);
             }
 
-            if($invoice!=null){
+            if($invoice!==null){
                 echo AppUtil::getReturnStatus("Successful",$invoice);
             }
             else {
@@ -72,14 +72,27 @@ class InvoiceController
      */
 
     public function loadInvoiceForProject($projid = null){
-        
-         if ($projid !=null) {
-             $invoice = Invoice::loadInvoiceForProject($projid); // possible user loading method
-         } else {
-             $invoice = Invoice::loadInvoiceForProject();
-         }
 
-         return $invoice;
+        try{
+            if ($projid !=null) {
+                $invoice = Invoice::loadInvoiceForProject($projid); // possible user loading method
+            } else {
+                $invoice = Invoice::loadInvoiceForProject();
+            }
+
+            if($invoice!==null) {
+                echo AppUtil::getReturnStatus("Successful", $invoice);
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
+
+
     }
      
     /**
