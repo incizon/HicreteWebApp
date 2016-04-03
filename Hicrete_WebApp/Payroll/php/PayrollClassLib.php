@@ -30,47 +30,51 @@
                     else{
                         $weeklyOffDay="null";
                     }
-                    $stmt=$connect->prepare(" Select count(*) from attendance_year WHERE to_date>=:toDate");
-                    $stmt->bindParam(':toDate',$toDate);
-                    $stmt->execute();
-                    $result=$stmt->fetch();
-                    $count=$result[0];
+                    try {
+                        $stmt = $connect->prepare(" Select count(*) from attendance_year WHERE to_date>=:toDate");
+                        $stmt->bindParam(':toDate', $toDate);
+                        $stmt->execute();
+                        $result = $stmt->fetch();
+                        $count = $result[0];
 
-                    if($count>0){
+                        if ($count > 0) {
 
-                        return 2;
-                    }
-                    else {
-                        $stmt1 = $connect->prepare("INSERT INTO attendance_year(caption_of_year,from_date,to_date,no_of_paid_leaves,weekly_off_day,created_by,creation_date)
+                            return 2;
+                        } else {
+                            $stmt1 = $connect->prepare("INSERT INTO attendance_year(caption_of_year,from_date,to_date,no_of_paid_leaves,weekly_off_day,created_by,creation_date)
 						     VALUES (:captionYear,:fromDate,:toDate,:noOfPaidLeaves,:weeklyOffDay,:createdBy,NOW())");
 
-                        $stmt1->bindParam(':captionYear', $captionYear);
-                        $stmt1->bindParam(':fromDate', $fromDate);
-                        $stmt1->bindParam(':toDate', $toDate);
-                        $stmt1->bindParam(':noOfPaidLeaves', $noOfPaidLeaves);
-                        $stmt1->bindParam(':weeklyOffDay', $weeklyOffDay);
-                        $stmt1->bindParam(':createdBy', $userId);
+                            $stmt1->bindParam(':captionYear', $captionYear);
+                            $stmt1->bindParam(':fromDate', $fromDate);
+                            $stmt1->bindParam(':toDate', $toDate);
+                            $stmt1->bindParam(':noOfPaidLeaves', $noOfPaidLeaves);
+                            $stmt1->bindParam(':weeklyOffDay', $weeklyOffDay);
+                            $stmt1->bindParam(':createdBy', $userId);
 
-                        if ($stmt1->execute()) {
-                            $isComplete = 1;
-                            $endDate = strtotime($toDate);
-                            for ($i = strtotime($weeklyOffDay, strtotime($fromDate)); $i <= $endDate; $i = strtotime('+1 week', $i)) {
+                            if ($stmt1->execute()) {
+                                $isComplete = 1;
+                                $endDate = strtotime($toDate);
+                                for ($i = strtotime($weeklyOffDay, strtotime($fromDate)); $i <= $endDate; $i = strtotime('+1 week', $i)) {
 
-                                $stmt2 = $connect->prepare("INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)");
-                                $stmt2->bindParam(':caption', $captionYear);
-                                $date = new DateTime(date('Y-m-d', $i));
-                                $nxtDate = $date->format('Y-m-d');
+                                    $stmt2 = $connect->prepare("INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)");
+                                    $stmt2->bindParam(':caption', $captionYear);
+                                    $date = new DateTime(date('Y-m-d', $i));
+                                    $nxtDate = $date->format('Y-m-d');
 
-                                $stmt2->bindParam(':offDate', $nxtDate);
-                                if (!$stmt2->execute()) {
-                                    $isComplete = 0;
-                                    break;
+                                    $stmt2->bindParam(':offDate', $nxtDate);
+                                    if (!$stmt2->execute()) {
+                                        $isComplete = 0;
+                                        break;
+                                    }
                                 }
+                                return $isComplete;
+                            } else {
+                                return 0;
                             }
-                            return $isComplete;
-                        } else {
-                            return 0;
                         }
+                    }
+                    catch(Exception $e){
+                        echo AppUtil::getReturnStatus("failure","Exception Occur While Creating Year");
                     }
                 }
 
@@ -134,24 +138,28 @@
                     $holidayDate = $date1->format('Y-m-d');
 
                     $description=$data->description;
-
-                    $stmt1 = $connect->prepare("INSERT INTO holiday_in_year(caption_of_year,holiday_date,description,created_by,creation_date)
+                    try {
+                        $stmt1 = $connect->prepare("INSERT INTO holiday_in_year(caption_of_year,holiday_date,description,created_by,creation_date)
 						     VALUES (:captionYear,:holidayDate,:description,:createdBy,NOW())");
 
-                    $stmt1->bindParam(':captionYear',$captionYear);
-                    $stmt1->bindParam(':holidayDate',$holidayDate);
-                    $stmt1->bindParam(':description', $description);
-                    $stmt1->bindParam(':createdBy', $userId);
+                        $stmt1->bindParam(':captionYear', $captionYear);
+                        $stmt1->bindParam(':holidayDate', $holidayDate);
+                        $stmt1->bindParam(':description', $description);
+                        $stmt1->bindParam(':createdBy', $userId);
 
-                    if($stmt1->execute()){
+                        if ($stmt1->execute()) {
 
-                          return true;
+                            return true;
+                        } else {
+
+                            return false;
+                        }
                     }
-                    else{
-
-                          return false;
+                    catch(Exception $e){
+                        echo AppUtil::getReturnStatus("failure","Exception occur while creating holiday");
                     }
                 }
+
             public function removeHoliday($data){
 
                 $db = Database::getInstance();
@@ -159,6 +167,7 @@
 
                     $holidayDate=$data->holiday_date;
 
+                try{
                     $stmt1=$connect->prepare("DELETE FROM holiday_in_year WHERE holiday_date=:holidayDate");
                     $stmt1->bindParam('holidayDate',$holidayDate);
                     if($stmt1->execute())
@@ -169,7 +178,10 @@
 
                         return false;
                     }
-
+                }
+                catch(Exception $e){
+                    echo AppUtil::getReturnStatus("failure","Exception occur while removing holiday");
+                }
             }
 
             public function createLeave($data){
@@ -193,27 +205,34 @@
                 $actionDate="null";
                 $actionBy="null";
 
-                $stmt1=$connect->prepare("INSERT INTO leave_application_master(application_id,leave_applied_by,from_date,to_date,type_of_leaves,no_of_leaves,reason,status,application_date,action_by,action_date)
+                try {
+                    $stmt1 = $connect->prepare("INSERT INTO leave_application_master(application_id,leave_applied_by,from_date,to_date,type_of_leaves,no_of_leaves,reason,status,application_date,action_by,action_date)
                                         VALUES(:applicationId,:leaveAppliedBy,:fromDate,:toDate,:type_of_leaves,:no_of_leaves,:reason,:status,NOW(),:actionBy,:actionDate)");
 
 
-                $stmt1->bindParam(':applicationId',$applicationId);
-                $stmt1->bindParam(':leaveAppliedBy',$leaveAppliedBy);
-                $stmt1->bindParam(':fromDate',$fromDate);
-                $stmt1->bindParam('toDate',$toDate);
-                $stmt1->bindParam('type_of_leaves',$typeOfLeave);
-                $stmt1->bindParam('no_of_leaves',$noOfLeaves);
-                $stmt1->bindParam(':reason',$reason);
-                $stmt1->bindParam(':status',$status);
-                $stmt1->bindParam(':actionDate',$actionDate);
-                $stmt1->bindParam(':actionBy',$actionBy);
+                    $stmt1->bindParam(':applicationId', $applicationId);
+                    $stmt1->bindParam(':leaveAppliedBy', $leaveAppliedBy);
+                    $stmt1->bindParam(':fromDate', $fromDate);
+                    $stmt1->bindParam('toDate', $toDate);
+                    $stmt1->bindParam('type_of_leaves', $typeOfLeave);
+                    $stmt1->bindParam('no_of_leaves', $noOfLeaves);
+                    $stmt1->bindParam(':reason', $reason);
+                    $stmt1->bindParam(':status', $status);
+                    $stmt1->bindParam(':actionDate', $actionDate);
+                    $stmt1->bindParam(':actionBy', $actionBy);
 
-                if($stmt1->execute()){
-                    return true;
+                    if ($stmt1->execute()) {
+                        return true;
+                    } else {
+                        return false;
+
+                    }
                 }
-                else{
-                    return false;
-
+                catch(Exception $e){
+                    $message = "Exception Occur While Creating Leave...!!!";
+                    $arr = array('msg' => '', 'error' => $message);
+                    $jsn = json_encode($arr);
+                    echo($jsn);
                 }
             }
 
@@ -436,6 +455,7 @@
                  $db = Database::getInstance();
                  $connect = $db->getConnection();
 
+                 try{
                  $stmt1=$connect->prepare("UPDATE leave_application_master
                                             SET status='cancel'
                                             WHERE application_id=:applicationId
@@ -449,18 +469,28 @@
                      else{
                           return false;
                      }
-                }
+                 }
+                 catch(Exception $e){
+
+                     echo AppUtil::getReturnStatus("fail","Exception Occur while Changing Canceling Leave");
+                 }
+             }
 
             public function getYears(){
 
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
-                $stmt=$connect->prepare("SELECT caption_of_year FROM attendance_year ");
+                try {
+                    $stmt = $connect->prepare("SELECT caption_of_year FROM attendance_year ");
 
-                if($stmt->execute()){
+                    if ($stmt->execute()) {
 
-                    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
-                    return true;
+                        echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+                        return true;
+                    }
+                }
+                catch(Exception $e){
+                    echo AppUtil::getReturnStatus("fail","Exception Occur While Getting Years");
                 }
             }
 
@@ -611,6 +641,7 @@
                 $status=$data->status;
                 $applicationId=$data->applicationId;
 
+                try{
                 $stmt=$connect->prepare("UPDATE leave_application_master SET
                                          status=:status,
                                          action_by=:actionBy,
@@ -621,13 +652,16 @@
                 $stmt->bindParam(':actionBy',$userId);
                 $stmt->bindParam(':applicationId',$applicationId);
 
-                $connect->beginTransaction();
-                if($stmt->execute()){
-                    echo AppUtil::getReturnStatus("success", "Status Updated Successfully");
-                    $connect->commit();
-                    return true;
+                    $connect->beginTransaction();
+                    if($stmt->execute()){
+                        echo AppUtil::getReturnStatus("success", "Status Updated Successfully");
+                        $connect->commit();
+                        return true;
+                    }
                 }
-
+                catch(Exception $e){
+                    echo AppUtil::getReturnStatus("fail", "Exception While Updating Leave Approval");
+                }
             }
         }
 
