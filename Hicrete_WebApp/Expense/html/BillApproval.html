@@ -1,3 +1,13 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
 <div class="row">
 <div class="col-lg-12 col-md-12">
 
@@ -21,61 +31,120 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Prayeja City</td>
-                        <td>Prayeja City Demo</td>
-                        <td>100000</td>
-                        <td>Namdev</td>
+                    <tr ng-repeat="bill in billApprovalList">
+                        <td>{{$index+1}}</td>
+                        <td>{{bill.projectName}}</td>
+                        <td>{{bill.description}}</td>
+                        <td>{{bill.amount}}</td>
+                        <td>{{bill.created_by}}</td>
                         <td>
-                            <button class="btn btn-info">View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Prayeja City</td>
-                        <td>Gokhale Constructions Demo</td>
-                        <td>200000</td>
-                        <td>Namdev</td>
-                        <td>
-                            <button class="btn btn-info">View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Goel Ganga</td>
-                        <td>Goel Ganga Demo</td>
-                        <td>10000</td>
-                        <td>Ajit</td>
-                        <td>
-                            <button class="btn btn-info">View</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Dream City</td>
-                        <td>Dream City Demo</td>
-                        <td>200000</td>
-                        <td>Atul</td>
-                        <td>
-                            <button class="btn btn-info">View</button>
+                            <button data-toggle="modal"  data-target="#viewBillApproval" class="btn btn-info" data-ng-click="viewBillDetails(bill.expensedetailsid)">View</button>
                         </td>
                     </tr>
 
                     </tbody>
                 </table>
             </div>
-
         </div>
-
-
     </div>
     <uib-pagination total-items="totalItems" ng-model="currentPage"
                     max-size="5" boundary-links="true"
                     items-per-page="BillApprovalPerPage" class="pagination-sm">
     </uib-pagination>
 
-
 </div>
 </div>
 
+<div class="modal fade" id="viewBillApproval" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Bill Approval</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                <div class="form-horizontal">
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Project Name</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{billDetails.projectName}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Segment Name</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{billDetails.budgetSegmentName}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Bill Number</label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{billDetails.billNo}}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                     </div>
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Bill Issuing Entity </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{billDetails.billissueingentity}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Bill Amount </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{billDetails.amount}}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-4">
+                                <label class="control-label">Bill Date </label>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <label class="control-label">{{billDetails.dateofbill}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-ng-click="billAction(billDetails.billid,'accepted')" data-dismiss="modal">Accept</button>
+                <button type="button" class="btn btn-danger" data-ng-click="billAction(billDetails.billid,'rejected')" data-dismiss="modal">Reject</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
+</div>

@@ -1,4 +1,13 @@
-  <div class="row" ng-controller="costCenterController">
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+  <div class="row">
                         <div class="col-md-12">
                             
                             <form name="costCenterForm" class="form-horizontal" novalidate>  
@@ -6,7 +15,7 @@
                             <div class="panel panel-default">
                                 <!--Start of form heading section-->
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><strong>Expense</strong> Details</h3>
+                                    <h3 class="panel-title"><strong>Create Cost</strong> Center</h3>
                                 </div>
                                 <!--End of form heading section-->
                                 
@@ -103,6 +112,5 @@
                             <!--End of form section-->
                             </div>
                             </form>
-
                         </div>
                     </div> 

@@ -2155,7 +2155,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 });
 
 
-myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService) {
+myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService,$rootScope) {
 
     $scope.customers = [];
     AppService.getAllCustomers($http, $scope.customers);
@@ -2252,6 +2252,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             companiesInvolved: companiesInvolved
         }
         // console.log("data is "+projectData);
+        $('#loader').css("display", "block");
         console.log("Posting");
         var data = {
             operation: "modifyProject",
@@ -2268,14 +2269,44 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             .success(function (data) {
                 console.log(data);
                 if (data.status == "Successful") {
-                    alert("Project Updated Successfully");
-                } else {
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        //window.location.reload(1);
+                        window.location="dashboard.php#/Process/viewProjects";
+                    }, 1000);
+
+                    //alert("Project Updated Successfully");
+                }else{
+
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                        //window.location.reload(1);
+                    }, 3000);
+
+
+
                     alert(data.message);
                 }
 
 
             })
             .error(function (data) {
+                $('#loader').css("display", "none");
+                //alert("Customer created Successfully");
+                $rootScope.errorMessage = "Technical error Occured Please contact administrator";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                    //window.location.reload(1);
+                }, 3000);
                 console.log(data);
             });
 
@@ -2901,6 +2932,21 @@ myApp.controller('CustomerController', function ($scope, $http) {
     $scope.submitted = false;
     $scope.submitted = false;
 
+    $scope.customerDetails={
+        customer_name:"",
+        customer_address:"",
+        customer_city:"",
+        customer_state:"",
+        customer_country:"",
+        customer_emailId:"",
+        customer_landline:"",
+        customer_phone:"",
+        customer_faxNo:"",
+        customer_vatNo:"",
+        customer_cstNo:"",
+        customer_serviceTaxNo:"",
+        customer_panNo:""
+    };
     $scope.createCustomer = function () {
         console.log("Inside create customer");
         console.log($scope.customerDetails);
@@ -2993,8 +3039,14 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
     $scope.formSubmitted = false;
 
     $scope.modifyCustomer = function () {
-        if ($scope.customerModifyForm.$pristine) {
-            alert("Fields are not modified");
+        if($scope.customerModifyForm.$pristine){
+
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Fields are not modified");
             return;
         }
 
@@ -3002,8 +3054,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
         $custId = $scope.customerDetails.customer_id;
         var custUpdate = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '"}';
         //  console.log("update data is ::"+custUpdate);
-        $scope.errorMessage = "";
-        $scope.warningMessage = "";
+        //$scope.errorMessage = "";
+        //$scope.warningMessage = "";
         $('#loader').css("display", "block");
 
         // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
@@ -3025,15 +3077,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
             .success(function (data, status, headers) {
                 console.log(data);
                 if (data.status == "Successful") {
-                    $('#loader').css("display", "block");
-                    $scope.postCustData = data;
-                    $('#loader').css("display", "none");
-                    //alert("Customer created Successfully");
-                    $scope.warningMessage = data.message;
-                    $('#warning').css("display", "block");
-                    console.log($scope.customerDetails);
-                    console.log($stateParams.customerToModify);
-                    //$rootScope.customerSearch[$scope.customerDetails.index]=$stateParams.customerToModify;
+                   // $('#loader').css("display", "block");
+
                     $rootScope.customerSearch[$scope.customerDetails.index].id = $scope.customerDetails.customer_id;
                     $rootScope.customerSearch[$scope.customerDetails.index].name = $scope.customerDetails.customer_name;
                     $rootScope.customerSearch[$scope.customerDetails.index].address = $scope.customerDetails.customer_address;
@@ -3048,19 +3093,27 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                     $rootScope.customerSearch[$scope.customerDetails.index].cstNo = $scope.customerDetails.customer_cstNo;
                     $rootScope.customerSearch[$scope.customerDetails.index].vatNo = $scope.customerDetails.customer_vatNo;
                     $rootScope.customerSearch[$scope.customerDetails.index].serviceTaxNo = $scope.customerDetails.customer_serviceTaxNo;
-                    //$rootScope.customerSearch[$scope.customerDetails.index].pincode=data.message[i].Pincode;
 
-                    //$rootScope.customerSearch[ $scope.customerDetails.index]=$scope.customerDetails;
-                    $('#loader').css("display", "block");
-                    $('#loading').css("display", "none");
-                    $scope.errorMessage = data.message;
-                    $('#error').css("display", "block");
+
+
+
+                    $scope.postCustData = data;
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    console.log(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location="dashboard.php#/Process/Customers";
+                    }, 1000);
+
 
                 } else {
 
                     $('#loader').css("display", "block");
                     $('#loading').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -3072,7 +3125,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                 $('#loader').css("display", "block");
                 $scope.ResponseDetails = "Data: " + data;
                 $('#loading').css("display", "none");
-                $scope.errorMessage = "Customer not Updated..";
+                $rootScope.errorMessage = "Customer not Updated..";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -3086,7 +3139,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
 });
 
 
-myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal, $stateParams) {
+
+myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$stateParams,$rootScope){
 
     var reviseQuotationData = $stateParams.quotationToRevise;
     var qId = reviseQuotationData.QuotationId;
@@ -3126,33 +3180,44 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
 
-            if (data.status != "Successful") {
-                alert("Error Occurred while fetching quoation data");
-                return;
-            }
+        if (data.status != "Successful") {
+
+            $rootScope.errorMessage = "Error Occurred while fetching quoation data";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Error Occurred while fetching quoation data");
+            return;
+        }
 
             var qData = data.message;
             $scope.qDetails = [];
 
-            $scope.totalAmnt = 0;
-            for (var i = 0; i < qData.length; i++) {
-                $scope.QuotationDetails.quotationItemDetails.push({
-                    'quotationItem': qData[i].Title,
-                    'quotationDescription': qData[i].Description,
-                    'quotationUnitRate': parseFloat(qData[i].UnitRate),
-                    'amount': parseFloat(qData[i].Amount),
-                    'quotationQuantity': parseFloat(qData[i].Quantity),
-                    'detailNo': qData[i].DetailNo,
-                    quotationUnit: qData[i].Unit
-                });
-                $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
-            }
-            console.log("totalAmount is" + $scope.totalAmount);
-        }).error(function (data) {
-        alert(data);
+        $scope.totalAmnt = 0;
+        for (var i = 0; i < qData.length; i++) {
+            $scope.QuotationDetails.quotationItemDetails.push({
+                'quotationItem': qData[i].Title,
+                'quotationDescription': qData[i].Description,
+                'quotationUnitRate': parseFloat(qData[i].UnitRate),
+                'amount': parseFloat(qData[i].Amount),
+                'quotationQuantity': parseFloat(qData[i].Quantity),
+                'detailNo': qData[i].DetailNo,
+                quotationUnit: qData[i].Unit
+            });
+            $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
+        }
+        console.log("totalAmount is" + $scope.totalAmount);
+    })  .error(function (data) {
+        $rootScope.errorMessage = "Error Occurred Please contact administrator";
+        $('#error').css("display", "block");
+        setTimeout(function () {
+            $('#error').css("display", "none");
+        }, 1000);
+       //alert(data);
     });
 
-
+    $('#loader').css("display", "block");
     data = {
         operation: "getQuotationTaxDetails",
         data: qId
@@ -3167,10 +3232,17 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
-            if (data.status != "Successful") {
-                alert("Error Occurred while getting tax details");
-                return;
-            }
+        if (data.status != "Successful") {
+
+            $('#loader').css("display", "none");
+            $rootScope.errorMessage = "Error Occurred while getting tax details";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Error Occurred while getting tax details");
+            return;
+        }
 
             var qtData = data.message;
             $scope.qTaxDetails = [];
@@ -3222,8 +3294,14 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
 
     $scope.ModifyQuotation = function () {
-        if ($scope.QuotationForm.$pristine) {
-            alert("Fields are not modified");
+        if($scope.QuotationForm.$pristine){
+
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Fields are not modified");
             return;
         }
 
@@ -3233,9 +3311,9 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
         var projectId = $scope.QuotationDetails.projectId;
         var companyId = $scope.QuotationDetails.companyId;
         var companyName = $scope.QuotationDetails.companyName;
-        var fileName = $scope.QuotationDetails.filePath;
-        $scope.warningMessage = "";
-        $scope.errorMessage = "";
+        var fileName =$scope.QuotationDetails.filePath ;
+        //$scope.warningMessage = "";
+        //$scope.errorMessage = "";
 
         for (var i = 0; i < $scope.noOfRows; i++) {
             b.push({
@@ -3286,6 +3364,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
                 quotationData.QuotationBlob = fileName;
                 var fd = new FormData();
                 fd.append('file', $scope.myFile);
+                $('#loader').css("display", "block");
                 $http.post("Process/php/uploadQuotation.php", fd, {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
@@ -3296,24 +3375,63 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
                             $http.post("Process/php/quotationFacade.php", null, config)
                                 .success(function (data) {
 
-                                    if (data.status == "Successful") {
-                                        alert("Quotaion Revised Successfully");
-                                    } else {
-                                        alert(data.message);
+                                    if(data.status=="Successful"){
+                                        $('#loader').css("display", "none");
+                                        //alert("Customer created Successfully");
+                                        console.log(data.message);
+                                        $rootScope.warningMessage = data.message;
+                                        $('#warning').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#warning').css("display", "none");
+                                            window.location="dashboard.php#/Process/viewProjects";
+                                        }, 1000);
+
+                                      // alert("Quotaion Revised Successfully");
+                                    }else{
+                                       // alert(data.message);
+                                        $('#loader').css("display", "none");
+                                        //$('#loading').css("display", "none");
+                                        $rootScope.errorMessage = data.message;
+                                        $('#error').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#error').css("display", "none");
+                                        }, 1000);
                                     }
 
                                 })
                                 .error(function (data) {
-                                    alert(data);
+                                    $('#loader').css("display", "none");
+                                    //$('#loading').css("display", "none");
+                                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                                    $('#error').css("display", "block");
+                                    setTimeout(function () {
+                                        $('#error').css("display", "none");
+                                    }, 1000);
+                                   // alert(data);
                                 });
 
 
-                        } else {
-                            alert(data.message);
+                        }else{
+                            $('#loader').css("display", "none");
+                            //$('#loading').css("display", "none");
+                            $rootScope.errorMessage = data.message;
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 1000);
+                            //alert(data.message);
                         }
                     })
                     .error(function () {
-                        alert("Something went wrong can not upload quoatation");
+                        $('#loader').css("display", "none");
+                        //$('#loading').css("display", "none");
+                        $rootScope.errorMessage = "Error Occured Please contact administrator";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                       // alert(data);
+                       //alert("Something went wrong can not upload quoatation");
 
                     });
             }
@@ -3322,16 +3440,40 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
             $http.post("Process/php/quotationFacade.php", null, config)
                 .success(function (data) {
 
-                    if (data.status == "Successful") {
-                        alert("Quotation is Revised Successfully");
+                    if(data.status=="Successful"){
 
-                    } else {
-                        alert(data.message);
+                        $('#loader').css("display", "none");
+                        //alert("Customer created Successfully");
+                        console.log(data.message);
+                        $rootScope.warningMessage = data.message;
+                        $('#warning').css("display", "block");
+                        setTimeout(function () {
+                            $('#warning').css("display", "none");
+                            window.location="dashboard.php#/Process/viewProjects";
+                        }, 1000);
+                        //alert("Quotation is Revised Successfully");
+
+                    }else{
+                        $('#loader').css("display", "none");
+                        //$('#loading').css("display", "none");
+                        $rootScope.errorMessage = data.message;
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                       // alert(data.message);
                     }
 
                 })
                 .error(function (data) {
-                    alert(data);
+                   // $('#loader').css("display", "block");
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 1000);
+                    //alert(data);
                 });
 
         }
@@ -3773,14 +3915,14 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
 });
 
 
-myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter) {
+myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter,$rootScope) {
 
     console.log("in AssignTaskController");
     $scope.users = [];
     AppService.getUsers($scope, $http);
 
     $scope.assignTask = function () {
-        $('#loader').css("display", "block");
+
         console.log("IN ASSIGN TASK");
         var date = new Date();
         var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
@@ -3799,6 +3941,18 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
             "CreationDate": creationDate
         };
         console.log("Task data is " + JSON.stringify(Taskdata));
+        $('#loader').css("display", "block");
+
+        $scope.clearData= function()
+        {
+            $scope.task.taskname="";
+            $scope.task.description="";
+            $scope.task.startDate="";
+            $scope.task.endDate="";
+            $scope.task.assignedTo="";
+
+
+        }
 
         var data = {
             operation: "saveTask",
@@ -3816,19 +3970,22 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                 } else {
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
 
                 }
                 setTimeout(function () {
-                    $scope.$apply(function () {
+                    //$scope.$apply(function () {
                         $('#warning').css("display", "none");
-                        window.location.reload(true);
-                    });
+
+                        //window.location.reload(true);
+                    //});
                 }, 3000);
+                $scope.clearData();
+                $scope.formSubmitted= false;
 
 
             })
@@ -3836,7 +3993,7 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 console.log(data.error);
 
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
             });
 

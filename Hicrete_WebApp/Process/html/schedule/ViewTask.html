@@ -101,15 +101,21 @@
                             <div class="col-md-8">
 
                                       <textarea ng-disabled="ViewTask.task_isCompleted==1" class="form-control" name="note"
-                                                ng-model="note" rows="2">
+                                                ng-model="note" rows="2" required>
                                     </textarea>
+                               <!-- <div class="help-block"
+                                     ng-messages="customerModifyForm.customerEmailId.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Email Id is required</span>
+                                    <span style="color:red" ng-message="email">Enter Valid Email Id</span>
+                                </div>-->
                             </div>
                         </div>
                         <div class="form-group">
 
                             <div class="col-md-offset-4 col-md-8">
 
-                                      <button class="btn btn-primary" ng-disabled="ViewTask.task_isCompleted==1" ng-click="updateTask(ViewTask.task_id)"> Add</button>
+                                      <button class="btn btn-primary" ng-disabled="ViewTask.task_isCompleted==1  " ng-click="note!='' && updateTask(ViewTask.task_id)"> Add</button>
                                       <button class="btn btn-primary"> Cancel</button>
                             </div>
                         </div>

@@ -22,22 +22,29 @@
 			case 'createPackage' :
 
                 $connect->beginTransaction();
-				if($operationObject->createPackage($data,$userId))
-					{
-                        $connect->commit();
+				if(Applicator::isPackageAvailable($data->package_name)) {
+					if ($operationObject->createPackage($data, $userId)) {
+						$connect->commit();
 						$message = "Package Created Successfully...!!!";
 						$arr = array('msg' => $message, 'error' => '');
 						$jsn = json_encode($arr);
 						echo($jsn);
-					}
-				else
-					{
-                        $connect->rollBack();
+					} else {
+						$connect->rollBack();
 						$message = "Unable to Create Package.Please try again...!!!";
-						$arr = array('msg' => '' , 'error' => $message);
+						$arr = array('msg' => '', 'error' => $message);
 						$jsn = json_encode($arr);
 						echo($jsn);
 					}
+				}
+				else
+				{
+					$message = "Package Name Is already Available";
+					$arr = array('msg' => '', 'error' => $message);
+					$jsn = json_encode($arr);
+					echo($jsn);
+
+				}
 				break;
 
 			case 'viewPackages'	:
@@ -56,6 +63,7 @@
                         $connect->beginTransaction();
 
 					if(Applicator::isApplicatorAvailable($data->firmname)) {
+
 						if ($data->packageEdited == "true") {
 
 							if ($operationObject->createPackage($data, $userId)) {

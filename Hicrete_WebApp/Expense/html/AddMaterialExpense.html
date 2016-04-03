@@ -96,7 +96,7 @@
                                                 <label class="col-md-2  control-label">Expense proof</label>
                                                     <div class="col-md-7">                                       
                                                     <div class="input-group col-md-8">
-                                                     <label class="check" for="chkPassport">
+                                                     <label class="check">
                                                         <input type="checkbox" class="mycheck" ng-model="expenseDetails.isBillApplicable"/>Mark if applicable</label>
                                                     </div>  
                                                     </div>  
@@ -113,13 +113,13 @@
                                                         <div class="col-md-7">                                       
                                                             <div class="input-group col-md-8">
                                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control" pattern="[0-9]+" minlength="5" maxlength="8" required/>
+                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control" pattern="[0-9]+"  required/>
                                                             </div>  
                                                              <div class="help-block" ng-messages="materialBillForm.billNo.$error" ng-show="materialExpenseClicked">
                                                                 <p style="color:red" ng-message="required">Bill No cannot be blank</p>
                                                                 <p style="color:red" ng-message="pattern">Only digits are allowed</p> 
-                                                                <p style="color:red" ng-message="minlength">Atleast 5 digits are allowed</p>
-                                                                <p style="color:red" ng-message="maxlength">Only 8 digits are allowed</p>
+                                                                <!--<p style="color:red" ng-message="minlength">Atleast 5 digits are allowed</p>-->
+                                                                <!--<p style="color:red" ng-message="maxlength">Only 8 digits are allowed</p>-->
                                                             </div>
                                                         </div>  
                                                 

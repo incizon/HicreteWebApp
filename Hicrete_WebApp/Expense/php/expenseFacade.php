@@ -24,6 +24,12 @@
         case 'getBillApproval':
             Expense::getBillApproval();
             break;
+        case 'getBillDetails':
+            Expense::getBillDetails($data);
+            break;
+        case 'updateBillStatus':
+            Expense::updateBillStatus($data,$userId);
+            break;
     }
 
 ?>
