@@ -1,8 +1,9 @@
 <?php
 
-require_once ("../../php/Database.php");
+require_once ("../../php/appUtil.php");
 
 include_once ("PayrollClassLib.php");
+
 
 if (!isset($_SESSION['token'])) {
     session_start();
@@ -25,35 +26,22 @@ $operationObject=new Payroll();
 
                         $status=$operationObject->createYear($data,$userId);
                         if($status==1){
-
                             $connect->commit();
-                            $message = "Year Created Successfully";
-                            $arr = array('msg' => $message, 'error' => '');
-                            $jsn = json_encode($arr);
-                            echo($jsn);
+                            echo AppUtil::getReturnStatus("success","Year Created Successfully...!!!");
                         }
                         else if($status==0){
 
                             $connect->rollBack();
-                            $message = "Could Not Create Year...!!!";
-                            $arr = array('msg' => '', 'error' => $message);
-                            $jsn = json_encode($arr);
-                            echo($jsn);
+                            echo AppUtil::getReturnStatus("failure","Could Not Create Year");
                         }
                         else{
-
-                            $message = "Year with same dete range conflict occure...!!!";
-                            $arr = array('msg' => '', 'error' => $message);
-                            $jsn = json_encode($arr);
-                            echo($jsn);
+                            echo AppUtil::getReturnStatus("failure","Year with Same Date Range Already Exist");
                         }
-
-
 
            break;
      case "getCurrentYearHolidayDetails":
 
-                      $operationObject->getYearDetails();
+                      $operationObject->getCurrentYearHolidayDetails();
 
             break;
 
@@ -63,45 +51,27 @@ $operationObject=new Payroll();
             $connect->beginTransaction();
 
              if($operationObject->createHoliday($data,$userId)){
-
                  $connect->commit();
-                 $message = "Holiday Created Successfully";
-                 $arr = array('msg' => $message, 'error' => '');
-                 $jsn = json_encode($arr);
-                 echo($jsn);
+                 echo AppUtil::getReturnStatus("success","Holiday Created Successfully...!!!");
              }
              else{
-
                  $connect->rollBack();
-                 $message = "Could Not Create Holiday...!!!";
-                 $arr = array('msg' => '', 'error' => $message);
-                 $jsn = json_encode($arr);
-                 echo($jsn);
+                 echo AppUtil::getReturnStatus("failure","Could Not Create Holiday");
              }
 
          break;
      case 'removeHoliday':
-
          $connect->beginTransaction();
-
          if($operationObject->removeHoliday($data,$userId)){
-
              $connect->commit();
-             $message = "Holiday removed Successfully";
-             $arr = array('msg' => $message, 'error' => '');
-             $jsn = json_encode($arr);
-             echo($jsn);
+             echo AppUtil::getReturnStatus("success","Holiday Removed Successfully...!!!");
          }
          else{
-
              $connect->rollBack();
-             $message = "Could Not Remove Holiday...!!!";
-             $arr = array('msg' => '', 'error' => $message);
-             $jsn = json_encode($arr);
-             echo($jsn);
+             echo AppUtil::getReturnStatus("failure","Holiday Could Not Remove");
          }
-
          break;
+
      case 'getEmployeeDetailsForLeave':
 
                     $operationObject->getEmployeeDetailsForLeave($userId);

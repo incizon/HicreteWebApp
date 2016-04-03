@@ -51,12 +51,36 @@ class WorkorderController
 
             $loggedInUserId=AppUtil::getLoggerInUserId();
             if($loggedInUserId!=null) {
-                $workorder = Workorder::saveWorkOrder($data,$loggedInUserId); // saving the user to the database
-                return $workorder; // returning the updated or newly created user object
+
+                if ($data != null) {
+
+                    if(Workorder::isWorkOrderNumberAlreadyPresent($data->workOrderNumber)){
+                        echo AppUtil::getReturnStatus("Unsuccessful","Workorder number is already present");
+                        return;
+                    }
+                    if(Workorder::isWorkOrderNameAlreadyPresent($data->ProjectId,$data->WorkOrderName)){
+                        echo AppUtil::getReturnStatus("Unsuccessful","Workorder Title already used for another workorder");
+                        return;
+                    }
+
+                    $Quotation = Workorder::saveWorkOrder($data,$loggedInUserId);
+
+                    if($Quotation) {
+                        echo AppUtil::getReturnStatus("Successful", "Workorder created successfully");
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Data value is empty");
+                }
+
+
             }
+
         }catch(Exception $e){
             echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }
+
 
     }
 

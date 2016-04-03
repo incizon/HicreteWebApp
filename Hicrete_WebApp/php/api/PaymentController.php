@@ -29,10 +29,10 @@ class PaymentController
      * @url GET /payment/paid/TotalAmount/$projid
      */
 
-    public function getPaymentPaidAndTotalAmount($projid = null){
+    public function getPaymentPaidAndTotalAmount($projid){
 
         try{
-            if($projid==null){
+            if($projid !== null){
                 $payment = Payment::getPaymentPaidAndTotalAmount($projid); // possible user loading method
 
                 if($payment!==null) {

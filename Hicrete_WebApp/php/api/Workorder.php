@@ -9,7 +9,7 @@ Class Workorder {
         $final = array();
         $db = Database::getInstance();
         $conn = $db->getConnection();
-        $stmt = $conn->prepare("SELECT w.*,q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation FROM work_order w ,quotation q WHERE w.ProjectId =:projId AND q.QuotationId=w.`quotationId`");
+        $stmt = $conn->prepare("SELECT w.*,q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation FROM work_order w ,quotation q WHERE w.`quotationId` IN (SELECT `QuotationId` FROM `quotation` WHERE `ProjectId`=:projId) AND w.`quotationId`=q.`QuotationId`");
         $stmt->bindParam(':projId',$projId,PDO::PARAM_STR);
         if($result = $stmt->execute()){
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -20,7 +20,8 @@ Class Workorder {
               $final['QuotationId']  =  $row['QuotationId'] ;
               $final['RefNo'] =$row['RefNo'] ;
               $final['DateOfQuotation'] = $row['DateOfQuotation'];
-              array_push($object, $final);
+                $final['WorkOrderBlob'] = $row['WorkOrderBlob'];
+                array_push($object, $final);
             }
         }
         else{
@@ -58,44 +59,68 @@ Class Workorder {
         //return "i m in";
     }
 
-   
-    public function saveWorkOrder($data,$userId){
-        $WorkOrderNo = AppUtil::generateId();
+    public static function isWorkOrderNumberAlreadyPresent($workOrderNumber){
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT `WorkOrderNo` FROM `work_order` WHERE `isDeleted`='0' AND `WorkOrderNo`=:workOrderNo");
+        $stmt->bindParam(':workOrderNo',$workOrderNumber, PDO::PARAM_STR);
+
+        $stmt->execute();
+        $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function isWorkOrderNameAlreadyPresent($projectId,$workOrderName){
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT `WorkOrderName` FROM `work_order` WHERE `isDeleted`='0' AND `WorkOrderName`=:workorderName AND `quotationId` IN (SELECT `QuotationId` FROM `quotation` WHERE `ProjectId`=:projectId)");
+        $stmt->bindParam(':workorderName',$workOrderName, PDO::PARAM_STR);
+        $stmt->bindParam(':projectId',$projectId, PDO::PARAM_STR);
+        $stmt->execute();
+        $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+
+    public static function saveWorkOrder($data,$userId){
+
         $t=time();
         $current =date("Y-m-d",$t);
-       // $object = array();
-        try {
-            $db = Database::getInstance();
-            $conn = $db->getConnection();
-            $conn->beginTransaction(); 
-            $conn->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
-            $stmt = $conn->prepare("INSERT INTO work_order (WorkOrderNo,WorkOrderName,ReceivedDate,WorkOrderBlob,ProjectId, CompanyId,CreationDate,CreatedBy) VALUES (?,?,?,?,?,?,?,?)");
-            if($stmt->execute([$WorkOrderNo, $data->WorkOrderName,$data->ReceivedDate,$data->WorkOrderBlob,$data->ProjectId,$data->CompanyId,$current,$userId]) === TRUE) {
-                /*$stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE ProjectId = :projId AND CompanyId = :compId");*/
-                $stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE QuotationId = :id");
-                $stmt1->bindParam(':id',$data->QuotationId,PDO::PARAM_STR);
-                //$stmt1->bindParam(':compId',$data->CompanyId,PDO::PARAM_STR);
-                if($stmt1->execute() === TRUE){
-                    $conn->commit();
-                    return "Quotation Updated succesfully";
-                }
-                else{
-                    return "Error in updated deletion";
-                }
-
-
-                        $conn->commit();
-                        return "Workorder created succesfully.";
-                }
-            else {
-                   $conn->rollBack();
-                    return "Error: ";
-                }            
-            } catch (PDOException $e) {
-                $conn->rollBack();
-                echo $e->getMessage();
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $conn->beginTransaction();
+        $date=time($data->ReceivedDate);
+        $recievedDate =date("Y-m-d",$date);
+        $stmt = $conn->prepare("INSERT INTO `work_order`(`WorkOrderNo`, `WorkOrderName`, `ReceivedDate`, `WorkOrderBlob`, `CreationDate`, `CreatedBy`, `quotationId`) VALUES (?,?,?,?,?,?,?)");
+        if($stmt->execute([$data->workOrderNumber, $data->WorkOrderName,$recievedDate,$data->WorkOrderBlob,$current,$userId,$data->QuotationId]) === TRUE) {
+            /*$stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE ProjectId = :projId AND CompanyId = :compId");*/
+            $stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE QuotationId = :id");
+            $stmt1->bindParam(':id',$data->QuotationId,PDO::PARAM_STR);
+            //$stmt1->bindParam(':compId',$data->CompanyId,PDO::PARAM_STR);
+            if($stmt1->execute() === TRUE){
+                $conn->commit();
+                return true;
             }
-            $conn = null;
+            else{
+               $conn->rollBack();
+                return false;
+            }
+
+        }
+        else {
+               $conn->rollBack();
+                return false;
+            }
+
+        $conn = null;
     }
 
 /*Delete project*/

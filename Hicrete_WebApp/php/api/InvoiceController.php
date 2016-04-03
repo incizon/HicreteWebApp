@@ -35,6 +35,77 @@ class InvoiceController
          return $invoice;
     }
 
+
+    /**
+     * Gets the quotation details
+     *
+     * @url GET /quotation/details/$qid
+     */
+
+    public static function getInvoiceDetails($qid){
+
+        try{
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+
+                if ($qid != null) {
+                    $Quotation = Invoice::getInvoiceDetails($qid);
+                    if($Quotation!==null) {
+                        echo AppUtil::getReturnStatus("Successful", $Quotation);
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Invoice value is empty");
+                }
+
+
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+
+    }
+
+    /**
+     * Gets the quotation tax detail
+     *
+     * @url GET /quotation/taxDetails/$qid
+     */
+
+    public static function getInvoiceTaxDetails($qid){
+        try{
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+
+                if ($qid != null) {
+                    $Quotation = Invoice::getInvoiceTaxDetails($qid); // possible user loading method
+                    if($Quotation!==null) {
+                        echo AppUtil::getReturnStatus("Successful", $Quotation);
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Invoice value is empty");
+                }
+
+
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+
+
+
+
+
+
     /**
      * Gets the invoice followups by invoice id
      *
@@ -117,18 +188,38 @@ class InvoiceController
      * @url POST /invoice
      * @url PUT /invoice/$id
      */
-    public function saveInvoice($data)
+    public static function saveInvoice($data)
     {
-        // ... validate $data properties such as $data->username, $data->firstName, etc.
-       // $data->id = $id;
         try{
 
             $loggedInUserId=AppUtil::getLoggerInUserId();
             if($loggedInUserId!=null) {
-                $invoice = Invoice::saveInvoice($data,$loggedInUserId); // saving the user to the database
 
-                return $invoice; // returning the updated or newly created user object
+                if ($data != null) {
+
+                    if(Invoice::isInvoiceNumberPresent($data->Invoice->InvoiceNo)){
+                        echo AppUtil::getReturnStatus("Unsuccessful","Invoice number is already present");
+                        return;
+                    }
+                    if(Invoice::isInvoiceTitlePresent($data->Invoice->QuotationId,$data->Invoice->InvoiceTitle)){
+                        echo AppUtil::getReturnStatus("Unsuccessful","Invoice Title already used for another invoice");
+                        return;
+                    }
+
+                    $invoice = Invoice::saveInvoice($data,$loggedInUserId);
+
+                    if($invoice) {
+                        echo AppUtil::getReturnStatus("Successful", "Invoice created successfully");
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Data value is empty");
+                }
+
+
             }
+
         }catch(Exception $e){
             echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }

@@ -1,17 +1,16 @@
-myApp.controller('CreateYearController', function($scope,$http) {
+myApp.controller('CreateYearController', function($scope,$http,$rootScope) {
 
     console.log("IN");
-
     $scope.yearDetails={
 
         weeklyOff:false,
         operation:""
     };
-
     $scope.today = function() {
         $scope.yearDetails.endDate = new Date();
         $scope.yearDetails.startDate = new Date();
     };
+
     $scope.today();
 
     $scope.maxDate = new Date(2020, 5, 22);
@@ -33,12 +32,10 @@ myApp.controller('CreateYearController', function($scope,$http) {
 
     $scope.createYear = function(){
 
-        $scope.errorMessage="";
-        $scope.warningMessage="";
 
         $scope.yearDetails.operation="createYear";
 
-        $('#loader').css("display","block");
+
 
         var config = {
             params: {
@@ -46,42 +43,38 @@ myApp.controller('CreateYearController', function($scope,$http) {
             }
         };
 
-        console.log($scope.yearDetails);
+
+        $('#loader').css("display","block");
         $http.post("Payroll/php/PayrollFacade.php", null, config)
+
             .success(function (data) {
-                console.log(data);
-                if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
-
-                    setTimeout(function() {
-                            if(data.msg!=""){
-                                $('#warning').css("display","none");
-                            }
-                    }, 3000);
-
-                    console.log(data);
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Payroll";
+                    }, 1000);
                 }
-                $scope.loading=false;
-                $('#loader').css("display","none");
-                if(data.msg==""){
-                    $scope.errorMessage=data.error;
-                    $('#error').css("display","block");
-                    setTimeout(function() {
-                        if(data.msg!=""){
-                            $('#error').css("display","none");
-                        }
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+
                     }, 3000);
                 }
             })
             .error(function (data, status, headers, config) {
-                $scope.loading=false;
                 $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
-                $('#error').css("display","block");
-                setTimeout(function() {
-                        $('#error').css("display","none");
-                }, 3000);
+                $rootScope.errorMessage ="Error Occur While Creating Year";
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                    window.location = "dashboard.php#/Payroll";
+                },1000);
             });
 
         }
@@ -114,21 +107,38 @@ myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http
                 details: $scope.holidaysDetails
             }
         };
+        $('#loader').css("display","block");
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $scope.holidaysDetails=data;
-                $scope.configureHoliday.caption_of_year=$scope.holidaysDetails.caption_of_year;
-                $scope.configureHoliday.from_date=$scope.holidaysDetails.from_date;
-                $scope.configureHoliday.to_date=$scope.holidaysDetails.to_date;
 
-                $scope.holidaysList=$scope.holidaysDetails.holidaysList;
-                console.log($scope.holidaysList);
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $scope.holidaysDetails=data.message;
+                    $scope.configureHoliday.caption_of_year=$scope.holidaysDetails.caption_of_year;
+                    $scope.configureHoliday.from_date=$scope.holidaysDetails.from_date;
+                    $scope.configureHoliday.to_date=$scope.holidaysDetails.to_date;
 
+                    $scope.holidaysList=$scope.holidaysDetails.holidaysList;
+                    console.log($scope.holidaysList);
+                }
+                if(data.status=="failure"){
+
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                    }, 3000);
+                }
             })
             .error(function (data, status, headers, config) {
-
-
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While Fetching Details";
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                },3000);
             });
     }
 
@@ -137,10 +147,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http
 
     $scope.addHoliday=function(){
 
-        //
-        //$scope.errorMessage="";
-        //$scope.warningMessage="";
-        $('#loader').css("display","block");
+
 
         $scope.configureHoliday.operation="createHoliday";
 
@@ -149,40 +156,43 @@ myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http
                 details: $scope.configureHoliday
             }
         };
+
+        $('#loader').css("display","block");
+
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
 
-                if(data.msg!=""){
-                    $rootScope.warningMessage=data.msg;
-                    $('#warning').css("display","block");
-
-                    setTimeout(function() {
-                        if(data.msg!=""){
-                            $('#warning').css("display","none");
-                            window.location.reload(1);
-                        }
-                    }, 3000);
-
-                    console.log(data);
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Payroll";
+                    }, 1000);
                 }
-                //$scope.loading=false;
-                $('#loader').css("display","none");
-                if(data.msg==""){
-                    $scope.errorMessage=data.error;
-                    $('#error').css("display","block");
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                    }, 3000);
                 }
             })
             .error(function (data, status, headers, config) {
 
                 $('#loader').css("display","none");
-                $rootScope.errorMessage=data.error;
-                $('#error').css("display","block");
-
+                $rootScope.errorMessage ="Error Occur While Creating Holiday";
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                },3000);
             });
-
     }
 
     $scope.removeHoliday=function(index,holiday_date){
+
         $scope.holidaysList.splice(index,1); //remove item by index
         $scope.holidaysDetails.operation="removeHoliday";
         $scope.holidaysDetails.holiday_date=holiday_date;
@@ -191,17 +201,38 @@ myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http
                     details: $scope.holidaysDetails
                 }
             };
+            $('#loader').css("display","block");
             $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
-                console.log(data);
-
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Payroll";
+                    }, 1000);
+                }
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                    }, 3000);
+                }
             })
             .error(function (data, status, headers, config) {
 
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While Removing Holiday";
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                },3000);
 
             });
         }
-
 
 });
 
@@ -239,7 +270,6 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
         operation:""
     };
 
-
     $scope.getEmployeeDetails=function(){
 
         $scope.employeeDetails.operation="getEmployeeDetailsForLeave";
@@ -258,13 +288,12 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
                 $scope.leaveDetails.caption_of_year=data.caption_of_year;
                 $scope.leaveDetails.leaves_remaining=data.leaves_remaining;
                 if(parseInt($scope.leaveDetails.leaves_remaining)<=0){
-                    console.log("In if");
+
                     $scope.hideOption=true;
                 }
                 else{
                     $scope.hideOption=false;
                 }
-
             })
             .error(function (data, status, headers, config) {
 
@@ -291,8 +320,6 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
                     .success(function (data) {
                         console.log(data);
                         $scope.leaveDetails.numberOfLeaves=data;
-                        console.log($scope.leaveDetails.numberOfLeaves);
-                        console.log($scope.leaveDetails.leaves_remaining);
                         if(parseInt($scope.leaveDetails.numberOfLeaves) > parseInt($scope.leaveDetails.leaves_remaining)){
                             $scope.hideOption=true;
                             console.log("In If");
@@ -336,7 +363,7 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
                     setTimeout(function() {
                         if(data.msg!=""){
                             $('#warning').css("display","none");
-                            window.location.reload(1);
+                            window.location = "dashboard.php#/Payroll";
                         }
                     }, 3000);
                 }
@@ -378,7 +405,7 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
 
-                console.log(data);
+                //console.log(data);
                 $scope.payrollEmployeeDetails=data;
                 $scope.modifyObject();
             })
@@ -437,11 +464,11 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
                     setTimeout(function() {
                         if(data.msg!=""){
                             $('#warning').css("display","none");
-                            window.location.reload(1);
+                            window.location = "dashboard.php#/Payroll";
                         }
-                    }, 3000);
+                    }, 1000);
                 }
-                $scope.loading=false;
+
                 $('#loader').css("display","none");
                 if(data.msg==""){
                     $scope.errorMessage=data.error;
@@ -550,6 +577,7 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
                     $scope.warningMessage = data.message;
                     $('#warning').css("display","block");
                     $('#loader').css("display","none");
+
                 }
                 else{
                     $scope.loading=false;
@@ -702,7 +730,7 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
     $scope.getYears();
 
     $scope.disableSearch=function(value){
-        console.log("In");
+        console.log(value);
         if(value=="Year") {
             $scope.hide = false;
         }

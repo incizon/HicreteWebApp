@@ -93,7 +93,7 @@ Class Quotation {
 			return $object;
 		}
 
-		public static function getQuotationDetails($qid){
+	public static function getQuotationDetails($qid){
 		$object= array();
 
 		$db = Database:: getInstance();
