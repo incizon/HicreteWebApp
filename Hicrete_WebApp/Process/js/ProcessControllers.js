@@ -2679,10 +2679,21 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
     AppService.getAllSiteTrackingProjects($http, $scope.projects);
-
+    $scope.followups=[];
     $scope.show = function () {
 
-        $http.post("php/api/projects/siteFollowup/" + $scope.selectedProjectId, null)
+        //getProjectSiteFollowup
+        var data = {
+            operation: "getProjectSiteFollowup",
+            projectId: $scope.selectedProjectId
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Process/php/projectFacade.php", null, config)
             .success(function (data) {
 
                 console.log(data);

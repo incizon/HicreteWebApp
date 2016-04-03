@@ -554,7 +554,7 @@ Class Project
 
         $db = Database::getInstance();
         $conn = $db->getConnection();
-        $stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='SiteTracking'");
+        $stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='Site Tracking'");
         if ($result = $stmt->execute()) {
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 array_push($object, $row);
