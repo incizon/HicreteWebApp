@@ -348,7 +348,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.addInvoice', {
             url: '/addInvoice',
             templateUrl:"Process/html/InvoiceCreation.html",
-            controller:"InvoiceController"
+            controller:"InvoiceController",
+            params:{workOrder:null}
         })
 
         .state('Process.addPayment', {
@@ -396,7 +397,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.viewInvoice', {
             url: '/ViewInvoice',
             templateUrl:'Process/html/ViewInvoice.html',
-            controller:'ViewInvoiceDetails'
+            controller:'ViewInvoiceDetails',
+            params:{InvoiceToView:null}
         })
         .state('Process.viewQuotation', {
             url: '/ViewQuotation',

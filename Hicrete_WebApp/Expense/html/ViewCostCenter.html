@@ -7,7 +7,7 @@
 <div>
     <div ng-include="'utils/WarningMessage.html'"></div>
 </div>
-<div class="row" ng-controller="costCenterSearchController">
+<div class="row" >
 
     <div class="col-md-12">
 
@@ -47,7 +47,7 @@
                     </div>
                     <!--table end-->
                     <uib-accordion>
-                        <uib-accordion-group heading="Material Expense Details">
+                        <uib-accordion-group heading="Material Expense Details" ng-show="expenseDetails[0].materialExpenseDetails.length>0">
                             <table class="table table-actions table-striped">
                                 <thead>
                                 <tr>
@@ -82,7 +82,7 @@
                     </uib-accordion>
                     <uib-accordion>
 
-                        <uib-accordion-group  heading="{{segmentExpense.segmentName}} Segment - Allocated Budget:{{segmentExpense.allocatedBudget}}, TotalExpense: {{segmentExpense.totalSegmentExpense}}" ng-repeat="segmentExpense in expenseDetails[0].SegmentExpenseDetails">
+                        <uib-accordion-group  heading="{{segmentExpense.segmentName}} Segment -  Allocated Budget:{{segmentExpense.allocatedBudget}},  TotalExpense: {{getTotalSegmentExpense(segmentExpense.SegmentExpense)}}" ng-repeat="segmentExpense in expenseDetails[0].SegmentExpenseDetails">
 
                             <table class="table table-actions table-striped">
                                 <thead>

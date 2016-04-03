@@ -42,7 +42,7 @@ class Expense
         $conn = $db->getConnection();
         $success=false;
 
-
+        $conn->beginTransaction();
             foreach ($segmentData as $segment) {
                 $bufgetId=uniqid();
                 $stmt = $conn->prepare("INSERT INTO `budget_details`(`budgetdetailsid`,`projectid`, `budgetsegmentid`, `allocatedbudget`, `alertlevel`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
@@ -67,9 +67,11 @@ class Expense
             }
 
         if($success){
+            $conn->commit();
             $message="Cost Center Created successfully..!!!";
             echo AppUtil::getReturnStatus("success", $message);
         }else{
+            $conn->rollBack();
             $message="Could not create cost center..!!!";
             echo AppUtil::getReturnStatus("failure", $message);
          }   
@@ -126,6 +128,9 @@ class Expense
                         $success = false;
                         $conn->rollBack();
                     }
+                }else{
+                    $success = true;
+                    $conn->commit();
                 }
             } else {
                 $success = false;
@@ -152,6 +157,7 @@ class Expense
 
 
         try {
+            $conn->beginTransaction();
             $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
         VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
             $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
@@ -188,6 +194,8 @@ class Expense
                     } else {
                         $success=false;
                     }
+                }else{
+                    $success=true;
                 }
             } else {
 
@@ -198,9 +206,11 @@ class Expense
             echo "Exception occur while adding material expense";
         }
         if($success){
+            $conn->commit();
             $message="Material Expense Details Added successfully..!!!";
             echo AppUtil::getReturnStatus("success", $message);
         }else{
+            $conn->rollBack();
             $message="Could not add material expense details..!!!";
             echo AppUtil::getReturnStatus("failure", $message);
         }

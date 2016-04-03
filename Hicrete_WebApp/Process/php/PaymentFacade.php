@@ -24,4 +24,7 @@ switch($data->operation)
     case 'AllPaymentForProject':
         echo json_encode(PaymentController::getAllPayment($data->data));
         break;
+    case 'getPaymentPaidByInvoices':
+        PaymentController::getPaymentPaidByInvoices($data->invoiceId);
+        break;
 }

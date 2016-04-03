@@ -29,10 +29,10 @@ class PaymentController
      * @url GET /payment/paid/TotalAmount/$projid
      */
 
-    public function getPaymentPaidAndTotalAmount($projid = null){
+    public function getPaymentPaidAndTotalAmount($projid){
 
         try{
-            if($projid==null){
+            if($projid !== null){
                 $payment = Payment::getPaymentPaidAndTotalAmount($projid); // possible user loading method
 
                 if($payment!==null) {
@@ -71,10 +71,11 @@ class PaymentController
      * @url GET /paymentDetails/Invoice/$InvoiceId
      */
 
-    public function getPaymentPaidByInvoices($InvoiceId){
+    public static function getPaymentPaidByInvoices($InvoiceId){
         
              $payment = Payment::getPaymentPaidByInvoices($InvoiceId); // possible user loading method
-         return $payment;
+
+         echo AppUtil::getReturnStatus("Successful",$payment);
     }
 
     /**

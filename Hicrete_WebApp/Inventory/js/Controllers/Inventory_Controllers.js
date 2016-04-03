@@ -34,7 +34,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     var isPrductDetailsTable = false;
     var isProductPkgingTable = false;
 
-    inventoryService.getProducts($scope, $http);
+    //inventoryService.getProducts($scope, $http);
 
     /*
      Start of Pagination Function
@@ -230,9 +230,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
 
 
-
-
-
     /***************************************************************************
      * Start of Get Material Types
      ****************************************************************************/
@@ -258,7 +255,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$uibModal,AppService) {
+myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$log,$uibModal,AppService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",

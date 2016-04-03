@@ -108,7 +108,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                             <?php
                                 if($hasWrite==1){
                                     echo "<a ui-sref=\"Process.createCostCenter\">
-                                <button class=\"btn btn-primary\" title=\"Add cost center\">
+                                <button  class=\"btn btn-primary\" title=\"Add cost center\">
                                     <span class=\"fa fa-plus\"></span>
                                     Cost center
                                 </button>

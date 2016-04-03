@@ -122,7 +122,7 @@ class CustomerController
             else if($customer==0) {
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown error occurred");
             }else{
-                echo AppUtil::getReturnStatus("Unsuccessful", "Customer With Same Already Exist");
+                echo AppUtil::getReturnStatus("Unsuccessful", "Customer With Same Name Already Exist");
             }
 
         }catch(Exception $e){

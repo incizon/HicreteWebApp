@@ -1,38 +1,60 @@
 <?php
 require_once '/../../php/appUtil.php';
 require_once '/../../php/Database.php';
+require 'Followup.php';
 
-Class Project {
-	
-	public function load($id) {
-		$object = array();
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT * from project_master pm,project_address_details pad where (pm.ProjectId = :id AND pad.ProjectId = :id) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0");
-			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
-			
-			if($result = $stmt->execute()){
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-					array_push($object, $row);
-				}
-			}
+Class Project
+{
 
-		 } catch (PDOException $e) {
+    public function load($id)
+    {
+        $object = array();
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT * from project_master pm,project_address_details pad where (pm.ProjectId = :id AND pad.ProjectId = :id) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0");
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+
+            if ($result = $stmt->execute()) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    array_push($object, $row);
+                }
+            }
+
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
 
-		$db = null;
-		return $object ;
-		//return "i m in";
-	}
+        $db = null;
+        return $object;
+        //return "i m in";
+    }
 
-	public static function getCompaniesForProject($projId){
-		$object = array();
+    public static function getCompaniesForProject($projId)
+    {
+        $object = array();
+
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID = c.companyId and cp.ProjectId =:projid;");
+        $stmt->bindParam(':projid', $projId, PDO::PARAM_STR);
+        if ($result = $stmt->execute()) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($object, $row);
+            }
+
+        }
+        $db = null;
+        return $object;
+    }
+
+    public static function getExcludedCompaniesForProject($projId)
+    {
+        $object = array();
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID = c.companyId and cp.ProjectId =:projid;");
+		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID != c.companyId and cp.ProjectId =:projid;");
 		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
 		if($result = $stmt->execute()){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -44,41 +66,22 @@ Class Project {
 		return $object;
 	}
 
-	public static function getExcludedCompaniesForProject($projId){
-		$object = array();
 
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-		//$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.companyId != c.companyId and cp.ProjectId =:projid;");
-		$stmt = $conn->prepare("SELECT DISTINCT companyId,companyName FROM companymaster WHERE companyId NOT IN (select companyid from companies_involved_in_project where ProjectId=:projid)");
-		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
-		if($result = $stmt->execute()){
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				array_push($object, $row);
-			}
-
-		}
-		$db = null;
-		return $object;
-	}
-
-
-
-	public function getInvoicesByProject($projid){
-		$object = array();
-		try{
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-				$stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = '56ff6150e7e925762'  AND q.isApproved = 1)");
-				//$stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
-					if($result = $stmt->execute()){
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-							array_push($object, $row);
-						}
-						echo AppUtil::getReturnStatus("success",$object);
-					}
-					else{
-						echo AppUtil::getReturnStatus("unsuccessful","Error in stmt in getInvoicesByProject");
+    public function getInvoicesByProject($projid)
+    {
+        $object = array();
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = '$projid'  AND q.isApproved = 1)");
+            //$stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
+            if ($result = $stmt->execute()) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    array_push($object, $row);
+                }
+                echo AppUtil::getReturnStatus("success", $object);
+            } else {
+                echo AppUtil::getReturnStatus("unsuccessful", "Error in stmt in getInvoicesByProject");
 //						return "Error in stmt in getInvoicesByProject";
 					}
 		}
@@ -175,113 +178,13 @@ Class Project {
 	}
 
 
+    public static function saveProject($data, $userId)
+    {
 
-
-	/*public function saveProject($data ,$userId){
-		
-		$projnum = AppUtil::generateId();
-		$projectBasicDetails=$data->projectDetails;	
-		
-
-		$object = array();
-		$rollBack=true;
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$conn->beginTransaction();
-			
-			$stmt = $conn->prepare("INSERT INTO project_master (ProjectId, ProjectName, ProjectManagerId, ProjectSource, IsSiteTrackingProject, ProjectStatus, CustomerId, IsClosedProject, CreatedBy, isDeleted ,LastModifiedBy)
-														VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-			
-			if ($stmt->execute([$projnum, $projectBasicDetails->ProjectName,$projectBasicDetails->ProjectManagerId,$projectBasicDetails->ProjectSource,'0','Initiated',$projectBasicDetails->CustomerId,'0',$userId,'0',$userId]) === TRUE) {
-				$stmt2 = $conn->prepare("INSERT INTO project_address_details (ProjectId, Address, City, State, Country, Pincode) VALUES (?,?,?,?,?,?)");
-				if( $stmt2->execute([$projnum,$projectBasicDetails->Address,$projectBasicDetails->City,$projectBasicDetails->State,$projectBasicDetails->Country,$projectBasicDetails->Pincode])) {
-					$stmt3 = $conn->prepare("INSERT INTO project_point_of_contact_details (ProjectId, PointContactName, MobileNo, LandlineNo, EmailId) VALUES (?,?,?,?,?)");
-					if( $stmt3->execute([$projnum, $projectBasicDetails->PointContactName, $projectBasicDetails->MobileNo, $projectBasicDetails->LandlineNo, $projectBasicDetails->EmailId])) {
-						$break=false;
-						foreach ($data->companiesInvolved as $company) {
-							$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
-							if(!$stmt4->execute([$projnum, $company->companyId]) ){
-								$break=true;
-								break;	
-							}	
-						
-						}
-						if(!$break){
-							$conn->commit();
-							$rollBack=false;
-						}	
-					}
-				}
-			}
-			if($rollBack) {
-					//$conn->rollBack();
-					return "Error: ";
-					
-			}
-		} catch (PDOException $e) {
-            echo "Exception alay";
-            echo $e->getMessage();
-            $conn->rollBack();
-        }
-		$conn = null;
-	}*/
-		/*public function saveProject($data ,$userId){
-		
-		$projnum = AppUtil::generateId();
-		$projectBasicDetails=$data->projectDetails;	
-		
-
-		$object = array();
-		$rollBack=true;
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$conn->beginTransaction();
-			
-			$stmt = $conn->prepare("INSERT INTO project_master (ProjectId, ProjectName, ProjectManagerId, ProjectSource, IsSiteTrackingProject, ProjectStatus, CustomerId, IsClosedProject, CreatedBy, isDeleted ,LastModifiedBy)
-														VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-			
-			if ($stmt->execute([$projnum, $projectBasicDetails->ProjectName,$projectBasicDetails->ProjectManagerId,$projectBasicDetails->ProjectSource,'0','Initiated',$projectBasicDetails->CustomerId,'0',$userId,'0',$userId]) === TRUE) {
-				$stmt2 = $conn->prepare("INSERT INTO project_address_details (ProjectId, Address, City, State, Country, Pincode) VALUES (?,?,?,?,?,?)");
-				if( $stmt2->execute([$projnum,$projectBasicDetails->Address,$projectBasicDetails->City,$projectBasicDetails->State,$projectBasicDetails->Country,$projectBasicDetails->Pincode])) {
-					$stmt3 = $conn->prepare("INSERT INTO project_point_of_contact_details (ProjectId, PointContactName, MobileNo, LandlineNo, EmailId) VALUES (?,?,?,?,?)");
-					if( $stmt3->execute([$projnum, $projectBasicDetails->PointContactName, $projectBasicDetails->MobileNo, $projectBasicDetails->LandlineNo, $projectBasicDetails->EmailId])) {
-						$break=false;
-						foreach ($data->companiesInvolved as $company) {
-							$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
-							if(!$stmt4->execute([$projnum, $company->companyId]) ){
-								$break=true;
-								break;	
-							}	
-						
-						}
-						if(!$break){
-							$conn->commit();
-							$rollBack=false;
-						}	
-					}
-				}
-			}
-			if($rollBack) {
-					//$conn->rollBack();
-					return "Error: ";
-					
-			}
-		} catch (PDOException $e) {
-            echo "Exception alay";
-            echo $e->getMessage();
-            $conn->rollBack();
-        }
-		$conn = null;
-	}*/
-
-public static function saveProject($data ,$userId){
-		
-		$projnum = AppUtil::generateId();
-		$projectBasicDetails=$data->projectDetails;	
-		$t=time();
-		$current =date("Y-m-d",$t);
+        $projnum = AppUtil::generateId();
+        $projectBasicDetails = $data->projectDetails;
+        $t = time();
+        $current = date("Y-m-d", $t);
 
 		$object = array();
 		$rollBack=true;
@@ -351,32 +254,7 @@ public static function saveProject($data ,$userId){
 	}
 
 
-/*	public function updateProject($id,$data) {
 
-		$db  = mysqli_connect('localhost','root','root','hicrete');
-		if($db == null)
-		return "Error..DB not cinnected";
-		//$sql = "SELECT * from customer_master ;";
-
-		$sql = "UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value "
-		
-		$result = mysqli_query($db,$sql);
-		if(!$result){
-			return "error";
-		}
-		else{
-
-			$object = array();
-			if($result = mysqli_query($db,$sql)){
-				while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-					array_push($object, $row);
-				}
-			}
-		}
-		mysqli_close($db);
-		return $object;
-
-	}*/
 
 public static function updateProject($id,$data,$loggedUserId){
 
@@ -386,8 +264,7 @@ public static function updateProject($id,$data,$loggedUserId){
 
 			$conn->beginTransaction();
 
-			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE ProjectName=:ProjectName AND `ProjectId`!= :projectId");
-			$stmt->bindParam(':ProjectName',$data->projectDetails->ProjectName, PDO::PARAM_STR);
+			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE `ProjectId`!= :projectId");
 			$stmt->bindParam(':projectId',$id, PDO::PARAM_STR);
 
 			$stmt->execute();
@@ -411,7 +288,7 @@ public static function updateProject($id,$data,$loggedUserId){
 			$stmt2->bindParam(':country', $data->projectDetails->Country, PDO::PARAM_STR);
 			$stmt2->bindParam(':pincode', $data->projectDetails->Pincode, PDO::PARAM_STR);
 			$stmt2->bindParam(':id', $id, PDO::PARAM_STR);
-			
+
 			/*update project_point_of_contact_details*/
 			$stmt1 = $conn->prepare("UPDATE project_point_of_contact_details SET PointContactName = :pointContactName, MobileNo=:mobileNo, LandlineNo=:landlineNo, EmailId=:emailId WHERE ProjectId = :id");
 			$stmt1->bindParam(':pointContactName', $data->projectDetails->PointContactName, PDO::PARAM_STR);
@@ -506,16 +383,16 @@ public static function updateProject($id,$data,$loggedUserId){
 	public static function getSiteTrackingProjectList() {
 		$object = array();
 
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='SiteTracking'");
-		if($result = $stmt->execute()) {
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				array_push($object, $row);
-			}
-		}else{
-			return null;
-		}
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='Site Tracking'");
+        if ($result = $stmt->execute()) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($object, $row);
+            }
+        } else {
+            return null;
+        }
 
 		$db = null;
 		return $object;

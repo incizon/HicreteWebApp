@@ -19,7 +19,7 @@
         <div class="panel-body">
 
             <!--Form Starts here-->
-            <form class="createInvoice form-horizontal" novalidate>
+            <form name="InvoiceForm" class="form-horizontal" novalidate>
 
                     <div class="row">
                         <h3 class="panel-title"><strong>Invoice</strong> Details </h3>
@@ -27,6 +27,23 @@
                     <div class="row">
 
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Quotation Number :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{InvoiceDetails.refNo}}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">WorkOrder Number :</label>
+                                    </div>
+                                    <div class="col-md-8">
+
+                                        {{InvoiceDetails.workoOrderNumber}}
+                                    </div>
+                                </div>
 
                                 <div class="form-group">
                                     <div class="col-md-4">
@@ -35,10 +52,10 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="InvoiceDetails.invoiceNumber" required/>
+                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="InvoiceDetails.invoiceNumber" maxlength="50" required/>
                                         </div>
                                         <div class="help-block"
-                                             ng-messages="createInvoice.InvoiceNumber.$error"
+                                             ng-messages="InvoiceForm.InvoiceNumber.$error"
                                              ng-show="formSubmitted">
                                             <span style="color:red" ng-message="required">Invoice number is required</span>
                                         </div>
@@ -46,38 +63,22 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        <label class="control-label">Quotation Number :</label>
+                                        <label class="control-label">Invoice Title :</label>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="InvoiceNumber" ng-model="InvoiceDetails.refNo" required/>
+                                            <input type="text" class="form-control" name="invoiceTitle" ng-model="InvoiceDetails.invoiceTitle" maxlength="100" required/>
                                         </div>
                                         <div class="help-block"
-                                             ng-messages="createInvoice.InvoiceNumber.$error"
+                                             ng-messages="InvoiceForm.invoiceTitle.$error"
                                              ng-show="formSubmitted">
-                                            <span style="color:red" ng-message="required">Quotation number is required</span>
+                                            <span style="color:red" ng-message="required">Invoice Title is required</span>
                                         </div>
 
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-md-4">
-                                        <label class="control-label">WorkOrder Number :</label>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="WorkorderNumber" ng-model="InvoiceDetails.workoOrderTitle"/>
-                                        </div>
-                                        <div class="help-block"
-                                             ng-messages="createInvoice.WorkorderNumber.$error"
-                                             ng-show="formSubmitted">
-                                            <span style="color:red" ng-message="required">Workorder number is required</span>
-                                        </div>
 
-                                    </div>
-                                </div>
                                 <div class="form-group">
                                     <div class="col-md-4">
                                         <label class="control-label">Contact Person :</label>
@@ -85,42 +86,46 @@
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="contactPerson" ng-model="InvoiceDetails.contactPerson"/>
+                                            <input type="text" class="form-control" name="contactPerson" ng-model="InvoiceDetails.contactPerson" maxlength="50"/>
                                         </div>
-                                        <div class="help-block"
-                                             ng-messages="createInvoice.contactPerson.$error"
-                                             ng-show="formSubmitted">
-                                            <span style="color:red" ng-message="required">Contact person
-                                                number is required</span>
-                                        </div>
+                                        <!--<div class="help-block"-->
+                                             <!--ng-messages="InvoiceForm.contactPerson.$error"-->
+                                             <!--ng-show="formSubmitted">-->
+                                            <!--<span style="color:red" ng-message="required">Contact person-->
+                                                <!--number is required</span>-->
+                                        <!--</div>-->
 
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="col-md-6">
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        <label class="control-label">Invoice Date :</label>
+                                        <label class="control-label">PAN :</label>
                                     </div>
                                     <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.invoiceDate" ng-click="invoiceDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="inDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
+                                            <input type="text" class="form-control" name="pan" ng-model="InvoiceDetails.pan" maxlength="20"/>
                                         </div>
+                                        <!--<div class="help-block"-->
+                                             <!--ng-messages="InvoiceForm.pan.$error"-->
+                                             <!--ng-show="formSubmitted">-->
+                                            <!--<span style="color:red" ng-message="required">PAN is required</span>-->
+                                        <!--</div>-->
 
                                     </div>
                                 </div>
+
+
+
+                            </div>
+                            <div class="col-md-6">
+
                                 <div class="form-group">
                                     <div class="col-md-4">
                                         <label class="control-label">Quotation Date :</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.quotationDate" ng-click="quotationDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="quotDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
-                                        </div>
-
+                                       {{InvoiceDetails.quotationDate}}
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -128,13 +133,56 @@
                                         <label class="control-label">Workorder Date :</label>
                                     </div>
                                     <div class="col-md-8">
+                                        {{InvoiceDetails.workOrderDate}}
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Invoice Date :</label>
+                                    </div>
+                                    <div class="col-md-8">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input type="text" class="form-control" name="WorkorderDate" ng-model="InvoiceDetails.workOrderDate" ng-click="workOrderDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="workDate.opened" datepicker-options="dateOptions" show-button-bar="false" readonly/>
+                                            <input type="text" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.invoiceDate" ng-click="invoiceDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="inDate.opened" datepicker-options="dateOptions" show-button-bar="false" required readonly/>
+                                        </div>
+
+                                    </div>
+                                    <div class="help-block"
+                                         ng-messages="InvoiceForm.InvoiceDate.$error"
+                                         ng-show="formSubmitted">
+                                        <span style="color:red" ng-message="required">InvoiceDate is required</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Attach Invoice :</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="file" class="form-control" name="invoiceBlob" file-model="myFile"/>
                                         </div>
 
                                     </div>
                                 </div>
+
+
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Purchasers VAT No:</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="text" class="form-control" name="InvoiceDate" ng-model="InvoiceDetails.purchaserVatNo" maxlength="20"/>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                             </div>
 
                     </div><br>
@@ -213,21 +261,42 @@
                                     <td>{{$index+1}}</td>
                                     <td>
                                         <input type="text" name="Title" placeholder="Title"
-                                               class="form-control" ng-model="quotation.quotationItem"/>
+                                               class="form-control" ng-model="quotation.quotationItem" maxlength="80" required/>
+                                        <div class="help-block"
+                                             ng-messages="InvoiceForm.Title.$error"
+                                             ng-show="formSubmitted">
+                                            <span style="color:red" ng-message="required">Title is required</span>
+                                        </div>
                                     </td>
                                     <td>
-                                        <input type="text" name="Decription" placeholder="Description"
-                                               class="form-control" ng-model="quotation.quotationDescription"/>
+                                        <input type="text" name="Description" placeholder="Description"
+                                               class="form-control" ng-model="quotation.quotationDescription" />
+
                                     </td>
                                     <td>
                                         <input type="text" name="Quantity" placeholder="Quantity"
-                                               class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)"/>
+                                               class="form-control" ng-model="quotation.quotationQuantity" ng-change="calculateAmount($index)" pattern="[0-9.]+" ng-blur="calculateTotal(quotation.amount)" required/>
+                                        <div class="help-block"
+                                             ng-messages="InvoiceForm.Quantity.$error"
+                                             ng-show="formSubmitted">
+                                            <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                            <span style="color:red" ng-message="required">Quantity is required</span>
+                                        </div>
                                     </td>
                                     <td><input type="text" name="Unit" placeholder="Unit"
-                                               class="form-control" ng-model="quotation.quotationUnit"/>
+                                               class="form-control" ng-model="quotation.quotationUnit"  />
+
                                     </td>
-                                    <td><input type="text" name="UnitRate" placeholder="Unit Rate"
-                                               class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index); calculateTotal(quotation.amount) "/>
+                                    <td>
+                                        <input type="text" name="UnitRate" placeholder="Unit Rate"
+                                               class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)" ng-blur="calculateTotal(quotation.amount)"
+                                               pattern="[0-9.]+" required/>
+                                        <div class="help-block"
+                                             ng-messages="InvoiceForm.UnitRate.$error"
+                                             ng-show="formSubmitted">
+                                            <span style="color:red" ng-message="pattern">Only digits are allowed</span>
+                                            <span style="color:red" ng-message="required">Unit rate is required</span>
+                                        </div>
                                     </td>
                                     <td ng-model="quotation.Totalamount">
                                         {{quotation.amount}}
@@ -249,7 +318,7 @@
                             <label class="control-label">Total Amount :</label>
                         </div>
                         <div class="col-md-8" ng-model="totalAmnt11">
-                                {{getTotalAmount()}}
+                                {{totalAmnt}}
                         </div>
                     </div>
 
@@ -280,16 +349,13 @@
                                            class="form-control" ng-model="tax.taxTitle"/>
                                 </td>
                                 <td>
-                                    <input type="text" name="TaxTitle" placeholder="Title"
-                                           class="form-control" ng-model="tax.taxApplicableTo"/>
+                                    {{tax.taxApplicableTo}}
                                 </td>
                                 <td>
-                                    <input type="text" name="TaxPercentage" placeholder="Percentage"
-                                           class="form-control" ng-model="tax.taxPercentage"/>
+                                   {{tax.taxPercentage}}
                                 </td>
                                 <td>
-                                    <input type="text" name="TaxAmount" placeholder="Tax Amount"
-                                           class="form-control" ng-model="tax.amount" ng-change ="totalTaxAmount(tax.amount)"/>
+                                   {{tax.amount}}
                                 </td>
 
                                 <td>
@@ -310,7 +376,7 @@
                                     <label class="control-label"><strong>Total Tax Amount :</strong></label>
                                 </div>
                                 <div class="col-md-8" ng-model="TaxAmnt11">
-                                    {{getTotalTaxAmount()}}
+                                    {{TaxAmnt}}
                                 </div>
                             </div>
                         </div>
@@ -356,7 +422,7 @@
                                         <input type="text" class="form-control" name="GrandTotal" ng-model="grandTotal">{{(+totalAmnt + +TaxAmnt) - +roundingOff}}</input>
                                     </div> -->
                                      <div class="col-md-8" ng-model="totalAmount">
-                                    {{(+totalAmnt + +TaxAmnt) - +roundingOff}}
+                                    {{(+totalAmnt + +TaxAmnt) + +roundingOff}}
                                 </div>
                                 </div>
                             </div>
@@ -371,10 +437,10 @@
         <div class="panel-footer">
 
             <button class="btn  btn-danger pull-right" ng-click="(formSubmitted=true)
-                    && createInvoice.$valid
+                    && InvoiceForm.$valid
                     && createInvoice()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
-            <button class="btn  btn-info pull-right" ng-click="CreateInvoiceDoc()">Create Doc</button>
+            <button class="btn  btn-info pull-right" ng-click="createInvoiceDoc()">Create Doc</button>
             <button class="btn  btn-default">Clear Form</button>
         </div>
 

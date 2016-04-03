@@ -49,36 +49,53 @@ myApp.service('AppService', function () {
         $scope.totalPayableAmount = 0;
         var invoiceDetail = [];
         var totalAmountPaid = 0;
-        var totalPayableAmt = 12000;
+        var totalPayableAmt = 0;
         console.log("invoice id is " + invoiceId);
-
-        $http.get("php/api/paymentDetails/Invoice/" + invoiceId).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    invoiceDetail.push({
-                        amountPaid: response.data[i].AmountPaid,
-                        paymentDate: response.data[i].PaymentDate,
-                        recievedBy: response.data[i].FirstName + response.data[i].LastName,
-                        amountRemaining: "----",
-                        grandTotal: response.data[i].GrandTotal,
-                        paymentMode: response.data[i].InstrumentOfPayment,
-                        bankName: response.data[i].BankName,
-                        branchName: response.data[i].BranchName,
-                        unqiueNo: response.data[i].IDOfInstrument
-                    });
-                    totalAmountPaid = totalAmountPaid + parseInt(response.data[i].AmountPaid);
-
-                }
-                totalPayableAmt = parseInt(response.data[0].GrandTotal);
+        //getPaymentPaidByInvoices
+        var data = {
+            operation: "getPaymentPaidByInvoices",
+            invoiceId:invoiceId
+        };
+        var config = {
+            params: {
+                data: data
             }
-            $scope.totalAmtPaid = totalAmountPaid;
-            $scope.totalPayableAmount = totalPayableAmt;
-            console.log("total amount payable=" + totalPayableAmt);
-            console.log("total amount paid=" + totalAmountPaid);
-            $scope.paymentHistoryData = invoiceDetail;
-            console.log("paymentHistoryData  scope is " + JSON.stringify($scope.paymentHistoryData));
-        })
+        };
+
+        $http.post("Process/php/PaymentFacade.php", null, config)
+            .success(function (data) {
+                $('#loader').css("display", "none");
+                console.log(data);
+                    if (data != null) {
+                        for (var i = 0; i < data.message.length; i++) {
+                            invoiceDetail.push({
+                                amountPaid: data.message[i].AmountPaid,
+                                paymentDate: data.message[i].PaymentDate,
+                                recievedBy: data.message[i].FirstName + data.message[i].LastName,
+                                amountRemaining: "----",
+                                grandTotal: data.message[i].GrandTotal,
+                                paymentMode: data.message[i].InstrumentOfPayment,
+                                bankName: data.message[i].BankName,
+                                branchName: data.message[i].BranchName,
+                                unqiueNo: data.message[i].IDOfInstrument
+                            });
+                            totalAmountPaid = totalAmountPaid + parseInt(data.message[i].AmountPaid);
+
+                        }
+                        totalPayableAmt = parseInt(data.message[0].GrandTotal);
+                    }
+                    $scope.totalAmtPaid = totalAmountPaid;
+                    $scope.totalPayableAmount = totalPayableAmt;
+                    console.log("total amount payable=" + totalPayableAmt);
+                    console.log("total amount paid=" + totalAmountPaid);
+                    $scope.paymentHistoryData = invoiceDetail;
+                    console.log("paymentHistoryData  scope is " + JSON.stringify($scope.paymentHistoryData));
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:" + data);
+
+            });
+
 
     }
 
@@ -294,28 +311,6 @@ myApp.service('AppService', function () {
                 alert("Error  Occurred:" + data);
             });
 
-        /*$http.post("php/api/quotationlist/"+$projectId, null)
-         .success(function (data) {
-
-         console.log("IN Project Get");
-         console.log(data);
-         if(data.status!="Successful"){
-         alert("Failed:"+data.message);
-         }else {
-         for(var i=0;i<data.message.length;i++){
-         $quotations.push({
-         id: data.message[i].QuotationId,
-         name: data.message[i].QuotationTitle,
-         refNo:data.message[i].RefNo
-         });
-         }
-         }
-         })
-         .error(function (data, status, headers, config) {
-         alert("Error  Occurred:"+data);
-
-         });*/
-
     }
 
     this.getAllInvoicesOfProject = function ($http, $invoices, $projectId) {
@@ -343,8 +338,9 @@ myApp.service('AppService', function () {
                             id: data.message[i].InvoiceNo,
                             name: data.message[i].InvoiceTitle
                         });
-                        console.log(JSON.stringify(data.message).length);
+
                     }
+
                 } else {
                     //  alert("Failed:"+data.message);
                 }
@@ -380,7 +376,6 @@ myApp.service('AppService', function () {
 
         var data = {
             operation: "getSiteTrackingProjectList",
-
 
         };
         var config = {

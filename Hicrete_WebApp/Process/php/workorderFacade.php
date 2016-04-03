@@ -21,7 +21,7 @@ $opt = array(
 switch($data->operation)
 {
     case "createWorkorder":
-        echo(json_encode(WorkorderController::saveWorkOrder($data->data)));
+        WorkorderController::saveWorkOrder($data->data);
         break;
     case "getWorkorderByProjectId":
 
