@@ -1475,7 +1475,7 @@ myApp.controller('ModifyCompanyController',function($scope,$http,$rootScope, $st
                             $('#warning').css("display","none");
                             window.location= "dashboard.php#/Config/SearchCompany";
                         });
-                    }, 3000);
+                    }, 1000);
 
 
 
@@ -1603,11 +1603,13 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
                     setTimeout(function() {
                         $scope.$apply(function() {
                             $('#error').css("display","none");
+
+
                         });
                     }, 3000);
                     //alert(data.message);
                     $rootScope.Roles[$stateParams.index].roleName=$scope.roleName;
-                    window.location="dashboard.php#/Config/SearchRole";
+                    //window.location="dashboard.php#/Config/SearchRole";
                 }else{
                     //alert(data.message);
                     $rootScope.warningMessage = data.message;
@@ -1616,7 +1618,9 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
                         $scope.$apply(function() {
                             $('#warning').css("display","none");
                         });
-                    }, 3000);
+                        window.location="dashboard.php#/Config/SearchRole";
+                    }, 1000);
+
                 }
 
             })
@@ -1695,7 +1699,7 @@ myApp.controller('ModifyWarehouseController',function($scope,$http,$rootScope,$s
                             $('#warning').css("display","none");
                             window.location= "dashboard.php#/Config/SearchWarehouse";
                         });
-                    }, 3000);
+                    }, 1000);
 
 
 

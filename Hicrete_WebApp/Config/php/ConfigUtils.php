@@ -133,32 +133,62 @@ class ConfigUtils
        }
    }
 
+    public static function isWarehouseAvailableForModify($wareHouseName,$warehouseId)
+    {
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("select count(1) as count from warehousemaster where wareHouseName=:wareHouseName AND warehouseId!=:warehouseId");
+            $stmt->bindParam(':wareHouseName', $wareHouseName, PDO::PARAM_STR);
+            $stmt->bindParam(':warehouseId', $warehouseId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $result['count'];
+
+            if ($count != 0) {
+                return 0;
+            } else
+                return 1;
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
+
     public static function modifyWareHouseDetails($data,$userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $stmt = $conn->prepare("UPDATE `warehousemaster` SET `wareHouseName`=:wareHouseName,`warehouseAbbrevation`=:abbrevation,`address`=:address,`city`=:city,`state`=:state,`country`=:country,`pincode`=:pincode,`phoneNumber`=:phoneNumber,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE `warehouseId`=:warehouseId");
+            if(ConfigUtils::isWarehouseAvailableForModify($data->data->wareHouseName,$data->data->warehouseId)) {
+                $stmt = $conn->prepare("UPDATE `warehousemaster` SET `wareHouseName`=:wareHouseName,`warehouseAbbrevation`=:abbrevation,`address`=:address,`city`=:city,`state`=:state,`country`=:country,`pincode`=:pincode,`phoneNumber`=:phoneNumber,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE `warehouseId`=:warehouseId");
 
-            $stmt->bindParam(':wareHouseName',$data->data->wareHouseName , PDO::PARAM_STR);
-            $stmt->bindParam(':abbrevation', $data->data->warehouseAbbrevation, PDO::PARAM_STR);
-            $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
-            $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
-            $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
-            $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
-            $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
-            $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':warehouseId', $data->data->warehouseId, PDO::PARAM_STR);
+                $stmt->bindParam(':wareHouseName', $data->data->wareHouseName, PDO::PARAM_STR);
+                $stmt->bindParam(':abbrevation', $data->data->warehouseAbbrevation, PDO::PARAM_STR);
+                $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
+                $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
+                $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
+                $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
+                $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
+                $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':warehouseId', $data->data->warehouseId, PDO::PARAM_STR);
 
-            if($stmt->execute()){
+                if ($stmt->execute()) {
 
-                echo AppUtil::getReturnStatus("Successful","Warehouse Modified successfully");
+                    echo AppUtil::getReturnStatus("Successful", "Warehouse Modified successfully");
 
-            }else{
-                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+                } else {
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+                }
+            }else
+            {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Warehouse is already available ");
             }
+
 
         }catch(Exception $e){
 
@@ -167,33 +197,65 @@ class ConfigUtils
 
 
     }
+
+    public static function isCompanyAvailableForModify($companyName,$companyId)
+    {
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("select count(1) as count from companymaster where companyName=:companyName AND companyId!=:companyId");
+            $stmt->bindParam(':companyName', $companyName, PDO::PARAM_STR);
+            $stmt->bindParam(':companyId', $companyId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $result['count'];
+
+            if ($count != 0) {
+                return 0;
+            } else
+                return 1;
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
+
+
     public static function modifyCompanyDetails($data,$userId)
     {
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $stmt = $conn->prepare("UPDATE companymaster SET companyName=:companyName,companyAbbrevation=:abbrevation,startDate=:startdate,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,emailId=:emailId,phoneNumber=:phoneNumber,lastModifiedBy=:userId,lastModificationDate=now() WHERE companyId=:companyId");
+            if(ConfigUtils::isCompanyAvailableForModify($data->data->companyName,$data->data->companyId)) {
+                $stmt = $conn->prepare("UPDATE companymaster SET companyName=:companyName,companyAbbrevation=:abbrevation,startDate=:startdate,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,emailId=:emailId,phoneNumber=:phoneNumber,lastModifiedBy=:userId,lastModificationDate=now() WHERE companyId=:companyId");
 
-            $stmt->bindParam(':companyName',$data->data->companyName , PDO::PARAM_STR);
-            $stmt->bindParam(':abbrevation', $data->data->companyAbbrevation, PDO::PARAM_STR);
-            $stmt->bindParam(':startdate', $data->data->startDate, PDO::PARAM_STR);
-            $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
-            $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
-            $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
-            $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
-            $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
-            $stmt->bindParam(':emailId', $data->data->emailId, PDO::PARAM_STR);
-            $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
-            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':companyId', $data->data->companyId, PDO::PARAM_STR);
+                $stmt->bindParam(':companyName', $data->data->companyName, PDO::PARAM_STR);
+                $stmt->bindParam(':abbrevation', $data->data->companyAbbrevation, PDO::PARAM_STR);
+                $stmt->bindParam(':startdate', $data->data->startDate, PDO::PARAM_STR);
+                $stmt->bindParam(':address', $data->data->address, PDO::PARAM_STR);
+                $stmt->bindParam(':city', $data->data->city, PDO::PARAM_STR);
+                $stmt->bindParam(':state', $data->data->state, PDO::PARAM_STR);
+                $stmt->bindParam(':country', $data->data->country, PDO::PARAM_STR);
+                $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
+                $stmt->bindParam(':emailId', $data->data->emailId, PDO::PARAM_STR);
+                $stmt->bindParam(':phoneNumber', $data->data->phoneNumber, PDO::PARAM_STR);
+                $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':companyId', $data->data->companyId, PDO::PARAM_STR);
 
-            if($stmt->execute()){
+                if ($stmt->execute()) {
 
-                echo AppUtil::getReturnStatus("Successful","Company Modified successfully");
+                    echo AppUtil::getReturnStatus("Successful", "Company Modified successfully");
 
-            }else{
-                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+                } else {
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+                }
+            }
+            else
+            {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Company Name you entered is already available");
             }
 
         }catch(Exception $e){
@@ -876,6 +938,32 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
     }
 
 
+    public static function isRoleAvailableForModify($roleName,$roleId)
+    {
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("select count(1) as count from rolemaster where roleName=:roleName AND roleId!=:roleId");
+            $stmt->bindParam(':roleName', $roleName, PDO::PARAM_STR);
+            $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            $count = $result['count'];
+
+            if ($count != 0) {
+                return 0;
+            } else
+                return 1;
+        }
+        catch(Exception $e)
+        {
+
+        }
+
+    }
+
+
+
 
     public static function modifyRole($roleId ,$roleName,$accessList, $userId)
     {
@@ -884,62 +972,68 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-            $conn->beginTransaction();
 
-            $stmt = $conn->prepare("SELECT * FROM `rolemaster` WHERE `roleId`=:roleId");
-            $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+            if(configutils::isRoleAvailableForModify($roleName,$roleId)) {
+                $conn->beginTransaction();
 
-            $rollback = true;
-            if ($stmt->execute()) {
-                $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+                $stmt = $conn->prepare("SELECT * FROM `rolemaster` WHERE `roleId`=:roleId");
+                $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
 
-                if (count($result) <= 0) {
-                    echo AppUtil::getReturnStatus("Unsuccessful", "Role not found");
-                    return;
-                }else{
+                $rollback = true;
+                if ($stmt->execute()) {
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                    $stmt = $conn->prepare("DELETE FROM `roleaccesspermission` WHERE `roleId`=:roleId");
-                    $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
-                    if($stmt->execute()){
+                    if (count($result) <= 0) {
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Role not found");
+                        return;
+                    } else {
 
-                        $stmt= $conn->prepare("UPDATE `rolemaster` SET `roleName`=:roleName , `lastModifiedBy`=:userId,`lasModificationDate`=now() WHERE `roleId`=:roleId");
+                        $stmt = $conn->prepare("DELETE FROM `roleaccesspermission` WHERE `roleId`=:roleId");
                         $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
-                        $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
-                        $stmt->bindParam(':roleName', $roleName, PDO::PARAM_STR);
+                        if ($stmt->execute()) {
 
-                        if($stmt->execute()){
+                            $stmt = $conn->prepare("UPDATE `rolemaster` SET `roleName`=:roleName , `lastModifiedBy`=:userId,`lasModificationDate`=now() WHERE `roleId`=:roleId");
+                            $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
+                            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+                            $stmt->bindParam(':roleName', $roleName, PDO::PARAM_STR);
 
-                            $isBreak=false;
-                            foreach ($accessList as $accessEntry) {
-                                if ($accessEntry->read->val) {
-                                    if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->read->accessId)) {
-                                        $isBreak=true;
-                                        break;
+                            if ($stmt->execute()) {
+
+                                $isBreak = false;
+                                foreach ($accessList as $accessEntry) {
+                                    if ($accessEntry->read->val) {
+                                        if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->read->accessId)) {
+                                            $isBreak = true;
+                                            break;
+                                        }
+                                    }
+                                    if ($accessEntry->write->val) {
+                                        if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->write->accessId)) {
+                                            $isBreak = true;
+                                            break;
+                                        }
                                     }
                                 }
-                                if ($accessEntry->write->val) {
-                                    if (!Config::insertAccessPermissionForRole($stmt, $conn, $roleId, $userId, $accessEntry->write->accessId)) {
-                                        $isBreak=true;
-                                        break;
-                                    }
-                                }
-                            }
-                            if(!$isBreak) {
-                                $rollback = false;
+                                if (!$isBreak) {
+                                    $rollback = false;
 
+                                }
                             }
                         }
+
                     }
 
                 }
-
-            }
-            if ($rollback) {
-                $conn->rollback();
-                echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
-            } else {
-                $conn->commit();
-                echo AppUtil::getReturnStatus("Successful", "Role Modified successfully");
+                if ($rollback) {
+                    $conn->rollback();
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
+                } else {
+                    $conn->commit();
+                    echo AppUtil::getReturnStatus("Successful", "Role Modified successfully");
+                }
+            }else
+            {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Role name Already Exists");
             }
 
         } catch (Exception $e) {

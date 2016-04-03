@@ -48,8 +48,10 @@ switch($data->operation) {
         ProjectController::getSiteTrackingProjectList();
         break;
     case "getInvoiceOfProject":
-
         ProjectController::getInvoicesByProject($data->projectId);
+        break;
+    case "getProjectSiteFollowup":
+        ProjectController::getProjectSiteFollowup($data->projectId);
         break;
 }
 

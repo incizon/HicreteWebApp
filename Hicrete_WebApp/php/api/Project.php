@@ -1,51 +1,56 @@
 <?php
 require_once '/../../php/appUtil.php';
 require_once '/../../php/Database.php';
+require 'Followup.php';
 
-Class Project {
-	
-	public function load($id) {
-		$object = array();
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT * from project_master pm,project_address_details pad where (pm.ProjectId = :id AND pad.ProjectId = :id) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0");
-			$stmt->bindParam(':id', $id, PDO::PARAM_STR);
-			
-			if($result = $stmt->execute()){
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-					array_push($object, $row);
-				}
-			}
+Class Project
+{
 
-		 } catch (PDOException $e) {
+    public function load($id)
+    {
+        $object = array();
+        try {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $stmt = $conn->prepare("SELECT * from project_master pm,project_address_details pad where (pm.ProjectId = :id AND pad.ProjectId = :id) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0");
+            $stmt->bindParam(':id', $id, PDO::PARAM_STR);
+
+            if ($result = $stmt->execute()) {
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    array_push($object, $row);
+                }
+            }
+
+        } catch (PDOException $e) {
             echo $e->getMessage();
         }
 
-		$db = null;
-		return $object ;
-		//return "i m in";
-	}
+        $db = null;
+        return $object;
+        //return "i m in";
+    }
 
-	public static function getCompaniesForProject($projId){
-		$object = array();
+    public static function getCompaniesForProject($projId)
+    {
+        $object = array();
 
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID = c.companyId and cp.ProjectId =:projid;");
-		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
-		if($result = $stmt->execute()){
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				array_push($object, $row);
-			}
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID = c.companyId and cp.ProjectId =:projid;");
+        $stmt->bindParam(':projid', $projId, PDO::PARAM_STR);
+        if ($result = $stmt->execute()) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($object, $row);
+            }
 
-		}
-		$db = null;
-		return $object;
-	}
+        }
+        $db = null;
+        return $object;
+    }
 
-	public static function getExcludedCompaniesForProject($projId){
-		$object = array();
+    public static function getExcludedCompaniesForProject($projId)
+    {
+        $object = array();
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
@@ -504,16 +509,16 @@ public static function updateProject($id,$data,$loggedUserId){
 	public static function getSiteTrackingProjectList() {
 		$object = array();
 
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='Site Tracking'");
-		if($result = $stmt->execute()) {
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				array_push($object, $row);
-			}
-		}else{
-			return null;
-		}
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `isDeleted`='0' AND `ProjectSource`='Site Tracking'");
+        if ($result = $stmt->execute()) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($object, $row);
+            }
+        } else {
+            return null;
+        }
 
 		$db = null;
 		return $object;

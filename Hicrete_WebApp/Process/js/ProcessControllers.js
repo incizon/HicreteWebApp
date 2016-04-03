@@ -120,28 +120,9 @@ myApp.controller('ProcessWidgetController', function ($scope, $http) {
         }
     };
 
-
-    //$http.post("Config/php/configFacade.php",null, config)
-    //    .success(function (data)
-    //    {
-    //        if(data.status=="Successful"){
-    //            $scope.hasWrite=true;
-    //        }else if(data.status=="Unsuccessful"){
-    //            $scope.hasWrite=false;
-    //        }else {
-    //            doShowAlert("Failure", data.message);
-    //        }
-    //    })
-    //    .error(function (data, status, headers, config)
-    //    {
-    //        doShowAlert("Failure","Error Occurred");
-    //
-    //    });
-
-
 });
 
-myApp.controller('ProjectCreationController', function ($scope, $http, $httpParamSerializerJQLike, AppService) {
+myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope, $httpParamSerializerJQLike, AppService,$uibModal,$log) {
     $scope.projectDetails = {
         projectName: '',
         state: '',
@@ -170,18 +151,12 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
     AppService.getAllCustomers($http, $scope.customers);
 
 
-
-
     $scope.creteProject = function () {
 
         var company = '';
         var isTracking = 0;
 
         $scope = this;
-        if ($scope.projectSource == "Site Tracking") {
-            isTracking = 1;
-        }
-
 
         var companiesInvolved = [];
         for (var i = 0; i < $scope.Companies.length; i++) {
@@ -190,7 +165,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
             }
 
         }
-        if(companiesInvolved.length<=0){
+        if (companiesInvolved.length <= 0) {
             alert("Please Select atleast one Company");
             return;
         }
@@ -216,56 +191,182 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
         }
         // console.log("data is "+projectData);
         console.log("Posting");
-        var data = {
-            operation: "createProject",
-            data: projectData
 
-        };
+        if ($scope.projectDetails.projectSource == "Site Tracking") {
+            isTracking = 1;
+            //open Followup modal
+            console.log("In site tracking set");
+            var modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'Applicator/html/paymentFollowup.html',
 
-        var config = {
-            params: {
-                data: data
-            }
-        };
+                controller: function ($scope, $uibModalInstance, $filter,projectData) {
+                    // console.log("quotation is "+JSON.stringify(q));
+                    AppService.getUsers($scope, $http);
+                    console.log("Project Data");
+                    console.log(projectData);
+                    $scope.ok = function () {
 
-        $http.post('Process/php/projectFacade.php', null, config)
-            .success(function (data, status, headers) {
-                console.log(data);
-                if (data.status == "Successful") {
-                    $('#loader').css("display", "block");
-                    //$scope.PostDataResponse = data;
-                    $('#loader').css("display", "none");
-                    $scope.warningMessage = data.message;
-                    $('#warning').css("display", "block");
-                    $scope.clearForm();
+                        var FollowupDate = $filter('date')($scope.applicatorDetails.followupdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+                        var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
+                        var FollowupTitle = $scope.applicatorDetails.followTitle;
+
+                        var followupData = {
+                            FollowupDate: FollowupDate,
+                            AssignEmployee: AssignEmployee,
+                            FollowupTitle: FollowupTitle
+                        };
+                        projectData.followupData=followupData;
+                        console.log(projectData);
+                        $scope.createProject(projectData);
+                        $uibModalInstance.close();
+                    };
+
+                    $scope.cancel = function () {
+                        $scope.createProject(projectData);
+                        $uibModalInstance.dismiss('cancel');
+                    };
+
+                    $scope.createProject=function(projectData){
+                        console.log("In create project function");
+                        console.log(projectData);
+                        var data = {
+                            operation: "createProject",
+                            data: projectData
+
+                        };
+
+                        var config = {
+                            params: {
+                                data: data
+                            }
+                        };
+
+                        $http.post('Process/php/projectFacade.php', null, config)
+                            .success(function (data, status, headers) {
+                                console.log(data);
+                                if (data.status == "Successful") {
+                                    $('#loader').css("display", "block");
+                                    //$scope.PostDataResponse = data;
+                                    $('#loader').css("display", "none");
+                                    $rootScope.warningMessage = data.message;
+                                    $('#warning').css("display", "block");
+                                    setTimeout(function () {
+                                        $('#warning').css("display", "none");
+                                        window.location="dashboard.php#/Process/addProject";
+                                    }, 1000);
+
+                                    $scope.clearForm();
+                                }
+                                else {
+                                    $rootScope.errorMessage = data.message;
+                                    $('#error').css("display", "block");
+                                    setTimeout(function () {
+                                        $('#error').css("display", "none");
+                                    }, 1000);
+                                }
+
+
+                                //alert(data.message);
+
+                            })
+                            .error(function (data, status, header) {
+                                //$scope.ResponseDetails = "Data: " + data;
+                                console.log(data);
+                                $scope.errorMessage = data;
+                                $('#error').css("display", "block");
+                                setTimeout(function () {
+                                    $('#error').css("display", "none");
+                                }, 1000);
+                                //alert(data);
+                            });
+                    }
+                    $scope.clearForm = function () {
+                        $scope.projectDetails = {
+                            projectName: '',
+                            state: '',
+                            address: '',
+                            country: '',
+                            city: '',
+                            pincode: '',
+                            pointOfContactName: '',
+                            pointOfContactEmailId: '',
+                            pointOfContactLandlineNo: '',
+                            pointfContactMobileNo: '',
+                            projectManagerId: '',
+                            projectSource: '',
+                            customerId: ''
+                        }
+                    }
+                },
+                resolve: {
+                    projectData: function () {
+                        return projectData;
+                    }
                 }
-                else
-                {
-                    $scope.errorMessage = data.message;
+
+            });
+
+            modalInstance.result.then(function () {
+            }, function () {
+                $scope.clearForm();
+                $log.info('Modal dismissed at: ' + new Date());
+            });
+            $scope.toggleAnimation = function () {
+                $scope.animationsEnabled = !$scope.animationsEnabled;
+            };
+
+        }else{
+
+            var data = {
+                operation: "createProject",
+                data: projectData
+
+            };
+
+            var config = {
+                params: {
+                    data: data
+                }
+            };
+
+            $http.post('Process/php/projectFacade.php', null, config)
+                .success(function (data, status, headers) {
+                    console.log(data);
+                    if (data.status == "Successful") {
+                        $('#loader').css("display", "block");
+                        //$scope.PostDataResponse = data;
+                        $('#loader').css("display", "none");
+                        $scope.warningMessage = data.message;
+                        $('#warning').css("display", "block");
+                        $scope.clearForm();
+                    }
+                    else {
+                        $scope.errorMessage = data.message;
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                    }
+
+
+                    //alert(data.message);
+
+                })
+                .error(function (data, status, header) {
+                    //$scope.ResponseDetails = "Data: " + data;
+                    console.log(data);
+                    $scope.errorMessage = data;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 1000);
-                }
-
-
-                //alert(data.message);
-
-            })
-            .error(function (data, status, header) {
-                //$scope.ResponseDetails = "Data: " + data;
-                console.log(data);
-                $scope.errorMessage = data;
-                $('#error').css("display", "block");
-                setTimeout(function () {
-                    $('#error').css("display", "none");
-                }, 1000);
-                //alert(data);
-            });
-
+                    //alert(data);
+                });
+        }
     }
 
-    $scope.clearForm=function(){
+    $scope.clearForm = function () {
         $scope.projectDetails = {
             projectName: '',
             state: '',
@@ -284,7 +385,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
         for (var i = 0; i < $scope.Companies.length; i++) {
             $scope.Companies[i].checkVal = false;
         }
-        $scope.formSubmitted=false;
+        $scope.formSubmitted = false;
 
     }
 });
@@ -310,14 +411,14 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         Pincode: detaildata.Pincode
     }
 
-    $scope.projectQuotations=[];
+    $scope.projectQuotations = [];
     $scope.PaidPaymentDetails = [];
     $scope.projectInvoice = [];
     $scope.projectWorkorders = [];
 
-    var data={
-        operation :"getQuotationByProjectId",
-        data : projId
+    var data = {
+        operation: "getQuotationByProjectId",
+        data: projId
 
     };
 
@@ -327,7 +428,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         }
     };
 
-    $http.post("Process/php/quotationFacade.php",null, config)
+    $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
             if (data.status != "Successful") {
                 alert(data.message);
@@ -342,7 +443,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     CompanyName: data.message[i].companyName,
                     CreationDate: data.message[i].DateOfQuotation,
                     ProjectName: data.message[i].ProjectName,
-                    ProjectId:data.message[i].ProjectId,
+                    ProjectId: data.message[i].ProjectId,
                     Subject: data.message[i].Subject,
                     RefNo: data.message[i].RefNo,
                     title: data.message[i].Title,
@@ -352,21 +453,21 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                 });
             }
             myService.set($scope.projectQuotations);
-            if($scope.projectQuotations.length>0) {
+            if ($scope.projectQuotations.length > 0) {
                 $scope.loadWorkOrderData(projId);
             }
 
         })
-        .error(function (data){
+        .error(function (data) {
             alert(data);
         })
 
 
     /*Get Workorder by project id*/
-    $scope.loadWorkOrderData=function(projId){
-         var data={
-            operation :"getWorkorderByProjectId",
-            data : projId
+    $scope.loadWorkOrderData = function (projId) {
+        var data = {
+            operation: "getWorkorderByProjectId",
+            data: projId
 
         };
 
@@ -376,10 +477,10 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             }
         };
 
-        $http.post("Process/php/workorderFacade.php",null, config)
+        $http.post("Process/php/workorderFacade.php", null, config)
             .success(function (data) {
 
-                if(data.status!="Successful"){
+                if (data.status != "Successful") {
                     alert(data.message);
                     return;
                 }
@@ -394,18 +495,18 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                         quotationId: data.message[i].QuotationId,
                         creationDate: data.message[i].CreationDate,
                         dateOfQuotation: data.message[i].DateOfQuotation,
-                        refNo :data.message[i].RefNo,
+                        refNo: data.message[i].RefNo,
                         filePath: data.message[i].WorkOrderBlob
 
                     });
                 }
                 myService.set($scope.projectWorkorders);
-                if($scope.projectWorkorders.length>0){
+                if ($scope.projectWorkorders.length > 0) {
                     $scope.loadInvoiceData(projId);
                 }
 
             })
-            .error(function(data){
+            .error(function (data) {
                 alert(data);
             });
 
@@ -413,10 +514,10 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     }
 
     /*Get Invoices by project id*/
-    $scope.loadInvoiceData=function(projId){
-        var data={
-            operation :"getInvoicesByProjectId",
-            data : projId
+    $scope.loadInvoiceData = function (projId) {
+        var data = {
+            operation: "getInvoicesByProjectId",
+            data: projId
 
         };
 
@@ -426,9 +527,9 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             }
         };
 
-        $http.post("Process/php/invoiceFacade.php",null, config)
+        $http.post("Process/php/invoiceFacade.php", null, config)
             .success(function (data) {
-                if(data.status!="Successful"){
+                if (data.status != "Successful") {
                     alert(data.message);
                     return;
                 }
@@ -464,7 +565,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                 }
 
             })
-            .error(function (data){
+            .error(function (data) {
                 alert(data);
             });
 
@@ -486,15 +587,15 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             }
         };
 
-        $http.post("Process/php/ProjectPaymentFacade.php",null, config)
+        $http.post("Process/php/ProjectPaymentFacade.php", null, config)
             .success(function (data) {
-                if(data.status!="Successful"){
+                if (data.status != "Successful") {
                     alert(data.message);
                     return;
                 }
 
                 for (var i = 0; i < data.message.length; i++) {
-                    $scope.PaidPaymentDetails .push({
+                    $scope.PaidPaymentDetails.push({
                         invoiceNo: data.message[i].InvoiceNo,
                         amountPaid: data.message[i].AmountPaid,
                         totalAmount: data.message[i].ProjectAmount,
@@ -503,7 +604,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                 }
 
             })
-            .error(function (data){
+            .error(function (data) {
                 alert(data);
             });
 
@@ -570,9 +671,9 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             workOrderNumber:$scope.workorder.number
         };
         console.log("workorder data is " + workorderData);
-        var data={
-            operation :"createWorkorder",
-            data : workorderData
+        var data = {
+            operation: "createWorkorder",
+            data: workorderData
 
         };
 
@@ -650,7 +751,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     }
     $scope.animationsEnabled = true;
 
-    $scope.scheduleFollowup = function (size, q,type) {
+    $scope.scheduleFollowup = function (size, q, type) {
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'Applicator/html/paymentFollowup.html',
@@ -676,11 +777,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                             data:followupData
                         };
 
-                    }else{
-                        data={
-                            operation :"CreateQuotationFollowup",
-                            id : q.QuotationId,
-                            data:followupData
+                    } else {
+                        data = {
+                            operation: "CreateQuotationFollowup",
+                            id: q.QuotationId,
+                            data: followupData
 
                         };
                     }
@@ -691,11 +792,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                         }
                     };
 
-                    $http.post('Process/php/followupFacade.php',null,config)
+                    $http.post('Process/php/followupFacade.php', null, config)
                         .success(function (data, status, headers) {
                             console.log(data);
                             alert("Stop");
-                            if(data.status == "Successful") {
+                            if (data.status == "Successful") {
                                 $('#loader').css("display", "block");
                                 //$scope.PostDataResponse = data;
                                 $('#loader').css("display", "none");
@@ -753,7 +854,6 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     }
 
 
-
     $scope.check = function (q) {
         var projQId = q;
         console.log("qqqq " + JSON.stringify(projQId));
@@ -769,9 +869,9 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
     $scope.closeProject = function () {
         console.log("close project" + projId);
-        var data={
-            operation :"closeProject",
-            data : projId
+        var data = {
+            operation: "closeProject",
+            data: projId
 
         };
 
@@ -781,12 +881,12 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             }
         };
 
-        $http.post("Process/php/projectFacade.php",null, config)
+        $http.post("Process/php/projectFacade.php", null, config)
             .success(function (data) {
                 alert(data);
                 //window.location="/dashboard.php#/Process/viewProjects";
             })
-            .error(function(data){
+            .error(function (data) {
 
             });
 
@@ -795,7 +895,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 });
 
 
-myApp.controller('QuotationController', function (fileUpload, $scope, $http, $uibModal,AppService,$stateParams) {
+myApp.controller('QuotationController', function (fileUpload, $scope, $http, $uibModal, AppService, $stateParams) {
     //alert("in quotation");
 
     $scope.taxSelected = 0;
@@ -803,7 +903,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.noOfRows = 0;
     $scope.taxDetails = [];
 
-    $scope.totalAmnt=0;
+    $scope.totalAmnt = 0;
     $scope.QuotationDetails = {
         quotationItemDetails: []
     };
@@ -813,16 +913,15 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     AppService.getAllProjects($http, $scope.projects);
 
     $scope.Companies = [];
-    if($stateParams.projectId !==null || $stateParams.projectId !==undefined){
-        $scope.QuotationDetails.projectId=$stateParams.projectId;
+    if ($stateParams.projectId !== null || $stateParams.projectId !== undefined) {
+        $scope.QuotationDetails.projectId = $stateParams.projectId;
         console.log("Calling");
-        AppService.getCompaniesForProject($http,$scope.QuotationDetails.projectId,$scope.Companies);
+        AppService.getCompaniesForProject($http, $scope.QuotationDetails.projectId, $scope.Companies);
     }
 
-    $scope.getCompaniesForProject=function(){
-        AppService.getCompaniesForProject($http,$scope.QuotationDetails.projectId,$scope.Companies);
+    $scope.getCompaniesForProject = function () {
+        AppService.getCompaniesForProject($http, $scope.QuotationDetails.projectId, $scope.Companies);
     }
-
 
 
     $scope.quotationDate = function () {
@@ -892,7 +991,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             if ($scope.myFile.name != undefined) {
                 var uploadQuotationLocation = "upload/Quotations/";
                 fileName = uploadQuotationLocation + $scope.myFile.name;
-                quotationData.QuotationBlob=fileName;
+                quotationData.QuotationBlob = fileName;
                 var fd = new FormData();
                 fd.append('file', $scope.myFile);
                 $http.post("Process/php/uploadQuotation.php", fd, {
@@ -900,12 +999,12 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                         headers: {'Content-Type': undefined}
                     })
                     .success(function (data) {
-                        if(data.status=="Successful"){
+                        if (data.status == "Successful") {
                             console.log("Upload Successful");
                             $http.post("Process/php/quotationFacade.php", null, config)
                                 .success(function (data) {
 
-                                    if(data.status=="Successful"){
+                                    if (data.status == "Successful") {
                                         $('#loader').css("display", "block");
                                         $('#loader').css("display", "none");
                                         $scope.warningMessage = "Quotation is Created Successfully...'";
@@ -914,10 +1013,10 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                                         $scope.clearForm();
                                         setTimeout(function () {
                                             $('#warning').css("display", "none");
-                                            window.location="dashboard.php#/Process/addQuotation";
+                                            window.location = "dashboard.php#/Process/addQuotation";
                                         }, 1000);
 
-                                    }else{
+                                    } else {
                                         alert(data.message);
                                     }
 
@@ -925,7 +1024,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                                 .error(function (data) {
                                     $('#loader').css("display", "block");
                                     $('#loader').css("display", "none");
-                                    $scope.errorMessage = "Error :"+data;
+                                    $scope.errorMessage = "Error :" + data;
                                     console.log($scope.errorMessage);
                                     $('#error').css("display", "block");
                                     setTimeout(function () {
@@ -934,7 +1033,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                                 });
 
 
-                        }else{
+                        } else {
                             alert(data.message);
                         }
                     })
@@ -944,11 +1043,11 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                     });
             }
 
-        }else{
+        } else {
             $http.post("Process/php/quotationFacade.php", null, config)
                 .success(function (data) {
 
-                    if(data.status=="Successful"){
+                    if (data.status == "Successful") {
                         $('#loader').css("display", "block");
                         $('#loader').css("display", "none");
                         $scope.warningMessage = "Quotation is Created Successfully...'";
@@ -957,10 +1056,10 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                         $scope.clearForm();
                         setTimeout(function () {
                             $('#warning').css("display", "none");
-                            window.location="dashboard.php#/Process/addQuotation";
+                            window.location = "dashboard.php#/Process/addQuotation";
                         }, 1000);
 
-                    }else{
+                    } else {
                         alert(data.message);
                     }
 
@@ -968,7 +1067,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 .error(function (data) {
                     $('#loader').css("display", "block");
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = "Error :"+data;
+                    $scope.errorMessage = "Error :" + data;
                     console.log($scope.errorMessage);
                     $('#error').css("display", "block");
                     setTimeout(function () {
@@ -1015,9 +1114,9 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     }
 
     $scope.calculateTotal = function (amount) {
-        $scope.totalAmnt=0;
+        $scope.totalAmnt = 0;
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
-            $scope.totalAmnt =$scope.totalAmnt+$scope.QuotationDetails.quotationItemDetails[i].amount;
+            $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
 
     }
@@ -1025,21 +1124,21 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
     $scope.removeQuotationItem = function (index) {
 
-        $scope.totalAmnt =$scope.totalAmnt- $scope.QuotationDetails.quotationItemDetails[index].amount;
+        $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
 
     };
 
     $scope.removeTaxItem = function (index) {
-        $scope.TaxAmnt=$scope.TaxAmnt - $scope.taxDetails[index].amount;
+        $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
     };
 
     $scope.addTax = function (size) {
-        var allTax=false;
+        var allTax = false;
         if ($scope.taxSelected <= 0) {
-            $scope.taxableAmount=$scope.totalAmnt;
-            allTax=true;
+            $scope.taxableAmount = $scope.totalAmnt;
+            allTax = true;
         }
 
         var modalInstance = $uibModal.open({
@@ -1072,9 +1171,9 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         });
 
         modalInstance.result.then(function (tax) {
-            var itemString="All";
-            var itemArray=[];
-            if(!allTax) {
+            var itemString = "All";
+            var itemArray = [];
+            if (!allTax) {
                 itemString = " (Item ";
                 for (var i = 0; i < $scope.currentItemList.length - 1; i++) {
                     itemString += $scope.currentItemList[i] + " ,";
@@ -1092,10 +1191,11 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 taxArray: itemArray
             });
 
-            $scope.TaxAmnt=0;;
+            $scope.TaxAmnt = 0;
+            ;
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
-                $scope.TaxAmnt =$scope.TaxAmnt +$scope.taxDetails[s].amount;
+                $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
             }
 
 
@@ -1105,29 +1205,29 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         $scope.toggleAnimation = function () {
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
-        if(allTax)
-            $scope.taxableAmount=0;
+        if (allTax)
+            $scope.taxableAmount = 0;
     }
 
 
-    $scope.clearForm=function(){
-        $scope.formSubmitted=false;
-        $scope.totalAmnt=0;
-        $scope.TaxAmnt=0;;
+    $scope.clearForm = function () {
+        $scope.formSubmitted = false;
+        $scope.totalAmnt = 0;
+        $scope.TaxAmnt = 0;
+        ;
         $scope.QuotationDetails = {
-            projectId:'',
-            quotationTitle:'',
-            quotationDate:'',
-            quotationSubject:'',
-            companyName:'',
-            referenceNo:'',
+            projectId: '',
+            quotationTitle: '',
+            quotationDate: '',
+            quotationSubject: '',
+            companyName: '',
+            referenceNo: '',
             quotationItemDetails: []
         };
         $scope.currentItemList = [];
-        $scope.taxDetails=[];
+        $scope.taxDetails = [];
 
     }
-
 
 
     //$scope.createQuotationDoc = function () {
@@ -1185,7 +1285,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     //
     //
     //}
-
 
 
 });
@@ -1510,9 +1609,9 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
     }
 
-    $scope.addRows=function(){
+    $scope.addRows = function () {
 
-        for(var index=0;index<$scope.noOfRows;index++) {
+        for (var index = 0; index < $scope.noOfRows; index++) {
             $scope.InvoiceDetails.invoiceItemDetails.push({
 
                 quotationItem: "",
@@ -1520,8 +1619,8 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 quotationQuantity: 0,
                 quotationUnit: "",
                 quotationUnitRate: 0,
-                amount:0,
-                isTaxAplicable:false
+                amount: 0,
+                isTaxAplicable: false
             });
         }
     }
@@ -1656,16 +1755,16 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     }
 
 
-    $scope.CreateInvoiceDoc = function(){
+    $scope.CreateInvoiceDoc = function () {
         // console.log("in createInvoice DOc generation");
         var d1 = $filter('date')($scope.InvoiceDetails.invoiceDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        var d2= $filter('date')($scope.InvoiceDetails.quotationDate, 'yyyy/MM/dd', '+0530');
+        var d2 = $filter('date')($scope.InvoiceDetails.quotationDate, 'yyyy/MM/dd', '+0530');
         var d3 = $filter('date')($scope.InvoiceDetails.workOrderDate, 'yyyy/MM/dd', '+0530');
         //var grandTotal = (+$scope.totalAmnt + +$scope.TaxAmnt) - +$scope.roundingOff;
-        var totalAt =$scope.totalAmnt;
+        var totalAt = $scope.totalAmnt;
         var totalTat = $scope.TaxAmnt;
-        var totalAmount =+totalAt + +totalTat;
-        var roundingOff =$scope.roundingOff;
+        var totalAmount = +totalAt + +totalTat;
+        var roundingOff = $scope.roundingOff;
         var grandTotal = +totalAmount - +roundingOff;
         /* var invoicData = '{"InvoiceNo":"'+$scope.InvoiceDetails.invoiceNumber+'","InvoiceTitle":"Invoice Title","TotalAmount":"1000","RoundingOffFactor":"10","GrandTotal":"1000","InvoiceBLOB":" ","isPaymentRetention":"1","PurchasersVATNo":"11","PAN":"123456","CreatedBy":"1","QuotationId":"'+$scope.InvoiceDetails.quotationNumber+'","WorkOrderNumber":"'+$scope.InvoiceDetails.workOrderNumber+'","ContactPerson":"'+$scope.InvoiceDetails.contactPerson+'","InvoiceDate":"'+d1+'","QuotationDate":"'+d2+'","WorkOrderDate":"'+d3+'"';
          var b = [];
@@ -1688,37 +1787,60 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
          taxJson = ', "TaxJson":'+taxData+' }';
          var invoiceAllData = invoicData+" "+jsonData+""+taxJson;
          //console.log("Final invoice data is "+invoiceAllData);*/
-        var invoicData = {"InvoiceNo":$scope.InvoiceDetails.invoiceNumber,"InvoiceTitle":"Invoice Title","TotalAmount":totalAmount,"RoundingOffFactor":$scope.roundingOff,"GrandTotal":grandTotal,"InvoiceBLOB":" ","isPaymentRetention":"1","PurchasersVATNo":"11","PAN":"123456","CreatedBy":"1","QuotationId":$scope.InvoiceDetails.quotationNumber,"WorkOrderNumber":$scope.InvoiceDetails.workOrderNumber,"ContactPerson":$scope.InvoiceDetails.contactPerson,"InvoiceDate":d1,"QuotationDate":d2,"WorkOrderDate":d3};
+        var invoicData = {
+            "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
+            "InvoiceTitle": "Invoice Title",
+            "TotalAmount": totalAmount,
+            "RoundingOffFactor": $scope.roundingOff,
+            "GrandTotal": grandTotal,
+            "InvoiceBLOB": " ",
+            "isPaymentRetention": "1",
+            "PurchasersVATNo": "11",
+            "PAN": "123456",
+            "CreatedBy": "1",
+            "QuotationId": $scope.InvoiceDetails.quotationNumber,
+            "WorkOrderNumber": $scope.InvoiceDetails.workOrderNumber,
+            "ContactPerson": $scope.InvoiceDetails.contactPerson,
+            "InvoiceDate": d1,
+            "QuotationDate": d2,
+            "WorkOrderDate": d3
+        };
         //var invoiceAbstract = '{"TaxName":"'+$scope.InvoiceDetails.invoiceItemDetails.quotationItem+'","Description":"'+$scope.InvoiceDetails.invoiceItemDetails.quotationDescription+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'","":"'+$scope.InvoiceDetails.invoiceItemDetails+'"}';
         var b = [];
         var data = [];
         //console.log("data is "+invoicData);
         //console.log("noOfRows "+$scope.noOfRows);
-        for(var i=0; i<$scope.noOfRows;i++){
+        for (var i = 0; i < $scope.noOfRows; i++) {
 
-            b.push({'Title': $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem, 'Decription': $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription,'Quantity': $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity,'Unit': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit,'UnitRate': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate});
-            data[i] = '{"DetailNo":"1","Title":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationItem+'","Description":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription+'","Quantity":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity+'","UnitRate":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit+'","Amount":"'+$scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate+'"}';
+            b.push({
+                'Title': $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem,
+                'Decription': $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription,
+                'Quantity': $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity,
+                'Unit': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit,
+                'UnitRate': $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate
+            });
+            data[i] = '{"DetailNo":"1","Title":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationItem + '","Description":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationDescription + '","Quantity":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationQuantity + '","UnitRate":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnit + '","Amount":"' + $scope.InvoiceDetails.invoiceItemDetails[i].quotationUnitRate + '"}';
             //  console.log("data is "+data[i]);
         }
-        var taxDetails =JSON.stringify($scope.taxDetails);
+        var taxDetails = JSON.stringify($scope.taxDetails);
         // console.log("tax is  data "+taxDetails);
 
         var jsonData = [];
-        jsonData = ',"Details":['+data+']';
-        var taxData =[];
+        jsonData = ',"Details":[' + data + ']';
+        var taxData = [];
         var taxJson = [];
-        taxData =JSON.stringify($scope.taxDetails);
-        taxJson = ', "taxDetails":'+taxData+' }';
-        var invoiceAllData = invoicData+" "+jsonData+""+taxJson;
+        taxData = JSON.stringify($scope.taxDetails);
+        taxJson = ', "taxDetails":' + taxData + ' }';
+        var invoiceAllData = invoicData + " " + jsonData + "" + taxJson;
         //console.log("111 "+invoiceAllData);
 
         var invoiceDetails = $scope.InvoiceDetails.invoiceItemDetails;
         //console.log("invoice details is313 "+invoiceDetails);
         var taxDetails = $scope.taxDetails;
         var InvoiceData = {
-            Invoice:invoicData,
-            Details:invoiceDetails,
-            taxDetails:taxDetails
+            Invoice: invoicData,
+            Details: invoiceDetails,
+            taxDetails: taxDetails
         };
         //console.log("doc gen is"+JSON.stringify(InvoiceData));
 
@@ -1730,12 +1852,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
             cache: false,
             contentType: 'application/json',
             processData: false,
-            success:  function(data)                            {
-                alert("success gen doc invoice "+JSON.stringify(data));
+            success: function (data) {
+                alert("success gen doc invoice " + JSON.stringify(data));
 
-            } ,
-            error: function(data){
-                alert("error in gen doc invoice "+JSON.stringify(data));
+            },
+            error: function (data) {
+                alert("error in gen doc invoice " + JSON.stringify(data));
             }
         });
 
@@ -1808,7 +1930,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     $('#error').css("display", "block");
                 } else {
                     if (data.message != null) {
-                        paymentdetails =data.message;
+                        paymentdetails = data.message;
                     }
 
                     $scope.totalPayableAmount = data.message.total_project_amount;
@@ -1831,9 +1953,9 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
 
     }
 
-    $scope.getInvoicePayment=function(invoicenumber){
+    $scope.getInvoicePayment = function (invoicenumber) {
         console.log("In get Invoice payment");
-        AppService.getInvoicePaymentDetails(invoicenumber,$scope,$http);
+        AppService.getInvoicePaymentDetails(invoicenumber, $scope, $http);
 
     }
     $scope.getPendingAmount = function () {
@@ -1848,17 +1970,39 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
         if (paymentDetails.paymentMode == 'cash') {
             iscash = 1;
             //var data = '{"AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'"}'
-            var data = {"InvoiceNo": paymentDetails.InvoiceNo,"AmountPaid": paymentDetails.amountPaid, "PaymentDate":paydate, "IsCashPayment": iscash, "PaidTo": paymentDetails.paidTo.id,"InstrumentOfPayment":paymentDetails.paymentMode, "IDOfInstrument":"", "BankName":"", "BranchName":"", "City":""};
+            var data = {
+                "InvoiceNo": paymentDetails.InvoiceNo,
+                "AmountPaid": paymentDetails.amountPaid,
+                "PaymentDate": paydate,
+                "IsCashPayment": iscash,
+                "PaidTo": paymentDetails.paidTo.id,
+                "InstrumentOfPayment": paymentDetails.paymentMode,
+                "IDOfInstrument": "",
+                "BankName": "",
+                "BranchName": "",
+                "City": ""
+            };
         }
         else {
-            var data = {"InvoiceNo": paymentDetails.InvoiceNo,"AmountPaid":paymentDetails.amountPaid , "PaymentDate": paydate, "IsCashPayment": iscash , "PaidTo": paymentDetails.paidTo.id,"InstrumentOfPayment":paymentDetails.paymentMode, "IDOfInstrument":paymentDetails.uniqueNumber, "BankName": paymentDetails.bankName, "BranchName":paymentDetails.branchName, "City": paymentDetails.branchCity };
+            var data = {
+                "InvoiceNo": paymentDetails.InvoiceNo,
+                "AmountPaid": paymentDetails.amountPaid,
+                "PaymentDate": paydate,
+                "IsCashPayment": iscash,
+                "PaidTo": paymentDetails.paidTo.id,
+                "InstrumentOfPayment": paymentDetails.paymentMode,
+                "IDOfInstrument": paymentDetails.uniqueNumber,
+                "BankName": paymentDetails.bankName,
+                "BranchName": paymentDetails.branchName,
+                "City": paymentDetails.branchCity
+            };
         }
         console.log("dta is " + data);
 
         var data = {
             operation: "saveProjectPayment",
             //projectId: project_id,
-            data:data
+            data: data
 
         };
         var config = {
@@ -1882,7 +2026,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 setTimeout(function () {
                     $scope.$apply(function () {
                         $('#warning').css("display", "none");
-                       // window.location.reload(true);
+                        // window.location.reload(true);
                     });
                 }, 3000);
 
@@ -1917,7 +2061,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     $scope.ok = function () {
                         //console.log($scope.paymentDetails);
                         console.log("on Ok click");
-                        AppService.schedulePaymentFollowup($http,$scope,$filter,paymentDetails.InvoiceNo);
+                        AppService.schedulePaymentFollowup($http, $scope, $filter, paymentDetails.InvoiceNo);
 
                         $uibModalInstance.close();
 
@@ -1951,7 +2095,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
 
 myApp.controller('viewProjectController', function ($scope, $http, $rootScope, myService) {
 
-    $scope.ProjectPerPage = 5;
+    $scope.ProjectPerPage = 10;
     $scope.currentPage = 1;
 
     $scope.searchKeyword = "";
@@ -1980,6 +2124,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
             $http.post('Process/php/projectFacade.php', null, config)
                 .success(function (data, status, headers) {
+                    console.log("In View Project=");
                     console.log(data);
                     if (data.status == "Successful") {
                         for (var i = 0; i < data.message.length; i++) {
@@ -2000,7 +2145,8 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
                                 'Pincode': data.message[i].Pincode,
                                 'customerId': data.message[i].CustomerId,
                                 'customerName': data.message[i].CustomerName,
-                                projectManagerId: data.message[i].ProjectManagerId,
+                                'projectManagerId': data.message[i].ProjectManagerId,
+                                'isCostCenterAvailable': data.message[i].isCostCenterAvailable
 
                             });
                             //$scope.Projects = b;
@@ -2123,7 +2269,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
                     alert("Error Occured" + data);
                 });
         }
-        else{
+        else {
             alert("Please select search by list");
         }
 
@@ -2163,7 +2309,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 });
 
 
-myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService) {
+myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService,$rootScope) {
 
     $scope.customers = [];
     AppService.getAllCustomers($http, $scope.customers);
@@ -2191,9 +2337,9 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
 
     var companiesInvolved;
     $scope.companies = [];
-    var data={
-        operation:"getExcludedCompaniesForProject",
-        data:$scope.projectDetails.projectId
+    var data = {
+        operation: "getExcludedCompaniesForProject",
+        data: $scope.projectDetails.projectId
 
     };
     var config = {
@@ -2203,25 +2349,28 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
     };
 
 
-    $http.post("Process/php/projectFacade.php",null, config)
-        .success(function (data){
+    $http.post("Process/php/projectFacade.php", null, config)
+        .success(function (data) {
 
             if (data.status == "Successful") {
-                for(var i=0;i<data.message.length;i++){
-                    $scope.companies.push({checkVal:false , companyId:data.message[i].companyId, companyName:data.message[i].companyName});
+                for (var i = 0; i < data.message.length; i++) {
+                    $scope.companies.push({
+                        checkVal: false,
+                        companyId: data.message[i].companyId,
+                        companyName: data.message[i].companyName
+                    });
                 }
             } else {
                 alert("Error Occurred Getting Company Information For This Project");
             }
         })
-        .error(function(data){
+        .error(function (data) {
             console.log(data);
         });
 
 
-
     $scope.modifyProject = function () {
-        if($scope.ProjectInfoForm.$pristine){
+        if ($scope.ProjectInfoForm.$pristine) {
             alert("Fields are not modified");
             return;
         }
@@ -2257,6 +2406,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             companiesInvolved: companiesInvolved
         }
         // console.log("data is "+projectData);
+        $('#loader').css("display", "block");
         console.log("Posting");
         var data = {
             operation: "modifyProject",
@@ -2273,14 +2423,44 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             .success(function (data) {
                 console.log(data);
                 if (data.status == "Successful") {
-                    alert("Project Updated Successfully");
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        //window.location.reload(1);
+                        window.location="dashboard.php#/Process/viewProjects";
+                    }, 1000);
+
+                    //alert("Project Updated Successfully");
                 }else{
+
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                        //window.location.reload(1);
+                    }, 3000);
+
+
+
                     alert(data.message);
                 }
 
 
             })
             .error(function (data) {
+                $('#loader').css("display", "none");
+                //alert("Customer created Successfully");
+                $rootScope.errorMessage = "Technical error Occured Please contact administrator";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                    //window.location.reload(1);
+                }, 3000);
                 console.log(data);
             });
 
@@ -2422,45 +2602,61 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
     $scope.projects = [];
     var project = [];
 
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
     AppService.getAllProjects($http, $scope.projects);
     console.log("in QuotationFollowupHistoryController");
+
     $scope.selectProject = function (projectId) {
         $scope.quotations = [];
-        var quotation = [];
-
+        var quotation = []
         console.log("changed" + projectId);
         AppService.getAllQuotationOfProject($http, $scope.quotations, projectId);
 
     }
+    $scope.showQuotationHistory = function () {
+        $scope.followups = [];
+        var data = {
+            operation: "getQuotationFollow",
+            quotationId: $scope.selectedQuotationId
+        };
 
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post('Process/php/followupFacade.php', null, config)
+            .success(function (data) {
+                console.log("quote Followup");
+                console.log(data);
+                if (data.status != "Successful") {
+                    alert("Failed:" + data.message);
+                } else {
+                    for (var i = 0; i < data.message.length; i++) {
+                        $scope.followups.push({
+                            followup_id: data.message[i].FollowupId,
+                            followup_date: data.message[i].FollowupDate,
+                            followup_title: data.message[i].FollowupTitle,
+                            followup_description: data.message[i].Description,
+                            followup_conductionDate: data.message[i].ConductDate,
+                            followup_by: data.message[i].firstName + " " + data.message[i].lastName
+                        });
+                    }
+                }
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error  Occurred:" + data);
+
+            });
+    }
     $scope.selectQuotation = function (quotationId) {
-        //  console.log("quotation id is "+$scope.quotationID.id);
-
-
-
-
-
-
         $scope.followups = [];
         var followup = [];
-
-        $http.get("php/api/quotation/followup/" + quotationId).then(function (response) {
-            //   console.log(response.data.length);
-            for (var i = 0; i < response.data.length; i++) {
-                followup.push({
-                    followup_id: response.data[i].FollowupId,
-                    followup_conductionDate: response.data[i].FollowupDate,
-                    followup_title: response.data[i].FollowupTitle,
-                    followup_description: response.data[i].Description,
-                    followup_actualDate: response.data[i].ConductDate,
-                    followup_by: response.data[i].FirstName + " " + response.data[i].LastName,
-                });
-            }
-            $scope.followups = followup;
-            //  console.log("followup scope is "+JSON.stringify($scope.followups));
-        })
-
+        console.log("Quotation ID");
+        console.log(quotationId);
     }
+
 
 });
 
@@ -2468,6 +2664,8 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
 
     $scope.projects = [];
     $scope.selectedProjectId = "";
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
     AppService.getAllProjects($http, $scope.projects);
 
     $scope.selectProject = function () {
@@ -2477,8 +2675,19 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     }
 
     $scope.show = function () {
+        $scope.followups = [];
+        var data = {
+            operation: "getInvoiceFollowups",
+            invoiceId: $scope.selectedInvoiceId
+        };
 
-        $http.post("php/api/invoice/followup/" + $scope.selectedInvoiceId)
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/followupFacade.php', null, config)
             .success(function (data) {
 
                 console.log(data);
@@ -2509,12 +2718,24 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
 myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $http, AppService) {
 
     $scope.projects = [];
-
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
     AppService.getAllSiteTrackingProjects($http, $scope.projects);
-
+    $scope.followups=[];
     $scope.show = function () {
 
-        $http.post("php/api/projects/siteFollowup/" + $scope.selectedProjectId, null)
+        //getProjectSiteFollowup
+        var data = {
+            operation: "getProjectSiteFollowup",
+            projectId: $scope.selectedProjectId
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Process/php/projectFacade.php", null, config)
             .success(function (data) {
 
                 console.log(data);
@@ -2679,20 +2900,7 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
         var invoice = [];
         console.log("project id is :" + project);
         $scope.viewProjectPayment(project);
-        $http.get("php/api/invoice/project/" + project).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    invoice.push({
-                        invoice_id: response.data[i].InvoiceNo,
-                        invoice_name: response.data[i].InvoiceTitle,
-                        invoice_date: response.data[i].InvoiceDate
-                    });
-                }
-            }
-            $scope.Invoices = invoice;
-            console.log("invoices  scope is " + JSON.stringify($scope.Invoices));
-        })
+        AppService.getAllInvoicesOfProject($http, $scope.Invoices, project);
     }
 
 
@@ -2720,11 +2928,11 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
                     $('#error').css("display", "block");
                 } else {
                     if (data.message != null) {
-                        paymentdetails =data.message;
+                        paymentdetails = data.message;
                     }
                     $scope.totalPayableAmount = data.message.total_project_amount;
                     $scope.totalAmtPaid = data.message.total_project_amount_paid;
-                    $scope.projectPayment.total_project_amount = data.message.total_project_amount;
+
                     $scope.previousAmountPaid = data.message.total_project_amount_paid;
 
                 }
@@ -2743,14 +2951,13 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
     }
 
 
-
     $scope.getInvoiceDetails = function (invoiceId) {
         $scope.paymentHistoryData = [];
         $scope.totalAmtPaid = "";
         $scope.totalPayableAmount = 0;
         var invoiceDetail = [];
         var totalAmountPaid = 0;
-        var totalPayableAmt = 12000;
+        var totalPayableAmt = 0;
         console.log("invoice id is " + invoiceId);
         $http.get("php/api/paymentDetails/Invoice/" + invoiceId).then(function (response) {
             console.log(response.data.length);
@@ -2801,6 +3008,21 @@ myApp.controller('CustomerController', function ($scope, $http) {
     $scope.submitted = false;
     $scope.submitted = false;
 
+    $scope.customerDetails={
+        customer_name:"",
+        customer_address:"",
+        customer_city:"",
+        customer_state:"",
+        customer_country:"",
+        customer_emailId:"",
+        customer_landline:"",
+        customer_phone:"",
+        customer_faxNo:"",
+        customer_vatNo:"",
+        customer_cstNo:"",
+        customer_serviceTaxNo:"",
+        customer_panNo:""
+    };
     $scope.createCustomer = function () {
         console.log("Inside create customer");
         console.log($scope.customerDetails);
@@ -2810,7 +3032,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
         $scope.warningMessage = "";
         //$('#loader').css("display", "block");
 
-       // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
+        // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
 
         // console.log(custData);
         var data = {
@@ -2890,11 +3112,17 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
         customer_serviceTaxNo: $stateParams.customerToModify.serviceTaxNo,
         index: $stateParams.customerToModify.index
     };
-    $scope.formSubmitted=false;
+    $scope.formSubmitted = false;
 
     $scope.modifyCustomer = function () {
         if($scope.customerModifyForm.$pristine){
-            alert("Fields are not modified");
+
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Fields are not modified");
             return;
         }
 
@@ -2902,8 +3130,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
         $custId = $scope.customerDetails.customer_id;
         var custUpdate = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '"}';
         //  console.log("update data is ::"+custUpdate);
-        $scope.errorMessage = "";
-        $scope.warningMessage = "";
+        //$scope.errorMessage = "";
+        //$scope.warningMessage = "";
         $('#loader').css("display", "block");
 
         // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
@@ -2925,15 +3153,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
             .success(function (data, status, headers) {
                 console.log(data);
                 if (data.status == "Successful") {
-                    $('#loader').css("display", "block");
-                    $scope.postCustData = data;
-                    $('#loader').css("display", "none");
-                    //alert("Customer created Successfully");
-                    $scope.warningMessage = data.message;
-                    $('#warning').css("display", "block");
-                    console.log($scope.customerDetails);
-                    console.log($stateParams.customerToModify);
-                    //$rootScope.customerSearch[$scope.customerDetails.index]=$stateParams.customerToModify;
+                   // $('#loader').css("display", "block");
+
                     $rootScope.customerSearch[$scope.customerDetails.index].id = $scope.customerDetails.customer_id;
                     $rootScope.customerSearch[$scope.customerDetails.index].name = $scope.customerDetails.customer_name;
                     $rootScope.customerSearch[$scope.customerDetails.index].address = $scope.customerDetails.customer_address;
@@ -2948,19 +3169,27 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                     $rootScope.customerSearch[$scope.customerDetails.index].cstNo = $scope.customerDetails.customer_cstNo;
                     $rootScope.customerSearch[$scope.customerDetails.index].vatNo = $scope.customerDetails.customer_vatNo;
                     $rootScope.customerSearch[$scope.customerDetails.index].serviceTaxNo = $scope.customerDetails.customer_serviceTaxNo;
-                    //$rootScope.customerSearch[$scope.customerDetails.index].pincode=data.message[i].Pincode;
 
-                    //$rootScope.customerSearch[ $scope.customerDetails.index]=$scope.customerDetails;
-                    $('#loader').css("display", "block");
-                    $('#loading').css("display", "none");
-                    $scope.errorMessage = data.message;
-                    $('#error').css("display", "block");
+
+
+
+                    $scope.postCustData = data;
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    console.log(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location="dashboard.php#/Process/Customers";
+                    }, 1000);
+
 
                 } else {
 
                     $('#loader').css("display", "block");
                     $('#loading').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -2972,7 +3201,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                 $('#loader').css("display", "block");
                 $scope.ResponseDetails = "Data: " + data;
                 $('#loading').css("display", "none");
-                $scope.errorMessage = "Customer not Updated..";
+                $rootScope.errorMessage = "Customer not Updated..";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -2987,20 +3216,20 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
 
 
 
-myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$stateParams){
+myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$stateParams,$rootScope){
 
     var reviseQuotationData = $stateParams.quotationToRevise;
     var qId = reviseQuotationData.QuotationId;
     $scope.QuotationDetails = {
-        projectId:reviseQuotationData.ProjectId,
-        ProjectName:$stateParams.projectName,
-        quotationTitle:reviseQuotationData.QuotationTitle,
-        quotationDate:reviseQuotationData.CreationDate,
-        quotationSubject:reviseQuotationData.Subject,
-        companyId:reviseQuotationData.CompanyId,
-        companyName:reviseQuotationData.CompanyName,
-        referenceNo:reviseQuotationData.RefNo,
-        filePath:reviseQuotationData.filePath,
+        projectId: reviseQuotationData.ProjectId,
+        ProjectName: $stateParams.projectName,
+        quotationTitle: reviseQuotationData.QuotationTitle,
+        quotationDate: reviseQuotationData.CreationDate,
+        quotationSubject: reviseQuotationData.Subject,
+        companyId: reviseQuotationData.CompanyId,
+        companyName: reviseQuotationData.CompanyName,
+        referenceNo: reviseQuotationData.RefNo,
+        filePath: reviseQuotationData.filePath,
         quotationItemDetails: []
     };
 
@@ -3008,10 +3237,9 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
     $scope.taxableAmount = 0;
     $scope.noOfRows = 0;
     $scope.taxDetails = [];
-    $scope.totalAmnt=0;
+    $scope.totalAmnt = 0;
     $scope.currentItemList = [];
-    $scope.taxDetails=[];
-
+    $scope.taxDetails = [];
 
 
     var data = {
@@ -3029,12 +3257,18 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         .success(function (data) {
 
         if (data.status != "Successful") {
-            alert("Error Occurred while fetching quoation data");
+
+            $rootScope.errorMessage = "Error Occurred while fetching quoation data";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Error Occurred while fetching quoation data");
             return;
         }
 
-        var qData = data.message;
-        $scope.qDetails = [];
+            var qData = data.message;
+            $scope.qDetails = [];
 
         $scope.totalAmnt = 0;
         for (var i = 0; i < qData.length; i++) {
@@ -3051,10 +3285,15 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         }
         console.log("totalAmount is" + $scope.totalAmount);
     })  .error(function (data) {
-        alert(data);
+        $rootScope.errorMessage = "Error Occurred Please contact administrator";
+        $('#error').css("display", "block");
+        setTimeout(function () {
+            $('#error').css("display", "none");
+        }, 1000);
+       //alert(data);
     });
 
-
+    $('#loader').css("display", "block");
     data = {
         operation: "getQuotationTaxDetails",
         data: qId
@@ -3070,44 +3309,51 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
         if (data.status != "Successful") {
-            alert("Error Occurred while getting tax details");
+
+            $('#loader').css("display", "none");
+            $rootScope.errorMessage = "Error Occurred while getting tax details";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Error Occurred while getting tax details");
             return;
         }
 
-        var qtData = data.message;
-        $scope.qTaxDetails = [];
-        $scope.TaxAmnt = 0;
+            var qtData = data.message;
+            $scope.qTaxDetails = [];
+            $scope.TaxAmnt = 0;
 
-        $scope.qTaxDetails = [];
-        for (var i = 0; i < qtData.length; i++) {
-            var taxApplicableTo = 'All';
-            var itemArray = [];
-            if (qtData[i].DetailsNo.length > 0) {
-                taxApplicableTo = "( Item No ";
-                for (var j = 0; j < qtData[i].DetailsNo.length; j++) {
-                    if (j + 1 == qtData[i].DetailsNo.length)
-                        taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + " )";
-                    else
-                        taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + ",";
-                    itemArray.push(parseInt(qtData[i].DetailsNo[j]));
+            $scope.qTaxDetails = [];
+            for (var i = 0; i < qtData.length; i++) {
+                var taxApplicableTo = 'All';
+                var itemArray = [];
+                if (qtData[i].DetailsNo.length > 0) {
+                    taxApplicableTo = "( Item No ";
+                    for (var j = 0; j < qtData[i].DetailsNo.length; j++) {
+                        if (j + 1 == qtData[i].DetailsNo.length)
+                            taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + " )";
+                        else
+                            taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + ",";
+                        itemArray.push(parseInt(qtData[i].DetailsNo[j]));
+                    }
+
                 }
 
+                $scope.taxDetails.push({
+                    'taxTitle': qtData[i].TaxName,
+                    'taxPercentage': qtData[i].TaxPercentage,
+                    'amount': parseFloat(qtData[i].TaxAmount),
+                    taxApplicableTo: taxApplicableTo,
+                    'taxArray': itemArray
+                });
+                $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
+
             }
-
-            $scope.taxDetails.push({
-                'taxTitle': qtData[i].TaxName,
-                'taxPercentage': qtData[i].TaxPercentage,
-                'amount': parseFloat(qtData[i].TaxAmount),
-                  taxApplicableTo: taxApplicableTo,
-                'taxArray' :itemArray
-            });
-            $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
-
-        }
-        console.log($scope.TaxAmnt);
-    })
+            console.log($scope.TaxAmnt);
+        })
         .error(function (data) {
-          alert(data);
+            alert(data);
         });
 
 
@@ -3125,7 +3371,13 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
     $scope.ModifyQuotation = function () {
         if($scope.QuotationForm.$pristine){
-            alert("Fields are not modified");
+
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Fields are not modified");
             return;
         }
 
@@ -3136,8 +3388,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         var companyId = $scope.QuotationDetails.companyId;
         var companyName = $scope.QuotationDetails.companyName;
         var fileName =$scope.QuotationDetails.filePath ;
-        $scope.warningMessage = "";
-        $scope.errorMessage = "";
+        //$scope.warningMessage = "";
+        //$scope.errorMessage = "";
 
         for (var i = 0; i < $scope.noOfRows; i++) {
             b.push({
@@ -3171,7 +3423,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         console.log(QuotationData);
         var data = {
             operation: "modifyQuotation",
-            quotationId:qId,
+            quotationId: qId,
             data: QuotationData
 
         };
@@ -3185,55 +3437,119 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
             if ($scope.myFile.name != undefined) {
                 var uploadQuotationLocation = "upload/Quotations/";
                 fileName = uploadQuotationLocation + $scope.myFile.name;
-                quotationData.QuotationBlob=fileName;
+                quotationData.QuotationBlob = fileName;
                 var fd = new FormData();
                 fd.append('file', $scope.myFile);
+                $('#loader').css("display", "block");
                 $http.post("Process/php/uploadQuotation.php", fd, {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
                     })
                     .success(function (data) {
-                        if(data.status=="Successful"){
+                        if (data.status == "Successful") {
                             console.log("Upload Successful");
                             $http.post("Process/php/quotationFacade.php", null, config)
                                 .success(function (data) {
 
                                     if(data.status=="Successful"){
-                                       alert("Quotaion Revised Successfully");
+                                        $('#loader').css("display", "none");
+                                        //alert("Customer created Successfully");
+                                        console.log(data.message);
+                                        $rootScope.warningMessage = data.message;
+                                        $('#warning').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#warning').css("display", "none");
+                                            window.location="dashboard.php#/Process/viewProjects";
+                                        }, 1000);
+
+                                      // alert("Quotaion Revised Successfully");
                                     }else{
-                                        alert(data.message);
+                                       // alert(data.message);
+                                        $('#loader').css("display", "none");
+                                        //$('#loading').css("display", "none");
+                                        $rootScope.errorMessage = data.message;
+                                        $('#error').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#error').css("display", "none");
+                                        }, 1000);
                                     }
 
                                 })
                                 .error(function (data) {
-                                    alert(data);
+                                    $('#loader').css("display", "none");
+                                    //$('#loading').css("display", "none");
+                                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                                    $('#error').css("display", "block");
+                                    setTimeout(function () {
+                                        $('#error').css("display", "none");
+                                    }, 1000);
+                                   // alert(data);
                                 });
 
 
                         }else{
-                            alert(data.message);
+                            $('#loader').css("display", "none");
+                            //$('#loading').css("display", "none");
+                            $rootScope.errorMessage = data.message;
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 1000);
+                            //alert(data.message);
                         }
                     })
                     .error(function () {
-                       alert("Something went wrong can not upload quoatation");
+                        $('#loader').css("display", "none");
+                        //$('#loading').css("display", "none");
+                        $rootScope.errorMessage = "Error Occured Please contact administrator";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                       // alert(data);
+                       //alert("Something went wrong can not upload quoatation");
 
                     });
             }
 
-        }else{
+        } else {
             $http.post("Process/php/quotationFacade.php", null, config)
                 .success(function (data) {
 
                     if(data.status=="Successful"){
-                        alert("Quotation is Revised Successfully");
+
+                        $('#loader').css("display", "none");
+                        //alert("Customer created Successfully");
+                        console.log(data.message);
+                        $rootScope.warningMessage = data.message;
+                        $('#warning').css("display", "block");
+                        setTimeout(function () {
+                            $('#warning').css("display", "none");
+                            window.location="dashboard.php#/Process/viewProjects";
+                        }, 1000);
+                        //alert("Quotation is Revised Successfully");
 
                     }else{
-                        alert(data.message);
+                        $('#loader').css("display", "none");
+                        //$('#loading').css("display", "none");
+                        $rootScope.errorMessage = data.message;
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                       // alert(data.message);
                     }
 
                 })
                 .error(function (data) {
-                    alert(data);
+                   // $('#loader').css("display", "block");
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 1000);
+                    //alert(data);
                 });
 
         }
@@ -3276,9 +3592,9 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
     }
 
     $scope.calculateTotal = function (amount) {
-        $scope.totalAmnt=0;
+        $scope.totalAmnt = 0;
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
-            $scope.totalAmnt =$scope.totalAmnt+ $scope.QuotationDetails.quotationItemDetails[i].amount;
+            $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
 
     }
@@ -3286,21 +3602,21 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
     $scope.removeQuotationItem = function (index) {
 
-        $scope.totalAmnt =$scope.totalAmnt- $scope.QuotationDetails.quotationItemDetails[index].amount;
+        $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
 
     };
 
     $scope.removeTaxItem = function (index) {
-        $scope.TaxAmnt=$scope.TaxAmnt - $scope.taxDetails[index].amount;
+        $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
     };
 
     $scope.addTax = function (size) {
-        var allTax=false;
+        var allTax = false;
         if ($scope.taxSelected <= 0) {
-            $scope.taxableAmount=$scope.totalAmnt;
-            allTax=true;
+            $scope.taxableAmount = $scope.totalAmnt;
+            allTax = true;
         }
 
         var modalInstance = $uibModal.open({
@@ -3333,9 +3649,9 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         });
 
         modalInstance.result.then(function (tax) {
-            var itemString="All";
-            var itemArray=[];
-            if(!allTax) {
+            var itemString = "All";
+            var itemArray = [];
+            if (!allTax) {
                 itemString = " (Item ";
                 for (var i = 0; i < $scope.currentItemList.length - 1; i++) {
                     itemString += $scope.currentItemList[i] + " ,";
@@ -3353,10 +3669,11 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                 taxArray: itemArray
             });
 
-            $scope.TaxAmnt=0;;
+            $scope.TaxAmnt = 0;
+            ;
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
-                $scope.TaxAmnt =$scope.TaxAmnt +$scope.taxDetails[s].amount;
+                $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
             }
 
 
@@ -3366,15 +3683,10 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         $scope.toggleAnimation = function () {
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
-        if(allTax)
-            $scope.taxableAmount=0;
+        if (allTax)
+            $scope.taxableAmount = 0;
     }
 });
-
-
-
-
-
 
 
 myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter, $rootScope) {
@@ -3435,7 +3747,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             .success(function (data) {
                 console.log(data);
                 $('#loader').css("display", "none");
-                for (var i = 0; i <data.message.length; i++) {
+                for (var i = 0; i < data.message.length; i++) {
                     notes.push({
                         Note: data.message[i].ConductionNote,
                         AddedBy: data.message[i].firstName + " " + data.message[i].lastName,
@@ -3470,13 +3782,21 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
         var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
 
-        var data = {"CompletionPercentage":$scope.taskCompletionP ,"isCompleted":isCompleted,"ActualStartDate": actualStart,"ActualEndDate": actualEnd ,"ConductionNote": $scope.note,"NoteAddedBy":"1","NoteAdditionDate": noteCreatedDate};
+        var data = {
+            "CompletionPercentage": $scope.taskCompletionP,
+            "isCompleted": isCompleted,
+            "ActualStartDate": actualStart,
+            "ActualEndDate": actualEnd,
+            "ConductionNote": $scope.note,
+            "NoteAddedBy": "1",
+            "NoteAdditionDate": noteCreatedDate
+        };
         console.log("update task data is " + data);
 
         var data = {
             operation: "updateTask",
             data: data,
-            taskId:taskid
+            taskId: taskid
 
         };
         var config = {
@@ -3516,8 +3836,6 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             });
 
 
-
-
         //$.ajax({
         //    type: "POST",
         //    url: 'php/api/task/edit/' + taskid,
@@ -3540,17 +3858,17 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 });
 
 
-myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $http) {
+myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, $http) {
 
-    $scope.sortBy="";
-    $scope.searchKeyword=""
+    $scope.sortBy = "";
+    $scope.searchKeyword = ""
 
-    $scope.getAllTasks=function(){
+    $scope.getAllTasks = function () {
         var task = [];
         var data = {
             operation: "getTasks",
-            keyword:$scope.searchKeyword,
-            sortBy:$scope.sortBy
+            keyword: $scope.searchKeyword,
+            sortBy: $scope.sortBy
 
         };
         var config = {
@@ -3620,7 +3938,7 @@ myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $
         console.log("delete task " + taskid);
         var data = {
             operation: "deleteTask",
-            taskId:taskid
+            taskId: taskid
 
         };
         var config = {
@@ -3658,9 +3976,6 @@ myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $
             });
 
 
-
-
-
         //$http({
         //    method: 'GET',
         //    url: 'php/api/task/delete/' + taskid
@@ -3671,23 +3986,19 @@ myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $
         //});
 
 
-
-
-
-
     }
 
 });
 
 
-myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter) {
+myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter,$rootScope) {
 
     console.log("in AssignTaskController");
     $scope.users = [];
     AppService.getUsers($scope, $http);
 
     $scope.assignTask = function () {
-        $('#loader').css("display", "block");
+
         console.log("IN ASSIGN TASK");
         var date = new Date();
         var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
@@ -3706,6 +4017,18 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
             "CreationDate": creationDate
         };
         console.log("Task data is " + JSON.stringify(Taskdata));
+        $('#loader').css("display", "block");
+
+        $scope.clearData= function()
+        {
+            $scope.task.taskname="";
+            $scope.task.description="";
+            $scope.task.startDate="";
+            $scope.task.endDate="";
+            $scope.task.assignedTo="";
+
+
+        }
 
         var data = {
             operation: "saveTask",
@@ -3723,19 +4046,22 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                 } else {
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
 
                 }
                 setTimeout(function () {
-                    $scope.$apply(function () {
+                    //$scope.$apply(function () {
                         $('#warning').css("display", "none");
-                        window.location.reload(true);
-                    });
+
+                        //window.location.reload(true);
+                    //});
                 }, 3000);
+                $scope.clearData();
+                $scope.formSubmitted= false;
 
 
             })
@@ -3743,7 +4069,7 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 console.log(data.error);
 
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
             });
 

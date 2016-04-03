@@ -6,6 +6,8 @@
  * Time: 16:03
  */
 require_once '../../php/api/FollowupController.php';
+require_once '../../php/api/InvoiceController.php';
+require_once '../../php/api/QuotationController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {
@@ -22,6 +24,12 @@ $opt = array(
 
 switch($data->operation)
 {
+    case 'getQuotationFollow':
+        QuotationController::getQuotationFollow($data->quotationId);
+        break;
+    case 'getInvoiceFollowups':
+        InvoiceController::getInvoiceFollowups($data->invoiceId);
+        break;
     case 'getPaymentFollowup':
         FollowupController::getPaymentFollowup($userId);
         break;

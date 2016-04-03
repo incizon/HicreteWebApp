@@ -23,35 +23,24 @@ myApp.service('ApplicatorService',function(){
 							$('#warning').css("display", "block");
 							setTimeout(function () {
 								$scope.$apply(function () {
-									if (data.msg != "") {
+									//if (data.msg != "") {
 										$('#warning').css("display", "none");
-                                        window.location ="dashboard.php#/Applicator";
-                                    }
+                                        window.location = "dashboard.php#/Applicator";
+                                    //}
 								});
 							}, 1000);
-
-							//$scope.step=1;
-							//console.log("Done");
-
-							//}
-
 							}
-
 							if (data.error != "") {
 								//$rootScope.errorMessage = "Unable to create Applicator...";
 								$rootScope.errorMessage = data.error;
 								$('#error').css("display", "block");
 								setTimeout(function () {
 									$scope.$apply(function () {
-
 											$('#error').css("display", "none");
 
 									});
 								}, 1000);
 							}
-							/*setTimeout(function(){
-							 window.location.reload(true);
-							 },6000);*/
 
 						})
 						.error(function (data, status, headers, config){
@@ -182,18 +171,18 @@ myApp.service('PackageService',function(){
 
 						$scope.loading=false;
 						$('#loader').css("display","none");
-						if(data.msg==""){
+						if(data.error!=""){
 							$rootScope.errorMessage=data.error;
 							$('#error').css("display","block");
 						}
 						console.log(data);
-						setTimeout(function(){
+						/*setTimeout(function(){
 							window.location.reload(true);
-						},2000);
+						},2000);*/
 
-						setTimeout(function(){
+					/*	setTimeout(function(){
 										window.location.reload(true);
-									},1000);
+									},1000);*/
 					})
 					.error(function (data, status, headers, config){
 									

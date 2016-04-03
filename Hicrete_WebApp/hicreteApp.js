@@ -452,7 +452,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('billApproval', {
             url: '/BillApproval',
-            templateUrl:'Expense/html/BillApproval.html'
+            templateUrl:'Expense/html/BillApproval.html',
+            controller:'BillApprovalController'
         })
         .state('leaveApproval', {
             url: '/LeaveApproval',

@@ -61,7 +61,8 @@
                 if(!$productObj->isAvailable($dbh)){
                     $productObj->insertInwardInToDb($dbh, $userId, $pData);
                 }else{
-                    echo "Inward number that you are trying to insert is already present";
+                    //echo "Inward number that you are trying to insert is already present";
+                    $productObj->showAlert('Failure', "Inward no already Exist Please insert new Inward Number");
                 }
 
                 break;
@@ -114,7 +115,8 @@
                 if(!$productObj->isAvailable($dbh)){
                     $productObj->insertOutwardInToDb($dbh, $userId, $pData);
                 }else{
-                    echo "Outward number that you are trying to insert is already present";
+                    //echo "Outward number that you are trying to insert is already present";
+                    $productObj->showAlert('Failure', "Outward no already Exist Please insert new Inward Number");
                 }
 
                 break;

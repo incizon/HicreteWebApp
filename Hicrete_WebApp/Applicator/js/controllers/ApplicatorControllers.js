@@ -238,27 +238,6 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller:  function ($scope,$uibModalInstance,applicatorDetails) {
                     console.log("Inside Followup");
-                    $scope.clearFields = function(applicatorDetails,page)
-                    {
-                        if(page=='initial')
-                        {
-                            applicatorDetails.firmname="";
-                            applicatorDetails.addressline1="";
-                            applicatorDetails.addressline2="";
-                            applicatorDetails.contactno="";
-                            applicatorDetails.country="";
-                            applicatorDetails.state="";
-                            applicatorDetails.city="";
-                            applicatorDetails.vatnumber="";
-                            applicatorDetails.cstnumber="";
-                            applicatorDetails.servicetaxnumber="";
-                            applicatorDetails.pannumber="";
-                            applicatorDetails.pointofcontact="";
-                            applicatorDetails.pointcontactno="";
-                        }
-                        $scope.formSubmitted=false;
-                    }
-
 
                     AppService.getUsers($scope,$http);
                     $scope.openFollowDate = function() {
@@ -292,7 +271,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             });
 
             modalInstance.result.then(function (applicatorDetails) {
-                $scope.applicatorDetails = applicatorDetails;
+                //$scope.applicatorDetails = applicatorDetails;
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -313,27 +292,6 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                 controller:  function ($scope, $uibModalInstance,applicatorDetails) {
                     AppService.getUsers($scope,$http);
 
-                    $scope.clearFields = function(applicatorDetails,page)
-                    {
-                        if(page=='initial')
-                        {
-                            applicatorDetails.firmname="";
-                            applicatorDetails.addressline1="";
-                            applicatorDetails.addressline2="";
-                            applicatorDetails.contactno="";
-                            applicatorDetails.country="";
-                            applicatorDetails.state="";
-                            applicatorDetails.city="";
-                            applicatorDetails.vatnumber="";
-                            applicatorDetails.cstnumber="";
-                            applicatorDetails.servicetaxnumber="";
-                            applicatorDetails.pannumber="";
-                            applicatorDetails.pointofcontact="";
-                            applicatorDetails.pointcontactno="";
-                        }
-                        $scope.formSubmitted=false;
-                    }
-
                     $scope.openFollowDate = function() {
                         $scope.followup.opened = true;
                     };
@@ -365,12 +323,8 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             });
 
             modalInstance.result.then(function (applicatorDetails) {
-                $scope.applicatorDetails = applicatorDetails;
-                //$scope.step=step;
-                //$scope.formSubmitted= false;
-               // $scope.clearFields(applicatorDetails,'initiate');
-                //window.location="dashboard.php#/Applicator/AddApplicator";
-                //$scope.step=1;
+                //$scope.applicatorDetails = applicatorDetails;
+
             }, function () {
                 $log.info('Modal dismissed at: ' + new Date());
             });
@@ -380,19 +334,9 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             };
         }
         $('#loader').css("display","none");
-       // $scope.formSubmitted=false;
-        //$scope.clearFields($scope.applicatorDetails,'initiate');
-    };
-
-    /* if not amount is paid or half amount is paid */
-
-    $scope.processFollowup=function(){
-
-        $scope.applicatorDetails.operation='createApplicator';
-        console.log($scope.applicatorDetails);
-        ApplicatorService.submitApplicatorDetails($scope,$http,$scope.applicatorDetails);
 
     };
+
 
 });
 

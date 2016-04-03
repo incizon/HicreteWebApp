@@ -98,7 +98,7 @@ class ProjectController
      * @url GET /projects/siteFollowup/$projid
      */
 
-    public function getProjectSiteFollowup($projid){
+    public static function getProjectSiteFollowup($projid){
         try{
             $project = Project::loadProjectSiteFollowup($projid); // possible user loading method
 

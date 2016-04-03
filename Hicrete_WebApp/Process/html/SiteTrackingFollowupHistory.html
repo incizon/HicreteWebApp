@@ -7,20 +7,20 @@
         </div>
         <div class="panel-body form-horizontal">
             <div class="row">
-                <div class="col-md-5">
+                <!--<div class="col-md-5">-->
 
-                    <div class="col-md-3">
-                        <label class="control-label">Sort By :</label>
-                    </div>
-                    <div class="col-md-9">
-                        <select class="form-control select" name="sortBy" ng-model="sortExpression"/>
-                        <option value="" disabled selected>Sort by </option>
-                        <option value="afollowupDate">Actual Followup date</option>
-                        <option value="sfollowupDate">Scheduled Followup date</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6">
+                    <!--<div class="col-md-3">-->
+                        <!--<label class="control-label">Sort By :</label>-->
+                    <!--</div>-->
+                    <!--<div class="col-md-9">-->
+                        <!--<select class="form-control select" name="sortBy" ng-model="sortExpression"/>-->
+                        <!--<option value="" disabled selected>Sort by </option>-->
+                        <!--<option value="afollowupDate">Actual Followup date</option>-->
+                        <!--<option value="sfollowupDate">Scheduled Followup date</option>-->
+                        <!--</select>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="col-md-8">
 
                     <div class="col-md-3">
                         <label class="control-label">Project Name  :</label>
@@ -55,15 +55,31 @@
                     <thead>
                     <tr>
                         <th>Sr.No</th>
-                        <th>Followup Title</th>
-                        <th>Scheduled Followup Date</th>
+                        <th>
+                            <a ng-click="sortType = 'followup.followup_title'; sortReverse = !sortReverse">Followup Title
+                                <span ng-show="sortType == 'followup.followup_title' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'followup.followup_title' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+
+                        <th>
+                            <a ng-click="sortType = 'followup.followup_date'; sortReverse = !sortReverse">Scheduled Followup Date
+                                <span ng-show="sortType == 'followup.followup_date' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'followup.followup_date' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                         <th>Followup Note</th>
                         <th>Actual Followup Date</th>
-                        <th>Followup By</th>
+                        <th>
+                            <a ng-click="sortType = 'followup.followup_by'; sortReverse = !sortReverse">Followup By
+                                <span ng-show="sortType == 'followup.followup_by' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'followup.followup_by' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat = "followup in followups">
+                    <tr ng-repeat = "followup in followups | orderBy:sortType:sortReverse">
                         <td>{{$index+1}}</td>
                         <td> {{followup.followup_title}}</td>
                         <td> {{followup.followup_date}}</td>

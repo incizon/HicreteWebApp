@@ -1,4 +1,4 @@
-myApp.controller('budgetSegmentController', function ($scope, $http) {
+myApp.controller('budgetSegmentController', function ($scope, $http,$rootScope) {
 
     $scope.segments = [];
     $scope.materialSegment=false;
@@ -62,18 +62,35 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
             .success(function (data) {
                 console.log("Dataa");
                 console.log(data);
-                if (data == "0"){
-                  alert("Segments Added Successsfully.!!!");
-                 }else{
-                   alert(data);
+                $("#loader").css("display","block");
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                           window.location = "dashboard.php#/Process";
+                    }, 1000);
                  }
-                    //doShowAlert("Success", "Added Successfully");
-                window.location = "dashboard.php#/Process";
-
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+                 }
             })
             .error(function (data, status, headers, config) {
-                doShowAlert("Failure", "Error Occurred");
 
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While creating segment";
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                    window.location = "dashboard.php#/Process";
+                }, 1000);
             });
     };
     $scope.clearSegmentFields = function () {
@@ -86,16 +103,14 @@ myApp.controller('budgetSegmentController', function ($scope, $http) {
 });
 
 
-myApp.controller('costCenterController', function ($scope, $http,AppService) {
+myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope,$uibModal,$log) {
     $scope.createCostCenterClicked = false;
 
     $scope.projectList = [];
     //$scope.projectList.push({name: "Project1", id: "1"});
     //$scope.projectList.push({name: "Project2", id: "2"});
     AppService.getAllProjects($http,$scope.projectList);
-
     $scope.segmentList = [];
-
     $scope.costCenterDetails = {
         projectId: "",
         costCenterName: "",
@@ -125,7 +140,7 @@ myApp.controller('costCenterController', function ($scope, $http,AppService) {
 
         })
         .error(function (data, status, headers, config) {
-            doShowAlert("Failure", "Error Occurred");
+
 
         });
 
@@ -133,45 +148,93 @@ myApp.controller('costCenterController', function ($scope, $http,AppService) {
     $scope.createCostCenter = function () {
         $scope.createCostCenterClicked = false;
 
-        // $scope.costCenterDetails=$scope.segmentList;
-
-        // angular.extend($scope.costCenterDetails, $scope.segmentList);
         console.log($scope.segmentList);
-        var data = {
-            operation: "createCostCenter",
-            costCenterData: $scope.costCenterDetails,
-            segments:$scope.segmentList
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'utils/ConfirmDialog.html',
+            controller:  function ($scope,$rootScope,$uibModalInstance,costCenterData,segmentList) {
 
-        };
-        console.log(data);
-        var config = {
-            params: {
-                data: data
-            }
-        };
-        console.log(config);
-        $http.post("Expense/php/expenseFacade.php", null, config)
-            .success(function (data) {
-                console.log(data);
-                if (data == "0") {
-                    doShowAlert("Success", "Costcenter created Successfully");
-                    window.location = "dashboard.php#/Process";
-                } else {
-                    doShowAlert("Failure", "Cannot connect to database");
+                 $scope.save = function () {
+                    console.log("Ok clicked");
+                    console.log(costCenterData);
+                     console.log(segmentList);
+                    $scope.saveCostCenter($scope,$rootScope, $http,costCenterData,segmentList);
+                    $uibModalInstance.close();
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.saveCostCenter = function ($scope,$rootScope, $http, costCenterData,segmentList) {
+                    var data = {
+                        operation: "createCostCenter",
+                        costCenterData: costCenterData,
+                        segments:segmentList
+                    };
+                    console.log(data);
+                    var config = {
+                        params: {
+                            data: data
+                        }
+                    };
+                    console.log(config);
+                    $http.post("Expense/php/expenseFacade.php", null, config)
+                        .success(function (data) {
+                            console.log(data);
+                            $("#loader").css("display","block");
+                            if (data.status == "success"){
+                                $('#loader').css("display","none");
+                                $rootScope.warningMessage =data.message;
+                                $("#warning").css("display", "block");
+                                setTimeout(function () {
+                                    $("#warning").css("display", "none");
+                                    window.location = "dashboard.php#/Process";
+                                }, 1000);
+                            }
+                            if(data.status=="failure"){
+                                $('#loader').css("display","none");
+                                $rootScope.errorMessage =data.message;
+                                $("#error").css("display", "block");
+                                setTimeout(function () {
+                                    $("#error").css("display", "none");
+                                    window.location = "dashboard.php#/Process";
+                                }, 1000);
+                            }
+                        })
+                        .error(function (data, status, headers, config) {
+                            $('#loader').css("display","none");
+                            $rootScope.errorMessage ="Error Occur While creating cost center";
+                            $("#error").css("display", "block");
+                            setTimeout(function () {
+                                $("#error").css("display", "none");
+                                window.location = "dashboard.php#/Process";
+                            },1000);
+                        });
+                };
+            },
+            resolve: {
+                costCenterData: function () {
+                    return $scope.costCenterDetails;
+                },
+                segmentList:function(){
+                    return $scope.segmentList;
                 }
+            }
 
-            })
-            .error(function (data, status, headers, config) {
-                doShowAlert("Failure", "Error Occurred");
+        });
 
-            });
+        modalInstance.result.then(function () {
+            console.log("In result");
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+        $scope.toggleAnimation = function () {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        };
 
-    }
-
+        }
 });
 
-
-myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
+myApp.controller('expenseEntryController', function ($scope, $http,AppService,$rootScope) {
 
     $scope.otherExpenseClicked = false;
     $scope.materialExpenseClicked = false;
@@ -207,12 +270,6 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
 
      $scope.projectList=[];
     AppService.getAllProjects($http,$scope.projectList);
-     //$scope.projectList.push({name:"project1",id:"1"});
-     //$scope.projectList.push({name:"project2",id:"2"});
-
-    // $scope.segmentList=[];
-    // $scope.segmentList.push({name:"Transport",id:"1"});
-    // $scope.segmentList.push({name:"Other",id:"2"});
 
     var data = {
         module: 'getProducts'
@@ -231,71 +288,19 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
         .error(function (data, status, headers) {
             console.log("IN SERVICE OF Inventory Search Failure=");
             console.log(data);
-
         });
 
 
     /*
      START of getting segment list
      */
-    var data = {
-        operation: "getSegments",
-    };
 
-    var config = {
-        params: {
-            data: data
-        }
-    };
 
-    $http.post("Expense/php/expenseUtils.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            if (data == "1") {
-
-            } else {
-                $scope.segmentList = data;
-            }
-
-        })
-        .error(function (data, status, headers, config) {
-            doShowAlert("Failure", "Error Occurred");
-
-        });
-    /*
-     End of getting segment list
-     */
-    var data = {
-        operation: "getCostCenters",
-    };
-
-    var config = {
-        params: {
-            data: data
-        }
-    };
-
-    $http.post("Expense/php/expenseUtils.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            if (data == "1") {
-
-            } else {
-                $scope.costCenterList = data;
-            }
-
-        })
-        .error(function (data, status, headers, config) {
-            doShowAlert("Failure", "Error Occurred");
-
-        });
-    $scope.addOtherExpense = function () {
-        $scope.otherExpenseClicked = false;
+    $scope.getProjectSegments=function(projectId){
+        console.log("IN Project Segment Get");
         var data = {
-            operation: "addOtherExpense",
-            otherExpenseData: $scope.expenseDetails,
-            billDetails: $scope.billDetails
-
+            operation: "getProjectWiseSegments",
+            projectId:projectId
         };
 
         var config = {
@@ -303,44 +308,69 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
                 data: data
             }
         };
-        console.log("config");
-        console.log(config);
-        console.log($scope.billDetails);
+
+        $http.post("Expense/php/expenseUtils.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                if (data == "1") {
+
+                } else {
+                    $scope.segmentList = data;
+                }
+            })
+            .error(function (data, status, headers, config) {
+
+
+            });
+    }
+    $scope.addOtherExpense = function () {
+        $scope.otherExpenseClicked = false;
+        var data = {
+            operation: "addOtherExpense",
+            otherExpenseData: $scope.expenseDetails,
+            billDetails: $scope.billDetails
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $("#loading").css("display","block");
-                if (data == "0") {
-                    $('#loading').css("display","none");
-                    $scope.warningMessage = "Other Expense Details Added successfully";
-                    console.log($scope.warningMessage);
+                $("#loader").css("display","block");
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
                         window.location = "dashboard.php#/Process";
-                    }, 3000);
-                    //doShowAlert("Success", "Other Expense Details Added successfully");
-                } else {
-                    $("#loading").css("display","none");
-                    $scope.errorMessage = "Other Expense Details Not Added";
+                    }, 1000);
+                }
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
                     $("#error").css("display", "block");
                     setTimeout(function () {
                         $("#error").css("display", "none");
-                    }, 3000);
-                    //doShowAlert("Failure", "Cannot connect to database");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
                 }
-
             })
             .error(function (data, status, headers, config) {
-                //doShowAlert("Failure", "Error Occurred");
-                $("#loading").css("display","none");
-                $scope.errorMessage = "Other Expense Details Not Added";
+
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While Adding Other Expense Details";
+
                 $("#error").css("display", "block");
                 setTimeout(function () {
                     $("#error").css("display", "none");
-                }, 3000);
+                    window.location = "dashboard.php#/Process";
+                },1000);
             });
-        //alert($scope.expenseDetails.costCenter);
+
     }
 
     $scope.addMaterialExpense = function () {
@@ -356,49 +386,45 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
                 data: data
             }
         };
-        console.log("config add material expense: ");
-        console.log($scope.expenseDetails);
-        console.log($scope.billDetails);
+
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $('#loading').css('display','block');
-                if (data == "0") {
-                    $('#loading').css('display','none');
-                    $scope.warningMessage = "Material Expense Details Added successfully";
-                    $('#warning').css("display", "block");
+
+                $("#loader").css("display","block");
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
                     setTimeout(function () {
-                        $('#warning').css("display", "none");
-                    }, 3000);
-                    //doShowAlert("Success", "Material Expense Details Added successfully");
-                } else {
-                    $('#loading').css('display','none');
-                    $scope.errorMessage = "Material Expense Details Not Added";
-                    $('#error').css("display", "block");
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+                }
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
                     setTimeout(function () {
-                        $('#error').css("display", "none");
-                    }, 3000);
-                    //doShowAlert("Failure", "Cannot connect to database");
+                        $("#error").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
                 }
 
             })
             .error(function (data, status, headers, config) {
-                $('#loading').css('display','block');
-                $('#loading').css('display','none');
-                $scope.errorMessage = "Material Expense Details Not Added";
-                $('#error').css("display", "block");
-                setTimeout(function () {
-                    $('#error').css("display", "none");
-                }, 3000);
-                //doShowAlert("Failure", "Error Occurred");
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While Adding Material Expense Details";
 
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                    window.location = "dashboard.php#/Process";
+                },1000);
             });
-        //alert($scope.expenseDetails.costCenter);
     }
 
-
 });
-
 
 myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
     var projectid="";
@@ -480,7 +506,15 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     //}
 
+    $scope.getTotalSegmentExpense=function(segment){
 
+        var totalExpense=0;
+        for (var i = 0; i < segment.length; i++) {
+            totalExpense=totalExpense+ parseInt(segment[i].amountExpenseDetails);
+        }
+        return totalExpense;
+
+    }
     $scope.paginateSegment = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -493,9 +527,10 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
 });
 
-myApp.controller('BillApprovalController', function ($scope, $rootScope,$http,$stateParams) {
+myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
 
-
+    console.log("In billApproval");
+    $scope.totalItems=0;
     $scope.currentPage=1;
     $scope.billApprovalPerPage=10;
 
@@ -512,19 +547,122 @@ myApp.controller('BillApprovalController', function ($scope, $rootScope,$http,$s
                 data: data
             }
         };
-        $http.post("Expense/php/expenseUtils.php", null, config)
+        $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
-                console.log(data);
 
+                $("#loader").css("display","block");
+                if (data.status == "success"){
+                    $scope.billApprovalList=data.message;
+                    $scope.totalItems=$scope.billApprovalList.length;
+                }
+                if(data.status=="failure"){
+                    console.log("In Fail");
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                    }, 3000);
+                }
             })
             .error(function (data, status, headers, config) {
-                alert("Error Occured..."+data);
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Could not fetch Bill Approvals";
+                $("#error").css("display", "block");
             });
     }
 
     $scope.getBillApproval();
 
+    $scope.viewBillDetails=function(expenseDetailsId){
 
+        var data = {
+            operation: "getBillDetails",
+            expenseDetailsId:expenseDetailsId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+
+                $("#loader").css("display","block");
+                if (data.status == "success"){
+                    $scope.billDetails=data.message;
+                }
+                if(data.status=="failure"){
+                    console.log("In Fail");
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                    }, 3000);
+                }
+            })
+            .error(function (data, status, headers, config) {
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Could not fetch Bill Details";
+                $("#error").css("display", "block");
+            });
+    }
+
+    $scope.billAction=function(billId,status){
+
+        var data = {
+            operation: "updateBillStatus",
+            billId:billId,
+            status:status
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+
+                $("#loader").css("display","block");
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+                }
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While Updating Bill Status";
+
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                    window.location = "dashboard.php#/Process";
+                },1000);
+
+            });
+    }
     $scope.paginate = function(value) {
 
         var begin, end, index;
