@@ -41,13 +41,13 @@ class InvoiceController
      * @url GET /invoice/followup/$invoiceid
      */
 
-    public function getInvoiceFollowups($invoiceid = null){
+    public static function getInvoiceFollowups($invoiceid){
 
         try{
             if ($invoiceid !=null) {
                 $invoice = Invoice::loadInvoiceFollowups($invoiceid); // possible user loading method
             } else {
-                $invoice = Invoice::loadInvoiceFollowups();
+                $invoice = Invoice::loadInvoiceFollowups($invoiceid);
             }
 
             if($invoice!=null){

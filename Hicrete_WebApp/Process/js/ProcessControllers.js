@@ -2580,8 +2580,19 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     }
 
     $scope.show = function () {
+        $scope.followups=[];
+        var data={
+            operation :"getPaymentFollowup",
+            invoiceId: $scope.selectedInvoiceId
+        };
 
-        $http.post("php/api/invoice/followup/" + $scope.selectedInvoiceId)
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/followupFacade.php',null,config)
             .success(function (data) {
 
                 console.log(data);
