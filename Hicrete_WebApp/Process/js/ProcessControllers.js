@@ -238,10 +238,10 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $httpPara
                         $('#error').css("display", "none");
                     }, 3000);
                 }
-                setTimeout(function () {
-                    $('#warning').css("display", "none");
-                    window.location.reload(1);
-                }, 3000);
+                //setTimeout(function () {
+                //    $('#warning').css("display", "none");
+                //    window.location.reload(1);
+                //}, 3000);
 
                 //alert(data.message);
 

@@ -179,13 +179,132 @@ class Expense
 //        }
 
     }
-    public static  function getBillApproval(){
+    public static function getBillApproval(){
+
 
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
+        $json_response=array();
 
+        try{
+            $stmt1=$conn->prepare("select expense_details.`expensedetailsid`,expense_details.`budgetsegmentid`,expense_details.projectid,expense_details.description,unapproved_expense_bills.amount,unapproved_expense_bills.createdby FROM expense_details JOIN unapproved_expense_bills ON expense_details.expensedetailsid=unapproved_expense_bills.`expensedetailsid` WHERE unapproved_expense_bills.bill_status='pending' ");
+            $stmt1->execute();
 
+            while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
+
+                    $result_array=array();
+
+                    $projectId=$result['projectid'];
+
+                    $result_array['expensedetailsid']=$result['expensedetailsid'];
+
+                    $result_array['description']=$result['description'];
+                    $result_array['amount']=$result['amount'];
+                    $result_array['created_by']=$result['createdby'];
+
+                    $stmt2=$conn->prepare("SELECT projectName from project_master WHERE projectId=:projectId");
+                    $stmt2->bindParam(':projectId',$projectId);
+                    $stmt2->execute();
+                    $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
+                    $result_array['projectName']=$result2['projectName'];
+
+                    array_push($json_response,$result_array);
+            }
+
+            echo json_encode($json_response);
+        }
+        catch(Exception $e){
+            echo "Exception Occur while getting bill approval";
+        }
+
+    }
+    public static function getBillDetails($data){
+
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $expenseDetailsId=$data->expenseDetailsId;
+
+        $result_array=array();
+
+        try{
+
+            $stmt1=$conn->prepare("SELECT `projectid`,`budgetsegmentid` FROM expense_details WHERE expensedetailsid=:expenseDetailsId");
+            $stmt1->bindParam(':expenseDetailsId',$expenseDetailsId);
+            $stmt1->execute();
+            $result1=$stmt1->fetch(PDO::FETCH_ASSOC);
+            $projectId=$result1['projectid'];
+            $budgetSegmentId=$result1['budgetsegmentid'];
+
+            $stmt2=$conn->prepare("SELECT projectName FROM project_master WHERE ProjectId=:projectId");
+            $stmt2->bindParam(':projectId',$projectId);
+            $stmt2->execute();
+            $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
+            $result_array['projectName']=$result2['projectName'];
+
+            $stmt3=$conn->prepare("SELECT segmentname FROM budget_segment WHERE budgetsegmentid=:budgetSegmentId");
+            $stmt3->bindParam(':budgetSegmentId',$budgetSegmentId);
+            $stmt3->execute();
+            $result3=$stmt3->fetch(PDO::FETCH_ASSOC);
+            $result_array['budgetSegmentName']=$result3['segmentname'];
+
+            $stmt4=$conn->prepare("select `billid`,`billno`,`billissueingentity`,`amount`,`dateofbill`from unapproved_expense_bills WHERE expensedetailsid=:expenseDetailsId");
+            $stmt4->bindParam(':expenseDetailsId',$expenseDetailsId);
+            $stmt4->execute();
+            $result4=$stmt4->fetch(PDO::FETCH_ASSOC);
+            $result_array['billid']=$result4['billid'];
+            $result_array['billNo']=$result4['billno'];
+            $result_array['billissueingentity']=$result4['billissueingentity'];
+            $result_array['amount']=$result4['amount'];
+            $result_array['dateofbill']=$result4['dateofbill'];
+
+            if(sizeof($result_array)>0){
+
+                echo json_encode($result_array);
+            }
+            else{
+
+                echo "Bill Details Not available";
+            }
+        }
+        catch(Exception $e){
+
+            echo "Exception occur while getting bill details";
+        }
+    }
+
+    public static function updateBillStatus($data,$userId){
+
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+
+        $billId=$data->billId;
+        $status=$data->status;
+
+        try {
+            $stmt = $conn->prepare("UPDATE unapproved_expense_bills SET
+                               lastmodificationdate=NOW(),
+                               lastmodifiedby=:modifiedBy,
+                               bill_status=:status
+                               WHERE
+                               billid=:billId
+                            ");
+
+            $stmt->bindParam(':modifiedBy', $userId);
+            $stmt->bindParam(':status', $status);
+            $stmt->bindParam(':billId', $billId);
+
+            if($stmt->execute()){
+
+                echo json_encode("Updated successfully");
+            }
+
+        }
+        catch(Exception $e){
+
+            echo json_encode("Could not update status of Bill Approval"+$e->getMessage());
+        }
     }
 }
 

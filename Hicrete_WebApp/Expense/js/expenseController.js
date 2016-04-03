@@ -493,9 +493,10 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
 });
 
-myApp.controller('BillApprovalController', function ($scope, $rootScope,$http,$stateParams) {
+myApp.controller('BillApprovalController', function ($scope,$http) {
 
-
+    console.log("In billApproval");
+    $scope.totalItems=0;
     $scope.currentPage=1;
     $scope.billApprovalPerPage=10;
 
@@ -512,10 +513,11 @@ myApp.controller('BillApprovalController', function ($scope, $rootScope,$http,$s
                 data: data
             }
         };
-        $http.post("Expense/php/expenseUtils.php", null, config)
+        $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-
+                $scope.billApprovalList=data;
+                $scope.totalItems=$scope.billApprovalList.length;
             })
             .error(function (data, status, headers, config) {
                 alert("Error Occured..."+data);
@@ -524,7 +526,55 @@ myApp.controller('BillApprovalController', function ($scope, $rootScope,$http,$s
 
     $scope.getBillApproval();
 
+    $scope.viewBillDetails=function(expenseDetailsId){
 
+        var data = {
+            operation: "getBillDetails",
+            expenseDetailsId:expenseDetailsId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $scope.billDetails=data;
+
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error Occured..."+data);
+            });
+    }
+
+    $scope.billAction=function(billId,status){
+
+        var data = {
+            operation: "updateBillStatus",
+            billId:billId,
+            status:status
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                setTimeout(function (){
+                        window.location.reload(1);
+                },1000);
+            })
+            .error(function (data, status, headers, config) {
+                alert("Error Occured..."+data);
+            });
+    }
     $scope.paginate = function(value) {
 
         var begin, end, index;
