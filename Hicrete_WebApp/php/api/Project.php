@@ -74,7 +74,7 @@ Class Project
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = '56ff6150e7e925762'  AND q.isApproved = 1)");
+            $stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = '$projid'  AND q.isApproved = 1)");
             //$stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
             if ($result = $stmt->execute()) {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
