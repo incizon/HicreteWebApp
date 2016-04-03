@@ -1886,7 +1886,13 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
     $scope.currentPage = 1;
 
     $scope.searchKeyword = "";
-
+    $scope.isCostCenterAvailable=function(project){
+        console.log("isCostCenterAvailable");
+        if(project.isCostCenterAvailable==="true")
+            return false;
+        else
+            return true;
+    }
     $scope.searchproject = function () {
         var project = [];
         var expression = $scope.searchBy + "" + $scope.searchKeyword;
