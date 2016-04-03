@@ -80,7 +80,7 @@ class QuotationController
                     $Quotation = $Quotation = Quotation::reviseQuotation($qid,$data); // possible user loading method;
 
                     if($Quotation==1) {
-                        echo AppUtil::getReturnStatus("Successful", "Quotation created successfully");
+                        echo AppUtil::getReturnStatus("Successful", "Quotation Revised successfully");
                     }else if($Quotation==0){
                         echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
                     }else if($Quotation==2){

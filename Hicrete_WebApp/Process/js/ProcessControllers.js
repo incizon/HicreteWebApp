@@ -2983,7 +2983,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
 
 
 
-myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$stateParams){
+myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$stateParams,$rootScope){
 
     var reviseQuotationData = $stateParams.quotationToRevise;
     var qId = reviseQuotationData.QuotationId;
@@ -3025,7 +3025,14 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         .success(function (data) {
 
         if (data.status != "Successful") {
-            alert("Error Occurred while fetching quoation data");
+            $('#loader').css("display", "block");
+            $('#loading').css("display", "none");
+            $rootScope.errorMessage = "Error Occurred while fetching quoation data";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Error Occurred while fetching quoation data");
             return;
         }
 
@@ -3066,7 +3073,14 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
         if (data.status != "Successful") {
-            alert("Error Occurred while getting tax details");
+            $('#loader').css("display", "block");
+            $('#loading').css("display", "none");
+            $rootScope.errorMessage = "Error Occurred while getting tax details";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Error Occurred while getting tax details");
             return;
         }
 
@@ -3121,7 +3135,14 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
     $scope.ModifyQuotation = function () {
         if($scope.QuotationForm.$pristine){
-            alert("Fields are not modified");
+            $('#loader').css("display", "block");
+            $('#loading').css("display", "none");
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Fields are not modified");
             return;
         }
 
@@ -3132,8 +3153,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         var companyId = $scope.QuotationDetails.companyId;
         var companyName = $scope.QuotationDetails.companyName;
         var fileName =$scope.QuotationDetails.filePath ;
-        $scope.warningMessage = "";
-        $scope.errorMessage = "";
+        //$scope.warningMessage = "";
+        //$scope.errorMessage = "";
 
         for (var i = 0; i < $scope.noOfRows; i++) {
             b.push({
@@ -3184,6 +3205,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                 quotationData.QuotationBlob=fileName;
                 var fd = new FormData();
                 fd.append('file', $scope.myFile);
+                $('#loader').css("display", "block");
                 $http.post("Process/php/uploadQuotation.php", fd, {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
@@ -3195,23 +3217,62 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                                 .success(function (data) {
 
                                     if(data.status=="Successful"){
-                                       alert("Quotaion Revised Successfully");
+                                        $('#loader').css("display", "none");
+                                        //alert("Customer created Successfully");
+                                        console.log(data.message);
+                                        $rootScope.warningMessage = data.message;
+                                        $('#warning').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#warning').css("display", "none");
+                                            window.location="dashboard.php#/Process/viewProjects";
+                                        }, 1000);
+
+                                      // alert("Quotaion Revised Successfully");
                                     }else{
-                                        alert(data.message);
+                                       // alert(data.message);
+                                        $('#loader').css("display", "block");
+                                        $('#loading').css("display", "none");
+                                        $rootScope.errorMessage = data.message;
+                                        $('#error').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#error').css("display", "none");
+                                        }, 1000);
                                     }
 
                                 })
                                 .error(function (data) {
-                                    alert(data);
+                                    $('#loader').css("display", "block");
+                                    $('#loading').css("display", "none");
+                                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                                    $('#error').css("display", "block");
+                                    setTimeout(function () {
+                                        $('#error').css("display", "none");
+                                    }, 1000);
+                                   // alert(data);
                                 });
 
 
                         }else{
-                            alert(data.message);
+                            $('#loader').css("display", "block");
+                            $('#loading').css("display", "none");
+                            $rootScope.errorMessage = data.message;
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 1000);
+                            //alert(data.message);
                         }
                     })
                     .error(function () {
-                       alert("Something went wrong can not upload quoatation");
+                        $('#loader').css("display", "block");
+                        $('#loading').css("display", "none");
+                        $rootScope.errorMessage = "Error Occured Please contact administrator";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                       // alert(data);
+                       //alert("Something went wrong can not upload quoatation");
 
                     });
             }
@@ -3221,15 +3282,39 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                 .success(function (data) {
 
                     if(data.status=="Successful"){
-                        alert("Quotation is Revised Successfully");
+
+                        $('#loader').css("display", "none");
+                        //alert("Customer created Successfully");
+                        console.log(data.message);
+                        $rootScope.warningMessage = data.message;
+                        $('#warning').css("display", "block");
+                        setTimeout(function () {
+                            $('#warning').css("display", "none");
+                            window.location="dashboard.php#/Process/viewProjects";
+                        }, 1000);
+                        //alert("Quotation is Revised Successfully");
 
                     }else{
-                        alert(data.message);
+                        $('#loader').css("display", "block");
+                        $('#loading').css("display", "none");
+                        $rootScope.errorMessage = data.message;
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 1000);
+                       // alert(data.message);
                     }
 
                 })
                 .error(function (data) {
-                    alert(data);
+                    $('#loader').css("display", "block");
+                    $('#loading').css("display", "none");
+                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 1000);
+                    //alert(data);
                 });
 
         }
