@@ -44,6 +44,24 @@ Class Project {
 		return $object;
 	}
 
+	public static function getExcludedCompaniesForProject($projId){
+		$object = array();
+
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID != c.companyId and cp.ProjectId =:projid;");
+		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
+		if($result = $stmt->execute()){
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+
+		}
+		$db = null;
+		return $object;
+	}
+
+
 
 	public function getInvoicesByProject($projid){
 		$object = array();
@@ -264,63 +282,69 @@ public static function saveProject($data ,$userId){
 
 		$object = array();
 		$rollBack=true;
-		try {
-			$db = Database::getInstance();
-			$conn = $db->getConnection();
-			$conn->beginTransaction();
-			
-			$stmt = $conn->prepare("INSERT INTO project_master (ProjectId, ProjectName, ProjectManagerId, ProjectSource, IsSiteTrackingProject, ProjectStatus, CustomerId, IsClosedProject, isDeleted, CreationDate, CreatedBy, LastModificationDate, LastModifiedBy)
-														VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
-				if($stmt->execute([$projnum, $projectBasicDetails->ProjectName,$projectBasicDetails->ProjectManagerId,$projectBasicDetails->ProjectSource,'0','Initiated',$projectBasicDetails->CustomerId,'0','0',$current,$userId,$current,$userId]) === TRUE){
-						$stmt2 = $conn->prepare("INSERT INTO project_address_details (ProjectId, Address, City, State, Country, Pincode) VALUES (?,?,?,?,?,?)");
-							if($stmt2->execute([$projnum,$projectBasicDetails->Address,$projectBasicDetails->City,$projectBasicDetails->State,$projectBasicDetails->Country,$projectBasicDetails->Pincode]) === TRUE){
-								$stmt3 = $conn->prepare("INSERT INTO project_point_of_contact_details (ProjectId, PointContactName, MobileNo, LandlineNo, EmailId) VALUES (?,?,?,?,?)");
-									if($stmt3->execute([$projnum, $projectBasicDetails->PointContactName, $projectBasicDetails->MobileNo, $projectBasicDetails->LandlineNo, $projectBasicDetails->EmailId]) === TRUE){
-											$break=false;
-										foreach ($data->companiesInvolved as $company) {
-											$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
-											if(!$stmt4->execute([$projnum, $company->companyId]) ){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$conn->beginTransaction();
 
-												throw new Exception($stmt4->errorInfo);
-												$break=true;
-												break;	
-											}	
-						
+		$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE `ProjectName`= :projectName");
+		$stmt->bindParam(':projectName',$projectBasicDetails->ProjectName, PDO::PARAM_STR);
+
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return 2;
+		}
+		$stmt = $conn->prepare("INSERT INTO project_master (ProjectId, ProjectName, ProjectManagerId, ProjectSource, IsSiteTrackingProject, ProjectStatus, CustomerId, IsClosedProject, isDeleted, CreationDate, CreatedBy, LastModificationDate, LastModifiedBy)
+													VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+
+			if($stmt->execute([$projnum, $projectBasicDetails->ProjectName,$projectBasicDetails->ProjectManagerId,$projectBasicDetails->ProjectSource,'0','Initiated',$projectBasicDetails->CustomerId,'0','0',$current,$userId,$current,$userId]) === TRUE){
+					$stmt2 = $conn->prepare("INSERT INTO project_address_details (ProjectId, Address, City, State, Country, Pincode) VALUES (?,?,?,?,?,?)");
+						if($stmt2->execute([$projnum,$projectBasicDetails->Address,$projectBasicDetails->City,$projectBasicDetails->State,$projectBasicDetails->Country,$projectBasicDetails->Pincode]) === TRUE){
+							$stmt3 = $conn->prepare("INSERT INTO project_point_of_contact_details (ProjectId, PointContactName, MobileNo, LandlineNo, EmailId) VALUES (?,?,?,?,?)");
+								if($stmt3->execute([$projnum, $projectBasicDetails->PointContactName, $projectBasicDetails->MobileNo, $projectBasicDetails->LandlineNo, $projectBasicDetails->EmailId]) === TRUE){
+										$break=false;
+									foreach ($data->companiesInvolved as $company) {
+										$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
+										if(!$stmt4->execute([$projnum, $company->companyId]) ){
+
+											throw new Exception($stmt4->errorInfo);
+											$break=true;
+											break;
 										}
-											if(!$break){
-												$conn->commit();
-												$rollBack=false;
-											}
 
 									}
-									else
-									{
-										throw new Exception($stmt3->errorInfo);
-									}
-							}
-							else{
-								throw new Exception($stmt2->errorInfo);
-							}
-				}
-				else
-				{
-					throw new Exception($stmt->errorInfo);
+										if(!$break){
+											$conn->commit();
+											$rollBack=false;
+										}
 
-				}
-
-			if($rollBack){
-				$conn->rollBack();
-				return false;
+								}
+								else
+								{
+									throw new Exception($stmt3->errorInfo);
+								}
+						}
+						else{
+							throw new Exception($stmt2->errorInfo);
+						}
 			}
-			return true;
-		
+			else
+			{
+				throw new Exception($stmt->errorInfo);
 
-		} catch (PDOException $e) {
-            $conn->rollBack();
-			throw new Exception($e->getMessage()) ;
-        }
+			}
+
+		if($rollBack){
+			$conn->rollBack();
+			return 0;
+		}
+
+
 		$conn = null;
+		return 1;
+
+
 	}
 
 
@@ -359,6 +383,16 @@ public static function updateProject($id,$data,$loggedUserId){
 
 			$conn->beginTransaction();
 
+			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE `ProjectId`!= :projectId");
+			$stmt->bindParam(':projectId',$id, PDO::PARAM_STR);
+
+			$stmt->execute();
+			$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+			if (count($result) > 0) {
+				return 2;
+			}
+
+
 			$stmt = $conn->prepare("UPDATE `project_master` SET `ProjectName`=:projectName,`ProjectManagerId`=:projectManagerId,`CustomerId`=:customerId, `LastModificationDate`=now(),`LastModifiedBy`=:lastModifiedBy WHERE `ProjectId`=:projectId");
 			$stmt->bindParam(':projectName' ,$data->projectDetails->ProjectName ,PDO::PARAM_STR);
 			$stmt->bindParam(':projectManagerId' ,$data->projectDetails->ProjectManagerId ,PDO::PARAM_STR);
@@ -389,14 +423,14 @@ public static function updateProject($id,$data,$loggedUserId){
 					$stmt4 = $conn->prepare("INSERT INTO companies_involved_in_project (ProjectID, CompanyID) VALUES (?,?)");
 					if (!$stmt4->execute([$id, $company->companyId])) {
 						$conn->rollBack();
-						return false;
+						return 0;
 					}
 				}
 				$conn->commit();
-				return true;
+				return 1;
 			}
 			else{
-				return false;
+				return 0;
 			}
 
 	}

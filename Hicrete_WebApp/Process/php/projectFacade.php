@@ -32,6 +32,9 @@ switch($data->operation) {
     case "getCompaniesForProject":
         ProjectController::getCompaniesForProject($data->data);
         break;
+    case "getExcludedCompaniesForProject":
+        ProjectController::getExcludedCompaniesForProject($data->data);
+        break;
     case "closeProject":
         echo(json_encode(ProjectController::closeProject($data->data)));
         break;

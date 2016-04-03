@@ -27,6 +27,115 @@ Class Payment {
 		//return "i m in";
 	}
 
+	public function getProjectPayment($projid,$invoiceId) {
+			$object = array();
+			$totalCost = array();
+			$invoiceCost = 0;
+			$paidInvoices = array();
+			$ActualPaidAmount = array();
+			$final = array();
+			$paid = 0;
+
+			try {
+				$db = Database::getInstance();
+				$conn = $db->getConnection();
+
+				$stmt = $conn->prepare("SELECT sum(Amount)  as Amount FROM quotation q,quotation_details qd WHERE q.QuotationId = qd.QuotationId AND q.ProjectId  = :projid AND q.isApproved = 1;");
+					$stmt->bindParam(':projid', $projid, PDO::PARAM_STR);
+					if($stmt->execute() === TRUE){
+							while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+								//echo "proj amnt".$row['Amount'];
+								$totalCost = $row['Amount'];
+								$final['projectcost'] = $totalCost;
+							//array_push($totalCost,$row);
+						}
+					}	
+					//print_r($totalCost);
+					#pushing project total cost in final object
+					
+
+					$stmt1 = $conn->prepare("SELECT i.TotalAmount as invoiceAmnt FROM invoice i WHERE i.InvoiceNo = :invoiceId");
+					$stmt1->bindParam(':invoiceId',$invoiceId,PDO::PARAM_STR);
+					if($stmt1->execute() === TRUE){
+							while ($row1 = $stmt1->fetch(PDO::FETCH_ASSOC)){
+							//array_push($invoiceCost,$row1);
+							$invoiceCost = $row1['invoiceAmnt'];
+							$final['invoicecost'] = $invoiceCost;	
+						}
+					}
+
+					//print_r($invoiceCost);
+					
+
+					# Get paid amount for given invoice
+					$stmt2 = $conn->prepare("SELECT sum(p.AmountPaid) as paidAmount FROM project_payment p WHERE p.InvoiceNo = :invoiceID");
+					$stmt2->bindParam(':invoiceID',$invoiceId,PDO::PARAM_STR);
+					if($stmt2->execute() === TRUE){
+							while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)){
+								//echo "here".$row2['paidAmount'];
+
+								if($row2['paidAmount'] === null ){
+									$final['paidInvoiceAmount'] = 0;
+								}
+								else{
+									array_push($ActualPaidAmount,$row2['paidAmount']);
+									$paid = $paid + $row2['paidAmount'];
+									//echo"paid is ".$paid;
+									$final['paidInvoiceAmount'] = $paid;
+								}
+							
+						}
+					}
+
+				//	$final['paidInvoiceAmount'] = $ActualPaidAmount;
+
+					# Get invoice detail Actual paid from project payment table
+					$stmt3 = $conn->prepare("SELECT * FROM project_payment p,project_payment_mode_details pd WHERE p.PaymentId = pd.PaymentId AND p.InvoiceNo = :invoiceID");
+					$stmt3->bindParam(':invoiceID',$invoiceId,PDO::PARAM_STR);
+					if($stmt3->execute() === TRUE){
+							while ($row3 = $stmt3->fetch(PDO::FETCH_ASSOC)){
+							array_push($paidInvoices,$row3);
+						}
+					}
+
+					//print_r($paidInvoices);
+					$final['paidInvoiceDetails'] = $paidInvoices;
+
+
+			 } catch (PDOException $e) {
+	            echo $e->getMessage();
+	        }
+
+			$db = null;
+			return $final ;
+		//return "i m in";
+	}
+
+	public function getPaymentPaidAndTotalAmount($projid) {
+
+			$final = array();
+			$db = Database::getInstance();
+			$conn = $db->getConnection();
+			$stmt = $conn->prepare("SELECT p.`InvoiceNo`,sum(`AmountPaid`),i.`TotalAmount`,i.`InvoiceTitle` FROM project_payment p,invoice i where p.InvoiceNo=i.InvoiceNo AND i.QuotationId in(SELECT q.QuotationId FROM quotation q where q.ProjectId = ':projid') group by p.`InvoiceNo`");
+
+			$stmt->bindParam(':projid', $projid, PDO::PARAM_STR);
+			if($result = $stmt->execute()){
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+					$final['ProjectAmount'] = $row['TotalAmount'];
+					$final['AmountPaid'] = $row['AmountPaid'];
+					$final['InvoiceNo'] = $row['InvoiceNo'];
+					$final['InvoiceTitle'] = $row['InvoiceTitle'];
+				}
+
+			}else{
+				return null;
+			}
+
+			$db = null;
+			return $final ;
+
+	}
+
 	public function getPaymentPaidByInvoices($InvoiceId){
 		$object = array();
 		try{

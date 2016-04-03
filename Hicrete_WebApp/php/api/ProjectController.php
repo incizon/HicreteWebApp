@@ -65,6 +65,21 @@ class ProjectController
 
     }
 
+
+    public static function getExcludedCompaniesForProject($id){
+
+        try{
+            $project = Project::getExcludedCompaniesForProject($id); // possible user loading method
+            echo AppUtil::getReturnStatus("Successful",$project);
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+
     /**
      * Gets invoices by project id for that project which are approved
      *
@@ -87,7 +102,7 @@ class ProjectController
         try{
             $project = Project::loadProjectSiteFollowup($projid); // possible user loading method
 
-            if($project!=null){
+            if($project!==null){
                 echo AppUtil::getReturnStatus("Successful",$project);
             }
             else {
@@ -131,10 +146,12 @@ class ProjectController
 
             $project = Project::saveProject($data,$userId); // saving the user to the database
 
-            if($project){
+            if($project==1){
                 echo AppUtil::getReturnStatus("Successful","Project Created Successfully");
-            }else{
+            }else if($project==0){
                 echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred while Creating project");
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful","Project with same name already exist");
             }
 
 
@@ -162,10 +179,13 @@ class ProjectController
         try{
             $loggedInUserId=AppUtil::getLoggerInUserId();
             $project = $project = project::updateProject($id,$data,$loggedInUserId);;
-            if($project)
+            if($project==1)
                 echo AppUtil::getReturnStatus("Successful","Project updated successfully");
-            else
-                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+            else if($project==0) {
+                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Project With Same Name already Exist");
+            }
 
 
         }catch(Exception $e){
@@ -207,7 +227,7 @@ class ProjectController
     public static function getProjectList(){
         try{
             $project = Project::getProjectList();
-            if($project!=null)
+            if($project!==null)
                 echo AppUtil::getReturnStatus("Successful",$project);
             else
                 echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
@@ -229,7 +249,7 @@ class ProjectController
     public static function getSiteTrackingProjectList(){
         try{
             $project = Project::getSiteTrackingProjectList();
-            if($project!=null)
+            if($project!==null)
               echo AppUtil::getReturnStatus("Successful",$project);
             else
                 echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");

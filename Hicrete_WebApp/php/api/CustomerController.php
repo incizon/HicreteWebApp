@@ -89,12 +89,14 @@ class CustomerController
             $userId=AppUtil::getLoggerInUserId();
             //$customer = Customer::saveCustomer($data,$userId); // saving the user to the database
             //Customer::saveCustomer($data,$userId); // saving the user to the database
-
-            if(Customer::saveCustomer($data,$userId)){
+            $status=Customer::saveCustomer($data,$userId);
+            if($status==1){
                 echo AppUtil::getReturnStatus("Successful","Customer created successfully");
             }
-            else {
+            else if($status==0) {
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown error occurred");
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Customer with same name already exist");
             }
 
         }catch(Exception $e){
@@ -114,11 +116,13 @@ class CustomerController
         try{
             $userId=AppUtil::getLoggerInUserId();
             $customer = Customer::updateCustomer($id, $data,$userId);
-            if($customer){
+            if($customer==1){
                 echo AppUtil::getReturnStatus("Successful","Customer updated successfully");
             }
-            else {
+            else if($customer==0) {
                 echo AppUtil::getReturnStatus("Unsuccessful", "Unknown error occurred");
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Customer With Same Already Exist");
             }
 
         }catch(Exception $e){

@@ -20,7 +20,7 @@ $opt = array(
 switch($data->operation)
 {
     case "getInvoicesByProjectId" :
-        echo(json_encode(InvoiceController::loadInvoiceForProject($data->data)));
+        InvoiceController::loadInvoiceForProject($data->data);
         break;
 }
 

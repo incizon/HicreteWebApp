@@ -18,15 +18,18 @@ myApp.service('AppService', function () {
         $http.post("Config/php/configFacade.php", null,config)
             .success(function (data) {
                 $('#loader').css("display","none");
-                console.log("IN Company Get");
-                console.log(data);
+
                 if(data.status!="Successful"){
                     alert("Failed:"+data.message);
+
                 }else {
+                    $companies=[];
                     for(var i=0;i<data.message.length;i++){
-                        $companies.push({checkVal:false,companyId:data.message[i].companyId,companyName:data.message[i].companyName});
+                        $companies.push({checkVal:false , companyId:data.message[i].companyId, companyName:data.message[i].companyName});
                     }
+
                 }
+
             })
             .error(function (data, status, headers, config) {
                alert("Error  Occurred:"+data);
@@ -406,5 +409,41 @@ myApp.service('AppService', function () {
                 console.log("In file upload error");
             });
     }
+
+    this.getCompaniesForProject=function($http,$projectId,$companies){
+        var data={
+            operation :"getCompaniesForProject",
+            data : $projectId
+
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/projectFacade.php",null, config)
+            .success(function (data) {
+                console.log(data);
+                if (data.status == "Successful") {
+                    for (var i = 0; i < data.message.length; i++) {
+                        $companies.push({
+                            company_id: data.message[i].companyId,
+                            company_name: data.message[i].companyName
+                        });
+                    }
+                    console.log($companies);
+                } else {
+                    alert(data.message);
+                }
+            })
+            .error(function(data){
+                alert(data);
+            });
+
+    }
+
+
 
 });

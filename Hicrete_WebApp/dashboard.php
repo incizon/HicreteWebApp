@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 require_once 'php/user.php';
 if (!isset($_SESSION['token'])) {
     session_start();
@@ -194,11 +194,11 @@ if(!$userObj->init($userId)){
                     </li>";
             }
 
-//            if($userObj->isSuper or $userObj->isBusinessProcess){
-//                echo "<li ng-class=\"{active:tab.isSet(3)}\">
-//                            <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
-//                    </li>";
-//            }
+            if($userObj->isSuper or $userObj->isBusinessProcess){
+                echo "<li ng-class=\"{active:tab.isSet(3)}\">
+                            <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
+                    </li>";
+            }
 
             if($userObj->isSuper or $userObj->isExpense){
 //                echo "<li class=\"\">

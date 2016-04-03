@@ -14,10 +14,7 @@ if (!isset($_SESSION['token'])) {
 }
 $userId=$_SESSION['token'];
 
-$opt = array(
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-);
+
 
 switch($data->operation)
 {
@@ -30,6 +27,18 @@ switch($data->operation)
     case "getQuotationList":
         QuotationController::getQuotationList($data->data);
         break;
+    case "getQuotationTaxDetails":
+        QuotationController::getQuotationTaxDetails($data->data);
+        break;
+    case "modifyQuotation":
+        QuotationController::reviseQuotation($data->quotationId,$data->data);
+        break;
+
+    case "getQuotationDetails":
+        QuotationController::getQuotationDetails($data->data);
+        break;
+
+
 }
 
 
