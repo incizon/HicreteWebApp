@@ -341,7 +341,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.addQuotation', {
             url: '/addQuotation',
             templateUrl:'Process/html/QuotationCreation.html',
-            controller:"QuotationController"
+            controller:"QuotationController",
+            params:{projectId:null}
         })
 
         .state('Process.addInvoice', {
@@ -413,7 +414,8 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         .state('Process.reviseQuotation', {
             url: '/ReviseQuotation',
             templateUrl:'Process/html/ReviseQuotation.html',
-            controller:'ReviseQuotation'
+            controller:'ReviseQuotationController',
+            params:{quotationToRevise:null,projectName:null}
         })
 
         .state('Process.searchTask', {

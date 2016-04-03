@@ -92,7 +92,7 @@
                          <!--<label class="control-label"> :</label>-->
                      </div>
                      <div class="col-md-8">
-                     <a ui-sref="Process.addQuotation"><input type="button" class="btn btn-info" ng-click="projectName(projDetailsData.project_name)" value="Add Quotation"/></a>
+                     <a ui-sref="Process.addQuotation({projectId:projDetailsData.projectId})"><input type="button" class="btn btn-info" ng-click="projectName(projDetailsData.project_name)" value="Add Quotation"/></a>
                     </div>
                  </div>
              </div>
@@ -118,10 +118,10 @@
 
                          <td>
                              <a ui-sref="Process.viewQuotation({quotationToView:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
-                             <a ui-sref="Process.reviseQuotation"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o" ></span>Revise</button></a>
-                             <a href="{{q.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                             <a ui-sref="Process.reviseQuotation({quotationToRevise:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o" ></span>Revise</button></a>
+                             <a href="{{q.filePath}}"><button ng-disabled="checkAvailability(q.filePath)"  class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
                              <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',q,'Quoatation')"><span class="fa fa-edit"></span>Schedule Followup</button>
-                             <a  data-target="#viewDetails" data-toggle="modal" ><input type="button" class="btn btn-info" ng-click="check(q)" value="Attach Workorder"></a>
+                             <a data-target="#viewDetails" data-toggle="modal" ><input ng-disabled="q.isApproved" type="button" class="btn btn-info" ng-click="check(q)" value="Attach Workorder"></a>
                          </td>
                      </tr>
                      </tbody>
@@ -251,9 +251,9 @@
                        
                       <tr ng-repeat = " payment in PaidPaymentDetails">
                              <td>{{$index+1}}</td>
-                             <td>{{payment.Payment.InvoiceNo}}</td>
-                             <td>{{payment.Payment.AmountPaid}}</td>
-                             <td>{{payment.Payment.Remaining}}</td>
+                             <td>{{payment.InvoiceNo}}</td>
+                             <td>{{payment.amountPaid}}</td>
+                             <td>{{payment.totalAmount}}</td>
                          </tr>
                        </tbody>
                      </table>

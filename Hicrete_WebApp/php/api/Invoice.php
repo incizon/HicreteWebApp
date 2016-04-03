@@ -54,23 +54,20 @@ Class Invoice {
 
 public function loadInvoiceForProject($projid){
 	$object = array();
-	try{
-		$db = Database::getInstance();
-		$conn = $db->getConnection();//SELECT * FROM invoice i , quotation q WHERE i.quotationId = q.quotationId AND i.QuotationId in (SELECT q.QuotationId FROM quotation q  WHERE q.ProjectId = :projid)
-			$stmt = $conn->prepare("SELECT * FROM invoice i , quotation q WHERE i.QuotationId = q.QuotationId AND i.QuotationId in (SELECT q.QuotationId FROM quotation q  WHERE q.ProjectId = :projid)");
-			$stmt->bindParam(':projid',$projid,PDO::PARAM_STR);
-			if($stmt->execute() === TRUE){
-					while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-						array_push($object, $row);
-					}
+
+	$db = Database::getInstance();
+	$conn = $db->getConnection();//SELECT * FROM invoice i , quotation q WHERE i.quotationId = q.quotationId AND i.QuotationId in (SELECT q.QuotationId FROM quotation q  WHERE q.ProjectId = :projid)
+	$stmt = $conn->prepare("SELECT * FROM invoice i , quotation q WHERE  q.ProjectId = :projid  AND  i.QuotationId = q.QuotationId");
+	$stmt->bindParam(':projid',$projid,PDO::PARAM_STR);
+	if($stmt->execute() === TRUE){
+			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
 			}
-			else{
-					return "Error in loadInvoiceForProject";
-			}
-		}
-	catch(PDOException $e){
-		return "Exception in loadInvoiceForProject ".$e->getMessage();
 	}
+	else{
+			return null;
+	}
+
 	$db = null;
 	return $object;
 }

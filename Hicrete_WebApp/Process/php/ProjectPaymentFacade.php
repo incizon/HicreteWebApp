@@ -27,6 +27,10 @@
         case 'saveProjectPayment':
             PaymentController::savePaymentAndDetails($data->data);
             break;
+        case 'getPaymentPaidAndTotalAmount':
+            PaymentController::getPaymentPaidAndTotalAmount($data->data);
+            break;
+
         case 'getAllPaymentForProject':
             PaymentController::getAllPaymentForProject($data->projectId);
             break;

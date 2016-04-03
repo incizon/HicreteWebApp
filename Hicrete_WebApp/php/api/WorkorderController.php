@@ -9,8 +9,22 @@ class WorkorderController
      * @url GET /workorder/$projId
      */
     public function getWokrorderByProject($projId){
-             $workorder = Workorder::getWokrorderByProject($projId); // possible user loading method
-         return $workorder;
+        try{
+
+            if ($projId != null) {
+                $workorder = Workorder::getWokrorderByProject($projId); // possible user loading method
+                if($workorder!==null) {
+                    echo AppUtil::getReturnStatus("Successful", $workorder);
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                }
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Project value is empty");
+            }
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
 
 

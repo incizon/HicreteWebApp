@@ -60,7 +60,10 @@ Class Customer {
 			return "SELECT * from customer_master cm where cm.isDeleted = 0 AND  cm.City LIKE :data" ;
 		}else if($searchBy=='state'){
 			return "SELECT * from customer_master cm where cm.isDeleted = 0 AND  cm.State LIKE :data" ;
+		}else if($searchBy=='name'){
+			return "SELECT * from customer_master cm where cm.isDeleted = 0 AND  cm.`CustomerName` LIKE :data" ;
 		}
+
 	}
 
 
@@ -93,16 +96,26 @@ Class Customer {
 		//echo json_encode($data);
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `CustomerName` FROM `customer_master` WHERE `CustomerName`=:customerName");
+		$stmt->bindParam(':customerName',$data->customer_name, PDO::PARAM_STR);
+
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return 2;
+		}
+
+
 		$stmt = $conn->prepare("INSERT INTO customer_master (CustomerId,CustomerName,Address,City,State,Country,Pincode,Mobileno,Landlineno,FaxNo,EmailId,isDeleted,CreationDate,CreatedBy,LastModificationDate,LastModifiedBy,VATNo,CSTNo,PAN,ServiceTaxNo) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		if ($stmt->execute([$custnum, $data->customer_name,$data->customer_address,$data->customer_city,$data->customer_state,$data->customer_country,$pincode,$data->customer_phone,$data->customer_landline,$data->customer_faxNo,$data->customer_emailId,$isDeleted,$current,$userId,$current,$userId,$data->customer_vatNo,$data->customer_cstNo,$data->customer_panNo,$data->customer_serviceTaxNo]) === TRUE) {
 			//echo "\nit true";
-			return true;
+			return 1;
 
 		}
 		else {
 			//echo "\n its false";
-			return false;
+			return 0;
 		}
 
 		$conn = null;
@@ -115,7 +128,19 @@ Class Customer {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
 			$conn->beginTransaction();
-			$stmt = $conn->prepare("UPDATE customer_master SET CustomerName = :customerName, Address=:address, City=:city, State=:state, Country=:country, Mobileno=:mobileno, Landlineno=:landlineno, FaxNo=:faxno, EmailId=:email, LastModificationDate=now(), LastModifiedBy=:modBy ,VATNo=:vatno, CSTNo=:cstno, PAN=:pan, ServiceTaxNo=:servicetNo WHERE CustomerId = :id");
+
+			$stmt = $conn->prepare("SELECT `CustomerName` FROM `customer_master` WHERE `CustomerId`!=:customerId ");
+			$stmt->bindParam(':customerId',$id, PDO::PARAM_STR);
+
+			$stmt->execute();
+			$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+			if (count($result) > 0) {
+				return 2;
+			}
+
+
+
+		$stmt = $conn->prepare("UPDATE customer_master SET CustomerName = :customerName, Address=:address, City=:city, State=:state, Country=:country, Mobileno=:mobileno, Landlineno=:landlineno, FaxNo=:faxno, EmailId=:email, LastModificationDate=now(), LastModifiedBy=:modBy ,VATNo=:vatno, CSTNo=:cstno, PAN=:pan, ServiceTaxNo=:servicetNo WHERE CustomerId = :id");
 			$stmt->bindParam(':customerName', $data->customer_name, PDO::PARAM_STR);
 			$stmt->bindParam(':address', $data->customer_address, PDO::PARAM_STR);
 			$stmt->bindParam(':city', $data->customer_city, PDO::PARAM_STR);
@@ -134,10 +159,10 @@ Class Customer {
 
 			if($stmt->execute() === TRUE){
 				$conn->commit();
-				return true;
+				return 1;
 			}
 			else{
-				return false;
+				return 0;
 			}
 	}
 
