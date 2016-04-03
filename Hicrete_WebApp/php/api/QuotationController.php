@@ -1,16 +1,11 @@
 <?php
 
-use \Jacwright\RestServer\RestException;
+
 require 'Quotation.php';
 
 class QuotationController
 {
  
-    /**
-     * Gets the quotation along with followup details
-     *
-     * @url GET /quotation/followup/$id
-     */
 
     public static function getQuotationFollow($id = null){
 
@@ -35,12 +30,6 @@ class QuotationController
 
          return $Quotation;
     }
-    /**
-     *
-     *
-     * @url POST /quotationlist/$id
-     *
-     */
 
     public static function getQuotationList($id){
         try{
@@ -52,22 +41,12 @@ class QuotationController
         }
 
     }
-    /**
-     * Gets the quotation with tax details
-     *
-     * @url GET /quotation/tax/$id
-     */
 
     public function getQuotationTax($id){
              $Quotation = Quotation::loadQuotationWithTax($id); // possible user loading method
          return $Quotation;
     }
 
-    /**
-     * Revise quotation
-     *
-     * @url POST /quotation/revise/$qid
-     */
 
     public static function reviseQuotation($qid,$data){
         try{
@@ -101,11 +80,6 @@ class QuotationController
 
     }
 
-      /**
-     * Gets the quotation details
-     *
-     * @url GET /quotation/details/$qid
-     */
 
     public static function getQuotationDetails($qid){
 
@@ -134,11 +108,6 @@ class QuotationController
 
     }
 
-   /**
-     * Gets the quotation tax detail
-     *
-     * @url GET /quotation/taxDetails/$qid
-     */
 
     public static function getQuotationTaxDetails($qid){
         try{
@@ -165,11 +134,6 @@ class QuotationController
 
     }
 
-    /**
-     * Gets all quotations
-     *
-     * @url GET /quotation
-     */
 
     public function getAllQuotation()
     {
@@ -180,11 +144,6 @@ class QuotationController
     }
 
 
-    /**
-     * Gets  quotations by project id
-     *
-     * @url GET /quotation/$projectId
-     */
 
     public function getQuotationByProjectId($projectId = null)
     {
@@ -215,12 +174,6 @@ class QuotationController
 
     }
 
-    /**
-     * Saves Quotation with details and tax details only
-     *
-     * @url POST /quotation/tax
-     * 
-     */
     public function saveQuotationDetailsAndTax($data)
     {
         try{
@@ -258,12 +211,6 @@ class QuotationController
         }
     }
 
-       /**
-     * Get Quotation with details and tax details only
-     *
-     * @url GET /quotation/tax
-     * @url PUT /quotation/tax/$id
-     */
     public function getQuotationDetailsAndTax($id = null, $data)
     {
         // ... validate $data properties such as $data->username, $data->firstName, etc.
@@ -279,24 +226,12 @@ class QuotationController
         return $Quotation;
     }
 
-    /**
-     * delete quotation By id
-     *
-     * @url POST /quotation/delete/$id
-     * 
-     */
 
     public function deleteQuotation($id){
         $quotation = Quotation::deleteQuotation($id);
         return $quotation;
     }
 
-    /**
-     * upload quotation
-     *
-     * @url POST /quotation/upload
-     * 
-     */
 
     public function uploadQuotation($data){
         $target_dir = "../../upload/Quotations/";
@@ -310,22 +245,5 @@ class QuotationController
     }
 
 
-    /**
-     * delete customer using id
-     *
-     * @url POST /quotationlist/$id
-     *
-     */
-
-//    public static function getQuotationList($id){
-//        try{
-//            $quotation = Quotation::getQuotationListForProject($id);
-//            echo AppUtil::getReturnStatus("Successful",$quotation);
-//
-//        }catch(Exception $e){
-//            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
-//        }
-//
-//    }
 
 }

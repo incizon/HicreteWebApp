@@ -1,16 +1,12 @@
 <?php
 
-use \Jacwright\RestServer\RestException;
+
 require 'Invoice.php';
 
 class InvoiceController
 {
  
-    /**
-     * Gets the invoice and tax by id
-     *
-     * @url GET /invoice/tax/$id
-     */
+
 
     public function getInvoiceTax($id = null){
 
@@ -36,11 +32,6 @@ class InvoiceController
     }
 
 
-    /**
-     * Gets the quotation details
-     *
-     * @url GET /quotation/details/$qid
-     */
 
     public static function getInvoiceDetails($qid){
 
@@ -69,11 +60,6 @@ class InvoiceController
 
     }
 
-    /**
-     * Gets the quotation tax detail
-     *
-     * @url GET /quotation/taxDetails/$qid
-     */
 
     public static function getInvoiceTaxDetails($qid){
         try{
@@ -102,16 +88,6 @@ class InvoiceController
 
 
 
-
-
-
-
-    /**
-     * Gets the invoice followups by invoice id
-     *
-     * @url GET /invoice/followup/$invoiceid
-     */
-
     public static function getInvoiceFollowups($invoiceid){
 
         try{
@@ -135,12 +111,6 @@ class InvoiceController
          return $invoice;
     }
 
-
-   /**
-     * Gets the invoice and for project by projid
-     *
-     * @url GET /invoice/project/$projid
-     */
 
     public function loadInvoiceForProject($projid = null){
 
@@ -166,11 +136,6 @@ class InvoiceController
 
     }
      
-    /**
-     * Gets the projects by id or current user
-     *
-     * @url GET /invoice
-     */
 
     public function getAllInvoice()
     {
@@ -182,12 +147,6 @@ class InvoiceController
          return $invoice;
     }
 
-    /**
-     * Saves a user to the database
-     *
-     * @url POST /invoice
-     * @url PUT /invoice/$id
-     */
     public static function saveInvoice($data)
     {
         try{
@@ -232,12 +191,6 @@ class InvoiceController
         return $invoice;
     }
 
-    /**
-     * delete customer using id
-     *
-     * @url POST /invoicelist/$id
-     *
-     */
 
     public static function getInvoiceList($id){
         try{
