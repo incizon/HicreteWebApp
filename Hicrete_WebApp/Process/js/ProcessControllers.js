@@ -2750,6 +2750,21 @@ myApp.controller('CustomerController', function ($scope, $http) {
     $scope.submitted = false;
     $scope.submitted = false;
 
+    $scope.customerDetails={
+        customer_name:"",
+        customer_address:"",
+        customer_city:"",
+        customer_state:"",
+        customer_country:"",
+        customer_emailId:"",
+        customer_landline:"",
+        customer_phone:"",
+        customer_faxNo:"",
+        customer_vatNo:"",
+        customer_cstNo:"",
+        customer_serviceTaxNo:"",
+        customer_panNo:""
+    };
     $scope.createCustomer = function () {
         console.log("Inside create customer");
         console.log($scope.customerDetails);
@@ -2851,8 +2866,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
         $custId = $scope.customerDetails.customer_id;
         var custUpdate = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '"}';
         //  console.log("update data is ::"+custUpdate);
-        $scope.errorMessage = "";
-        $scope.warningMessage = "";
+        //$scope.errorMessage = "";
+        //$scope.warningMessage = "";
         $('#loader').css("display", "block");
 
         // var custData = '{"CustomerName":"' + $scope.customerDetails.customer_name + '","Address":"' + $scope.customerDetails.customer_address + '","City":"' + $scope.customerDetails.customer_city + '","State":"' + $scope.customerDetails.customer_state + '","Country":"' + $scope.customerDetails.customer_country + '","EmailId":"' + $scope.customerDetails.customer_emailId + '","Pincode":"' + $scope.customerDetails.customer_pincode + '","Mobileno":"' + $scope.customerDetails.customer_phone + '","Landlineno":"' + $scope.customerDetails.customer_landline + '","FaxNo":"' + $scope.customerDetails.customer_faxNo + '","VATNo":"' + $scope.customerDetails.customer_vatNo + '","CSTNo":"' + $scope.customerDetails.customer_cstNo + '","ServiceTaxNo":"' + $scope.customerDetails.customer_serviceTaxNo + '","PAN":"' + $scope.customerDetails.customer_panNo + '","isDeleted":"0"}';
@@ -2874,15 +2889,8 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
             .success(function (data, status, headers) {
                 console.log(data);
                 if (data.status == "Successful") {
-                    $('#loader').css("display", "block");
-                    $scope.postCustData = data;
-                    $('#loader').css("display", "none");
-                    //alert("Customer created Successfully");
-                    $scope.warningMessage = data.message;
-                    $('#warning').css("display", "block");
-                    console.log($scope.customerDetails);
-                    console.log($stateParams.customerToModify);
-                    //$rootScope.customerSearch[$scope.customerDetails.index]=$stateParams.customerToModify;
+                   // $('#loader').css("display", "block");
+
                     $rootScope.customerSearch[$scope.customerDetails.index].id = $scope.customerDetails.customer_id;
                     $rootScope.customerSearch[$scope.customerDetails.index].name = $scope.customerDetails.customer_name;
                     $rootScope.customerSearch[$scope.customerDetails.index].address = $scope.customerDetails.customer_address;
@@ -2897,19 +2905,27 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                     $rootScope.customerSearch[$scope.customerDetails.index].cstNo = $scope.customerDetails.customer_cstNo;
                     $rootScope.customerSearch[$scope.customerDetails.index].vatNo = $scope.customerDetails.customer_vatNo;
                     $rootScope.customerSearch[$scope.customerDetails.index].serviceTaxNo = $scope.customerDetails.customer_serviceTaxNo;
-                    //$rootScope.customerSearch[$scope.customerDetails.index].pincode=data.message[i].Pincode;
 
-                    //$rootScope.customerSearch[ $scope.customerDetails.index]=$scope.customerDetails;
-                    $('#loader').css("display", "block");
-                    $('#loading').css("display", "none");
-                    $scope.errorMessage = data.message;
-                    $('#error').css("display", "block");
+
+
+
+                    $scope.postCustData = data;
+                    $('#loader').css("display", "none");
+                    //alert("Customer created Successfully");
+                    console.log(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location="dashboard.php#/Process/Customers";
+                    }, 1000);
+
 
                 } else {
 
                     $('#loader').css("display", "block");
                     $('#loading').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -2921,7 +2937,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                 $('#loader').css("display", "block");
                 $scope.ResponseDetails = "Data: " + data;
                 $('#loading').css("display", "none");
-                $scope.errorMessage = "Customer not Updated..";
+                $rootScope.errorMessage = "Customer not Updated..";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
