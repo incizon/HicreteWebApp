@@ -129,9 +129,9 @@ Class Customer {
 			$conn = $db->getConnection();
 			$conn->beginTransaction();
 
-			$stmt = $conn->prepare("SELECT `CustomerName` FROM `customer_master` WHERE `CustomerId`!=:customerId ");
+			$stmt = $conn->prepare("SELECT `CustomerName` FROM `customer_master` WHERE `CustomerId`!=:customerId AND `CustomerName`=:customerName");
 			$stmt->bindParam(':customerId',$id, PDO::PARAM_STR);
-
+			$stmt->bindParam(':customerName',$data->customer_name, PDO::PARAM_STR);
 			$stmt->execute();
 			$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
 			if (count($result) > 0) {

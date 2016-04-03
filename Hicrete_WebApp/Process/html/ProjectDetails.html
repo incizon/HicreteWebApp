@@ -119,9 +119,9 @@
                          <td>
                              <a ui-sref="Process.viewQuotation({quotationToView:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
                              <a ui-sref="Process.reviseQuotation({quotationToRevise:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-pencil-square-o" ></span>Revise</button></a>
-                             <a href="{{q.filePath}}"><button ng-disabled="checkAvailability(q.filePath)"  class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                             <a ng-show="checkAvailability(q.filePath)" href="{{q.filePath}}"><button  class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
                              <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',q,'Quoatation')"><span class="fa fa-edit"></span>Schedule Followup</button>
-                             <a data-target="#viewDetails" data-toggle="modal" ><input ng-disabled="q.isApproved" type="button" class="btn btn-info" ng-click="check(q)" value="Attach Workorder"></a>
+                             <a ng-show="isQuotationApproaved(q.isApproved)" data-target="#viewDetails" data-toggle="modal" ><input  type="button" class="btn btn-info" ng-click="check(q)" value="Attach Workorder"></a>
                          </td>
                      </tr>
                      </tbody>
@@ -162,8 +162,8 @@
 
                              <td>
 
-                                 <a href="{{wo.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-                                 <a ui-sref="Process.addInvoice"><input type="button" class="btn btn-info" ng-click="passWork(wo)" value="Create Invoice"/></a>
+                                 <a ng-show="checkAvailability(wo.filePath)" href="{{wo.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <a ui-sref="Process.addInvoice({workOrder:wo})"><input type="button" class="btn btn-info" ng-click="passWork(wo)" value="Create Invoice"/></a>
 
                              </td>
                          </tr>
@@ -205,8 +205,9 @@
                              <td>{{iv.invoiceDate}}</td>
 
                              <td>
-                                 <a ui-sref="Process.viewInvoice"><button class="btn btn-default btn-sm" ng-click="passInvoice(iv)"><span class="fa fa-eye"></span>View</button></a>
-                                 <a href="Assets/document/Invoice.doc"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+                                 <a ui-sref="Process.viewInvoice({InvoiceToView:iv})"><button class="btn btn-default btn-sm" ng-click="passInvoice(iv)"><span class="fa fa-eye"></span>View</button></a>
+                                 <a ng-show="checkAvailability(iv.invoiceBLOB)" href="{{iv.invoiceBLOB}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
+
                                  <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',iv,'invoice')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
@@ -354,11 +355,17 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-
+                    <form name="workOrderForm" novalidate>
                     <div class="form-horizontal">
 
                         <div class="col-md-12">
 
+                            <div class="form-group" ng-show="showError">
+                                <div class="col-md-4">
+                                    <label class="control-label" style="color:red">All Fields are mandatory</label>
+                                </div>
+
+                            </div>
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Quotation :</label>
@@ -367,45 +374,61 @@
                                    <label ng-model="workorder.QuotationId"> {{workOrderDetails.QuotationTitle}}</label>
                                 </div>
                             </div>
+
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label class="control-label">Name of work order:</label>
+                                    <label class="control-label">Workorder Title<span style="color:red">*</span> :</label>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <!--  <input ng-model="workorder.title" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/> -->
-                                        <input ng-model="workorder.title" name="mobile" type="text" class="form-control"/>
+                                        <input ng-model="workorder.title" name="title" type="text" class="form-control" maxlength="50" required/>
                                     </div>
+
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label class="control-label">Date of Work Order :</label>
+                                    <label class="control-label">Workorder No<span style="color:red">*</span> :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <!--  <input ng-model="workorder.title" name="mobile" type="text" class="form-control" minlength=10 pattern="[0-9]+"/> -->
+                                        <input ng-model="workorder.number" name="number" type="text" class="form-control" required maxlength="30"/>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Date of Work Order<span style="color:red">*</span> :</label>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="text" value="2015-12-01" ng-model="workorder.date" class="form-control" ng-click="workOrderDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="workOrder.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true" readonly/>
+                                        <input type="text" name="date" value="2015-12-01" ng-model="workorder.date" class="form-control" ng-click="workOrderDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="workOrder.opened" datepicker-options="dateOptions"  show-button-bar="false" required readonly/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="col-md-4">
-                                    <label class="control-label">Attach Work Order :</label>
+                                    <label class="control-label">Attach Work Order<span style="color:red">*</span> :</label>
                                 </div>
                                 <div class="col-md-8">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                        <input type="file" class="form-control" name="QuotationBlob" file-model="myFile"/>
+                                        <input type="file" class="form-control" name="QuotationBlob" file-model="myFile" required/>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-
+                    </form>
                 </div>
 
             </div>

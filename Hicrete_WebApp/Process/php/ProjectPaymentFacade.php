@@ -28,6 +28,7 @@
             PaymentController::savePaymentAndDetails($data->data);
             break;
         case 'getPaymentPaidAndTotalAmount':
+
             PaymentController::getPaymentPaidAndTotalAmount($data->data);
             break;
 

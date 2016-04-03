@@ -22,6 +22,15 @@ switch($data->operation)
     case "getInvoicesByProjectId" :
         InvoiceController::loadInvoiceForProject($data->data);
         break;
+    case "createInvoice":
+        InvoiceController::saveInvoice($data->data);
+        break;
+    case "getInvoiceTaxDetails":
+        InvoiceController::getInvoiceTaxDetails($data->data);
+        break;
+    case "getInvoiceDetails":
+        InvoiceController::getInvoiceDetails($data->data);
+        break;
 }
 
 ?>
