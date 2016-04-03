@@ -29,29 +29,18 @@ myApp.service('ApplicatorService',function(){
                                     }
 								});
 							}, 1000);
-
-							//$scope.step=1;
-							//console.log("Done");
-
-							//}
-
 							}
-
 							if (data.error != "") {
 								//$rootScope.errorMessage = "Unable to create Applicator...";
 								$rootScope.errorMessage = data.error;
 								$('#error').css("display", "block");
 								setTimeout(function () {
 									$scope.$apply(function () {
-
 											$('#error').css("display", "none");
 
 									});
 								}, 1000);
 							}
-							/*setTimeout(function(){
-							 window.location.reload(true);
-							 },6000);*/
 
 						})
 						.error(function (data, status, headers, config){
