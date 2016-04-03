@@ -265,7 +265,6 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
             billDetails: $scope.billDetails
 
         };
-
         var config = {
             params: {
                 data: data
