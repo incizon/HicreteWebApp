@@ -49,7 +49,8 @@ Class Project {
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID != c.companyId and cp.ProjectId =:projid;");
+		//$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.companyId != c.companyId and cp.ProjectId =:projid;");
+		$stmt = $conn->prepare("SELECT DISTINCT companyId,companyName FROM companymaster WHERE companyId NOT IN (select companyid from companies_involved_in_project where ProjectId=:projid)");
 		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
 		if($result = $stmt->execute()){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -385,7 +386,8 @@ public static function updateProject($id,$data,$loggedUserId){
 
 			$conn->beginTransaction();
 
-			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE `ProjectId`!= :projectId");
+			$stmt = $conn->prepare("SELECT `ProjectName` FROM `project_master` WHERE ProjectName=:ProjectName AND `ProjectId`!= :projectId");
+			$stmt->bindParam(':ProjectName',$data->projectDetails->ProjectName, PDO::PARAM_STR);
 			$stmt->bindParam(':projectId',$id, PDO::PARAM_STR);
 
 			$stmt->execute();
