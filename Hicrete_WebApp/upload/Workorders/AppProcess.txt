@@ -1,0 +1,46 @@
+1. App FILE HTDOCS
+
+   Changes completed ADD PAYMENT AND PAYMENT HISTORY DONE
+
+	1. Changed followup form
+	2. changed paymentHistory form added total remaining and paid fields
+	3. change in query of paymenthistory of particular invoice
+	4. Need to modify query- Fetch only required files
+	5. Change in sort- sort by amount paid
+
+
+REMAINING
+
+1- IF SOURCE IS SITE TRACKING SHOW FOLLOW UP FORM REMAINING
+2- CUSTONER WISE SHOW PROJECCTSS
+3- BINDING OF TOTAL AMOUNT in Quotaion Creation4
+- REMOVE 3 items FROM PROJECT SEARCH
+
+PROCESS UI
+Followup UI change- users
+Folloup history
+
+Payment folloup not getting updated in database
+
+PRoject PAYMENT BNIDING
+
+CHECK INVOICES
+
+CHANGE QUERY of
+
+
+
+
+MARch 29th
+
+WARNING POPUP REMAINING
+
+Task controller - Done
+Payment controller - Add payment done - history remainng
+
+
+Followupcontroller
+InvoiceController
+WorkorderController
+
+

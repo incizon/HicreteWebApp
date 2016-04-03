@@ -5,7 +5,7 @@
  * Date: 03/29/16
  * Time: 11:30 PM
  */
-    require_once '../../php/api/PaymentController.php';
+    require_once 'PaymentController.php';
     $data = json_decode($_GET['data']);
 
     if (!isset($_SESSION['token'])) {

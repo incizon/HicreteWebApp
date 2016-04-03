@@ -6,7 +6,7 @@
  * Time: 20:55
  */
 
-require_once '../../php/api/PaymentController.php';
+require_once 'PaymentController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {

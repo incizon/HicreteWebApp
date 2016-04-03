@@ -5,7 +5,7 @@
      * Date: 29-03-2016
      *
      */
-    require_once '../../php/api/TaskController.php';
+    require_once 'TaskController.php';
     $data = json_decode($_GET['data']);
 
     if (!isset($_SESSION['token'])) {

@@ -5,9 +5,9 @@
  * Date: 27-03-2016
  * Time: 16:03
  */
-require_once '../../php/api/FollowupController.php';
-require_once '../../php/api/InvoiceController.php';
-require_once '../../php/api/QuotationController.php';
+require_once 'FollowupController.php';
+require_once 'InvoiceController.php';
+require_once 'QuotationController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {

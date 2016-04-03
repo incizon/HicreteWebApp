@@ -5,7 +5,7 @@
  * Date: 27-03-2016
  * Time: 16:03
  */
-require_once '../../php/api/CustomerController.php';
+require_once 'CustomerController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {

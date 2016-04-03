@@ -6,7 +6,7 @@
  * Time: 00:36
  */
 
-require_once '../../php/api/QuotationController.php';
+require_once 'QuotationController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {

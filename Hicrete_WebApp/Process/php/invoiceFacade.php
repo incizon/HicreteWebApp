@@ -5,7 +5,7 @@
  * Date: 29-03-2016
  * Time: 22:43
  */
-require_once '../../php/api/InvoiceController.php';
+require_once 'InvoiceController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {

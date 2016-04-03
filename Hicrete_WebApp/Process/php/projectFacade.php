@@ -5,7 +5,7 @@
  * Date: 28-03-2016
  * Time: 23:12
  */
-require_once '../../php/api/ProjectController.php';
+require_once 'ProjectController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {

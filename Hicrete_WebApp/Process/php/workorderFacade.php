@@ -5,7 +5,7 @@
  * Date: 29-03-2016
  * Time: 21:43
  */
-require_once '../../php/api/WorkorderController.php';
+require_once 'WorkorderController.php';
 $data=json_decode($_GET['data'] );
 
 if (!isset($_SESSION['token'])) {
