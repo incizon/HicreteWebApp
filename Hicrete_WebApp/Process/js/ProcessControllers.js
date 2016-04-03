@@ -560,14 +560,26 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         $http.post("Process/php/workorderFacade.php",null, config)
             .success(function (data) {
                 console.log(data);
-                alert("success in workorder creation " + data + " status is " + status);
-                alert("status" + JSON.stringify(data));
+                $rootScope.warningMessage = "success in work order creation"+data;
+                $('#warning').css('display','block');
+                setTimeout(function(){
+                    $('#warning').css('display','none');
+                },3000);
+                //alert("success in workorder creation " + data + " status is " + status);
+                //alert("status" + JSON.stringify(data));
                 var file = $scope.myFile;
                 var uploadUrl = "php/api/workorder/upload";
                 fileUpload.uploadFileToUrl(file, uploadUrl);
+                $('#viewDetails').modal('hide');
+                $scope.getWorkorderByProject(projId);
             })
             .error(function (data){
-                alert("error in workorder creation " + JSON.stringify(data));
+                $rootScope.errorMessage = "Error in work order creation"+data;
+                $('#error').css('display','block');
+                setTimeout(function(){
+                    $('#error').css('display','none');
+                },3000);
+                //alert("error in workorder creation " + JSON.stringify(data));
             })
     }
 
@@ -664,11 +676,6 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                             }, 3000);
                             //alert(data);
                         });
-
-
-
-
-
 
                     $uibModalInstance.close();
                 };
@@ -1592,14 +1599,16 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
     //     /************* got all project ********************/
 
     AppService.getAllProjects($http, $scope.Projects);
+
     AppService.getAllInvoicesOfProject($http, $scope.Invoices, $scope.paymentDetails.projectID);
 
     $scope.viewProjectPaymentDetails = function (project_id) {
         $scope.Invoices = [];
         var invoice = [];
+        console.log(project_id);
         AppService.getAllInvoicesOfProject($http, $scope.Invoices, project_id);
         var data = {
-            operation: "getProjectPayment",
+            operation: "getAllPaymentForProject",
             projectId: project_id
 
         };
@@ -1611,6 +1620,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
         console.log(config);
         $http.post("Process/php/ProjectPaymentFacade.php", null, config)
             .success(function (data) {
+                console.log("in PAYMENTSJKNSFK");
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
@@ -1620,29 +1630,12 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     if (data.message != null) {
                         paymentdetails =data.message;
                     }
-                    $scope.projectPayment = paymentdetails;
-                    console.log("project payment new scope is " + JSON.stringify($scope.projectPayment));
-                    var pkgamount = 0;
-                    var amountPaid = 0;
 
-                    for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
-                        pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
-                        amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
+                    $scope.totalPayableAmount = data.message.total_project_amount;
+                    $scope.totalAmtPaid = data.message.total_project_amount_paid;
+                    $scope.projectPayment.total_project_amount = data.message.total_project_amount;
+                    $scope.previousAmountPaid = data.message.total_project_amount_paid;
 
-                        for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
-                            //    console.log("in for");
-                            $scope.projectPaymentsInvoice.push({
-                                amount_paid: $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
-                                date_of_payment: $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceDate,
-                                paid_to: $scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName + '' + $scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
-                            });
-                        }
-                    }
-
-                    $scope.packageAmount = pkgamount;
-                    $scope.projectPayment.total_project_amount = pkgamount;
-                    $scope.previousAmountPaid = amountPaid;
-                    $scope.projectPayment.total_paid_amount = amountPaid;
                 }
 
             })
@@ -1654,45 +1647,15 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 $('#error').css("display", "block");
             });
 
-
-
-
-
-        //$http.get("php/api/payment/allPayment/Byproj/" + project_id).then(function (response) {
-        //    //  console.log(response.data.length);
-        //    if (response.data != null) {
-        //        paymentdetails = response.data;
-        //    }
-        //    $scope.projectPayment = paymentdetails;
-        //    console.log("project payment new scope is " + JSON.stringify($scope.projectPayment));
-        //    var pkgamount = 0;
-        //    var amountPaid = 0;
-        //
-        //    for (var i = 0; i < $scope.projectPayment.Quotation.length; i++) {
-        //        pkgamount = +pkgamount + +$scope.projectPayment.Quotation[i].total_project_amount;
-        //        amountPaid = +amountPaid + +$scope.projectPayment.Quotation[i].total_paid_amount;
-        //
-        //        for (var index1 = 0; index1 < $scope.projectPayment.Quotation[i].paymentDetails.length; index1++) {
-        //            //    console.log("in for");
-        //            $scope.projectPaymentsInvoice.push({
-        //                amount_paid: $scope.projectPayment.Quotation[i].paymentDetails[index1].GrandTotal,
-        //                date_of_payment: $scope.projectPayment.Quotation[i].paymentDetails[index1].InvoiceDate,
-        //                paid_to: $scope.projectPayment.Quotation[i].paymentDetails[index1].FirstName + '' + $scope.projectPayment.Quotation[i].paymentDetails[index1].LastName,
-        //            });
-        //        }
-        //    }
-        //
-        //    $scope.packageAmount = pkgamount;
-        //    $scope.projectPayment.total_project_amount = pkgamount;
-        //    $scope.previousAmountPaid = amountPaid;
-        //    $scope.projectPayment.total_paid_amount = amountPaid;
-        //})
-
         $scope.showPaymentDetails = true;
 
     }
 
+    $scope.getInvoicePayment=function(invoicenumber){
+        console.log("In get Invoice payment");
+        AppService.getInvoicePaymentDetails(invoicenumber,$scope,$http);
 
+    }
     $scope.getPendingAmount = function () {
         // console.log("In Pending amount function");
         $scope.paymentDetails.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - $scope.previousAmountPaid;
@@ -1752,23 +1715,6 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 $('#error').css("display", "block");
             });
 
-        //$.ajax({
-        //    type: "POST",
-        //    url: 'php/api/savepayment',
-        //    data: data,
-        //    dataType: 'json',
-        //    cache: false,
-        //    contentType: 'application/json',
-        //    processData: false,
-        //    success: function (data) {
-        //        alert("success save payment " + data);
-        //    },
-        //    error: function (xhr, status, error) {
-        //        alert(xhr.responseText + " " + error + " AND " + status.code);
-        //    }
-        //});
-
-
         $scope.formSubmitted = false;
 
         if ($scope.paymentDetails.pendingAmount == 0) {
@@ -1787,14 +1733,14 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
                 controller: function ($scope, $uibModalInstance, paymentDetails, AppService) {
                     AppService.getUsers($scope, $http);
-
                     $scope.paymentDetails = paymentDetails;
-
                     $scope.ok = function () {
-
-                        console.log($scope.paymentDetails);
+                        //console.log($scope.paymentDetails);
+                        console.log("on Ok click");
+                        AppService.schedulePaymentFollowup($http,$scope,$filter,paymentDetails.InvoiceNo);
 
                         $uibModalInstance.close();
+
                     };
 
                     $scope.cancel = function () {
@@ -2670,7 +2616,7 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
         $scope.Invoices = [];
         var invoice = [];
         console.log("project id is :" + project);
-
+        $scope.viewProjectPayment(project);
         $http.get("php/api/invoice/project/" + project).then(function (response) {
             console.log(response.data.length);
             if (response.data != null) {
@@ -2686,6 +2632,55 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
             console.log("invoices  scope is " + JSON.stringify($scope.Invoices));
         })
     }
+
+
+    $scope.viewProjectPayment = function (project_id) {
+        $scope.Invoices = [];
+        var invoice = [];
+        console.log(project_id);
+        var data = {
+            operation: "getAllPaymentForProject",
+            projectId: project_id
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $http.post("Process/php/ProjectPaymentFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                if (data.status != "sucess") {
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                } else {
+                    if (data.message != null) {
+                        paymentdetails =data.message;
+                    }
+                    $scope.totalPayableAmount = data.message.total_project_amount;
+                    $scope.totalAmtPaid = data.message.total_project_amount_paid;
+                    $scope.projectPayment.total_project_amount = data.message.total_project_amount;
+                    $scope.previousAmountPaid = data.message.total_project_amount_paid;
+
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+
+                $('#loader').css("display", "none");
+                $scope.errorMessage = data.message;
+                $('#error').css("display", "block");
+            });
+
+        $scope.showPaymentDetails = true;
+
+    }
+
+
 
     $scope.getInvoiceDetails = function (invoiceId) {
         $scope.paymentHistoryData = [];
@@ -3485,58 +3480,62 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 
 myApp.controller('SearchTaskController', function (setInfo,$rootScope, $scope, $http) {
 
+    $scope.sortBy="";
+    $scope.searchKeyword=""
 
-    //$scope.tasks = [];
-    var task = [];
+    $scope.getAllTasks=function(){
+        var task = [];
+        var data = {
+            operation: "getTasks",
+            keyword:$scope.searchKeyword,
+            sortBy:$scope.sortBy
 
-
-    var data = {
-        operation: "getTasks"
-    };
-    var config = {
-        params: {
-            data: data
-        }
-    };
-    console.log(config);
-    $('#loader').css("display", "block");
-    $http.post("Process/php/TaskFacade.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            $('#loader').css("display", "none");
-
-            for (var i = 0; i < data.message.length; i++) {
-
-                task.push({
-                    "TaskID": data.message[i].TaskID,
-                    "TaskName": data.message[i].TaskName,
-                    "TaskDescripion": data.message[i].TaskDescripion,
-                    "ScheduleStartDate": data.message[i].ScheduleStartDate,
-                    "ScheduleEndDate": data.message[i].ScheduleEndDate,
-                    "CompletionPercentage": data.message[i].CompletionPercentage,
-                    "TaskAssignedTo": data.message[i].TaskAssignedTo,
-                    "isCompleted": data.message[i].isCompleted,
-                    "CreationDate": data.message[i].CreationDate,
-                    "CreatedBy": data.message[i].CreatedBy,
-                    "ActualStartDate": data.message[i].ActualStartDate,
-                    "AcutalEndDate": data.message[i].AcutalEndDate,
-                    "UserId": data.message[i].UserId,
-                    "UserName": data.message[i].firstName + " " + data.message[i].lastName
-
-                });
+        };
+        var config = {
+            params: {
+                data: data
             }
-            $rootScope.tasks = task;
-            console.log($rootScope.tasks);
+        };
+        console.log(config);
+        $('#loader').css("display", "block");
+        $http.post("Process/php/TaskFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
 
-        })
-        .error(function (data, status, headers, config) {
-            console.log(data.error);
+                for (var i = 0; i < data.message.length; i++) {
 
-            $('#loader').css("display", "none");
-            $scope.errorMessage = data.message;
-            $('#error').css("display", "block");
-        });
+                    task.push({
+                        "TaskID": data.message[i].TaskID,
+                        "TaskName": data.message[i].TaskName,
+                        "TaskDescripion": data.message[i].TaskDescripion,
+                        "ScheduleStartDate": data.message[i].ScheduleStartDate,
+                        "ScheduleEndDate": data.message[i].ScheduleEndDate,
+                        "CompletionPercentage": data.message[i].CompletionPercentage,
+                        "TaskAssignedTo": data.message[i].TaskAssignedTo,
+                        "isCompleted": data.message[i].isCompleted,
+                        "CreationDate": data.message[i].CreationDate,
+                        "CreatedBy": data.message[i].CreatedBy,
+                        "ActualStartDate": data.message[i].ActualStartDate,
+                        "AcutalEndDate": data.message[i].AcutalEndDate,
+                        "UserId": data.message[i].UserId,
+                        "UserName": data.message[i].firstName + " " + data.message[i].lastName
 
+                    });
+                }
+                $rootScope.tasks = task;
+                console.log($rootScope.tasks);
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+
+                $('#loader').css("display", "none");
+                $scope.errorMessage = data.message;
+                $('#error').css("display", "block");
+            });
+
+    }
 
 
     $scope.totalItems = $rootScope.tasks.length;

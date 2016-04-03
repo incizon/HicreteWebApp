@@ -199,7 +199,8 @@ myApp.service('addSupplierService', function () {
                     }, 3000);
                     console.log( $rootScope.warningMessage);
                     //alert(data.msg);
-                    window.location="dashboard.php#/Inventory/addSupplier";
+                   // window.location="dashboard.php#/Inventory/addSupplier";
+                    console.log("clearing ");
                     $scope.submitted=false;
                     $scope.clearData(supplier,'clear');
 
@@ -257,6 +258,7 @@ myApp.service('addMaterialTypeService', function () {
                  }
 
                 console.log(data);
+                $scope.submitted = false;
                 $scope.clear();
             })
             .error(function (data, status, headers, config) {
@@ -424,6 +426,7 @@ myApp.service('ProductionBatchService', function () {
 
     this.addProdBatchInfo = function ($scope, $http, prodBatchInfo,$rootScope) {
         console.log("before submitting"+prodBatchInfo);
+        //$scope.submitted=false;
         //console.log(prodBatchInfo.prodcdMaterial);
         //console.log("inside controller check"+materialType);
         $('#loader').css("display","block");
@@ -464,7 +467,14 @@ myApp.service('ProductionBatchService', function () {
                         setTimeout(function() {
                             $('#warning').css("display","none");
                             window.location="dashboard.php#/Inventory";
-                        }, 3000);
+                        }, 1000);
+
+
+                    /*    $scope.clear('ALL');
+                    $scope.submitted=false;
+                    $scope.step=1;*/
+
+
                     if(prodBatchInfo.option=='complete')
                     {
                         $rootScope.prodInq.splice(prodBatchInfo.selectedIndex,1);
@@ -496,18 +506,9 @@ myApp.service('ProductionBatchService', function () {
                     $scope.submitted=false;
                     //window.location="dashboard.php#/Inventory";
                 }
-                $scope.submitted=false;
+                //$scope.submitted=false;
 
-                //$scope.step = 1;
-                //$scope.clear('All');
 
-              /*  setTimeout(function() {
-                    $('#error').css("display","none");
-                    window.location="dashboard.php#/Inventory";
-                }, 3000);*/
-
-                //$scope.messages.push(data.msg);
-                // $scope.clearData(supplier,'submit');
             })
             .error(function (data, status, headers, config) {
                 console.log("Error calling php");
@@ -520,6 +521,7 @@ myApp.service('ProductionBatchService', function () {
                 }, 3000);
                 //$scope.messages.push(data.error);
             });
+        //$scope.submitted=false;
     };
 
 });

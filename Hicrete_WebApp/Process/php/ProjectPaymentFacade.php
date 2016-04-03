@@ -31,6 +31,9 @@
             PaymentController::getPaymentPaidAndTotalAmount($data->data);
             break;
 
+        case 'getAllPaymentForProject':
+            PaymentController::getAllPaymentForProject($data->projectId);
+            break;
 
     }
 
