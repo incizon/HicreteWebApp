@@ -291,32 +291,7 @@ Class Project
     }
 
 
-    /*	public function updateProject($id,$data) {
 
-            $db  = mysqli_connect('localhost','root','root','hicrete');
-            if($db == null)
-            return "Error..DB not cinnected";
-            //$sql = "SELECT * from customer_master ;";
-
-            $sql = "UPDATE table_name SET column1=value, column2=value2 WHERE some_column=some_value "
-
-            $result = mysqli_query($db,$sql);
-            if(!$result){
-                return "error";
-            }
-            else{
-
-                $object = array();
-                if($result = mysqli_query($db,$sql)){
-                    while ($row = mysqli_fetch_array($result,MYSQLI_ASSOC)){
-                        array_push($object, $row);
-                    }
-                }
-            }
-            mysqli_close($db);
-            return $object;
-
-        }*/
 
     public
     static function updateProject($id, $data, $loggedUserId)
