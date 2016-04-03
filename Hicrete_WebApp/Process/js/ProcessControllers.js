@@ -2889,7 +2889,13 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
 
     $scope.modifyCustomer = function () {
         if($scope.customerModifyForm.$pristine){
-            alert("Fields are not modified");
+
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 1000);
+            //alert("Fields are not modified");
             return;
         }
 
@@ -3025,8 +3031,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         .success(function (data) {
 
         if (data.status != "Successful") {
-            $('#loader').css("display", "block");
-            $('#loading').css("display", "none");
+
             $rootScope.errorMessage = "Error Occurred while fetching quoation data";
             $('#error').css("display", "block");
             setTimeout(function () {
@@ -3054,10 +3059,15 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         }
         console.log("totalAmount is" + $scope.totalAmount);
     })  .error(function (data) {
-        alert(data);
+        $rootScope.errorMessage = "Error Occurred Please contact administrator";
+        $('#error').css("display", "block");
+        setTimeout(function () {
+            $('#error').css("display", "none");
+        }, 1000);
+       //alert(data);
     });
 
-
+    $('#loader').css("display", "block");
     data = {
         operation: "getQuotationTaxDetails",
         data: qId
@@ -3073,8 +3083,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
         if (data.status != "Successful") {
-            $('#loader').css("display", "block");
-            $('#loading').css("display", "none");
+
+            $('#loader').css("display", "none");
             $rootScope.errorMessage = "Error Occurred while getting tax details";
             $('#error').css("display", "block");
             setTimeout(function () {
@@ -3135,8 +3145,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
     $scope.ModifyQuotation = function () {
         if($scope.QuotationForm.$pristine){
-            $('#loader').css("display", "block");
-            $('#loading').css("display", "none");
+
             $rootScope.errorMessage = "Fields are not modified";
             $('#error').css("display", "block");
             setTimeout(function () {
@@ -3230,8 +3239,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                                       // alert("Quotaion Revised Successfully");
                                     }else{
                                        // alert(data.message);
-                                        $('#loader').css("display", "block");
-                                        $('#loading').css("display", "none");
+                                        $('#loader').css("display", "none");
+                                        //$('#loading').css("display", "none");
                                         $rootScope.errorMessage = data.message;
                                         $('#error').css("display", "block");
                                         setTimeout(function () {
@@ -3241,8 +3250,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
                                 })
                                 .error(function (data) {
-                                    $('#loader').css("display", "block");
-                                    $('#loading').css("display", "none");
+                                    $('#loader').css("display", "none");
+                                    //$('#loading').css("display", "none");
                                     $rootScope.errorMessage = "Error Occured Please contact administrator";
                                     $('#error').css("display", "block");
                                     setTimeout(function () {
@@ -3253,8 +3262,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
 
                         }else{
-                            $('#loader').css("display", "block");
-                            $('#loading').css("display", "none");
+                            $('#loader').css("display", "none");
+                            //$('#loading').css("display", "none");
                             $rootScope.errorMessage = data.message;
                             $('#error').css("display", "block");
                             setTimeout(function () {
@@ -3264,8 +3273,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                         }
                     })
                     .error(function () {
-                        $('#loader').css("display", "block");
-                        $('#loading').css("display", "none");
+                        $('#loader').css("display", "none");
+                        //$('#loading').css("display", "none");
                         $rootScope.errorMessage = "Error Occured Please contact administrator";
                         $('#error').css("display", "block");
                         setTimeout(function () {
@@ -3295,8 +3304,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                         //alert("Quotation is Revised Successfully");
 
                     }else{
-                        $('#loader').css("display", "block");
-                        $('#loading').css("display", "none");
+                        $('#loader').css("display", "none");
+                        //$('#loading').css("display", "none");
                         $rootScope.errorMessage = data.message;
                         $('#error').css("display", "block");
                         setTimeout(function () {
@@ -3307,8 +3316,8 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
                 })
                 .error(function (data) {
-                    $('#loader').css("display", "block");
-                    $('#loading').css("display", "none");
+                   // $('#loader').css("display", "block");
+                    $('#loader').css("display", "none");
                     $rootScope.errorMessage = "Error Occured Please contact administrator";
                     $('#error').css("display", "block");
                     setTimeout(function () {
