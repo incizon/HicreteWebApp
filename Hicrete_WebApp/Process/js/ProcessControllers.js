@@ -266,9 +266,6 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                                     }, 1000);
                                 }
 
-
-                                //alert(data.message);
-
                             })
                             .error(function (data, status, header) {
                                 //$scope.ResponseDetails = "Data: " + data;
@@ -278,7 +275,6 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                                 setTimeout(function () {
                                     $('#error').css("display", "none");
                                 }, 1000);
-                                //alert(data);
                             });
                     }
                     $scope.clearForm = function () {
@@ -1176,63 +1172,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         $scope.taxDetails = [];
 
     }
-
-
-    //$scope.createQuotationDoc = function () {
-    //    var b = [];
-    //    var data = [];
-    //    var projectId = $scope.QuotationDetails.projectName.id;
-    //    var companyId = $scope.QuotationDetails.companyName.company_id;
-    //    var companyName = $scope.QuotationDetails.companyName.company_name;
-    //    var date = new Date();
-    //    alert("No of rows " + $scope.noOfRows);
-    //    for (var i = 0; i < $scope.noOfRows; i++) {
-    //        // alert("in for"+i+" count "+$scope.noOfRows);
-    //        //alert("Title is "+$scope.QuotationDetails.quotationItemDetails[i].quotationItem);
-    //        b.push({
-    //            'Title': $scope.QuotationDetails.quotationItemDetails[i].quotationItem,
-    //            'Decription': $scope.QuotationDetails.quotationItemDetails[i].quotationDescription,
-    //            'Quantity': $scope.QuotationDetails.quotationItemDetails[i].quotationQuantity,
-    //            'Unit': $scope.QuotationDetails.quotationItemDetails[i].quotationUnit,
-    //            'UnitRate': $scope.QuotationDetails.quotationItemDetails[i].quotationUnitRate
-    //        });
-    //        data[i] = '{"Title":"' + $scope.QuotationDetails.quotationItemDetails[i].quotationItem + '","Description":"' + $scope.QuotationDetails.quotationItemDetails[i].quotationDescription + '","Quantity":"' + $scope.QuotationDetails.quotationItemDetails[i].quotationQuantity + '","UnitRate":"' + $scope.QuotationDetails.quotationItemDetails[i].quotationUnit + '","Amount":"' + $scope.QuotationDetails.quotationItemDetails[i].quotationUnitRate + '"} '
-    //        // console.log("data is "+data[i]);
-    //    }
-    //    var jsonData = [];
-    //    jsonData = '"Quotation":[' + data + ']';
-    //    //console.log("JSON data is --"+jsonData);
-    //    var taxData = [];
-    //    var taxJson = [];
-    //    taxData = JSON.stringify($scope.taxDetails);
-    //    taxJson = ', "TaxJson":' + taxData + ' }';
-    //    var d2 = $filter('date')($scope.QuotationDetails.quotationDate, 'yyyy/MM/dd ', '+0530');
-    //    var quotationData = '{"Date":"' + date + '","QuotationTitle":"' + $scope.QuotationDetails.quotationTitle + '","ProjectId":"' + projectId + '","CompanyName":"' + companyName + '","CompanyId":"' + companyId + '","RefNo":"' + $scope.QuotationDetails.referenceNo + '","DateOfQuotation":"' + d2 + '","Subject":"' + $scope.QuotationDetails.quotationSubject + '","QuotationBlob":"' + $scope.qBlob + '" ,';
-    //    // var data3 =',{"TaxName":"test tax",  "TaxPercentage":"12",  "TaxAmount":"1200"}'
-    //    var quotationAllData = quotationData + " " + jsonData + "" + taxJson;
-    //
-    //    console.log("data in create quotation doc " + quotationAllData);
-    //    $.ajax({
-    //        type: "POST",
-    //        url: 'php/api/GenDoc/Quotation',
-    //        data: quotationAllData,
-    //        dataType: 'json',
-    //        cache: false,
-    //        contentType: 'application/json',
-    //        processData: false,
-    //
-    //        success: function (data) {
-    //            alert("success in task updation " + data);
-    //
-    //
-    //        },
-    //        error: function (data) {
-    //            alert("error in task updation " + JSON.stringify(data));
-    //        }
-    //    });
-    //
-    //
-    //}
 
 
 });
@@ -2896,43 +2835,9 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
         var totalAmountPaid = 0;
         var totalPayableAmt = 0;
         console.log("invoice id is " + invoiceId);
-        $http.get("php/api/paymentDetails/Invoice/" + invoiceId).then(function (response) {
-            console.log(response.data.length);
-            if (response.data != null) {
-                for (var i = 0; i < response.data.length; i++) {
-                    invoiceDetail.push({
-                        amountPaid: response.data[i].AmountPaid,
-                        paymentDate: response.data[i].PaymentDate,
-                        recievedBy: response.data[i].FirstName + response.data[i].LastName,
-                        amountRemaining: "----",
-                        grandTotal: response.data[i].GrandTotal,
-                        paymentMode: response.data[i].InstrumentOfPayment,
-                        bankName: response.data[i].BankName,
-                        branchName: response.data[i].BranchName,
-                        unqiueNo: response.data[i].IDOfInstrument
-                    });
-                    totalAmountPaid = totalAmountPaid + parseInt(response.data[i].AmountPaid);
-
-                }
-                totalPayableAmt = parseInt(response.data[0].GrandTotal);
-            }
-            $scope.totalAmtPaid = totalAmountPaid;
-            $scope.totalPayableAmount = totalPayableAmt;
-            console.log("total amount payable=" + totalPayableAmt);
-            console.log("total amount paid=" + totalAmountPaid);
-            $scope.paymentHistoryData = invoiceDetail;
-            console.log("paymentHistoryData  scope is " + JSON.stringify($scope.paymentHistoryData));
-        })
+        AppService.getInvoicePaymentDetails(invoiceId,$scope,$http);
 
     }
-
-
-    /*    $scope.paymentHistoryData=[
-     {amountPaid:10000,paymentDate:'10-FEB-2016',recievedBy:'Shankar',amountRemaining:5000,paymentMode:'Cheque',bankName:'SBI',branchName:'Kothrud',unqiueNo:179801},
-     {amountPaid:20000,paymentDate:'13-DEC-2015',recievedBy:'Ajit',amountRemaining:25500,paymentMode:'Cash',bankName:'Bank of India',branchName:'Vadgaon',unqiueNo:101546},
-     {amountPaid:100000,paymentDate:'16-JUL-2016',recievedBy:'Atul',amountRemaining:55600,paymentMode:'Cheque',bankName:'ICICI',branchName:'Balaji Nagar',unqiueNo:568343},
-     {amountPaid:457000,paymentDate:'10-FEB-2016',recievedBy:'Shankar',amountRemaining:58700,paymentMode:'Netbanking',bankName:'SBI',branchName:'Indira Nagar',unqiueNo:678935},
-     ];*/
 
     $scope.getPaymentHistoryData = function (pPaymentHistory) {
         $scope.viewHistory = pPaymentHistory;
@@ -3773,24 +3678,6 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             });
 
 
-        //$.ajax({
-        //    type: "POST",
-        //    url: 'php/api/task/edit/' + taskid,
-        //    data: data,
-        //    dataType: 'json',
-        //    cache: false,
-        //    contentType: 'application/json',
-        //    processData: false,
-        //
-        //    success: function (data) {
-        //        $scope.getViewNotes(task);
-        //        console.log($scope.ViewNotes);
-        //        alert("success in task updation " + data);
-        //    },
-        //    error: function (data) {
-        //        alert("error in task updation " + data);
-        //    }
-        //});
     }
 });
 
@@ -4010,24 +3897,6 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                 $('#error').css("display", "block");
             });
 
-        //$.ajax({
-        //    type: "POST",
-        //    url: 'php/api/task',
-        //    data: Taskdata,
-        //    dataType: 'json',
-        //    cache: false,
-        //    contentType: 'application/json',
-        //    processData: false,
-        //
-        //    success: function (data) {
-        //        alert("success in assign task " + data);
-        //
-        //    },
-        //    error: function (data) {
-        //        console.log(data);
-        //        alert("error in task assignment" + data);
-        //    }
-        //});
 
     };
     //$scope.today = function(){
