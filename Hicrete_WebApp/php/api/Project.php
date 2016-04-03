@@ -168,7 +168,40 @@ Class Project
         if ($result = $stmt->execute()) {
             $noOfRows = 0;
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                array_push($object, $row);
+                //get project id from row
+                // check costcennter for projeect
+                $result_array = array();
+
+                $result_array['ProjectName'] = $row['ProjectName'];
+                $result_array['ProjectId'] = $row['ProjectId'];
+                $result_array['ProjectStatus'] = $row['ProjectStatus'];
+                $result_array['LastName'] = $row['LastName'];
+                $result_array['FirstName'] = $row['FirstName'];
+                $result_array['ProjectId'] = $row['ProjectId'];
+                $result_array['Address'] = $row['Address'];
+                $result_array['City'] = $row['City'];
+                $result_array['State'] = $row['State'];
+                $result_array['Country'] = $row['Country'];
+                $result_array['PointContactName'] = $row['PointContactName'];
+                $result_array['MobileNo'] = $row['MobileNo'];
+                $result_array['LandlineNo'] = $row['LandlineNo'];
+                $result_array['EmailId'] = $row['EmailId'];
+                $result_array['Pincode'] = $row['Pincode'];
+                $result_array['CustomerId'] = $row['CustomerId'];
+                $result_array['CustomerName'] = $row['CustomerName'];
+                $result_array['ProjectManagerId'] = $row['ProjectManagerId'];
+
+                $projectID=$row['ProjectId'];
+                $stmtCostCenter=$conn->prepare("SELECT projectid FROM budget_details WHERE projectid=:projectID");
+                $stmtCostCenter->bindParam(':projectID', $projectID, PDO::PARAM_STR);
+                if($stmtCostCenter->execute()){
+                    if($stmtCostCenter->rowCount()>0){
+                        $result_array['isCostCenterAvailable'] = "true";
+                    }else{
+                        $result_array['isCostCenterAvailable'] = "false";
+                    }
+                }
+                array_push($object, $result_array);
                 $noOfRows++;
             }
 

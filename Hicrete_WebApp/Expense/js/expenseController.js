@@ -103,7 +103,7 @@ myApp.controller('budgetSegmentController', function ($scope, $http,$rootScope) 
 });
 
 
-myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope) {
+myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope,$uibModal,$log) {
     $scope.createCostCenterClicked = false;
 
     $scope.projectList = [];
@@ -148,54 +148,89 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
     $scope.createCostCenter = function () {
         $scope.createCostCenterClicked = false;
 
-        // $scope.costCenterDetails=$scope.segmentList;
-
-        // angular.extend($scope.costCenterDetails, $scope.segmentList);
         console.log($scope.segmentList);
-        var data = {
-            operation: "createCostCenter",
-            costCenterData: $scope.costCenterDetails,
-            segments:$scope.segmentList
-        };
-        console.log(data);
-        var config = {
-            params: {
-                data: data
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'utils/ConfirmDialog.html',
+            controller:  function ($scope,$rootScope,$uibModalInstance,costCenterData,segmentList) {
+
+                 $scope.save = function () {
+                    console.log("Ok clicked");
+                    console.log(costCenterData);
+                     console.log(segmentList);
+                    $scope.saveCostCenter($scope,$rootScope, $http,costCenterData,segmentList);
+                    $uibModalInstance.close();
+                };
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+                $scope.saveCostCenter = function ($scope,$rootScope, $http, costCenterData,segmentList) {
+                    var data = {
+                        operation: "createCostCenter",
+                        costCenterData: costCenterData,
+                        segments:segmentList
+                    };
+                    console.log(data);
+                    var config = {
+                        params: {
+                            data: data
+                        }
+                    };
+                    console.log(config);
+                    $http.post("Expense/php/expenseFacade.php", null, config)
+                        .success(function (data) {
+                            console.log(data);
+                            $("#loader").css("display","block");
+                            if (data.status == "success"){
+                                $('#loader').css("display","none");
+                                $rootScope.warningMessage =data.message;
+                                $("#warning").css("display", "block");
+                                setTimeout(function () {
+                                    $("#warning").css("display", "none");
+                                    window.location = "dashboard.php#/Process";
+                                }, 1000);
+                            }
+                            if(data.status=="failure"){
+                                $('#loader').css("display","none");
+                                $rootScope.errorMessage =data.message;
+                                $("#error").css("display", "block");
+                                setTimeout(function () {
+                                    $("#error").css("display", "none");
+                                    window.location = "dashboard.php#/Process";
+                                }, 1000);
+                            }
+                        })
+                        .error(function (data, status, headers, config) {
+                            $('#loader').css("display","none");
+                            $rootScope.errorMessage ="Error Occur While creating cost center";
+                            $("#error").css("display", "block");
+                            setTimeout(function () {
+                                $("#error").css("display", "none");
+                                window.location = "dashboard.php#/Process";
+                            },1000);
+                        });
+                };
+            },
+            resolve: {
+                costCenterData: function () {
+                    return $scope.costCenterDetails;
+                },
+                segmentList:function(){
+                    return $scope.segmentList;
+                }
             }
+
+        });
+
+        modalInstance.result.then(function () {
+            console.log("In result");
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+        $scope.toggleAnimation = function () {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
         };
-        console.log(config);
-        $http.post("Expense/php/expenseFacade.php", null, config)
-            .success(function (data) {
-                console.log(data);
-                $("#loader").css("display","block");
-                if (data.status == "success"){
-                    $('#loader').css("display","none");
-                    $rootScope.warningMessage =data.message;
-                    $("#warning").css("display", "block");
-                    setTimeout(function () {
-                        $("#warning").css("display", "none");
-                        window.location = "dashboard.php#/Process";
-                    }, 1000);
-                }
-                if(data.status=="failure"){
-                    $('#loader').css("display","none");
-                    $rootScope.errorMessage =data.message;
-                    $("#error").css("display", "block");
-                    setTimeout(function () {
-                        $("#error").css("display", "none");
-                        window.location = "dashboard.php#/Process";
-                    }, 1000);
-                }
-            })
-            .error(function (data, status, headers, config) {
-                $('#loader').css("display","none");
-                $rootScope.errorMessage ="Error Occur While creating cost center";
-                $("#error").css("display", "block");
-                setTimeout(function () {
-                    $("#error").css("display", "none");
-                    window.location = "dashboard.php#/Process";
-                },1000);
-            });
+
         }
 });
 
@@ -259,30 +294,35 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
     /*
      START of getting segment list
      */
-    var data = {
-        operation: "getSegments",
-    };
 
-    var config = {
-        params: {
-            data: data
-        }
-    };
 
-    $http.post("Expense/php/expenseUtils.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            if (data == "1") {
+    $scope.getProjectSegments=function(projectId){
+        console.log("IN Project Segment Get");
+        var data = {
+            operation: "getProjectWiseSegments",
+            projectId:projectId
+        };
 
-            } else {
-                $scope.segmentList = data;
+        var config = {
+            params: {
+                data: data
             }
-        })
-        .error(function (data, status, headers, config) {
+        };
+
+        $http.post("Expense/php/expenseUtils.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                if (data == "1") {
+
+                } else {
+                    $scope.segmentList = data;
+                }
+            })
+            .error(function (data, status, headers, config) {
 
 
-        });
-
+            });
+    }
     $scope.addOtherExpense = function () {
         $scope.otherExpenseClicked = false;
         var data = {
@@ -466,7 +506,15 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     //}
 
+    $scope.getTotalSegmentExpense=function(segment){
 
+        var totalExpense=0;
+        for (var i = 0; i < segment.length; i++) {
+            totalExpense=totalExpense+ parseInt(segment[i].amountExpenseDetails);
+        }
+        return totalExpense;
+
+    }
     $scope.paginateSegment = function (value) {
         //console.log("In Paginate");
         var begin, end, index;

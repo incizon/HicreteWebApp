@@ -1943,7 +1943,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
 
 myApp.controller('viewProjectController', function ($scope, $http, $rootScope, myService) {
 
-    $scope.ProjectPerPage = 5;
+    $scope.ProjectPerPage = 10;
     $scope.currentPage = 1;
 
     $scope.searchKeyword = "";
@@ -1972,6 +1972,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
             $http.post('Process/php/projectFacade.php', null, config)
                 .success(function (data, status, headers) {
+                    console.log("In View Project=");
                     console.log(data);
                     if (data.status == "Successful") {
                         for (var i = 0; i < data.message.length; i++) {
@@ -1992,7 +1993,8 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
                                 'Pincode': data.message[i].Pincode,
                                 'customerId': data.message[i].CustomerId,
                                 'customerName': data.message[i].CustomerName,
-                                projectManagerId: data.message[i].ProjectManagerId,
+                                'projectManagerId': data.message[i].ProjectManagerId,
+                                'isCostCenterAvailable': data.message[i].isCostCenterAvailable
 
                             });
                             //$scope.Projects = b;

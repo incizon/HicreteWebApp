@@ -29,7 +29,7 @@
                                             <label class="col-md-2 control-label">Select Project</label>
                                             <div class="col-md-7">                   
                                                 
-                                                    <select class="form-control" name="projectName" required  ng-model="expenseDetails.project">
+                                                    <select class="form-control" name="projectName" required ng-change="getProjectSegments(expenseDetails.project)"  ng-model="expenseDetails.project">
                                                         <option value="" disabled>Select</option>
                                                         <option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>
                                                     </select>

@@ -255,7 +255,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$uibModal,AppService) {
+myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$log,$uibModal,AppService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
