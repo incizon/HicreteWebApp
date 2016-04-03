@@ -71,10 +71,11 @@ class PaymentController
      * @url GET /paymentDetails/Invoice/$InvoiceId
      */
 
-    public function getPaymentPaidByInvoices($InvoiceId){
+    public static function getPaymentPaidByInvoices($InvoiceId){
         
              $payment = Payment::getPaymentPaidByInvoices($InvoiceId); // possible user loading method
-         return $payment;
+
+         echo AppUtil::getReturnStatus("Successful",$payment);
     }
 
     /**
