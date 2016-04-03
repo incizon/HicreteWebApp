@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select" name="quotation" ng-change="selectQuotation(selectedQuotationId)" ng-model="selectedQuotationId"  />
+                        <select class="form-control select" name="quotation" ng-change="" ng-model="selectedQuotationId"  />
                         <option value="" disabled selected>Choose quotation </option>>
                         <option ng-repeat="quotation in quotations" value="{{quotation.id}}">{{quotation.name}}</option>
 
@@ -46,7 +46,7 @@
                     <div class="input-group" >
 
                         <div class="input-group-btn">
-                            <button class="btn btn-primary" ng-click= "show()">Show</button>
+                            <button class="btn btn-primary" ng-click= "showQuotationHistory()">Show</button>
                         </div>
                     </div>
                 </div>
@@ -74,15 +74,31 @@
                     <thead>
                     <tr>
                         <th>Sr.No</th>
-                        <th>Followup Title</th>
-                        <th>Scheduled Followup Date</th>
+                        <th>
+                            <a ng-click="sortType = 'followup.followup_title'; sortReverse = !sortReverse">Followup Title
+                                <span ng-show="sortType == 'followup.followup_title' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'followup.followup_title' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+
+                        <th>
+                            <a ng-click="sortType = 'followup.followup_date'; sortReverse = !sortReverse">Scheduled Followup Date
+                                <span ng-show="sortType == 'followup.followup_date' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'followup.followup_date' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                         <th>Followup Note</th>
                         <th>Actual Followup Date</th>
-                        <th>Followup By</th>
+                        <th>
+                            <a ng-click="sortType = 'followup.followup_by'; sortReverse = !sortReverse">Followup By
+                                <span ng-show="sortType == 'followup.followup_by' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'followup.followup_by' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat = "followup in followups">
+                    <tr ng-repeat = "followup in followups | orderBy:sortType:sortReverse">
                         <td>{{$index+1}}</td>
                         <td> {{followup.followup_title}}</td>
                         <td> {{followup.followup_date}}</td>

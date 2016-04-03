@@ -67,7 +67,7 @@
                             <div class="col-md-9">
                                 <select class="form-control select" ng-change="getInvoiceDetails(invoiceNumber)" ng-model = "invoiceNumber" name="invoiceNumber">
                                     <option value="" disabled selected>All</option>
-                                    <option ng-repeat="invoice in Invoices" value="{{invoice.invoice_id}}" >{{invoice.invoice_id}}</option>
+                                    <option ng-repeat="invoice in Invoices" value="{{invoice.id}}" >{{invoice.name}}</option>
                                 </select>
                             </div>
                         </div>

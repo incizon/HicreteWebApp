@@ -34,7 +34,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     var isPrductDetailsTable = false;
     var isProductPkgingTable = false;
 
-    inventoryService.getProducts($scope, $http);
+    //inventoryService.getProducts($scope, $http);
 
     /*
      Start of Pagination Function
@@ -228,9 +228,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     /**********************************************************************************
      *End of Getter
      **********************************************************************************/
-
-
-
 
 
     /***************************************************************************

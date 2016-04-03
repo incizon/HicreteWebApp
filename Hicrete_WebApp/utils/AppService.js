@@ -294,28 +294,6 @@ myApp.service('AppService', function () {
                 alert("Error  Occurred:" + data);
             });
 
-        /*$http.post("php/api/quotationlist/"+$projectId, null)
-         .success(function (data) {
-
-         console.log("IN Project Get");
-         console.log(data);
-         if(data.status!="Successful"){
-         alert("Failed:"+data.message);
-         }else {
-         for(var i=0;i<data.message.length;i++){
-         $quotations.push({
-         id: data.message[i].QuotationId,
-         name: data.message[i].QuotationTitle,
-         refNo:data.message[i].RefNo
-         });
-         }
-         }
-         })
-         .error(function (data, status, headers, config) {
-         alert("Error  Occurred:"+data);
-
-         });*/
-
     }
 
     this.getAllInvoicesOfProject = function ($http, $invoices, $projectId) {
@@ -343,8 +321,9 @@ myApp.service('AppService', function () {
                             id: data.message[i].InvoiceNo,
                             name: data.message[i].InvoiceTitle
                         });
-                        console.log(JSON.stringify(data.message).length);
+
                     }
+
                 } else {
                     //  alert("Failed:"+data.message);
                 }
@@ -380,7 +359,6 @@ myApp.service('AppService', function () {
 
         var data = {
             operation: "getSiteTrackingProjectList",
-
 
         };
         var config = {

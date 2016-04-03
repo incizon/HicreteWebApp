@@ -12,7 +12,7 @@ class QuotationController
      * @url GET /quotation/followup/$id
      */
 
-    public function getQuotationFollow($id = null){
+    public static function getQuotationFollow($id = null){
 
         try{
             if ($id !=null) {

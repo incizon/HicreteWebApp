@@ -207,12 +207,6 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
 
      $scope.projectList=[];
     AppService.getAllProjects($http,$scope.projectList);
-     //$scope.projectList.push({name:"project1",id:"1"});
-     //$scope.projectList.push({name:"project2",id:"2"});
-
-    // $scope.segmentList=[];
-    // $scope.segmentList.push({name:"Transport",id:"1"});
-    // $scope.segmentList.push({name:"Other",id:"2"});
 
     var data = {
         module: 'getProducts'
@@ -262,33 +256,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService) {
             doShowAlert("Failure", "Error Occurred");
 
         });
-    /*
-     End of getting segment list
-     */
-    var data = {
-        operation: "getCostCenters",
-    };
 
-    var config = {
-        params: {
-            data: data
-        }
-    };
-
-    $http.post("Expense/php/expenseUtils.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            if (data == "1") {
-
-            } else {
-                $scope.costCenterList = data;
-            }
-
-        })
-        .error(function (data, status, headers, config) {
-            doShowAlert("Failure", "Error Occurred");
-
-        });
     $scope.addOtherExpense = function () {
         $scope.otherExpenseClicked = false;
         var data = {
