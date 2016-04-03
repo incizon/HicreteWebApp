@@ -13,6 +13,31 @@
 
                 var $lastInsertedPackageId;
 
+
+
+                public static function isPackageAvailable($packageName)
+                {
+
+                    try {
+                        $db = Database::getInstance();
+                        $conn = $db->getConnection();
+                        $stmt = $conn->prepare("select count(1) as count from payment_package_master where package_name=:packageName");
+                        $stmt->bindParam(':packageName', $packageName, PDO::PARAM_STR);
+                        $stmt->execute();
+                        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+                        $count = $result['count'];
+
+                        if ($count != 0) {
+                            return 0;
+                        } else
+                            return 1;
+                    }
+                    catch(Exception $e)
+                    {
+
+                    }
+
+                }
                 /*
                  * createPackage() input : package details .
                  *                 output : return true if created successfully.
