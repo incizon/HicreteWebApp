@@ -43,12 +43,24 @@
         case 'getProductsForOutward':
 	        getProductsForOutward();
 	        break;
-
+        case 'getProductsForInward':
+            getProductsForInward();
+            break;
         default:
             # code...
             break;
     }
 
+    function getProductsForInward(){
+        global $dbh;
+        $stmt = $dbh->prepare("SELECT product_master.productmasterid,product_master.productname,product_master.unitofmeasure,material.materialid FROM product_master JOIN material ON product_master.productmasterid=material.productmasterid");
+
+        $stmt->execute();
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $stmt->fetchAll();
+        $json = json_encode($result);
+        echo $json;
+    }
     function inwardOperations($pOperation, $pData)
     {
         global $dbh;
@@ -222,14 +234,8 @@
                 $inventoryData['materialtype']=$result2['materialtype'];
                 $inventoryData['productname']=$result2['productname'];
                 $inventoryData['totalquantity']=$result2['totalquantity'];
-               // $inventoryData['materialName']=$material;
-                $warehouseId=$result2['warehouseid'];
-                $companyId=$result2['companyid'];
-                //$inventoryData['companyName']=DatabaseCommonOperations::getCompanyName($warehouseId);
-                //$inventoryData['warehouseName']=DatabaseCommonOperations::getWarehouseName($companyId);
                 $inventoryData['warehouseName']=$result2['wareHouseName'];
                 $inventoryData['companyName']=$result2['companyName'];
-
                 array_push($json_array,$inventoryData);
             }
             $json = json_encode($json_array);
@@ -263,17 +269,8 @@
 
     function getProductsForOutward(){
             global $dbh;
-        $stmt = $dbh->prepare("SELECT * FROM product_master
-                JOIN product_details ON
-                product_master.productmasterid=product_details.productmasterid
-                JOIN product_packaging ON
-                product_master.productmasterid=product_packaging.productmasterid
-                JOIN material ON
-                product_master.productmasterid=material.productmasterid
-                 JOIN inventory ON inventory. materialid=material.materialid GROUP BY inventory. materialid");
-
+        $stmt = $dbh->prepare("SELECT product_master.productmasterid,product_master.productname,product_master.unitofmeasure,material.materialid,inventory.totalquantity FROM product_master JOIN material ON product_master.productmasterid=material.productmasterid JOIN inventory ON inventory. materialid=material.materialid GROUP BY inventory. materialid");
         $stmt->execute();
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $result = $stmt->fetchAll();
         $json = json_encode($result);
         echo $json;

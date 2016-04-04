@@ -67,11 +67,10 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                             <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" data-ng-click="showCustomerDetails(customer)">View Other Details</button>
                             <?php
                                 if($hasWrite==1){
-                                    echo "<a ui-sref=\"Process.modifyCustomer({customerToModify:customer})\"> <button class=\"btn btn-info\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>
-                            <button class=\"btn btn-danger\">Delete</button>";
+                                    echo "<a ui-sref=\"Process.modifyCustomer({customerToModify:customer})\"> <button class=\"btn btn-info\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>";
                                 }
                             ?>
-
+<!--                            <button class="btn btn-danger">Delete</button>-->
 
                         </td>
                     </tr>

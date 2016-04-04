@@ -6,20 +6,10 @@
 	$dbh = $db->getConnection();
 	$mData = json_decode($_GET["data"]);
 
-	//echo $mData->keyword;
-	//echo $mData->SearchTerm;
 	if(isset($mData->keyword)) {
 		$keyword = "%" . $mData->keyword . "%";
 	}
-	$selectStatement="SELECT * FROM product_master
-            JOIN product_details ON
-            product_master.productmasterid=product_details.productmasterid
-            JOIN product_packaging ON
-            product_master.productmasterid=product_packaging.productmasterid
-            JOIN material ON
-            product_master.productmasterid=material.productmasterid
-            JOIN materialtype ON
-            materialtype.materialtypeid=product_master.materialtypeid ";
+	$selectStatement="SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid ";
 
 	if(isset($mData->SearchTerm)) {
 		switch ($mData->SearchTerm) {
@@ -33,7 +23,7 @@
 	}
 	//echo $selectStatement;
 	$stmt=$dbh->prepare($selectStatement);
-if(isset($mData->SearchTerm)) {
+	if(isset($mData->SearchTerm)) {
 	if ($mData->SearchTerm == 'productName' || $mData->SearchTerm == 'materialType') {
 		$stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
 	}

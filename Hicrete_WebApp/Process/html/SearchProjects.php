@@ -90,15 +90,14 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                                 <button class=\"btn btn-info\" title=\"Modify project details\">
                                     <span class=\"fa fa-pencil-square-o\"></span>
                                 </button>
-                            </a>
-                            <a href=\"\">
-                                <button class=\"btn btn-danger\" title=\"Delete\">
-                                    <span class=\"fa fa-times\"></span>
-                                </button>
                             </a>";
                                 }
                             ?>
-
+<!--                                                   <a href="">-->
+<!--                                                       <button class="btn btn-danger" title="Delete">-->
+<!--                                                                 <span class="fa fa-times"></span>-->
+<!--                                                                    </button>-->
+<!--                            </a>-->
                             <a ui-sref="Process.searchExpense({costCenterForProject:project})">
                                 <button class="btn btn-primary" title="View cost center">
                                     <span class="fa fa-eye"></span>

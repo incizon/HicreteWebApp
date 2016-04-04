@@ -534,12 +534,12 @@ class Config
             echo "Sorry, there was an error uploading your file.";
         }
     }
-    public static function getCompanys($userId)
+    public static function getCompanys()
     {
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt = $conn->prepare("SELECT * FROM companymaster");
+        $stmt = $conn->prepare("SELECT companyId,companyName FROM companymaster");
         $stmt->execute();
         $result = $stmt->fetchAll();
         $json = json_encode($result);
@@ -552,7 +552,7 @@ class Config
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
-        $stmt1 = $conn->prepare("SELECT * FROM warehousemaster");
+        $stmt1 = $conn->prepare("SELECT warehouseId,wareHouseName FROM warehousemaster");
         $stmt1->execute();
 
         $result1 = $stmt1->fetchAll();

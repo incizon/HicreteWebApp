@@ -1,7 +1,4 @@
 
-
-
-
 /**********************************************************************************
  * Start of Product controller
  *
@@ -34,7 +31,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     var isPrductDetailsTable = false;
     var isProductPkgingTable = false;
 
-    //inventoryService.getProducts($scope, $http);
 
     /*
      Start of Pagination Function
@@ -332,7 +328,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         //console.log($scope.InwardData.inwardMaterials.length);
         return $scope.InwardData.inwardMaterials.length;
     }
-    inventoryService.getProductsForInwardandOutward($scope,$http);
+    inventoryService.getProductsForInwardand($scope,$http);
     //Get Warehouses
     inventoryService.getWarehouses($scope,$http);
     // Get Company
@@ -373,7 +369,6 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                 $scope.availableTotalquantity=qty;
                 $scope.unitofMeasure=$scope.materialsForOutwardInward[i].unitofmeasure;
                 qty= $scope.unitofMeasure;
-                console.log("UNIT"+qty);
             }
         }
 
@@ -408,9 +403,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.step=2;
-            console.log("Step Value:" + $scope.step);
             $scope.submitted = false;
-            //console.log("in nest form function");
         }
 
     }
@@ -421,9 +414,6 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
             $scope.addInwardDetails($scope.InwardData);
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
             $scope.step++;
-            console.log("Step Value:" + $scope.step);
-            console.log("in next step =");
-            console.log($scope.InwardData);
             $scope.submitted = false;
         }
     }
@@ -458,7 +448,6 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
 
                 $scope.clearFields = function (InwardData) {
 
-                    console.log("clearing");
                     InwardData.inwardNumber = "";
                     InwardData.material = "";
                     InwardData.packageUnit = "";
@@ -490,8 +479,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                 };
 
                 $scope.save = function () {
-                    console.log("Ok clicked");
-                    console.log(inwardData);
+
                     $scope.inwardEntry($scope,$rootScope, $http,inwardData);
                     $uibModalInstance.close();
                 };
@@ -499,8 +487,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                     $uibModalInstance.dismiss('cancel');
                 };
                 $scope.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
-                    console.log("IN SERVICE OF INWARD=");
-                    console.log(inwardData);
+
                     $('#loader').css("display","block");
                     var data = {
                         inwardData: inwardData,
@@ -512,7 +499,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                             data: data
                         }
                     };
-                    console.log(config);
+
                     $http.post("Inventory/php/InventoryIndex.php", null, config)
                         .success(function (data) {
                             $('#loader').css("display","none");
@@ -584,12 +571,10 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                 data: data
             }
         };
-        console.log("Inward Data to be Updated");
-        console.log(data);
+
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                console.log("IN SERVICE OF INWARD=");
-                console.log(data);
+
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
@@ -607,30 +592,24 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
      * End of update inward entry function
      ****************************************************************************/
 
-    inventoryService.getSavedProducts($scope);
     /**********************************************************************************
      *Setters to set true/false for tables to modify
      **********************************************************************************/
     $scope.setInwardTable = function () {
         isInwardTable = true;
-        console.log("IN ng CHANGE");
     }
     $scope.setInwardDetailsTable = function () {
         isInwardDetailsTable = true;
-        console.log("IN ng CHANGE");
+
     }
     $scope.setInwardTransport = function () {
         isInwardTransportTable = true;
-        console.log("IN ng CHANGE");
+
     }
     /**********************************************************************************
      *End of Setters
      **********************************************************************************/
 
-
-
-
-// inventoryService.getProducts($scope,$http);
 // Get Suppliers From DB
     var data = {
         operation: 'search'
@@ -642,9 +621,9 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
     };
     $http.post("Inventory/php/supplierSearch.php", null,config)
         .success(function (data) {
-            console.log("Suppliers="+data);
+
             $scope.suppliers = data;
-            console.log($scope.suppliers);
+
         })
         .error(function (data, status, headers) {
             console.log(data);
@@ -713,43 +692,6 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
     // Get Company
     inventoryService.getCompanys($scope,$http);
 
-    $scope.getAvailableQuantiyPerPackage=function(material){
-        console.log(material);
-        var data = {
-            materialId:material,
-            module: 'outward',
-            operation: 'getProductAvailableQty'
-        }
-        var config = {
-            params: {
-                data: data
-            }
-        };
-        $http.post("Inventory/php/InventoryIndex.php", null, config)
-            .success(function (data) {
-                console.log("In Post of outward entry success:");
-                console.log(data);
-                $scope.productAvailables=data;
-                console.log($scope.productAvailables);
-                if(data.msg!=""){
-                   // alert(data.msg);
-                   // console.log(data.msg);
-                   // $scope.productAvailables=data.msg;
-
-                }else{
-                  //  alert(data.error);
-                    console.log(data.error);
-                }
-
-            })
-            .error(function (data, status, headers) {
-                console.log(data);
-                alert(data);
-
-            });
-
-
-    }
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -771,7 +713,6 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
                 qty = $scope.materialsForOutward[i].totalquantity;
                 $scope.availableTotalquantity=qty;
-                console.log("this is actual quantity"+$scope.availableTotalquantity);
                 $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
                 break;
             }
@@ -785,11 +726,9 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
 
         for (var i = 0; i < $scope.materialsForOutward.length; i++) {
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
-                //qty = $scope.materialsForOutward[i].totalquantity;
-                //$scope.availableTotalquantity=qty;
                 $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
                  qty= $scope.unitofMeasure;
-                //console.log(qty);
+
             }
         }
 
@@ -878,8 +817,6 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                     });
                 };
                 $scope.save = function () {
-                    console.log("Ok clicked");
-                    console.log(outwardData);
                     $scope.outwardEntry($scope, $http,outwardData);
                     $uibModalInstance.close();
                 };
@@ -898,28 +835,24 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                             data: data
                         }
                     };
-                    console.log(config);
                     $http.post("Inventory/php/InventoryIndex.php", null, config)
                         .success(function (data) {
                             $('#loader').css("display","none");
-                            console.log("In Post of outward entry success:");
-                            console.log(data);
+
                             if(data.msg!=""){
                                 $('#loader').css("display","none");
                                 $rootScope.warningMessage=data.msg;
                                 $('#warning').css("display","block");
                                 setTimeout(function () {
                                     $('#warning').css("display","none");
-                                    //window.location="dashboard.php#/Inventory";
-                                }, 3000);
+                                    window.location="dashboard.php#/Inventory";
+                                }, 2000);
                                 $scope.submitted = false;
-                                console.log($scope.submitted);
+
                                 $scope.clearFields(outwardData);
                                 $scope.submitted = false;
                                 $scope.step=1;
-                                //setTimeout(function(){
-                                //    window.location="dashboard.php#/Inventory";
-                                //},1000);
+
                             }else{
                                 $('#loader').css("display","none");
                                 $rootScope.errorMessage=data.error;
@@ -974,10 +907,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
      * Return- success or failure
      *************************************************************/
     $scope.updateOutwardInfo = function (selectedProduct) {
-        console.log("Product in Update Info function");
-        //Set Extra attribute in object to identify operation to be performed as update
 
-        //Check which tables should get affected
         selectedProduct.isOutwardTable = isOutwardTable;
         selectedProduct.isOutwardDetailsTable = isOutwardDetailsTable;
         selectedProduct.isOutwardTransportTable = isOutwardTransportTable;
@@ -994,12 +924,10 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                 data: data
             }
         };
-        console.log(data);
         //call add product service
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                console.log("IN POST Outward UPDATE OPERATION:");
-                console.log(data);
+
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
                     window.location="dashboard.php#/Inventory";
@@ -1057,15 +985,12 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
      ****************************************************/
     $scope.setOutwardTable = function () {
         isOutwardTable = true;
-        console.log("IN ng CHANGE");
     }
     $scope.setOutwardDetailsTable = function () {
         isOutwardDetailsTable = true;
-        console.log("IN ng CHANGE");
     }
     $scope.setOutwardTransport = function () {
         isOutwardTransportTable = true;
-        console.log("IN ng CHANGE");
     }
     /***************************************************
      *End of Setters
@@ -1103,14 +1028,14 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
     }
 
     $scope.submit = function (materialType) {
-        console.log($scope.materialType);
+
         addMaterialTypeService.addMaterialtype($scope, $http, materialType)
         //$scope.clear();
         $scope.submitted = false;
 
     };
     $scope.addFields = function () {
-        console.log($scope.noOfMaterials);
+
         for (var i = 0; i < $scope.noOfMaterials; i++) {
             $scope.addField();
         }
@@ -1172,7 +1097,6 @@ myApp.controller('addSupplierController', function ($scope,$rootScope, $http, ad
         supplier.VATNo = "";
         supplier.CSTNo = "";
 
-        console.log(msg);
         if (msg == 'clear') {
             $scope.messages[0] = "";
         }
@@ -1181,12 +1105,6 @@ myApp.controller('addSupplierController', function ($scope,$rootScope, $http, ad
 
     $scope.submitData = function (supplier) {
 
-        console.log(supplier.supplierName);
-        console.log(supplier.contactNo);
-        console.log(supplier.address);
-        console.log(supplier.city);
-        console.log(supplier.country);
-        console.log(supplier.pinCode);
 
         addSupplierService.addSupplier($scope,$rootScope,$http, supplier);
     };
@@ -1225,7 +1143,6 @@ myApp.controller('OutwardSearchController',function($http,$scope,$rootScope){
 
     $scope.getOutwardDetails = function()
     {
-        console.log($scope.SearchTerm);
         $scope.materialDetails=[];
         var data = {
             module: 'outward',
@@ -1308,19 +1225,13 @@ myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
                 data: data
             }
         };
-
+        $('#loader').css("display","block");
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                $scope.loading=true;
-                $('#loader').css("display","block");
-                //setTimeout(function(){
-                $scope.loading=false;
                 $('#loader').css("display","none");
-                //},1000);
-                console.log("IN INWARD Search");
                 $rootScope.InwardSearchData = data;
                 $scope.totalInwardItems = $rootScope.InwardSearchData.length;
-                console.log(data);
+
             })
             .error(function (data, status, headers) {
                 console.log("IN SERVICE OF Inward Search Failure=");

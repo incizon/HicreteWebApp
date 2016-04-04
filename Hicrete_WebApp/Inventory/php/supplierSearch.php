@@ -1,19 +1,8 @@
 <?php
 require_once 'Database/Database.php';
-/*require_once '../../php/appUtil.php';*/
-
-// $supplier = json_decode($_GET["supplier"]);
-
-// $searchString=$supplier->supplierName;
-// $searchString='%'.$searchString.'%';
-
 
 $db = Database::getInstance();
 $dbh = $db->getConnection();
-/*$hostname = 'localhost';
-$dbname='inventory';
-$username = 'admin';
-$password = 'admin';*/
 
 $opt = array(
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -26,22 +15,20 @@ $userId = $_SESSION['token'];
 switch ($data->operation) {
     case "search":
         try {
-            $stmt = $dbh->prepare("select * from supplier");
+            $stmt = $dbh->prepare("select supplierid,suppliername from supplier");
 
-//$stmt->bindParam(':supplierName',$searchString, PDO::PARAM_STR,100);
-
-            if($stmt->execute()){
-                 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-                 $result = $stmt->fetchAll();
+            if ($stmt->execute()) {
+                $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+                $result = $stmt->fetchAll();
                 $json = json_encode($result);
                 echo $json;
-            }else{
-            	echo "statement failed";
+            } else {
+                echo "statement failed";
             }
-            
+
 
         } catch (exception $e) {
-		echo "Exception occured";
+            echo "Exception occured";
         }
         break;
     case "modify":

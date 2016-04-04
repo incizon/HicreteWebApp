@@ -30,10 +30,10 @@ myApp.service('inventoryService', function () {
     /***************************************************************************
      Get Product Details
      ****************************************************************************/
-    this.getProductsForInwardandOutward = function ($scope, $http) {
+    this.getProductsForInwardand = function ($scope, $http) {
         $('#loader').css("display","block");
         var data = {
-            module: 'getProducts'
+            module: 'getProductsForInward'
         }
         var config = {
             params: {
