@@ -42,17 +42,15 @@
         public function isAvailable($dbh){
 
             $stmt = $dbh->prepare("SELECT productname FROM product_master WHERE productname =:productname");
-
-            $stmt->bindParam(':productname', $this->productName, PDO::PARAM_STR, 10);
-//            $stmt->bindParam(':materialtypeid', $this->productType, PDO::PARAM_STR, 10);
-//            $stmt->bindParam(':unitofmeasure', $this->productUnitOfMeasure, PDO::PARAM_STR, 10);
+            $productName=trim( $this->productName);
+            $stmt->bindParam(':productname',$productName, PDO::PARAM_STR, 10);
             $stmt->execute();
 
             $count=$stmt->rowcount();
             if($count!=0)
-            {return 1;}
+            {return true;}
             else
-            {return 0;}
+            {return false;}
         }
         public function select()
         {
