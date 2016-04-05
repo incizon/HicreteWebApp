@@ -1,11 +1,10 @@
-
 /**********************************************************************************
  * Start of Product controller
  *
  ***********************************************************************************/
 myApp.controller('productController', function ($scope, $http, inventoryService) {
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    $scope.errorMessage = "";
+    $scope.warningMessage = "";
     //Pagination variables
     $scope.totalItems = 0;
     $scope.currentPage = 1;
@@ -25,7 +24,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     };
     $scope.submitted = false;
     $scope.submittedModal = false;
-    $scope.loading="";
+    $scope.loading = "";
     var isProductMasterTable = false;
     var isMaterialTable = false;
     var isPrductDetailsTable = false;
@@ -56,11 +55,11 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         //Set Extra attribute in object to identify operation to be performed
         product.opertaion = "insert";
         $scope.submitted = false;
-        $scope.loading=true;
+        $scope.loading = true;
 
-        $scope.errorMessage="";
-        $scope.warningMessage="";
-        $('#loader').css("display","block");
+        $scope.errorMessage = "";
+        $scope.warningMessage = "";
+        $('#loader').css("display", "block");
 
         var config = {
             params: {
@@ -70,39 +69,36 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
         //call service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
-                $('#loader').css("display","none");
-                if(data.msg!=""){
-                    $scope.warningMessage=data.msg;
+                $('#loader').css("display", "none");
+                if (data.msg != "") {
+                    $scope.warningMessage = data.msg;
                     //alert(data.msg);
-                    $('#warning').css("display","block");
+                    $('#warning').css("display", "block");
                 }
-                setTimeout(function() {
-                    $scope.$apply(function() {
-                        if(data.msg!=""){
-                            $('#warning').css("display","none");
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        if (data.msg != "") {
+                            $('#warning').css("display", "none");
                         }
                     });
                 }, 3000);
 
-                $scope.loading=false;
+                $scope.loading = false;
 
-                if(data.msg==""){
-                    $scope.errorMessage=data.error;
+                if (data.msg == "") {
+                    $scope.errorMessage = data.error;
                     //alert(data.error);
-                    $('#error').css("display","block");
+                    $('#error').css("display", "block");
                 }
-                console.log("IN POST OF add product success");
-                console.log(data);
+
                 $scope.clearFields(product);
 
             })
             .error(function (data, status, headers, config) {
-                console.log(data.error);
-
                 //alert(data);
-                $('#loader').css("display","none");
-                $scope.errorMessage=data.error;
-                $('#error').css("display","block");
+                $('#loader').css("display", "none");
+                $scope.errorMessage = data.error;
+                $('#error').css("display", "block");
             });
 
     };
@@ -156,22 +152,21 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
             }
         };
         $scope.loading = true;
-        $('#loader').css("display","block");
+        $('#loader').css("display", "block");
         //call add product service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
-                console.log("IN POST UPDATE OPERATION:");
-                console.log(data);
+
                 $scope.lodaing = false;
-                $('#loader').css("display","none");
-                if(data.msg!="") {
+                $('#loader').css("display", "none");
+                if (data.msg != "") {
                     //alert("Success", data.msg);
                     $scope.warningMessage = data.msg;
                     $('#warning').css("display", "block");
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.message!=""){
-                                $('#warning').css("display","none");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            if (data.message != "") {
+                                $('#warning').css("display", "none");
                             }
                         });
                     }, 3000);
@@ -180,29 +175,29 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
                     //alert("Success", data.error);
                     $scope.errorMessage = data.error;
                     $('#error').css("display", "block");
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.message!=""){
-                                $('#error').css("display","none");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            if (data.message != "") {
+                                $('#error').css("display", "none");
                             }
                         });
                     }, 3000);
                 }
 
-                        window.location.reload = true;
+                window.location.reload = true;
 
             })
             .error(function (data, status, headers, config) {
                 console.log(data.error);
                 //alert(data);
                 $scope.lodaing = false;
-                $('#loader').css("display","none");
+                $('#loader').css("display", "none");
                 $scope.errorMessage = data.error;
-                $('#error').css("display","block");
-                setTimeout(function() {
-                    $scope.$apply(function() {
-                        if(data.message!=""){
-                            $('#error').css("display","none");
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        if (data.message != "") {
+                            $('#error').css("display", "none");
                         }
                     });
                 }, 3000);
@@ -219,7 +214,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
-        console.log($scope.selectedProduct);
     }
     /**********************************************************************************
      *End of Getter
@@ -231,9 +225,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      ****************************************************************************/
     $http.get("Inventory/php/Material.php")
         .success(function (data) {
-            console.log("IN MATERIAL");
             $scope.materialNames = data;
-            console.log(data);
         });
     /***************************************************************************
      * End of Get Material Types
@@ -251,14 +243,14 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
  *
  ************************************************************************************************************/
 
-myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardService, inventoryService,$log,$uibModal,AppService) {
+myApp.controller('inwardController', function ($scope, $rootScope, $http, inwardService, inventoryService, $log, $uibModal, AppService) {
     $scope.InwardData = {
         inwardNumber: "",
         date: "",
         companyName: "",
         warehouseName: "",
         suppervisor: "",
-        hasTransportDetails:"",
+        hasTransportDetails: "",
 
         transportMode: "",
         vehicleNumber: "",
@@ -273,7 +265,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                 materialQuantity: "",
                 packageUnit: "",
                 suppplierName: "",
-                size:""
+                size: ""
             }
         ]
     };
@@ -290,7 +282,6 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
      ************************************************/
     $scope.clearFields = function (InwardData) {
 
-        console.log("clearing");
         $scope.InwardData.inwardNumber = "";
         $scope.InwardData.material = "";
         $scope.InwardData.packageUnit = "";
@@ -308,14 +299,14 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         $scope.InwardData.transportAgency = "";
         $scope.InwardData.driver = "";
         $scope.InwardData.transportPayable = "";
-        $scope.InwardData.hasTransportDetails="";
+        $scope.InwardData.hasTransportDetails = "";
         $scope.InwardData.inwardMaterials.splice(0, $scope.InwardData.inwardMaterials.length);
         $scope.InwardData.inwardMaterials.push({
             material: "",
             materialQuantity: "",
             packageUnit: "",
             suppplierName: "",
-            size:""
+            size: ""
         });
     };
 
@@ -324,18 +315,17 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
      **************************************************/
 
 
-    $scope.getNoOfMaterials=function(){
-        //console.log($scope.InwardData.inwardMaterials.length);
+    $scope.getNoOfMaterials = function () {
         return $scope.InwardData.inwardMaterials.length;
     }
-    inventoryService.getProductsForInwardand($scope,$http);
+    inventoryService.getProductsForInwardand($scope, $http);
     //Get Warehouses
-    inventoryService.getWarehouses($scope,$http);
+    inventoryService.getWarehouses($scope, $http);
     // Get Company
-    inventoryService.getCompanys($scope,$http);
+    inventoryService.getCompanys($scope, $http);
 
     //GetUsers
-    AppService.getUsers($scope,$http);
+    AppService.getUsers($scope, $http);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -347,14 +337,13 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         {filterName: 'Product Name', id: 1},
         {filterName: 'Company Name', id: 2},
         {filterName: 'Warehouse Name', id: 3},
-        {filterName: 'Available Inventory', id: 4}
     ];
     $scope.SearchTerm = $scope.filters[3].filterName;
 
     var isInwardTable = false;
     var isInwardDetailsTable = false;
     var isInwardTransportTable = false;
-    $scope.stepa=1;
+    $scope.stepa = 1;
     /**********************************
      Add material fields
      *******************************/
@@ -366,9 +355,9 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         for (var i = 0; i < $scope.materialsForOutwardInward.length; i++) {
             if (pMaterialId == $scope.materialsForOutwardInward[i].materialid) {
                 // qty = $scope.materialsForOutward[i].totalquantity;
-                $scope.availableTotalquantity=qty;
-                $scope.unitofMeasure=$scope.materialsForOutwardInward[i].unitofmeasure;
-                qty= $scope.unitofMeasure;
+                $scope.availableTotalquantity = qty;
+                $scope.unitofMeasure = $scope.materialsForOutwardInward[i].unitofmeasure;
+                qty = $scope.unitofMeasure;
             }
         }
 
@@ -395,14 +384,14 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         $scope.InwardData.inwardMaterials.splice(index, 1); //remove item by index
     };
 
-    $scope.nextForm=function(){
+    $scope.nextForm = function () {
 
         if ($scope.InwardData.hasTransportDetails == 'No') {
             // $scope.showModal=true;
             //alert("if");
             $scope.addInwardDetails();
         } else if ($scope.InwardData.hasTransportDetails == 'Yes') {
-            $scope.step=2;
+            $scope.step = 2;
             $scope.submitted = false;
         }
 
@@ -422,14 +411,14 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         $scope.step--;
     }
 
-    $scope.today = function() {
+    $scope.today = function () {
         $scope.InwardData.date = new Date();
     };
     $scope.today();
 
     $scope.maxDate = new Date(2020, 5, 22);
 
-    $scope.openDate = function() {
+    $scope.openDate = function () {
         $scope.popup1.opened = true;
     };
 
@@ -439,12 +428,10 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
 
     $scope.addInwardDetails = function (inwardData) {
 
-        console.log("Add inwardDetails function =");
-        console.log($scope.InwardData);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
-            controller:  function ($scope,$rootScope,$uibModalInstance,inwardData) {
+            controller: function ($scope, $rootScope, $uibModalInstance, inwardData) {
 
                 $scope.clearFields = function (InwardData) {
 
@@ -465,14 +452,14 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                     InwardData.transportAgency = "";
                     InwardData.driver = "";
                     InwardData.transportPayable = "";
-                    InwardData.hasTransportDetails="";
+                    InwardData.hasTransportDetails = "";
                     InwardData.inwardMaterials.splice(0, InwardData.inwardMaterials.length);
                     InwardData.inwardMaterials.push({
                         material: "",
                         materialQuantity: "",
                         packageUnit: "",
                         suppplierName: "",
-                        size:""
+                        size: ""
                     });
 
 
@@ -480,15 +467,15 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
 
                 $scope.save = function () {
 
-                    $scope.inwardEntry($scope,$rootScope, $http,inwardData);
+                    $scope.inwardEntry($scope, $rootScope, $http, inwardData);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
-                $scope.inwardEntry = function ($scope,$rootScope, $http, inwardData) {
+                $scope.inwardEntry = function ($scope, $rootScope, $http, inwardData) {
 
-                    $('#loader').css("display","block");
+                    $('#loader').css("display", "block");
                     var data = {
                         inwardData: inwardData,
                         module: 'inward',
@@ -502,28 +489,27 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
 
                     $http.post("Inventory/php/InventoryIndex.php", null, config)
                         .success(function (data) {
-                            $('#loader').css("display","none");
-                            console.log(data);
-                            if(data.msg!=""){
-                                $rootScope.warningMessage=data.msg;
-                                $('#warning').css("display","block");
+                            $('#loader').css("display", "none");
+                            if (data.msg != "") {
+                                $rootScope.warningMessage = data.msg;
+                                $('#warning').css("display", "block");
                                 setTimeout(function () {
-                                    $('#warning').css("display","none");
+                                    $('#warning').css("display", "none");
                                     //window.location="dashboard.php#/Inventory";
                                 }, 2000);
                                 $scope.clearFields(inwardData);
-                               // $scope.submitted= false;
-                                $scope.step=1;
-                            }else{
-                                $rootScope.errorMessage=data.error;
-                                $('#error').css("display","block");
+                                // $scope.submitted= false;
+                                $scope.step = 1;
+                            } else {
+                                $rootScope.errorMessage = data.error;
+                                $('#error').css("display", "block");
                             }
-                            $('#loader').css("display","none");
+                            $('#loader').css("display", "none");
 
                         })
                         .error(function (data, status, headers) {
-                            $('#loader').css("display","none");
-                            $('#error').css("display","block");
+                            $('#loader').css("display", "none");
+                            $('#error').css("display", "block");
                         });
                 };
             },
@@ -536,7 +522,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
         });
 
         modalInstance.result.then(function () {
-           console.log("In result");
+            console.log("In result");
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
         });
@@ -547,7 +533,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
 
         //inwardService.inwardEntry($scope, $http, $scope.InwardData);
         $scope.submitted = false;
-        $scope.step=1;
+        $scope.step = 1;
     }
 
     /***************************************************************************
@@ -578,7 +564,7 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
                 if (data.msg != "") {
                     doShowAlert("Success", data.msg);
                     setTimeout(function () {
-                        window.location="dashboard.php#/Inventory";
+                        window.location = "dashboard.php#/Inventory";
                     }, 1000);
                 } else if (data.error != "")
                     doShowAlert("Failure", data.error);
@@ -619,11 +605,9 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
             data: data
         }
     };
-    $http.post("Inventory/php/supplierSearch.php", null,config)
+    $http.post("Inventory/php/supplierSearch.php", null, config)
         .success(function (data) {
-
             $scope.suppliers = data;
-
         })
         .error(function (data, status, headers) {
             console.log(data);
@@ -643,11 +627,11 @@ myApp.controller('inwardController', function ($scope,$rootScope, $http, inwardS
  *
  ************************************************************************************************************/
 
-myApp.controller('outwardController', function ($scope,$rootScope, $http, outwardService, inventoryService,AppService,$uibModal) {
+myApp.controller('outwardController', function ($scope, $rootScope, $http, outwardService, inventoryService, AppService, $uibModal) {
     //$scope.errorMessage="";
     //$scope.warningMessage="";
     $scope.productsToModify = [];
-    $scope.productAvailable=[];
+    $scope.productAvailable = [];
     $scope.OutwardData = {
 
         outwardMaterials: [
@@ -663,8 +647,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
     $scope.step = 1;
     $scope.submitted = false;
 
-    AppService.getUsers($scope,$http);
-    $scope.getNoOfMaterials=function(){
+    AppService.getUsers($scope, $http);
+    $scope.getNoOfMaterials = function () {
 
         return $scope.OutwardData.outwardMaterials.length;
     }
@@ -672,14 +656,14 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
     var isOutwardDetailsTable = false;
     var isOutwardTransportTable = false;
 
-    $scope.todayDate = function() {
+    $scope.todayDate = function () {
         $scope.OutwardData.date = new Date();
     };
     $scope.todayDate();
 
     $scope.maxDate = new Date(2020, 5, 22);
 
-    $scope.open1 = function() {
+    $scope.open1 = function () {
         $scope.popup1.opened = true;
     };
 
@@ -688,9 +672,9 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
     };
 
     //Get Warehouses
-    inventoryService.getWarehouses($scope,$http);
+    inventoryService.getWarehouses($scope, $http);
     // Get Company
-    inventoryService.getCompanys($scope,$http);
+    inventoryService.getCompanys($scope, $http);
 
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
@@ -699,7 +683,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
     ];
 
 
-    inventoryService.getProductsForOutward($scope,$http);
+    inventoryService.getProductsForOutward($scope, $http);
 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
@@ -712,8 +696,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
         for (var i = 0; i < $scope.materialsForOutward.length; i++) {
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
                 qty = $scope.materialsForOutward[i].totalquantity;
-                $scope.availableTotalquantity=qty;
-                $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
+                $scope.availableTotalquantity = qty;
+                $scope.unitofMeasure = $scope.materialsForOutward[i].unitofmeasure;
                 break;
             }
 
@@ -726,8 +710,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
 
         for (var i = 0; i < $scope.materialsForOutward.length; i++) {
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
-                $scope.unitofMeasure=$scope.materialsForOutward[i].unitofmeasure;
-                 qty= $scope.unitofMeasure;
+                $scope.unitofMeasure = $scope.materialsForOutward[i].unitofmeasure;
+                qty = $scope.unitofMeasure;
 
             }
         }
@@ -787,7 +771,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
-            controller:  function ($scope,$rootScope,$uibModalInstance,outwardData) {
+            controller: function ($scope, $rootScope, $uibModalInstance, outwardData) {
 
                 $scope.clearFields = function (OutwardData) {
                     OutwardData.OutwardNumber = "";
@@ -806,25 +790,25 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                     OutwardData.transportAgency = "";
                     OutwardData.driver = "";
                     OutwardData.transportPayable = "";
-                    OutwardData.hasTransportDetails="";
+                    OutwardData.hasTransportDetails = "";
                     OutwardData.outwardMaterials.splice(0, OutwardData.outwardMaterials.length);
                     OutwardData.outwardMaterials.push({
                         material: "",
                         materialQuantity: "",
                         packageUnit: "",
                         suppplierName: "",
-                        size:""
+                        size: ""
                     });
                 };
                 $scope.save = function () {
-                    $scope.outwardEntry($scope, $http,outwardData);
+                    $scope.outwardEntry($scope, $http, outwardData);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
                 $scope.outwardEntry = function ($scope, $http, outwardData) {
-                    $('#loader').css("display","block");
+                    $('#loader').css("display", "block");
                     var data = {
                         outwardData: outwardData,
                         module: 'outward',
@@ -837,28 +821,28 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                     };
                     $http.post("Inventory/php/InventoryIndex.php", null, config)
                         .success(function (data) {
-                            $('#loader').css("display","none");
+                            $('#loader').css("display", "none");
 
-                            if(data.msg!=""){
-                                $('#loader').css("display","none");
-                                $rootScope.warningMessage=data.msg;
-                                $('#warning').css("display","block");
+                            if (data.msg != "") {
+                                $('#loader').css("display", "none");
+                                $rootScope.warningMessage = data.msg;
+                                $('#warning').css("display", "block");
                                 setTimeout(function () {
-                                    $('#warning').css("display","none");
-                                    window.location="dashboard.php#/Inventory";
+                                    $('#warning').css("display", "none");
+                                    window.location = "dashboard.php#/Inventory";
                                 }, 2000);
                                 $scope.submitted = false;
 
                                 $scope.clearFields(outwardData);
                                 $scope.submitted = false;
-                                $scope.step=1;
+                                $scope.step = 1;
 
-                            }else{
-                                $('#loader').css("display","none");
-                                $rootScope.errorMessage=data.error;
-                                $('#error').css("display","block");
+                            } else {
+                                $('#loader').css("display", "none");
+                                $rootScope.errorMessage = data.error;
+                                $('#error').css("display", "block");
                                 setTimeout(function () {
-                                    $('#error').css("display","none");
+                                    $('#error').css("display", "none");
                                 }, 3000);
                             }
                             $scope.submitted = false;
@@ -867,11 +851,11 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
                         })
                         .error(function (data, status, headers) {
                             console.log(data);
-                            $('#loader').css("display","none");
-                            $rootScope.errorMessage=data.error;
-                            $('#error').css("display","block");
+                            $('#loader').css("display", "none");
+                            $rootScope.errorMessage = data.error;
+                            $('#error').css("display", "block");
                             setTimeout(function () {
-                                $('#error').css("display","none");
+                                $('#error').css("display", "none");
                             }, 3000);
                         });
                 };
@@ -893,8 +877,8 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
 
-        $scope.submitted= false;
-        $scope.step=1;
+        $scope.submitted = false;
+        $scope.step = 1;
     }
     /***********************************************
      *End of add Outward function
@@ -930,7 +914,7 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
 
                 doShowAlert("Success", data.msg);
                 setTimeout(function () {
-                    window.location="dashboard.php#/Inventory";
+                    window.location = "dashboard.php#/Inventory";
                 }, 1000);
 
 
@@ -949,7 +933,6 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
      * STart of clear field controller
      *************************************************/
     $scope.clearFields = function (OutwardData) {
-        //console.log("clearing");
         OutwardData.OutwardNumber = "";
         OutwardData.material = "";
         OutwardData.packageUnit = "";
@@ -966,14 +949,14 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
         OutwardData.transportAgency = "";
         OutwardData.driver = "";
         OutwardData.transportPayable = "";
-        OutwardData.hasTransportDetails="";
+        OutwardData.hasTransportDetails = "";
         OutwardData.outwardMaterials.splice(0, OutwardData.outwardMaterials.length);
         OutwardData.outwardMaterials.push({
             material: "",
             materialQuantity: "",
             packageUnit: "",
             suppplierName: "",
-            size:""
+            size: ""
         });
     };
     /***********************************************
@@ -1011,16 +994,14 @@ myApp.controller('outwardController', function ($scope,$rootScope, $http, outwar
 myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
     $scope.materialType = [];
     $scope.submitted = false;
-    $scope.errorMessage="";
-    $scope.warningMessage="";
+    $scope.errorMessage = "";
+    $scope.warningMessage = "";
     $scope.materialType.push({
         type: ""
     });
 
-    $scope.sizeCheck=function()
-    {
-        if($scope.materialType.length==0)
-        {
+    $scope.sizeCheck = function () {
+        if ($scope.materialType.length == 0) {
             return 0;
         }
         else
@@ -1069,9 +1050,9 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
  * START OF SUPPLIER CONTROLLER
  *Add Supplier controller
  **************************************************************************************************/
-myApp.controller('addSupplierController', function ($scope,$rootScope, $http, addSupplierService) {
+myApp.controller('addSupplierController', function ($scope, $rootScope, $http, addSupplierService) {
 
-    $scope.submitted=false;
+    $scope.submitted = false;
     $scope.supplier = {
         supplierName: "",
         contactNo: "",
@@ -1106,7 +1087,7 @@ myApp.controller('addSupplierController', function ($scope,$rootScope, $http, ad
     $scope.submitData = function (supplier) {
 
 
-        addSupplierService.addSupplier($scope,$rootScope,$http, supplier);
+        addSupplierService.addSupplier($scope, $rootScope, $http, supplier);
     };
 
 
@@ -1116,9 +1097,9 @@ myApp.controller('addSupplierController', function ($scope,$rootScope, $http, ad
  */
 
 //Start of outward search controller
-myApp.controller('OutwardSearchController',function($http,$scope,$rootScope){
+myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope) {
 
-    $scope.keyword="";
+    $scope.keyword = "";
     $scope.totalOutwardItems = 0;
     $scope.currentOutwardPage = 1;
     $scope.InventoryOutwardItemsPerPage = 10;
@@ -1139,41 +1120,32 @@ myApp.controller('OutwardSearchController',function($http,$scope,$rootScope){
     };
 
 
-
-
-    $scope.getOutwardDetails = function()
-    {
-        $scope.materialDetails=[];
+    $scope.getOutwardDetails = function () {
+        $scope.materialDetails = [];
         var data = {
             module: 'outward',
             operation: 'search',
             keyword: $scope.keyword,
-            SearchTerm:$scope.SearchTerm
+            SearchTerm: $scope.SearchTerm
         }
         var config = {
             params: {
                 data: data
             }
         };
-
+        $('#loader').css("display", "block");
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                $scope.loading=true;
-                $('#loader').css("display","block");
-                //setTimeout(function(){
-                $scope.loading=false;
-                $('#loader').css("display","none");
-                //},1000);
-                console.log("IN INWARD Search");
+                $('#loader').css("display", "none");
+
                 $rootScope.OutwardSearchData = data;
                 $scope.totalOutwardItems = $rootScope.OutwardSearchData.length;
-                console.log(data);
             })
             .error(function (data, status, headers) {
                 console.log("IN SERVICE OF Inward Search Failure=");
                 console.log(data);
-                $scope.loading=false;
-                $('#loader').css("display","none");
+                $scope.loading = false;
+                $('#loader').css("display", "none");
             });
 
     };
@@ -1184,13 +1156,12 @@ myApp.controller('OutwardSearchController',function($http,$scope,$rootScope){
 //End of outward search controller
 
 
-
 /////////////////////////////////////////////////////////////////////////////////////
 //Start of inward search controller
 /////////////////////////////////////////////////////////////////////////////////////
 
-myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
-    $scope.keyword="";
+myApp.controller('InwardSearchController', function ($http, $scope, $rootScope) {
+    $scope.keyword = "";
     $scope.totalInwardItems = 0;
     $scope.currentInwardPage = 1;
     $scope.InventoryInwardItemsPerPage = 10;
@@ -1204,31 +1175,28 @@ myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
         return (begin <= index && index < end);
     };
 
-    $scope.getViewDataObject = function (product,materialDetails) {
-        console.log(product);
-        $scope.viewMaterials={};
+    $scope.getViewDataObject = function (product, materialDetails) {
+        $scope.viewMaterials = {};
         $scope.viewProduct = product;
-        $scope.viewMaterials =  $scope.viewProduct.materialDetails;
+        $scope.viewMaterials = $scope.viewProduct.materialDetails;
     }
-    $scope.getInwardDetails = function()
-    {
-        console.log($scope.SearchTerm);
-        $scope.materialDetails=[];
+    $scope.getInwardDetails = function () {
+        $scope.materialDetails = [];
         var data = {
             module: 'inward',
             operation: 'search',
             keyword: $scope.keyword,
-            SearchTerm:$scope.SearchTerm
+            SearchTerm: $scope.SearchTerm
         }
         var config = {
             params: {
                 data: data
             }
         };
-        $('#loader').css("display","block");
+        $('#loader').css("display", "block");
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
-                $('#loader').css("display","none");
+                $('#loader').css("display", "none");
                 $rootScope.InwardSearchData = data;
                 $scope.totalInwardItems = $rootScope.InwardSearchData.length;
 
@@ -1236,8 +1204,8 @@ myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
             .error(function (data, status, headers) {
                 console.log("IN SERVICE OF Inward Search Failure=");
                 console.log(data);
-                $scope.loading=false;
-                $('#loader').css("display","none");
+                $scope.loading = false;
+                $('#loader').css("display", "none");
             });
 
     };
@@ -1260,11 +1228,11 @@ myApp.controller('InwardSearchController',function($http,$scope,$rootScope){
  * End of product Search Controller
  *********************************************************************************************/
 
-myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) {
+myApp.controller('ProductSearchController', function ($scope, $http, $rootScope) {
     $scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
-    $scope.keyword="";
+    $scope.keyword = "";
     var isProductMasterTable = false;
     var isMaterialTable = false;
     var isPrductDetailsTable = false;
@@ -1272,51 +1240,42 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
 
     $http.get("Inventory/php/Material.php")
         .success(function (data) {
-            console.log("IN MATERIAL");
             $scope.materialNames = data;
-            console.log(data);
         });
     $scope.paginate = function (value) {
-        //console.log("In Paginate");
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
         end = begin + $scope.InventoryItemsPerPage;
         index = $scope.products.indexOf(value);
-        //console.log(index);
         return (begin <= index && index < end);
     };
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
     }
 
-    $scope.getProductDetails= function()
-    {
+    $scope.getProductDetails = function () {
         $scope.lodaing = "";
         var data = {
 
             keyword: $scope.keyword,
-            SearchTerm:$scope.SearchTerm
+            SearchTerm: $scope.SearchTerm
         }
         var config = {
             params: {
                 data: data
             }
         };
-        $http.post("Inventory/php/ProductSearch.php", null ,config)
+        $('#loader').css("display", "block");
+        $http.post("Inventory/php/ProductSearch.php", null, config)
             .success(function (data) {
-                console.log("Items Present in database");
-                console.log(data);
-                $scope.lodaing = true;
-                $('#loader').css("display","block");
-                $scope.lodaing = false;
-                $('#loader').css("display","none");
+                $('#loader').css("display", "none");
                 $rootScope.products = data;
                 $scope.totalItems = $rootScope.products.length;
             })
             .error(function (data, status, headers) {
                 console.log(data);
                 $scope.lodaing = false;
-                $('#loader').css("display","none");
+                $('#loader').css("display", "none");
             });
     }
 
@@ -1326,19 +1285,16 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
      **********************************************************************************/
     $scope.setMasterTable = function () {
         isProductMasterTable = true;
-        console.log("IN ng CHANGE");
     }
     $scope.setProductDetailsTable = function () {
         isPrductDetailsTable = true;
-        console.log("IN ng CHANGE");
     }
     $scope.setProductPackagingTable = function () {
         isProductPkgingTable = true;
-        console.log("IN ng CHANGE");
     }
     $scope.setProductMaterialTable = function () {
         isMaterialTable = true;
-        console.log("IN ng CHANGE");
+
     }
     /**********************************************************************************
      *End of Setters
@@ -1349,7 +1305,7 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
      * Return- Success or Failure
      ***********************************************************************************/
     $scope.updateProductInfo = function (product) {
-        console.log("Product in Update Info function");
+
         //Set Extra attribute in object to identify operation to be performed as update
         product.opertaion = "modify";
         //Check which tables should get affected
@@ -1368,22 +1324,20 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
             }
         };
         $scope.loading = true;
-        $('#loader').css("display","block");
+        $('#loader').css("display", "block");
         //call add product service
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
-                console.log("IN POST UPDATE OPERATION:");
-                console.log(data);
                 $scope.lodaing = false;
-                $('#loader').css("display","none");
-                if(data.msg!="") {
+                $('#loader').css("display", "none");
+                if (data.msg != "") {
                     //alert("Success", data.msg);
                     $scope.warningMessage = data.msg;
                     $('#warning').css("display", "block");
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.message!=""){
-                                $('#warning').css("display","none");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            if (data.message != "") {
+                                $('#warning').css("display", "none");
                             }
                         });
                     }, 3000);
@@ -1392,10 +1346,10 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
                     //alert("Success", data.error);
                     $scope.errorMessage = data.error;
                     $('#error').css("display", "block");
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            if(data.message!=""){
-                                $('#error').css("display","none");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            if (data.message != "") {
+                                $('#error').css("display", "none");
                             }
                         });
                     }, 3000);
@@ -1408,13 +1362,13 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
                 console.log(data.error);
                 //alert(data);
                 $scope.lodaing = false;
-                $('#loader').css("display","none");
+                $('#loader').css("display", "none");
                 $scope.errorMessage = data.error;
-                $('#error').css("display","block");
-                setTimeout(function() {
-                    $scope.$apply(function() {
-                        if(data.message!=""){
-                            $('#error').css("display","none");
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $scope.$apply(function () {
+                        if (data.message != "") {
+                            $('#error').css("display", "none");
                         }
                     });
                 }, 3000);
@@ -1429,7 +1383,6 @@ myApp.controller('ProductSearchController', function ($scope, $http,$rootScope) 
 });
 
 
-
 /*********************************************************************************************
  * START of Search Controller
  *********************************************************************************************/
@@ -1440,16 +1393,6 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     $scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.InventoryAvailableItemsPerPage = 10;
-
-    $scope.totalInwardItems = 0;
-    $scope.currentInwardPage = 1;
-    $scope.InventoryInwardItemsPerPage = 10;
-    $scope.InwardSearchData = [];
-
-    $scope.totalOutwardItems = 0;
-    $scope.currentOutwardPage = 1;
-    $scope.InventoryOutwardItemsPerPage = 10;
-    $scope.OutwardSearchData = [];
 
     $scope.inventoryData = {};
     $scope.transportMode = [
@@ -1472,43 +1415,36 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
         }
     };
 
-    $scope.loading=true;
-    $('#loader').css("display","block");
+    $scope.loading = true;
+    $('#loader').css("display", "block");
 
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
-            console.log("IN SERVICE OF Inventory Search=");
-            console.log(data);
-            setTimeout(function(){
-                $scope.loading=false;
-                $('#loader').css("display","none");
-            },3000);
+            $('#loader').css("display", "none");
             $scope.inventoryData = data;
-            $scope.paginateItemsPerPage = data;
+            $scope.InventoryAvailableItemsPerPage = data;
             $scope.totalItems = $scope.inventoryData.length;
-            console.log($scope.inventoryData);
+
         })
         .error(function (data, status, headers) {
             console.log("IN SERVICE OF Inventory Search Failure=");
             console.log(data);
-            setTimeout(function(){
-                $scope.loading=false;
-                $('#loader').css("display","none");
-            },3000);
+            $('#loader').css("display", "none");
+
         });
-    $scope.getViewDataObject = function (product,materialDetails) {
-        console.log(product);
-        $scope.viewMaterials={};
+    $scope.getViewDataObject = function (product, materialDetails) {
+
+        $scope.viewMaterials = {};
         $scope.viewProduct = product;
-        $scope.viewMaterials =  $scope.viewProduct.materialDetails;
+        $scope.viewMaterials = $scope.viewProduct.materialDetails;
     }
     $scope.getMaterialObject = function (product) {
         $scope.viewMaterials = product;
-        console.log($scope.viewMaterials);
+
     }
 
     $scope.getDataObjectToModify = function (product) {
-        $scope.modifyInwardData - product;
+        $scope.modifyInwardData = product;
     }
     /*************************************************
      * END of GETTING INVENTORY DATA
@@ -1517,86 +1453,23 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
         $scope.viewMaterials = $scope.selectedProduct.materialDetails;
-        console.log($scope.selectedProduct);
 
     }
-    /*************************************************
-     * START of GETTING INWARD DATA
-     **************************************************/
-
-    /*************************************************
-     * END of GETTING INWARD DATA
-     **************************************************/
 
 
-    /*************************************************
-     * START of GETTING OUTWARD DATA
-     **************************************************/
-    $scope.loading = "";
-    var data = {
-        module: 'outward',
-        operation: 'search'
-    }
-    var config = {
-        params: {
-            data: data
-        }
-    };
-    $scope.loading = "";
-    $http.post("Inventory/php/InventoryIndex.php", null, config)
-        .success(function (data) {
-            $scope.loading=true;
-            $('#loader').css("display","block");
-            //setTimeout(function(){
-                $scope.loading=false;
-                $('#loader').css("display","none");
-            //},3000);
-            console.log("IN Outward Search");
-            $scope.OutwardSearchData = data;
-            $scope.totalOutwardItems = $scope.OutwardSearchData.length;
-            console.log(data);
-        })
-        .error(function (data, status, headers) {
-            console.log("IN SERVICE OF Outward Search Failure=");
-            console.log(data);
-            //setTimeout(function(){
-                $scope.loading=false;
-                $('#loader').css("display","none");
-            //},3000);
-        });
-    /*************************************************
-     * END of GETTING INWARD DATA
-     **************************************************/
     /*
      Start of Pagination Function
      */
     $scope.paginate = function (value) {
-        //console.log("In Paginate");
+
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
         end = begin + $scope.InventoryAvailableItemsPerPage;
-        index = $scope.paginateItemsPerPage.indexOf(value);
-        //console.log(index);
+        index = $scope.InventoryAvailableItemsPerPage.indexOf(value);
+
         return (begin <= index && index < end);
     };
-    $scope.paginateInward = function (value) {
-        //console.log("In Paginate");
-        var begin, end, index;
-        begin = ($scope.currentInwardPage - 1) * $scope.InventoryInwardItemsPerPage;
-        end = begin + $scope.InventoryInwardItemsPerPage;
-        index = $scope.InwardSearchData.indexOf(value);
-        //console.log(index);
-        return (begin <= index && index < end);
-    };
-    $scope.paginateOutward = function (value) {
-        //console.log("In Paginate");
-        var begin, end, index;
-        begin = ($scope.currentOutwardPage - 1) * $scope.InventoryOutwardItemsPerPage;
-        end = begin + $scope.InventoryOutwardItemsPerPage;
-        index = $scope.OutwardSearchData.indexOf(value);
-        //console.log(index);
-        return (begin <= index && index < end);
-    };
+
     /*
      End of Pagination Function
      */
@@ -1612,15 +1485,15 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
  * Start of of PRODUCTION BATCH
  *********************************************************************************************/
 
-myApp.controller('productionBatchController', function ($scope,$rootScope, $filter, $http,inventoryService, ProductionBatchService) {
+myApp.controller('productionBatchController', function ($scope, $rootScope, $filter, $http, inventoryService, ProductionBatchService) {
 
-    $scope.nextStep =false;
-    $scope.qtyError=0;
+    $scope.nextStep = false;
+    $scope.qtyError = 0;
     $scope.currentPage = 1;
     $scope.prodBatchPerPage = 10;
-    $scope.submitted=false;
+    $scope.submitted = false;
 
-    $scope.paginate = function(value) {
+    $scope.paginate = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.prodBatchPerPage;
@@ -1629,7 +1502,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         //console.log(index);
         return (begin <= index && index < end);
     };
-    $scope.paginate1 = function(value) {
+    $scope.paginate1 = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.prodBatchPerPage;
@@ -1639,9 +1512,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         return (begin <= index && index < end);
     };
 
-    $scope.formatDate=function()
-    {
-        $scope.prodBatchInfo.endDate=$filter("date")($scope.prodBatchInfo.endDate, 'dd-MM-yyyy');
+    $scope.formatDate = function () {
+        $scope.prodBatchInfo.endDate = $filter("date")($scope.prodBatchInfo.endDate, 'dd-MM-yyyy');
     }
 
     var data = {
@@ -1661,7 +1533,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
     $scope.maxDate = new Date(2020, 5, 22);
 
-    $scope.openPicker = function() {
+    $scope.openPicker = function () {
         $scope.popup1.opened = true;
     };
 
@@ -1669,7 +1541,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         opened: false
     };
 
-    $scope.openStart = function() {
+    $scope.openStart = function () {
         $scope.showStart.opened = true;
     };
 
@@ -1677,7 +1549,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         opened: false
     };
 
-    $scope.openEnd = function() {
+    $scope.openEnd = function () {
         $scope.showEnd.opened = true;
     };
 
@@ -1689,10 +1561,10 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         .success(function (data) {
             console.log("IN SERVICE OF Inventory Search=");
             console.log(data);
-            $scope.loading=true;
-            $('#loader').css("display","block");
-            $scope.loading=false;
-            $('#loader').css("display","none");
+            $scope.loading = true;
+            $('#loader').css("display", "block");
+            $scope.loading = false;
+            $('#loader').css("display", "none");
             $scope.inventoryData = data;
             $scope.paginateItemsPerPage = data;
             $scope.totalItems = $scope.inventoryData.length;
@@ -1701,8 +1573,8 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         .error(function (data, status, headers) {
             console.log("IN SERVICE OF Inventory Search Failure=");
             console.log(data);
-            $scope.loading=false;
-            $('#loader').css("display","none");
+            $scope.loading = false;
+            $('#loader').css("display", "none");
         });
 
     $scope.getAvailableQty = function (pMaterialId) {
@@ -1711,22 +1583,21 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         for (var i = 0; i < $scope.inventoryData.length; i++) {
             if (pMaterialId == $scope.inventoryData[i].materialid) {
                 qty = $scope.inventoryData[i].totalquantity;
-                if(qty!="undefined") {
+                if (qty != "undefined") {
                     console.log("here");
                     $scope.availableTotalquantity = qty;
                 }
                 else {
                     $scope.availableTotalquantity = 0;
-                    qty=0;
+                    qty = 0;
                 }
                 //console.log(qty);
                 console.log($scope.availableTotalquantity);
                 break;
             }
-            else
-            {
-                qty=0;
-                $scope.availableTotalquantity=0;
+            else {
+                qty = 0;
+                $scope.availableTotalquantity = 0;
 
             }
         }
@@ -1734,33 +1605,28 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         return qty;
     };
 
-    $scope.check= function(quantity)
-    {
+    $scope.check = function (quantity) {
         console.log(quantity);
         console.log($scope.availableTotalquantity);
 
-        if($scope.availableTotalquantity<quantity || $scope.availableTotalquantity == 0 )
-        {
+        if ($scope.availableTotalquantity < quantity || $scope.availableTotalquantity == 0) {
 
             //console.log("m alo nighalo");
-            $scope.qtyError= 1;
+            $scope.qtyError = 1;
             console.log($scope.qtyError);
         }
-        else
-        {
+        else {
             //console.log("kai prob ahe rao");
-            $scope.qtyError= 0;
+            $scope.qtyError = 0;
         }
     };
-
 
 
     // check for fetching inventory details END
 
 
-
-    inventoryService.getCompanys($scope,$http);
-    inventoryService.getWarehouses($scope,$http);
+    inventoryService.getCompanys($scope, $http);
+    inventoryService.getWarehouses($scope, $http);
     //$scope.today = $filter("date")(Date.now(), 'yyyy-MM-dd');
     //$scope.today1 = Date();
     $scope.today1 = $filter("date")(Date.now(), 'dd-MM-yyyy');
@@ -1772,7 +1638,6 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
         $scope.step--;
     };
-
 
 
     $http.post("Inventory/php/fetch_materials.php", null)
@@ -1861,24 +1726,24 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
         console.log(prodBatchInfo);
         prodBatchInfo.option = message;
 
-        $scope.today = function(){
+        $scope.today = function () {
             $scope.prodBatchInfo.dateOfEntryAftrProd = new Date();
         };
 
-        $scope.openDOE = function(){
+        $scope.openDOE = function () {
             $scope.showPicker.opened = true;
         };
 
         $scope.showPicker = {
-            opened:false
+            opened: false
         }
 
-        $scope.prodDOE = function(){
+        $scope.prodDOE = function () {
             $scope.dateOfEntry.opened = true;
         };
 
         $scope.dateOfEntry = {
-            opened:false
+            opened: false
         };
 
         if (prodBatchInfo.option == 'complete' && prodBatchInfo.tranReq != true) {
@@ -1908,18 +1773,18 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             prodBatchInfo.step = $scope.step;
             prodBatchInfo.option = message;
 
-            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
-            $scope.submitted=false;
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo, $rootScope);
+            $scope.submitted = false;
             setTimeout(function () {
-             window.location="dashboard.php#/Inventory/prodInit";
-             }, 1000);
+                window.location = "dashboard.php#/Inventory/prodInit";
+            }, 1000);
         }
         else if (message == 'Modify') {
             console.log(prodBatchInfo);
             if (page == 'final') {
                 prodBatchInfo.step = $scope.step;
                 prodBatchInfo.option = message;
-                ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
+                ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo, $rootScope);
                 /*setTimeout(function () {
                  window.location="dashboard.php#/Inventory/prodInit";
                  }, 1000);*/
@@ -1935,21 +1800,20 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             $scope.prodBatchInfo.step = $scope.step;
             //$scope.submitPart();
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
-            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo, $rootScope);
             //$scope.submitted=false;
             console.log($scope.submitted);
-           /* setTimeout(function () {
-                window.location="dashboard.php#/Inventory/prodInit";
-            }, 1000);*/
+            /* setTimeout(function () {
+             window.location="dashboard.php#/Inventory/prodInit";
+             }, 1000);*/
 
 
         }
         else if (page == "Search" || page == 'Complete') {
             prodBatchInfo.option = message;
             prodBatchInfo.step = 0;
-            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo,$rootScope);
-            if(page =='Complete')
-            {
+            ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo, $rootScope);
+            if (page == 'Complete') {
                 /* setTimeout(function () {
                  window.location="dashboard.php#/Inventory";
                  }, 1000);*/
@@ -1959,10 +1823,10 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
     };
 
 
-    $scope.getProdInfo = function (prodInfo,index) {
+    $scope.getProdInfo = function (prodInfo, index) {
 
         $scope.modProdBatchInfo = prodInfo;
-        $scope.modProdBatchInfo.selectedIndex=index;
+        $scope.modProdBatchInfo.selectedIndex = index;
 
 
         //console.log($scope.selectedProdBatchInfo);
@@ -1970,7 +1834,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
     $scope.clear = function (page) {
 
-        console.log('inside clear'+$scope.submitted);
+        console.log('inside clear' + $scope.submitted);
         if (page == 'Init') {
             $scope.prodBatchInfo.batchNo = "";
             $scope.prodBatchInfo.batchCodeName = "";

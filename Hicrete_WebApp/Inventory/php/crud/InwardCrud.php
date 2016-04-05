@@ -47,13 +47,9 @@ class InwardData extends CommonMethods
          ********************************************************/
         if ($inwardDetails->operation == 'insert') {
             $this->inwardNumber = $inwardDetails->inwardData->inwardNumber;
-//            $this->material = $inwardDetails->inwardData->material;
-//            $this->packageUnit = $inwardDetails->inwardData->packageUnit;
             $this->companyName = $inwardDetails->inwardData->companyName;
-//            $this->suppplierName = $inwardDetails->inwardData->suppplierName;
             $this->dateOfInward = $inwardDetails->inwardData->date;
 
-//            $this->materialQty = $inwardDetails->inwardData->materialQuantity;
             $this->warehouse = $inwardDetails->inwardData->warehouseName;
             $this->suppervisor = $inwardDetails->inwardData->suppervisor;
             $this->hasTransportDetails = $inwardDetails->inwardData->hasTransportDetails;
@@ -69,24 +65,21 @@ class InwardData extends CommonMethods
     }
 
     //Function to fetch unit of measure
-    public static function getUnitOfMeasure($dbh,$materialId)
+    public static function getUnitOfMeasure($dbh, $materialId)
     {
-        try{
+        try {
             $stmt = $dbh->prepare("select a.unitofmeasure as unitofmeasure from product_master a, material b where a.productmasterid=b.productmasterid and b.materialid=:materialid");
             $stmt->bindParam(':materialid', $materialId, PDO::PARAM_STR, 10);
-            if($stmt->execute())
-            {
-                $json_array=array();
+            if ($stmt->execute()) {
+                $json_array = array();
                 while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     //$result = $stmt->fetch(PDO::FETCH_ASSOC);
-                    $json_array['unitofmeasure']=$result['unitofmeasure'];
+                    $json_array['unitofmeasure'] = $result['unitofmeasure'];
                 }
             }
             echo json_encode($json_array);
 
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
 
         }
 
@@ -98,7 +91,7 @@ class InwardData extends CommonMethods
      * @param1- $dbh connection object
      * Returns- inward entries
      ***********************************************************************************/
-    public function getInwardEntries($dbh,$keyword,$searchTerm,$dbhHicrete)
+    public function getInwardEntries($dbh, $keyword, $searchTerm, $dbhHicrete)
     {
         $keyword = "%" . $keyword . "%";
 
@@ -106,45 +99,43 @@ class InwardData extends CommonMethods
         $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
         //echo "select statement".$selectStatement;
 
-            switch ($searchTerm) {
-                case'InwardNo':
-                    $selectStatement = $selectStatement . " AND a.inwardno like :keyword";
-                    break;
-                case'Company':
-                    $selectStatement = $selectStatement . " AND b.companyName like :keyword";
-                    break;
-                case'Warehouse':
-                    $selectStatement = $selectStatement . " AND c.wareHouseName like :keyword";
-                    break;
-            }
+        switch ($searchTerm) {
+            case'InwardNo':
+                $selectStatement = $selectStatement . " AND a.inwardno like :keyword";
+                break;
+            case'Company':
+                $selectStatement = $selectStatement . " AND b.companyName like :keyword";
+                break;
+            case'Warehouse':
+                $selectStatement = $selectStatement . " AND c.wareHouseName like :keyword";
+                break;
+        }
 
-       // echo $selectStatement;
-        //$stmt = $dbh->prepare("SELECT * FROM inward");
         $stmt = $dbh->prepare($selectStatement);
 
-            if ($searchTerm == 'InwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
-                $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
-            }
+        if ($searchTerm == 'InwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
+            $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
+        }
 
         if ($stmt->execute()) {
             //push it into array
-            $json_array=array();
+            $json_array = array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $inwardData = array();
                 $inwardID = $result2['inwardid'];
-                $inwardData['inwardno']=$result2['inwardno'];
+                $inwardData['inwardno'] = $result2['inwardno'];
                 $inwardData['inwardid'] = $inwardID;
-                $inwardData['warehouseid']=$result2['warehouseid'];
-                $inwardData['companyid']=$result2['companyid'];
-                $inwardData['supervisorid']=$result2['supervisorid'];
-                $inwardData['dateofentry']=$result2['dateofentry'];
-                $inwardData['companyName']= $result2['companyName'];
-                $inwardData['warehouseName']=$result2['wareHouseName'];
-                $stmtTransport=$dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
+                $inwardData['warehouseid'] = $result2['warehouseid'];
+                $inwardData['companyid'] = $result2['companyid'];
+                $inwardData['supervisorid'] = $result2['supervisorid'];
+                $inwardData['dateofentry'] = $result2['dateofentry'];
+                $inwardData['companyName'] = $result2['companyName'];
+                $inwardData['warehouseName'] = $result2['wareHouseName'];
+                $stmtTransport = $dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
                 $stmtTransport->bindParam(':inwardID', $inwardID);
-                if($stmtTransport->execute()){
+                if ($stmtTransport->execute()) {
 
-                    if($stmtTransport->rowCount()!=0){
+                    if ($stmtTransport->rowCount() != 0) {
                         while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)) {
                             $inwardData['transportationmode'] = $resultTransport['transportationmode'];
                             $inwardData['vehicleno'] = $resultTransport['vehicleno'];
@@ -153,13 +144,13 @@ class InwardData extends CommonMethods
                             $inwardData['cost'] = $resultTransport['cost'];
                             $inwardData['remark'] = $resultTransport['remark'];
                         }
-                    }else {
-                        $inwardData['transportationmode']="--";
-                        $inwardData['vehicleno']="--";
-                        $inwardData['drivername']="--";
-                        $inwardData['transportagency']="--";
-                        $inwardData['cost']="--";
-                        $inwardData['remark']="--";
+                    } else {
+                        $inwardData['transportationmode'] = "--";
+                        $inwardData['vehicleno'] = "--";
+                        $inwardData['drivername'] = "--";
+                        $inwardData['transportagency'] = "--";
+                        $inwardData['cost'] = "--";
+                        $inwardData['remark'] = "--";
                     }
 
                 }
@@ -193,7 +184,7 @@ class InwardData extends CommonMethods
                         );
                     }
 
-                    array_push($json_array,$inwardData);
+                    array_push($json_array, $inwardData);
                 } else {
                     //Rollback
                 }
@@ -206,21 +197,25 @@ class InwardData extends CommonMethods
         }
 
     }
+
     /**********************************************************************************
      * End of get Inward function
      ***********************************************************************************/
-    public function isAvailable($dbh){
+    public function isAvailable($dbh)
+    {
         $stmt = $dbh->prepare("SELECT inwardno FROM inward WHERE inwardno =:inwardno");
-        $inwardNumber=trim($this->inwardNumber);
+        $inwardNumber = trim($this->inwardNumber);
         $stmt->bindParam(':inwardno', $inwardNumber, PDO::PARAM_STR, 10);
         $stmt->execute();
 
-        $count=$stmt->rowcount();
-        if($count!=0)
-        {return 1;}
-        else
-        {return 0;}
+        $count = $stmt->rowcount();
+        if ($count != 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
+
     /**********************************************************************************
      * Purpose- This function will insert inward data into DB
      * @param1- $dbh connection object
@@ -237,122 +232,116 @@ class InwardData extends CommonMethods
             $date = new DateTime($this->dateOfInward);
             $inwardDate = $date->format('Y-m-d');
 
-
-
-                $stmtInward = $dbh->prepare("INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime)
+            $stmtInward = $dbh->prepare("INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime)
              values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())");
-                $stmtInward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
-                $stmtInward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
-                $stmtInward->bindParam(':supervisorid', $this->suppervisor, PDO::PARAM_STR, 10);
-                $stmtInward->bindParam(':dateofentry', $inwardDate, PDO::PARAM_STR, 40);
-                $stmtInward->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
-                $stmtInward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-                $stmtInward->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':supervisorid', $this->suppervisor, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':dateofentry', $inwardDate, PDO::PARAM_STR, 40);
+            $stmtInward->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+            $stmtInward->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
 
-                if ($stmtInward->execute()) {
-                    $lastInwardId = $dbh->lastInsertId();
-                    $materials = $data->inwardData->inwardMaterials;
-                    //Insert Data into Inward Details table
-                    foreach ($materials as $material) {
-//                    $material->materialQuantity=$material->materialQuantity*$material->packagesize;
-                        //echo $material->materialQuantity;
-
-                        $stmtInwardDetails = $dbh->prepare("INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)
+            if ($stmtInward->execute()) {
+                $lastInwardId = $dbh->lastInsertId();
+                $materials = $data->inwardData->inwardMaterials;
+                //Insert Data into Inward Details table
+                foreach ($materials as $material) {
+                    $stmtInwardDetails = $dbh->prepare("INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)
                     values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())");
-                        $stmtInwardDetails->bindParam(':inwardid', $lastInwardId, PDO::PARAM_STR, 10);
-                        $stmtInwardDetails->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
-                        $stmtInwardDetails->bindParam(':supplierid', $material->suppplierName, PDO::PARAM_STR, 10);
-                        $stmtInwardDetails->bindParam(':quantity', $material->materialQuantity, PDO::PARAM_STR, 40);
-                        $stmtInwardDetails->bindParam(':packagedunits', $material->packageUnit, PDO::PARAM_STR, 10);
-                        $stmtInwardDetails->bindParam(':size', $material->packagesize, PDO::PARAM_STR, 10);
-                        $stmtInwardDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-                        $stmtInwardDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
-                        if ($stmtInwardDetails->execute()) {
-                            $isSuccess = true;
-                            //Check if material already exist in inventory table if yes update else Insert
-                            $stmtAvailabiltyCheck = $dbh->prepare("SELECT materialid FROM inventory WHERE materialid=:materialid ");
-                            $stmtAvailabiltyCheck->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
-                            //$stmtAvailabiltyCheck->bindParam(':packagingType', $material->packageUnit, PDO::PARAM_STR, 10);
-                            //$stmtAvailabiltyCheck->bindParam(':packagingSize', $material->packagesize, PDO::PARAM_STR, 10);
-                            $stmtAvailabiltyCheck->execute();
-                            $count = $stmtAvailabiltyCheck->rowcount();
-                            if ($count != 0) {
-                                //UPDATE
-                                $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
+                    $stmtInwardDetails->bindParam(':inwardid', $lastInwardId, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':supplierid', $material->suppplierName, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':quantity', $material->materialQuantity, PDO::PARAM_STR, 40);
+                    $stmtInwardDetails->bindParam(':packagedunits', $material->packageUnit, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':size', $material->packagesize, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                    $stmtInwardDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+                    if ($stmtInwardDetails->execute()) {
+                        $isSuccess = true;
+                        //Check if material already exist in inventory table if yes update else Insert
+                        $stmtAvailabiltyCheck = $dbh->prepare("SELECT materialid FROM inventory WHERE materialid=:materialid ");
+                        $stmtAvailabiltyCheck->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+
+                        $stmtAvailabiltyCheck->execute();
+                        $count = $stmtAvailabiltyCheck->rowcount();
+                        if ($count != 0) {
+                            //UPDATE
+                            $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :totalquantity,
                                         warehouseid=:warehouseid,companyid=:companyid
                             WHERE materialid = :materialid");
 
-                                $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
-                                $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
-                                $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
-                                $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
 
-                                if ($stmtInventory->execute()) {
-                                    $isSuccess = true;
-                                } else {
-                                    $isSuccess = false;
-                                }
+                            if ($stmtInventory->execute()) {
+                                $isSuccess = true;
                             } else {
-                                //Insert
-                                $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
+                                $isSuccess = false;
+                            }
+                        } else {
+                            //Insert
+                            $stmtInventory = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
                                                       values (:materialid,:warehouseid,:companyid,:totalquantity)");
 
-                                $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
 
-                                $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
-                                $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
-                                $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
+                            $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
 
 
-                                if ($stmtInventory->execute()) {
-                                    $isSuccess = true;
-                                } else {
-                                    $isSuccess = false;
-                                }
-                            }
-                        } else {
-                            $isSuccess = false;
-                        }
-                    }
-
-                    if ($isSuccess) {
-                        $lastInwardDetailsId = $dbh->lastInsertId();
-                        // Insert Data into Transport Details Table
-                        if ($this->hasTransportDetails == 'Yes') {
-                            $stmtTransportDetails = $dbh->prepare("INSERT INTO inward_transportation_details (inwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)
-                       values (:inwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchnguserid,now(),:creuserid,now(),:remark)");
-                            $stmtTransportDetails->bindParam(':inwardid', $lastInwardId, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':transportationmode', $this->transportMode, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':vehicleno', $this->vehicleNumber, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':drivername', $this->driverName, PDO::PARAM_STR, 40);
-                            $stmtTransportDetails->bindParam(':transportagency', $this->transportAgency, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':cost', $this->transportCost, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
-                            $stmtTransportDetails->bindParam(':remark', $this->remark, PDO::PARAM_STR, 10);
-
-                            if ($stmtTransportDetails->execute()) {
-                                $lastTransportId = $dbh->lastInsertId();
-                                $this->showAlert('success', "Inward details added Successfully!!!");
-                                $dbh->commit();
-                                //MAP PURCHASE ORDER TO INWARD ENTRY HERE
+                            if ($stmtInventory->execute()) {
+                                $isSuccess = true;
                             } else {
-                                $this->showAlert('Failure', "Error while adding transport");
-                                $dbh->rollBack();
+                                $isSuccess = false;
                             }
-                        } else {
-                            $this->showAlert('success', "Inward details added Successfully!!!");
-                            $dbh->commit();
                         }
                     } else {
-                        $this->showAlert('Failure', "Error while adding 2nd");
-                        $dbh->rollBack();
+                        $isSuccess = false;
                     }
+                }
 
+                if ($isSuccess) {
+                    $lastInwardDetailsId = $dbh->lastInsertId();
+                    // Insert Data into Transport Details Table
+                    if ($this->hasTransportDetails == 'Yes') {
+                        $stmtTransportDetails = $dbh->prepare("INSERT INTO inward_transportation_details (inwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)
+                       values (:inwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchnguserid,now(),:creuserid,now(),:remark)");
+                        $stmtTransportDetails->bindParam(':inwardid', $lastInwardId, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':transportationmode', $this->transportMode, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':vehicleno', $this->vehicleNumber, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':drivername', $this->driverName, PDO::PARAM_STR, 40);
+                        $stmtTransportDetails->bindParam(':transportagency', $this->transportAgency, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':cost', $this->transportCost, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+                        $stmtTransportDetails->bindParam(':remark', $this->remark, PDO::PARAM_STR, 10);
+
+                        if ($stmtTransportDetails->execute()) {
+                            $lastTransportId = $dbh->lastInsertId();
+                            $this->showAlert('success', "Inward details added Successfully!!!");
+                            $dbh->commit();
+                            //MAP PURCHASE ORDER TO INWARD ENTRY HERE
+                        } else {
+                            $this->showAlert('Failure', "Error while adding transport");
+                            $dbh->rollBack();
+                        }
+                    } else {
+                        $this->showAlert('success', "Inward details added Successfully!!!");
+                        $dbh->commit();
+                    }
                 } else {
-                    $this->showAlert('Failure', "Error while adding 1st");
+                    $this->showAlert('Failure', "Error while adding 2nd");
                     $dbh->rollBack();
                 }
+
+            } else {
+                $this->showAlert('Failure', "Error while adding 1st");
+                $dbh->rollBack();
+            }
 
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -436,10 +425,8 @@ class InwardData extends CommonMethods
             $stmtTransportDetailsUpdate->bindParam(':remark', $InwardDetails->remark, PDO::PARAM_STR, 10);
             $stmtTransportDetailsUpdate->bindParam(':inwardtranspid', $InwardDetails->inwardtranspid, PDO::PARAM_STR, 10);
             if ($stmtTransportDetailsUpdate->execute()) {
-                // $this->showAlert('success',"Inward details updated Successfully!!!");
                 $flag = true;
             } else {
-                // $this->showAlert('Failure',"Error while adding");
                 $flag = false;
             }
         }
@@ -447,9 +434,6 @@ class InwardData extends CommonMethods
         if ($flag) {
             $this->showAlert('success', "Inward details updated Successfully!!!");
             $dbh->commit();
-            $pmateriID = $InwardDetails->materialid;
-            $pmaterialQty = $InwardDetails->quantity;
-            //  $this->updateInventoryTable($dbh,$pmateriID,$pmaterialQty);
         } else {
             $this->showAlert('Failure', "Error");
             $dbh->rollback();
