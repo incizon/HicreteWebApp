@@ -1,5 +1,6 @@
 <?php
 require_once 'Database/Database.php';
+require_once "../../php/HicreteLogger.php";
 
 $db = Database::getInstance();
 $dbh = $db->getConnection();
@@ -15,25 +16,31 @@ $userId = $_SESSION['token'];
 switch ($data->operation) {
     case "search":
         try {
-            $stmt = $dbh->prepare("select supplierid,suppliername from supplier");
+            HicreteLogger::logInfo("Searching suppliers");
+            $stmt = $dbh->prepare("select * from supplier");
 
             if ($stmt->execute()) {
                 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
                 $result = $stmt->fetchAll();
                 $json = json_encode($result);
+                HicreteLogger::logInfo("Data fetch successful:\n".$json);
                 echo $json;
             } else {
-                echo "statement failed";
+                HicreteLogger::logInfo("Data fetch failed:\n");
+                $arr = array('msg' => '', 'error' => 'Data fetching failed');
+                $jsn = json_encode($arr);
+                echo($jsn);
             }
 
 
-        } catch (exception $e) {
+        } catch (Exception $e) {
+            HicreteLogger::logInfo("Exception occured :\n".$e->getMessage());
             echo "Exception occured";
         }
         break;
     case "modify":
         try {
-
+            HicreteLogger::logInfo("Modifying suppliers");
             $stmt = $dbh->prepare("UPDATE `supplier` SET `suppliername`=:supplierName,`contactno`=:contactNo,`pointofcontact`=:pointofcontact,`officeno`=:officeno,`cstno`=:cstno,`vatno`=:vatno,`address`=:address,`city`=:city,`country`=:country,`pincode`=:pincode,`lchnguserid`=:userId,`lchngtime`=now() WHERE supplierid=:supplierId");
             $stmt->bindParam(':supplierName', $data->data->suppliername, PDO::PARAM_STR);
             $stmt->bindParam(':contactNo', $data->data->contactno, PDO::PARAM_STR);
@@ -47,17 +54,24 @@ switch ($data->operation) {
             $stmt->bindParam(':pincode', $data->data->pincode, PDO::PARAM_STR);
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':supplierId', $data->data->supplierid, PDO::PARAM_STR);
+
+            HicreteLogger::logInfo("Query:\n ".json_encode($stmt));
             if ($stmt->execute()) {
+                HicreteLogger::logInfo("Supplier Modified . \n".json_encode($data->data));
                 $arr = array('msg' => 'Supplier modified successfully', 'error' => '');
                 $jsn = json_encode($arr);
                 echo($jsn);
             } else {
+                HicreteLogger::logInfo("Error while modifying suppliers. \n".json_encode($data->data));
                 $arr = array('msg' => '', 'error' => 'Error occured while modifying supplier');
                 $jsn = json_encode($arr);
                 echo($jsn);
             }
-        } catch (exception $e) {
-
+        } catch (Exception $e) {
+            HicreteLogger::logFatal("Exception occured\n".$e->getMessage());
+            $arr = array('msg' => '', 'error' => 'Exception occured while modifying supplier');
+            $jsn = json_encode($arr);
+            echo($jsn);
         }
 
         break;
