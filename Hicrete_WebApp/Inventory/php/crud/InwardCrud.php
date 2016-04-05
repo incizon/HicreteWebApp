@@ -128,7 +128,6 @@ class InwardData extends CommonMethods
 
         if ($stmt->execute()) {
             //push it into array
-            $material=InventoryUtils::getProductById('97');
             $json_array=array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $inwardData = array();
@@ -139,10 +138,6 @@ class InwardData extends CommonMethods
                 $inwardData['companyid']=$result2['companyid'];
                 $inwardData['supervisorid']=$result2['supervisorid'];
                 $inwardData['dateofentry']=$result2['dateofentry'];
-                $warehouseId=$result2['warehouseid'];
-                $companyId=$result2['companyid'];
-                //$inwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
-                //$inwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
                 $inwardData['companyName']= $result2['companyName'];
                 $inwardData['warehouseName']=$result2['wareHouseName'];
                 $stmtTransport=$dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");
@@ -168,12 +163,10 @@ class InwardData extends CommonMethods
                     }
 
                 }
-                //push inward data into array
-
-                //push inward transport details data into array
 
                 // Join
-                $stmt1 = $dbh->prepare("SELECT * FROM inward_details
+                $stmt1 = $dbh->prepare("SELECT inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,
+                       inward_details.size,supplier.supplierid,supplier.suppliername,material.materialid,product_master.productname FROM inward_details
                         JOIN supplier ON
                         inward_details.supplierid=supplier.supplierid
                         JOIN material ON
@@ -218,8 +211,8 @@ class InwardData extends CommonMethods
      ***********************************************************************************/
     public function isAvailable($dbh){
         $stmt = $dbh->prepare("SELECT inwardno FROM inward WHERE inwardno =:inwardno");
-
-        $stmt->bindParam(':inwardno', $this->inwardNumber, PDO::PARAM_STR, 10);
+        $inwardNumber=trim($this->inwardNumber);
+        $stmt->bindParam(':inwardno', $inwardNumber, PDO::PARAM_STR, 10);
         $stmt->execute();
 
         $count=$stmt->rowcount();
