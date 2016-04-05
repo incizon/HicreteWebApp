@@ -2071,7 +2071,14 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
                 .success(function (data, status, headers) {
                     console.log("In View Project=");
                     console.log(data);
+                    $rootScope.loading=true;
+                    $('#loader').css("display","block");
+
                     if (data.status == "Successful") {
+                        setTimeout(function(){
+                            $rootScope.loading=false;
+                            $('#loader').css("display","none");
+                        },3000);
                         for (var i = 0; i < data.message.length; i++) {
                             project.push({
                                 'project_name': data.message[i].ProjectName,
@@ -2099,21 +2106,39 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
                         $rootScope.projectSearch = project;
                         if ($rootScope.projectSearch.length == 0) {
-                            alert("No Data Found For Search Criteria");
+                            $rootScope.errorMessage = "No Data Found For Search Criteria..";
+                            $('#error').css("display","block");
+                            setTimeout(function(){
+                                $('#error').css("display","none");
+                            },3000);
+                            //alert("No Data Found For Search Criteria");
                         }
                     } else {
-                        alert(data.message);
+                        $rootScope.errorMessage = data.message;
+                        $('#error').css("display","block");
+                        setTimeout(function(){
+                            $('#error').css("display","none");
+                        },3000);
+                        //alert(data.message);
                     }
 
                 }).error(function (data, status, headers) {
-
+                $rootScope.errorMessage = data.message;
+                $('#error').css("display","block");
+                setTimeout(function(){
+                    $('#error').css("display","none");
+                },3000);
             });
             // $http.get("php/api/projects/search/" + $scope.searchBy + "/" + $scope.searchKeyword).then(function (response) {
 
 
         } else {
-
-            alert("Please Select Search By From SelectList");
+            $rootScope.errorMessage = "Please Select Search By From SelectList..";
+            $('#error').css("display","block");
+            setTimeout(function(){
+                $('#error').css("display","none");
+            },3000);
+            //alert("Please Select Search By From SelectList");
         }
     }
 
@@ -2177,7 +2202,15 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
                 .success(function (data) {
                     console.log(data);
                     if (data.status == "Successful") {
+                        $rootScope.loading=true;
+                        $('#loader').css("display","block");
+
+
                         for (var i = 0; i < data.message.length; i++) {
+                            setTimeout(function(){
+                                $rootScope.loading=false;
+                                $('#loader').css("display","none");
+                            },3000);
 
                             cust.push({
                                 id: data.message[i].CustomerId,
@@ -2204,18 +2237,42 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 
                     } else {
 
-                        alert(response.data.message);
+                        $scope.errorMessage= response.data.message;
+                        $('#error').css("display","block");
+                        console.log($scope.errorMessage);
+                        setTimeout(function() {
+                            $scope.$apply(function() {
+                                $('#error').css("display","none");
+                            });
+                        }, 3000);
+                        //alert(response.data.message);
 
 
                     }
 
                 })
                 .error(function (data, status, headers, config) {
-                    alert("Error Occured" + data);
+                    $scope.errorMessage= "Error occurred..";
+                    $('#error').css("display","block");
+                    console.log($scope.errorMessage);
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
+                    //alert("Error Occured" + data);
                 });
         }
         else {
-            alert("Please select search by list");
+            $scope.errorMessage= "Please select search by list..";
+            $('#error').css("display","block");
+            console.log($scope.errorMessage);
+            setTimeout(function() {
+                $scope.$apply(function() {
+                    $('#error').css("display","none");
+                });
+            }, 3000);
+            //alert("Please select search by list");
         }
 
 

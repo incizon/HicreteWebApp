@@ -248,128 +248,9 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                      </ul>  -->
                 </div>
 
-                <!--<table id="supplierDetails">
 
-                    <tr>
-                        <th>Supplier Name :</th>
-                        <td><input type="text" ng-model="selectedSupplier.suppliername"></td>
-                    </tr>
-                    <tr>
-                        <th>Contact No :</th>
-                        <td>
-                            <input type="text" ng-model="selectedSupplier.contactno">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Point Of Contact :</th>
-                        <td><input type="text" ng-model="selectedSupplier.pointofcontact">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Office Number :</th>
-                        <td><input type="text" ng-model="selectedSupplier.officeno">
+            </div>
 
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>Vat Number :</th>
-                        <td><input type="text" ng-model="selectedSupplier.vatno">
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <th>CST Number :</th>
-                        <td><input type="text" ng-model="selectedSupplier.cstno">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Address :</th>
-                        <td><input type="text" ng-model="selectedSupplier.address">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>City :</th>
-                        <td><input type="text" ng-model="selectedSupplier.city">
-                        </td>
-
-                    </tr>
-
-                    <tr>
-                        <th>Country :</th>
-                        <td><input type="text" ng-model="selectedSupplier.country">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>Pincode :</th>
-                        <td><input type="text" ng-model="selectedSupplier.pincode">
-                        </td>
-                    </tr>
-
-
-
-
-                </table>
--->            </div>
-
-
-            <!--<div class="modal-body">
-                <table id="supplierDetails">
-
-                    <tr>
-                        <th>Supplier Name :</th>
-                        <td>{{selectedSupplier.suppliername}}</td>
-
-                    </tr>
-                    <tr>
-                        <th>Contact No :</th>
-                        <td>{{selectedSupplier.contactno}}</td>
-                    </tr>
-                    <tr>
-                        <th>Point Of Contact :</th>
-                        <td>{{selectedSupplier.pointofcontact}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Office Number :</th>
-                        <td>{{selectedSupplier.officeno}}
-                        </td>
-
-                    </tr>
-
-
-
-                    <tr>                                                 <th>Vat Number :</th>
-                        <td>{{selectedSupplier.vatno}}</td>
-
-                    </tr>
-                    <tr>                                                 <th>CST Number :</th>
-                        <td>{{selectedSupplier.cstno}}</td>
-
-                    </tr>
-                    <tr>                                                 <th>Address :</th>
-                        <td>{{selectedSupplier.address}}</td>
-
-                    </tr>
-
-                    <tr>                                                 <th>City :</th>
-                        <td>{{selectedSupplier.city}}</td>
-
-                    </tr>
-
-                    <tr>                                                 <th>Country :</th>
-                        <td>{{selectedSupplier.country}}</td>
-
-                    </tr>
-
-                    <tr>                                                 <th>Pincode :</th>
-                        <td>{{selectedSupplier.pincode}}</td>
-
-                    </tr>
-
-                </table>
-            </div>-->
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -392,7 +273,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
             </div>
             <div class="modal-body">
                 <div class="panel-body">
-
+                    <form name="modifySeupplier">
                     <div class="row"  style="margin-top: 1%;">
                         <div class="form-group">
                             <label class="col-md-4 col-xs-12 control-label">Name of Supplier</label>
@@ -527,70 +408,8 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                      </ul>  -->
                 </div>
 
-                <!--<table id="supplierDetails">
 
-                    <tr>
-                        <th>Supplier Name :</th>
-                        <td><input type="text" ng-model="selectedSupplier.suppliername"></td>
-                    </tr>
-                    <tr>
-                        <th>Contact No :</th>
-                        <td>
-                            <input type="text" ng-model="selectedSupplier.contactno">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Point Of Contact :</th>
-                        <td><input type="text" ng-model="selectedSupplier.pointofcontact">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Office Number :</th>
-                        <td><input type="text" ng-model="selectedSupplier.officeno">
-
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>Vat Number :</th>
-                        <td><input type="text" ng-model="selectedSupplier.vatno">
-                        </td>
-
-                    </tr>
-                    <tr>
-                        <th>CST Number :</th>
-                        <td><input type="text" ng-model="selectedSupplier.cstno">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Address :</th>
-                        <td><input type="text" ng-model="selectedSupplier.address">
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>City :</th>
-                        <td><input type="text" ng-model="selectedSupplier.city">
-                        </td>
-
-                    </tr>
-
-                    <tr>
-                        <th>Country :</th>
-                        <td><input type="text" ng-model="selectedSupplier.country">
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>Pincode :</th>
-                        <td><input type="text" ng-model="selectedSupplier.pincode">
-                        </td>
-                    </tr>
-
-
-
-
-                </table>
--->            </div>
+           </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" ng-click="modifySupplier()" data-dismiss="modal">Modify</button>

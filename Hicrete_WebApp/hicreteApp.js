@@ -133,7 +133,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Inventory.searchProduct', {
             url: '/searchProduct',
-            templateUrl: 'Inventory/html/search/Inventory_Items_Search.php',
+            templateUrl: 'Inventory/html/search/Inventory_Product_Search.php',
             controller: 'ProductSearchController'
         })
         .state('Inventory.searchInward', {
