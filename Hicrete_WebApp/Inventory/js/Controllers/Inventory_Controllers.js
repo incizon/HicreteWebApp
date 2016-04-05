@@ -1712,7 +1712,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
             if (pMaterialId == $scope.inventoryData[i].materialid) {
                 qty = $scope.inventoryData[i].totalquantity;
                 if(qty!="undefined") {
-                    console.log("here");
+                    //console.log("here");
                     $scope.availableTotalquantity = qty;
                 }
                 else {
@@ -1720,7 +1720,7 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
                     qty=0;
                 }
                 //console.log(qty);
-                console.log($scope.availableTotalquantity);
+                //console.log($scope.availableTotalquantity);
                 break;
             }
             else
@@ -1730,14 +1730,14 @@ myApp.controller('productionBatchController', function ($scope,$rootScope, $filt
 
             }
         }
-        console.log($scope.availableTotalquantity);
+        //console.log($scope.availableTotalquantity);
         return qty;
     };
 
     $scope.check= function(quantity)
     {
-        console.log(quantity);
-        console.log($scope.availableTotalquantity);
+        //console.log(quantity);
+        //console.log($scope.availableTotalquantity);
 
         if($scope.availableTotalquantity<quantity || $scope.availableTotalquantity == 0 )
         {
