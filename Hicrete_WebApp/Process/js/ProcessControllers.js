@@ -241,40 +241,37 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                                 data: data
                             }
                         };
-
+                        $('#loader').css("display", "block");
                         $http.post('Process/php/projectFacade.php', null, config)
                             .success(function (data, status, headers) {
                                 console.log(data);
                                 if (data.status == "Successful") {
-                                    $('#loader').css("display", "block");
-                                    //$scope.PostDataResponse = data;
                                     $('#loader').css("display", "none");
                                     $rootScope.warningMessage = data.message;
                                     $('#warning').css("display", "block");
                                     setTimeout(function () {
                                         $('#warning').css("display", "none");
-                                        window.location="dashboard.php#/Process/addProject";
+                                        window.location="dashboard.php#/Process";
                                     }, 1000);
-
                                     $scope.clearForm();
                                 }
                                 else {
+                                    $('#loader').css("display", "none");
                                     $rootScope.errorMessage = data.message;
                                     $('#error').css("display", "block");
                                     setTimeout(function () {
                                         $('#error').css("display", "none");
                                     }, 1000);
                                 }
-
                             })
                             .error(function (data, status, header) {
-                                //$scope.ResponseDetails = "Data: " + data;
+                                $('#loader').css("display", "none");
                                 console.log(data);
-                                $scope.errorMessage = data;
+                                $rootScope.errorMessage = "Unable to create Project..Please try again";
                                 $('#error').css("display", "block");
                                 setTimeout(function () {
                                     $('#error').css("display", "none");
-                                }, 1000);
+                                }, 3000);
                             });
                     }
                     $scope.clearForm = function () {
@@ -326,41 +323,39 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                 }
             };
 
+            $('#loader').css("display", "block");
             $http.post('Process/php/projectFacade.php', null, config)
                 .success(function (data, status, headers) {
                     console.log(data);
                     if (data.status == "Successful") {
-                        $('#loader').css("display", "block");
-                        //$scope.PostDataResponse = data;
                         $('#loader').css("display", "none");
                         $scope.warningMessage = data.message;
                         $('#warning').css("display", "block");
-                        $scope.clearForm();
+                        setTimeout(function () {
+                            $('#warning').css("display", "none");
+                            window.location="dashboard.php#/Process";
+                        }, 1000);
                     }
                     else {
+                        $('#loader').css("display", "none");
                         $scope.errorMessage = data.message;
                         $('#error').css("display", "block");
                         setTimeout(function () {
                             $('#error').css("display", "none");
-                        }, 1000);
+                        }, 3000);
                     }
-
-
-                    //alert(data.message);
-
                 })
                 .error(function (data, status, header) {
-                    //$scope.ResponseDetails = "Data: " + data;
+                    $('#loader').css("display", "none");
                     console.log(data);
-                    $scope.errorMessage = data;
+                    $scope.errorMessage = "Unable to create Project.Please try again";
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
-                    }, 1000);
-                    //alert(data);
+                    }, 3000);
                 });
+            }
         }
-    }
 
     $scope.clearForm = function () {
         $scope.projectDetails = {
@@ -382,7 +377,6 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
             $scope.Companies[i].checkVal = false;
         }
         $scope.formSubmitted = false;
-
     }
 });
 
@@ -430,7 +424,6 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                 alert(data.message);
                 return;
             }
-
             for (var i = 0; i < data.message.length; i++) {
                 $scope.projectQuotations.push({
                     QuotationTitle: data.message[i].QuotationTitle,
@@ -475,7 +468,6 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
         $http.post("Process/php/workorderFacade.php", null, config)
             .success(function (data) {
-
                 if (data.status != "Successful") {
                     alert(data.message);
                     return;
@@ -990,89 +982,106 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 quotationData.QuotationBlob = fileName;
                 var fd = new FormData();
                 fd.append('file', $scope.myFile);
+
+                $('#loader').css("display", "block");
+
                 $http.post("Process/php/uploadQuotation.php", fd, {
                         transformRequest: angular.identity,
                         headers: {'Content-Type': undefined}
                     })
                     .success(function (data) {
+
                         if (data.status == "Successful") {
                             console.log("Upload Successful");
+
+                            $('#loader').css("display", "none");
+
                             $http.post("Process/php/quotationFacade.php", null, config)
+
                                 .success(function (data) {
 
                                     if (data.status == "Successful") {
-                                        $('#loader').css("display", "block");
-                                        $('#loader').css("display", "none");
-                                        $scope.warningMessage = "Quotation is Created Successfully...'";
+                                        $scope.warningMessage = data.message;
                                         console.log($scope.warningMessage);
                                         $('#warning').css("display", "block");
                                         $scope.clearForm();
                                         setTimeout(function () {
                                             $('#warning').css("display", "none");
-                                            window.location = "dashboard.php#/Process/addQuotation";
+                                            window.location = "dashboard.php#/Process";
                                         }, 1000);
 
                                     } else {
-                                        alert(data.message);
+                                        $('#loader').css("display", "none");
+                                        $scope.errorMessage = data.message;
+                                        console.log($scope.errorMessage);
+                                        $('#error').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#error').css("display", "none");
+                                        }, 3000);
                                     }
-
                                 })
                                 .error(function (data) {
-                                    $('#loader').css("display", "block");
                                     $('#loader').css("display", "none");
-                                    $scope.errorMessage = "Error :" + data;
+                                    $scope.errorMessage = "Unable to create Quotation..Please try again";
                                     console.log($scope.errorMessage);
                                     $('#error').css("display", "block");
                                     setTimeout(function () {
                                         $('#error').css("display", "none");
-                                    }, 2000);
+                                    }, 3000);
                                 });
 
-
                         } else {
-                            alert(data.message);
+                            $('#loader').css("display", "none");
+                            $scope.errorMessage = data.message;
+                            console.log($scope.errorMessage);
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 3000);
                         }
                     })
                     .error(function () {
-                        $scope.errorMessage = "Something went wrong can not upload quoatation";
+                        $scope.errorMessage = "Something went wrong can not upload quotation";
                         $('#error').css("display", "block");
                     });
             }
 
         } else {
+            $('#loader').css("display", "block");
             $http.post("Process/php/quotationFacade.php", null, config)
                 .success(function (data) {
-
                     if (data.status == "Successful") {
-                        $('#loader').css("display", "block");
                         $('#loader').css("display", "none");
-                        $scope.warningMessage = "Quotation is Created Successfully...'";
+                        $scope.warningMessage = data.message;
                         console.log($scope.warningMessage);
                         $('#warning').css("display", "block");
                         $scope.clearForm();
                         setTimeout(function () {
                             $('#warning').css("display", "none");
-                            window.location = "dashboard.php#/Process/addQuotation";
+                            window.location = "dashboard.php#/Process";
                         }, 1000);
 
                     } else {
-                        alert(data.message);
+                        $('#loader').css("display", "none");
+                        $scope.errorMessage = data.message;
+                        console.log($scope.errorMessage);
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 3000);
                     }
-
                 })
                 .error(function (data) {
-                    $('#loader').css("display", "block");
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = "Error :" + data;
+                    $scope.errorMessage = "Unable to create Quotation..Please try again";
                     console.log($scope.errorMessage);
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
-                    }, 2000);
+                    }, 3000);
                 });
-
+            }
         }
-    }
 
 
     $scope.addRows = function () {
@@ -1090,7 +1099,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             });
         }
     }
-
     $scope.calculateTaxableAmount = function (index) {
 
         if ($scope.QuotationDetails.quotationItemDetails[index].isTaxAplicable) {
@@ -1114,7 +1122,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
-
     }
 
 
@@ -2351,7 +2358,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             companiesInvolved: companiesInvolved
         }
         // console.log("data is "+projectData);
-        $('#loader').css("display", "block");
+
         console.log("Posting");
         var data = {
             operation: "modifyProject",
@@ -2364,6 +2371,7 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
             }
         };
 
+        $('#loader').css("display", "block");
         $http.post("Process/php/projectFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
@@ -2544,6 +2552,7 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
 
 
 myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, AppService) {
+
     $scope.projects = [];
     var project = [];
 
@@ -2551,13 +2560,11 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
     $scope.sortReverse = false;
     AppService.getAllProjects($http, $scope.projects);
     console.log("in QuotationFollowupHistoryController");
-
     $scope.selectProject = function (projectId) {
         $scope.quotations = [];
         var quotation = []
         console.log("changed" + projectId);
         AppService.getAllQuotationOfProject($http, $scope.quotations, projectId);
-
     }
     $scope.showQuotationHistory = function () {
         $scope.followups = [];
@@ -2565,19 +2572,26 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
             operation: "getQuotationFollow",
             quotationId: $scope.selectedQuotationId
         };
-
         var config = {
             params: {
                 data: data
             }
         };
+        $('#loader').css("display", "block");
         $http.post('Process/php/followupFacade.php', null, config)
             .success(function (data) {
                 console.log("quote Followup");
                 console.log(data);
-                if (data.status != "Successful") {
-                    alert("Failed:" + data.message);
+                if (data.status !== "Successful") {
+                    $('#loader').css("display", "none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+
                 } else {
+                    $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
                         $scope.followups.push({
                             followup_id: data.message[i].FollowupId,
@@ -2591,7 +2605,12 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
                 }
             })
             .error(function (data, status, headers, config) {
-                alert("Error  Occurred:" + data);
+                $('#loader').css("display", "none");
+                $scope.errorMessage = "Could not fetch data";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
 
             });
     }
@@ -2601,8 +2620,6 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
         console.log("Quotation ID");
         console.log(quotationId);
     }
-
-
 });
 
 myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, AppService) {
@@ -2625,20 +2642,25 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
             operation: "getInvoiceFollowups",
             invoiceId: $scope.selectedInvoiceId
         };
-
         var config = {
             params: {
                 data: data
             }
         };
 
+        $('#loader').css("display", "block");
         $http.post('Process/php/followupFacade.php', null, config)
             .success(function (data) {
-
                 console.log(data);
                 if (data.status != "Successful") {
-                    alert("Failed:" + data.message);
+                    $('#loader').css("display", "none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                 } else {
+                    $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
                         $scope.followups.push({
                             followup_id: data.message[i].FollowupId,
@@ -2652,8 +2674,12 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
                 }
             })
             .error(function (data, status, headers, config) {
-                alert("Error  Occurred:" + data);
-
+                $('#loader').css("display", "none");
+                $scope.errorMessage = "Could not fetch data";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
 
     }
@@ -2679,14 +2705,20 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
                 data: data
             }
         };
-        console.log(config);
+
+        $('#loader').css("display", "block");
         $http.post("Process/php/projectFacade.php", null, config)
             .success(function (data) {
-
                 console.log(data);
                 if (data.status != "Successful") {
-                    alert("Failed:" + data.message);
+                    $('#loader').css("display", "none");
+                    $scope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                 } else {
+                    $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
                         $scope.followups.push({
                             followup_id: data.message[i].FollowupId,
@@ -2700,10 +2732,13 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
                 }
             })
             .error(function (data, status, headers, config) {
-                alert("Error  Occurred:" + data);
-
+                $('#loader').css("display", "none");
+                $scope.errorMessage = "Could not fetch data";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
-
     }
 
 });
@@ -2958,43 +2993,41 @@ myApp.controller('CustomerController', function ($scope, $http) {
             }
         };
 
+        $('#loader').css("display", "block");
         $http.post('Process/php/customerFacade.php', null, config)
             .success(function (data, status, headers) {
                 console.log(data);
+
                 if (data.status == "Successful") {
-                    $('#loader').css("display", "block");
                     $scope.postCustData = data;
                     $('#loader').css("display", "none");
-                    //alert("Customer created Successfully");
-                    $scope.warningMessage = "Customer created Successfully";
+                    $scope.warningMessage = data.message;
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                         $('#warning').css("display", "none");
-                        window.location.reload(1);
+                        window.location = "dashboard.php#/Process";
                     }, 1000);
 
                 } else {
-                    //alert(data.message);
-                    $('#loader').css("display", "block");
                     $('#loader').css("display", "none");
                     $scope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
-                    }, 1000);
+                    }, 3000);
                 }
             })
             .error(function (data, status, header) {
+                $('#loader').css("display", "none");
                 console.log(data);
-                $('#loader').css("display", "block");
                 $scope.ResponseDetails = "Data: " + data;
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Customer not created..";
+                $scope.errorMessage = "Unable to create Customer.Please try again";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
-                }, 1000);
-                //alert("Error Occurred:" + data);
+                }, 3000);
+
             });
     }
 
@@ -3002,7 +3035,6 @@ myApp.controller('CustomerController', function ($scope, $http) {
 });
 
 myApp.controller('ModifyCustomerController', function ($scope, $http, $stateParams, $rootScope) {
-
 
     $scope.customerDetails = {
 
@@ -3517,7 +3549,6 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
 
     };
-
     $scope.removeTaxItem = function (index) {
         $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
@@ -3654,9 +3685,11 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             }
         };
         console.log(config);
+        $('#loader').css("display", "none");
         $http.post("Process/php/TaskFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
+                if(data.status=='sucess'){
                 $('#loader').css("display", "none");
                 for (var i = 0; i < data.message.length; i++) {
                     notes.push({
@@ -3667,22 +3700,18 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                 }
                 $scope.ViewNotes = notes;
                 setInfo.set(notes);
-
+                }
             })
             .error(function (data, status, headers, config) {
-                console.log(data.error);
-
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $scope.errorMessage = "Unable to get Note Details.Please contact Administrator";
                 $('#error').css("display", "block");
             });
 
-    }
+        }
     $scope.getViewNotes();
 
     $scope.updateTask = function (taskid) {
-
-
         var isCompleted = $scope.completed;
         console.log("completed " + isCompleted);
 
@@ -3722,31 +3751,32 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $('#error').css("display", "none");
+                        });
+                    }, 3000);
                 } else {
                     $scope.warningMessage = data.message;
                     $('#warning').css("display", "block");
-
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $('#warning').css("display", "none");
+                        });
+                    }, 1000);
                 }
                 $scope.getViewNotes();
-                setTimeout(function () {
-                    $scope.$apply(function () {
-                        $('#warning').css("display", "none");
-                    });
-                }, 3000);
-
-
             })
             .error(function (data, status, headers, config) {
-                console.log(data.error);
-
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $scope.errorMessage = "Unable to Update Task.Please contact Administrator.";
                 $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#erro').css("display", "none");
+                }, 3000);
             });
-
-
     }
 });
 
@@ -3774,41 +3804,49 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
         $http.post("Process/php/TaskFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $('#loader').css("display", "none");
 
-                for (var i = 0; i < data.message.length; i++) {
-
-                    task.push({
-                        "TaskID": data.message[i].TaskID,
-                        "TaskName": data.message[i].TaskName,
-                        "TaskDescripion": data.message[i].TaskDescripion,
-                        "ScheduleStartDate": data.message[i].ScheduleStartDate,
-                        "ScheduleEndDate": data.message[i].ScheduleEndDate,
-                        "CompletionPercentage": data.message[i].CompletionPercentage,
-                        "TaskAssignedTo": data.message[i].TaskAssignedTo,
-                        "isCompleted": data.message[i].isCompleted,
-                        "CreationDate": data.message[i].CreationDate,
-                        "CreatedBy": data.message[i].CreatedBy,
-                        "ActualStartDate": data.message[i].ActualStartDate,
-                        "AcutalEndDate": data.message[i].AcutalEndDate,
-                        "UserId": data.message[i].UserId,
-                        "UserName": data.message[i].firstName + " " + data.message[i].lastName
-
-                    });
+                if (data.status == "sucess") {
+                    $('#loader').css("display", "none");
+                    for (var i = 0; i < data.message.length; i++) {
+                        task.push({
+                            "TaskID": data.message[i].TaskID,
+                            "TaskName": data.message[i].TaskName,
+                            "TaskDescripion": data.message[i].TaskDescripion,
+                            "ScheduleStartDate": data.message[i].ScheduleStartDate,
+                            "ScheduleEndDate": data.message[i].ScheduleEndDate,
+                            "CompletionPercentage": data.message[i].CompletionPercentage,
+                            "TaskAssignedTo": data.message[i].TaskAssignedTo,
+                            "isCompleted": data.message[i].isCompleted,
+                            "CreationDate": data.message[i].CreationDate,
+                            "CreatedBy": data.message[i].CreatedBy,
+                            "ActualStartDate": data.message[i].ActualStartDate,
+                            "AcutalEndDate": data.message[i].AcutalEndDate,
+                            "UserId": data.message[i].UserId,
+                            "UserName": data.message[i].firstName + " " + data.message[i].lastName
+                        });
+                    }
+                    $rootScope.tasks = task;
+                    console.log($rootScope.tasks);
                 }
-                $rootScope.tasks = task;
-                console.log($rootScope.tasks);
-
+                else{
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+                }
             })
             .error(function (data, status, headers, config) {
-                console.log(data.error);
-
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $scope.errorMessage = "Unable to fetch data.Please contact Administrator";
                 $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
 
-    }
+        }
 
 
     $scope.totalItems = $rootScope.tasks.length;
@@ -3832,7 +3870,6 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
         var data = {
             operation: "deleteTask",
             taskId: taskid
-
         };
         var config = {
             params: {
@@ -3840,34 +3877,35 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
             }
         };
         console.log(config);
+        $('#loader').css("display", "block");
         $http.post("Process/php/TaskFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $('#loader').css("display", "none");
                 if (data.status != "sucess") {
+                    $('#loader').css("display", "none");
                     $scope.errorMessage = data.message;
                     $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                 } else {
+                    $('#loader').css("display", "none");
                     $scope.warningMessage = data.message;
                     $('#warning').css("display", "block");
-
-                }
-                setTimeout(function () {
-                    $scope.$apply(function () {
+                    setTimeout(function () {
                         $('#warning').css("display", "none");
-                        window.location.reload(true);
-                    });
-                }, 3000);
-
+                        window.location="dashboard.php#/Process/";
+                    }, 1000);
+                }
             })
             .error(function (data, status, headers, config) {
-                console.log(data.error);
-
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $scope.errorMessage = "Unable to delete task.Please contact Administrator";
                 $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
-
 
         //$http({
         //    method: 'GET',
@@ -3877,7 +3915,6 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
         //}, function errorCallback(response) {
         //    alert("in error ::" + response);
         //});
-
 
     }
 
@@ -3910,7 +3947,7 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
             "CreationDate": creationDate
         };
         console.log("Task data is " + JSON.stringify(Taskdata));
-        $('#loader').css("display", "block");
+
 
         $scope.clearData= function()
         {
@@ -3919,10 +3956,7 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
             $scope.task.startDate="";
             $scope.task.endDate="";
             $scope.task.assignedTo="";
-
-
         }
-
         var data = {
             operation: "saveTask",
             data: Taskdata
@@ -3934,39 +3968,37 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
             }
         };
         console.log(config);
+        $('#loader').css("display", "block");
         $http.post("Process/php/TaskFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                $('#loader').css("display", "none");
                 if (data.status != "sucess") {
+                    $('#loader').css("display", "none");
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#erro').css("display", "none");
+                    }, 3000);
                 } else {
+                    $('#loader').css("display", "none");
                     $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
-
-                }
-                setTimeout(function () {
-                    //$scope.$apply(function () {
+                    $scope.clearData();
+                    setTimeout(function () {
                         $('#warning').css("display", "none");
-
-                        //window.location.reload(true);
-                    //});
-                }, 3000);
-                $scope.clearData();
+                        window.location="dashboard.php#/Process";
+                    }, 1000);
+                }
                 $scope.formSubmitted= false;
-
-
             })
             .error(function (data, status, headers, config) {
-                console.log(data.error);
-
                 $('#loader').css("display", "none");
-                $rootScope.errorMessage = data.message;
+                $rootScope.errorMessage = "Unable to assign task.Please contact Administrator";
                 $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#erro').css("display", "none");
+                }, 3000);
             });
-
-
     };
     //$scope.today = function(){
     //    $scope.task.startDate = new Date();

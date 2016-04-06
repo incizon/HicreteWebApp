@@ -69,18 +69,15 @@ class ProjectController
 
     }
 
-
     public static function getProjectSiteFollowup($projid){
         try{
             $project = Project::loadProjectSiteFollowup($projid); // possible user loading method
-
-            if($project!==null){
+            if(sizeof($project)>0){
                 echo AppUtil::getReturnStatus("Successful",$project);
             }
             else {
-                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                echo AppUtil::getReturnStatus("Unsuccessful", "Data not found");
             }
-
         }catch(Exception $e){
             echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
         }

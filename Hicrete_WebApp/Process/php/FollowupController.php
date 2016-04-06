@@ -12,7 +12,6 @@ class FollowupController
             $followup = Followup::getPaymentFollowup($id); // possible user loading method
             echo AppUtil::getReturnStatus("Successful",$followup);
 
-
         }catch(Exception $e){
             echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }

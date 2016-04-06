@@ -51,7 +51,10 @@ switch($data->operation) {
         ProjectController::getInvoicesByProject($data->projectId);
         break;
     case "getProjectSiteFollowup":
-        ProjectController::getProjectSiteFollowup($data->projectId);
+        if(isset($data->projectId))
+            ProjectController::getProjectSiteFollowup($data->projectId);
+        else
+            echo AppUtil::getReturnStatus("fail", "Please select project");
         break;
 }
 
