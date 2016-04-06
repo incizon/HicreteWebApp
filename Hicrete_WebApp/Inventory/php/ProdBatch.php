@@ -1,4 +1,5 @@
 <?php
+require_once "../../php/HicreteLogger.php";
 class ProdBatch
 {
     public $batchNo;
@@ -66,10 +67,12 @@ class ProdBatch
     }
     public function checkAvlblBatchNo($dbh)
     {
+        HicreteLogger::logInfo("Checking if the Batch no is available");
          $stmt = $dbh->prepare("SELECT BATCHCODENAME FROM production_batch_master WHERE BATCHNO =:batchNo");
          $stmt->bindParam(':batchNo', $this->batchNo, PDO::PARAM_STR, 10);
          $stmt->execute();
          $count=$stmt->rowcount();
+        HicreteLogger::logInfo("Count is : ".$count);
          if($count!=0)
          {return 1;}
          else
@@ -81,6 +84,7 @@ class ProdBatch
     {
        
         try{
+            HicreteLogger::logInfo("Adding Production Batch");
             $this->dateOfEntry=date('y-m-d', strtotime($this->dateOfEntry));
             //echo json_encode($this->dateOfEntry);
             $this->startDate=date('y-m-d', strtotime($this->startDate));
@@ -102,12 +106,13 @@ class ProdBatch
         
         $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
         $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
-
+            HicreteLogger::logInfo("Query:".json_encode($stmt));
+            HicreteLogger::logInfo("Data:\n".json_encode($this));
             if($stmt->execute())
             {
-               // echo "first is complete";
+                    HicreteLogger::logInfo("Insert to production batch master is successful");
                    $lastId = $dbh->lastInsertId();
-            //Fetch master id from product master table
+
                     $this->prodMasterId=$lastId;
                 
                 for ($i=0; $i < sizeof($this->rawMaterial); $i++) 
@@ -117,44 +122,55 @@ class ProdBatch
                     $stmt2 ->execute();
                     $result=$stmt2->fetch(PDO::FETCH_ASSOC);
                     $count=$result['count'];
+                    HicreteLogger::logInfo("count of materials: ".$count);
                     if($count == 1)
                     {
                         $stmt2= $dbh->prepare("UPDATE inventory SET totalquantity=totalquantity- :quantity where materialid=:material");
                         $stmt2->bindParam(':quantity', $this->rawMaterial[$i]->quantity, PDO::PARAM_STR,10);
                         $stmt2->bindParam(':material', $this->rawMaterial[$i]->material, PDO::PARAM_STR,10);
-                        $stmt2->execute();
+                        HicreteLogger::logInfo("query: \n".json_encode($stmt2));
+                        //HicreteLogger::logInfo("check execution value: ".$stmt2->execute());
+                        $valcheck = $stmt2->execute();
+                        HicreteLogger::logInfo("Value check after execution".$valcheck);
+                        /*if($valcheck == 1){                        {
+                            HicreteLogger::logInfo("Inventory Entry Updated successfully for: ".$this->rawMaterial[$i]);
+                        }
+                        else
+                        {
+                            HicreteLogger::logInfo("Inventory Entry Updation failed for: ".$this->rawMaterial[$i]);
+                            return 0;
+                        }*/
                     }
                     else
                     {
-                        echo "not done yar";
+                        HicreteLogger::logInfo("Error while checking material");
                         $dbh->rollBack();
                         return 0;
                     }
 
-
+                    HicreteLogger::logInfo("Inserting data to production_raw_materials_details");
                 $stmt1 = $dbh->prepare("INSERT INTO production_raw_materials_details (productionbatchmasterid,materialid,quantity,lchnguserid,lchngtime,creuserid,cretime)
                   values (:prodMasterId,:material,:quantity,:lchnguserid,now(),:creuserid,now())");
-                /*echo(json_encode($this->prodMasterId));
-                echo (json_encode($this->rawMaterial[$i]->material));
-                echo (json_encode($this->rawMaterial[$i]->quantity));*/
+
                 $stmt1->bindParam(':prodMasterId', $this->prodMasterId, PDO::PARAM_STR,10);
                 $stmt1->bindParam(':material', $this->rawMaterial[$i]->material, PDO::PARAM_STR,10);
                 $stmt1->bindParam(':quantity', $this->rawMaterial[$i]->quantity, PDO::PARAM_STR,10);
                 $stmt1->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                 $stmt1->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+
+                    HicreteLogger::logInfo("Query : ".json_encode($stmt1));
                 if(!$stmt1->execute())
                     break;
                 }
                 if ($i!=(sizeof($this->rawMaterial)))
                 {
-
+                    HicreteLogger::logInfo("One of the entry to Production_raw_material_details failed");
                     $dbh->rollBack();
                      return 0;   
                 }
                 else
                 {
-                    /*$message="Data Added successfully";
-                    return $message;*/
+                    HicreteLogger::logInfo("Data inserted successfully");
                     $dbh->commit();
                      return 1;   
                 }
@@ -163,14 +179,13 @@ class ProdBatch
             }
             else
             {
-                /*$message="Issues while adding Initial details of Production Batch ";
-                return $message;*/
+                HicreteLogger::logInfo("Failure while adding data to production batch master");
                 $dbh->rollBack();
                 return 0;
             }
         }catch(Exception $e)
         {
-
+            HicreteLogger::logInfo("Exception occured: ".$e->getMessage());
 
         }
 
@@ -195,7 +210,7 @@ class ProdBatch
                  $dbh->beginTransaction();
 
 
-
+                 HicreteLogger::logInfo("Adding data to produced good");
                  $stmt = $dbh->prepare("INSERT INTO produced_good (productionbatchmasterid,materialproducedid,QUANTITY,PACKAGEDUNITS,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
                                           values (:productionbatchmasterid,:prodcdMaterial,:quantityProdMat,:pckgdUnits,:lchngUserId,now(),:creUserId,now())");
 
@@ -210,15 +225,17 @@ class ProdBatch
                  $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
 
 
-
+                 HicreteLogger::logInfo("Query:".json_encode($stmt));
+                 HicreteLogger::logInfo("Data:\n".json_encode($this));
 
                  if($stmt->execute())
                  {
-                     //echo "first is complete";
+                     HicreteLogger::logInfo("Insertion into produced good is successful");
+                     HicreteLogger::logInfo("Inserting in inhouse inward entry");
                      $lastId = $dbh->lastInsertId();
-                     //Fetch master id from product master table
+
                      $this->producedGoodId=$lastId;
-                     //echo "\n this is warehouse".$this->wareHouse."\n";
+
                      $stmt = $dbh->prepare("INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)
                                                           values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())");
                      //echo $this->prodMasterId;
@@ -236,34 +253,36 @@ class ProdBatch
 
                      //$stmt->execute();
 
-
+                     HicreteLogger::logInfo("Query:".json_encode($stmt));
+                     HicreteLogger::logInfo("Data:\n".json_encode($this));
                      if($stmt->execute())
                      {
-                         //echo "\n dusra zalai bgh";
+                         HicreteLogger::logInfo("Insertion into inhouse_inward_entry is successful");
                          $lastId = $dbh->lastInsertId();
                          //Fetch master id from product master table
                          $this->inhouseInwardId=$lastId;
 
                          if ($this->tranReq) {
-                             //echo "\nthis is transport";
+                             HicreteLogger::logInfo("Inserting into inhouse transport");
                              if($this->addToInhouseTransport($dbh,$userId)){
-
+                                 HicreteLogger::logInfo("Insertion to inhouse transport successful");
                              }
                              else{
-
+                                 HicreteLogger::logInfo("Error while Insertion to inhouse transport ");
                                  $dbh->rollBack();
                                  return 0;
                              }
                              # code...
                          }
+                         HicreteLogger::logInfo("Inserting into inventory");
                          if($this->insertToInventory($dbh,$userId))
                          {
-                             // echo "\n Inventory zala na bhau";
+                             HicreteLogger::logInfo("Insertion to inventory successful");
                              $dbh->commit();
                              return 1;
                          }
                          else {
-
+                             HicreteLogger::logInfo("Error while updating inventory");
                              $dbh->rollBack();
                              return 0;
                          }
@@ -273,7 +292,7 @@ class ProdBatch
                      }
                      else
                      {
-
+                         HicreteLogger::logInfo("Error while Insertion into inhouse_inward_entry");
                          $dbh->rollBack();
                          return 0;
                      }
@@ -286,6 +305,7 @@ class ProdBatch
                  }
                  else
                  {
+                     HicreteLogger::logInfo("Error while Insertion into produced good");
                      $dbh->rollBack();
                      return 0;
                  }
@@ -295,7 +315,7 @@ class ProdBatch
 
         }catch(Exception $e)
         {
-
+            HicreteLogger::logFatal("Exception occured: \n".$e->getMessage());
 
         }
 
@@ -310,56 +330,48 @@ class ProdBatch
                                  
                                                     //$stmt2->bindParam(':material', $this->rawMaterial[$i]->material, PDO::PARAM_STR,10);
 
-            $stmt2 ->execute();
+            if($stmt2 ->execute()) {
 
-            $result=$stmt2->fetch(PDO::FETCH_ASSOC);
-            $count=$result['count'];
-                                                    if($count == 1)
-                                                    {
+                $result = $stmt2->fetch(PDO::FETCH_ASSOC);
+                $count = $result['count'];
+                if ($count == 1) {
 
-                                                         $stmt2= $dbh->prepare("UPDATE inventory set totalquantity=totalquantity + :quantityProdMat where materialid=:prodcdMaterial");
-                                                         $stmt2->bindParam(':quantityProdMat', $this->quantityProdMat, PDO::PARAM_STR, 10);
-                                                         $stmt2->bindParam(':prodcdMaterial', $this->prodcdMaterial, PDO::PARAM_STR, 10);
-                                                            //$stmt2->bindParam(':quantity', $this->rawMaterial[$i]->quantity, PDO::PARAM_STR,10);
-                                                            if(!$stmt2->execute())
-                                                            {
-                                                                //$dbh->rollBack();
-                                                                return 0;
-                                                            }
-                                                            else
-                                                            {
-                                                                //$dbh->commit();
-                                                                return 1;
-                                                            }
+                    $stmt2 = $dbh->prepare("UPDATE inventory set totalquantity=totalquantity + :quantityProdMat where materialid=:prodcdMaterial");
+                    $stmt2->bindParam(':quantityProdMat', $this->quantityProdMat, PDO::PARAM_STR, 10);
+                    $stmt2->bindParam(':prodcdMaterial', $this->prodcdMaterial, PDO::PARAM_STR, 10);
 
-                                                    }
-                                                    else
-                                                    {
+                    HicreteLogger::logInfo("query: ".json_encode($stmt2));
+                    if (!$stmt2->execute()) {
+                        HicreteLogger::logInfo("Updation to inventory unsuccessful");
+                        return 0;
+                    } else {
+                        HicreteLogger::logInfo("Updation to inventory successful");
+                        return 1;
+                    }
 
-                                                        //echo "inserting \n";
-                                                        $stmt2= $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
+                } else {
+
+                    //echo "inserting \n";
+                    $stmt2 = $dbh->prepare("INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)
                                                             values(:materialid,:warehouseid,:companyid,:totalquantity)");
-                                                      /*  echo "\n".$this->prodcdMaterial;
-                                                        echo "\n".$this->wareHouse;
-                                                        echo "\n".$this->company;
-                                                        echo "\n".$this->quantityProdMat;*/
-                                                        $stmt2->bindParam(':materialid', $this->prodcdMaterial, PDO::PARAM_STR, 10);
-                                                        $stmt2->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
-                                                        $stmt2->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
-                                                        $stmt2->bindParam(':totalquantity', $this->quantityProdMat, PDO::PARAM_STR, 10);
 
-                                                        if($stmt2->execute())
-                                                        {
-                                                            //echo "returning success\n";
-                                                                return 1;
-                                                        }
-                                                        else
-                                                        {
-                                                            //echo "returning failure";
-                                                                return 0;
-                                                        }
+                    $stmt2->bindParam(':materialid', $this->prodcdMaterial, PDO::PARAM_STR, 10);
+                    $stmt2->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
+                    $stmt2->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
+                    $stmt2->bindParam(':totalquantity', $this->quantityProdMat, PDO::PARAM_STR, 10);
+                    HicreteLogger::logInfo("Query: \n".json_encode($stmt2));
+                    if ($stmt2->execute()) {
+                        HicreteLogger::logInfo("Insertion to inventory successful");
+                        return 1;
+                    } else {
+                        HicreteLogger::logInfo("Insertion to inventory unsuccessful");
+                        return 0;
+                    }
 
-                                                    }
+                }
+
+
+            }
     }
 
 
@@ -388,23 +400,17 @@ class ProdBatch
         $stmt->bindParam(':lchngUserId', $userId, PDO::PARAM_STR, 10);
         $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
 
-  /*      $stmt->execute();*/
-        //$lastId = $dbh->lastInsertId();
-            //Fetch master id from product master table
-        //$this->inhouseInwardId=$lastId;
 
+                 HicreteLogger::logInfo("Query: \n".json_encode($stmt));
             if($stmt->execute())
             {
-                /*$message="User Created successfully";
-                return $message;*/
-                //$dbh->commit();
+                HicreteLogger::logInfo("Insert to inhouse_transport_details successful");
                 return 1;
             }
             else
             {
-                /*$message="Issues while adding supplier.Please contact administrator ";
-                return $message;*/
-                //$dbh->rollBack();
+                HicreteLogger::logInfo("Insert to inhouse_transport_details unsuccessful");
+
                 return 0;
             }
         }catch(Exception $e)

@@ -1,3 +1,4 @@
+
 /**********************************************************************************
  * Start of Product controller
  *
@@ -95,6 +96,8 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
 
             })
             .error(function (data, status, headers, config) {
+                console.log(data.error);
+
                 //alert(data);
                 $('#loader').css("display", "none");
                 $scope.errorMessage = data.error;
@@ -214,6 +217,7 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      **********************************************************************************/
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
+        console.log($scope.selectedProduct);
     }
     /**********************************************************************************
      *End of Getter
@@ -225,7 +229,9 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
      ****************************************************************************/
     $http.get("Inventory/php/Material.php")
         .success(function (data) {
+            console.log("IN MATERIAL");
             $scope.materialNames = data;
+            console.log(data);
         });
     /***************************************************************************
      * End of Get Material Types
@@ -282,6 +288,7 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
      ************************************************/
     $scope.clearFields = function (InwardData) {
 
+        console.log("clearing");
         $scope.InwardData.inwardNumber = "";
         $scope.InwardData.material = "";
         $scope.InwardData.packageUnit = "";
@@ -337,6 +344,7 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
         {filterName: 'Product Name', id: 1},
         {filterName: 'Company Name', id: 2},
         {filterName: 'Warehouse Name', id: 3},
+        {filterName: 'Available Inventory', id: 4}
     ];
     $scope.SearchTerm = $scope.filters[2].filterName;
 
@@ -428,6 +436,8 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
 
     $scope.addInwardDetails = function (inwardData) {
 
+        console.log("Add inwardDetails function =");
+        console.log($scope.InwardData);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
@@ -607,7 +617,9 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
     };
     $http.post("Inventory/php/supplierSearch.php", null, config)
         .success(function (data) {
+
             $scope.suppliers = data;
+
         })
         .error(function (data, status, headers) {
             console.log(data);
@@ -933,6 +945,7 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
      * STart of clear field controller
      *************************************************/
     $scope.clearFields = function (OutwardData) {
+        //console.log("clearing");
         OutwardData.OutwardNumber = "";
         OutwardData.material = "";
         OutwardData.packageUnit = "";
@@ -1156,6 +1169,7 @@ myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope)
 //End of outward search controller
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////
 //Start of inward search controller
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1247,6 +1261,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
         begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
         end = begin + $scope.InventoryItemsPerPage;
         index = $scope.products.indexOf(value);
+        //console.log(index);
         return (begin <= index && index < end);
     };
     $scope.getProduct = function (product) {
@@ -1381,6 +1396,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
 
 
 });
+
 
 
 /*********************************************************************************************
@@ -1601,7 +1617,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
                     qty = 0;
                 }
                 //console.log(qty);
-                console.log($scope.availableTotalquantity);
+                //console.log($scope.availableTotalquantity);
                 break;
             }
             else {
@@ -1610,13 +1626,14 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
 
             }
         }
-        console.log($scope.availableTotalquantity);
+        //console.log($scope.availableTotalquantity);
         return qty;
     };
 
-    $scope.check = function (quantity) {
-        console.log(quantity);
-        console.log($scope.availableTotalquantity);
+    $scope.check= function(quantity)
+    {
+        //console.log(quantity);
+        //console.log($scope.availableTotalquantity);
 
         if ($scope.availableTotalquantity < quantity || $scope.availableTotalquantity == 0) {
 
@@ -1629,6 +1646,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
             $scope.qtyError = 0;
         }
     };
+
 
 
     // check for fetching inventory details END
@@ -1647,6 +1665,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
 
         $scope.step--;
     };
+
 
 
     $http.post("Inventory/php/fetch_materials.php", null)
