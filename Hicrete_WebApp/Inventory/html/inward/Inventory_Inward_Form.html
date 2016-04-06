@@ -164,19 +164,19 @@
                             <table class="table table-actions">
                                 <thead>
                                 <tr>
-                                    <th>Material</th>
-                                    <th>Quantity</th>
-                                    <th>Packaging Type</th>
-                                    <th>Packaging Size</th>
-                                    <th>Unit</th>
-                                    <th>Supplier</th>
+                                    <th width="30%">Material</th>
+                                    <th width="15%">Quantity</th>
+                                    <th width="13%">Packaging Type</th>
+                                    <th width="10%">Packaging Size</th>
+                                    <th width="7%">Unit</th>
+                                    <th width="30%">Supplier</th>
                                     <th>Remove</th>
                                 </tr>
                                 </thead>
                                 <tr ng-repeat="materials in InwardData.inwardMaterials">
-                                    <td>
+                                    <td width="30%">
                                         <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.material" name="material"
-                                                ng-value="Select" required>
+                                                ng-value="Select" required style="width: 90%">
                                             <option value="" disabled selected>Select Material</option>
                                             <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
                                             </option>
@@ -190,11 +190,11 @@
                                             <p style="color:red" ng-message="required">Please enter material.</p>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td width="15%">
 
 
                                         <input maxlength="11" type="number" class="form-control" ng-model="materials.materialQuantity"
-                                               name="materialQuantity" min="1" required/>
+                                               name="materialQuantity" min="1" required style="width:100%"/>
 
                                         <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"
                                              ng-show="submitted">
@@ -202,31 +202,31 @@
                                         </div>
                                     </td>
 
-                                    <td>
+                                    <td width="13%">
                                         <input type="text" class="form-control" ng-model="materials.packageUnit"
-                                               name="packageUnit" required/>
+                                               name="packageUnit" required style="width:100%"/>
 
                                         <div class="help-block" ng-messages="inwardEntryForm.packageUnit.$error"
                                              ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please select packaging unit.</p>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td width="10%">
 
                                         <input maxlength="20" type="text" class="form-control" ng-model="materials.packagesize"
-                                               name="size"  />
+                                               name="size" style="width:100%" />
 
                                         <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"
                                              ng-show="submitted">
                                             <p style="color:red" ng-message="pattern">Only Numeric values allowed</p>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td width="7%">
                                         {{getUnitOfMeasure(materials.material)}}
                                     </td>
-                                    <td>
+                                    <td width="25%">
                                         <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.suppplierName"
-                                                ng-value="Select" name="supplierName" required>
+                                                ng-value="Select" name="supplierName" required style="width:100%">
                                             <option value="" disabled selected>Select Supplier</option>
                                             <option ng-repeat="x in suppliers " value={{x.supplierid}}>{{x.suppliername}}
                                             </option>
