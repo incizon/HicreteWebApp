@@ -143,7 +143,7 @@ class ProdBatch
                     }
                     else
                     {
-                        HicreteLogger::logInfo("Error while checking material");
+                        HicreteLogger::logError("Error while checking material");
                         $dbh->rollBack();
                         return 0;
                     }
@@ -158,7 +158,7 @@ class ProdBatch
                 $stmt1->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                 $stmt1->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
 
-                    HicreteLogger::logInfo("Query : ".json_encode($stmt1));
+                    HicreteLogger::logDebug("Query : ".json_encode($stmt1));
                 if(!$stmt1->execute())
                     break;
                 }
@@ -185,7 +185,7 @@ class ProdBatch
             }
         }catch(Exception $e)
         {
-            HicreteLogger::logInfo("Exception occured: ".$e->getMessage());
+            HicreteLogger::logFatal("Exception occured: ".$e->getMessage());
 
         }
 
@@ -225,8 +225,8 @@ class ProdBatch
                  $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
 
 
-                 HicreteLogger::logInfo("Query:".json_encode($stmt));
-                 HicreteLogger::logInfo("Data:\n".json_encode($this));
+                 HicreteLogger::logDebug("Query:".json_encode($stmt));
+                 HicreteLogger::logDebug("Data:\n".json_encode($this));
 
                  if($stmt->execute())
                  {
@@ -253,8 +253,8 @@ class ProdBatch
 
                      //$stmt->execute();
 
-                     HicreteLogger::logInfo("Query:".json_encode($stmt));
-                     HicreteLogger::logInfo("Data:\n".json_encode($this));
+                     HicreteLogger::logDebug("Query:".json_encode($stmt));
+                     HicreteLogger::logDebug("Data:\n".json_encode($this));
                      if($stmt->execute())
                      {
                          HicreteLogger::logInfo("Insertion into inhouse_inward_entry is successful");
@@ -340,7 +340,7 @@ class ProdBatch
                     $stmt2->bindParam(':quantityProdMat', $this->quantityProdMat, PDO::PARAM_STR, 10);
                     $stmt2->bindParam(':prodcdMaterial', $this->prodcdMaterial, PDO::PARAM_STR, 10);
 
-                    HicreteLogger::logInfo("query: ".json_encode($stmt2));
+                    HicreteLogger::logDebug("query: ".json_encode($stmt2));
                     if (!$stmt2->execute()) {
                         HicreteLogger::logInfo("Updation to inventory unsuccessful");
                         return 0;
@@ -359,7 +359,7 @@ class ProdBatch
                     $stmt2->bindParam(':warehouseid', $this->wareHouse, PDO::PARAM_STR, 10);
                     $stmt2->bindParam(':companyid', $this->company, PDO::PARAM_STR, 10);
                     $stmt2->bindParam(':totalquantity', $this->quantityProdMat, PDO::PARAM_STR, 10);
-                    HicreteLogger::logInfo("Query: \n".json_encode($stmt2));
+                    HicreteLogger::logDebug("Query: \n".json_encode($stmt2));
                     if ($stmt2->execute()) {
                         HicreteLogger::logInfo("Insertion to inventory successful");
                         return 1;
@@ -401,7 +401,7 @@ class ProdBatch
         $stmt->bindParam(':creUserId', $userId, PDO::PARAM_STR, 10);
 
 
-                 HicreteLogger::logInfo("Query: \n".json_encode($stmt));
+                 HicreteLogger::logDebug("Query: \n".json_encode($stmt));
             if($stmt->execute())
             {
                 HicreteLogger::logInfo("Insert to inhouse_transport_details successful");
@@ -415,7 +415,7 @@ class ProdBatch
             }
         }catch(Exception $e)
         {
-
+            HicreteLogger::logFatal("Exception occured: \n".$e->getMessage());
 
         }
 
