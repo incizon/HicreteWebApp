@@ -338,7 +338,7 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
         {filterName: 'Company Name', id: 2},
         {filterName: 'Warehouse Name', id: 3},
     ];
-    $scope.SearchTerm = $scope.filters[3].filterName;
+    $scope.SearchTerm = $scope.filters[2].filterName;
 
     var isInwardTable = false;
     var isInwardDetailsTable = false;
@@ -1393,45 +1393,54 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     $scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.InventoryAvailableItemsPerPage = 10;
-
+    $scope.filters = [
+        {filterName: 'ProductName', id: 1},
+        {filterName: 'CompanyName', id: 2},
+        {filterName: 'WarehouseName', id: 3},
+    ];
     $scope.inventoryData = {};
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
         {transport: 'Road Transport', transportId: 3}
     ];
-
+    $scope.SearchTerm=$scope.filters[0].filterName
     $scope.loading = ""
+
+    $scope.keywords="";
+
 
     /*************************************************
      * START of GETTING INVENTORY DATA
      **************************************************/
-    var data = {
-        module: 'inventorySearch'
-    }
-    var config = {
-        params: {
-            data: data
+        $scope.getInventoryData=function(){
+            $('#loader').css("display", "block");
+            var data = {
+                module: 'inventorySearch',
+                searchBy:$scope.SearchTerm,
+                searchKeyword:$scope.keywords
+            }
+            var config = {
+                params: {
+                    data: data
+                }
+            };
+            $http.post("Inventory/php/InventoryIndex.php", null, config)
+                .success(function (data) {
+                    $('#loader').css("display", "none");
+                    $scope.inventoryData = data;
+                    $scope.InventoryAvailableItemsPerPage = data;
+                    $scope.totalItems = $scope.inventoryData.length;
+
+                })
+                .error(function (data, status, headers) {
+                    console.log("IN SERVICE OF Inventory Search Failure=");
+                    console.log(data);
+                    $('#loader').css("display", "none");
+
+                });
         }
-    };
 
-    $scope.loading = true;
-    $('#loader').css("display", "block");
-
-    $http.post("Inventory/php/InventoryIndex.php", null, config)
-        .success(function (data) {
-            $('#loader').css("display", "none");
-            $scope.inventoryData = data;
-            $scope.InventoryAvailableItemsPerPage = data;
-            $scope.totalItems = $scope.inventoryData.length;
-
-        })
-        .error(function (data, status, headers) {
-            console.log("IN SERVICE OF Inventory Search Failure=");
-            console.log(data);
-            $('#loader').css("display", "none");
-
-        });
     $scope.getViewDataObject = function (product, materialDetails) {
 
         $scope.viewMaterials = {};

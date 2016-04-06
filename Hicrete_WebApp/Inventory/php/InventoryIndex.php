@@ -35,7 +35,8 @@
             outwardOperations($mData->operation, $mData);
             break;
         case 'inventorySearch':
-            getInventory();
+
+            getInventory($mData->searchBy,$mData->searchKeyword);
             break;
         case 'getProducts':
             getProducts();
@@ -203,12 +204,12 @@
 
 
     }
-    function getInventory()
+    function getInventory($searchBy,$searchKeyword)
     {
         global $dbh;
-        //$material=InventoryUtils::getProductById('97');
-        $stmt = $dbh->prepare(
-            "SELECT inventory.warehouseid,inventory.companyid,material.abbrevation,material.materialid,materialtype.materialtype,
+        $keyword = "%" . $searchKeyword . "%";
+
+        $stmt ="SELECT inventory.warehouseid,inventory.companyid,material.abbrevation,material.materialid,materialtype.materialtype,
                     product_master.productname,inventory.totalquantity,warehousemaster.wareHouseName,companymaster.companyName,inventory.inventoryid
                 FROM inventory
                 JOIN material ON
@@ -220,8 +221,22 @@
                 JOIN companymaster ON
                 companymaster.companyid=inventory.companyid
                 JOIN warehousemaster on
-                warehousemaster.warehouseid=inventory.warehouseid
-                ");
+                warehousemaster.warehouseid=inventory.warehouseid ";
+
+        switch ($searchBy) {
+            case'ProductName':
+                $stmt = $stmt . "WHERE product_master.productname LIKE :keyword";
+                break;
+            case'CompanyName':
+                $stmt = $stmt . "WHERE companymaster.companyName like :keyword";
+                break;
+            case'WarehouseName':
+                $stmt = $stmt . "WHERE warehousemaster.wareHouseName like :keyword";
+                break;
+        }
+
+        $stmt=$dbh->prepare($stmt);
+        $stmt->bindParam(':keyword', $keyword);
         if($stmt->execute()){
             $json_array=array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
