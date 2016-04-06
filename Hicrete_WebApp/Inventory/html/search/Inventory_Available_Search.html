@@ -19,7 +19,7 @@
                     <span class="input-group-addon"><span class="fa fa-search"></span></span>
                     <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="keywords"/>
                     <div class="input-group-btn">
-                        <button class="btn btn-primary" ng-click="getInventory()">Search</button>
+                        <button class="btn btn-primary" ng-click="getInventoryData()">Search</button>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@
     </div>
 </div>
 
-  <div class="search-results" ng-controller="SearchController">
+  <div class="search-results">
 
     <div class="sr-item">
         <div class="sr-item-title">Products Available</div>
@@ -47,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in inventoryData | filter:paginate| filter:keywords | orderBy:'productname'">
+                    <tr ng-repeat="product in inventoryData">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyName}}</td>

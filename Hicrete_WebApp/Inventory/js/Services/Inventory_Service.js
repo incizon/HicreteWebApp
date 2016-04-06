@@ -22,11 +22,6 @@ myApp.service('inventoryService', function () {
             });
     };
 
-    this.getSavedProducts = function ($scope) {
-        console.log("In get saved products");
-        $scope.products = savedData;
-        $scope.productsToModify = savedData;
-    }
     /***************************************************************************
      Get Product Details
      ****************************************************************************/
@@ -115,12 +110,6 @@ myApp.service('inventoryService', function () {
             });
     }
 
-    this.getSavedCompanys = function ($scope) {
-        console.log("IN Saved Company Get");
-        $scope.Company = companys;
-        console.log(companys);
-    }
-
     /***************************************************************************
      End of Get Company's
      ****************************************************************************/
@@ -149,11 +138,6 @@ myApp.service('inventoryService', function () {
             });
     }
 
-    this.getSavedWarehouses = function ($scope) {
-        console.log("IN Saved Warehouse Get");
-        $scope.warehouses = warehouses;
-        console.log(warehouses);
-    }
 
     /***************************************************************************
      End of Get Warehouses's
