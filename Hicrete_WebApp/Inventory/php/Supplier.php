@@ -1,5 +1,5 @@
 <?php
-require_once "../../php/HicreteLogger.php";
+include_once "../../php/HicreteLogger.php";
 class Supplier
 {
     public $supplierName;
@@ -84,10 +84,10 @@ class Supplier
             $stmt->bindParam(':lchngUserId', $userId);
             $stmt->bindParam(':creUserId', $userId);
 
-            HicreteLogger::logInfo("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             if($stmt->execute())
             {
-                HicreteLogger::logInfo("Supplier Created successfully DATA: \n".json_encode($supplier));
+                HicreteLogger::logDebug("Supplier Created successfully DATA: \n".json_encode($supplier));
                 $message="Supplier Created successfully";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
@@ -96,7 +96,7 @@ class Supplier
             }
             else
             {
-                HicreteLogger::logInfo("Supplier Creation failed \n data: \n".json_encode($supplier));
+                HicreteLogger::logDebug("Supplier Creation failed \n data: \n".json_encode($supplier));
                 $message="Issues while adding supplier.Please contact administrator ";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
@@ -105,7 +105,7 @@ class Supplier
             }
         }catch(Exception $e)
         {
-            HicreteLogger::logInfo("Exception Occured Message:\n".$e->getMessage());
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             $message="Exception thrown";
             return $message;
 
