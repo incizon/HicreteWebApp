@@ -40,7 +40,7 @@ switch ($data->operation) {
             $arr = array('msg' => '', 'error' => 'Exception occured');
             $jsn = json_encode($arr);
             echo($jsn);
-            
+
         }
         break;
     case "modify":
