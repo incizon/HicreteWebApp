@@ -25,10 +25,17 @@ $opt = array(
 switch($data->operation)
 {
     case 'getQuotationFollow':
-        QuotationController::getQuotationFollow($data->quotationId);
+        if(isset($data->quotationId))
+            QuotationController::getQuotationFollow($data->quotationId);
+        else
+            // $Quotation = Quotation::loadAllQuotationFollowup();
+            echo AppUtil::getReturnStatus("fail", "Please select Quotation");
         break;
     case 'getInvoiceFollowups':
-        InvoiceController::getInvoiceFollowups($data->invoiceId);
+           if(isset($data->invoiceId))
+                InvoiceController::getInvoiceFollowups($data->invoiceId);
+           else
+               echo AppUtil::getReturnStatus("fail", "Please select invoice");
         break;
     case 'getPaymentFollowup':
         FollowupController::getPaymentFollowup($userId);

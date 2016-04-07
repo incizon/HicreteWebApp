@@ -6,9 +6,16 @@ require 'Task.php';
 class TaskController
 {
 
-    public static function getAllTask($sortBy,$keyword){
-             $task = Task::getAllTask($sortBy,$keyword);
-        echo AppUtil::getReturnStatus("sucess",$task);
+    public static function getAllTask($sortBy,$keyword)
+    {
+
+        $task = Task::getAllTask($sortBy, $keyword);
+        if (sizeof($task) > 0){
+            echo AppUtil::getReturnStatus("sucess", $task);
+        }
+        else{
+            echo AppUtil::getReturnStatus("fail", "Data not found");
+        }
     }
 
 
@@ -47,10 +54,13 @@ class TaskController
 
 
     public static function getNotes($taskId){
-             $task = Task::getNotes($taskId); 
-         echo AppUtil::getReturnStatus("sucess",$task);
+             $task = Task::getNotes($taskId);
+             if(sizeof($task)>0){
+              echo AppUtil::getReturnStatus("sucess",$task);
+             }
+             else{
+                 echo AppUtil::getReturnStatus("fail","Note Details not available");
+             }
     }
-  
 
-  
 }

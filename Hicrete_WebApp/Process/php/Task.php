@@ -123,9 +123,10 @@ Class Task {
                 }
 //                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {
-                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
                              {
-                             array_push($object, $row);
+                                array_push($object, $row);
                              }
                         }
         }
@@ -133,6 +134,7 @@ Class Task {
             return "exception in getAllTask ".$e->getMessage();
         } 
         $db = null;
+
         return $object;
     }
 

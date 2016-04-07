@@ -7,20 +7,18 @@ class QuotationController
 {
  
 
-    public static function getQuotationFollow($id = null){
+    public static function getQuotationFollow($id){
 
         try{
             if ($id !=null) {
                 $Quotation = Quotation::loadQuotationFollowup($id); // possible user loading method
-            } else {
-                $Quotation = Quotation::loadAllQuotationFollowup();
             }
 
-            if($Quotation!==null){
+            if(sizeof($Quotation)>0){
                 echo AppUtil::getReturnStatus("Successful",$Quotation);
             }
             else {
-                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                echo AppUtil::getReturnStatus("Unsuccessful", "Data not found");
             }
 
         }catch(Exception $e){

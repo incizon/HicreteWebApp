@@ -83,31 +83,22 @@ class InvoiceController
         }catch(Exception $e){
             echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }
-
     }
 
-
-
     public static function getInvoiceFollowups($invoiceid){
-
         try{
             if ($invoiceid !=null) {
                 $invoice = Invoice::loadInvoiceFollowups($invoiceid); // possible user loading method
-            } else {
-                $invoice = Invoice::loadInvoiceFollowups($invoiceid);
             }
-
-            if($invoice!==null){
+            if(sizeof($invoice)>0){
                 echo AppUtil::getReturnStatus("Successful",$invoice);
             }
             else {
-                echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                echo AppUtil::getReturnStatus("fail", "Data not found");
             }
-
         }catch(Exception $e){
             echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
         }
-
          return $invoice;
     }
 
