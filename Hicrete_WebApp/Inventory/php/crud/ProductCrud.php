@@ -1,6 +1,7 @@
 <?php
 require_once 'Database/Database.php';
 require_once 'utils/Common_Methods.php';
+require_once "../../php/HicreteLogger.php";
 
 class Product extends CommonMethods
 {
@@ -66,6 +67,7 @@ class Product extends CommonMethods
         try {
             //BEGIN THE TRANSACTION
             $dbh->beginTransaction();
+            HicreteLogger::logInfo("Inserting product to db");
 
             $stmtProduct = $dbh->prepare("INSERT INTO product_master (productname,materialtypeid,unitofmeasure,lchnguserid,lchngtime,creuserid,cretime)
                                 values (:productname,:materialtypeid,:unitofmeasure,:lchnguserid,now(),:creuserid,now())");
@@ -74,6 +76,8 @@ class Product extends CommonMethods
             $stmtProduct->bindParam(':unitofmeasure', $this->productUnitOfMeasure, PDO::PARAM_STR, 10);
             $stmtProduct->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
             $stmtProduct->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmtProduct));
+            HicreteLogger::logDebug("DATA: \n" . json_encode($this));
 
             if ($stmtProduct->execute()) {
                 $lastId = $dbh->lastInsertId();
@@ -90,7 +94,8 @@ class Product extends CommonMethods
                 $stmtProductProductDetails->bindParam(':alertquantity', $this->productAlertQty, PDO::PARAM_STR, 10);
                 $stmtProductProductDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                 $stmtProductProductDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
-
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmtProductProductDetails));
+                //HicreteLogger::logDebug("DATA: \n".json_encode($this));
                 if ($stmtProductProductDetails->execute()) {
                     $lastProductDetailsId = $dbh->lastInsertId();
 
@@ -104,6 +109,7 @@ class Product extends CommonMethods
                     $stmtProductProductPackaging->bindParam(':packaging', $this->productPackaging, PDO::PARAM_STR, 10);
                     $stmtProductProductPackaging->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                     $stmtProductProductPackaging->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+                    HicreteLogger::logDebug("Query: \n" . json_encode($stmtProductProductPackaging));
                     if ($stmtProductProductPackaging->execute()) {
                         $lastProductPackagingId = $dbh->lastInsertId();
                         $productPackagingId = $lastProductPackagingId;
@@ -118,6 +124,7 @@ class Product extends CommonMethods
                         $stmtProductProductMaster->bindParam(':abbrevation', $this->productAbbrevations, PDO::PARAM_STR, 10);
                         $stmtProductProductMaster->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                         $stmtProductProductMaster->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+                        HicreteLogger::logDebug("Query: \n" . json_encode($stmtProductProductMaster));
                         if ($stmtProductProductMaster->execute()) {
                             $lastMaterialId = $dbh->lastInsertId();
 
@@ -126,6 +133,7 @@ class Product extends CommonMethods
 
 //                                $stmtInventory->bindParam(':materialid', $lastMaterialId);
 //                                if ($stmtInventory->execute()) {
+                            HicreteLogger::logInfo("Product added successfully");
                             $this->showAlert("success", "Product added Successfully!!!");
 //                                } else {
 //                                    $this->showAlert('Failure', "Error while adding 5");
@@ -135,29 +143,35 @@ class Product extends CommonMethods
 
                                 // $this->showAlert('success',"Product added Successfully!!!");
                             } else {
+                                HicreteLogger::logError("Error while adding");
                                 $this->showAlert('Failure', "Error while adding.Please check information you entered");
                                 $dbh->rollBack();
                             }
                         } else {
+                            HicreteLogger::logError("Error while adding material");
                             $this->showAlert('Failure', "Error while adding.Please check information you entered");
                             $dbh->rollBack();
                         }
                     } else {
+                        HicreteLogger::logError("Error while adding product packaging");
                         $this->showAlert('Failure', "Error while adding.Please check information you entered");
                         $dbh->rollBack();
                     }
 
                 } else {
+                    HicreteLogger::logError("Error while adding product details");
                     $this->showAlert('Failure', "Error while adding.Please check information you entered");
                     $dbh->rollBack();
                 }
 
             } else {
+                HicreteLogger::logError("Error while adding product master");
                 $this->showAlert('Failure', "Error while adding.Please check information you entered");
                 $dbh->rollBack();
             }
 
         } catch (Exception $e) {
+            HicreteLogger::logFatal("Exception occured \n" . $e->getMessage());
             echo $e->getMessage();
 //                $dbh->rollBack();
         }
@@ -170,92 +184,113 @@ class Product extends CommonMethods
 
     public function updateProduct($dbh, $userId, $productDetails)
     {
+        try {
+            //BEGIN THE TRANSACTION
+            $dbh->beginTransaction();
+            $flag = false;
+            $updatedProductName = $productDetails->productname;
+            $productmasterid = $productDetails->productmasterid;
 
-        //BEGIN THE TRANSACTION
-        $dbh->beginTransaction();
-        $flag = false;
-        $updatedProductName = $productDetails->productname;
-        $productmasterid = $productDetails->productmasterid;
-
-        if ($productDetails->isProductMasterTable) {
-            $stmtMasterTable = $dbh->prepare("UPDATE product_master SET productname =:productname,materialtypeid=:materialtypeid,unitofmeasure=:unitofmeasure,lchnguserid=:lchnguserid,lchngtime=now()
+            HicreteLogger::logInfo("Updating product");
+            if ($productDetails->isProductMasterTable) {
+                HicreteLogger::logInfo("Updating product master");
+                $stmtMasterTable = $dbh->prepare("UPDATE product_master SET productname =:productname,materialtypeid=:materialtypeid,unitofmeasure=:unitofmeasure,lchnguserid=:lchnguserid,lchngtime=now()
           WHERE productmasterid = :productmasterid");
-            $stmtMasterTable->bindParam(':productname', $updatedProductName, PDO::PARAM_STR, 10);
-            $stmtMasterTable->bindParam(':materialtypeid', $productDetails->materialtypeid, PDO::PARAM_STR, 10);
-            $stmtMasterTable->bindParam(':unitofmeasure', $productDetails->unitofmeasure, PDO::PARAM_STR, 10);
-            $stmtMasterTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-            $stmtMasterTable->bindParam(':productmasterid', $productmasterid, PDO::PARAM_STR, 10);
-            if ($stmtMasterTable->execute()) {
-                // $this->showAlert('success',"Inward details updated Successfully!!!");
-                $flag = true;
-            } else {
-                //$this->showAlert('Failure',"Error while adding");
-                $flag = false;
+                $stmtMasterTable->bindParam(':productname', $updatedProductName, PDO::PARAM_STR, 10);
+                $stmtMasterTable->bindParam(':materialtypeid', $productDetails->materialtypeid, PDO::PARAM_STR, 10);
+                $stmtMasterTable->bindParam(':unitofmeasure', $productDetails->unitofmeasure, PDO::PARAM_STR, 10);
+                $stmtMasterTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                $stmtMasterTable->bindParam(':productmasterid', $productmasterid, PDO::PARAM_STR, 10);
+
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmtMasterTable));
+                HicreteLogger::logDebug("DATA: \n" . json_encode($productDetails));
+
+                if ($stmtMasterTable->execute()) {
+                    // $this->showAlert('success',"Inward details updated Successfully!!!");
+                    $flag = true;
+                } else {
+                    //$this->showAlert('Failure',"Error while adding");
+                    $flag = false;
+                }
             }
-        }
-        if ($productDetails->isProductDetailsTable) {
-            $stmtDetailsTable = $dbh->prepare("UPDATE product_details SET color =:color,description=:description,alertquantity=:alertquantity,
+            if ($productDetails->isProductDetailsTable) {
+                HicreteLogger::logInfo("Updating product details");
+                $stmtDetailsTable = $dbh->prepare("UPDATE product_details SET color =:color,description=:description,alertquantity=:alertquantity,
           lchnguserid=:lchnguserid,lchngtime=now()
           WHERE productdetailsid = :productdetailsid");
-            $stmtDetailsTable->bindParam(':color', $productDetails->color, PDO::PARAM_STR, 10);
-            $stmtDetailsTable->bindParam(':description', $productDetails->description, PDO::PARAM_STR, 10);
-            $stmtDetailsTable->bindParam(':alertquantity', $productDetails->alertquantity, PDO::PARAM_STR, 10);
-            $stmtDetailsTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-            $stmtDetailsTable->bindParam(':productdetailsid', $productDetails->productdetailsid, PDO::PARAM_STR, 10);
-            if ($stmtDetailsTable->execute()) {
-                // $this->showAlert('success',"Inward details updated Successfully!!!");
-                $flag = true;
-            } else {
-                //$this->showAlert('Failure',"Error while adding");
-                $flag = false;
+                $stmtDetailsTable->bindParam(':color', $productDetails->color, PDO::PARAM_STR, 10);
+                $stmtDetailsTable->bindParam(':description', $productDetails->description, PDO::PARAM_STR, 10);
+                $stmtDetailsTable->bindParam(':alertquantity', $productDetails->alertquantity, PDO::PARAM_STR, 10);
+                $stmtDetailsTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                $stmtDetailsTable->bindParam(':productdetailsid', $productDetails->productdetailsid, PDO::PARAM_STR, 10);
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmtDetailsTable));
+                HicreteLogger::logDebug("DATA: \n" . json_encode($productDetails));
+                if ($stmtDetailsTable->execute()) {
+                    // $this->showAlert('success',"Inward details updated Successfully!!!");
+                    $flag = true;
+                } else {
+                    //$this->showAlert('Failure',"Error while adding");
+                    $flag = false;
+                }
             }
-        }
 
-        if ($productDetails->isProductPackagingTable) {
+            if ($productDetails->isProductPackagingTable) {
+                HicreteLogger::logInfo("Updating product packaging");
 
-            $stmtPackagingTable = $dbh->prepare("UPDATE product_packaging SET packaging =:packaging, lchnguserid=:lchnguserid,lchngtime=now()
+                $stmtPackagingTable = $dbh->prepare("UPDATE product_packaging SET packaging =:packaging, lchnguserid=:lchnguserid,lchngtime=now()
           WHERE productpackagingid = :productpackagingid");
-            $stmtPackagingTable->bindParam(':packaging', $productDetails->packaging, PDO::PARAM_STR, 10);
-            $stmtPackagingTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-            $stmtPackagingTable->bindParam(':productpackagingid', $productDetails->productpackagingid, PDO::PARAM_STR, 10);
-            if ($stmtPackagingTable->execute()) {
-                // $this->showAlert('success',"Inward details updated Successfully!!!");
-                $flag = true;
-            } else {
-                // $this->showAlert('Failure',"Error while adding");
-                $flag = false;
+                $stmtPackagingTable->bindParam(':packaging', $productDetails->packaging, PDO::PARAM_STR, 10);
+                $stmtPackagingTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                $stmtPackagingTable->bindParam(':productpackagingid', $productDetails->productpackagingid, PDO::PARAM_STR, 10);
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmtPackagingTable));
+                HicreteLogger::logDebug("DATA: \n" . json_encode($productDetails));
+                if ($stmtPackagingTable->execute()) {
+                    // $this->showAlert('success',"Inward details updated Successfully!!!");
+                    $flag = true;
+                } else {
+                    // $this->showAlert('Failure',"Error while adding");
+                    $flag = false;
 
+                }
             }
-        }
 
-        if ($productDetails->isProductMaterialTable) {
-            $stmtMaterialTable = $dbh->prepare("UPDATE material SET abbrevation =:abbrevation, lchnguserid=:lchnguserid,lchngtime=now()
+            if ($productDetails->isProductMaterialTable) {
+                HicreteLogger::logInfo("Updating material");
+                $stmtMaterialTable = $dbh->prepare("UPDATE material SET abbrevation =:abbrevation, lchnguserid=:lchnguserid,lchngtime=now()
           WHERE materialid = :materialid");
-            $stmtMaterialTable->bindParam(':abbrevation', $productDetails->abbrevation, PDO::PARAM_STR, 10);
-            $stmtMaterialTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
-            $stmtMaterialTable->bindParam(':materialid', $productDetails->materialid, PDO::PARAM_STR, 10);
-            if ($stmtMaterialTable->execute()) {
+                $stmtMaterialTable->bindParam(':abbrevation', $productDetails->abbrevation, PDO::PARAM_STR, 10);
+                $stmtMaterialTable->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                $stmtMaterialTable->bindParam(':materialid', $productDetails->materialid, PDO::PARAM_STR, 10);
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmtMaterialTable));
+                HicreteLogger::logDebug("DATA: \n" . json_encode($productDetails));
+                if ($stmtMaterialTable->execute()) {
+                    // $this->showAlert('success',"Inward details updated Successfully!!!");
+                    $flag = true;
+                } else {
+                    // $this->showAlert('Failure',"Error while adding");
+                    $flag = false;
+                }
+            }
+            if ($flag) {
                 // $this->showAlert('success',"Inward details updated Successfully!!!");
-                $flag = true;
+                if ($dbh->commit()) {
+                    HicreteLogger::logInfo("Product updated successfully");
+                    $this->showAlert('success', "Product Updated Successfully!!!");
+                } else {
+                    $this->showAlert('success', "Commit failed!!");
+                }
             } else {
-                // $this->showAlert('Failure',"Error while adding");
-                $flag = false;
+                HicreteLogger::logError("Error while updating product");
+                $this->showAlert('Failure', "Error while Updating");
+                $dbh->rollBack();
             }
+
+        } catch (Exception $e) {
+            HicreteLogger::logFatal("Exception occured :\n" . $e->getMessage());
+            $this->showAlert('Failure', "Exception occured please contact admin");
         }
-        if ($flag) {
-            // $this->showAlert('success',"Inward details updated Successfully!!!");
-            if ($dbh->commit()) {
-                $this->showAlert('success', "Product Updated Successfully!!!");
-            } else {
-                $this->showAlert('success', "Commit failed!!");
-            }
-        } else {
-            $this->showAlert('Failure', "Error while adding");
-            $dbh->rollBack();
-        }
+
     }
-
-
 }
 
 ?>

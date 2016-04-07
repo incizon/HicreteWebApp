@@ -7,3 +7,11 @@
 2016-04-06 19:17:54 - INFO  --> Searching suppliers 
 2016-04-06 19:17:54 - INFO  --> Data fetch successful:
 [{"supplierid":"7","suppliername":"pradeep kulkarni","contactno":"08149050480","pointofcontact":"asdasdasd","officeno":"123123123123","cstno":null,"vatno":null,"address":"A\/8 state bank staff shivneri hsg soc shivtirthnagar paud road","city":"Pune","country":"India","pincode":"123456","delflg":"N","lchnguserid":"56e87cbeedde77493","lchngtime":"2016-04-05","creuserid":"56e87cbeedde77493","cretime":"2016-04-05"}] 
+2016-04-07 18:55:12 - INFO  --> Searching suppliers 
+2016-04-07 18:56:35 - INFO  --> Searching suppliers 
+2016-04-07 18:56:53 - INFO  --> Searching suppliers 
+2016-04-07 18:56:55 - INFO  --> Searching suppliers 
+2016-04-07 18:57:11 - INFO  --> Searching suppliers 
+2016-04-07 18:57:30 - INFO  --> Searching suppliers 
+2016-04-07 18:58:03 - INFO  --> Searching suppliers 
+2016-04-07 18:58:08 - INFO  --> Searching suppliers 
