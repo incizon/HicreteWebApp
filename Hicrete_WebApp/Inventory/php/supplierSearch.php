@@ -17,13 +17,15 @@ switch ($data->operation) {
     case "search":
         try {
             HicreteLogger::logInfo("Searching suppliers");
-            $stmt = $dbh->prepare("select * from supplier");
-
+            $supplierName="%".$data->data."%";
+            $stmt = $dbh->prepare("select * from supplier where suppliername like :supplierName");
+            $stmt->bindParam(':supplierName', $supplierName, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query: ".json_encode($stmt));
             if ($stmt->execute()) {
                 $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
                 $result = $stmt->fetchAll();
                 $json = json_encode($result);
-                HicreteLogger::logInfo("Data fetch successful:\n".$json);
+                //HicreteLogger::logInfo("Data fetch successful:\n".$json);
                 echo $json;
             } else {
                 HicreteLogger::logInfo("Data fetch failed:\n");
@@ -34,8 +36,11 @@ switch ($data->operation) {
 
 
         } catch (Exception $e) {
-            HicreteLogger::logInfo("Exception occured :\n".$e->getMessage());
-            echo "Exception occured";
+            HicreteLogger::logFatal("Exception occured :\n".$e->getMessage());
+            $arr = array('msg' => '', 'error' => 'Exception occured');
+            $jsn = json_encode($arr);
+            echo($jsn);
+
         }
         break;
     case "modify":
@@ -55,14 +60,15 @@ switch ($data->operation) {
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':supplierId', $data->data->supplierid, PDO::PARAM_STR);
 
-            HicreteLogger::logInfo("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Data:\n ".json_encode($data->data));
             if ($stmt->execute()) {
-                HicreteLogger::logInfo("Supplier Modified . \n".json_encode($data->data));
+                HicreteLogger::logInfo("Supplier Modified . \n");
                 $arr = array('msg' => 'Supplier modified successfully', 'error' => '');
                 $jsn = json_encode($arr);
                 echo($jsn);
             } else {
-                HicreteLogger::logInfo("Error while modifying suppliers. \n".json_encode($data->data));
+                HicreteLogger::logInfo("Error while modifying suppliers. \n");
                 $arr = array('msg' => '', 'error' => 'Error occured while modifying supplier');
                 $jsn = json_encode($arr);
                 echo($jsn);
