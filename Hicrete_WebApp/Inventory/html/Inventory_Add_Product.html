@@ -120,11 +120,11 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input type="text" name="productColor" maxlength="20" data-ng-model="product.color" class="form-control" required/>
+                                <input type="text" name="productColor" maxlength="100" data-ng-model="product.color" class="form-control" required/>
                             </div>
                             <div class="help-block" ng-messages="addProductForm.productColor.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please enter product color</p>
-                                <p style="color:red" ng-message="maxlength">Maximum 20 character allowed</p>
+                                <p style="color:red" ng-message="maxlength">Maximum 100 character allowed</p>
                             </div>
                             <!-- <span class="help-block">This is sample of text field</span> -->
                         </div>
