@@ -1,0 +1,9 @@
+2016-04-06 19:10:42 - INFO  --> Checking if the supplier is available 
+2016-04-06 19:10:42 - INFO  --> Count fetched by query: 0 
+2016-04-06 19:10:42 - INFO  --> Query:
+ {"queryString":"INSERT INTO supplier (SUPPLIERNAME,CONTACTNO,POINTOFCONTACT,OFFICENO,CSTNO,VATNO,ADDRESS,CITY,COUNTRY,PINCODE,DELFLG,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)\r\n              values (:supplierName,:contactNo,:pointofcontact,:officeno,:cstno,:vatno,:address,:city,:country,:pincode,:delflg,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-06 19:10:42 - INFO  --> Supplier Created successfully DATA: 
+{"supplierName":"askdhaksdj","contactNo":"1826362354273","address":"A\/8 state bank staff shivneri hsg soc shivtirthnagar paud road","city":"pune","country":"india","pinCode":"412322","pointOfContact":"asdasdasd","officeNo":"1723617238","VATNo":"","CSTNo":""} 
+2016-04-06 19:17:54 - INFO  --> Searching suppliers 
+2016-04-06 19:17:54 - INFO  --> Data fetch successful:
+[{"supplierid":"7","suppliername":"pradeep kulkarni","contactno":"08149050480","pointofcontact":"asdasdasd","officeno":"123123123123","cstno":null,"vatno":null,"address":"A\/8 state bank staff shivneri hsg soc shivtirthnagar paud road","city":"Pune","country":"India","pincode":"123456","delflg":"N","lchnguserid":"56e87cbeedde77493","lchngtime":"2016-04-05","creuserid":"56e87cbeedde77493","cretime":"2016-04-05"}] 

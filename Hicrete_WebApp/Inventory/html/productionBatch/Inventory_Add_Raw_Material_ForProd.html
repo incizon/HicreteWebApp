@@ -34,11 +34,11 @@
 
                                     <div class="form-group">
                                     <div class="row" style="margin-top: 1%;" ng-repeat="rawMat in prodBatchInfo.rawMaterial" >
-                                        <div class="col-md-6">
+                                        <div class="col-md-4">
                                             
                                             <div class="form-group">
-                                                <label class="col-md-3 control-label">Material</label>
-                                                <div class="col-md-9">                                            
+                                                <label class="col-md-5 control-label">Material</label>
+                                                <div class="col-md-7">
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
                                                         <!-- try -->
@@ -60,11 +60,11 @@
                                             </div>
                                              
                                         </div>
-                                        <div class="col-md-6">
+                                        <div class="col-md-5">
                                             
                                             <div class="form-group">                                        
-                                                <label class="col-md-3 control-label">Quantity</label>
-                                                <div class="col-md-9">
+                                                <label class="col-md-4 control-label">Quantity</label>
+                                                <div class="col-md-7">
                                                     <div class="input-group" style="width:100%">
                                                         <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
                                                         <input ng-change="check(rawMat.quantity)" name="quantity" style="width: 66%;" type="number" ng-model="rawMat.quantity" class="form-control" required>

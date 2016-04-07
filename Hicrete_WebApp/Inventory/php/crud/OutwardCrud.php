@@ -41,12 +41,9 @@ class OutwardData extends CommonMethods
         if ($OutwardObj->operation == 'insert') {
             $OutwardDetails = $OutwardObj->outwardData;
             $this->OutwardNumber = $OutwardDetails->OutwardNumber;
-//            $this->material = $OutwardDetails->material;
-//            $this->packageUnit = $OutwardDetails->packageUnit;
             $this->companyName = $OutwardDetails->companyName;
             $this->dateOfOutward = $OutwardDetails->date;
 
-//            $this->materialQty = $OutwardDetails->materialQuantity;
             $this->warehouse = $OutwardDetails->warehouseName;
             $this->suppervisor = $OutwardDetails->suppervisor;
             $this->hasTransportDetails = $OutwardDetails->hasTransportDetails;
@@ -57,72 +54,66 @@ class OutwardData extends CommonMethods
                 $this->remark = $OutwardDetails->transportRemark;
                 $this->transportAgency = $OutwardDetails->transportAgency;
                 $this->driverName = $OutwardDetails->driver;
-                // $this->transportPayable = $OutwardDetails->transportPayable;
             }
         }
     }
 
-    public function getOutwardEntries($dbh,$keyword,$searchTerm)
+    public function getOutwardEntries($dbh, $keyword, $searchTerm)
     {
-        $keyword="%".$keyword."%";
+        $keyword = "%" . $keyword . "%";
 
         $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from outward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
 
-        switch($searchTerm) {
+        switch ($searchTerm) {
             case 'OutwardNo':
-                $selectStatement = $selectStatement." AND a.outwardno like :keyword";
+                $selectStatement = $selectStatement . " AND a.outwardno like :keyword";
                 break;
             case'Company':
-                $selectStatement = $selectStatement." AND b.companyName like :keyword";
+                $selectStatement = $selectStatement . " AND b.companyName like :keyword";
                 break;
             case'Warehouse':
-                $selectStatement = $selectStatement." AND c.wareHouseName like :keyword";
+                $selectStatement = $selectStatement . " AND c.wareHouseName like :keyword";
                 break;
         }
         $stmt = $dbh->prepare($selectStatement);
-        if($searchTerm == 'OutwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
+        if ($searchTerm == 'OutwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
             $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
         }
         //$stmt = $dbh->prepare("SELECT * FROM outward");
         if ($stmt->execute()) {
 
             //push it into array
-            $json_array=array();
+            $json_array = array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $outwardData = array();
                 $outwardID = $result2['outwardid'];
-                $outwardData['outwardno']=$result2['outwardno'];
-                $outwardData['warehouseid']=$result2['warehouseid'];
-                $outwardData['companyid']=$result2['companyid'];
-                $outwardData['supervisorid']=$result2['supervisorid'];
-                $outwardData['dateofentry']=$result2['dateofentry'];
+                $outwardData['outwardno'] = $result2['outwardno'];
+                $outwardData['warehouseid'] = $result2['warehouseid'];
+                $outwardData['companyid'] = $result2['companyid'];
+                $outwardData['supervisorid'] = $result2['supervisorid'];
+                $outwardData['dateofentry'] = $result2['dateofentry'];
 
-                $companyId=$result2['companyid'];
-                $warehouseId=$result2['warehouseid'];
-                //$outwardData['companyName']=DatabaseCommonOperations::getCompanyName($companyId);
-               // $outwardData['warehouseName']=DatabaseCommonOperations::getWarehouseName($warehouseId);
+                $outwardData['companyName'] = $result2['companyName'];
+                $outwardData['warehouseName'] = $result2['wareHouseName'];
 
-                $outwardData['companyName']=$result2['companyName'];
-                $outwardData['warehouseName']=$result2['wareHouseName'];
-
-                $stmtTransport=$dbh->prepare("SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID");
+                $stmtTransport = $dbh->prepare("SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID");
                 $stmtTransport->bindParam(':outwardID', $outwardID);
-                if($stmtTransport->execute()){
-                    if($stmtTransport->rowCount()==0){
-                        $outwardData['transportationmode']="--";
-                        $outwardData['vehicleno']="--";
-                        $outwardData['drivername']="--";
-                        $outwardData['transportagency']="--";
-                        $outwardData['cost']="--";
-                        $outwardData['remark']="--";
-                    }else{
-                        while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)){
-                            $outwardData['transportationmode']=$resultTransport['transportationmode'];
-                            $outwardData['vehicleno']=$resultTransport['vehicleno'];
-                            $outwardData['drivername']=$resultTransport['drivername'];
-                            $outwardData['transportagency']=$resultTransport['transportagency'];
-                            $outwardData['cost']=$resultTransport['cost'];
-                            $outwardData['remark']=$resultTransport['remark'];
+                if ($stmtTransport->execute()) {
+                    if ($stmtTransport->rowCount() == 0) {
+                        $outwardData['transportationmode'] = "--";
+                        $outwardData['vehicleno'] = "--";
+                        $outwardData['drivername'] = "--";
+                        $outwardData['transportagency'] = "--";
+                        $outwardData['cost'] = "--";
+                        $outwardData['remark'] = "--";
+                    } else {
+                        while ($resultTransport = $stmtTransport->fetch(PDO::FETCH_ASSOC)) {
+                            $outwardData['transportationmode'] = $resultTransport['transportationmode'];
+                            $outwardData['vehicleno'] = $resultTransport['vehicleno'];
+                            $outwardData['drivername'] = $resultTransport['drivername'];
+                            $outwardData['transportagency'] = $resultTransport['transportagency'];
+                            $outwardData['cost'] = $resultTransport['cost'];
+                            $outwardData['remark'] = $resultTransport['remark'];
                         }
                     }
                 }
@@ -139,9 +130,7 @@ class OutwardData extends CommonMethods
                 $stmt1->bindParam(':outwardID', $outwardID);
 
                 if ($stmt1->execute()) {
-//                    array_push($inwardData,$stmt1->fetchAll());
                     while ($resultMaterials = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-
                         $outwardData['materialDetails'][] = array(
                             'outwardid' => $resultMaterials['outwardid'],
                             'materialid' => $resultMaterials['materialid'],
@@ -152,7 +141,7 @@ class OutwardData extends CommonMethods
                         );
                     }
 
-                    array_push($json_array,$outwardData);
+                    array_push($json_array, $outwardData);
                 } else {
                     //Rollback
                     echo "Error2 ";
@@ -166,16 +155,20 @@ class OutwardData extends CommonMethods
             echo "Error";
         }
     }
-    public function isAvailable($dbh){
+
+    public function isAvailable($dbh)
+    {
         $stmt = $dbh->prepare("SELECT outwardno FROM Outward WHERE outwardno =:outwardno");
-        $stmt->bindParam(':outwardno', $this->OutwardNumber, PDO::PARAM_STR, 10);
+        $outwardNumber = trim($this->OutwardNumber);
+        $stmt->bindParam(':outwardno', $outwardNumber, PDO::PARAM_STR, 10);
 
         $stmt->execute();
-        $count=$stmt->rowcount();
-        if($count!=0)
-        {return 1;}
-        else
-        {return 0;}
+        $count = $stmt->rowcount();
+        if ($count != 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
     public function insertOutwardInToDb($dbh, $userId, $data)
@@ -183,14 +176,14 @@ class OutwardData extends CommonMethods
         try {
             //BEGIN THE TRANSACTION
             $dbh->beginTransaction();
-	        $date = new DateTime($this->dateOfOutward);
+            $date = new DateTime($this->dateOfOutward);
             $dob = $date->format('Y-m-d');
             $stmtOutward = $dbh->prepare("INSERT INTO outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
                            values (:warehouseid,:companyid,:supervisorid,:dateofentry,:Outwardno,:lchnguserid,now(),:creuserid,now())");
             $stmtOutward->bindParam(':warehouseid', $this->warehouse, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':companyid', $this->companyName, PDO::PARAM_STR, 10);
-            $stmtOutward->bindParam(':supervisorid',  $this->suppervisor, PDO::PARAM_STR, 10);
-             $stmtOutward->bindParam(':dateofentry', $dob, PDO::PARAM_STR, 40);
+            $stmtOutward->bindParam(':supervisorid', $this->suppervisor, PDO::PARAM_STR, 10);
+            $stmtOutward->bindParam(':dateofentry', $dob, PDO::PARAM_STR, 40);
             $stmtOutward->bindParam(':Outwardno', $this->OutwardNumber, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
@@ -230,19 +223,19 @@ class OutwardData extends CommonMethods
                             $stmtInventory->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
 
                             if ($stmtInventory->execute()) {
-                                $isSuccess=true;
+                                $isSuccess = true;
 
                             } else {
-                                 $this->showAlert('Failure', "Error 3rd");
-                                $isSuccess=false;
+                                $this->showAlert('Failure', "Error 3rd");
+                                $isSuccess = false;
 
                             }
-                        }else{
-                   $this->showAlert('Failure', "Error 2nd");
-                             $isSuccess = false;
+                        } else {
+                            $this->showAlert('Failure', "Error 2nd");
+                            $isSuccess = false;
                         }
                     } else {
-                   $this->showAlert('Failure', "Error 1st");
+                        $this->showAlert('Failure', "Error 1st");
                         $isSuccess = false;
                     }
                 }
@@ -266,16 +259,16 @@ class OutwardData extends CommonMethods
                         $stmtTransportDetails->bindParam(':remark', $this->remark, PDO::PARAM_STR, 10);
 
                         if ($stmtTransportDetails->execute()) {
-                                $this->showAlert('success', "Outward details added Successfully!!!");
-                                $dbh->commit();
+                            $this->showAlert('success', "Outward details added Successfully!!!");
+                            $dbh->commit();
 
                         } else {
                             $this->showAlert('Failure', "Error while adding 3rd");
                             $dbh->rollBack();
                         }
                     } else {
-                                $this->showAlert('success', "Outward details added Successfully!!!");
-                                $dbh->commit();
+                        $this->showAlert('success', "Outward details added Successfully!!!");
+                        $dbh->commit();
                     }
 
 

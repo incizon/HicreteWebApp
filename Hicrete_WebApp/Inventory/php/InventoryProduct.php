@@ -41,11 +41,11 @@ require_once 'utils/Common_Methods.php';
 	switch ($productDetails->opertaion) {
 	 	case 'insert':
 				# code...
-//			if($productObj->isAvailable($dbh)){
+			if(!$productObj->isAvailable($dbh)){
 				$productObj->insertProductInToDb($dbh,$userId);
-//			}else{
-//				echo "Product you are trying to add is already added";
-//			}
+			}else{
+				$showAlerts->showAlert("Failure","Product you are trying to add is already added");
+			}
 
 	 	break;
 	 	case 'delete':

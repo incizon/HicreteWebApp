@@ -1,4 +1,5 @@
 <?php
+include_once "../../php/HicreteLogger.php";
 class Supplier
 {
     public $supplierName;
@@ -47,10 +48,12 @@ class Supplier
     }
     public function isAvailable($dbh)
     {
+        HicreteLogger::logInfo("Checking if the supplier is available");
          $stmt = $dbh->prepare("SELECT supplierName FROM SUPPLIER WHERE contactno =:contactNo AND delflg!='Y'");
          $stmt->bindParam(':contactNo', $this->contactNo, PDO::PARAM_STR, 10);
          $stmt->execute();
          $count=$stmt->rowcount();
+        HicreteLogger::logInfo("Count fetched by query: ".$count);
          if($count!=0)
          {return 1;}
          else
@@ -81,8 +84,10 @@ class Supplier
             $stmt->bindParam(':lchngUserId', $userId);
             $stmt->bindParam(':creUserId', $userId);
 
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             if($stmt->execute())
             {
+                HicreteLogger::logDebug("Supplier Created successfully DATA: \n".json_encode($supplier));
                 $message="Supplier Created successfully";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
@@ -91,6 +96,7 @@ class Supplier
             }
             else
             {
+                HicreteLogger::logDebug("Supplier Creation failed \n data: \n".json_encode($supplier));
                 $message="Issues while adding supplier.Please contact administrator ";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
@@ -99,6 +105,7 @@ class Supplier
             }
         }catch(Exception $e)
         {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             $message="Exception thrown";
             return $message;
 

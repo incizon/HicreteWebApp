@@ -1,5 +1,6 @@
 <?php
 	require_once 'Database/Database.php';
+    require_once "../../php/HicreteLogger.php";
 
 
 	$db = Database::getInstance();
@@ -23,6 +24,9 @@
 	}
 	//echo $selectStatement;
 	$stmt=$dbh->prepare($selectStatement);
+	HicreteLogger::logInfo("Searching Products");
+	HicreteLogger::logDebug("Query: ".json_encode($stmt));
+	HicreteLogger::logDebug("Data: ".json_encode($mData));
 	if(isset($mData->SearchTerm)) {
 	if ($mData->SearchTerm == 'productName' || $mData->SearchTerm == 'materialType') {
 		$stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
