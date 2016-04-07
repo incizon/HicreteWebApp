@@ -6,6 +6,7 @@
     require_once 'utils/InventoryUtils.php';
     require_once 'utils/Common_Methods.php';
 
+
     /********************************************************
      * Get connection to the Database
      **********************************************************/
@@ -47,11 +48,29 @@
         case 'getProductsForInward':
             getProductsForInward();
             break;
+        case 'getSuppliers':
+            getSuppliers();
+            break;
         default:
             # code...
             break;
     }
 
+    function getSuppliers(){
+        global $dbh;
+        $stmt = $dbh->prepare("SELECT supplierid,suppliername FROM supplier");
+
+        if ($stmt->execute()) {
+            if($stmt->rowCount()>0){
+                $result = $stmt->fetchAll();
+                echo json_encode($result);
+            }
+
+        } else {
+            $returnVal=array('status' => "Fail", 'message' => "Suppliers not found" );
+            echo json_encode($returnVal);
+        }
+    }
     function getProductsForInward(){
         global $dbh;
         $stmt = $dbh->prepare("SELECT product_master.productmasterid,product_master.productname,product_master.unitofmeasure,material.materialid FROM product_master JOIN material ON product_master.productmasterid=material.productmasterid");
