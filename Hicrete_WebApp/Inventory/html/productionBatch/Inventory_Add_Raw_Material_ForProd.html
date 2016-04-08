@@ -42,7 +42,7 @@
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
                                                         <!-- try -->
-                                                           <select ng-change="getAvailableQty(rawMat.material)"  class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material" name="rawMaterial" required>
+                                                           <select ng-change="getAvailableQty(rawMat.material)" style="width:214%;"  class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material" name="rawMaterial" required>
                                                                    <option value="" disabled selected>Select</option>
                                                                    <option ng-repeat="x in existingMaterials" 
                                                                       value={{x.materialid}}>{{x.productname}}
