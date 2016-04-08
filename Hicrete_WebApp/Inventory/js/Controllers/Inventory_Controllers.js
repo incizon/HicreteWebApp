@@ -1512,6 +1512,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
     $scope.prodBatchPerPage = 10;
     $scope.submitted = false;
 
+    inventoryService.getProductsForOutward($scope,$http);
     $scope.paginate = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1599,9 +1600,9 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
     $scope.getAvailableQty = function (pMaterialId) {
         var qty;
         // console.log("New function here");
-        for (var i = 0; i < $scope.inventoryData.length; i++) {
-            if (pMaterialId == $scope.inventoryData[i].materialid) {
-                qty = $scope.inventoryData[i].totalquantity;
+        for (var i = 0; i < $scope.materialsForOutward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutward[i].materialid) {
+                qty = $scope.materialsForOutward[i].totalquantity;
                 if (qty != "undefined") {
                     console.log("here");
                     $scope.availableTotalquantity = qty;
