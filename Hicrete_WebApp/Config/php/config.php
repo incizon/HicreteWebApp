@@ -1,6 +1,7 @@
 <?php
 require_once '../../php/Database.php';
 require_once '../../php/appUtil.php';
+require_once "../../php/HicreteLogger.php";
 
 class Config
 {
@@ -9,14 +10,17 @@ class Config
     public static function isCompanyAvailable($companyName)
     {
         try {
+            HicreteLogger::logInfo("Checking if the company is available");
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $stmt = $conn->prepare("select count(1) as count from companymaster where companyName=:companyName");
             $stmt->bindParam(':companyName', $companyName, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $count = $result['count'];
-
+            HicreteLogger::logDebug("Count:\n ".json_encode($count));
             if ($count != 0) {
                 return 0;
             } else
@@ -24,7 +28,8 @@ class Config
         }
         catch(Exception $e)
         {
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            return 0;
         }
 
     }
@@ -37,6 +42,7 @@ class Config
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
+            HicreteLogger::logInfo("Adding company");
             if(config::isCompanyAvailable($data->name)) {
                 $conn->beginTransaction();
                 $companyId = AppUtil::generateId();
@@ -60,6 +66,7 @@ class Config
                 $stmt->bindParam(':phone', $data->phone, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                 $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+                HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
                 if ($stmt->execute()) {
                     $stmt = $conn->prepare("INSERT INTO `company_bank_details`(`companyId`, `BankName`, `BankBranch`, `AccountName`, `AccountNo`, `AccountType`, `IFSCCode`)
                         VALUES (:id,:bankName,:bankBranch,:accountName,:accountNo,:accountType,:ifscCode)");
@@ -70,28 +77,32 @@ class Config
                     $stmt->bindParam(':accountNo', $data->accountNo, PDO::PARAM_STR);
                     $stmt->bindParam(':accountType', $data->accountType, PDO::PARAM_STR);
                     $stmt->bindParam(':ifscCode', $data->IFSCCode, PDO::PARAM_STR);
+                    HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
                     if ($stmt->execute()) {
                         $conn->commit();
+                        HicreteLogger::logInfo("Company created successfully");
                         echo AppUtil::getReturnStatus("Successful", "Company Created Successfully");
                     } else {
+                        HicreteLogger::logError("Company creation failed");
                         $conn->rollBack();
-                        echo AppUtil::getReturnStatus("Unsuccessful", "Cannot Add Bank Details");
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Company creation failed");
                     }
 
 
                 } else {
-
+                    HicreteLogger::logError("Company creation failed");
                     echo AppUtil::getReturnStatus("Unsuccessful", "Cannot Create Company");
 
                 }
             }
             else
             {
+                HicreteLogger::logError("Company is already available");
                 echo AppUtil::getReturnStatus("Unsuccessful", "Company is already available");
             }
 
         } catch (Exception $e) {
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception", "Exception Occurred while creating company");
 
         }
@@ -103,11 +114,14 @@ class Config
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            HicreteLogger::logInfo("Checking if the warehouse is available");
             $stmt = $conn->prepare("select count(1) as count from warehousemaster where wareHouseName=:wareHouseName");
             $stmt->bindParam(':wareHouseName', $warehouseName, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             $count = $result['count'];
+            HicreteLogger::logDebug("Count:\n ".json_encode($count));
 
             if ($count != 0) {
                 return 0;
@@ -116,7 +130,8 @@ class Config
         }
         catch(Exception $e)
         {
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            return 0;
         }
 
     }
@@ -127,7 +142,7 @@ class Config
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-
+            HicreteLogger::logInfo("Adding Warehouse");
             if(config::isWarehouseAvailable($data->name)) {
                 $warehouseId = AppUtil::generateId();
 
@@ -146,22 +161,26 @@ class Config
                 $stmt->bindParam(':phone', $data->phone, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                 $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+                HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+
                 if ($stmt->execute()) {
+                    HicreteLogger::logInfo("Warehouse added succesfully");
                     echo AppUtil::getReturnStatus("Successful", "");
 
 
                 } else {
-
+                    HicreteLogger::logError("Warehouse addition unsuccesfully");
                     echo AppUtil::getReturnStatus("Unsuccessful", "Insert failed");
 
                 }
             }
             else{
+                HicreteLogger::logError("Warehouse already available");
                 echo AppUtil::getReturnStatus("Unsuccessful", "Warehouse is Already Available");
             }
 
         } catch (Exception $e) {
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception", "Exception Occurred while creating warehouse");
 
         }
@@ -173,11 +192,14 @@ class Config
         try{
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            HicreteLogger::logInfo("Checking if the role is available");
             $stmt = $conn->prepare("select count(1) as count from rolemaster where roleName=:roleName");
             $stmt->bindParam(':roleName', $roleName, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             $stmt ->execute();
             $result=$stmt->fetch(PDO::FETCH_ASSOC);
             $count=$result['count'];
+            HicreteLogger::logDebug("Count:\n ".$count);
 
             if($count!=0)
             {
@@ -190,7 +212,8 @@ class Config
         }
         catch(Exception $e)
         {
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            return 0;
         }
 
     }
@@ -202,7 +225,7 @@ class Config
         try {
             $db = Database::getInstance();
             $conn = $db->getConnection();
-
+            HicreteLogger::logInfo("Creating role");
             if(config::isRoleAvailable($data->roleName)) {
                 $conn->beginTransaction();
 
@@ -215,6 +238,7 @@ class Config
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
 
                 $rollback = false;
+                HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
                 if ($stmt->execute()) {
 
                     foreach ($data->accessPermissions as $accessEntry) {
@@ -233,22 +257,27 @@ class Config
                         }
                     }
                 } else {
+                    HicreteLogger::logError("Role addition failed");
                     echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
                 }
 
 
                 if ($rollback) {
                     $conn->rollback();
+                    HicreteLogger::logError("Role addition failed");
                     echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
                 } else {
                     $conn->commit();
+                    HicreteLogger::logInfo("Role Created successfully");
                     echo AppUtil::getReturnStatus("Successful", "Role created successfully");
                 }
             }
             else{
+                HicreteLogger::logError("Role is already available");
                 echo AppUtil::getReturnStatus("Unsuccessful", "Role is Already Available");
             }
         } catch (Exception $e) {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception", "Exception Occurred while creating role");
         }
 
@@ -263,6 +292,8 @@ class Config
         $stmt->bindParam(':roleId', $roleId, PDO::PARAM_STR);
         $stmt->bindParam(':accessId', $accessId, PDO::PARAM_STR);
         $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+        HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+        HicreteLogger::logDebug("Data:\n ".$permissionId." ".$roleId." ".$accessId);
         return $stmt->execute();
     }
 
@@ -276,6 +307,8 @@ class Config
         $stmt->bindParam(':userType', $userType, PDO::PARAM_STR);
         $stmt->bindParam(':lastModifiedBy', $requestUserId, PDO::PARAM_STR);
         $stmt->bindParam(':createdBy', $requestUserId, PDO::PARAM_STR);
+        HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+        HicreteLogger::logDebug("Data:\n ".$designation." ".$roleId." ".$userType." ".$requestUserId);
         return $stmt->execute();
     }
 
@@ -308,12 +341,15 @@ class Config
             $stmt->bindParam(':emailId', $data->superUserInfo->email, PDO::PARAM_STR);
             $stmt->bindParam(':createdBy', $loggedInUserId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $loggedInUserId, PDO::PARAM_STR);
-
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Data:\n ".json_encode($data));
 
             if ($stmt->execute()) {
                 $stmt = $conn->prepare("INSERT INTO `superuserdesignation`(`userId`, `designation`) VALUES (:userId,:designation)");
                 $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
                 $stmt->bindParam(':designation', $data->superUserInfo->designation, PDO::PARAM_STR);
+                HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+                HicreteLogger::logDebug("Data:\n ".json_encode($data));
                 if($stmt->execute()){
                     $stmt = $conn->prepare("INSERT INTO `logindetails`(`userId`, `userName`, `password`)
                             VALUES (:userId,:userName,:password)");
@@ -322,26 +358,33 @@ class Config
                     $password = mt_rand(1000000, 9999999);
                     $hash = sha1($password);
                     $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+                    HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+                    HicreteLogger::logDebug("Data:\n ".json_encode($data));
                     if($stmt->execute()){
                         echo AppUtil::getReturnStatus("Success","Super User created successfully. Username is :".$data->superUserInfo->email.
                             "  Password is:".$password);
                         $conn->commit();
                         AppUtil::sendMail($data->superUserInfo->email,$password,$data->superUserInfo->email,$data->superUserInfo->firstName);
                     }else{
+                        HicreteLogger::logError("Database error occured ");
+
                         echo AppUtil::getReturnStatus("fail","Database Error Occurred");
                         $conn->rollBack();
                     }
 
                 }else{
+                    HicreteLogger::logError("Database error occured ");
                     echo AppUtil::getReturnStatus("fail","Database Error Occurred");
                     $conn->rollBack();
                 }
             }else{
+                HicreteLogger::logError("Database error occured ");
                 echo AppUtil::getReturnStatus("fail","Database Error Occurred");
                 $conn->rollBack();
             }
 
         }catch(Exception $e){
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception","Exception Occurred");
         }
     }
@@ -356,6 +399,8 @@ class Config
         $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
         $stmt->bindParam(':accessId', $accessId, PDO::PARAM_STR);
         $stmt->bindParam(':createdBy', $requestUserId, PDO::PARAM_STR);
+        HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+        HicreteLogger::logDebug("Data:\n ".$permissionId." ".$userId." ".$accessId." ".$requestUserId);
         return $stmt->execute();
 
     }
@@ -368,10 +413,11 @@ class Config
             $conn = $db->getConnection();
             $stmt = $conn->prepare("select count(1) as count from usermaster where emailId=:emailId");
             $stmt->bindParam(':emailId', $emailId, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             $stmt ->execute();
             $result=$stmt->fetch(PDO::FETCH_ASSOC);
             $count=$result['count'];
-
+            HicreteLogger::logDebug("Count: ".$count);
             if($count!=0)
             {
                 return 0;
@@ -383,7 +429,7 @@ class Config
         }
         catch(Exception $e)
         {
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
         }
 
     }
@@ -419,6 +465,8 @@ class Config
                 $stmt->bindParam(':lastModifiedBy', $requestUserId, PDO::PARAM_STR);
 
                 $rollback = false;
+                HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+                HicreteLogger::logDebug("Data:\n ".json_encode($data));
                 if ($stmt->execute()) {
 
                     if (!Config::insertRoleInfo($conn, $userId, $data->userInfo->designation, $data->roleId, $data->userInfo->userType, $requestUserId)) {
@@ -455,6 +503,8 @@ class Config
                         $password = mt_rand(1000000, 9999999);
                         $hash = sha1($password);
                         $stmt->bindParam(':password', $hash, PDO::PARAM_STR);
+                        HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+
                         if (!$stmt->execute()) {
 
                             $rollback = true;
@@ -463,25 +513,30 @@ class Config
 
                     }
                 } else {
+                    HicreteLogger::logError("Unknown Database error occured ");
                     echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
                 }
 
 
                 if ($rollback) {
                     $conn->rollback();
+                    HicreteLogger::logError("Unknown Database error occured ");
                     echo AppUtil::getReturnStatus("Unsuccessful", "Unknown database error occurred");
                 } else {
                     $conn->commit();
+                    HicreteLogger::logInfo("User added successfully");
                     echo AppUtil::getReturnStatus("Successful", $password);
                     AppUtil::sendMail($data->userInfo->email, $password, $data->userInfo->email, $data->userInfo->firstName);
                 }
             }
             else
             {
+                HicreteLogger::logError("user already available");
                 echo AppUtil::getReturnStatus("Unsuccessful", "User Already Available");
             }
 
         } catch (Exception $e) {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception", "Exception Occurred while creating role");
         }
 
@@ -490,7 +545,7 @@ class Config
     public static function modifyUserDetails($data)
     {
         try{
-
+            HicreteLogger::logInfo("Modifying user");
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
@@ -513,13 +568,18 @@ class Config
             $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':profilePicPath', $data->userInfo->profilePic, PDO::PARAM_STR);
 
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Data:\n ".json_encode($data));
             if($stmt->execute()){
                 $conn->commit();
+                HicreteLogger::logInfo("Profile modified successfully");
                 echo "Profile Modified successfully";
             }else{
+                HicreteLogger::logError("Failure in updating user details");
                 echo "Something went wrong.Please try again";
             }
         }catch(Exception $e) {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo $e->getMessage();
         }
 
@@ -539,8 +599,11 @@ class Config
         $db = Database::getInstance();
         $conn = $db->getConnection();
 
+        HicreteLogger::logInfo("Fetching companies");
         $stmt = $conn->prepare("SELECT companyId,companyName FROM companymaster");
+        HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
         $stmt->execute();
+        HicreteLogger::logDebug("Count :\n ".json_encode($stmt->rowCount()));
         $result = $stmt->fetchAll();
         $json = json_encode($result);
         echo $json;
@@ -553,8 +616,9 @@ class Config
         $conn = $db->getConnection();
 
         $stmt1 = $conn->prepare("SELECT warehouseId,wareHouseName FROM warehousemaster");
+        HicreteLogger::logDebug("Query:\n ".json_encode($stmt1));
         $stmt1->execute();
-
+        HicreteLogger::logDebug("Count:\n ".json_encode($stmt1->rowCount()));
         $result1 = $stmt1->fetchAll();
         $json = json_encode($result1);
         echo $json;
@@ -568,7 +632,9 @@ class Config
 
         try {
             $stmt = $conn->prepare("SELECT `companyId` ,`companyName` FROM `companymaster`");
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             if ($stmt->execute()) {
+                HicreteLogger::logDebug("Count:\n ".json_encode($stmt->rowCount()));
                 $result = $stmt->fetchAll();
                 echo  AppUtil::getReturnStatus("Successful",$result);
             } else {
