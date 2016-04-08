@@ -355,8 +355,22 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
     /**********************************
      Add material fields
      *******************************/
-        // function to fetch unit of measure- START
-
+    var data = {
+        module: 'getSuppliers',
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log(data);
+                 $scope.suppliers = data;
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
+        });
     $scope.getUnitOfMeasure = function (pMaterialId) {
         var qty;
 
@@ -605,26 +619,6 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
     /**********************************************************************************
      *End of Setters
      **********************************************************************************/
-
-// Get Suppliers From DB
-    var data = {
-        operation: 'search'
-    }
-    var config = {
-        params: {
-            data: data
-        }
-    };
-    $http.post("Inventory/php/supplierSearch.php", null, config)
-        .success(function (data) {
-
-            $scope.suppliers = data;
-
-        })
-        .error(function (data, status, headers) {
-            console.log(data);
-        });
-
 
 });
 

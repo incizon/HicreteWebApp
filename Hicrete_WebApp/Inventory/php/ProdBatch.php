@@ -268,7 +268,7 @@ class ProdBatch
                                  HicreteLogger::logInfo("Insertion to inhouse transport successful");
                              }
                              else{
-                                 HicreteLogger::logInfo("Error while Insertion to inhouse transport ");
+                                 HicreteLogger::logError("Error while Insertion to inhouse transport ");
                                  $dbh->rollBack();
                                  return 0;
                              }
@@ -282,7 +282,7 @@ class ProdBatch
                              return 1;
                          }
                          else {
-                             HicreteLogger::logInfo("Error while updating inventory");
+                             HicreteLogger::logError("Error while updating inventory");
                              $dbh->rollBack();
                              return 0;
                          }
@@ -292,7 +292,7 @@ class ProdBatch
                      }
                      else
                      {
-                         HicreteLogger::logInfo("Error while Insertion into inhouse_inward_entry");
+                         HicreteLogger::logError("Error while Insertion into inhouse_inward_entry");
                          $dbh->rollBack();
                          return 0;
                      }
@@ -305,7 +305,7 @@ class ProdBatch
                  }
                  else
                  {
-                     HicreteLogger::logInfo("Error while Insertion into produced good");
+                     HicreteLogger::logError("Error while Insertion into produced good");
                      $dbh->rollBack();
                      return 0;
                  }
@@ -342,7 +342,7 @@ class ProdBatch
 
                     HicreteLogger::logDebug("query: ".json_encode($stmt2));
                     if (!$stmt2->execute()) {
-                        HicreteLogger::logInfo("Updation to inventory unsuccessful");
+                        HicreteLogger::logError("Updation to inventory unsuccessful");
                         return 0;
                     } else {
                         HicreteLogger::logInfo("Updation to inventory successful");
@@ -364,7 +364,7 @@ class ProdBatch
                         HicreteLogger::logInfo("Insertion to inventory successful");
                         return 1;
                     } else {
-                        HicreteLogger::logInfo("Insertion to inventory unsuccessful");
+                        HicreteLogger::logError("Insertion to inventory unsuccessful");
                         return 0;
                     }
 
@@ -409,7 +409,7 @@ class ProdBatch
             }
             else
             {
-                HicreteLogger::logInfo("Insert to inhouse_transport_details unsuccessful");
+                HicreteLogger::logError("Insert to inhouse_transport_details unsuccessful");
 
                 return 0;
             }

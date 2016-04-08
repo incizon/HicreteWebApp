@@ -1,6 +1,7 @@
 <?php
 require_once 'utils/Common_Methods.php';
 require_once 'utils/DatabaseCommonOperations.php';
+require_once "../../php/HicreteLogger.php";
 
 class OutwardData extends CommonMethods
 {
@@ -62,6 +63,7 @@ class OutwardData extends CommonMethods
     {
         $keyword = "%" . $keyword . "%";
 
+        HicreteLogger::logInfo("Fetching outward entries");
         $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from outward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
 
         switch ($searchTerm) {
@@ -79,7 +81,8 @@ class OutwardData extends CommonMethods
         if ($searchTerm == 'OutwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
             $stmt->bindParam(':keyword', $keyword, PDO::PARAM_STR, 10);
         }
-        //$stmt = $dbh->prepare("SELECT * FROM outward");
+        HicreteLogger::logDebug("Query: ".json_encode($stmt));
+        HicreteLogger::logDebug("Keyword: ".json_encode($keyword));
         if ($stmt->execute()) {
 
             //push it into array
@@ -98,6 +101,7 @@ class OutwardData extends CommonMethods
 
                 $stmtTransport = $dbh->prepare("SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID");
                 $stmtTransport->bindParam(':outwardID', $outwardID);
+                HicreteLogger::logDebug("Query: ".json_encode($stmtTransport));
                 if ($stmtTransport->execute()) {
                     if ($stmtTransport->rowCount() == 0) {
                         $outwardData['transportationmode'] = "--";
@@ -128,7 +132,7 @@ class OutwardData extends CommonMethods
                         WHERE outwardid=:outwardID");
 
                 $stmt1->bindParam(':outwardID', $outwardID);
-
+                HicreteLogger::logDebug("Query: ".json_encode($stmt1));
                 if ($stmt1->execute()) {
                     while ($resultMaterials = $stmt1->fetch(PDO::FETCH_ASSOC)) {
                         $outwardData['materialDetails'][] = array(
@@ -143,7 +147,7 @@ class OutwardData extends CommonMethods
 
                     array_push($json_array, $outwardData);
                 } else {
-                    //Rollback
+                    HicreteLogger::logError("Error occured while fetching outward data ");
                     echo "Error2 ";
                 }
             }
@@ -152,6 +156,7 @@ class OutwardData extends CommonMethods
 
         } else {
             //Rollback
+            HicreteLogger::logError("Error occured while fetching outward data ");
             echo "Error";
         }
     }
@@ -176,6 +181,7 @@ class OutwardData extends CommonMethods
         try {
             //BEGIN THE TRANSACTION
             $dbh->beginTransaction();
+            HicreteLogger::logInfo("Inserting outward entries");
             $date = new DateTime($this->dateOfOutward);
             $dob = $date->format('Y-m-d');
             $stmtOutward = $dbh->prepare("INSERT INTO outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)
@@ -188,7 +194,10 @@ class OutwardData extends CommonMethods
             $stmtOutward->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
             $stmtOutward->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
 
+            HicreteLogger::logDebug("Query: ".json_encode($stmtOutward));
+            HicreteLogger::logDebug("Data: ".json_encode($this));
             if ($stmtOutward->execute()) {
+                HicreteLogger::logInfo("Insertion to outward successful. Inserting outward details");
                 $lastOutwardId = $dbh->lastInsertId();
                 $materials = $data->outwardData->outwardMaterials;
                 //Insert Data into Outward Details table
@@ -203,10 +212,12 @@ class OutwardData extends CommonMethods
                     $stmtOutwardDetails->bindParam(':packagesize', $material->packagesize, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
                     $stmtOutwardDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+                    HicreteLogger::logDebug("Query: ".json_encode($stmtOutwardDetails));
+                    HicreteLogger::logDebug("Data: ".json_encode($material));
                     if ($stmtOutwardDetails->execute()) {
                         $isSuccess = true;
                         // I CAN OPTIMIZE THIS CODE
-
+                        HicreteLogger::logInfo(" Inserting outward details successfull updating inventory");
                         $result = null;
                         $stmtInventoryCount = $dbh->prepare("SELECT totalquantity from inventory  WHERE materialid = :materialid");
                         $stmtInventoryCount->bindParam(':materialid', $material->material, PDO::PARAM_STR, 10);
@@ -217,6 +228,7 @@ class OutwardData extends CommonMethods
                         // }
 
                         if ($result['totalquantity'] != 0) {
+                            HicreteLogger::logInfo("Updating inventory");
                             $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity- :totalquantity
                     WHERE materialid = :materialid");
                             $stmtInventory->bindParam(':totalquantity', $material->materialQuantity, PDO::PARAM_STR, 10);
@@ -226,15 +238,18 @@ class OutwardData extends CommonMethods
                                 $isSuccess = true;
 
                             } else {
+                                HicreteLogger::logError("Error in updating or inserting main table");
                                 $this->showAlert('Failure', "Error 3rd");
                                 $isSuccess = false;
 
                             }
                         } else {
+                            HicreteLogger::logError("Error in inserting outward details");
                             $this->showAlert('Failure', "Error 2nd");
                             $isSuccess = false;
                         }
                     } else {
+                        HicreteLogger::logError("Error in inserting outward details");
                         $this->showAlert('Failure', "Error 1st");
                         $isSuccess = false;
                     }
@@ -246,6 +261,7 @@ class OutwardData extends CommonMethods
 
                     // Insert Data into Transport Details Table
                     if ($this->hasTransportDetails == 'Yes') {
+                        HicreteLogger::logInfo("Inserting transport details ");
                         $stmtTransportDetails = $dbh->prepare("INSERT INTO outward_transportation_details (Outwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)
                values (:Outwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchnguserid,now(),:creuserid,now(),:remark)");
                         $stmtTransportDetails->bindParam(':Outwardid', $lastOutwardId, PDO::PARAM_STR, 10);
@@ -259,28 +275,34 @@ class OutwardData extends CommonMethods
                         $stmtTransportDetails->bindParam(':remark', $this->remark, PDO::PARAM_STR, 10);
 
                         if ($stmtTransportDetails->execute()) {
+                            HicreteLogger::logInfo("Outward details added successfully");
                             $this->showAlert('success', "Outward details added Successfully!!!");
                             $dbh->commit();
 
                         } else {
+                            HicreteLogger::logError("Error in inserting outward transport details");
                             $this->showAlert('Failure', "Error while adding 3rd");
                             $dbh->rollBack();
                         }
                     } else {
+                        HicreteLogger::logInfo("Outward details added successfully");
                         $this->showAlert('success', "Outward details added Successfully!!!");
                         $dbh->commit();
                     }
 
 
                 } else {
+                    HicreteLogger::logError("Error in inserting outward details");
                     $this->showAlert('Failure', "Error while adding 2nf");
                     $dbh->rollBack();
                 }
             } else {
+                HicreteLogger::logError("Error in inserting outward");
                 $this->showAlert('Failure', "Error while adding 1st");
                 $dbh->rollBack();
             }
         } catch (Exception $e) {
+            HicreteLogger::logFatal("Exception occured \n". $e->getMessage());
             echo $e->getMessage();
         }
     }
