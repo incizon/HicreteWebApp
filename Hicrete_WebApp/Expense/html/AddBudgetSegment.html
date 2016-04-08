@@ -76,16 +76,19 @@
                                 </div>
                                 <!--End of form container row-->
 
-                                <!--Start of buttons section-->
-                                <div class="panel-footer">
-                                    <button class="btn  btn-primary pull-right"  ng-click="(submitClicked=true) && segmentForm.elementType.$valid && initializeMaterialSegment()">Submit</button>
-                                        
-                                    <button class="btn  btn-default pull-right"  ng-click="clearSegmentFields()" ng-disabled="isSegmentAdded">Clear Form</button> 
-                                </div>
-                                <!--End of buttons section-->
+
                             </div>
                             <!--End of form section-->
                                     </div>
+                                </div>
+
+                                <!--Start of buttons section-->
+                                <div class="panel-footer">
+                                    <button class="btn  btn-primary pull-right"  ng-click="(submitClicked=true) && segmentForm.elementType.$valid && initializeMaterialSegment()">Submit</button>
+
+                                    <button class="btn  btn-default pull-right"  ng-click="clearSegmentFields()" ng-disabled="isSegmentAdded">Clear Form</button>
+                                </div>
+                                <!--End of buttons section-->
                             </form>
                             </div>
 
