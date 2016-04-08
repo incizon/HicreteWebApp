@@ -85,9 +85,10 @@ class Supplier
             $stmt->bindParam(':creUserId', $userId);
 
             HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Data:\n ".json_encode($supplier));
             if($stmt->execute())
             {
-                HicreteLogger::logDebug("Supplier Created successfully DATA: \n".json_encode($supplier));
+                HicreteLogger::logInfo("Supplier Created successfully");
                 $message="Supplier Created successfully";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
@@ -96,7 +97,7 @@ class Supplier
             }
             else
             {
-                HicreteLogger::logDebug("Supplier Creation failed \n data: \n".json_encode($supplier));
+                HicreteLogger::logInfo("Supplier Creation failed");
                 $message="Issues while adding supplier.Please contact administrator ";
                 $arr = array('msg' => $message, 'error' => '');
                 $jsn = json_encode($arr);
