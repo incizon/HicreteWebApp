@@ -2298,9 +2298,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
                     $('#error').css("display", "block");
                     console.log($rootScope.errorMessage);
                     setTimeout(function () {
-                        $scope.$apply(function () {
                             $('#error').css("display", "none");
-                        });
                     }, 3000);
                     //alert("Error Occured" + data);
                 });
@@ -2310,9 +2308,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
             $('#error').css("display", "block");
             console.log($rootScope.errorMessage);
             setTimeout(function () {
-                $scope.$apply(function () {
                     $('#error').css("display", "none");
-                });
             }, 3000);
             //alert("Please select search by list");
         }
@@ -3875,17 +3871,13 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
-                        $scope.$apply(function () {
                             $('#error').css("display", "none");
-                        });
                     }, 3000);
                 } else {
                     $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
                     setTimeout(function () {
-                        $scope.$apply(function () {
                             $('#warning').css("display", "none");
-                        });
                     }, 1000);
                 }
                 $scope.getViewNotes();

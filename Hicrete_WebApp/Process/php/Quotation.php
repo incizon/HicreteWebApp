@@ -1,6 +1,6 @@
 <?php
-require_once '../../php/appUtil.php';
-require_once '../../php/Database.php';
+require_once '/../../php/appUtil.php';
+require_once '/../../php/Database.php';
 
 Class Quotation {
 	protected $db;
@@ -151,8 +151,8 @@ Class Quotation {
 			return $object;
 		}
 
-	public static function modifyQuotation($data){
-		$QuotationId = AppUtil::generateId();
+	public static function modifyQuotation($data,$qid){
+		$QuotationId = $qid;
 		$quotation = $data->Quotation;
 		$quotationBasicDetails = $data->Details;
 		$quotationTaxDetails = $data->taxDetails;
@@ -161,10 +161,17 @@ Class Quotation {
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
+		$current=time($quotation->DateOfQuotation);
+		$quotationDate=$current =date("Y-m-d",$current);
+		$stmt = $conn->prepare("UPDATE `quotation` SET `QuotationTitle`=:title,`RefNo`=:refNo,`DateOfQuotation`=:dateOfQuotation,`Subject`=:subject,`QuotationBlob`=:blob WHERE `QuotationId`=:quotationId");
+		$stmt->bindparam(':title',$quotation->QuotationTitle ,PDO::PARAM_STR);
+		$stmt->bindparam(':refNo',$quotation->RefNo ,PDO::PARAM_STR);
+		$stmt->bindparam(':dateOfQuotation',$quotationDate ,PDO::PARAM_STR);
+		$stmt->bindparam(':subject',$quotation->Subject ,PDO::PARAM_STR);
+		$stmt->bindparam(':blob',$quotation->QuotationBlob ,PDO::PARAM_STR);
+		$stmt->bindparam(':quotationId',$qid ,PDO::PARAM_STR);
 
-
-		$stmt = $conn->prepare("INSERT INTO quotation(QuotationId, QuotationTitle, RefNo, DateOfQuotation, Subject, ProjectId, CompanyId, QuotationBlob, isApproved, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?);");
-		if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotation->DateOfQuotation,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
+		if($stmt->execute() === TRUE){
 
 			for($i = 0;$i<sizeof($quotationBasicDetails);$i++){
 
@@ -214,6 +221,38 @@ Class Quotation {
 	}
 
 
+	public static function isRefNoPresentInAnotherQuotation($refNo,$qid){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `RefNo` FROM `quotation` WHERE `RefNo`=:refNo AND `QuotationId`!=:qid");
+		$stmt->bindParam(':refNo',$refNo, PDO::PARAM_STR);
+		$stmt->bindParam(':qid',$qid, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public static function isQuotationTitlePresentInAnotherQuotation($projectId,$title,$qid){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `QuotationTitle` FROM `quotation` WHERE `ProjectId`=:projectId AND `QuotationTitle`=:title AND `QuotationId`!=:qid");
+		$stmt->bindParam(':projectId',$projectId, PDO::PARAM_STR);
+		$stmt->bindParam(':title',$title, PDO::PARAM_STR);
+		$stmt->bindParam(':qid',$qid, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+
+
+
 	public function reviseQuotation($qid,$data){
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
@@ -230,27 +269,23 @@ Class Quotation {
 					$stmt3->bindParam(':qid',$qid,PDO::PARAM_STR);
 
 					if($stmt3->execute() ===TRUE){
-
-						$stmt4 = $conn->prepare("DELETE FROM quotation WHERE QuotationId = :qid");
-						$stmt4->bindParam(':qid',$qid,PDO::PARAM_STR);
-						if($stmt4->execute() ===TRUE){
-							if(Quotation::isRefNoPresent($data->Quotation->RefNo)){
+							if(Quotation::isRefNoPresentInAnotherQuotation($data->Quotation->RefNo,$qid)){
 								$conn->rollback();
 								return 2;
 							}
-							if(Quotation::isQuotationTitlePresent($data->Quotation->ProjectId,$data->Quotation->QuotationTitle)){
+							if(Quotation::isQuotationTitlePresentInAnotherQuotation($data->Quotation->ProjectId,$data->Quotation->QuotationTitle,$qid)){
 								$conn->rollback();
 								return 3;
 							}
 
-							$result = Quotation::modifyQuotation($data);
+							$result = Quotation::modifyQuotation($data,$qid);
 								if ($result) {
 									$conn->commit();
 									return 1;
 								}
 
 
-						}
+
 					}
 				}
 			}
@@ -398,9 +433,11 @@ public static  function saveQuotationDetailsAndTax($data){
 	$db = Database::getInstance();
 	$conn = $db->getConnection();
 	$conn->beginTransaction();
+	$current=time($quotation->DateOfQuotation);
+	$quotationDate=date("Y-m-d",$current);
 
 		$stmt = $conn->prepare("INSERT INTO quotation(QuotationId, QuotationTitle, RefNo, DateOfQuotation, Subject, ProjectId, CompanyId, QuotationBlob, isApproved, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?);");
-		if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotation->DateOfQuotation,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
+		if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotationDate,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
 
 			for($i = 0;$i<sizeof($quotationBasicDetails);$i++){
 
