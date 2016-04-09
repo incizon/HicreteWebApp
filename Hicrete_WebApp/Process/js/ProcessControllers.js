@@ -49,7 +49,7 @@ myApp.service('fileUpload', ['$http', function ($http) {
             })
 
             .success(function (status) {
-                $scope.warningMessage = "File upload started..";
+                $rootScope.warningMessage = "File upload started..";
                 $('#warning').css("display", "block");
                 setTimeout(function () {
                     $('#warning').css("display", "none");
@@ -58,7 +58,7 @@ myApp.service('fileUpload', ['$http', function ($http) {
             })
 
             .error(function () {
-                $scope.errorMessage = "File upload not started..";
+                $rootScope.errorMessage = "File upload not started..";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -70,7 +70,7 @@ myApp.service('fileUpload', ['$http', function ($http) {
 /**************************************************************/
 
 
-myApp.controller('ProcessWidgetController', function ($scope, $http) {
+myApp.controller('ProcessWidgetController', function ($scope, $http,$rootScope) {
 
     $scope.hasRead = true;
     $scope.hasWrite = true;
@@ -103,7 +103,7 @@ myApp.controller('ProcessWidgetController', function ($scope, $http) {
 
 });
 
-myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope, $httpParamSerializerJQLike, AppService,$uibModal,$log) {
+myApp.controller('ProjectCreationController', function ($scope, $http, $rootScope, $httpParamSerializerJQLike, AppService, $uibModal, $log) {
     $scope.projectDetails = {
         projectName: '',
         state: '',
@@ -185,7 +185,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
 
-                controller: function ($scope, $uibModalInstance, $filter,projectData) {
+                controller: function ($scope, $uibModalInstance, $filter, projectData,$rootScope) {
                     // console.log("quotation is "+JSON.stringify(q));
                     AppService.getUsers($scope, $http);
                     console.log("Project Data");
@@ -201,7 +201,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                             AssignEmployee: AssignEmployee,
                             FollowupTitle: FollowupTitle
                         };
-                        projectData.followupData=followupData;
+                        projectData.followupData = followupData;
                         console.log(projectData);
                         $scope.createProject(projectData);
                         $uibModalInstance.close();
@@ -212,7 +212,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                         $uibModalInstance.dismiss('cancel');
                     };
 
-                    $scope.createProject=function(projectData){
+                    $scope.createProject = function (projectData) {
                         console.log("In create project function");
                         console.log(projectData);
                         var data = {
@@ -236,7 +236,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                                     $('#warning').css("display", "block");
                                     setTimeout(function () {
                                         $('#warning').css("display", "none");
-                                        window.location="dashboard.php#/Process";
+                                        window.location = "dashboard.php#/Process";
                                     }, 1000);
                                     $scope.clearForm();
                                 }
@@ -294,7 +294,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                 $scope.animationsEnabled = !$scope.animationsEnabled;
             };
 
-        }else{
+        } else {
 
             var data = {
                 operation: "createProject",
@@ -314,16 +314,16 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                     console.log(data);
                     if (data.status == "Successful") {
                         $('#loader').css("display", "none");
-                        $scope.warningMessage = data.message;
+                        $rootScope.warningMessage = data.message;
                         $('#warning').css("display", "block");
                         setTimeout(function () {
                             $('#warning').css("display", "none");
-                            window.location="dashboard.php#/Process";
+                            window.location = "dashboard.php#/Process";
                         }, 1000);
                     }
                     else {
                         $('#loader').css("display", "none");
-                        $scope.errorMessage = data.message;
+                        $rootScope.errorMessage = data.message;
                         $('#error').css("display", "block");
                         setTimeout(function () {
                             $('#error').css("display", "none");
@@ -333,14 +333,14 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
                 .error(function (data, status, header) {
                     $('#loader').css("display", "none");
                     console.log(data);
-                    $scope.errorMessage = "Unable to create Project.Please try again";
+                    $rootScope.errorMessage = "Unable to create Project.Please try again";
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 3000);
                 });
-            }
         }
+    }
 
     $scope.clearForm = function () {
         $scope.projectDetails = {
@@ -366,11 +366,11 @@ myApp.controller('ProjectCreationController', function ($scope, $http,$rootScope
 });
 
 
-myApp.controller('ProjectDetailsController', function ($stateParams, myService, setInfo, $scope, $http, $uibModal, $log, fileUpload, AppService,$rootScope) {
+myApp.controller('ProjectDetailsController', function ($stateParams, myService, setInfo, $scope, $http, $uibModal, $log, fileUpload, AppService, $rootScope) {
 
     var detaildata = $stateParams.projectToView;
     var projId = detaildata.project_id;
-    $scope.showError=false;
+    $scope.showError = false;
     $scope.projDetailsData = {
         projectId: detaildata.projectId,
         project_name: detaildata.project_name,
@@ -406,7 +406,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
             if (data.status != "Successful") {
-                $rootScope.errorMessage=data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -437,7 +437,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
         })
         .error(function (data) {
-            alert(data);
+            $rootScope.errorMessage = data;
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 3000);
         })
 
 
@@ -458,11 +462,15 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         $http.post("Process/php/workorderFacade.php", null, config)
             .success(function (data) {
                 if (data.status != "Successful") {
-                    alert(data.message);
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                     return;
                 }
 
-                $scope.projectWorkorders=[];
+                $scope.projectWorkorders = [];
                 for (var i = 0; i < data.message.length; i++) {
                     $scope.projectWorkorders.push({
                         workOrderNo: data.message[i].WorkOrderNo,
@@ -484,7 +492,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
             })
             .error(function (data) {
-                alert(data);
+                $rootScope.errorMessage = data;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
 
 
@@ -507,7 +519,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         $http.post("Process/php/invoiceFacade.php", null, config)
             .success(function (data) {
                 if (data.status != "Successful") {
-                    alert(data.message);
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                     return;
                 }
 
@@ -523,38 +539,42 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                         CreatedBy: data.message[i].CreatedBy,
                         quotationTitle: data.message[i].QuotationTitle,
                         quotationDate: data.message[i].DateOfQuotation,
-                        refNo:data.message[i].RefNo,
+                        refNo: data.message[i].RefNo,
                         companyId: data.message[i].CompanyId,
-                        contactPerson:data.message[i].ContactPerson,
-                        PurchasersVATNo:data.message[i].PurchasersVATNo,
-                        pan:data.message[i].PAN,
-                        grandTotal:data.message[i].GrandTotal,
-                        roundOff:data.message[i].RoundingOffFactor,
-                        workOrderNo:data.message[i].WorkOrderNo,
-                        workOrderDate:data.message[i].ReceivedDate
+                        contactPerson: data.message[i].ContactPerson,
+                        PurchasersVATNo: data.message[i].PurchasersVATNo,
+                        pan: data.message[i].PAN,
+                        grandTotal: data.message[i].GrandTotal,
+                        roundOff: data.message[i].RoundingOffFactor,
+                        workOrderNo: data.message[i].WorkOrderNo,
+                        workOrderDate: data.message[i].ReceivedDate
                     });
                 }
 
 
                 myService.set($scope.projectInvoice);
-                if($scope.projectInvoice.length>0){
+                if ($scope.projectInvoice.length > 0) {
                     $scope.loadPaymentData(projId);
                 }
 
             })
             .error(function (data) {
-                alert(data);
+                $rootScope.errorMessage = data;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
 
 
     }
 
 
-    $scope.loadPaymentData=function(projId){
+    $scope.loadPaymentData = function (projId) {
         console.log(projId);
-        var data={
-            operation :"getPaymentPaidAndTotalAmount",
-            data : projId
+        var data = {
+            operation: "getPaymentPaidAndTotalAmount",
+            data: projId
 
         };
 
@@ -567,7 +587,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         $http.post("Process/php/ProjectPaymentFacade.php", null, config)
             .success(function (data) {
                 if (data.status != "Successful") {
-                    alert(data.message);
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                     return;
                 }
 
@@ -582,19 +606,22 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
             })
             .error(function (data) {
-                alert(data);
+                $rootScope.errorMessage = data;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
 
     }
 
 
+    $scope.checkAvailability = function (filePath) {
 
-    $scope.checkAvailability=function(filePath){
-
-        if(filePath===null || filePath===undefined){
+        if (filePath === null || filePath === undefined) {
 
             return false;
-        }else if(filePath.trim()===''){
+        } else if (filePath.trim() === '') {
 
             return false;
         }
@@ -602,22 +629,21 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         return true;
     }
 
-    $scope.isQuotationApproaved=function(isApproaved){
+    $scope.isQuotationApproaved = function (isApproaved) {
 
-        if(isApproaved==null || isApproaved==undefined){
+        if (isApproaved == null || isApproaved == undefined) {
             return true;
         }
-        if(isApproaved==='0')
+        if (isApproaved === '0')
             return true;
-        if(isApproaved=='1')
+        if (isApproaved == '1')
             return false;
 
-        if(isApproaved.trim()=='')
+        if (isApproaved.trim() == '')
             return true;
 
         return true;
     }
-
 
 
     $scope.workorder = {
@@ -629,25 +655,26 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
     $scope.createWorkorder = function () {
 
-        if($scope.workOrderForm.$invalid){
-            $scope.showError=true;
+        if ($scope.workOrderForm.$invalid) {
+            $scope.showError = true;
             return;
         }
-        $scope.showError=false;
+        $scope.showError = false;
         console.log("IN");
         console.log("company id is :" + JSON.stringify($scope.CompanyName));
         var uploadQuotationLocation = "upload/Workorders/";
         var fileName = uploadQuotationLocation + $scope.myFile.name;
         var workorderData = {
             ProjectId: $scope.workorder.projId,
-            WorkOrderName:$scope.workorder.title,
-            ReceivedDate:$scope.workorder.date,
-            WorkOrderBlob:fileName,
-            CompanyId:$scope.workOrderDetails.CompanyId,
-            QuotationId:$scope.workOrderDetails.QuotationId,
-            workOrderNumber:$scope.workorder.number
+            WorkOrderName: $scope.workorder.title,
+            ReceivedDate: $scope.workorder.date,
+            WorkOrderBlob: fileName,
+            CompanyId: $scope.workOrderDetails.CompanyId,
+            QuotationId: $scope.workOrderDetails.QuotationId,
+            workOrderNumber: $scope.workorder.number
         };
-        console.log("workorder data is " + workorderData);
+        console.log("workorder data is ");
+        console.log(workorderData);
         var data = {
             operation: "createWorkorder",
             data: workorderData
@@ -667,23 +694,23 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                 headers: {'Content-Type': undefined}
             })
             .success(function (data) {
-                if(data.status=="Successful"){
+                if (data.status == "Successful") {
                     console.log("Upload Successful");
-                    $http.post("Process/php/workorderFacade.php",null, config)
+                    $http.post("Process/php/workorderFacade.php", null, config)
                         .success(function (data) {
                             console.log(data);
 
-                            if(data.status=="Successful") {
+                            if (data.status == "Successful") {
 
                                 $rootScope.warningMessage = "Workorder Created Successfully";
                                 $('#warning').css('display', 'block');
                                 setTimeout(function () {
                                     $('#warning').css('display', 'none');
                                 }, 1000);
-                                $scope.workorder={};
+                                $scope.workorder = {};
                                 $('#viewDetails').modal('hide');
                                 $scope.loadWorkOrderData(projId);
-                            }else{
+                            } else {
                                 $rootScope.errorMessage = data.message;
                                 $('#error').css('display', 'block');
                                 setTimeout(function () {
@@ -692,21 +719,25 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
                             }
                         })
-                        .error(function (data){
-                            $rootScope.errorMessage = "Error in work order creation"+data;
-                            $('#error').css('display','block');
-                            setTimeout(function(){
-                                $('#error').css('display','none');
-                            },1000);
+                        .error(function (data) {
+                            $rootScope.errorMessage = "Error in work order creation" + data;
+                            $('#error').css('display', 'block');
+                            setTimeout(function () {
+                                $('#error').css('display', 'none');
+                            }, 1000);
 
                         })
 
-                }else{
-                    alert(data.message);
+                } else {
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
                 }
             })
             .error(function () {
-                $scope.errorMessage = "Something went wrong can not upload workorder";
+                $rootScope.errorMessage = "Something went wrong can not upload workorder";
                 $('#error').css("display", "block");
             });
     }
@@ -733,25 +764,27 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             animation: $scope.animationsEnabled,
             templateUrl: 'Applicator/html/paymentFollowup.html',
 
-            controller: function ($scope, $uibModalInstance,$rootScope,$http) {
+            controller: function ($scope, $uibModalInstance, $rootScope, $http) {
                 // console.log("quotation is "+JSON.stringify(q));
                 AppService.getUsers($scope, $http);
                 $scope.ok = function () {
 
                     // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
-                    var FollowupDate =$scope.applicatorDetails.followupdate;
+                    var FollowupDate = $scope.applicatorDetails.followupdate;
                     var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
                     var FollowupTitle = $scope.applicatorDetails.followTitle;
 
-                    var followupData = {FollowupDate: FollowupDate ,
-                        AssignEmployee:  AssignEmployee ,
-                        FollowupTitle:FollowupTitle };
-                    var data={};
-                    if(type === "invoice"){
-                        data={
-                            operation :"CreatePaymentFollowup",
-                            id : q.invoiceNo,
-                            data:followupData
+                    var followupData = {
+                        FollowupDate: FollowupDate,
+                        AssignEmployee: AssignEmployee,
+                        FollowupTitle: FollowupTitle
+                    };
+                    var data = {};
+                    if (type === "invoice") {
+                        data = {
+                            operation: "CreatePaymentFollowup",
+                            id: q.invoiceNo,
+                            data: followupData
                         };
 
                     } else {
@@ -772,15 +805,14 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     $http.post('Process/php/followupFacade.php', null, config)
                         .success(function (data, status, headers) {
                             console.log(data);
-                            alert("Stop");
+
                             if (data.status == "Successful") {
                                 //$scope.PostDataResponse = data;
                                 $('#loader').css("display", "none");
                                 $rootScope.warningMessage = "Followup Created Successfully";
                                 $('#warning').css("display", "block");
                             }
-                            else
-                            {
+                            else {
                                 $rootScope.errorMessage = data.message;
                                 $('#error').css("display", "block");
                                 setTimeout(function () {
@@ -859,7 +891,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
         $http.post("Process/php/projectFacade.php", null, config)
             .success(function (data) {
-                $scope.warningMessage = data;
+                $rootScope.warningMessage = data;
                 $('#warning').css("display", "block");
                 setTimeout(function () {
                     $('#warning').css("display", "none");
@@ -876,7 +908,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 });
 
 
-myApp.controller('QuotationController', function (fileUpload, $scope, $http, $uibModal, AppService, $stateParams) {
+myApp.controller('QuotationController', function (fileUpload, $scope, $http, $uibModal, AppService, $stateParams,$rootScope) {
     //alert("in quotation");
 
     $scope.taxSelected = 0;
@@ -924,8 +956,6 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         var companyId = $scope.QuotationDetails.companyName.company_id;
         var companyName = $scope.QuotationDetails.companyName.company_name;
         var fileName = "";
-        $scope.warningMessage = "";
-        $scope.errorMessage = "";
 
         for (var i = 0; i < $scope.noOfRows; i++) {
             b.push({
@@ -994,8 +1024,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                                 .success(function (data) {
 
                                     if (data.status == "Successful") {
-                                        $scope.warningMessage = data.message;
-                                        console.log($scope.warningMessage);
+                                        $rootScope.warningMessage = data.message;
+                                        console.log($rootScope.warningMessage);
                                         $('#warning').css("display", "block");
                                         $scope.clearForm();
                                         setTimeout(function () {
@@ -1005,8 +1035,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
                                     } else {
                                         $('#loader').css("display", "none");
-                                        $scope.errorMessage = data.message;
-                                        console.log($scope.errorMessage);
+                                        $rootScope.errorMessage = data.message;
+                                        console.log($rootScope.errorMessage);
                                         $('#error').css("display", "block");
                                         setTimeout(function () {
                                             $('#error').css("display", "none");
@@ -1015,8 +1045,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                                 })
                                 .error(function (data) {
                                     $('#loader').css("display", "none");
-                                    $scope.errorMessage = "Unable to create Quotation..Please try again";
-                                    console.log($scope.errorMessage);
+                                    $rootScope.errorMessage = "Unable to create Quotation..Please try again";
+                                    console.log($rootScope.errorMessage);
                                     $('#error').css("display", "block");
                                     setTimeout(function () {
                                         $('#error').css("display", "none");
@@ -1025,8 +1055,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
                         } else {
                             $('#loader').css("display", "none");
-                            $scope.errorMessage = data.message;
-                            console.log($scope.errorMessage);
+                            $rootScope.errorMessage = data.message;
+                            console.log($rootScope.errorMessage);
                             $('#error').css("display", "block");
                             setTimeout(function () {
                                 $('#error').css("display", "none");
@@ -1034,7 +1064,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                         }
                     })
                     .error(function () {
-                        $scope.errorMessage = "Something went wrong can not upload quotation";
+                        $rootScope.errorMessage = "Something went wrong can not upload quotation";
                         $('#error').css("display", "block");
                     });
             }
@@ -1045,8 +1075,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 .success(function (data) {
                     if (data.status == "Successful") {
                         $('#loader').css("display", "none");
-                        $scope.warningMessage = data.message;
-                        console.log($scope.warningMessage);
+                        $rootScope.warningMessage = data.message;
+                        console.log($rootScope.warningMessage);
                         $('#warning').css("display", "block");
                         $scope.clearForm();
                         setTimeout(function () {
@@ -1056,8 +1086,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
                     } else {
                         $('#loader').css("display", "none");
-                        $scope.errorMessage = data.message;
-                        console.log($scope.errorMessage);
+                        $rootScope.errorMessage = data.message;
+                        console.log($rootScope.errorMessage);
                         $('#error').css("display", "block");
                         setTimeout(function () {
                             $('#error').css("display", "none");
@@ -1066,15 +1096,15 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 })
                 .error(function (data) {
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = "Unable to create Quotation..Please try again";
-                    console.log($scope.errorMessage);
+                    $rootScope.errorMessage = "Unable to create Quotation..Please try again";
+                    console.log($rootScope.errorMessage);
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 3000);
                 });
-            }
         }
+    }
 
 
     $scope.addRows = function () {
@@ -1140,7 +1170,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'Process/html/addTax.html',
-            controller: function ($scope, $uibModalInstance, amount) {
+            controller: function ($scope, $uibModalInstance, amount,$rootScope) {
                 $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
                 $scope.amount = amount;
                 console.log($scope.amount);
@@ -1228,7 +1258,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
 });
 
-myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootScope,$stateParams) {
+myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootScope, $stateParams) {
 
     console.log("in add invoice");
     var workDetail = $stateParams.workOrder;
@@ -1242,20 +1272,20 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     $scope.taxableAmount = 0;
     $scope.noOfRows = 0;
     $scope.taxDetails = [];
-    $scope.totalAmnt=0;
+    $scope.totalAmnt = 0;
     $scope.currentItemList = [];
-    $scope.taxDetails=[];
+    $scope.taxDetails = [];
 
-    $scope.InvoiceDetails={
-        invoiceItemDetails:[],
-        workoOrderNumber : workDetail.workOrderNo,
-        quotationNumber : workDetail.quotationId,
-        quotationDate :workDetail.dateOfQuotation,
-        workOrderDate :workDetail.receivedDate,
-        refNo:workDetail.refNo,
-        purchaserVatNo:'',
-        pan:'',
-        contactPerson:''
+    $scope.InvoiceDetails = {
+        invoiceItemDetails: [],
+        workoOrderNumber: workDetail.workOrderNo,
+        quotationNumber: workDetail.quotationId,
+        quotationDate: workDetail.dateOfQuotation,
+        workOrderDate: workDetail.receivedDate,
+        refNo: workDetail.refNo,
+        purchaserVatNo: '',
+        pan: '',
+        contactPerson: ''
     }
     var data = {
         operation: "getQuotationDetails",
@@ -1272,7 +1302,11 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         .success(function (data) {
 
             if (data.status != "Successful") {
-                alert("Error Occurred while fetching quoation data");
+                $rootScope.errorMessage = data.message;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
                 return;
             }
 
@@ -1284,19 +1318,19 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 $scope.InvoiceDetails.invoiceItemDetails.push({
                     'quotationItem': qData[i].Title,
                     'quotationDescription': qData[i].Description,
-                    'quotationQuantity':qData[i].Quantity,
+                    'quotationQuantity': qData[i].Quantity,
                     'quotationUnitRate': parseFloat(qData[i].UnitRate),
                     'amount': parseFloat(qData[i].Amount),
                     'quotationQuantity': parseFloat(qData[i].Quantity),
-                    'detailID':qData[i].DetailID,
+                    'detailID': qData[i].DetailID,
                     'detailNo': qData[i].DetailNo,
                     quotationUnit: qData[i].Unit
                 });
                 $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
             }
             console.log("totalAmount is" + $scope.totalAmount);
-        })  .error(function (data) {
-        alert(data);
+        }).error(function (data) {
+
     });
 
 
@@ -1315,7 +1349,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
             if (data.status != "Successful") {
-                alert("Error Occurred while getting tax details");
+                $rootScope.errorMessage = "Error Occurred while getting tax details";
+                ;
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
                 return;
             }
 
@@ -1346,7 +1385,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                     'taxPercentage': qtData[i].TaxPercentage,
                     'amount': parseFloat(qtData[i].TaxAmount),
                     taxApplicableTo: taxApplicableTo,
-                    'taxArray' :itemArray
+                    'taxArray': itemArray
                 });
                 $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
 
@@ -1354,7 +1393,11 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
             console.log($scope.TaxAmnt);
         })
         .error(function (data) {
-            alert(data);
+            $rootScope.errorMessage = data;
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 3000);
         });
 
     /************************************/
@@ -1370,11 +1413,11 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     var remainingTotal = 0;
 
 
-    $scope.createInvoice = function(){
+    $scope.createInvoice = function () {
 
         console.log("in createInvoice");
-        var totalAmount=parseFloat($scope.totalAmnt)+parseFloat($scope.TaxAmnt);
-        var grandTotal =(+totalAmount + +totalTax) - +$scope.roundingOff;
+        var totalAmount = parseFloat($scope.totalAmnt) + parseFloat($scope.TaxAmnt);
+        var grandTotal = (+totalAmount + +totalTax) - +$scope.roundingOff;
 
         var invoiceData = {
             "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
@@ -1391,28 +1434,28 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         }
 
 
-        taxData =$scope.taxDetails;
+        taxData = $scope.taxDetails;
         var invoiceDetails = $scope.InvoiceDetails.invoiceItemDetails;
         var InvoiceData = {
-            Invoice:invoiceData,
-            Details:invoiceDetails,
-            taxDetails:taxData
+            Invoice: invoiceData,
+            Details: invoiceDetails,
+            taxDetails: taxData
         };
 
         console.log(InvoiceData);
-        $scope.InvoiceData=InvoiceData;
+        $scope.InvoiceData = InvoiceData;
         console.log($scope.myFile);
 
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
-            controller:  function ($scope,$rootScope,$uibModalInstance,InvoiceData,myFile) {
+            controller: function ($scope, $rootScope, $uibModalInstance, InvoiceData, myFile) {
 
 
                 $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(InvoiceData);
-                    $scope.saveInvoice($scope,$rootScope, $http,InvoiceData,myFile);
+                    $scope.saveInvoice($scope, $rootScope, $http, InvoiceData, myFile);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
@@ -1420,7 +1463,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 };
 
 
-                $scope.saveInvoice = function ($scope,$rootScope, $http, InvoiceData,myFile) {
+                $scope.saveInvoice = function ($scope, $rootScope, $http, InvoiceData, myFile) {
                     var data = {
                         operation: "createInvoice",
                         data: InvoiceData
@@ -1436,7 +1479,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                         if (myFile.name != undefined) {
                             var uploadQuotationLocation = "upload/Invoices/";
                             fileName = uploadQuotationLocation + myFile.name;
-                            InvoiceData.Invoice.InvoiceBLOB=fileName;
+                            InvoiceData.Invoice.InvoiceBLOB = fileName;
                             console.log(InvoiceData);
                             var fd = new FormData();
                             fd.append('file', myFile);
@@ -1446,12 +1489,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                     headers: {'Content-Type': undefined}
                                 })
                                 .success(function (data) {
-                                    if(data.status=="Successful"){
+                                    if (data.status == "Successful") {
                                         console.log("Upload Successful");
                                         $http.post("Process/php/InvoiceFacade.php", null, config)
                                             .success(function (data) {
 
-                                                if(data.status=="Successful"){
+                                                if (data.status == "Successful") {
 
                                                     $('#loader').css("display", "none");
                                                     $rootScope.warningMessage = "Invoice is Created Successfully...'";
@@ -1460,17 +1503,21 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                                     //$scope.clearForm();
                                                     setTimeout(function () {
                                                         $('#warning').css("display", "none");
-                                                        window.location="dashboard.php#/Process/viewProjects";
+                                                        window.location = "dashboard.php#/Process/viewProjects";
                                                     }, 1000);
 
-                                                }else{
-                                                    alert(data.message);
+                                                } else {
+                                                    $rootScope.errorMessage = data.message;
+                                                    $('#error').css("display", "block");
+                                                    setTimeout(function () {
+                                                        $('#error').css("display", "none");
+                                                    }, 3000);
                                                 }
 
                                             })
                                             .error(function (data) {
                                                 $('#loader').css("display", "none");
-                                                $rootScope.errorMessage = "Error :"+data;
+                                                $rootScope.errorMessage = "Error :" + data;
                                                 console.log($rootScope.errorMessage);
                                                 $('#error').css("display", "block");
                                                 setTimeout(function () {
@@ -1479,8 +1526,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                             });
 
 
-                                    }else{
-                                        alert(data.message);
+                                    } else {
+                                        $rootScope.errorMessage = data.message;
+                                        $('#error').css("display", "block");
+                                        setTimeout(function () {
+                                            $('#error').css("display", "none");
+                                        }, 3000);
                                     }
                                 })
                                 .error(function () {
@@ -1489,12 +1540,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                 });
                         }
 
-                    }else{
+                    } else {
                         $('#loader').css("display", "block");
                         $http.post("Process/php/InvoiceFacade.php", null, config)
                             .success(function (data) {
 
-                                if(data.status=="Successful"){
+                                if (data.status == "Successful") {
 
                                     $('#loader').css("display", "none");
                                     $rootScope.warningMessage = "Invoice is Created Successfully...'";
@@ -1503,17 +1554,21 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                     //$scope.clearForm();
                                     setTimeout(function () {
                                         $('#warning').css("display", "none");
-                                        window.location="dashboard.php#/Process/viewProjects";
+                                        window.location = "dashboard.php#/Process/viewProjects";
                                     }, 1000);
 
-                                }else{
-                                    alert(data.message);
+                                } else {
+                                    $rootScope.errorMessage = data.message;
+                                    $('#error').css("display", "block");
+                                    setTimeout(function () {
+                                        $('#error').css("display", "none");
+                                    }, 3000);
                                 }
 
                             })
                             .error(function (data) {
                                 $('#loader').css("display", "none");
-                                $rootScope.errorMessage = "Error :"+data;
+                                $rootScope.errorMessage = "Error :" + data;
                                 console.log($rootScope.errorMessage);
                                 $('#error').css("display", "block");
                                 setTimeout(function () {
@@ -1529,7 +1584,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 InvoiceData: function () {
                     return $scope.InvoiceData;
                 },
-                myFile:function(){
+                myFile: function () {
                     return $scope.myFile;
                 }
             }
@@ -1567,63 +1622,63 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
     $scope.removeQuotationItem = function (index) {
 
-        $scope.totalAmnt =$scope.totalAmnt- $scope.QuotationDetails.quotationItemDetails[index].amount;
+        $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
 
     };
 
-    $scope.removeInvoiceItem= function(index){
+    $scope.removeInvoiceItem = function (index) {
 
-        $scope.totalAmnt =$scope.totalAmnt- $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+        $scope.totalAmnt = $scope.totalAmnt - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
         $scope.InvoiceDetails.invoiceItemDetails.splice(index, 1); //remove item by index
     };
 
-    $scope.removeInvoiceTaxItem= function(index){
-        $scope.TaxAmnt=$scope.TaxAmnt - $scope.taxDetails[index].amount;
+    $scope.removeInvoiceTaxItem = function (index) {
+        $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
     };
 
-    $scope.calculateTaxableAmount=function(index){
+    $scope.calculateTaxableAmount = function (index) {
 
-        if($scope.InvoiceDetails.invoiceItemDetails[index].isTaxAplicable){
-            $scope.taxableAmount=$scope.taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+        if ($scope.InvoiceDetails.invoiceItemDetails[index].isTaxAplicable) {
+            $scope.taxableAmount = $scope.taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[index].amount;
             $scope.taxSelected++;
-            $scope.currentItemList.push(index+1);
-        }else{
-            $scope.taxableAmount=$scope.taxableAmount - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+            $scope.currentItemList.push(index + 1);
+        } else {
+            $scope.taxableAmount = $scope.taxableAmount - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
             $scope.taxSelected--;
-            $scope.currentItemList.splice($scope.currentItemList.indexOf(index+1),1);
+            $scope.currentItemList.splice($scope.currentItemList.indexOf(index + 1), 1);
         }
     }
 
-    $scope.calculateAmount=function(index){
+    $scope.calculateAmount = function (index) {
         //alert("ttttt");
 
-        $scope.InvoiceDetails.invoiceItemDetails[index].amount=$scope.InvoiceDetails.invoiceItemDetails[index].quotationQuantity * $scope.InvoiceDetails.invoiceItemDetails[index].quotationUnitRate;
-        console.log("amount is "+$scope.InvoiceDetails.invoiceItemDetails[index].amount);
+        $scope.InvoiceDetails.invoiceItemDetails[index].amount = $scope.InvoiceDetails.invoiceItemDetails[index].quotationQuantity * $scope.InvoiceDetails.invoiceItemDetails[index].quotationUnitRate;
+        console.log("amount is " + $scope.InvoiceDetails.invoiceItemDetails[index].amount);
     }
 
 
-    $scope.calculateTotal = function(amount){
+    $scope.calculateTotal = function (amount) {
 
-        $scope.totalAmnt=0;
+        $scope.totalAmnt = 0;
         for (var i = 0; i < $scope.InvoiceDetails.invoiceItemDetails.length; i++) {
-            $scope.totalAmnt =$scope.totalAmnt+ $scope.InvoiceDetails.invoiceItemDetails[i].amount;
+            $scope.totalAmnt = $scope.totalAmnt + $scope.InvoiceDetails.invoiceItemDetails[i].amount;
         }
     }
 
 
     $scope.addTax = function (size) {
-        var allTax=false;
+        var allTax = false;
         if ($scope.taxSelected <= 0) {
-            $scope.taxableAmount=$scope.totalAmnt;
-            allTax=true;
+            $scope.taxableAmount = $scope.totalAmnt;
+            allTax = true;
         }
 
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'Process/html/addTax.html',
-            controller: function ($scope, $uibModalInstance, amount) {
+            controller: function ($scope, $uibModalInstance, amount,$rootScope) {
                 $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
                 $scope.amount = amount;
                 console.log($scope.amount);
@@ -1650,9 +1705,9 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         });
 
         modalInstance.result.then(function (tax) {
-            var itemString="All";
-            var itemArray=[];
-            if(!allTax) {
+            var itemString = "All";
+            var itemArray = [];
+            if (!allTax) {
                 itemString = " (Item ";
                 for (var i = 0; i < $scope.currentItemList.length - 1; i++) {
                     itemString += $scope.currentItemList[i] + " ,";
@@ -1670,10 +1725,11 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 taxArray: itemArray
             });
 
-            $scope.TaxAmnt=0;;
+            $scope.TaxAmnt = 0;
+            ;
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
-                $scope.TaxAmnt =$scope.TaxAmnt +$scope.taxDetails[s].amount;
+                $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
             }
 
 
@@ -1683,8 +1739,8 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         $scope.toggleAnimation = function () {
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
-        if(allTax)
-            $scope.taxableAmount=0;
+        if (allTax)
+            $scope.taxableAmount = 0;
 
 
     }
@@ -1804,9 +1860,8 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     //};
 
 
-
 });
-myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal, $log, $filter, AppService) {
+myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal, $log, $filter, AppService,$rootScope) {
     /**************************************************************************/
 
     $scope.projectPayment = [];
@@ -1865,7 +1920,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
 
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                 } else {
                     if (data.message != null) {
@@ -1884,7 +1939,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 console.log(data.error);
 
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
             });
 
@@ -1955,18 +2010,16 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                 } else {
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
 
                 }
                 setTimeout(function () {
-                    $scope.$apply(function () {
-                        $('#warning').css("display", "none");
-                        window.location="dashboard.php#/Process";
-                    });
+                    $('#warning').css("display", "none");
+                    window.location = "dashboard.php#/Process";
                 }, 1000);
 
             })
@@ -1974,7 +2027,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                 console.log(data.error);
 
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
             });
 
@@ -1994,7 +2047,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
-                controller: function ($scope, $uibModalInstance, paymentDetails, AppService) {
+                controller: function ($scope, $uibModalInstance, paymentDetails, AppService,$rootScope) {
                     AppService.getUsers($scope, $http);
                     $scope.paymentDetails = paymentDetails;
                     $scope.ok = function () {
@@ -2038,9 +2091,9 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
     $scope.currentPage = 1;
 
     $scope.searchKeyword = "";
-    $scope.isCostCenterAvailable=function(project){
+    $scope.isCostCenterAvailable = function (project) {
         console.log("isCostCenterAvailable");
-        if(project.isCostCenterAvailable==="true")
+        if (project.isCostCenterAvailable === "true")
             return false;
         else
             return true;
@@ -2066,14 +2119,14 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
                     data: data
                 }
             };
-            $('#loader').css("display","block");
+            $('#loader').css("display", "block");
             $http.post('Process/php/projectFacade.php', null, config)
                 .success(function (data, status, headers) {
                     console.log("In View Project=");
                     console.log(data);
-                    $rootScope.loading=true;
+                    $rootScope.loading = true;
 
-                    $('#loader').css("display","none");
+                    $('#loader').css("display", "none");
                     if (data.status == "Successful") {
                         for (var i = 0; i < data.message.length; i++) {
                             project.push({
@@ -2103,37 +2156,37 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
                         $rootScope.projectSearch = project;
                         if ($rootScope.projectSearch.length == 0) {
                             $rootScope.errorMessage = "No Data Found For Search Criteria..";
-                            $('#error').css("display","block");
-                            setTimeout(function(){
-                                $('#error').css("display","none");
-                            },3000);
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 3000);
                             //alert("No Data Found For Search Criteria");
                         }
                     } else {
                         $rootScope.errorMessage = data.message;
-                        $('#error').css("display","block");
-                        setTimeout(function(){
-                            $('#error').css("display","none");
-                        },3000);
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 3000);
                         //alert(data.message);
                     }
 
                 }).error(function (data, status, headers) {
                 $rootScope.errorMessage = data.message;
-                $('#error').css("display","block");
-                setTimeout(function(){
-                    $('#error').css("display","none");
-                },3000);
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
             // $http.get("php/api/projects/search/" + $scope.searchBy + "/" + $scope.searchKeyword).then(function (response) {
 
 
         } else {
             $rootScope.errorMessage = "Please Select Search By From SelectList..";
-            $('#error').css("display","block");
-            setTimeout(function(){
-                $('#error').css("display","none");
-            },3000);
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 3000);
             //alert("Please Select Search By From SelectList");
         }
     }
@@ -2150,9 +2203,14 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
             .success(function (data, status) {
                 //  $scope.postCustData = data;
                 alert("data is " + data + " status is " + status);
+
             })
             .error(function (data, status) {
-                alert($scope.ResponseDetails);
+                $rootScope.errorMessage = "Something Went wrong";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
             });
     }
 
@@ -2193,13 +2251,13 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
                     data: data
                 }
             };
-            $('#loader').css("display","block");
+            $('#loader').css("display", "block");
             $http.post("Process/php/customerFacade.php", null, config)
                 .success(function (data) {
                     console.log(data);
                     if (data.status == "Successful") {
-                        $rootScope.loading=true;
-                        $('#loader').css("display","none");
+                        $rootScope.loading = true;
+                        $('#loader').css("display", "none");
                         for (var i = 0; i < data.message.length; i++) {
 
                             cust.push({
@@ -2226,40 +2284,34 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
                         $rootScope.customerSearch = cust;
 
                     } else {
-
-                        $scope.errorMessage= response.data.message;
-                        $('#error').css("display","block");
-                        console.log($scope.errorMessage);
-                        setTimeout(function() {
-                            $scope.$apply(function() {
-                                $('#error').css("display","none");
-                            });
+                        $rootScope.errorMessage = response.data.message;
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
                         }, 3000);
                         //alert(response.data.message);
-
-
                     }
 
                 })
                 .error(function (data, status, headers, config) {
-                    $scope.errorMessage= "Error occurred..";
-                    $('#error').css("display","block");
-                    console.log($scope.errorMessage);
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                            $('#error').css("display","none");
+                    $rootScope.errorMessage = "Error occurred..";
+                    $('#error').css("display", "block");
+                    console.log($rootScope.errorMessage);
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            $('#error').css("display", "none");
                         });
                     }, 3000);
                     //alert("Error Occured" + data);
                 });
         }
         else {
-            $scope.errorMessage= "Please select search by list..";
-            $('#error').css("display","block");
-            console.log($scope.errorMessage);
-            setTimeout(function() {
-                $scope.$apply(function() {
-                    $('#error').css("display","none");
+            $rootScope.errorMessage = "Please select search by list..";
+            $('#error').css("display", "block");
+            console.log($rootScope.errorMessage);
+            setTimeout(function () {
+                $scope.$apply(function () {
+                    $('#error').css("display", "none");
                 });
             }, 3000);
             //alert("Please select search by list");
@@ -2301,7 +2353,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 });
 
 
-myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService,$rootScope) {
+myApp.controller('ModifyProjectController', function ($scope, $http, $stateParams, AppService, $rootScope) {
 
     $scope.customers = [];
     AppService.getAllCustomers($http, $scope.customers);
@@ -2353,7 +2405,13 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
                     });
                 }
             } else {
-                alert("Error Occurred Getting Company Information For This Project");
+                //alert("Error Occurred Getting Company Information For This Project");
+                $rootScope.errorMessage = "Error Occurred Getting Company Information For This Project";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
+
             }
         })
         .error(function (data) {
@@ -2363,7 +2421,11 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
 
     $scope.modifyProject = function () {
         if ($scope.ProjectInfoForm.$pristine) {
-            alert("Fields are not modified");
+            $rootScope.errorMessage = "Fields are not modified";
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 3000);
             return;
         }
 
@@ -2423,11 +2485,11 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
                     setTimeout(function () {
                         $('#warning').css("display", "none");
                         //window.location.reload(1);
-                        window.location="dashboard.php#/Process/viewProjects";
+                        window.location = "dashboard.php#/Process/viewProjects";
                     }, 1000);
 
                     //alert("Project Updated Successfully");
-                }else{
+                } else {
 
                     $('#loader').css("display", "none");
                     //alert("Customer created Successfully");
@@ -2439,8 +2501,6 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
                     }, 3000);
 
 
-
-                    alert(data.message);
                 }
 
 
@@ -2462,26 +2522,26 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
 });
 
 
-myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
+myApp.controller('ViewInvoiceDetails', function ($scope, $http, $stateParams,$rootScope) {
 
     var data = $stateParams.InvoiceToView;
     console.log(data);
 
 
-    $scope.invoiceDetail ={
-      invoiceNumber : data.invoiceNo,
-      quotationNumber : data.refNo,
-      invoiceDate : data.invoiceDate,
-      quotationDate : data.quotationDate,
-      companyId : data.companyId,
-        contactPerson :data.contactPerson,
-      grandTotal:data.grandTotal,
-        pan:data.pan,
-        purchaserVatNo:data.PurchasersVATNo,
-        totalAmount:data.totalAmount,
-        roundingOff:data.roundOff,
-        workOrderNo:data.workOrderNo,
-        workOrderDate:data.workOrderDate
+    $scope.invoiceDetail = {
+        invoiceNumber: data.invoiceNo,
+        quotationNumber: data.refNo,
+        invoiceDate: data.invoiceDate,
+        quotationDate: data.quotationDate,
+        companyId: data.companyId,
+        contactPerson: data.contactPerson,
+        grandTotal: data.grandTotal,
+        pan: data.pan,
+        purchaserVatNo: data.PurchasersVATNo,
+        totalAmount: data.totalAmount,
+        roundingOff: data.roundOff,
+        workOrderNo: data.workOrderNo,
+        workOrderDate: data.workOrderDate
 
     };
 
@@ -2489,8 +2549,8 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
     var iId = $scope.invoiceDetail.invoiceNumber;
     var cId = $scope.invoiceDetail.companyId;
 
-    $scope.InvoiceItemDetails=[];
-    $scope.taxDetails=[];
+    $scope.InvoiceItemDetails = [];
+    $scope.taxDetails = [];
 
     var data = {
         operation: "getInvoiceDetails",
@@ -2507,13 +2567,18 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
         .success(function (data) {
 
             if (data.status != "Successful") {
-                alert("Error Occurred while fetching quoation data");
+
+                $rootScope.errorMessage = "Error Occurred Getting Quotation Data";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
                 return;
             }
 
             var qData = data.message;
 
-            $scope.InvoiceItemDetails=[];
+            $scope.InvoiceItemDetails = [];
             $scope.totalAmnt = 0;
             for (var i = 0; i < qData.length; i++) {
                 $scope.InvoiceItemDetails.push({
@@ -2528,8 +2593,12 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
                 $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
             }
             console.log("totalAmount is" + $scope.totalAmnt);
-        })  .error(function (data) {
-        alert(data);
+        }).error(function (data) {
+            $rootScope.errorMessage = data;
+            $('#error').css("display", "block");
+            setTimeout(function () {
+                $('#error').css("display", "none");
+            }, 3000);
     });
 
 
@@ -2548,14 +2617,19 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
     $http.post("Process/php/invoiceFacade.php", null, config)
         .success(function (data) {
             if (data.status != "Successful") {
-                alert("Error Occurred while getting tax details");
+                //alert("Error Occurred while getting tax details");
+                $rootScope.errorMessage= "Error Occurred Getting Tax Details";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                }, 3000);
                 return;
             }
 
             var qtData = data.message;
             $scope.qTaxDetails = [];
             $scope.TaxAmnt = 0;
-            $scope.taxDetails=[];
+            $scope.taxDetails = [];
             $scope.qTaxDetails = [];
             for (var i = 0; i < qtData.length; i++) {
                 var taxApplicableTo = 'All';
@@ -2577,7 +2651,7 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
                     'taxPercentage': qtData[i].TaxPercentage,
                     'amount': parseFloat(qtData[i].TaxAmount),
                     taxApplicableTo: taxApplicableTo,
-                    'taxArray' :itemArray
+                    'taxArray': itemArray
                 });
                 $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
 
@@ -2585,13 +2659,17 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http,$stateParams) {
             console.log($scope.TaxAmnt);
         })
         .error(function (data) {
-            alert(data);
+            $rootScope.errorMessage= data;
+            $('#error').css("display","block");
+            setTimeout(function() {
+                $('#error').css("display","none");
+            }, 3000);
         })
 
 });
 
 
-myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, AppService) {
+myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, AppService,$rootScope) {
 
     $scope.projects = [];
     var project = [];
@@ -2624,7 +2702,7 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
                 console.log(data);
                 if (data.status !== "Successful") {
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -2646,7 +2724,7 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Could not fetch data";
+                $rootScope.errorMessage = "Could not fetch data";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -2662,7 +2740,7 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
     }
 });
 
-myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, AppService) {
+myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, AppService,$rootScope) {
 
     $scope.projects = [];
     $scope.selectedProjectId = "";
@@ -2694,7 +2772,7 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
                 console.log(data);
                 if (data.status != "Successful") {
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -2715,7 +2793,7 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Could not fetch data";
+                $rootScope.errorMessage = "Could not fetch data";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -2726,13 +2804,13 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
 
 });
 
-myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $http, AppService) {
+myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $http, AppService,$rootScope) {
 
     $scope.projects = [];
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
     AppService.getAllSiteTrackingProjects($http, $scope.projects);
-    $scope.followups=[];
+    $scope.followups = [];
     $scope.show = function () {
 
         //getProjectSiteFollowup
@@ -2752,7 +2830,7 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
                 console.log(data);
                 if (data.status != "Successful") {
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -2773,7 +2851,7 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Could not fetch data";
+                $rootScope.errorMessage = "Could not fetch data";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -2783,7 +2861,7 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
 
 });
 
-myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scope, $http) {
+myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scope, $http,$rootScope) {
     var viewQuotDetail = $stateParams.quotationToView;
     $scope.projectName = $stateParams.projectName;
     var qId = viewQuotDetail.QuotationId;
@@ -2811,41 +2889,50 @@ myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scop
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
             if (data.status != "Successful") {
-            alert("Error Occurred while fetching quoation data");
-            return;
-        }
-        var qData = data.message;
-        $scope.qDetails = [];
+                
+                $rootScope.errorMessage= "Error Occurred Getting Quotation Data";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                }, 3000);
+                return;
+            }
+            var qData = data.message;
+            $scope.qDetails = [];
 
-        $scope.totalAmount = 0;
-        for (var i = 0; i < qData.length; i++) {
-            $scope.totalAmount = $scope.totalAmount + parseInt(qData[i].Amount);
+            $scope.totalAmount = 0;
+            for (var i = 0; i < qData.length; i++) {
+                $scope.totalAmount = $scope.totalAmount + parseInt(qData[i].Amount);
 
-        }
-        console.log("totalAmount is" + $scope.totalAmount);
+            }
+            console.log("totalAmount is" + $scope.totalAmount);
 
-        $scope.qDetails = [];
-        for (var i = 0; i < qData.length; i++) {
-            $scope.qDetails.push({
-                'quotationId': qData[i].QuotationId,
-                'quotationTitle': qData[i].QuotationTitle,
-                'dateOfQuotation': qData[i].DateOfQuotation,
-                'subject': qData[i].Subject,
-                'companyId': qData[i].CompanyId,
-                'refNo': qData[i].RefNo,
-                'title': qData[i].Title,
-                'description': qData[i].Description,
-                'unitRate': qData[i].UnitRate,
-                'amount': qData[i].Amount,
-                'quantity': qData[i].Quantity,
-                'detailNo': qData[i].DetailNo,
-                unit: qData[i].Unit
-            });
+            $scope.qDetails = [];
+            for (var i = 0; i < qData.length; i++) {
+                $scope.qDetails.push({
+                    'quotationId': qData[i].QuotationId,
+                    'quotationTitle': qData[i].QuotationTitle,
+                    'dateOfQuotation': qData[i].DateOfQuotation,
+                    'subject': qData[i].Subject,
+                    'companyId': qData[i].CompanyId,
+                    'refNo': qData[i].RefNo,
+                    'title': qData[i].Title,
+                    'description': qData[i].Description,
+                    'unitRate': qData[i].UnitRate,
+                    'amount': qData[i].Amount,
+                    'quantity': qData[i].Quantity,
+                    'detailNo': qData[i].DetailNo,
+                    unit: qData[i].Unit
+                });
 
-        }
-    }).error(function (data, status, headers, config) {
-          alert(data);
-        });
+            }
+        }).error(function (data, status, headers, config) {
+        $rootScope.errorMessage= data;
+        $('#error').css("display","block");
+        setTimeout(function() {
+            $('#error').css("display","none");
+        }, 3000);
+    });
 
     var data = {
         operation: "getQuotationTaxDetails",
@@ -2860,49 +2947,57 @@ myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scop
 
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
-        if (data.status != "Successful") {
-            alert("Error Occurred while getting tax details");
-            return;
-        }
-
-        var qtData = data.message;
-        $scope.qTaxDetails = [];
-        $scope.TotalTax = 0;
-
-        $scope.qTaxDetails = [];
-        for (var i = 0; i < qtData.length; i++) {
-            var taxApplicableTo = 'All';
-            if (qtData[i].DetailsNo.length > 0) {
-                taxApplicableTo = "( Item No ";
-                for (var j = 0; j < qtData[i].DetailsNo.length; j++) {
-                    if (j + 1 == qtData[i].DetailsNo.length)
-                        taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + " )";
-                    else
-                        taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + ",";
-                }
-
+            if (data.status != "Successful") {
+                $rootScope.errorMessage= "Error Occurred Getting Tax Data";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                }, 3000);
+                return;
             }
 
-            $scope.qTaxDetails.push({
-                'quotationId': qtData[i].QuotationId,
-                'taxId': qtData[i].TaxID,
-                'taxName': qtData[i].TaxName,
-                'taxPercentage': qtData[i].TaxPercentage,
-                'taxAmount': qtData[i].TaxAmount,
-                taxApplicableTo: taxApplicableTo
-            });
-            $scope.TotalTax = $scope.TotalTax + parseInt(qtData[i].TaxAmount);
-        }
+            var qtData = data.message;
+            $scope.qTaxDetails = [];
+            $scope.TotalTax = 0;
 
-    }).error(function (data, status, headers, config) {
-            console.log(data.error);
-            alert(data);
-        });
+            $scope.qTaxDetails = [];
+            for (var i = 0; i < qtData.length; i++) {
+                var taxApplicableTo = 'All';
+                if (qtData[i].DetailsNo.length > 0) {
+                    taxApplicableTo = "( Item No ";
+                    for (var j = 0; j < qtData[i].DetailsNo.length; j++) {
+                        if (j + 1 == qtData[i].DetailsNo.length)
+                            taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + " )";
+                        else
+                            taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + ",";
+                    }
+
+                }
+
+                $scope.qTaxDetails.push({
+                    'quotationId': qtData[i].QuotationId,
+                    'taxId': qtData[i].TaxID,
+                    'taxName': qtData[i].TaxName,
+                    'taxPercentage': qtData[i].TaxPercentage,
+                    'taxAmount': qtData[i].TaxAmount,
+                    taxApplicableTo: taxApplicableTo
+                });
+                $scope.TotalTax = $scope.TotalTax + parseInt(qtData[i].TaxAmount);
+            }
+
+        }).error(function (data, status, headers, config) {
+        console.log(data.error);
+        $rootScope.errorMessage= data;
+        $('#error').css("display","block");
+        setTimeout(function() {
+            $('#error').css("display","none");
+        }, 3000);
+    });
 
 
 });
 
-myApp.controller('PaymentHistoryController', function ($scope, $http, AppService) {
+myApp.controller('PaymentHistoryController', function ($scope, $http, AppService,$rootScope) {
 
     console.log("in payment history controller");
     $scope.Projects = [];
@@ -2939,13 +3034,13 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
             }
         };
         console.log(config);
-        $('#loader').css("display","block");
+        $('#loader').css("display", "block");
         $http.post("Process/php/ProjectPaymentFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
                 $('#loader').css("display", "none");
                 if (data.status != "sucess") {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                 } else {
                     if (data.message != null) {
@@ -2963,7 +3058,7 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
                 console.log(data.error);
 
                 $('#loader').css("display", "none");
-                $scope.errorMessage = data.message;
+                $rootScope.errorMessage = data.message;
                 $('#error').css("display", "block");
             });
 
@@ -2980,7 +3075,7 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
         var totalAmountPaid = 0;
         var totalPayableAmt = 0;
         console.log("invoice id is " + invoiceId);
-        AppService.getInvoicePaymentDetails(invoiceId,$scope,$http);
+        AppService.getInvoicePaymentDetails(invoiceId, $scope, $http);
 
     }
 
@@ -2990,34 +3085,31 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
 });
 
 
-myApp.controller('CustomerController', function ($scope, $http) {
+myApp.controller('CustomerController', function ($scope, $http,$rootScope) {
 
     $scope.submitted = false;
     $scope.submitted = false;
 
-    $scope.customerDetails={
-        customer_name:"",
-        customer_address:"",
-        customer_city:"",
-        customer_state:"",
-        customer_country:"",
-        customer_emailId:"",
-        customer_landline:"",
-        customer_phone:"",
-        customer_faxNo:"",
-        customer_vatNo:"",
-        customer_cstNo:"",
-        customer_serviceTaxNo:"",
-        customer_panNo:""
+    $scope.customerDetails = {
+        customer_name: "",
+        customer_address: "",
+        customer_city: "",
+        customer_state: "",
+        customer_country: "",
+        customer_emailId: "",
+        customer_landline: "",
+        customer_phone: "",
+        customer_faxNo: "",
+        customer_vatNo: "",
+        customer_cstNo: "",
+        customer_serviceTaxNo: "",
+        customer_panNo: ""
     };
     $scope.createCustomer = function () {
         console.log("Inside create customer");
         console.log($scope.customerDetails);
         var date = new Date();
-
-        $scope.errorMessage = "";
-        $scope.warningMessage = "";
-
+        
         var data = {
             operation: "addCustomer",
             data: $scope.customerDetails
@@ -3038,7 +3130,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
                 if (data.status == "Successful") {
                     $scope.postCustData = data;
                     $('#loader').css("display", "none");
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                         $('#warning').css("display", "none");
@@ -3047,7 +3139,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
 
                 } else {
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
@@ -3058,7 +3150,7 @@ myApp.controller('CustomerController', function ($scope, $http) {
                 $('#loader').css("display", "none");
                 console.log(data);
                 $scope.ResponseDetails = "Data: " + data;
-                $scope.errorMessage = "Unable to create Customer.Please try again";
+                $rootScope.errorMessage = "Unable to create Customer.Please try again";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -3094,7 +3186,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
     $scope.formSubmitted = false;
 
     $scope.modifyCustomer = function () {
-        if($scope.customerModifyForm.$pristine){
+        if ($scope.customerModifyForm.$pristine) {
 
             $rootScope.errorMessage = "Fields are not modified";
             $('#error').css("display", "block");
@@ -3153,7 +3245,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                         $('#warning').css("display", "none");
-                        window.location="dashboard.php#/Process/Customers";
+                        window.location = "dashboard.php#/Process/Customers";
                     }, 1000);
 
 
@@ -3185,8 +3277,7 @@ myApp.controller('ModifyCustomerController', function ($scope, $http, $statePara
 });
 
 
-
-myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$stateParams,$rootScope){
+myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal, $stateParams, $rootScope) {
 
     var reviseQuotationData = $stateParams.quotationToRevise;
     var qId = reviseQuotationData.QuotationId;
@@ -3226,41 +3317,41 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
 
-        if (data.status != "Successful") {
+            if (data.status != "Successful") {
 
-            $rootScope.errorMessage = "Error Occurred while fetching quoation data";
-            $('#error').css("display", "block");
-            setTimeout(function () {
-                $('#error').css("display", "none");
-            }, 1000);
-            //alert("Error Occurred while fetching quoation data");
-            return;
-        }
+                $rootScope.errorMessage = "Error Occurred while fetching quoation data";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 1000);
+                //alert("Error Occurred while fetching quoation data");
+                return;
+            }
 
             var qData = data.message;
             $scope.qDetails = [];
 
-        $scope.totalAmnt = 0;
-        for (var i = 0; i < qData.length; i++) {
-            $scope.QuotationDetails.quotationItemDetails.push({
-                'quotationItem': qData[i].Title,
-                'quotationDescription': qData[i].Description,
-                'quotationUnitRate': parseFloat(qData[i].UnitRate),
-                'amount': parseFloat(qData[i].Amount),
-                'quotationQuantity': parseFloat(qData[i].Quantity),
-                'detailNo': qData[i].DetailNo,
-                quotationUnit: qData[i].Unit
-            });
-            $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
-        }
-        console.log("totalAmount is" + $scope.totalAmount);
-    })  .error(function (data) {
+            $scope.totalAmnt = 0;
+            for (var i = 0; i < qData.length; i++) {
+                $scope.QuotationDetails.quotationItemDetails.push({
+                    'quotationItem': qData[i].Title,
+                    'quotationDescription': qData[i].Description,
+                    'quotationUnitRate': parseFloat(qData[i].UnitRate),
+                    'amount': parseFloat(qData[i].Amount),
+                    'quotationQuantity': parseFloat(qData[i].Quantity),
+                    'detailNo': qData[i].DetailNo,
+                    quotationUnit: qData[i].Unit
+                });
+                $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
+            }
+            console.log("totalAmount is" + $scope.totalAmount);
+        }).error(function (data) {
         $rootScope.errorMessage = "Error Occurred Please contact administrator";
         $('#error').css("display", "block");
         setTimeout(function () {
             $('#error').css("display", "none");
         }, 1000);
-       //alert(data);
+        //alert(data);
     });
 
     $('#loader').css("display", "block");
@@ -3278,17 +3369,17 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
     $http.post("Process/php/quotationFacade.php", null, config)
         .success(function (data) {
-        if (data.status != "Successful") {
+            if (data.status != "Successful") {
 
-            $('#loader').css("display", "none");
-            $rootScope.errorMessage = "Error Occurred while getting tax details";
-            $('#error').css("display", "block");
-            setTimeout(function () {
-                $('#error').css("display", "none");
-            }, 1000);
-            //alert("Error Occurred while getting tax details");
-            return;
-        }
+                $('#loader').css("display", "none");
+                $rootScope.errorMessage = "Error Occurred while getting tax details";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 1000);
+                //alert("Error Occurred while getting tax details");
+                return;
+            }
 
             var qtData = data.message;
             $scope.qTaxDetails = [];
@@ -3323,7 +3414,11 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
             console.log($scope.TaxAmnt);
         })
         .error(function (data) {
-            alert(data);
+            $rootScope.errorMessage= data;
+            $('#error').css("display","block");
+            setTimeout(function() {
+                $('#error').css("display","none");
+            }, 3000);
         });
 
 
@@ -3340,7 +3435,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
 
 
     $scope.ModifyQuotation = function () {
-        if($scope.QuotationForm.$pristine){
+        if ($scope.QuotationForm.$pristine) {
 
             $rootScope.errorMessage = "Fields are not modified";
             $('#error').css("display", "block");
@@ -3357,9 +3452,9 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         var projectId = $scope.QuotationDetails.projectId;
         var companyId = $scope.QuotationDetails.companyId;
         var companyName = $scope.QuotationDetails.companyName;
-        var fileName =$scope.QuotationDetails.filePath ;
-        //$scope.warningMessage = "";
-        //$scope.errorMessage = "";
+        var fileName = $scope.QuotationDetails.filePath;
+        //$rootScope.warningMessage = "";
+        //$rootScope.errorMessage = "";
 
         for (var i = 0; i < $scope.noOfRows; i++) {
             b.push({
@@ -3421,7 +3516,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                             $http.post("Process/php/quotationFacade.php", null, config)
                                 .success(function (data) {
 
-                                    if(data.status=="Successful"){
+                                    if (data.status == "Successful") {
                                         $('#loader').css("display", "none");
                                         //alert("Customer created Successfully");
                                         console.log(data.message);
@@ -3429,12 +3524,12 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                                         $('#warning').css("display", "block");
                                         setTimeout(function () {
                                             $('#warning').css("display", "none");
-                                            window.location="dashboard.php#/Process/viewProjects";
+                                            window.location = "dashboard.php#/Process/viewProjects";
                                         }, 1000);
 
-                                      // alert("Quotaion Revised Successfully");
-                                    }else{
-                                       // alert(data.message);
+                                        // alert("Quotaion Revised Successfully");
+                                    } else {
+                                        // alert(data.message);
                                         $('#loader').css("display", "none");
                                         //$('#loading').css("display", "none");
                                         $rootScope.errorMessage = data.message;
@@ -3453,11 +3548,11 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                                     setTimeout(function () {
                                         $('#error').css("display", "none");
                                     }, 1000);
-                                   // alert(data);
+                                    // alert(data);
                                 });
 
 
-                        }else{
+                        } else {
                             $('#loader').css("display", "none");
                             //$('#loading').css("display", "none");
                             $rootScope.errorMessage = data.message;
@@ -3476,8 +3571,6 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                         setTimeout(function () {
                             $('#error').css("display", "none");
                         }, 1000);
-                       // alert(data);
-                       //alert("Something went wrong can not upload quoatation");
 
                     });
             }
@@ -3487,7 +3580,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
             $http.post("Process/php/quotationFacade.php", null, config)
                 .success(function (data) {
 
-                    if(data.status=="Successful"){
+                    if (data.status == "Successful") {
 
                         $('#loader').css("display", "none");
                         //alert("Customer created Successfully");
@@ -3496,19 +3589,20 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                         $('#warning').css("display", "block");
                         setTimeout(function () {
                             $('#warning').css("display", "none");
-                            window.location="dashboard.php#/Process/viewProjects";
+                            window.location = "dashboard.php#/Process/viewProjects";
                         }, 1000);
                         //alert("Quotation is Revised Successfully");
 
-                    }else{
+                    } else {
                         $('#loader').css("display", "none");
                         //$('#loading').css("display", "none");
                         $rootScope.errorMessage = data.message;
+                        console.log(data.message);
                         $('#error').css("display", "block");
                         setTimeout(function () {
-                            $('#error').css("display", "none");
+                            //$('#error').css("display", "none");
                         }, 1000);
-                       // alert(data.message);
+                        // alert(data.message);
                     }
 
                 })
@@ -3517,7 +3611,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
                     $rootScope.errorMessage = "Error Occured Please contact administrator";
                     $('#error').css("display", "block");
                     setTimeout(function () {
-                        $('#error').css("display", "none");
+                        //$('#error').css("display", "none");
                     }, 1000);
                     //alert(data);
                 });
@@ -3591,7 +3685,7 @@ myApp.controller('ReviseQuotationController',function($scope,$http,$uibModal,$st
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'Process/html/addTax.html',
-            controller: function ($scope, $uibModalInstance, amount) {
+            controller: function ($scope, $uibModalInstance, amount,$rootScope) {
                 $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
                 $scope.amount = amount;
                 console.log($scope.amount);
@@ -3716,26 +3810,26 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         $http.post("Process/php/TaskFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                if(data.status=='sucess'){
-                $('#loader').css("display", "none");
-                for (var i = 0; i < data.message.length; i++) {
-                    notes.push({
-                        Note: data.message[i].ConductionNote,
-                        AddedBy: data.message[i].firstName + " " + data.message[i].lastName,
-                        NoteDate: data.message[i].DateAdded
-                    });
-                }
-                $scope.ViewNotes = notes;
-                setInfo.set(notes);
+                if (data.status == 'sucess') {
+                    $('#loader').css("display", "none");
+                    for (var i = 0; i < data.message.length; i++) {
+                        notes.push({
+                            Note: data.message[i].ConductionNote,
+                            AddedBy: data.message[i].firstName + " " + data.message[i].lastName,
+                            NoteDate: data.message[i].DateAdded
+                        });
+                    }
+                    $scope.ViewNotes = notes;
+                    setInfo.set(notes);
                 }
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Unable to get Note Details.Please contact Administrator";
+                $rootScope.errorMessage = "Unable to get Note Details.Please contact Administrator";
                 $('#error').css("display", "block");
             });
 
-        }
+    }
     $scope.getViewNotes();
 
     $scope.updateTask = function (taskid) {
@@ -3786,7 +3880,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                         });
                     }, 3000);
                 } else {
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                         $scope.$apply(function () {
@@ -3798,7 +3892,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Unable to Update Task.Please contact Administrator.";
+                $rootScope.errorMessage = "Unable to Update Task.Please contact Administrator.";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#erro').css("display", "none");
@@ -3855,7 +3949,7 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                     $rootScope.tasks = task;
                     console.log($rootScope.tasks);
                 }
-                else{
+                else {
                     $('#loader').css("display", "none");
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
@@ -3866,14 +3960,14 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Unable to fetch data.Please contact Administrator";
+                $rootScope.errorMessage = "Unable to fetch data.Please contact Administrator";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
                 }, 3000);
             });
 
-        }
+    }
 
 
     $scope.totalItems = $rootScope.tasks.length;
@@ -3910,24 +4004,24 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                 console.log(data);
                 if (data.status != "sucess") {
                     $('#loader').css("display", "none");
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 3000);
                 } else {
                     $('#loader').css("display", "none");
-                    $scope.warningMessage = data.message;
+                    $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                         $('#warning').css("display", "none");
-                        window.location="dashboard.php#/Process/";
+                        window.location = "dashboard.php#/Process/";
                     }, 1000);
                 }
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");
-                $scope.errorMessage = "Unable to delete task.Please contact Administrator";
+                $rootScope.errorMessage = "Unable to delete task.Please contact Administrator";
                 $('#error').css("display", "block");
                 setTimeout(function () {
                     $('#error').css("display", "none");
@@ -3939,7 +4033,7 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
 });
 
 
-myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter,$rootScope) {
+myApp.controller('AssignTaskController', function ($scope, $http, AppService, $filter, $rootScope) {
 
     console.log("in AssignTaskController");
     $scope.users = [];
@@ -3967,13 +4061,12 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
         console.log("Task data is " + JSON.stringify(Taskdata));
 
 
-        $scope.clearData= function()
-        {
-            $scope.task.taskname="";
-            $scope.task.description="";
-            $scope.task.startDate="";
-            $scope.task.endDate="";
-            $scope.task.assignedTo="";
+        $scope.clearData = function () {
+            $scope.task.taskname = "";
+            $scope.task.description = "";
+            $scope.task.startDate = "";
+            $scope.task.endDate = "";
+            $scope.task.assignedTo = "";
         }
         var data = {
             operation: "saveTask",
@@ -4004,10 +4097,10 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
                     $scope.clearData();
                     setTimeout(function () {
                         $('#warning').css("display", "none");
-                        window.location="dashboard.php#/Process";
+                        window.location = "dashboard.php#/Process";
                     }, 1000);
                 }
-                $scope.formSubmitted= false;
+                $scope.formSubmitted = false;
             })
             .error(function (data, status, headers, config) {
                 $('#loader').css("display", "none");

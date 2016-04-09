@@ -1222,3 +1222,23 @@
 2016-04-09 12:34:33 - DEBUG --> Query:
  {"queryString":"SELECT `userId`,`firstName`,`lastName` FROM `usermaster` WHERE `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `roleId` IN (SELECT `roleId` FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=\"Business Process\")))"} 
 2016-04-09 12:34:33 - INFO  --> Process users found 
+2016-04-09 17:39:21 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-09 17:39:21 - DEBUG --> Count:
+ 4 
+2016-04-09 17:39:21 - INFO  --> Fetching all process users 
+2016-04-09 17:39:21 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`,`firstName`,`lastName` FROM `usermaster` WHERE `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `roleId` IN (SELECT `roleId` FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=\"Business Process\")))"} 
+2016-04-09 17:39:21 - INFO  --> Process users found 
+2016-04-09 17:42:40 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 17:42:40 - DEBUG --> Row Count : 
+11 
+2016-04-09 18:25:56 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 18:25:56 - DEBUG --> Row Count : 
+11 
+2016-04-09 18:26:03 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 18:26:03 - DEBUG --> Row Count : 
+11 

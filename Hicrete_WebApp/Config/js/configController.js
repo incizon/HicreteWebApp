@@ -679,7 +679,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
 });
 
 
-myApp.controller('ModifyUserController',function($scope,$http,$stateParams,configService){
+myApp.controller('ModifyUserController',function($scope,$http,$stateParams,configService,$rootScope){
 
     $scope.selectedUserInfo=$stateParams.userToModify;
     configService.getRoleList($http,$scope);
@@ -707,7 +707,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                    alert("Error Occured"+data.message);
+                    //alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -728,7 +728,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             alert("Fields are not modified");
             return;
         }
-
+        $('#loader').css("display","block");
         console.log($scope.selectedUserInfo);
         var data={
             operation :"modifyUser",
@@ -746,15 +746,22 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
          $http.post("Config/php/configFacade.php",null, config)
          .success(function (data)
          {
-
+             $('#loader').css("display","none");
          console.log(data);
 
          if(data.status=="Successful"){
-            alert("User Modified Successfully");
+            //alert("User Modified Successfully");
+             $rootScope.warningMessage="User Modified Successfully";
+             setTimeout(function() {
+                     $('#warning').css("display","none");
+
+             }, 3000);
 
          }else if(data.status=="Unsuccessful"){
-            console.log(data.message);
-            alert(data.message);
+             $rootScope.errorMessage=data.message;
+              $('#error').css("display","block");
+            //console.log(data.message);
+            //alert(data.message);
          }else{
              console.log(data.message);
             alert(data.message);
@@ -764,6 +771,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
          })
          .error(function (data, status, headers, config)
          {
+             $('#loader').css("display","block");
             alert("Failure -Error Occurred");
 
          });
@@ -854,15 +862,7 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
                     console.log(data);
                     $scope.loading=false;
                     $('#loader').css("display","none");
-                    $scope.errorMessage="Data not found..";
-                   // $('#error').css("display","block");
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                           // $('#error').css("display","none");
-                        });
-                    }, 3000);
-
-                    $rootScope.Roles=data.message;
+                     $rootScope.Roles=data.message;
                 }else{
                     $scope.loading=false;
                     $('#loader').css("display","none");
