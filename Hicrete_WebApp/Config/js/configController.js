@@ -1591,6 +1591,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
             }
         };
 
+        $('#loader').css('display','block');
         $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
             {
@@ -1598,13 +1599,12 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
 
 
                 if(data.status!="Successful"){
+                    $('#loader').css('display','none');
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
                             $('#error').css("display","none");
-
-
                         });
                     }, 3000);
                     //alert(data.message);
@@ -1612,6 +1612,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
                     //window.location="dashboard.php#/Config/SearchRole";
                 }else{
                     //alert(data.message);
+                    $('#loader').css('display','none');
                     $rootScope.warningMessage = data.message;
                     $('#warning').css("display","block");
                     setTimeout(function() {
@@ -1626,6 +1627,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
             })
             .error(function (data, status, headers, config)
             {
+                $('#loader').css('display','none');
                 console.log(data);
                 //alert("Error Occured");
                 $rootScope.errorMessage = "Error Occured..";

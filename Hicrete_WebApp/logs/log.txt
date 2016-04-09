@@ -31,4 +31,78 @@
 2016-04-07 18:40:52 - INFO  --> Searching suppliers 
 2016-04-07 18:58:21 - INFO  --> Searching suppliers 
 2016-04-07 18:59:22 - INFO  --> Searching suppliers 
-2016-04-07 19:12:05 - INFO  --> Searching Products 
+2016-04-08 11:12:25 - INFO  --> Getting employee details for leave  
+2016-04-08 11:12:47 - INFO  --> Creating leaves 
+2016-04-08 11:12:47 - INFO  --> Creation of leaves successful  
+2016-04-08 11:21:02 - INFO  --> Getting employee details for leave  
+2016-04-08 11:21:02 - DEBUG --> query: 
+{"queryString":"SELECT leave_approver_id FROM employee_on_payroll WHERE employee_id=:userId "} 
+2016-04-08 11:21:02 - DEBUG --> Row count: 0 
+2016-04-08 11:21:02 - DEBUG --> query: 
+{"queryString":"SELECT firstName,lastName FROM userMaster WHERE userId=''"} 
+2016-04-08 11:21:02 - DEBUG --> Row count: 0 
+2016-04-08 11:21:02 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId"} 
+2016-04-08 11:21:02 - DEBUG --> Row count: 1 
+2016-04-08 11:21:02 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year FROM attendance_year WHERE from_date<=:currentDate AND to_date>=:currentDate"} 
+2016-04-08 11:21:02 - DEBUG --> Row count: 0 
+2016-04-08 11:21:02 - DEBUG --> query: 
+{"queryString":"SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`=:captionYear\r\n                                                  AND `leave_application_master`.`status`!='cancel' AND\r\n                                                   `leave_application_master`.`leave_applied_by`=:userId\r\n                                                    AND `leave_application_master`.`type_of_leaves`='paid'\r\n                                                     group by `leave_application_master`.`leave_applied_by`"} 
+2016-04-08 11:21:02 - DEBUG --> Row count: 0 
+2016-04-08 11:21:08 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)\r\n                                          AND `caption_of_year`=:caption"} 
+2016-04-08 11:21:08 - DEBUG --> Row count: 1 
+2016-04-08 11:21:08 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `holiday_in_year` WHERE (`holiday_date` BETWEEN :fromDate AND :toDate) AND `caption_of_year`=:caption"} 
+2016-04-08 11:21:08 - DEBUG --> Row count: 1 
+2016-04-08 11:21:11 - INFO  --> Creating leaves 
+2016-04-08 11:21:11 - DEBUG --> query: 
+{"queryString":"INSERT INTO leave_application_master(application_id,leave_applied_by,from_date,to_date,type_of_leaves,no_of_leaves,reason,status,application_date,action_by,action_date)\r\n                                        VALUES(:applicationId,:leaveAppliedBy,:fromDate,:toDate,:type_of_leaves,:no_of_leaves,:reason,:status,NOW(),:actionBy,:actionDate)"} 
+2016-04-08 11:21:11 - DEBUG --> Data: 
+{"userId":"56e87cbeedde77493","status":"pending","fromDate":"2016-04-08T18:30:00.000Z","toDate":"2016-04-28T18:30:00.000Z","remaining":0,"operation":"createLeave","hideOption":"","numberOfLeaves":"20\r\n\r\n\r\n\r\n\r\n\r\n\r\n","caption_of_year":null,"leaves_remaining":null,"typeofLeave":"Paid","description":"asdasdasd"} 
+2016-04-08 11:21:11 - INFO  --> Creation of leaves successful  
+2016-04-08 11:57:41 - INFO  --> Adding Warehouse 
+2016-04-08 11:57:41 - INFO  --> Checking if the warehouse is available 
+2016-04-08 11:57:41 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from warehousemaster where wareHouseName=:wareHouseName"} 
+2016-04-08 11:57:41 - DEBUG --> Count:
+ "0" 
+2016-04-08 11:57:41 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `warehousemaster`(`warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)\r\n                VALUES (:id,:name,:abbrevation,:address,:city,:state,:country,:pincode,:phone,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-08 11:57:41 - INFO  --> Warehouse added succesfully 
+2016-04-08 13:21:26 - INFO  --> Fetching company details 
+2016-04-08 13:21:26 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster`"} 
+2016-04-08 13:21:26 - DEBUG --> Row Count:
+ 4 
+2016-04-08 13:21:26 - INFO  --> Company details fetch successful 
+2016-04-08 13:21:34 - INFO  --> Modifying company details 
+2016-04-08 13:21:34 - INFO  --> Checking if company is already available 
+2016-04-08 13:21:34 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from companymaster where companyName=:companyName AND companyId!=:companyId"} 
+2016-04-08 13:21:34 - DEBUG --> Count:
+ 0 
+2016-04-08 13:21:34 - DEBUG --> Query:
+ {"queryString":"UPDATE companymaster SET companyName=:companyName,companyAbbrevation=:abbrevation,startDate=:startdate,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,emailId=:emailId,phoneNumber=:phoneNumber,lastModifiedBy=:userId,lastModificationDate=now() WHERE companyId=:companyId"} 
+2016-04-08 13:21:34 - DEBUG --> Data:
+ {"operation":"modifyCompanyDetails","data":{"companyId":"56fd75ecb47a81876","companyName":"daskdjasdkjasdhkajsdhkasjdhk","companyAbbrevation":"surr","startDate":"2016-04-21","address":"A\/8 state bank staff shivneri hsg soc shivtirthnagar paud road","city":"Pune","state":"Maharashtra","country":"India","pincode":"411038","emailId":"asdasd@mail.com","phoneNumber":"08149050480"}} 
+2016-04-08 13:21:34 - INFO  --> Company details modified successfully 
+2016-04-08 15:11:08 - INFO  --> Fetching companies 
+2016-04-08 15:11:08 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-08 15:11:08 - DEBUG --> Count :
+ 4 
+2016-04-08 15:11:08 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-08 15:11:08 - DEBUG --> Count:
+ 3 
+2016-04-08 15:33:46 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-08 15:33:46 - DEBUG --> Count:
+ 3 
+2016-04-08 15:33:46 - INFO  --> Fetching companies 
+2016-04-08 15:33:46 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-08 15:33:46 - DEBUG --> Count :
+ 4 
