@@ -1628,7 +1628,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
     $scope.check= function(quantity)
     {
         //console.log(quantity);
-        //console.log($scope.availableTotalquantity);
+        //console.log($scope.availableTotalquantity)
 
         if ($scope.availableTotalquantity < quantity || $scope.availableTotalquantity == 0) {
 
