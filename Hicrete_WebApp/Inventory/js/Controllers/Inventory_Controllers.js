@@ -1604,7 +1604,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
                 qty = $scope.materialsForOutward[i].totalquantity;
                 if (qty != "undefined") {
-                    console.log("here");
+                    //console.log("here");
                     $scope.availableTotalquantity = qty;
                 }
                 else {
