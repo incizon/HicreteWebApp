@@ -1140,6 +1140,7 @@
                         $stmt2->bindParam(':lastModifiedBy', $userId);
 
                         HicreteLogger::logDebug("Query:\n " . json_encode($stmt1));
+                        HicreteLogger::logDebug("Data:\n " . json_encode($data));
                         if ($stmt1->execute()) {
 
                             HicreteLogger::logDebug("Query:\n " . json_encode($stmt2));
