@@ -101,7 +101,7 @@
                             HicreteLogger::logError("Payment package master data insertion unsuccessful");
                             return false;
                         }
-
+                        HicreteLogger::logInfo("Package created successfully");
                         return true;
                     } catch (Exception $e)
                     {
