@@ -41,6 +41,7 @@ switch ($data->operation) {
     case "deleteUser" : ConfigUtils::deleteUser($data->key,$userId);
                         break;
     case "modifyUser" : ConfigUtils::modifyUser($data,$userId);
+                        break;
 
     case "getAccessForRole" : ConfigUtils::getAccessForRole($data->roleId);
     				    break;

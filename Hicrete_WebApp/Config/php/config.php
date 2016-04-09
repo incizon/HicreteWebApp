@@ -440,8 +440,6 @@ class Config
             $db = Database::getInstance();
             $conn = $db->getConnection();
 
-
-
             if(Config::isUserAvailable($data->userInfo->email)) {
                 $conn->beginTransaction();
                 $password = "";

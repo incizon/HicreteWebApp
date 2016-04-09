@@ -106,3 +106,1119 @@
  {"queryString":"SELECT companyId,companyName FROM companymaster"} 
 2016-04-08 15:33:46 - DEBUG --> Count :
  4 
+2016-04-09 11:15:15 - INFO  --> Fetching all Roles 
+2016-04-09 11:15:15 - DEBUG --> Query:
+ {"queryString":"SELECT `roleId`, `roleName` FROM `rolemaster`"} 
+2016-04-09 11:15:15 - DEBUG --> Count:
+ 7 
+2016-04-09 11:15:15 - INFO  --> Role fetch successful 
+2016-04-09 11:15:27 - INFO  --> Getting user Details 
+2016-04-09 11:15:27 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword)"} 
+2016-04-09 11:15:27 - DEBUG --> Data:
+ "%%" 
+2016-04-09 11:15:27 - DEBUG --> Row count:
+ 7 
+2016-04-09 11:15:27 - INFO  --> User details found  successfully 
+2016-04-09 11:15:33 - INFO  --> Fetching all Roles 
+2016-04-09 11:15:33 - DEBUG --> Query:
+ {"queryString":"SELECT `roleId`, `roleName` FROM `rolemaster`"} 
+2016-04-09 11:15:33 - DEBUG --> Count:
+ 7 
+2016-04-09 11:15:33 - INFO  --> Role fetch successful 
+2016-04-09 11:15:33 - INFO  --> Fetching Access for roles 
+2016-04-09 11:15:33 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:15:33 - DEBUG --> Row Count:
+ 8 
+2016-04-09 11:15:33 - INFO  --> Access for role fetch successful 
+2016-04-09 11:15:38 - INFO  --> Fetching Access for roles 
+2016-04-09 11:15:38 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:15:38 - DEBUG --> Row Count:
+ 4 
+2016-04-09 11:15:38 - INFO  --> Access for role fetch successful 
+2016-04-09 11:15:43 - INFO  --> Modifying User details 
+2016-04-09 11:15:43 - DEBUG --> Query:
+ {"queryString":"UPDATE `userroleinfo` SET `designation`=:designation,`roleId`=:roleId,`userType`=:userType,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE userid=:dataUserId"} 
+2016-04-09 11:15:43 - DEBUG --> Data:
+ {"operation":"modifyUser","userInfo":{"userId":"56fe61c46d5ef9831","firstName":"JAYASHREE","lastName":"DEORE","dateOfBirth":"11-22-1990","address":"9B, 1201, KALPATARU ESTATE,\nPIMPLE GURAV, NEAR NASHIK PHATA, PUNE-61","city":"PUNE","state":"MAHARASHTRA","country":"INDIA","pincode":"411061","emailId":"mjayd2211.mnc@gmail.com","mobileNumber":"8378972602","designation":"IT & OFFICE COORDINATOR","role":"IT & OFF.COORDINATOR","userType":"Normal","roleId":"56fe641b901ce8819"},"designation":null,"roleId":null,"userType":null,"userId":null} 
+2016-04-09 11:15:43 - INFO  --> User modified successfully 
+2016-04-09 11:15:43 - INFO  --> Fetching Access for roles 
+2016-04-09 11:15:43 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:15:43 - DEBUG --> Row Count:
+ 0 
+2016-04-09 11:15:43 - ERROR --> No Access Permissions found 
+2016-04-09 11:18:20 - INFO  --> Getting user Details 
+2016-04-09 11:18:20 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword)"} 
+2016-04-09 11:18:20 - DEBUG --> Data:
+ "%%" 
+2016-04-09 11:18:20 - DEBUG --> Row count:
+ 7 
+2016-04-09 11:18:20 - INFO  --> User details found  successfully 
+2016-04-09 11:18:42 - INFO  --> Fetching Access for roles 
+2016-04-09 11:18:42 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:18:42 - DEBUG --> Row Count:
+ 8 
+2016-04-09 11:18:42 - INFO  --> Access for role fetch successful 
+2016-04-09 11:18:42 - INFO  --> Fetching all Roles 
+2016-04-09 11:18:42 - DEBUG --> Query:
+ {"queryString":"SELECT `roleId`, `roleName` FROM `rolemaster`"} 
+2016-04-09 11:18:42 - DEBUG --> Count:
+ 7 
+2016-04-09 11:18:42 - INFO  --> Role fetch successful 
+2016-04-09 11:18:44 - INFO  --> Fetching Access for roles 
+2016-04-09 11:18:44 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:18:44 - DEBUG --> Row Count:
+ 4 
+2016-04-09 11:18:44 - INFO  --> Access for role fetch successful 
+2016-04-09 11:18:49 - INFO  --> Modifying User details 
+2016-04-09 11:18:49 - DEBUG --> Query:
+ {"queryString":"UPDATE `userroleinfo` SET `designation`=:designation,`roleId`=:roleId,`userType`=:userType,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE userid=:dataUserId"} 
+2016-04-09 11:18:49 - DEBUG --> Data:
+ {"operation":"modifyUser","userInfo":{"userId":"56fe61c46d5ef9831","firstName":"JAYASHREE","lastName":"DEORE","dateOfBirth":"11-22-1990","address":"9B, 1201, KALPATARU ESTATE,\nPIMPLE GURAV, NEAR NASHIK PHATA, PUNE-61","city":"PUNE","state":"MAHARASHTRA","country":"INDIA","pincode":"411061","emailId":"mjayd2211.mnc@gmail.com","mobileNumber":"8378972602","designation":"IT & OFFICE COORDINATOR","role":"IT & OFF.COORDINATOR","userType":"Normal","roleId":"56fe641b901ce8819"},"designation":null,"roleId":null,"userType":null,"userId":null} 
+2016-04-09 11:18:49 - INFO  --> User modified successfully 
+2016-04-09 11:18:49 - INFO  --> Fetching Access for roles 
+2016-04-09 11:18:49 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:18:49 - DEBUG --> Row Count:
+ 0 
+2016-04-09 11:18:49 - ERROR --> No Access Permissions found 
+2016-04-09 11:20:42 - INFO  --> Getting user Details 
+2016-04-09 11:20:42 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword)"} 
+2016-04-09 11:20:42 - DEBUG --> Data:
+ "%%" 
+2016-04-09 11:20:42 - DEBUG --> Row count:
+ 7 
+2016-04-09 11:20:42 - INFO  --> User details found  successfully 
+2016-04-09 11:20:43 - INFO  --> Fetching all Roles 
+2016-04-09 11:20:43 - DEBUG --> Query:
+ {"queryString":"SELECT `roleId`, `roleName` FROM `rolemaster`"} 
+2016-04-09 11:20:43 - DEBUG --> Count:
+ 7 
+2016-04-09 11:20:43 - INFO  --> Role fetch successful 
+2016-04-09 11:20:43 - INFO  --> Fetching Access for roles 
+2016-04-09 11:20:43 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:20:43 - DEBUG --> Row Count:
+ 8 
+2016-04-09 11:20:43 - INFO  --> Access for role fetch successful 
+2016-04-09 11:20:45 - INFO  --> Fetching Access for roles 
+2016-04-09 11:20:45 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:20:45 - DEBUG --> Row Count:
+ 4 
+2016-04-09 11:20:45 - INFO  --> Access for role fetch successful 
+2016-04-09 11:20:46 - INFO  --> Modifying User details 
+2016-04-09 11:20:46 - DEBUG --> Query:
+ {"queryString":"UPDATE `userroleinfo` SET `designation`=:designation,`roleId`=:roleId,`userType`=:userType,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE userid=:dataUserId"} 
+2016-04-09 11:20:46 - DEBUG --> Data:
+ {"operation":"modifyUser","userInfo":{"userId":"56fe61c46d5ef9831","firstName":"JAYASHREE","lastName":"DEORE","dateOfBirth":"11-22-1990","address":"9B, 1201, KALPATARU ESTATE,\nPIMPLE GURAV, NEAR NASHIK PHATA, PUNE-61","city":"PUNE","state":"MAHARASHTRA","country":"INDIA","pincode":"411061","emailId":"mjayd2211.mnc@gmail.com","mobileNumber":"8378972602","designation":"IT & OFFICE COORDINATOR","role":"IT & OFF.COORDINATOR","userType":"Normal","roleId":"56fe643405bb75623"},"designation":null,"roleId":null,"userType":null,"userId":null} 
+2016-04-09 11:20:46 - INFO  --> User modified successfully 
+2016-04-09 11:21:16 - INFO  --> Fetching company details 
+2016-04-09 11:21:16 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber` FROM `companymaster`"} 
+2016-04-09 11:21:16 - DEBUG --> Row Count:
+ 3 
+2016-04-09 11:21:16 - INFO  --> Company details fetch successful 
+2016-04-09 11:21:25 - INFO  --> Modifying company details 
+2016-04-09 11:21:25 - INFO  --> Checking if company is already available 
+2016-04-09 11:21:25 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from companymaster where companyName=:companyName AND companyId!=:companyId"} 
+2016-04-09 11:21:26 - DEBUG --> Count:
+ 0 
+2016-04-09 11:21:26 - DEBUG --> Query:
+ {"queryString":"UPDATE companymaster SET companyName=:companyName,companyAbbrevation=:abbrevation,startDate=:startdate,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,emailId=:emailId,phoneNumber=:phoneNumber,lastModifiedBy=:userId,lastModificationDate=now() WHERE companyId=:companyId"} 
+2016-04-09 11:21:26 - DEBUG --> Data:
+ {"operation":"modifyCompanyDetails","data":{"companyId":"56ff5baf49d966442","companyName":"HITECH ENGINEERSss","companyAbbrevation":"HE","startDate":"2008-10-12","address":"\u2018ASEEM', PLOT NO.36, SANT EKNATHNAGAR(PART II), BIBEWADI, PUNE-37, MAHARASHTRA","city":"PUNE","state":"MAHARASHTRA","country":"INDIA","pincode":"411037","emailId":"info@hitechflooringindia.com","phoneNumber":"020-41259091"}} 
+2016-04-09 11:21:26 - INFO  --> Company details modified successfully 
+2016-04-09 11:21:31 - INFO  --> Fetching all Warehouse details 
+2016-04-09 11:21:31 - DEBUG --> Query:
+ {"queryString":"SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster` where wareHouseName like :key"} 
+2016-04-09 11:21:31 - DEBUG --> Count:
+ 1 
+2016-04-09 11:21:31 - INFO  --> Warehouse details fetched successful 
+2016-04-09 11:21:35 - INFO  --> Modifying warehouse details 
+2016-04-09 11:21:35 - INFO  --> Checking if warehouse is already available 
+2016-04-09 11:21:35 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from warehousemaster where wareHouseName=:wareHouseName AND warehouseId!=:warehouseId"} 
+2016-04-09 11:21:35 - DEBUG --> Count:
+ 0 
+2016-04-09 11:21:35 - DEBUG --> Query:
+ {"queryString":"UPDATE `warehousemaster` SET `wareHouseName`=:wareHouseName,`warehouseAbbrevation`=:abbrevation,`address`=:address,`city`=:city,`state`=:state,`country`=:country,`pincode`=:pincode,`phoneNumber`=:phoneNumber,`lastModifiedBy`=:userId,`lastModificationDate`=now() WHERE `warehouseId`=:warehouseId"} 
+2016-04-09 11:21:35 - DEBUG --> Data:
+ {"operation":"modifyWareHouseDetails","data":{"warehouseId":"56ff6341570898419","wareHouseName":"SHINDEWADIrtt","warehouseAbbrevation":"SHW","address":"OPP. SHINDEWADI JAKAT NAKA,\nGAT NO.-318,B\/1,A\/P SHINDEWADI \nNH-4, BHOR,PUNE","city":"PUNE","state":"MAHARSHTRA","country":"INDIA","pincode":"412205","phoneNumber":"7767034817"}} 
+2016-04-09 11:21:35 - INFO  --> Warehouse details modified successfully 
+2016-04-09 11:22:06 - INFO  --> Adding Warehouse 
+2016-04-09 11:22:06 - INFO  --> Checking if the warehouse is available 
+2016-04-09 11:22:06 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from warehousemaster where wareHouseName=:wareHouseName"} 
+2016-04-09 11:22:06 - DEBUG --> Count:
+ "0" 
+2016-04-09 11:22:06 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `warehousemaster`(`warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)\r\n                VALUES (:id,:name,:abbrevation,:address,:city,:state,:country,:pincode,:phone,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-09 11:22:07 - INFO  --> Warehouse added succesfully 
+2016-04-09 11:22:45 - INFO  --> Adding company 
+2016-04-09 11:22:45 - INFO  --> Checking if the company is available 
+2016-04-09 11:22:45 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from companymaster where companyName=:companyName"} 
+2016-04-09 11:22:45 - DEBUG --> Count:
+ "0" 
+2016-04-09 11:22:45 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `companymaster`(`companyId`, `companyName`, `companyAbbrevation`, `startDate`, `address`, `city`, `state`, `country`, `pincode`, `emailId`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)\r\n                VALUES (:id,:name,:abbrevation,:startDate,:address,:city,:state,:country,:pincode,:email,:phone,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-09 11:22:45 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `company_bank_details`(`companyId`, `BankName`, `BankBranch`, `AccountName`, `AccountNo`, `AccountType`, `IFSCCode`)\r\n                        VALUES (:id,:bankName,:bankBranch,:accountName,:accountNo,:accountType,:ifscCode)"} 
+2016-04-09 11:22:45 - INFO  --> Company created successfully 
+2016-04-09 11:22:48 - INFO  --> Fetching all access permissions 
+2016-04-09 11:22:48 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-09 11:22:48 - DEBUG --> Count:
+ 10 
+2016-04-09 11:22:48 - INFO  --> access Permissions found 
+2016-04-09 11:22:54 - INFO  --> Creating role 
+2016-04-09 11:22:54 - INFO  --> Checking if the role is available 
+2016-04-09 11:22:54 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from rolemaster where roleName=:roleName"} 
+2016-04-09 11:22:54 - DEBUG --> Count:
+ 0 
+2016-04-09 11:22:54 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `rolemaster`(`roleId`, `roleName`, `createdBy`, `creationDate`)\r\n                    VALUES (:roleId,:roleName,:createdBy,now())"} 
+2016-04-09 11:22:54 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `roleaccesspermission`(`roleAccessId`, `roleId`, `accessId`, `createdBy`, `creationDate`)\r\n              VALUES (:permissionId,:roleId,:accessId,:createdBy,now())"} 
+2016-04-09 11:22:54 - DEBUG --> Data:
+ 5708c9ee3ca621550 5708c9ee3245d6805 121 
+2016-04-09 11:22:54 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `roleaccesspermission`(`roleAccessId`, `roleId`, `accessId`, `createdBy`, `creationDate`)\r\n              VALUES (:permissionId,:roleId,:accessId,:createdBy,now())"} 
+2016-04-09 11:22:54 - DEBUG --> Data:
+ 5708c9ee3d4266809 5708c9ee3245d6805 228 
+2016-04-09 11:22:54 - INFO  --> Role Created successfully 
+2016-04-09 11:22:57 - INFO  --> Fetching all Roles 
+2016-04-09 11:22:57 - DEBUG --> Query:
+ {"queryString":"SELECT `roleId`, `roleName` FROM `rolemaster`"} 
+2016-04-09 11:22:57 - DEBUG --> Count:
+ 8 
+2016-04-09 11:22:57 - INFO  --> Role fetch successful 
+2016-04-09 11:23:24 - INFO  --> Fetching Access for roles 
+2016-04-09 11:23:24 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:23:24 - DEBUG --> Row Count:
+ 2 
+2016-04-09 11:23:24 - INFO  --> Access for role fetch successful 
+2016-04-09 11:23:28 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from usermaster where emailId=:emailId"} 
+2016-04-09 11:23:28 - DEBUG --> Count: 0 
+2016-04-09 11:23:28 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `usermaster`(`userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)\r\n                VALUES (:userId,:firstName,:lastName,:dob,:address,:city,:state,:country,:pincode,:mobileNumber,:emailId,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-09 11:23:28 - DEBUG --> Data:
+ {"operation":"addUser","userInfo":{"firstName":"dfgdfgdfg","lastName":"fgh","dob":"2016-04-09T09:22:57.303Z","address":"fghfghfg ghfgh fghfgh","city":"fg","state":"gd","country":"dfggf","pincode":"56456356","email":"as@gmail.com","mobile":"65676575645","designation":"ffgdfgdfg","userType":"Normal"},"roleId":"5708c9ee3245d6805"} 
+2016-04-09 11:23:28 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `userroleinfo`(`userId`, `designation`, `roleId`, `userType`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) \r\n        VALUES (:userId,:designation,:roleId,:userType,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-09 11:23:28 - DEBUG --> Data:
+ ffgdfgdfg 5708c9ee3245d6805 Normal 56fd8f4a122d02927 
+2016-04-09 11:23:28 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `logindetails`(`userId`, `userName`, `password`) \r\n                            VALUES (:userId,:userName,:password)"} 
+2016-04-09 11:23:28 - INFO  --> User added successfully 
+2016-04-09 11:27:00 - INFO  --> Fetching all Roles 
+2016-04-09 11:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT `roleId`, `roleName` FROM `rolemaster`"} 
+2016-04-09 11:27:00 - DEBUG --> Count:
+ 8 
+2016-04-09 11:27:00 - INFO  --> Role fetch successful 
+2016-04-09 11:29:41 - INFO  --> Fetching Access for roles 
+2016-04-09 11:29:41 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:29:41 - DEBUG --> Row Count:
+ 2 
+2016-04-09 11:29:41 - INFO  --> Access for role fetch successful 
+2016-04-09 11:29:46 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from usermaster where emailId=:emailId"} 
+2016-04-09 11:29:46 - DEBUG --> Count: 0 
+2016-04-09 11:29:46 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `usermaster`(`userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)\r\n                VALUES (:userId,:firstName,:lastName,:dob,:address,:city,:state,:country,:pincode,:mobileNumber,:emailId,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-09 11:29:46 - DEBUG --> Data:
+ {"operation":"addUser","userInfo":{"firstName":"ggfhgfhgf","lastName":"dhatrakAsdfr","dob":"2016-04-09T09:26:59.954Z","address":"ygkhfc vcjgjfcjcjcjg","city":"jkhj","state":"JHGH","country":"tbhgfd","pincode":"554544","email":"s@gma.co","mobile":"545455454545","designation":"hjghjghj","userType":"Normal"},"roleId":"5708c9ee3245d6805"} 
+2016-04-09 11:29:46 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `userroleinfo`(`userId`, `designation`, `roleId`, `userType`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`) \r\n        VALUES (:userId,:designation,:roleId,:userType,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-09 11:29:46 - DEBUG --> Data:
+ hjghjghj 5708c9ee3245d6805 Normal 56fd8f4a122d02927 
+2016-04-09 11:29:46 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `logindetails`(`userId`, `userName`, `password`) \r\n                            VALUES (:userId,:userName,:password)"} 
+2016-04-09 11:29:46 - INFO  --> User added successfully 
+2016-04-09 11:30:13 - INFO  --> Fetching all access permissions 
+2016-04-09 11:30:13 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-09 11:30:13 - DEBUG --> Count:
+ 10 
+2016-04-09 11:30:13 - INFO  --> access Permissions found 
+2016-04-09 11:30:14 - INFO  --> Getting Role Details 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Row Count:
+ 8 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-09 11:30:14 - INFO  --> Roles found successfully 
+2016-04-09 11:30:16 - INFO  --> Fetching Access for roles 
+2016-04-09 11:30:16 - DEBUG --> Query:
+ {"queryString":"SELECT `accessId`, `ModuleName`, `accessType` FROM `accesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `roleaccesspermission` WHERE `roleId`=:roleId)"} 
+2016-04-09 11:30:16 - DEBUG --> Row Count:
+ 2 
+2016-04-09 11:30:16 - INFO  --> Access for role fetch successful 
+2016-04-09 11:30:20 - INFO  --> Modifying role 
+2016-04-09 11:30:20 - INFO  --> Checking if the role is already available 
+2016-04-09 11:30:20 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from rolemaster where roleName=:roleName AND roleId!=:roleId"} 
+2016-04-09 11:30:20 - DEBUG --> Data:
+  dfgdfgfdg 5708c9ee3245d6805 
+2016-04-09 11:30:20 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `rolemaster` WHERE `roleId`=:roleId"} 
+2016-04-09 11:30:20 - DEBUG --> Query:
+ {"queryString":"DELETE FROM `roleaccesspermission` WHERE `roleId`=:roleId"} 
+2016-04-09 11:30:20 - DEBUG --> Query:
+ {"queryString":"UPDATE `rolemaster` SET `roleName`=:roleName , `lastModifiedBy`=:userId,`lasModificationDate`=now() WHERE `roleId`=:roleId"} 
+2016-04-09 11:30:20 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `roleaccesspermission`(`roleAccessId`, `roleId`, `accessId`, `createdBy`, `creationDate`)\r\n              VALUES (:permissionId,:roleId,:accessId,:createdBy,now())"} 
+2016-04-09 11:30:20 - DEBUG --> Data:
+ 5708cbacbbf819833 5708c9ee3245d6805 121 
+2016-04-09 11:30:20 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `roleaccesspermission`(`roleAccessId`, `roleId`, `accessId`, `createdBy`, `creationDate`)\r\n              VALUES (:permissionId,:roleId,:accessId,:createdBy,now())"} 
+2016-04-09 11:30:20 - DEBUG --> Data:
+ 5708cbacf075c6420 5708c9ee3245d6805 226 
+2016-04-09 11:30:21 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `roleaccesspermission`(`roleAccessId`, `roleId`, `accessId`, `createdBy`, `creationDate`)\r\n              VALUES (:permissionId,:roleId,:accessId,:createdBy,now())"} 
+2016-04-09 11:30:21 - DEBUG --> Data:
+ 5708cbad07ea88954 5708c9ee3245d6805 228 
+2016-04-09 11:30:21 - INFO  --> Role modified successfully 
+2016-04-09 11:30:22 - INFO  --> Fetching all access permissions 
+2016-04-09 11:30:22 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-09 11:30:22 - DEBUG --> Count:
+ 10 
+2016-04-09 11:30:22 - INFO  --> access Permissions found 
+2016-04-09 11:30:34 - INFO  --> Adding material type 
+2016-04-09 11:30:34 - DEBUG --> Query: 
+{"queryString":"INSERT INTO materialtype (materialtype,delflg,lchnguserid,lchngtime,creuserid,cretime)\r\n                  values (:materialtype,:delflg,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:30:34 - DEBUG --> DATA: 
+"sdfsdfdsf" 
+2016-04-09 11:30:34 - INFO  --> Material type Added successfully 
+2016-04-09 11:31:26 - INFO  --> Checking if the supplier is available 
+2016-04-09 11:31:26 - INFO  --> Count fetched by query: 0 
+2016-04-09 11:31:26 - DEBUG --> Query:
+ {"queryString":"INSERT INTO supplier (SUPPLIERNAME,CONTACTNO,POINTOFCONTACT,OFFICENO,CSTNO,VATNO,ADDRESS,CITY,COUNTRY,PINCODE,DELFLG,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)\r\n              values (:supplierName,:contactNo,:pointofcontact,:officeno,:cstno,:vatno,:address,:city,:country,:pincode,:delflg,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 11:31:26 - DEBUG --> Data:
+ {"supplierName":"dsfdsf","contactNo":"45345345","address":"dffgdfgdfgrrrrrr","city":"asdasd","country":"ertert","pinCode":"435345","pointOfContact":"sdf","officeNo":"43543543","VATNo":"35","CSTNo":"345"} 
+2016-04-09 11:31:26 - INFO  --> Supplier Created successfully 
+2016-04-09 11:31:49 - INFO  --> Inserting product to db 
+2016-04-09 11:31:49 - DEBUG --> Query: 
+{"queryString":"INSERT INTO product_master (productname,materialtypeid,unitofmeasure,lchnguserid,lchngtime,creuserid,cretime)\r\n                                values (:productname,:materialtypeid,:unitofmeasure,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:31:49 - DEBUG --> DATA: 
+{"productName":"ffdgdfgsdfsdfdsfsdfsdfsdfdsfdsfsdfsd dsf dsf fdsfsd","productAbbrevations":"dfg","productUnitOfMeasure":"dsfdsf","productAlertQty":23,"productColor":"sdfdsf","productDescription":"df dfg fdgdf g dfgdfg","productPackaging":"sdfdsf","productType":"3","userId":"1"} 
+2016-04-09 11:31:49 - DEBUG --> Query: 
+{"queryString":"INSERT INTO product_details (productmasterid,color,description,alertquantity,lchnguserid,lchngtime,creuserid,cretime)\r\n                                                  values (:productmasterid,:color,:description,:alertquantity,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:31:49 - DEBUG --> Query: 
+{"queryString":"INSERT INTO product_packaging (productmasterid,packaging,lchnguserid,lchngtime,creuserid,cretime)\r\n                                                        values (:productmasterid,:packaging,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:31:49 - DEBUG --> Query: 
+{"queryString":"INSERT INTO material(productmasterid,productdetailsid,productpackagingid,abbrevation,lchnguserid,lchngtime,creuserid,cretime)\r\n                                                        values (:productmasterid,:productdetailsid,:productpackagingid,:abbrevation,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:31:49 - INFO  --> Product added successfully 
+2016-04-09 11:31:52 - INFO  --> Fetching companies 
+2016-04-09 11:31:52 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:31:52 - DEBUG --> Count :
+ 4 
+2016-04-09 11:31:52 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:31:52 - DEBUG --> Count:
+ 2 
+2016-04-09 11:31:52 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 11:31:52 - DEBUG --> Row Count : 
+11 
+2016-04-09 11:31:57 - INFO  --> Searching Products 
+2016-04-09 11:31:57 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-09 11:31:57 - DEBUG --> Data: {"keyword":""} 
+2016-04-09 11:38:08 - INFO  --> Inserting product to db 
+2016-04-09 11:38:08 - DEBUG --> Query: 
+{"queryString":"INSERT INTO product_master (productname,materialtypeid,unitofmeasure,lchnguserid,lchngtime,creuserid,cretime)\r\n                                values (:productname,:materialtypeid,:unitofmeasure,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:38:08 - DEBUG --> DATA: 
+{"productName":"aju","productAbbrevations":"ds","productUnitOfMeasure":"dsfdsf","productAlertQty":43,"productColor":"dgdfg","productDescription":"fdgs dfsdfdsf","productPackaging":"dsfdsf67sdf","productType":"1","userId":"1"} 
+2016-04-09 11:38:08 - DEBUG --> Query: 
+{"queryString":"INSERT INTO product_details (productmasterid,color,description,alertquantity,lchnguserid,lchngtime,creuserid,cretime)\r\n                                                  values (:productmasterid,:color,:description,:alertquantity,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:38:08 - DEBUG --> Query: 
+{"queryString":"INSERT INTO product_packaging (productmasterid,packaging,lchnguserid,lchngtime,creuserid,cretime)\r\n                                                        values (:productmasterid,:packaging,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:38:08 - DEBUG --> Query: 
+{"queryString":"INSERT INTO material(productmasterid,productdetailsid,productpackagingid,abbrevation,lchnguserid,lchngtime,creuserid,cretime)\r\n                                                        values (:productmasterid,:productdetailsid,:productpackagingid,:abbrevation,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:38:08 - INFO  --> Product added successfully 
+2016-04-09 11:38:13 - INFO  --> Searching Products 
+2016-04-09 11:38:13 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-09 11:38:13 - DEBUG --> Data: {"keyword":""} 
+2016-04-09 11:38:42 - INFO  --> Searching Products 
+2016-04-09 11:38:42 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid  WHERE product_master.productname like :keyword"} 
+2016-04-09 11:38:42 - DEBUG --> Data: {"keyword":"aju","SearchTerm":"productName"} 
+2016-04-09 11:38:54 - INFO  --> Fetching companies 
+2016-04-09 11:38:54 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:38:54 - DEBUG --> Count :
+ 4 
+2016-04-09 11:38:54 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:38:54 - DEBUG --> Count:
+ 2 
+2016-04-09 11:38:54 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 11:38:54 - DEBUG --> Row Count : 
+11 
+2016-04-09 11:41:37 - INFO  --> Inserting inward entries 
+2016-04-09 11:41:37 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime)\r\n             values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:41:37 - DEBUG --> DATA: 
+{"inwardNumber":"sdasd435","material":null,"packageUnit":null,"companyName":"5708c9e54aabf7767","suppplierName":null,"dateOfInward":"2016-04-09T09:38:54.712Z","materialQty":null,"warehouse":"5708c9bed61506780","suppervisor":"5708ca10102d33583","transportMode":"1","vehicleNumber":"456456","transportCost":43,"remark":"dfgdfgdfg","transportAgency":"dfgdfg","driverName":"dgdfg","transportPayable":null,"hasTransportDetails":"Yes","isSuccess":null,"size":null} 
+2016-04-09 11:41:38 - INFO  --> Insertion to Inward successful.Inserting inward Details 
+2016-04-09 11:41:38 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)\r\n                    values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:41:38 - DEBUG --> DATA: 
+{"material":"247","materialQuantity":21,"packageUnit":"sdf","suppplierName":"2","size":"","packagesize":"23"} 
+2016-04-09 11:41:38 - INFO  --> Insertion of Inward Details successful.Updating inventory 
+2016-04-09 11:41:38 - INFO  --> Inserting to inventory 
+2016-04-09 11:41:38 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)\r\n                                                      values (:materialid,:warehouseid,:companyid,:totalquantity)"} 
+2016-04-09 11:41:38 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)\r\n                    values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:41:38 - DEBUG --> DATA: 
+{"material":"1","materialQuantity":34,"packageUnit":"dfg","suppplierName":"1","packagesize":"34"} 
+2016-04-09 11:41:38 - INFO  --> Insertion of Inward Details successful.Updating inventory 
+2016-04-09 11:41:38 - INFO  --> Inserting to inventory 
+2016-04-09 11:41:38 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)\r\n                                                      values (:materialid,:warehouseid,:companyid,:totalquantity)"} 
+2016-04-09 11:41:38 - INFO  --> Inserting into transport details  
+2016-04-09 11:41:38 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward_transportation_details (inwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)\r\n                       values (:inwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchnguserid,now(),:creuserid,now(),:remark)"} 
+2016-04-09 11:41:55 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 11:41:55 - DEBUG --> Row Count : 
+11 
+2016-04-09 11:41:55 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:41:55 - DEBUG --> Count:
+ 2 
+2016-04-09 11:41:55 - INFO  --> Fetching companies 
+2016-04-09 11:41:55 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:41:55 - DEBUG --> Count :
+ 4 
+2016-04-09 11:43:06 - INFO  --> Inserting outward entries 
+2016-04-09 11:43:06 - DEBUG --> Query: {"queryString":"INSERT INTO outward (warehouseid,companyid,supervisorid,dateofentry,outwardno,lchnguserid,lchngtime,creuserid,cretime)\r\n                           values (:warehouseid,:companyid,:supervisorid,:dateofentry,:Outwardno,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:43:06 - DEBUG --> Data: {"OutwardNumber":"adsasd","companyName":"56ff5baf49d966442","warehouse":"5708c9bed61506780","suppervisor":"56fd8f4a122d02927","dateOfOutward":"2016-04-09T09:41:55.629Z","material":null,"packageUnit":null,"materialQty":null,"transportMode":"1","vehicleNumber":"sdf","transportCost":4,"remark":"sdfs fdsf sdf","transportAgency":"sdf","driverName":"dsf sdf","transportPayable":null,"isSuccess":null,"hasTransportDetails":"Yes"} 
+2016-04-09 11:43:06 - INFO  --> Insertion to outward successful. Inserting outward details 
+2016-04-09 11:43:06 - DEBUG --> Query: {"queryString":"INSERT INTO outward_details (Outwardid,materialid,quantity,packagedunits,packagesize,lchnguserid,lchngtime,creuserid,cretime)\r\n              values (:Outwardid,:materialid,:quantity,:packagedunits,:packagesize,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:43:06 - DEBUG --> Data: {"material":"1","materialQuantity":3,"packageUnit":"ds","suppplierName":"","packagesize":"4"} 
+2016-04-09 11:43:06 - INFO  -->  Inserting outward details successfull updating inventory 
+2016-04-09 11:43:06 - INFO  --> Updating inventory 
+2016-04-09 11:43:06 - DEBUG --> Query: {"queryString":"INSERT INTO outward_details (Outwardid,materialid,quantity,packagedunits,packagesize,lchnguserid,lchngtime,creuserid,cretime)\r\n              values (:Outwardid,:materialid,:quantity,:packagedunits,:packagesize,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 11:43:06 - DEBUG --> Data: {"material":"247","materialQuantity":4,"packageUnit":"sdf","packagesize":"5"} 
+2016-04-09 11:43:06 - INFO  -->  Inserting outward details successfull updating inventory 
+2016-04-09 11:43:06 - INFO  --> Updating inventory 
+2016-04-09 11:43:06 - INFO  --> Inserting transport details  
+2016-04-09 11:43:06 - INFO  --> Outward details added successfully 
+2016-04-09 11:43:09 - INFO  --> Fetching inward details 
+2016-04-09 11:43:09 - INFO  --> Getting inward details 
+2016-04-09 11:43:09 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-09 11:43:09 - DEBUG --> Query: {"queryString":"SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID"} 
+2016-04-09 11:43:09 - DEBUG --> Query: {"queryString":"SELECT inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,\r\n                       inward_details.size,supplier.supplierid,supplier.suppliername,material.materialid,product_master.productname FROM inward_details\r\n                        JOIN supplier ON\r\n                        inward_details.supplierid=supplier.supplierid\r\n                        JOIN material ON\r\n                        material.materialid=inward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE inwardid=:inwardID"} 
+2016-04-09 11:44:06 - INFO  --> Fetching inward details 
+2016-04-09 11:44:06 - INFO  --> Getting inward details 
+2016-04-09 11:44:06 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid AND a.inwardno like :keyword"} 
+2016-04-09 11:44:06 - DEBUG --> Query: {"queryString":"SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID"} 
+2016-04-09 11:44:06 - DEBUG --> Query: {"queryString":"SELECT inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,\r\n                       inward_details.size,supplier.supplierid,supplier.suppliername,material.materialid,product_master.productname FROM inward_details\r\n                        JOIN supplier ON\r\n                        inward_details.supplierid=supplier.supplierid\r\n                        JOIN material ON\r\n                        material.materialid=inward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE inwardid=:inwardID"} 
+2016-04-09 11:44:24 - INFO  --> Fetching outward entries 
+2016-04-09 11:44:24 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from outward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-09 11:44:24 - DEBUG --> Keyword: "%%" 
+2016-04-09 11:44:24 - DEBUG --> Query: {"queryString":"SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID"} 
+2016-04-09 11:44:24 - DEBUG --> Query: {"queryString":"SELECT * FROM outward_details\r\n                        JOIN material ON\r\n                        material.materialid=outward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE outwardid=:outwardID"} 
+2016-04-09 11:44:53 - INFO  --> Fetching outward entries 
+2016-04-09 11:44:53 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from outward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-09 11:44:53 - DEBUG --> Keyword: "%%" 
+2016-04-09 11:44:53 - DEBUG --> Query: {"queryString":"SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID"} 
+2016-04-09 11:44:53 - DEBUG --> Query: {"queryString":"SELECT * FROM outward_details\r\n                        JOIN material ON\r\n                        material.materialid=outward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE outwardid=:outwardID"} 
+2016-04-09 11:47:51 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:47:51 - DEBUG --> Count:
+ 2 
+2016-04-09 11:47:51 - INFO  --> Fetching companies 
+2016-04-09 11:47:51 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:47:51 - DEBUG --> Count :
+ 4 
+2016-04-09 11:47:53 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:47:53 - DEBUG --> Count:
+ 2 
+2016-04-09 11:47:53 - INFO  --> Fetching companies 
+2016-04-09 11:47:53 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:47:53 - DEBUG --> Count :
+ 4 
+2016-04-09 11:47:53 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 11:47:53 - DEBUG --> Row Count : 
+11 
+2016-04-09 11:47:57 - INFO  --> Searching Products 
+2016-04-09 11:47:57 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-09 11:47:57 - DEBUG --> Data: {"keyword":""} 
+2016-04-09 11:48:00 - INFO  --> Searching Products 
+2016-04-09 11:48:00 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-09 11:48:00 - DEBUG --> Data: {"keyword":"aju"} 
+2016-04-09 11:48:01 - INFO  --> Searching Products 
+2016-04-09 11:48:01 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-09 11:48:01 - DEBUG --> Data: {"keyword":"aju"} 
+2016-04-09 11:48:05 - INFO  --> Searching Products 
+2016-04-09 11:48:05 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid  WHERE product_master.productname like :keyword"} 
+2016-04-09 11:48:05 - DEBUG --> Data: {"keyword":"aju","SearchTerm":"productName"} 
+2016-04-09 11:48:16 - INFO  --> Fetching inward details 
+2016-04-09 11:48:16 - INFO  --> Getting inward details 
+2016-04-09 11:48:16 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-09 11:48:16 - DEBUG --> Query: {"queryString":"SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID"} 
+2016-04-09 11:48:16 - DEBUG --> Query: {"queryString":"SELECT inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,\r\n                       inward_details.size,supplier.supplierid,supplier.suppliername,material.materialid,product_master.productname FROM inward_details\r\n                        JOIN supplier ON\r\n                        inward_details.supplierid=supplier.supplierid\r\n                        JOIN material ON\r\n                        material.materialid=inward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE inwardid=:inwardID"} 
+2016-04-09 11:48:29 - INFO  --> Getting user Details 
+2016-04-09 11:48:29 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`, `isDeleted`, `deletedBy`, `deletionDate` FROM `usermaster` WHERE `userId`=:keyword"} 
+2016-04-09 11:48:29 - DEBUG --> Data:
+ "56fd8f4a122d02927" 
+2016-04-09 11:48:29 - DEBUG --> Row count:
+ 1 
+2016-04-09 11:48:29 - INFO  --> User details found  successfully 
+2016-04-09 11:48:33 - INFO  --> Modifying user 
+2016-04-09 11:48:33 - DEBUG --> Query:
+ {"queryString":"UPDATE usermaster SET firstName=:firstName,\r\n            lastName=:lastName,dateOfBirth=:dateOfBirth,address=:address,city=:city,state=:state,country=:country,pincode=:pincode,mobileNumber=:mobileNumber,lastModifiedBy=:lastModifiedBy,lastModificationDate=now(),profilePicPath=:profilePicPath WHERE userId = :userId"} 
+2016-04-09 11:48:33 - DEBUG --> Data:
+ {"operation":"modifyUserDetails","userInfo":{"userId":"56fd8f4a122d02927","firstName":"Sachin","lastName":"Panse","dateOfBirth":"01-23-1966","address":"PLOT NO. 36, ASEEM BUNGALOW, SANT EKNATH NAGAR-2, BIBWEWADI,PUNE-37","city":"Pune","state":"Maharashtra","country":"India","pincode":"411037","emailId":"sachin@hicretesystems.com","mobileNumber":"9822555870","newDate":"1966\/01\/23 12:00:00","profilePic":"upload\/ProfilePictures\/739730_151850774964567_39177002_o.jpg"}} 
+2016-04-09 11:48:33 - INFO  --> Profile modified successfully 
+2016-04-09 11:48:35 - INFO  --> Getting user Details 
+2016-04-09 11:48:35 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`, `isDeleted`, `deletedBy`, `deletionDate` FROM `usermaster` WHERE `userId`=:keyword"} 
+2016-04-09 11:48:35 - DEBUG --> Data:
+ "56fd8f4a122d02927" 
+2016-04-09 11:48:35 - DEBUG --> Row count:
+ 1 
+2016-04-09 11:48:35 - INFO  --> User details found  successfully 
+2016-04-09 11:49:10 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:49:10 - DEBUG --> Count:
+ 2 
+2016-04-09 11:49:10 - INFO  --> Fetching companies 
+2016-04-09 11:49:10 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:49:10 - DEBUG --> Count :
+ 4 
+2016-04-09 11:50:48 - INFO  --> Fetching companies 
+2016-04-09 11:50:48 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:50:48 - DEBUG --> Count :
+ 4 
+2016-04-09 11:50:48 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:50:48 - DEBUG --> Count:
+ 2 
+2016-04-09 11:51:47 - INFO  --> Fetching companies 
+2016-04-09 11:51:47 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:51:47 - DEBUG --> Count :
+ 4 
+2016-04-09 11:51:47 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:51:47 - DEBUG --> Count:
+ 2 
+2016-04-09 11:52:52 - INFO  --> Fetching companies 
+2016-04-09 11:52:52 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:52:52 - DEBUG --> Count :
+ 4 
+2016-04-09 11:52:52 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:52:52 - DEBUG --> Count:
+ 2 
+2016-04-09 11:52:53 - INFO  --> Fetching companies 
+2016-04-09 11:52:53 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:52:53 - DEBUG --> Count :
+ 4 
+2016-04-09 11:52:53 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:52:53 - DEBUG --> Count:
+ 2 
+2016-04-09 11:57:30 - INFO  --> Fetching companies 
+2016-04-09 11:57:30 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:57:30 - DEBUG --> Count :
+ 4 
+2016-04-09 11:57:30 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:57:30 - DEBUG --> Count:
+ 2 
+2016-04-09 11:57:32 - INFO  --> Fetching companies 
+2016-04-09 11:57:32 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 11:57:32 - DEBUG --> Count :
+ 4 
+2016-04-09 11:57:32 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 11:57:32 - DEBUG --> Count:
+ 2 
+2016-04-09 12:02:22 - INFO  --> Checking if the Batch no is available 
+2016-04-09 12:02:23 - INFO  --> Count is : 0 
+2016-04-09 12:02:23 - INFO  --> Adding Production Batch 
+2016-04-09 12:02:23 - INFO  --> Query:{"queryString":"INSERT INTO production_batch_master (BATCHNO,BATCHCODENAME,DATEOFENTRY,PRODUCTIONSTARTDATE,PRODUCTIONENDDATE,PRODUCTIONSUPERVISORID,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME) \r\n              values (:batchNo,:batchCodeName,:dateOfEntry,:startDate,:endDate,:supervisor,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:02:23 - INFO  --> Data:
+{"batchNo":"fghfhfgh","batchCodeName":"fhfgh","dateOfEntry":"16-04-08","startDate":"16-04-08","endDate":"16-04-09","supervisor":"sfsdfsdfsdf","rawMaterial":[{"material":"1","quantity":3}],"prodcdMaterial":"1","quantityProdMat":32,"dateOfEntryAftrProd":"2016-04-08T18:30:00.000Z","pckgdUnits":"dsf","company":"56ff5baf49d966442","wareHouse":"56ff6341570898419","step":3,"modeOfTransport":"sdf","vehicleNo":"4rf","driver":"fdsf","TranspAgency":"sdfsdf","cost":"345","prodMasterId":null,"producedGoodId":null,"inhouseInwardId":null,"option":"Add","tranReq":true} 
+2016-04-09 12:02:23 - INFO  --> Insert to production batch master is successful 
+2016-04-09 12:02:23 - INFO  --> count of materials: 1 
+2016-04-09 12:02:23 - INFO  --> query: 
+{"queryString":"UPDATE inventory SET totalquantity=totalquantity- :quantity where materialid=:material"} 
+2016-04-09 12:02:23 - INFO  --> Value check after execution1 
+2016-04-09 12:02:23 - INFO  --> Inserting data to production_raw_materials_details 
+2016-04-09 12:02:23 - DEBUG --> Query : {"queryString":"INSERT INTO production_raw_materials_details (productionbatchmasterid,materialid,quantity,lchnguserid,lchngtime,creuserid,cretime)\r\n                  values (:prodMasterId,:material,:quantity,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 12:02:23 - INFO  --> Data inserted successfully 
+2016-04-09 12:02:23 - INFO  --> Adding data to produced good 
+2016-04-09 12:02:23 - DEBUG --> Query:{"queryString":"INSERT INTO produced_good (productionbatchmasterid,materialproducedid,QUANTITY,PACKAGEDUNITS,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)\r\n                                          values (:productionbatchmasterid,:prodcdMaterial,:quantityProdMat,:pckgdUnits,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:02:23 - DEBUG --> Data:
+{"batchNo":"fghfhfgh","batchCodeName":"fhfgh","dateOfEntry":"16-04-08","startDate":"16-04-08","endDate":"16-04-09","supervisor":"sfsdfsdfsdf","rawMaterial":[{"material":"1","quantity":3}],"prodcdMaterial":"1","quantityProdMat":32,"dateOfEntryAftrProd":"16-04-08","pckgdUnits":"dsf","company":"56ff5baf49d966442","wareHouse":"56ff6341570898419","step":3,"modeOfTransport":"sdf","vehicleNo":"4rf","driver":"fdsf","TranspAgency":"sdfsdf","cost":"345","prodMasterId":"1","producedGoodId":null,"inhouseInwardId":null,"option":"Add","tranReq":true} 
+2016-04-09 12:02:23 - INFO  --> Insertion into produced good is successful 
+2016-04-09 12:02:23 - INFO  --> Inserting in inhouse inward entry 
+2016-04-09 12:02:23 - DEBUG --> Query:{"queryString":"INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)\r\n                                                          values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:02:23 - DEBUG --> Data:
+{"batchNo":"fghfhfgh","batchCodeName":"fhfgh","dateOfEntry":"16-04-08","startDate":"16-04-08","endDate":"16-04-09","supervisor":"sfsdfsdfsdf","rawMaterial":[{"material":"1","quantity":3}],"prodcdMaterial":"1","quantityProdMat":32,"dateOfEntryAftrProd":"16-04-08","pckgdUnits":"dsf","company":"56ff5baf49d966442","wareHouse":"56ff6341570898419","step":3,"modeOfTransport":"sdf","vehicleNo":"4rf","driver":"fdsf","TranspAgency":"sdfsdf","cost":"345","prodMasterId":"1","producedGoodId":"1","inhouseInwardId":null,"option":"Add","tranReq":true} 
+2016-04-09 12:02:23 - INFO  --> Insertion into inhouse_inward_entry is successful 
+2016-04-09 12:02:23 - INFO  --> Inserting into inhouse transport 
+2016-04-09 12:02:23 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inhouse_transportation_details (inhouseinwardid,transportationmode,vehicleno,drivername,transportagency,cost,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME) \r\n              values (:inhouseinwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:02:23 - INFO  --> Insert to inhouse_transport_details successful 
+2016-04-09 12:02:23 - INFO  --> Insertion to inhouse transport successful 
+2016-04-09 12:02:23 - INFO  --> Inserting into inventory 
+2016-04-09 12:02:23 - DEBUG --> query: {"queryString":"UPDATE inventory set totalquantity=totalquantity + :quantityProdMat where materialid=:prodcdMaterial"} 
+2016-04-09 12:02:23 - INFO  --> Updation to inventory successful 
+2016-04-09 12:02:23 - INFO  --> Insertion to inventory successful 
+2016-04-09 12:02:30 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 12:02:30 - DEBUG --> Count:
+ 2 
+2016-04-09 12:02:30 - INFO  --> Fetching companies 
+2016-04-09 12:02:30 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 12:02:30 - DEBUG --> Count :
+ 4 
+2016-04-09 12:02:34 - INFO  --> Fetching companies 
+2016-04-09 12:02:34 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 12:02:34 - DEBUG --> Count :
+ 4 
+2016-04-09 12:02:34 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 12:02:34 - DEBUG --> Count:
+ 2 
+2016-04-09 12:03:03 - INFO  --> Fetching companies 
+2016-04-09 12:03:03 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 12:03:03 - DEBUG --> Count :
+ 4 
+2016-04-09 12:03:03 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 12:03:03 - DEBUG --> Count:
+ 2 
+2016-04-09 12:03:30 - INFO  --> Fetching companies 
+2016-04-09 12:03:30 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 12:03:30 - DEBUG --> Count :
+ 4 
+2016-04-09 12:03:30 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 12:03:30 - DEBUG --> Count:
+ 2 
+2016-04-09 12:05:37 - INFO  --> Fetching companies 
+2016-04-09 12:05:37 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-09 12:05:37 - DEBUG --> Count :
+ 4 
+2016-04-09 12:05:37 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-09 12:05:37 - DEBUG --> Count:
+ 2 
+2016-04-09 12:07:32 - INFO  --> Checking if the Batch no is available 
+2016-04-09 12:07:32 - INFO  --> Count is : 0 
+2016-04-09 12:07:32 - INFO  --> Adding Production Batch 
+2016-04-09 12:07:32 - INFO  --> Query:{"queryString":"INSERT INTO production_batch_master (BATCHNO,BATCHCODENAME,DATEOFENTRY,PRODUCTIONSTARTDATE,PRODUCTIONENDDATE,PRODUCTIONSUPERVISORID,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME) \r\n              values (:batchNo,:batchCodeName,:dateOfEntry,:startDate,:endDate,:supervisor,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:07:32 - INFO  --> Data:
+{"batchNo":"dgdfg","batchCodeName":"dfgdfg","dateOfEntry":"16-04-08","startDate":"16-04-08","endDate":"16-04-09","supervisor":"dfgdf","rawMaterial":[{"material":"1","quantity":4}],"prodcdMaterial":"1","quantityProdMat":4,"dateOfEntryAftrProd":"2016-04-08T18:30:00.000Z","pckgdUnits":"dsf","company":"56ff5baf49d966442","wareHouse":"56ff6341570898419","step":3,"modeOfTransport":"","vehicleNo":"","driver":"","TranspAgency":"","cost":"","prodMasterId":null,"producedGoodId":null,"inhouseInwardId":null,"option":"Add","tranReq":""} 
+2016-04-09 12:07:32 - INFO  --> Insert to production batch master is successful 
+2016-04-09 12:07:32 - INFO  --> count of materials: 1 
+2016-04-09 12:07:32 - INFO  --> query: 
+{"queryString":"UPDATE inventory SET totalquantity=totalquantity- :quantity where materialid=:material"} 
+2016-04-09 12:07:32 - INFO  --> Value check after execution1 
+2016-04-09 12:07:32 - INFO  --> Inserting data to production_raw_materials_details 
+2016-04-09 12:07:32 - DEBUG --> Query : {"queryString":"INSERT INTO production_raw_materials_details (productionbatchmasterid,materialid,quantity,lchnguserid,lchngtime,creuserid,cretime)\r\n                  values (:prodMasterId,:material,:quantity,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-09 12:07:33 - INFO  --> Data inserted successfully 
+2016-04-09 12:07:33 - INFO  --> Adding data to produced good 
+2016-04-09 12:07:33 - DEBUG --> Query:{"queryString":"INSERT INTO produced_good (productionbatchmasterid,materialproducedid,QUANTITY,PACKAGEDUNITS,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)\r\n                                          values (:productionbatchmasterid,:prodcdMaterial,:quantityProdMat,:pckgdUnits,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:07:33 - DEBUG --> Data:
+{"batchNo":"dgdfg","batchCodeName":"dfgdfg","dateOfEntry":"16-04-08","startDate":"16-04-08","endDate":"16-04-09","supervisor":"dfgdf","rawMaterial":[{"material":"1","quantity":4}],"prodcdMaterial":"1","quantityProdMat":4,"dateOfEntryAftrProd":"16-04-08","pckgdUnits":"dsf","company":"56ff5baf49d966442","wareHouse":"56ff6341570898419","step":3,"modeOfTransport":"","vehicleNo":"","driver":"","TranspAgency":"","cost":"","prodMasterId":"2","producedGoodId":null,"inhouseInwardId":null,"option":"Add","tranReq":""} 
+2016-04-09 12:07:33 - INFO  --> Insertion into produced good is successful 
+2016-04-09 12:07:33 - INFO  --> Inserting in inhouse inward entry 
+2016-04-09 12:07:33 - DEBUG --> Query:{"queryString":"INSERT INTO inhouse_inward_entry (productionbatchmasterid,producedgoodid,warehouseid,companyid,dateofentry,supervisorid,LCHNGUSERID,LCHNGTIME,CREUSERID,CRETIME)\r\n                                                          values (:productionbatchmasterid,:producedgoodid,:warehouseid,:companyid,:dateOfEntry,:supervisorid,:lchngUserId,now(),:creUserId,now())"} 
+2016-04-09 12:07:33 - DEBUG --> Data:
+{"batchNo":"dgdfg","batchCodeName":"dfgdfg","dateOfEntry":"16-04-08","startDate":"16-04-08","endDate":"16-04-09","supervisor":"dfgdf","rawMaterial":[{"material":"1","quantity":4}],"prodcdMaterial":"1","quantityProdMat":4,"dateOfEntryAftrProd":"16-04-08","pckgdUnits":"dsf","company":"56ff5baf49d966442","wareHouse":"56ff6341570898419","step":3,"modeOfTransport":"","vehicleNo":"","driver":"","TranspAgency":"","cost":"","prodMasterId":"2","producedGoodId":"2","inhouseInwardId":null,"option":"Add","tranReq":""} 
+2016-04-09 12:07:33 - INFO  --> Insertion into inhouse_inward_entry is successful 
+2016-04-09 12:07:33 - INFO  --> Inserting into inventory 
+2016-04-09 12:07:33 - DEBUG --> query: {"queryString":"UPDATE inventory set totalquantity=totalquantity + :quantityProdMat where materialid=:prodcdMaterial"} 
+2016-04-09 12:07:33 - INFO  --> Updation to inventory successful 
+2016-04-09 12:07:33 - INFO  --> Insertion to inventory successful 
+2016-04-09 12:07:38 - INFO  --> Fetching inward details 
+2016-04-09 12:07:38 - INFO  --> Getting inward details 
+2016-04-09 12:07:38 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-09 12:07:38 - DEBUG --> Query: {"queryString":"SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID"} 
+2016-04-09 12:07:38 - DEBUG --> Query: {"queryString":"SELECT inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,\r\n                       inward_details.size,supplier.supplierid,supplier.suppliername,material.materialid,product_master.productname FROM inward_details\r\n                        JOIN supplier ON\r\n                        inward_details.supplierid=supplier.supplierid\r\n                        JOIN material ON\r\n                        material.materialid=inward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE inwardid=:inwardID"} 
+2016-04-09 12:07:48 - INFO  --> Fetching outward entries 
+2016-04-09 12:07:48 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from outward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-09 12:07:48 - DEBUG --> Keyword: "%%" 
+2016-04-09 12:07:48 - DEBUG --> Query: {"queryString":"SELECT * FROM outward_transportation_details WHERE outwardid=:outwardID"} 
+2016-04-09 12:07:48 - DEBUG --> Query: {"queryString":"SELECT * FROM outward_details\r\n                        JOIN material ON\r\n                        material.materialid=outward_details.materialid\r\n                        JOIN product_master ON\r\n                        material.productmasterid=product_master.productmasterid\r\n                        WHERE outwardid=:outwardID"} 
+2016-04-09 12:15:46 - INFO  --> creating Year 
+2016-04-09 12:15:46 - DEBUG --> query: 
+{"queryString":" Select count(*) from attendance_year WHERE to_date>=:toDate"} 
+2016-04-09 12:15:46 - DEBUG --> Count fetched by query: 0 
+2016-04-09 12:15:46 - INFO  --> inserting year 
+2016-04-09 12:15:46 - DEBUG --> query: 
+{"queryString":"INSERT INTO attendance_year(caption_of_year,from_date,to_date,no_of_paid_leaves,weekly_off_day,created_by,creation_date)\r\n\t\t\t\t\t\t     VALUES (:captionYear,:fromDate,:toDate,:noOfPaidLeaves,:weeklyOffDay,:createdBy,NOW())"} 
+2016-04-09 12:15:46 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:46 - INFO  --> insertion of year successfull 
+2016-04-09 12:15:46 - INFO  --> inserting weekly off 
+2016-04-09 12:15:46 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:46 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:46 - INFO  --> inserting weekly off 
+2016-04-09 12:15:46 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:46 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:46 - INFO  --> inserting weekly off 
+2016-04-09 12:15:46 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:46 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:47 - INFO  --> inserting weekly off 
+2016-04-09 12:15:47 - DEBUG --> query: 
+{"queryString":"INSERT INTO `weekly_off_in_year`(`caption_of_year`, `weekly_off_date`) VALUES (:caption,:offDate)"} 
+2016-04-09 12:15:47 - DEBUG --> Data: 
+{"weeklyOff":true,"operation":"createYear","endDate":"2017-04-09T10:15:12.122Z","startDate":"2016-04-09T10:15:12.122Z","caption":"tesrtt","paidLeaves":"10","weeklyoffDay":"Sunday"} 
+2016-04-09 12:15:50 - INFO  --> Getting current holiday details 
+2016-04-09 12:15:50 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year,from_date,to_date FROM attendance_year WHERE CURRENT_DATE () BETWEEN  from_date AND to_date"} 
+2016-04-09 12:15:50 - DEBUG --> Row Count: 
+1 
+2016-04-09 12:15:50 - DEBUG --> query: 
+{"queryString":"SELECT * FROM holiday_in_year WHERE caption_of_year=:captionYear"} 
+2016-04-09 12:15:50 - DEBUG --> Row Count: 
+0 
+2016-04-09 12:15:50 - INFO  --> Current holiday details fetched successfully 
+2016-04-09 12:15:56 - INFO  --> Creating holiday 
+2016-04-09 12:15:56 - DEBUG --> query: 
+{"queryString":"INSERT INTO holiday_in_year(caption_of_year,holiday_date,description,created_by,creation_date)\r\n\t\t\t\t\t\t     VALUES (:captionYear,:holidayDate,:description,:createdBy,NOW())"} 
+2016-04-09 12:15:56 - DEBUG --> Data: 
+{"operation":"createHoliday","caption_of_year":"tesrtt","from_date":"2016-04-09","to_date":"2017-04-09","holidayDate":"2016-04-09T18:30:00.000Z","description":"fghfghfgh"} 
+2016-04-09 12:15:56 - INFO  --> Holiday creation Successful  
+2016-04-09 12:16:02 - INFO  --> Getting current holiday details 
+2016-04-09 12:16:02 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year,from_date,to_date FROM attendance_year WHERE CURRENT_DATE () BETWEEN  from_date AND to_date"} 
+2016-04-09 12:16:02 - DEBUG --> Row Count: 
+1 
+2016-04-09 12:16:02 - DEBUG --> query: 
+{"queryString":"SELECT * FROM holiday_in_year WHERE caption_of_year=:captionYear"} 
+2016-04-09 12:16:02 - DEBUG --> Row Count: 
+1 
+2016-04-09 12:16:02 - INFO  --> Current holiday details fetched successfully 
+2016-04-09 12:16:14 - INFO  --> Getting employee details 
+2016-04-09 12:16:14 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName FROM usermaster WHERE usermaster.userId NOT IN (SELECT employee_id FROM employee_on_payroll)"} 
+2016-04-09 12:16:14 - DEBUG -->  Row Count: 
+11 
+2016-04-09 12:16:14 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName FROM usermaster"} 
+2016-04-09 12:16:14 - DEBUG -->  Row Count: 
+11 
+2016-04-09 12:16:29 - DEBUG --> query: 
+{"queryString":"INSERT INTO employee_on_payroll(employee_id,leave_approver_id,created_by,creation_date,last_modified_by,last_modification_date)\r\n\t\t\t\t\t\t\t  VALUES (:employeeId ,:approverId ,:createdBy ,NOW(),:modifiedBy,NOW())"} 
+2016-04-09 12:16:29 - DEBUG --> Data: 
+{"operation":"addEmployeeToPayroll","employee":[{"userId":"56fd8f4a122d02927","firstName":"Sachin","lastName":"Panse","val":true,"approverId":"56fd8f4a122d02927"},{"userId":"56fe61c46d5ef9831","firstName":"JAYASHREE","lastName":"DEORE","val":true,"approverId":"56fd8f4a122d02927"},{"userId":"56fe6616662894695","firstName":"GANESH","lastName":"KUTAL","val":true,"approverId":"56fd8f4a122d02927"},{"userId":"56fe66f72a1143717","firstName":"MADHURA","lastName":"SHETH","val":true,"approverId":"56fd8f4a122d02927"}]} 
+2016-04-09 12:16:30 - INFO  --> Employees added to payroll  
+2016-04-09 12:16:36 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 12:16:36 - DEBUG --> Row Count : 
+11 
+2016-04-09 12:16:41 - DEBUG --> query: 
+{"queryString":"SELECT * FROM leave_application_master WHERE leave_applied_by=:searchBy"} 
+2016-04-09 12:16:41 - DEBUG --> Row Count : 
+0 
+2016-04-09 12:16:41 - ERROR --> Leave details not found 
+2016-04-09 12:16:47 - INFO  --> Getting employee details for leave  
+2016-04-09 12:16:47 - DEBUG --> query: 
+{"queryString":"SELECT leave_approver_id FROM employee_on_payroll WHERE employee_id=:userId "} 
+2016-04-09 12:16:47 - DEBUG --> Row count: 1 
+2016-04-09 12:16:47 - DEBUG --> query: 
+{"queryString":"SELECT firstName,lastName FROM userMaster WHERE userId='56fd8f4a122d02927'"} 
+2016-04-09 12:16:47 - DEBUG --> Row count: 1 
+2016-04-09 12:16:47 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId"} 
+2016-04-09 12:16:47 - DEBUG --> Row count: 1 
+2016-04-09 12:16:47 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year FROM attendance_year WHERE from_date<=:currentDate AND to_date>=:currentDate"} 
+2016-04-09 12:16:47 - DEBUG --> Row count: 1 
+2016-04-09 12:16:47 - DEBUG --> query: 
+{"queryString":"SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`=:captionYear\r\n                                                  AND `leave_application_master`.`status`!='cancel' AND\r\n                                                   `leave_application_master`.`leave_applied_by`=:userId\r\n                                                    AND `leave_application_master`.`type_of_leaves`='paid'\r\n                                                     group by `leave_application_master`.`leave_applied_by`"} 
+2016-04-09 12:16:47 - DEBUG --> Row count: 0 
+2016-04-09 12:16:50 - INFO  --> Getting employee details for leave  
+2016-04-09 12:16:50 - DEBUG --> query: 
+{"queryString":"SELECT leave_approver_id FROM employee_on_payroll WHERE employee_id=:userId "} 
+2016-04-09 12:16:50 - DEBUG --> Row count: 1 
+2016-04-09 12:16:50 - DEBUG --> query: 
+{"queryString":"SELECT firstName,lastName FROM userMaster WHERE userId='56fd8f4a122d02927'"} 
+2016-04-09 12:16:50 - DEBUG --> Row count: 1 
+2016-04-09 12:16:50 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId"} 
+2016-04-09 12:16:50 - DEBUG --> Row count: 1 
+2016-04-09 12:16:50 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year FROM attendance_year WHERE from_date<=:currentDate AND to_date>=:currentDate"} 
+2016-04-09 12:16:50 - DEBUG --> Row count: 1 
+2016-04-09 12:16:50 - DEBUG --> query: 
+{"queryString":"SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`=:captionYear\r\n                                                  AND `leave_application_master`.`status`!='cancel' AND\r\n                                                   `leave_application_master`.`leave_applied_by`=:userId\r\n                                                    AND `leave_application_master`.`type_of_leaves`='paid'\r\n                                                     group by `leave_application_master`.`leave_applied_by`"} 
+2016-04-09 12:16:50 - DEBUG --> Row count: 0 
+2016-04-09 12:16:56 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)\r\n                                          AND `caption_of_year`=:caption"} 
+2016-04-09 12:16:56 - DEBUG --> Row count: 1 
+2016-04-09 12:16:56 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `holiday_in_year` WHERE (`holiday_date` BETWEEN :fromDate AND :toDate) AND `caption_of_year`=:caption"} 
+2016-04-09 12:16:56 - DEBUG --> Row count: 1 
+2016-04-09 12:17:16 - INFO  --> Getting year failed 
+2016-04-09 12:17:16 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year FROM attendance_year "} 
+2016-04-09 12:17:16 - INFO  --> Getting year failed 
+2016-04-09 12:17:19 - INFO  --> Getting employee details for leave  
+2016-04-09 12:17:19 - DEBUG --> query: 
+{"queryString":"SELECT leave_approver_id FROM employee_on_payroll WHERE employee_id=:userId "} 
+2016-04-09 12:17:19 - DEBUG --> Row count: 1 
+2016-04-09 12:17:19 - DEBUG --> query: 
+{"queryString":"SELECT firstName,lastName FROM userMaster WHERE userId='56fd8f4a122d02927'"} 
+2016-04-09 12:17:19 - DEBUG --> Row count: 1 
+2016-04-09 12:17:19 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId"} 
+2016-04-09 12:17:19 - DEBUG --> Row count: 1 
+2016-04-09 12:17:19 - DEBUG --> query: 
+{"queryString":"SELECT caption_of_year FROM attendance_year WHERE from_date<=:currentDate AND to_date>=:currentDate"} 
+2016-04-09 12:17:19 - DEBUG --> Row count: 1 
+2016-04-09 12:17:19 - DEBUG --> query: 
+{"queryString":"SELECT (`attendance_year`.`no_of_paid_leaves`- SUM(`leave_application_master`.`no_of_leaves`)) FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`=:captionYear\r\n                                                  AND `leave_application_master`.`status`!='cancel' AND\r\n                                                   `leave_application_master`.`leave_applied_by`=:userId\r\n                                                    AND `leave_application_master`.`type_of_leaves`='paid'\r\n                                                     group by `leave_application_master`.`leave_applied_by`"} 
+2016-04-09 12:17:19 - DEBUG --> Row count: 0 
+2016-04-09 12:17:28 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)\r\n                                          AND `caption_of_year`=:caption"} 
+2016-04-09 12:17:28 - DEBUG --> Row count: 1 
+2016-04-09 12:17:28 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `holiday_in_year` WHERE (`holiday_date` BETWEEN :fromDate AND :toDate) AND `caption_of_year`=:caption"} 
+2016-04-09 12:17:28 - DEBUG --> Row count: 1 
+2016-04-09 12:17:30 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)\r\n                                          AND `caption_of_year`=:caption"} 
+2016-04-09 12:17:30 - DEBUG --> Row count: 1 
+2016-04-09 12:17:30 - DEBUG --> query: 
+{"queryString":"SELECT count(*) FROM `holiday_in_year` WHERE (`holiday_date` BETWEEN :fromDate AND :toDate) AND `caption_of_year`=:caption"} 
+2016-04-09 12:17:30 - DEBUG --> Row count: 1 
+2016-04-09 12:17:44 - INFO  --> Creating leaves 
+2016-04-09 12:17:44 - DEBUG --> query: 
+{"queryString":"INSERT INTO leave_application_master(application_id,leave_applied_by,from_date,to_date,type_of_leaves,no_of_leaves,reason,status,application_date,action_by,action_date)\r\n                                        VALUES(:applicationId,:leaveAppliedBy,:fromDate,:toDate,:type_of_leaves,:no_of_leaves,:reason,:status,NOW(),:actionBy,:actionDate)"} 
+2016-04-09 12:17:44 - DEBUG --> Data: 
+{"userId":"56fd8f4a122d02927","status":"pending","fromDate":"2016-04-08T18:30:00.000Z","toDate":"2016-04-13T18:30:00.000Z","remaining":0,"operation":"createLeave","hideOption":"","numberOfLeaves":"3\r\n\r\n\r\n\r\n\r\n\r\n\r\n","caption_of_year":"tesrtt","leaves_remaining":null,"typeofLeave":"Paid","description":"ffghgfhgfhfh"} 
+2016-04-09 12:17:44 - INFO  --> Creation of leaves successful  
+2016-04-09 12:25:44 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 12:25:44 - DEBUG --> Row Count : 
+11 
+2016-04-09 12:30:41 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 12:30:41 - DEBUG --> Row Count : 
+11 
+2016-04-09 12:32:41 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 12:32:41 - DEBUG --> Row Count : 
+11 
+2016-04-09 12:33:11 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-09 12:33:11 - DEBUG --> Row Count : 
+11 
+2016-04-09 12:34:33 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-09 12:34:33 - DEBUG --> Count:
+ 4 
+2016-04-09 12:34:33 - INFO  --> Fetching all process users 
+2016-04-09 12:34:33 - DEBUG --> Query:
+ {"queryString":"SELECT `userId`,`firstName`,`lastName` FROM `usermaster` WHERE `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `roleId` IN (SELECT `roleId` FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=\"Business Process\")))"} 
+2016-04-09 12:34:33 - INFO  --> Process users found 

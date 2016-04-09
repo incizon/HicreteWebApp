@@ -286,8 +286,6 @@ class ConfigUtils
             echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
         }
 
-
-
     }
 
     public static function modifyUser($data,$userId)
