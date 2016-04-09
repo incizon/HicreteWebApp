@@ -339,13 +339,9 @@ userType:""
            {
                
              console.log(data.status);
+               $('#loader').css("display","none");
              console.log(data.message);
              if(data.status=="Successful"){
-                //alert("User added successfully. Password is :"+data.message);
-                 setTimeout(function(){
-                     $scope.loading=false;
-                     $('#loader').css("display","none");
-                 },1000);
 
                  $scope.warningMessage= "User added successfully...Credential send to "+$scope.userInfo.email;
                  $('#warning').css("display","block");
@@ -354,22 +350,13 @@ userType:""
                      $scope.$apply(function() {
                          if(data.message!=""){
                              $('#warning').css("display","none");
+                             window.location = "dashboard.php#/Config";
                          }
                      });
                  }, 3000);
 
-                /* $scope.clearUserForm();
-
-                 $scope.userInfoSubmitted= false;
-                 $scope.step=1;
-*/
-                //doShowAlert("Success","User created successfully");
-                 setTimeout(function(){
-                    //window.location.reload(true);
-                     window.location = "dashboard.php#/Config";
-                 },1000);
              }else if(data.status=="Unsuccessful"){
-                  //doShowAlert("Failure",data.message);
+
                  $scope.errorMessage=data.message;
                  $('#loader').css("display","none");
                  $('#error').css("display","block");
@@ -380,9 +367,7 @@ userType:""
                  $('#loader').css("display","none");
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
-             } 
-             //window.location.reload=true;
-            // $scope.clearUserForm();
+             }
                      
            })
            .error(function (data, status, headers, config)
@@ -419,7 +404,9 @@ userType:""
                      {
                      
                        if(data.status!="Successful"){
-                          alert(data.message);
+                           $scope.errorMessage="User not Added";
+                           $('#loader').css("display","none");
+                           $('#error').css("display","block");
                        }else{
                            $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -755,7 +742,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
 
             }
         };
-
+        console.log(config);
          $http.post("Config/php/configFacade.php",null, config)
          .success(function (data)
          {
