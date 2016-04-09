@@ -31,3 +31,4 @@
 2016-04-07 18:40:52 - INFO  --> Searching suppliers 
 2016-04-07 18:58:21 - INFO  --> Searching suppliers 
 2016-04-07 18:59:22 - INFO  --> Searching suppliers 
+2016-04-07 19:12:05 - INFO  --> Searching Products 
