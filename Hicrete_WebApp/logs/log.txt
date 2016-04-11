@@ -1764,3 +1764,6 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
 {"queryString":"SELECT userId,firstName,lastName from usermaster"} 
 2016-04-11 20:06:58 - DEBUG --> Row Count : 
 9 
+2016-04-11 20:18:09 - INFO  --> Searching Products 
+2016-04-11 20:18:09 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-11 20:18:09 - DEBUG --> Data: {"keyword":""} 
