@@ -590,7 +590,7 @@ myApp.run(function($rootScope,$http) {
 
 // create the controller and inject Angular's $scope
 // set for Route Controller
-myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService) {
+myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService,$rootScope) {
   /** create $scope.template **/
 
 

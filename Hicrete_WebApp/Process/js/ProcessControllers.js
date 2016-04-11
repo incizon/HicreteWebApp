@@ -1413,11 +1413,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     var remainingTotal = 0;
 
 
+
     $scope.createInvoice = function () {
 
         console.log("in createInvoice");
         var totalAmount = parseFloat($scope.totalAmnt) + parseFloat($scope.TaxAmnt);
-        var grandTotal = (+totalAmount + +totalTax) - +$scope.roundingOff;
+        var grandTotal = (+totalAmount) - +$scope.roundingOff;
 
         var invoiceData = {
             "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
@@ -1450,7 +1451,6 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
             controller: function ($scope, $rootScope, $uibModalInstance, InvoiceData, myFile) {
-
 
                 $scope.save = function () {
                     console.log("Ok clicked");
@@ -1493,10 +1493,9 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                         console.log("Upload Successful");
                                         $http.post("Process/php/InvoiceFacade.php", null, config)
                                             .success(function (data) {
-
+                                                $('#loader').css("display", "none");
+                                                console.log(data);
                                                 if (data.status == "Successful") {
-
-                                                    $('#loader').css("display", "none");
                                                     $rootScope.warningMessage = "Invoice is Created Successfully...'";
                                                     console.log($rootScope.warningMessage);
                                                     $('#warning').css("display", "block");
@@ -1527,6 +1526,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
 
                                     } else {
+                                        $('#loader').css("display", "none");
                                         $rootScope.errorMessage = data.message;
                                         $('#error').css("display", "block");
                                         setTimeout(function () {
@@ -1535,6 +1535,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                     }
                                 })
                                 .error(function () {
+                                    $('#loader').css("display", "none");
                                     $rootScope.errorMessage = "Something went wrong can not upload Invoice";
                                     $('#error').css("display", "block");
                                 });
