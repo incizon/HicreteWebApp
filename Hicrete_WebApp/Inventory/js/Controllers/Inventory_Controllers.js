@@ -1,13 +1,61 @@
 
+myApp.controller('reportController', function ($scope, $http, inventoryService) {
+
+    //Highcharts.chart('container', {
+    //
+    //    title: {
+    //        text: 'Categorized chart'
+    //    },
+    //
+    //    xAxis: {
+    //        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+    //    },
+    //
+    //    series: [{
+    //        data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+    //    }]
+    //
+    //});
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Company Profit'
+            },
+            xAxis: {
+                categories: ['Project1', 'Project2', 'Project3']
+            },
+            yAxis: {
+                title: {
+                    text: 'Profit in Lacs'
+                }
+            },
+            series: [{
+                name: 'Hi-Crete',
+                data: [1, 5, 4]
+            }, {
+                name: 'Hi-TechFlooring',
+                data: [5, 7, 3]
+            },
+                {
+                    name: 'Hi-TechEngg',
+                    data: [5, 7, 3]
+                }
+            ],
+        });
+    });
+});
+
+
+
 /**********************************************************************************
  * Start of Product controller
  *
  ***********************************************************************************/
 myApp.controller('productController', function ($scope, $http, inventoryService) {
-    $scope.errorMessage = "";
-    $scope.warningMessage = "";
-    //Pagination variables
-    $scope.totalItems = 0;
+
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
     //Initialize all the variables
@@ -35,15 +83,15 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     /*
      Start of Pagination Function
      */
-    $scope.paginate = function (value) {
-        //console.log("In Paginate");
-        var begin, end, index;
-        begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
-        end = begin + $scope.InventoryItemsPerPage;
-        index = $scope.products.indexOf(value);
-        //console.log(index);
-        return (begin <= index && index < end);
-    };
+    //$scope.paginate = function (value) {
+    //    //console.log("In Paginate");
+    //    var begin, end, index;
+    //    begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
+    //    end = begin + $scope.InventoryItemsPerPage;
+    //    index = $scope.products.indexOf(value);
+    //    //console.log(index);
+    //    return (begin <= index && index < end);
+    //};
     /*
      End of Pagination Function
      */
@@ -1237,7 +1285,7 @@ myApp.controller('InwardSearchController', function ($http, $scope, $rootScope) 
  *********************************************************************************************/
 
 myApp.controller('ProductSearchController', function ($scope, $http, $rootScope) {
-    $scope.totalItems = 0;
+    //$scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
     $scope.keyword = "";
@@ -1251,13 +1299,15 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
             $scope.materialNames = data;
         });
     $scope.paginate = function (value) {
+
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
         end = begin + $scope.InventoryItemsPerPage;
-        index = $scope.products.indexOf(value);
-        //console.log(index);
+        index = $rootScope.products.indexOf(value);
+
         return (begin <= index && index < end);
     };
+
     $scope.getProduct = function (product) {
         $scope.selectedProduct = product;
     }
@@ -1279,7 +1329,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
             .success(function (data) {
                 $('#loader').css("display", "none");
                 $rootScope.products = data;
-                $scope.totalItems = $rootScope.products.length;
+                $rootScope.totalProducts = $rootScope.products.length;
             })
             .error(function (data, status, headers) {
                 console.log(data);
@@ -1400,7 +1450,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
     //Pagination variables
     $scope.submitted = false;
     $scope.submittedModal = false;
-    $scope.totalItems = 0;
+    //$scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.InventoryAvailableItemsPerPage = 10;
     $scope.filters = [
@@ -1440,7 +1490,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService) 
                     $('#loader').css("display", "none");
                     $scope.inventoryData = data;
                     $scope.InventoryAvailableItemsPerPage = data;
-                    $scope.totalItems = $scope.inventoryData.length;
+                    $rootScope.totalItems = $scope.inventoryData.length;
 
                 })
                 .error(function (data, status, headers) {
@@ -1587,7 +1637,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
             $('#loader').css("display", "none");
             $scope.inventoryData = data;
             $scope.paginateItemsPerPage = data;
-            $scope.totalItems = $scope.inventoryData.length;
+            $rootScope.totalItems = $scope.inventoryData.length;
             console.log($scope.inventoryData);
         })
         .error(function (data, status, headers) {

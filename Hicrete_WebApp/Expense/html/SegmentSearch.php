@@ -61,7 +61,7 @@ $hasWrite=appUtil::doesUserHasAccess("Expense",$userId,"Write");
                         </tr>
                         </tbody>
                     </table>
-                    <uib-pagination total-items="totalItems" ng-model="currentPage"
+                    <uib-pagination total-items="Segments.length" ng-model="currentPage"
                                     boundary-links="true"
                                     items-per-page="ItemsPerPage" class="pagination-sm">
 

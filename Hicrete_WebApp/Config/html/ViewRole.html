@@ -42,7 +42,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="role in Roles">
+                    <tr ng-repeat="role in Roles ">
                         <td>{{$index+1}}</td>
                         <td>{{role.roleName}}</td>
                         <td>{{role.createdBy}}</td>
@@ -62,9 +62,9 @@
 
 
     </div>
-    <uib-pagination total-items="totalItems" ng-model="currentPage"
+    <uib-pagination total-items="Roles.length" ng-model="currentPage"
                     max-size="10" boundary-links="true"
-                    items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+                    items-per-page="RolesPerPage" class="pagination-sm">
     </uib-pagination>
 
 

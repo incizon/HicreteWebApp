@@ -805,8 +805,7 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    alert(data.message);
-
+                    //alert(data.message);
                 }else{
                     console.log(data);
                     $rootScope.AllAccessPermissions=data.message;
