@@ -1767,3 +1767,45 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
 2016-04-11 20:18:09 - INFO  --> Searching Products 
 2016-04-11 20:18:09 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
 2016-04-11 20:18:09 - DEBUG --> Data: {"keyword":""} 
+2016-04-11 20:36:36 - INFO  --> Searching Products 
+2016-04-11 20:36:36 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-11 20:36:36 - DEBUG --> Data: {"keyword":""} 
+2016-04-11 20:45:26 - INFO  --> Fetching all access permissions 
+2016-04-11 20:45:26 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-11 20:45:26 - DEBUG --> Count:
+ 10 
+2016-04-11 20:45:26 - INFO  --> access Permissions found 
+2016-04-11 20:45:28 - INFO  --> Getting Role Details 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Row Count:
+ 7 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-11 20:45:28 - INFO  --> Roles found successfully 
+2016-04-11 20:54:19 - INFO  --> Getting access approvals 
+2016-04-11 20:54:19 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 20:54:19 - INFO  --> All access permissions found 
+2016-04-11 20:54:20 - INFO  --> Getting leaves for approval 
+2016-04-11 20:54:20 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:userId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 20:54:20 - DEBUG --> Row Count : 
+0 
+2016-04-11 20:54:24 - INFO  --> Getting access approvals 
+2016-04-11 20:54:24 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 20:54:24 - INFO  --> All access permissions found 
