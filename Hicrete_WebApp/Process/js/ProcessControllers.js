@@ -124,8 +124,8 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $rootScop
     $scope.Companies = [];
     AppService.getCompanyList($http, $scope.Companies);
 
-    $scope.projectManagers = [];
-    AppService.getProjectManagers($http, $scope.projectManagers);
+   // $scope.projectManagers = [];
+    //AppService.getProjectManagers($http, $scope.projectManagers);
     console.log("In Project Creation Controller");
 
     $scope.customers = [];
@@ -2133,7 +2133,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
                                 'project_name': data.message[i].ProjectName,
                                 'projectId': data.message[i].ProjectId,
                                 'project_status': data.message[i].ProjectStatus,
-                                'project_manager': data.message[i].FirstName + " " + data.message[i].LastName,
+                                'project_manager': data.message[i].ProjectManagerId,
                                 'project_id': data.message[i].ProjectId,
                                 'project_Address': data.message[i].Address,
                                 'project_City': data.message[i].City,
@@ -2354,8 +2354,8 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
     $scope.customers = [];
     AppService.getAllCustomers($http, $scope.customers);
 
-    $scope.projectManagers = [];
-    AppService.getProjectManagers($http, $scope.projectManagers);
+   // $scope.projectManagers = [];
+    //AppService.getProjectManagers($http, $scope.projectManagers);
 
 
     $scope.projectDetails = {

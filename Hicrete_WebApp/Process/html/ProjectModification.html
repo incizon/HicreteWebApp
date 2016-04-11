@@ -30,13 +30,19 @@
                                 <label class="control-label">Customer Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="customer" ng-model="projectDetails.customerId">
+                                <select class="form-control select" name="customer" ng-model="projectDetails.customerId" required>
                                     <option value="" disabled selected>Choose Customer</option>
                                     <option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>
 
                                 </select>
 
                             </div>
+                            <div class="help-block"
+                                 ng-messages="ProjectInfoForm.customer.$error"
+                                 ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">Customer Name is required</span>
+                            </div>
+
                         </div>
                         <div class="form-group">
                             <div class="col-md-4">
@@ -46,7 +52,13 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="ProjectName" ng-model="projectDetails.projectName"/>
+                                    <input type="text" class="form-control" name="ProjectName" ng-model="projectDetails.projectName" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.ProjectName.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Project Name is required</span>
+
                                 </div>
 
                             </div>
@@ -57,8 +69,14 @@
                             </div>
                             <div class="col-md-8">
                                     <textarea class="form-control" name="Project"
-                                              ng-model="projectDetails.projectAddress" rows="2">
+                                              ng-model="projectDetails.projectAddress" rows="2" required>
                                     </textarea>
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.ProjectName.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Address is required</span>
+
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
@@ -66,7 +84,13 @@
                                 <label class="control-label">City :</label>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" name="ProjectCity" ng-model="projectDetails.projectCity"/>
+                                <input type="text" class="form-control" name="ProjectCity" ng-model="projectDetails.projectCity" required/>
+
+                            </div>
+                            <div class="help-block"
+                                 ng-messages="ProjectInfoForm.ProjectCity.$error"
+                                 ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">City is required</span>
 
                             </div>
                         </div>
@@ -78,7 +102,13 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="pinCode" ng-model="projectDetails.pinCode"/>
+                                    <input type="text" class="form-control" name="pinCode" ng-model="projectDetails.pinCode" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.PinCode.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Pin Code is required</span>
+
                                 </div>
 
                             </div>
@@ -94,20 +124,34 @@
                                 <label class="control-label">State :</label>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" name="projectState" ng-model="projectDetails.projectState"/>
+                                <input type="text" class="form-control" name="projectState" ng-model="projectDetails.projectState" required/>
 
 
                             </div>
+                            <div class="help-block"
+                                 ng-messages="ProjectInfoForm.projectState.$error"
+                                 ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">State is required</span>
+
+                            </div>
+
                         </div>
                         <div class="form-group">
                             <div class="col-md-4">
                                 <label class="control-label">Country :</label>
                             </div>
                             <div class="col-md-8">
-                                <input type="text" class="form-control" name="projectCountry" ng-model="projectDetails.projectCountry"/>
+                                <input type="text" class="form-control" name="projectCountry" ng-model="projectDetails.projectCountry" required/>
 
 
                             </div>
+                            <div class="help-block"
+                                 ng-messages="ProjectInfoForm.projectCountry.$error"
+                                 ng-show="formSubmitted">
+                                <span style="color:red" ng-message="required">Country is required</span>
+
+                            </div>
+
                         </div>
 
 
@@ -127,12 +171,20 @@
                                 <label class="control-label">Manager :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="projectManager" ng-model="projectDetails.projectManagerId">
-                                    <option value="" disabled selected>Choose Manager..</option>
-                                    <option ng-repeat="manager in projectManagers" value="{{manager.projectManagerId}}">{{manager.name}}</option>
+                                <!--<select class="form-control select" name="projectManager" ng-model="projectDetails.projectManagerId">-->
+                                    <!--<option value="" disabled selected>Choose Manager..</option>-->
+                                    <!--<option ng-repeat="manager in projectManagers" value="{{manager.projectManagerId}}">{{manager.name}}</option>-->
 
-                                </select>
-
+                                <!--</select>-->
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="projectManager" ng-model="projectDetails.projectManagerId" maxlength="60" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.projectManager.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Project Manager is required</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -152,7 +204,13 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="PointOfContactName" ng-model="projectDetails.pointOfContactName"/>
+                                    <input type="text" class="form-control" name="PointOfContactName" ng-model="projectDetails.pointOfContactName" required/>
+                                </div>
+
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.PointOfContactName.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Contact Name is required</span>
                                 </div>
 
                             </div>
@@ -187,7 +245,12 @@
 
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                    <input type="text" class="form-control" name="pointOfContactEmailId" ng-model="projectDetails.pointOfContactEmailID"/>
+                                    <input type="email" class="form-control" name="pointOfContactEmailId" ng-model="projectDetails.pointOfContactEmailID"/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.pointOfContactEmailId.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="email">Enter a valid Email Id</span>
                                 </div>
 
                             </div>
@@ -281,7 +344,7 @@
         </div>
         <div class="panel-footer">
 
-            <button class="btn  btn-danger pull-right" ng-click="modifyProject()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
+            <button class="btn  btn-danger pull-right" ng-click="(formSubmitted=true) && ProjectInfoForm.$valid && modifyProject()">Submit<span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
             <button class="btn  btn-default pull-right">Clear Form</button>
         </div>

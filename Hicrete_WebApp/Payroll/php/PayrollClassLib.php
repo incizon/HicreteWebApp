@@ -691,16 +691,15 @@
                 }
             }
 
-            public function getLeavesApproval(){
+            public function getLeavesApproval($userId){
 
 
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
                 HicreteLogger::logInfo("Getting leaves for approval");
                 try {
-                    $stmt = $connect->prepare("SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster JOIN leave_application_master
-                                          ON usermaster.userId=leave_application_master.leave_applied_by WHERE leave_application_master.status='pending'
-                                         ");
+                    $stmt = $connect->prepare("SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:userId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by");
+                    $stmt->bindParam(':userId',$userId);
                     HicreteLogger::logDebug("query: \n" . json_encode($stmt));
                     $stmt->execute();
                     HicreteLogger::logDebug("Row Count : \n" . json_encode($stmt->rowCount()));
@@ -710,6 +709,7 @@
                 }
                 catch(Exception $e)
                 {
+                   // echo AppUtil::getReturnStatus("exception", $e->getMessage());
                     HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
                 }
             }
