@@ -116,7 +116,7 @@ Class Project
 		try {
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT * from project_master pm ,project_address_details pad , project_point_of_contact_details ppoc WHERE pm.IsClosedProject = 0 AND pm.isDeleted = 0 AND (pm.ProjectManagerId = u.UserId AND pm.ProjectId = pad.ProjectId AND ppoc.ProjectId = pm.ProjectId) ");
+			$stmt = $conn->prepare("SELECT * from project_master pm ,project_address_details pad , project_point_of_contact_details ppoc WHERE pm.IsClosedProject = 0 AND pm.isDeleted = 0 AND (pm.ProjectId = pad.ProjectId AND ppoc.ProjectId = pm.ProjectId) ");
 			if($result = $stmt->execute()) {
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
 					array_push($object, $row);
@@ -140,9 +140,9 @@ Class Project
     public static function getProjectSearchQuery($searchBy)
     {
         if ($searchBy == 'project_name') {
-            return "SELECT pm.*,pad.*,pc.*,u.FirstName,u.LastName,cm.`CustomerName` from project_master pm,project_address_details pad,usermaster u ,customer_master cm ,`project_point_of_contact_details` pc where (pm.ProjectName LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId` AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ";
+            return "SELECT pm.*,pad.*,pc.*,cm.`CustomerName` from project_master pm,project_address_details pad,customer_master cm ,`project_point_of_contact_details` pc where (pm.ProjectName LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0  AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ";
         } else if ($searchBy == 'project_city') {
-            return "SELECT pm.*,pad.*,pc.*,u.FirstName,u.LastName,cm.`CustomerName` from project_master pm,project_address_details pad,usermaster u ,customer_master cm ,`project_point_of_contact_details` pc where (pad.`City` LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0 AND u.userId=pm.`ProjectManagerId` AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ";
+            return "SELECT pm.*,pad.*,pc.*,cm.`CustomerName` from project_master pm,project_address_details pad,customer_master cm ,`project_point_of_contact_details` pc where (pad.`City` LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0  AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ";
         }
     }
 
@@ -174,8 +174,8 @@ Class Project
                 $result_array['ProjectName'] = $row['ProjectName'];
                 $result_array['ProjectId'] = $row['ProjectId'];
                 $result_array['ProjectStatus'] = $row['ProjectStatus'];
-                $result_array['LastName'] = $row['LastName'];
-                $result_array['FirstName'] = $row['FirstName'];
+//                $result_array['LastName'] = $row['LastName'];
+//                $result_array['FirstName'] = $row['FirstName'];
                 $result_array['ProjectId'] = $row['ProjectId'];
                 $result_array['Address'] = $row['Address'];
                 $result_array['City'] = $row['City'];

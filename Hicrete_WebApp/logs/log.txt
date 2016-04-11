@@ -1242,3 +1242,86 @@
 {"queryString":"SELECT userId,firstName,lastName from usermaster"} 
 2016-04-09 18:26:03 - DEBUG --> Row Count : 
 11 
+2016-04-11 20:33:39 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 20:33:39 - DEBUG --> Count:
+ 1 
+2016-04-11 20:34:50 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 20:34:50 - DEBUG --> Count:
+ 1 
+2016-04-11 21:35:33 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 21:35:33 - DEBUG --> Count:
+ 1 
+2016-04-11 21:37:12 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 21:37:12 - DEBUG --> Count:
+ 1 
+2016-04-11 21:38:09 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 21:38:09 - DEBUG --> Count:
+ 1 
+2016-04-11 21:45:23 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 21:45:23 - DEBUG --> Count:
+ 1 
+2016-04-11 21:45:47 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-04-11 21:45:47 - DEBUG --> Count:
+ 1 
+2016-04-11 22:15:02 - INFO  --> Getting leaves for approval 
+2016-04-11 22:15:02 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:usedId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 22:15:02 - FATAL --> Exception Occured Message:
+SQLSTATE[HY093]: Invalid parameter number: parameter was not defined 
+2016-04-11 22:15:17 - INFO  --> Getting access approvals 
+2016-04-11 22:15:17 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 22:15:17 - INFO  --> All access permissions found 
+2016-04-11 22:15:20 - INFO  --> Getting leaves for approval 
+2016-04-11 22:15:20 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:usedId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 22:15:20 - FATAL --> Exception Occured Message:
+SQLSTATE[HY093]: Invalid parameter number: parameter was not defined 
+2016-04-11 22:17:22 - INFO  --> Getting access approvals 
+2016-04-11 22:17:22 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 22:17:22 - INFO  --> All access permissions found 
+2016-04-11 22:17:23 - INFO  --> Getting leaves for approval 
+2016-04-11 22:17:23 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:usedId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 22:17:23 - FATAL --> Exception Occured Message:
+SQLSTATE[HY093]: Invalid parameter number: parameter was not defined 
+2016-04-11 22:18:04 - INFO  --> Getting access approvals 
+2016-04-11 22:18:04 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 22:18:04 - INFO  --> All access permissions found 
+2016-04-11 22:18:05 - INFO  --> Getting leaves for approval 
+2016-04-11 22:18:05 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:userId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 22:18:05 - DEBUG --> Row Count : 
+1 
+2016-04-11 22:18:22 - DEBUG --> query: 
+{"queryString":"UPDATE leave_application_master SET\r\n                                         status=:status,\r\n                                         action_by=:actionBy,\r\n                                         action_date=NOW()\r\n                                         WHERE application_id=:applicationId"} 
+2016-04-11 22:18:22 - DEBUG --> Data: 
+{"operation":"LeaveApprovalAction","applicationId":"qsd1231","status":"Accepted"} 
+2016-04-11 22:18:22 - INFO  --> Status Updated Successfully 
+2016-04-11 22:18:27 - INFO  --> Getting access approvals 
+2016-04-11 22:18:27 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 22:18:27 - INFO  --> All access permissions found 
+2016-04-11 22:18:28 - INFO  --> Getting leaves for approval 
+2016-04-11 22:18:28 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:userId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 22:18:28 - DEBUG --> Row Count : 
+0 
+2016-04-11 22:19:12 - INFO  --> Getting access approvals 
+2016-04-11 22:19:12 - DEBUG --> Query:
+ {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
+2016-04-11 22:19:12 - INFO  --> All access permissions found 
+2016-04-11 22:19:13 - INFO  --> Getting leaves for approval 
+2016-04-11 22:19:13 - DEBUG --> query: 
+{"queryString":"SELECT leave_application_master.application_id,usermaster.firstName,usermaster.lastName,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason FROM usermaster ,leave_application_master,`employee_on_payroll` WHERE leave_application_master.status='pending' AND usermaster.userId=leave_application_master.leave_applied_by AND `employee_on_payroll`.`leave_approver_id`=:userId AND  `employee_on_payroll`.`employee_id`=leave_application_master.leave_applied_by"} 
+2016-04-11 22:19:13 - DEBUG --> Row Count : 
+0 
