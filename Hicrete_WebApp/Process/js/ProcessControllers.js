@@ -2673,6 +2673,18 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
 
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
+    $scope.followups = [];
+    $scope.QuotationHistoryPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.QuotationHistoryPerPage;
+        end = begin + $scope.QuotationHistoryPerPage;
+        index =  $scope.followups.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     AppService.getAllProjects($http, $scope.projects);
     console.log("in QuotationFollowupHistoryController");
     $scope.selectProject = function (projectId) {
@@ -2682,7 +2694,7 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
         AppService.getAllQuotationOfProject($http, $scope.quotations, projectId);
     }
     $scope.showQuotationHistory = function () {
-        $scope.followups = [];
+
         var data = {
             operation: "getQuotationFollow",
             quotationId: $scope.selectedQuotationId
@@ -2743,6 +2755,18 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     $scope.selectedProjectId = "";
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
+    $scope.PaymentHistoryPerPage=10;
+    $scope.currentPage=1;
+    $scope.followups = [];
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.PaymentHistoryPerPage;
+        end = begin + $scope.PaymentHistoryPerPage;
+        index =  $scope.followups.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     AppService.getAllProjects($http, $scope.projects);
 
     $scope.selectProject = function () {
@@ -2752,7 +2776,7 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     }
 
     $scope.show = function () {
-        $scope.followups = [];
+
         var data = {
             operation: "getInvoiceFollowups",
             invoiceId: $scope.selectedInvoiceId
@@ -2808,6 +2832,18 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
     $scope.sortReverse = false;
     AppService.getAllSiteTrackingProjects($http, $scope.projects);
     $scope.followups = [];
+    $scope.SiteTrackingHistoryPerPage=1;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.SiteTrackingHistoryPerPage;
+        end = begin + $scope.SiteTrackingHistoryPerPage;
+        index =  $scope.followups.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
     $scope.show = function () {
 
         //getProjectSiteFollowup
@@ -3003,6 +3039,20 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
     $scope.sortType = 'amountPaid'; // set the default sort type
     $scope.sortReverse = false;
     var project = [];
+
+    $scope.paymentHistoryPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.paymentHistoryPerPage;
+        end = begin + $scope.paymentHistoryPerPage;
+        index =  $scope.paymentHistoryData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
     AppService.getAllProjects($http, $scope.Projects);
 
 

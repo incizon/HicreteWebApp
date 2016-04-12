@@ -115,7 +115,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="paymentHistory in paymentHistoryData | orderBy:sortType:sortReverse">
+                        <tr ng-repeat="paymentHistory in paymentHistoryData |filter:paginate| orderBy:sortType:sortReverse">
                             <td>{{$index+1}}</td>
                             <td>{{paymentHistory.amountPaid}}</td>
                             <td>{{paymentHistory.paymentDate}}</td>

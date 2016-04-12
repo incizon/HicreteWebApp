@@ -785,8 +785,17 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
 myApp.controller('viewRoleController',function($scope,$http,$rootScope,$stateParams,configService)
 {
     $scope.searchKeyword="";
-
-
+    $scope.RolesPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.RolesPerPage;
+        end = begin + $scope.RolesPerPage;
+        index =  $rootScope.Roles.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
 
     $scope.getAllAccesspermissions= function()
     {
@@ -961,6 +970,20 @@ $scope.warehouse={
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get Ware house details
 /////////////////////////////////////////////////////////////////////////////////
+
+
+    $scope.warehousesPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.warehousesPerPage;
+        end = begin + $scope.warehousesPerPage;
+        index =  $rootScope.warehouses.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
     $scope.getWareHouseDetails = function(keyword)
     {
         console.log(keyword);

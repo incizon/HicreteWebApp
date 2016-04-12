@@ -42,7 +42,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="role in Roles ">
+                    <tr ng-repeat="role in Roles | filter:paginate">
                         <td>{{$index+1}}</td>
                         <td>{{role.roleName}}</td>
                         <td>{{role.createdBy}}</td>

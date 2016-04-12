@@ -1809,3 +1809,118 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
 2016-04-11 20:54:24 - DEBUG --> Query:
  {"queryString":"SELECT tempaccessrequest.`requestId`,`firstName`,`lastName`,tempaccessrequest.`description` FROM `usermaster`,`tempaccessrequest` where usermaster.userId=tempaccessrequest.requestedBy AND tempaccessrequest.`requestId` NOT IN (SELECT `requestId` FROM `tempaccessrequestaction`)"} 
 2016-04-11 20:54:24 - INFO  --> All access permissions found 
+2016-04-12 19:26:58 - INFO  --> Fetching all access permissions 
+2016-04-12 19:26:58 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-12 19:26:58 - DEBUG --> Count:
+ 10 
+2016-04-12 19:26:58 - INFO  --> access Permissions found 
+2016-04-12 19:27:00 - INFO  --> Getting Role Details 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Row Count:
+ 7 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:00 - INFO  --> Roles found successfully 
+2016-04-12 19:27:17 - INFO  --> Fetching all access permissions 
+2016-04-12 19:27:17 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-12 19:27:17 - DEBUG --> Count:
+ 10 
+2016-04-12 19:27:17 - INFO  --> access Permissions found 
+2016-04-12 19:27:19 - INFO  --> Getting Role Details 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Row Count:
+ 7 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:19 - INFO  --> Roles found successfully 
+2016-04-12 19:27:51 - INFO  --> Fetching all access permissions 
+2016-04-12 19:27:51 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM `accesspermission`"} 
+2016-04-12 19:27:51 - DEBUG --> Count:
+ 10 
+2016-04-12 19:27:51 - INFO  --> access Permissions found 
+2016-04-12 19:27:52 - INFO  --> Getting Role Details 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Row Count:
+ 7 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - DEBUG --> Query:
+ {"queryString":"SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword"} 
+2016-04-12 19:27:52 - INFO  --> Roles found successfully 
+2016-04-12 19:31:42 - INFO  --> Fetching all Warehouse details 
+2016-04-12 19:31:42 - DEBUG --> Query:
+ {"queryString":"SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster` where wareHouseName like :key"} 
+2016-04-12 19:31:42 - DEBUG --> Count:
+ 1 
+2016-04-12 19:31:42 - INFO  --> Warehouse details fetched successful 
+2016-04-12 19:31:58 - INFO  --> Adding Warehouse 
+2016-04-12 19:31:58 - INFO  --> Checking if the warehouse is available 
+2016-04-12 19:31:58 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from warehousemaster where wareHouseName=:wareHouseName"} 
+2016-04-12 19:31:58 - DEBUG --> Count:
+ "0" 
+2016-04-12 19:31:58 - DEBUG --> Query:
+ {"queryString":"INSERT INTO `warehousemaster`(`warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber`, `createdBy`, `creationDate`, `lastModifiedBy`, `lastModificationDate`)\r\n                VALUES (:id,:name,:abbrevation,:address,:city,:state,:country,:pincode,:phone,:createdBy,now(),:lastModifiedBy,now())"} 
+2016-04-12 19:31:58 - INFO  --> Warehouse added succesfully 
+2016-04-12 19:32:10 - INFO  --> Fetching all Warehouse details 
+2016-04-12 19:32:10 - DEBUG --> Query:
+ {"queryString":"SELECT `warehouseId`, `wareHouseName`, `warehouseAbbrevation`, `address`, `city`, `state`, `country`, `pincode`, `phoneNumber` FROM `warehousemaster` where wareHouseName like :key"} 
+2016-04-12 19:32:10 - DEBUG --> Count:
+ 2 
+2016-04-12 19:32:10 - INFO  --> Warehouse details fetched successful 
+2016-04-12 19:36:57 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-12 19:36:57 - DEBUG --> Row Count : 
+9 
+2016-04-12 19:37:30 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-12 19:37:30 - DEBUG --> Row Count : 
+9 
+2016-04-12 19:43:58 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-12 19:43:58 - DEBUG --> Row Count : 
+9 
+2016-04-12 19:49:10 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-12 19:49:10 - DEBUG --> Row Count : 
+9 

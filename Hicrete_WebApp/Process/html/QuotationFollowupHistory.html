@@ -61,22 +61,6 @@
                 </div>
 
             </div><br>
-            <!--<div class="row">-->
-
-                <!--<div class="col-md-5">-->
-
-                    <!--<div class="col-md-3">-->
-                        <!--<label class="control-label">Sort By :</label>-->
-                    <!--</div>-->
-                    <!--<div class="col-md-9">-->
-                        <!--<select class="form-control select" name="sortBy" ng-model="sortExpression"/>-->
-                        <!--<option value="" disabled selected>Sort by </option>-->
-                        <!--<option value="afollowupDate">Actual Followup date</option>-->
-                        <!--<option value="sfollowupDate">Scheduled Followup date</option>-->
-                        <!--</select>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div><br>-->
 
             <div class="table-responsive push-up-10">
                 <table class="table table-bordered">
@@ -107,7 +91,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat = "followup in followups | orderBy:sortType:sortReverse">
+                    <tr ng-repeat = "followup in followups |filter:paginate | orderBy:sortType:sortReverse">
                         <td>{{$index+1}}</td>
                         <td> {{followup.followup_title}}</td>
                         <td> {{followup.followup_date}}</td>
@@ -118,7 +102,10 @@
                     </tbody>
                 </table>
             </div>
-
+            <uib-pagination total-items="followups.length" ng-model="currentPage"
+                            max-size="10" boundary-links="true"
+                            items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+            </uib-pagination>
         </div>
 
     </div>

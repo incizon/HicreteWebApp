@@ -220,7 +220,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
                                                         <div class="col-md-8">
                                                             <select class="form-control" ng-change="setMasterTable()"
-                                                                    ng-model="selectedProduct.materialtype"
+                                                                    ng-model="selectedProduct.materialtypeid"
                                                                     name="materialType" required>
                                                                 <option ng-repeat="x in materialNames "
                                                                         value={{x.materialtypeid}}>{{x.materialtype}}
