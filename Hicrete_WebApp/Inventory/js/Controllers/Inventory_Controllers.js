@@ -1,6 +1,23 @@
 
 myApp.controller('reportController', function ($scope, $http, inventoryService) {
+    var data = {
+        module: 'getCriticalStock'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
 
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+
+            console.log(data);
+            $scope.criticalStock=data;
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
+        });
     //Highcharts.chart('container', {
     //
     //    title: {
@@ -34,7 +51,7 @@ myApp.controller('reportController', function ($scope, $http, inventoryService) 
             },
             series: [{
                 name: 'Hi-Crete',
-                data: [1, 5, 4]
+                data: [5, 7, 4]
             }, {
                 name: 'Hi-TechFlooring',
                 data: [5, 7, 3]
@@ -1446,7 +1463,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
 /*********************************************************************************************
  * START of Search Controller
  *********************************************************************************************/
-myApp.controller('SearchController', function ($scope, $http, inventoryService) {
+myApp.controller('SearchController', function ($scope, $http, inventoryService,$rootScope) {
     //Pagination variables
     $scope.submitted = false;
     $scope.submittedModal = false;
@@ -1586,20 +1603,6 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         $scope.prodBatchInfo.endDate = $filter("date")($scope.prodBatchInfo.endDate, 'dd-MM-yyyy');
     }
 
-    var data = {
-        module: 'inventorySearch'
-    }
-    var config = {
-        params: {
-            data: data
-        }
-    };
-
-    //$scope.today = function() {
-    //    //$scope.prodBatchInfo.dateOfEntry = new Date();
-    //    $scope.prodBatchInfo.startDate = new Date();
-    //};
-    //$scope.today();
 
     $scope.maxDate = new Date(2020, 5, 22);
 
@@ -1625,6 +1628,14 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
 
     $scope.showEnd = {
         opened: false
+    };
+    var data = {
+        module: 'inventorySearch'
+    }
+    var config = {
+        params: {
+            data: data
+        }
     };
 
     $http.post("Inventory/php/InventoryIndex.php", null, config)

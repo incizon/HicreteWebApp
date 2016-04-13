@@ -51,6 +51,10 @@
         case 'getSuppliers':
             getSuppliers();
             break;
+        case 'getCriticalStock':
+            $result=InventoryUtils::getCriticalStock();
+           echo json_encode($result);
+            break;
         default:
             # code...
             break;

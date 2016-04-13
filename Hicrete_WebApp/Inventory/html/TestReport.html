@@ -2,3 +2,34 @@
 
 
 </div>
+<div>
+
+    <div class="table-responsive push-up-10">
+        <table class="table table-actions table-striped">
+            <thead >
+            <tr style="text-align: center;">
+                <th  class="tablehead">Sr.no</th>
+                <th  class="tablehead">Product Name</th>
+                <th  class="tablehead">Availabel Quantity</th>
+                <th  class="tablehead">Alert Level</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr style="text-align: center;" ng-repeat="product in criticalStock">
+                <td>{{$index+1}}</td>
+                <td>{{product.productname}}</td>
+                <td>{{product.totalquantity}}</td>
+                <td>{{product.alertquantity}}</td>
+
+            </tr>
+
+
+            </tbody>
+        </table>
+        <uib-pagination total-items="InwardSearchData.length" ng-model="currentInwardPage"
+                        boundary-links="true"
+                        items-per-page="InventoryInwardItemsPerPage" class="pagination-sm">
+
+        </uib-pagination>
+    </div>
+</div>

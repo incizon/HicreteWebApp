@@ -144,7 +144,7 @@ if(!$hasRead && !$hasWrite){
             }
 
             ?>
-<!--            <li><a ui-sref="Inventory.report">Report</a></li>-->
+            <li><a ui-sref="Inventory.report">Report</a></li>
 
         </ul>
     </nav>

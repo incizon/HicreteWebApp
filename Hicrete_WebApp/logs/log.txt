@@ -1924,3 +1924,72 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
 {"queryString":"SELECT userId,firstName,lastName from usermaster"} 
 2016-04-12 19:49:10 - DEBUG --> Row Count : 
 9 
+2016-04-12 19:54:57 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-12 19:54:57 - DEBUG --> Row Count : 
+9 
+2016-04-13 18:31:07 - INFO  --> Fetching inward details 
+2016-04-13 18:31:07 - INFO  --> Getting inward details 
+2016-04-13 18:31:07 - DEBUG --> Query: {"queryString":"select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid"} 
+2016-04-13 18:57:36 - INFO  --> Searching Products 
+2016-04-13 18:57:36 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-13 18:57:36 - DEBUG --> Data: {"keyword":""} 
+2016-04-13 19:14:22 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-13 19:14:22 - DEBUG --> Count:
+ 2 
+2016-04-13 19:14:22 - INFO  --> Fetching companies 
+2016-04-13 19:14:22 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-13 19:14:22 - DEBUG --> Count :
+ 3 
+2016-04-13 19:14:22 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-13 19:14:22 - DEBUG --> Row Count : 
+9 
+2016-04-13 19:14:47 - INFO  --> Searching Products 
+2016-04-13 19:14:47 - DEBUG --> Query: {"queryString":"SELECT product_master.productmasterid,product_master.`productname`,product_master.`unitofmeasure`,product_details.`color`,product_details.`description`, product_details.`alertquantity`,product_packaging.`packaging`,material.`materialid`,material.`abbrevation`,materialtype.`materialtypeid`,materialtype.`materialtype` FROM product_master JOIN product_details ON product_master.productmasterid=product_details.productmasterid JOIN product_packaging ON product_master.productmasterid=product_packaging.productmasterid JOIN material ON product_master.productmasterid=material.productmasterid JOIN materialtype ON materialtype.materialtypeid=product_master.materialtypeid "} 
+2016-04-13 19:14:47 - DEBUG --> Data: {"keyword":""} 
+2016-04-13 19:15:25 - INFO  --> Inserting inward entries 
+2016-04-13 19:15:25 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime)\r\n             values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-13 19:15:25 - DEBUG --> DATA: 
+{"inwardNumber":"345345","material":null,"packageUnit":null,"companyName":"56ff5baf49d966442","suppplierName":null,"dateOfInward":"2016-04-13T17:14:22.057Z","materialQty":null,"warehouse":"56ff6341570898419","suppervisor":"56fd8f4a122d02927","transportMode":null,"vehicleNumber":null,"transportCost":null,"remark":null,"transportAgency":null,"driverName":null,"transportPayable":null,"hasTransportDetails":"No","isSuccess":null,"size":null} 
+2016-04-13 19:15:25 - INFO  --> Insertion to Inward successful.Inserting inward Details 
+2016-04-13 19:15:25 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)\r\n                    values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-13 19:15:25 - DEBUG --> DATA: 
+{"material":"1","materialQuantity":9,"packageUnit":"fdg","suppplierName":"1","size":"","packagesize":"5"} 
+2016-04-13 19:15:25 - INFO  --> Insertion of Inward Details successful.Updating inventory 
+2016-04-13 19:15:25 - INFO  --> Inserting to inventory 
+2016-04-13 19:15:25 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)\r\n                                                      values (:materialid,:warehouseid,:companyid,:totalquantity)"} 
+2016-04-13 19:15:25 - INFO  --> Inward details added Successfully 
+2016-04-13 19:27:32 - INFO  --> Fetching companies 
+2016-04-13 19:27:32 - DEBUG --> Query:
+ {"queryString":"SELECT companyId,companyName FROM companymaster"} 
+2016-04-13 19:27:32 - DEBUG --> Count :
+ 3 
+2016-04-13 19:27:32 - DEBUG --> Query:
+ {"queryString":"SELECT warehouseId,wareHouseName FROM warehousemaster"} 
+2016-04-13 19:27:32 - DEBUG --> Count:
+ 2 
+2016-04-13 19:27:32 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-13 19:27:32 - DEBUG --> Row Count : 
+9 
+2016-04-13 19:27:56 - INFO  --> Inserting inward entries 
+2016-04-13 19:27:56 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward (warehouseid,companyid,supervisorid,dateofentry,inwardno,lchnguserid,lchngtime,creuserid,cretime)\r\n             values (:warehouseid,:companyid,:supervisorid,:dateofentry,:inwardno,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-13 19:27:56 - DEBUG --> DATA: 
+{"inwardNumber":"56757","material":null,"packageUnit":null,"companyName":"56ff5baf49d966442","suppplierName":null,"dateOfInward":"2016-04-13T17:27:32.621Z","materialQty":null,"warehouse":"56ff6341570898419","suppervisor":"56fd8f4a122d02927","transportMode":null,"vehicleNumber":null,"transportCost":null,"remark":null,"transportAgency":null,"driverName":null,"transportPayable":null,"hasTransportDetails":"No","isSuccess":null,"size":null} 
+2016-04-13 19:27:56 - INFO  --> Insertion to Inward successful.Inserting inward Details 
+2016-04-13 19:27:56 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inward_details (inwardid,materialid,supplierid,quantity,packagedunits,size,lchnguserid,lchngtime,creuserid,cretime)\r\n                    values (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())"} 
+2016-04-13 19:27:56 - DEBUG --> DATA: 
+{"material":"2","materialQuantity":1,"packageUnit":"dfg","suppplierName":"1","size":"","packagesize":"44"} 
+2016-04-13 19:27:56 - INFO  --> Insertion of Inward Details successful.Updating inventory 
+2016-04-13 19:27:56 - INFO  --> Inserting to inventory 
+2016-04-13 19:27:56 - DEBUG --> Query: 
+{"queryString":"INSERT INTO inventory (materialid,warehouseid,companyid,totalquantity)\r\n                                                      values (:materialid,:warehouseid,:companyid,:totalquantity)"} 
+2016-04-13 19:27:56 - INFO  --> Inward details added Successfully 

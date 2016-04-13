@@ -30,5 +30,23 @@
             }
 
         }
+        public static function getCriticalStock(){
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            try{
+
+                $stmt=$conn->prepare("SELECT productname,inventory.totalquantity ,product_details.alertquantity FROM product_master JOIN product_details ON product_details.productmasterid=product_master.productmasterid JOIN material On material.productmasterid=product_master.productmasterid JOIN inventory ON material.materialid=inventory.materialid WHERE inventory.totalquantity<=product_details.alertquantity");
+//                $stmt=$dbh->prepare("SELECT productname FROM product_master");
+                if($stmt->execute()){
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+//                    $material=$result['productname'];
+                    return $result;
+                }else{
+                    return "no material";
+                }
+            }catch(Exception $e){
+
+            }
+        }
     }
 ?>
