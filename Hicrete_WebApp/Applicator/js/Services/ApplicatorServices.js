@@ -165,7 +165,8 @@ myApp.service('PackageService',function(){
 							$scope.$apply(function() {
 								if(data.msg!=""){
 									$('#warning').css("display","none");
-								}
+                                    window.location = "dashboard.php#/Applicator";
+                                }
 							});
 						}, 1000);
 
@@ -243,6 +244,9 @@ myApp.service('PackageService',function(){
                 if(data.msg!=""){
                     $rootScope.warningMessage=data.msg;
                     $('#warning').css("display","block");
+                    setTimeout(function(){
+                        window.location = "dashboard.php#/Applicator";
+                    },1000);
                 }
                 $scope.loading=false;
                 $('#loader').css("display","none");
