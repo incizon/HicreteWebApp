@@ -1924,3 +1924,61 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
 {"queryString":"SELECT userId,firstName,lastName from usermaster"} 
 2016-04-12 19:49:10 - DEBUG --> Row Count : 
 9 
+2016-04-14 20:37:07 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:37:07 - DEBUG --> Row count:
+ 1 
+2016-04-14 20:37:49 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:37:49 - DEBUG --> Row count:
+ 1 
+2016-04-14 20:39:24 - INFO  --> Checking if the package is available 
+2016-04-14 20:39:24 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from payment_package_master where package_name=:packageName"} 
+2016-04-14 20:39:24 - DEBUG --> Count:
+ 1 
+2016-04-14 20:39:24 - INFO  --> Creating package 
+2016-04-14 20:39:24 - DEBUG --> Query:
+ {"queryString":"INSERT INTO payment_package_master(package_name,package_description,package_customized,package_dateof_creation,created_by,creation_date)\r\n\t\t\t\t\t\t     VALUES (:packageName,:packageDescription,:isCustomized,NOW(),:createdBy,NOW())"} 
+2016-04-14 20:39:24 - DEBUG --> Data:
+ {"elementDetails":[{"element_name":"as","element_quantity":"11","element_rate":"11"}],"package_name":"d","package_description":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","packageEdited":"false","operation":"createPackage"} 
+2016-04-14 20:39:24 - DEBUG --> Query:
+ {"queryString":"INSERT INTO payment_package_details(package_element_name,package_element_quantity,package_element_rate,package_element_amount,created_by,creation_date, payment_package_id)\r\n\t\t\t\t\t\t\t  VALUES (:packageElementName ,:packageElementQuantity ,:packageElementRate ,:packageElementAmount ,:createdBy,NOW(),:lastPackageId)"} 
+2016-04-14 20:39:24 - DEBUG --> Data:
+ {"elementDetails":[{"element_name":"as","element_quantity":"11","element_rate":"11"}],"package_name":"d","package_description":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","packageEdited":"false","operation":"createPackage"} 
+2016-04-14 20:39:25 - INFO  --> Package created successfully 
+2016-04-14 20:40:50 - INFO  --> Checking if the package is available 
+2016-04-14 20:40:50 - DEBUG --> Query:
+ {"queryString":"select count(1) as count from payment_package_master where package_name=:packageName"} 
+2016-04-14 20:40:50 - DEBUG --> Count:
+ 1 
+2016-04-14 20:40:50 - INFO  --> Creating package 
+2016-04-14 20:40:50 - DEBUG --> Query:
+ {"queryString":"INSERT INTO payment_package_master(package_name,package_description,package_customized,package_dateof_creation,created_by,creation_date)\r\n\t\t\t\t\t\t     VALUES (:packageName,:packageDescription,:isCustomized,NOW(),:createdBy,NOW())"} 
+2016-04-14 20:40:50 - DEBUG --> Data:
+ {"elementDetails":[{"element_name":"z","element_quantity":"011","element_rate":"11"}],"package_name":"sss","package_description":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasssssssssssss","packageEdited":"false","operation":"createPackage"} 
+2016-04-14 20:40:50 - DEBUG --> Query:
+ {"queryString":"INSERT INTO payment_package_details(package_element_name,package_element_quantity,package_element_rate,package_element_amount,created_by,creation_date, payment_package_id)\r\n\t\t\t\t\t\t\t  VALUES (:packageElementName ,:packageElementQuantity ,:packageElementRate ,:packageElementAmount ,:createdBy,NOW(),:lastPackageId)"} 
+2016-04-14 20:40:50 - DEBUG --> Data:
+ {"elementDetails":[{"element_name":"z","element_quantity":"011","element_rate":"11"}],"package_name":"sss","package_description":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasssssssssssss","packageEdited":"false","operation":"createPackage"} 
+2016-04-14 20:40:50 - INFO  --> Package created successfully 
+2016-04-14 20:43:23 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:43:23 - DEBUG --> Row count:
+ 2 
+2016-04-14 20:43:23 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:43:23 - DEBUG --> Row count:
+ 2 
+2016-04-14 20:44:31 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:44:31 - DEBUG --> Row count:
+ 2 
+2016-04-14 20:44:31 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:44:31 - DEBUG --> Row count:
+ 2 
+2016-04-14 20:44:59 - DEBUG --> Query:
+ {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
+2016-04-14 20:44:59 - DEBUG --> Row count:
+ 1 

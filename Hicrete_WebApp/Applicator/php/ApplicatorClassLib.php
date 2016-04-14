@@ -120,6 +120,7 @@
 
                     global $connect;
 
+                    try{
                     $stmt1 = $connect->prepare("SELECT * FROM payment_package_master WHERE package_customized='false' AND is_deleted='0'");
 
                     if ($stmt1->execute()) {
@@ -261,7 +262,6 @@
 
 
                         }
-
 
                         $stmt1 = $connect->prepare("INSERT INTO applicator_master(applicator_name,applicator_contact,applicator_address_line1,applicator_address_line2,applicator_city,applicator_state,applicator_country,applicator_vat_number,applicator_cst_number,applicator_stax_number,applicator_pan_number,last_modification_date,last_modified_by,created_by,creation_date)
 	                 VALUES (:firmName,:applicatorContactNo,:applicatorAddressLine1,:applicatorAddressLine2,:applicatorCity,:applicatorState,:applicatorCountry,:applicatorVatNumber,:applicatorCstNumber,:applicatorServiceTaxNumber,:applicatorPanNumber,NOW(),:lastModifiedBy,:createdBy,NOW())");

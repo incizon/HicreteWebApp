@@ -149,34 +149,30 @@ myApp.service('PackageService',function(){
                 
 					.success(function (data, status, headers, config){
 						            
-						            console.log(data);
+                        console.log(data);
 						if(data.msg!=""){
 							$rootScope.warningMessage=data.msg;
 							$('#warning').css("display","block");
-						}
-						setTimeout(function() {
-
-								if(data.msg!=""){
-									window.location.reload(true);
-									$('#warning').css("display","none");
-								}
+                            setTimeout(function() {
+                                    $('#loader').css("display", "none");
+                                    $('#warning').css("display","none");
                                     window.location = "dashboard.php#/Applicator";
-                                }
-							});
-						}, 1000);
 
-						$scope.loading=false;
-						$('#loader').css("display","none");
-						if(data.error!=""){
-							$rootScope.errorMessage=data.error;
-							$('#error').css("display","block");
-						}
+                            },1000);
+                        }
+
+                        if (data.error != "") {
+                                $('#loader').css("display", "none");
+                                $rootScope.errorMessage = data.error;
+                                $('#error').css("display", "block");
+                        }
+
 					})
 					.error(function (data, status, headers, config){
 									
 						console.log(data);
 						$('#loader').css("display","none");
-						$rootScope.errorMessage=data.error;
+						$rootScope.errorMessage="Unable to create package";
 						$('#error').css("display","block");
 
                     });
@@ -196,17 +192,14 @@ myApp.service('PackageService',function(){
 					$http.post("Applicator/php/Applicator.php", null,config)
 					
 					.success(function (data, status, headers, config){
-
 							console.log(data);
 							$scope.packages=data;
 							$scope.totalPackages = $scope.packages.length;
-						
 						})
 
 					.error(function (data, status, headers){
-							
+
 							console.log(data);
-          
 						});	
 
 		};
