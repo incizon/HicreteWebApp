@@ -220,9 +220,45 @@ myApp.service('PackageService',function(){
 							console.log(data);
           
 						});	
-			
 
 		};
+
+    this.deletePackage=function($scope,$rootScope,$http,packageId){
+
+        var data = {
+            operation: "deletePackage",
+            package_id: packageId
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $('#loader').css("display","block");
+        $http.post("Applicator/php/Applicator.php",null,config)
+
+            .success(function (data, status, headers, config){
+                console.log(data);
+                if(data.msg!=""){
+                    $rootScope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                if(data.error!=""){
+                    $rootScope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+            })
+            .error(function (data, status, headers, config){
+                console.log(data);
+                $('#loader').css("display","none");
+                $rootScope.errorMessage="Unable to delete Package";
+                $('#error').css("display","block");
+            });
+    };
+
 
 });
 

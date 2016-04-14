@@ -998,7 +998,7 @@ End of package controller
 start of view package controller
  */
 
-myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
+myApp.controller('ViewPackageController',function($scope,$http,$rootScope,PackageService) {
 
     $scope.oneAtATime = true;
     $scope.packages = [];
@@ -1012,6 +1012,21 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
     };
 
     PackageService.viewPackages($scope,$http,$scope.packageDetails);
+
+    $scope.showPackageDetails=function(package){
+
+        $scope.selectedPackage=package;
+        $scope.totalElement=$scope.selectedPackage.elementType.length;
+        console.log($scope.totalElement);
+
+    }
+
+    $scope.deletePackage=function(packageId){
+        console.log(packageId);
+        PackageService.deletePackage($scope,$rootScope,$http,packageId);
+
+    }
+
     $scope.paginatePackage = function(value) {
 
         var begin, end, index;
@@ -1020,7 +1035,7 @@ myApp.controller('ViewPackageController',function($scope,$http,PackageService) {
         index = $scope.packages.indexOf(value);
 
         return (begin <= index && index < end);
-    };
+    }
 });
 
 /*

@@ -109,7 +109,7 @@
 
                     global $connect;
 
-                    $stmt1 = $connect->prepare("SELECT * FROM payment_package_master WHERE package_customized='false'");
+                    $stmt1 = $connect->prepare("SELECT * FROM payment_package_master WHERE package_customized='false' AND is_deleted='0'");
 
                     if ($stmt1->execute()) {
 
@@ -1091,6 +1091,28 @@
                     else{
                         return false;
                     }
+                }
+                public function deletePackage($data,$userId){
+
+
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+                    $packageId=$data->package_id;
+
+                    $stmt=$connect->prepare("UPDATE payment_package_master SET is_deleted='1',
+                                              deleted_by=:deletedBy,
+                                              deletion_date=NOW()
+                                              WHERE payment_package_id=:packageId");
+                    $stmt->bindParam(':packageId',$packageId);
+                    $stmt->bindParam(':deletedBy',$userId);
+
+                    if($stmt->execute()){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+
                 }
             }
 
