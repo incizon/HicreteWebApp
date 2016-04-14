@@ -160,7 +160,7 @@ class QuotationController
                         echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
                     }
                 }else{
-                    echo AppUtil::getReturnStatus("Unsuccessful", "Project value is empty");
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Data not found");
                 }
 
 

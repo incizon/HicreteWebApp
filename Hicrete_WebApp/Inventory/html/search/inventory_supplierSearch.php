@@ -95,7 +95,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
         </div>
         <!-- END SEARCH RESULT -->
 
-        <uib-pagination total-items="totalItems" ng-model="currentPage"
+        <uib-pagination total-items="suppliers.length" ng-model="currentPage"
                         max-size="10" boundary-links="true"
                         items-per-page="supplierPerPage" class="pagination-sm">
         </uib-pagination>

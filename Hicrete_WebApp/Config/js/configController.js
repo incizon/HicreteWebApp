@@ -339,13 +339,9 @@ userType:""
            {
                
              console.log(data.status);
+               $('#loader').css("display","none");
              console.log(data.message);
              if(data.status=="Successful"){
-                //alert("User added successfully. Password is :"+data.message);
-                 setTimeout(function(){
-                     $scope.loading=false;
-                     $('#loader').css("display","none");
-                 },1000);
 
                  $scope.warningMessage= "User added successfully...Credential send to "+$scope.userInfo.email;
                  $('#warning').css("display","block");
@@ -354,22 +350,13 @@ userType:""
                      $scope.$apply(function() {
                          if(data.message!=""){
                              $('#warning').css("display","none");
+                             window.location = "dashboard.php#/Config";
                          }
                      });
                  }, 3000);
 
-                /* $scope.clearUserForm();
-
-                 $scope.userInfoSubmitted= false;
-                 $scope.step=1;
-*/
-                //doShowAlert("Success","User created successfully");
-                 setTimeout(function(){
-                    //window.location.reload(true);
-                     window.location = "dashboard.php#/Config";
-                 },1000);
              }else if(data.status=="Unsuccessful"){
-                  //doShowAlert("Failure",data.message);
+
                  $scope.errorMessage=data.message;
                  $('#loader').css("display","none");
                  $('#error').css("display","block");
@@ -380,9 +367,7 @@ userType:""
                  $('#loader').css("display","none");
                  $('#error').css("display","block");
                  //console.log($scope.errorMessage);
-             } 
-             //window.location.reload=true;
-            // $scope.clearUserForm();
+             }
                      
            })
            .error(function (data, status, headers, config)
@@ -419,7 +404,9 @@ userType:""
                      {
                      
                        if(data.status!="Successful"){
-                          alert(data.message);
+                           $scope.errorMessage="User not Added";
+                           $('#loader').css("display","none");
+                           $('#error').css("display","block");
                        }else{
                            $scope.roleAccessList=[];
                             configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -692,7 +679,7 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
 });
 
 
-myApp.controller('ModifyUserController',function($scope,$http,$stateParams,configService){
+myApp.controller('ModifyUserController',function($scope,$http,$stateParams,configService,$rootScope){
 
     $scope.selectedUserInfo=$stateParams.userToModify;
     configService.getRoleList($http,$scope);
@@ -720,7 +707,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                    alert("Error Occured"+data.message);
+                    //alert("Error Occured"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -741,7 +728,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             alert("Fields are not modified");
             return;
         }
-
+        $('#loader').css("display","block");
         console.log($scope.selectedUserInfo);
         var data={
             operation :"modifyUser",
@@ -755,19 +742,26 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
 
             }
         };
-
+        console.log(config);
          $http.post("Config/php/configFacade.php",null, config)
          .success(function (data)
          {
-
+             $('#loader').css("display","none");
          console.log(data);
 
          if(data.status=="Successful"){
-            alert("User Modified Successfully");
+            //alert("User Modified Successfully");
+             $rootScope.warningMessage="User Modified Successfully";
+             setTimeout(function() {
+                     $('#warning').css("display","none");
+
+             }, 3000);
 
          }else if(data.status=="Unsuccessful"){
-            console.log(data.message);
-            alert(data.message);
+             $rootScope.errorMessage=data.message;
+              $('#error').css("display","block");
+            //console.log(data.message);
+            //alert(data.message);
          }else{
              console.log(data.message);
             alert(data.message);
@@ -777,6 +771,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
          })
          .error(function (data, status, headers, config)
          {
+             $('#loader').css("display","block");
             alert("Failure -Error Occurred");
 
          });
@@ -790,8 +785,17 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
 myApp.controller('viewRoleController',function($scope,$http,$rootScope,$stateParams,configService)
 {
     $scope.searchKeyword="";
-
-
+    $scope.RolesPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.RolesPerPage;
+        end = begin + $scope.RolesPerPage;
+        index =  $rootScope.Roles.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
 
     $scope.getAllAccesspermissions= function()
     {
@@ -810,8 +814,7 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
 
                 if(data.status!="Successful"){
                     console.log(data);
-                    alert(data.message);
-
+                    //alert(data.message);
                 }else{
                     console.log(data);
                     $rootScope.AllAccessPermissions=data.message;
@@ -867,15 +870,7 @@ myApp.controller('viewRoleController',function($scope,$http,$rootScope,$statePar
                     console.log(data);
                     $scope.loading=false;
                     $('#loader').css("display","none");
-                    $scope.errorMessage="Data not found..";
-                   // $('#error').css("display","block");
-                    setTimeout(function() {
-                        $scope.$apply(function() {
-                           // $('#error').css("display","none");
-                        });
-                    }, 3000);
-
-                    $rootScope.Roles=data.message;
+                     $rootScope.Roles=data.message;
                 }else{
                     $scope.loading=false;
                     $('#loader').css("display","none");
@@ -975,6 +970,20 @@ $scope.warehouse={
 /////////////////////////////////////////////////////////////////////////////////
 // Function to get Ware house details
 /////////////////////////////////////////////////////////////////////////////////
+
+
+    $scope.warehousesPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.warehousesPerPage;
+        end = begin + $scope.warehousesPerPage;
+        index =  $rootScope.warehouses.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
     $scope.getWareHouseDetails = function(keyword)
     {
         console.log(keyword);
@@ -1591,6 +1600,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
             }
         };
 
+        $('#loader').css('display','block');
         $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
             {
@@ -1598,13 +1608,12 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
 
 
                 if(data.status!="Successful"){
+                    $('#loader').css('display','none');
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display","block");
                     setTimeout(function() {
                         $scope.$apply(function() {
                             $('#error').css("display","none");
-
-
                         });
                     }, 3000);
                     //alert(data.message);
@@ -1612,6 +1621,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
                     //window.location="dashboard.php#/Config/SearchRole";
                 }else{
                     //alert(data.message);
+                    $('#loader').css('display','none');
                     $rootScope.warningMessage = data.message;
                     $('#warning').css("display","block");
                     setTimeout(function() {
@@ -1626,6 +1636,7 @@ myApp.controller('ModifyRoleController',function($scope,$http,$rootScope,$stateP
             })
             .error(function (data, status, headers, config)
             {
+                $('#loader').css('display','none');
                 console.log(data);
                 //alert("Error Occured");
                 $rootScope.errorMessage = "Error Occured..";

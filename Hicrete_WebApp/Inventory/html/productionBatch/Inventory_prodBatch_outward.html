@@ -21,7 +21,7 @@
                                                 <div class="col-md-7">
                                                     <div class="input-group">
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
-                                                        <select style="width:216%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" name="materialProduced" ng-model="prodBatchInfo.prodcdMaterial" required>
+                                                        <select style="width:100%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" name="materialProduced" ng-model="prodBatchInfo.prodcdMaterial" required>
                                                             <option value="" disabled selected>Select Material</option>
                                                             <option ng-repeat="x in existingMaterials" 
                                                                       value={{x.materialid}}>{{x.productname}}
@@ -65,7 +65,7 @@
 
                                                 <div class="col-md-7">
                                                     <div class="input-group">
-                                                    <select style="width:206%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.company" name="companyName"
+                                                    <select style="width:100%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.company" name="companyName"
                                                             required>
                                                         <option value="" disabled selected>Select Company</option>
                                                         <option ng-repeat="x in Company"
@@ -87,7 +87,7 @@
 
                                                 <div class="col-md-7">
                                                     <div class="input-group" >
-                                                            <select style="width:191%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.wareHouse"
+                                                            <select style="width:100%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" ng-model="prodBatchInfo.wareHouse"
                                                                     name="warehouseName" required>
                                                                 <option value="" disabled selected>Select Warehouse</option>
                                                                 <option ng-repeat="x in warehouses"

@@ -22,12 +22,9 @@ myApp.service('ApplicatorService',function(){
 							//console.log($scope.warningMessage);
 							$('#warning').css("display", "block");
 							setTimeout(function () {
-								$scope.$apply(function () {
-									//if (data.msg != "") {
 										$('#warning').css("display", "none");
                                         window.location = "dashboard.php#/Applicator";
-                                    //}
-								});
+
 							}, 1000);
 							}
 							if (data.error != "") {
@@ -35,10 +32,8 @@ myApp.service('ApplicatorService',function(){
 								$rootScope.errorMessage = data.error;
 								$('#error').css("display", "block");
 								setTimeout(function () {
-									$scope.$apply(function () {
 											$('#error').css("display", "none");
 
-									});
 								}, 1000);
 							}
 
@@ -48,11 +43,9 @@ myApp.service('ApplicatorService',function(){
 							$rootScope.errorMessage="Unable to create Applicator...";
 							$('#error').css("display","block");
 							setTimeout(function() {
-								$scope.$apply(function() {
 									if(data.msg!=""){
 										$('#error').css("display","none");
 									}
-								});
 							}, 1000);
                         			console.log(data);
 
@@ -104,12 +97,12 @@ myApp.service('ApplicatorService',function(){
 						$('#warning').css("display","block");
 					}
 					setTimeout(function() {
-						$scope.$apply(function() {
+
 							if(data.msg!=""){
 								$('#warning').css("display","none");
                                 window.location.reload(true);
                             }
-						});
+
 					}, 1000);
 
 					$scope.loading=false;
@@ -162,9 +155,11 @@ myApp.service('PackageService',function(){
 							$('#warning').css("display","block");
 						}
 						setTimeout(function() {
-							$scope.$apply(function() {
+
 								if(data.msg!=""){
+									window.location.reload(true);
 									$('#warning').css("display","none");
+								}
                                     window.location = "dashboard.php#/Applicator";
                                 }
 							});
@@ -176,14 +171,6 @@ myApp.service('PackageService',function(){
 							$rootScope.errorMessage=data.error;
 							$('#error').css("display","block");
 						}
-						console.log(data);
-						/*setTimeout(function(){
-							window.location.reload(true);
-						},2000);*/
-
-					/*	setTimeout(function(){
-										window.location.reload(true);
-									},1000);*/
 					})
 					.error(function (data, status, headers, config){
 									

@@ -8,109 +8,135 @@
     <div ng-include="'utils/WarningMessage.html'"></div>
 </div>
 
- <div class="page-content-wrap">
-                
-                    <div class="row">
-                        <div class="col-md-12">
-                            
-                            <form class="form-horizontal" name="prodAddRawMaterialForm" novalidate>
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title"><strong>Raw material for Production</strong></h3>
+<div class="page-content-wrap">
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <form class="form-horizontal" name="prodAddRawMaterialForm" novalidate>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>Raw material for Production</strong></h3>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label class="col-md-3 col-xs-12 control-label">Number of material to be Added</label>
+
+                            <div class="col-md-6 col-xs-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="number" style="width:86%" name="noOfMat"
+                                           ng-model="prodBatchInfo.noOfMaterials" class="form-control"/>
+                                    <button class="btn btn-primary pull-right" ng-click="addFields('Add')"
+                                            style="margin-right: 5px;">Add
+                                    </button>
                                 </div>
-                             
-                                <div class="panel-body">  
-                                    <div class="form-group">
-                                            <label class="col-md-3 col-xs-12 control-label">Number of material to be Added</label>
-                                            <div class="col-md-6 col-xs-12">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input type="number" style="width:86%" name="noOfMat"  ng-model="prodBatchInfo.noOfMaterials" class="form-control"/>
-                                                    <button class="btn btn-primary pull-right"  ng-click="addFields('Add')" style="margin-right: 5px;" >Add</button>
-                                                </div>
-                                    
-                                            </div>
-                                    </div>                                
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row col-md-12" style="margin-top: 1%;"
+                                 ng-repeat="rawMat in prodBatchInfo.rawMaterial">
+                                <div class="col-md-6">
 
                                     <div class="form-group">
-                                    <div class="row" style="margin-top: 1%;" ng-repeat="rawMat in prodBatchInfo.rawMaterial" >
+                                        <label class="col-md-3 control-label">Material</label>
+
                                         <div class="col-md-4">
-                                            
-                                            <div class="form-group">
-                                                <label class="col-md-5 control-label">Material</label>
-                                                <div class="col-md-7">
-                                                    <div class="input-group">
-                                                        <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
-                                                        <!-- try -->
-                                                           <select ng-change="getAvailableQty(rawMat.material)"  class="btn dropdown-toggle selectpicker btn-default" ng-model="rawMat.material" name="rawMaterial" required>
-                                                                   <option value="" disabled selected>Select</option>
-                                                                   <option ng-repeat="x in existingMaterials" 
-                                                                      value={{x.materialid}}>{{x.productname}}
-                                                                   </option>
-                                                            </select>
+                                            <div class="input-group">
+                                                <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
+                                                <!-- try -->
+                                                <select ng-change="getAvailableQty(rawMat.material)" style="width:185%;"
+                                                        class="btn dropdown-toggle selectpicker btn-default"
+                                                        ng-model="rawMat.material" name="rawMaterial" required>
+                                                    <option value="" disabled selected>Select</option>
+                                                    <option ng-repeat="x in existingMaterials"
+                                                            value={{x.materialid}}>{{x.productname}}
+                                                    </option>
+                                                </select>
 
 
-                                              <!--           <!-- try end -->
-                                                       <!--  <input style="width: 66%;" type="text" ng-model="rawMat.material"class="form-control"/> --> 
-                                                    </div>
-                                                    <div class="help-block" ng-messages="prodAddRawMaterialForm.rawMaterial.$error" ng-show="nextStep">
-                                                        <p style="color:red" ng-message="required">Please select material</p>
-                                                    </div>
-                                                </div>
+                                                <!--           <!-- try end -->
+                                                <!--  <input style="width: 66%;" type="text" ng-model="rawMat.material"class="form-control"/> -->
                                             </div>
-                                             
-                                        </div>
-                                        <div class="col-md-5">
-                                            
-                                            <div class="form-group">                                        
-                                                <label class="col-md-4 control-label">Quantity</label>
-                                                <div class="col-md-7">
-                                                    <div class="input-group" style="width:100%">
-                                                        <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-                                                        <input ng-change="check(rawMat.quantity)" name="quantity" style="width: 66%;" type="number" ng-model="rawMat.quantity" class="form-control" required>
-                                                                      <ul class="panel-controls">
-                                        <li><a ng-click="addField('Add')" class="panel-remove"><span class="fa fa-plus"></span></a></li>
-                                        </ul>
-
-                                                        <label style="margin-left: 3%;margin-top: 1%;" >{{getAvailableQty(rawMat.material)}}</label>
-                                                        <ul class="panel-controls">
-
-                                                         <!--   <div class="help-block" ng-show="qtyError1">
-                                                                <span style="color:red" >Material not available in stock Please contact your manager</span>
-                                                            </div>-->
-                                        <li><a ng-click="remove($index,'Add')" class="panel-remove"><span class="fa fa-times"></span></a></li>
-                                        </ul>
-
-                                                        <div class="help-block" ng-show="qtyError">
-                                                            <span style="color:red" >Don't have sufficient quantity available in stock. Current available quantity is {{getAvailableQty(rawMat.material)}}</span>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="help-block" ng-messages="prodAddRawMaterialForm.quantity.$error" ng-show="nextStep">
-                                                        <p style="color:red" ng-message="required">Please Enter quantity material</p>
-                                                    </div>
-                                               <!--      <span class="help-block">Click on input field to get datepicker</span> -->
-                                                </div>
-
+                                            <div class="help-block"
+                                                 ng-messages="prodAddRawMaterialForm.rawMaterial.$error"
+                                                 ng-show="nextStep">
+                                                <p style="color:red" ng-message="required">Please select material</p>
                                             </div>
-
-                                            
                                         </div>
-                                    </div>
                                     </div>
 
                                 </div>
-                                <div class="panel-footer">
-                                    <button class="btn btn-default" ng-click="clear('Raw')">Clear Form</button>
+                                <div class="col-md-6">
 
-                                    <button style="margin-left: 5px;" ng-show="prodBatchInfo.endDate <= today1" class="btn btn-primary pull-right" ng-click="(nextStep= 'true')&& prodAddRawMaterialForm.$valid && !qtyError && initProd(prodBatchInfo,'Raw','Add')">Next</button>
-                                    <button style="margin-left: 5px;" ng-show="prodBatchInfo.endDate > today1" class="btn btn-primary pull-right" ng-click="(nextStep= 'true')&& prodAddRawMaterialForm.$valid && !qtyError && initProd(prodBatchInfo,'Raw','Add')">Submit</button>
-                                    <button class="btn btn-primary pull-right"  ng-click="(nextStep = 'false') && goBack()">Back</button>
+                                    <div class="form-group">
+                                        <label class="col-md-2 control-label">Quantity</label>
+
+                                        <div class="col-md-7">
+                                            <div class="input-group" style="width:100%">
+                                                <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                                <input ng-change="check(rawMat.quantity)" name="quantity"
+                                                       style="width: 66%;" type="number" ng-model="rawMat.quantity"
+                                                       class="form-control" required>
+                                                <ul class="panel-controls">
+                                                    <li><a ng-click="addField('Add')" class="panel-remove"><span
+                                                            class="fa fa-plus"></span></a></li>
+                                                </ul>
+
+                                                <label style="margin-left: 3%;margin-top: 1%;">{{getAvailableQty(rawMat.material)}}</label>
+                                                <ul class="panel-controls">
+
+                                                    <!--   <div class="help-block" ng-show="qtyError1">
+                                                           <span style="color:red" >Material not available in stock Please contact your manager</span>
+                                                       </div>-->
+                                                    <li><a ng-click="remove($index,'Add')" class="panel-remove"><span
+                                                            class="fa fa-times"></span></a></li>
+                                                </ul>
+
+                                                <div class="help-block" ng-show="qtyError">
+                                                    <span style="color:red">Don't have sufficient quantity available in stock. Current available quantity is {{getAvailableQty(rawMat.material)}}</span>
+                                                </div>
+
+                                            </div>
+                                            <div class="help-block" ng-messages="prodAddRawMaterialForm.quantity.$error"
+                                                 ng-show="nextStep">
+                                                <p style="color:red" ng-message="required">Please Enter quantity
+                                                    material</p>
+                                            </div>
+                                            <!--      <span class="help-block">Click on input field to get datepicker</span> -->
+                                        </div>
+
+                                    </div>
+
+
                                 </div>
                             </div>
-                            </form>
-                            
                         </div>
-                    </div>                    
-                    
+
+                    </div>
+                    <div class="panel-footer">
+                        <button class="btn btn-default" ng-click="clear('Raw')">Clear Form</button>
+
+                        <button style="margin-left: 5px;" ng-show="prodBatchInfo.endDate <= today1"
+                                class="btn btn-primary pull-right"
+                                ng-click="(nextStep= 'true')&& prodAddRawMaterialForm.$valid && !qtyError && initProd(prodBatchInfo,'Raw','Add')">
+                            Next
+                        </button>
+                        <button style="margin-left: 5px;" ng-show="prodBatchInfo.endDate > today1"
+                                class="btn btn-primary pull-right"
+                                ng-click="(nextStep= 'true')&& prodAddRawMaterialForm.$valid && !qtyError && initProd(prodBatchInfo,'Raw','Add')">
+                            Submit
+                        </button>
+                        <button class="btn btn-primary pull-right" ng-click="(nextStep = 'false') && goBack()">Back
+                        </button>
+                    </div>
                 </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>

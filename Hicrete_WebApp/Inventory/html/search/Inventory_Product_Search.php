@@ -62,10 +62,10 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                 <thead>
                 <tr>
                     <th width="3%">Sr.No</th>
-                    <th width="10%">Product Name</th>
-                    <th width="12%">Unit of Measure</th>
+                    <th width="20%">Product Name</th>
+                    <th width="10%">Unit of Measure</th>
                     <th width="10%">Color</th>
-                    <th width="15%">Description</th>
+                    <th width="25%">Description</th>
                     <th width="40%">Actions</th>
                 </tr>
                 </thead>
@@ -74,8 +74,8 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                     <td width="5%">{{$index + 1}}</td>
                     <td width="20%">{{product.productname}}</td>
                     <td width="10%">{{product.unitofmeasure}}</td>
-                    <td width="15%">{{product.color}}</td>
-                    <td width="15%">{{product.description}}</td>
+                    <td width="10%">{{product.color}}</td>
+                    <td width="25%">{{product.description}}</td>
                     <td width="35%">
                         <button data-target="#viewDetails" data-toggle="modal" ng-click="getProduct(product)" data-toggle="modal"
                                 class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View
@@ -220,7 +220,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
                                                         <div class="col-md-8">
                                                             <select class="form-control" ng-change="setMasterTable()"
-                                                                    ng-model="selectedProduct.materialtype"
+                                                                    ng-model="selectedProduct.materialtypeid"
                                                                     name="materialType" required>
                                                                 <option ng-repeat="x in materialNames "
                                                                         value={{x.materialtypeid}}>{{x.materialtype}}
@@ -309,7 +309,8 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
         </div>
     </div>
 
-    <uib-pagination total-items="totalItems" ng-model="currentPage"
+    <uib-pagination total-items="products.length
+    " ng-model="currentPage"
                     max-size="10" boundary-links="true"
                     items-per-page="InventoryItemsPerPage" class="pagination-sm">
     </uib-pagination>

@@ -147,20 +147,20 @@
                             <table class="table table-actions">
                                 <thead>
                                 <tr>
-                                    <th>Material</th>
-                                    <th>Quantity</th>
-                                    <th>Packaging Type</th>
-                                    <th>Packaging Size</th>
-                                    <th>Unit</th>
-                                    <th>Available Quantity</th>
-                                    <th>Remove</th>
+                                    <th width="30%">Material</th>
+                                    <th width="15%">Quantity</th>
+                                    <th width="13%">Packaging Type</th>
+                                    <th width="10%">Packaging Size</th>
+                                    <th width="10%">Unit</th>
+                                    <th width="12%">Available Quantity</th>
+                                    <th width="10%">Remove</th>
                                 </tr>
                                 </thead>
                                 <tr ng-repeat="materials in OutwardData.outwardMaterials">
 
                                     <td>
                                         <select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"
-                                                ng-model="materials.material" ng-value="Select" name="material" required>
+                                                ng-model="materials.material" ng-value="Select" name="material" required style="width: 100%;">
                                             <option value="" disabled selected>Select Material</option>
                                             <option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>
 
@@ -171,7 +171,7 @@
                                     </td>
                                     <td>
                                         <input maxlength ="11" type="number" min="1" ng-disabled="availableTotalquantity==0" class="form-control"
-                                               ng-model="materials.materialQuantity" name="materialQuantity" required/>
+                                               ng-model="materials.materialQuantity" name="materialQuantity" required style="width: 100%;"/>
                                         <div class="help-block" ng-messages="outwardMaterialForm.materialQuantity.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please enter material quantity</p>
                                         </div>
@@ -179,13 +179,13 @@
 
                                     <td>
                                         <input type="text" ng-disabled="availableTotalquantity==0" class="form-control"
-                                               ng-model="materials.packageUnit" name="packageUnit" required/>
+                                               ng-model="materials.packageUnit" name="packageUnit" required style="width: 100%;"/>
 
                                     </td>
                                     <td>
 
                                         <input maxlength="20" type="text" class="form-control" ng-model="materials.packagesize"
-                                               name="size"  />
+                                               name="size" style="width: 100%;" />
 
                                         <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"
                                              ng-show="submitted">
@@ -194,14 +194,14 @@
                                     </td>
                                     <td>
                                         <!--{{getAvailableQty(materials.material)}}-->
-                                        <label >{{getUnit(materials.material)}}</label>
+                                        <label style="width: 100%;">{{getUnit(materials.material)}}</label>
                                     </td>
                                     <!--<td>-->
                                         <!--<button ng-show="selected==true" data-target="#showAvailablequantity" data-ng-click="getAvailableQuantiyPerPackage(materials.material)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>Available Qty</button>-->
 
                                     <!--</td>-->
                                     <td>
-                                        <label  name="availableQty">{{getAvailableQty(materials.material)}}</label>
+                                        <label style="width: 100%;"  name="availableQty">{{getAvailableQty(materials.material)}}</label>
                                         <div class="help-block" ng-show="submitted && availableTotalquantity==0">
                                             <span style="color:red">Selected material is not available. Contact inventory manager</span>
                                         </div>
