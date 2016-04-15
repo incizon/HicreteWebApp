@@ -199,7 +199,22 @@
 							}
 					break;
 
+			case 'deletePackage':
 
+                            if($operationObject->deletePackage($data,$userId)){
+                                $message = "Package Deleted Successfully...!!!";
+                                $arr = array('msg' => $message, 'error' => '');
+                                $jsn = json_encode($arr);
+                                echo($jsn);
+                            }
+                            else{
+                                $message = "Could not delete Package";
+                                $arr = array('msg' => '', 'error' => $message);
+                                $jsn = json_encode($arr);
+                                echo($jsn);
+                            }
+
+               break;
 			default :
 
 				   echo "Please provide correct operation  to do .";
