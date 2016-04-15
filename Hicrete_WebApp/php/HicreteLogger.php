@@ -19,14 +19,14 @@ class HicreteLogger
 
 
     private static function init(){
-        Self::$klogger = new KLogger ( "../../logs/log.txt" , KLogger::DEBUG );
+        self::$klogger = new KLogger ( "../../logs/log.txt" , KLogger::ERROR );
     }
 
     private static function getLogger(){
-        if(Self::$klogger ==null){
-            Self::init();
+        if(self::$klogger ==null){
+            self::init();
         }
-        return Self::$klogger;
+        return self::$klogger;
     }
 
     public static function LogInfo($line)
@@ -55,7 +55,7 @@ class HicreteLogger
     public static function  setPriority($priority){
         if($priority<=6 && $priority >=1){
             self::getLogger()->setPriority($priority);
-        }else{
+        }else{ 
             throw  new Exception("Invalid priority value");
         }
 

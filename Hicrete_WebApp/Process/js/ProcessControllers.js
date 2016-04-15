@@ -1417,7 +1417,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
         console.log("in createInvoice");
         var totalAmount = parseFloat($scope.totalAmnt) + parseFloat($scope.TaxAmnt);
-        var grandTotal = (+totalAmount + +totalTax) - +$scope.roundingOff;
+        var grandTotal = (+totalAmount ) - +$scope.roundingOff;
 
         var invoiceData = {
             "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
