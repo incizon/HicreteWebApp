@@ -139,11 +139,12 @@ if(!$hasRead && !$hasWrite){
                 </ul>
             </li>
             <li><a ui-sref=\"Inventory.searchInventory\">Show Inventory</a></li>
+
             ";
             }
 
             ?>
-
+<!--            <li><a ui-sref="Inventory.report">Report</a></li>-->
 
         </ul>
     </nav>

@@ -142,6 +142,10 @@ if(!$userObj->init($userId)){
     <script type="text/javascript" src="utils/AppService.js"></script>
 
 
+<!--    //REPORTING JS-->
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+<!--    <script src="http://code.highcharts.com/modules/exporting.js"></script>-->
+    <script src="http://highcharts.github.io/export-csv/export-csv.js"></script>
 </head>
 
 
@@ -265,13 +269,13 @@ if(!$userObj->init($userId)){
             <li class="xn-icon-button">
                 <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
             </li>
-            <li class="xn-icon-button">
-                <a ui-sref="billApproval" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Bill Approval"><span class="fa fa-file-text-o"></span></a>
-            </li>
+
 
             <?php
                 if($userObj->isSuper){
-
+                       echo "<li class=\"xn-icon-button\">
+                <a ui-sref=\"billApproval\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"\" data-original-title=\"Bill Approval\"><span class=\"fa fa-file-text-o\"></span></a>
+            </li>";
                         echo "<li class=\"xn-icon-button\">
                 <a ui-sref=\"accessApproval\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"\" data-original-title=\"Access Approval\"><span class=\"fa fa-check-square-o\"></span></a>
             </li>";

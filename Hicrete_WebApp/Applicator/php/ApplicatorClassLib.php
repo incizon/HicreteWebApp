@@ -119,21 +119,21 @@
                 {
 
                     global $connect;
-                    try {
-                        HicreteLogger::logInfo("Fetching package details");
-                        $stmt1 = $connect->prepare("SELECT * FROM payment_package_master WHERE package_customized='false'");
-                        HicreteLogger::logDebug("Query:\n ".json_encode($stmt1));
-                        if ($stmt1->execute()) {
-                            HicreteLogger::logDebug("Row count:\n ".json_encode($stmt1->rowCount()));
-                            $json_response = array();
-                            while ($result1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
-                                $result1_array = array();
-                                $result1_array['payment_package_id'] = $result1['payment_package_id'];
-                                $result1_array['package_name'] = $result1['package_name'];
-                                $result1_array['package_description'] = $result1['package_description'];
-                                $result1_array['package_total_amount'] = 0;
-                                $result1_array['elementType'] = array();
-                                $payment_package_id = $result1['payment_package_id'];
+
+                    try{
+                    $stmt1 = $connect->prepare("SELECT * FROM payment_package_master WHERE package_customized='false' AND is_deleted='0'");
+
+                    if ($stmt1->execute()) {
+
+                        $json_response = array();
+                        while ($result1 = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                            $result1_array = array();
+                            $result1_array['payment_package_id'] = $result1['payment_package_id'];
+                            $result1_array['package_name'] = $result1['package_name'];
+                            $result1_array['package_description'] = $result1['package_description'];
+                            $result1_array['package_total_amount'] = 0;
+                            $result1_array['elementType'] = array();
+                            $payment_package_id = $result1['payment_package_id'];
 
                                 $stmt2 = $connect->prepare("SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id");
                                 $stmt2->bindParam(':payment_package_id', $payment_package_id);
@@ -262,7 +262,6 @@
 
 
                         }
-
 
                         $stmt1 = $connect->prepare("INSERT INTO applicator_master(applicator_name,applicator_contact,applicator_address_line1,applicator_address_line2,applicator_city,applicator_state,applicator_country,applicator_vat_number,applicator_cst_number,applicator_stax_number,applicator_pan_number,last_modification_date,last_modified_by,created_by,creation_date)
 	                 VALUES (:firmName,:applicatorContactNo,:applicatorAddressLine1,:applicatorAddressLine2,:applicatorCity,:applicatorState,:applicatorCountry,:applicatorVatNumber,:applicatorCstNumber,:applicatorServiceTaxNumber,:applicatorPanNumber,NOW(),:lastModifiedBy,:createdBy,NOW())");
@@ -1159,6 +1158,28 @@
                         HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
                         return false;
                     }
+                }
+                public function deletePackage($data,$userId){
+
+
+                    $db = Database::getInstance();
+                    $connect = $db->getConnection();
+                    $packageId=$data->package_id;
+
+                    $stmt=$connect->prepare("UPDATE payment_package_master SET is_deleted='1',
+                                              deleted_by=:deletedBy,
+                                              deletion_date=NOW()
+                                              WHERE payment_package_id=:packageId");
+                    $stmt->bindParam(':packageId',$packageId);
+                    $stmt->bindParam(':deletedBy',$userId);
+
+                    if($stmt->execute()){
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+
                 }
             }
 

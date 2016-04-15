@@ -220,7 +220,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
 
                                                         <div class="col-md-8">
                                                             <select class="form-control" ng-change="setMasterTable()"
-                                                                    ng-model="selectedProduct.materialtype"
+                                                                    ng-model="selectedProduct.materialtypeid"
                                                                     name="materialType" required>
                                                                 <option ng-repeat="x in materialNames "
                                                                         value={{x.materialtypeid}}>{{x.materialtype}}
@@ -309,7 +309,8 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
         </div>
     </div>
 
-    <uib-pagination total-items="totalItems" ng-model="currentPage"
+    <uib-pagination total-items="products.length
+    " ng-model="currentPage"
                     max-size="10" boundary-links="true"
                     items-per-page="InventoryItemsPerPage" class="pagination-sm">
     </uib-pagination>

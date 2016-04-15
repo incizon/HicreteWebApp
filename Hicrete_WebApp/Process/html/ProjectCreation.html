@@ -256,17 +256,21 @@
                                 <label class="control-label">Manager :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="projectManager" ng-model="projectDetails.projectManagerId" required>
-                                    <option value="" disabled selected>Choose Manager..</option>
-                                    <option ng-repeat="manager in projectManagers" value="{{manager.projectManagerId}}">{{manager.name}}</option>
-                                </select>
+                                <!--<select class="form-control select" name="projectManager" ng-model="projectDetails.projectManagerId" required>-->
+                                    <!--<option value="" disabled selected>Choose Manager..</option>-->
+                                    <!--<option ng-repeat="manager in projectManagers" value="{{manager.projectManagerId}}">{{manager.name}}</option>-->
+                                <!--</select>-->
+                                <div class="input-group">
+                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                    <input type="text" class="form-control" name="projectManager" ng-model="projectDetails.projectManagerId" maxlength="60" required/>
+                                </div>
+                                <div class="help-block"
+                                     ng-messages="ProjectInfoForm.projectManager.$error"
+                                     ng-show="formSubmitted">
+                                    <span style="color:red" ng-message="required">Project Manager is required</span>
+                                </div>
+                            </div>
 
-                            </div>
-                            <div class="help-block"
-                                 ng-messages="ProjectInfoForm.projectManager.$error"
-                                 ng-show="formSubmitted">
-                                <span style="color:red" ng-message="required">Project Manager is required</span>
-                            </div>
                         </div>
                     </div>
                 </div><br>

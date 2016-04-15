@@ -19,14 +19,14 @@ class HicreteLogger
 
 
     private static function init(){
-        Self::$klogger = new KLogger ( "../../logs/log.txt" , KLogger::DEBUG );
+        self::$klogger = new KLogger ( "../../logs/log.txt" , KLogger::DEBUG );
     }
 
     private static function getLogger(){
-        if(Self::$klogger ==null){
-            Self::init();
+        if(self::$klogger ==null){
+            self::init();
         }
-        return Self::$klogger;
+        return self::$klogger;
     }
 
     public static function LogInfo($line)

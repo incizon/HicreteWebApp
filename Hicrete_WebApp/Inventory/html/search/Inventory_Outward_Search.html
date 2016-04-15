@@ -66,345 +66,17 @@
                         <td  class="tablerow">{{product.dateofentry}}</td>
                         <td  class="tablerow">
                             <button data-target="#viewOutwardDetails" ng-click="getProduct(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
-                            <div class="modal fade inventoryDetails" id="viewOutwardDetails" role="dialog">
-                                <div class="modal-dialog">
-                                    <form class="form-horizontal">
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Outward Details of {{selectedProduct.outwardno}}</h4>
-                                        </div>
 
-                                        <div class="modal-body">
-                                            <h4 style="text-align: left;"><b>Basic Details of  {{selectedProduct.outwardno}}</b></h4>
-                                            <table class="table table-actions">
-                                                <thead>
-                                                <tr>
-                                                    <th class="tablehead">Outward Number</th>
-                                                    <th class="tablehead">Company</th>
-                                                    <th class="tablehead">Warehouse</th>
-                                                    <th class="tablehead">Date</th>
-                                                    <th class="tablehead">Supervisor</th>
-                                                </tr>
-                                                </thead>
-                                                <tr>
-                                                    <td>
-                                                        {{selectedProduct.outwardno}}
-                                                    </td>
-                                                    <td>
-                                                        {{selectedProduct.companyName}}
-                                                    </td>
-                                                    <td>
-                                                        {{selectedProduct.warehouseName}}
-                                                    </td>
-                                                    <td>
-                                                        {{selectedProduct.dateofentry}}
-                                                    </td>
-                                                    <td>
-                                                        {{selectedProduct.supervisorid}}
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <h4 style="text-align: left;"><b>Transport Details of  {{selectedProduct.outwardno}}</b></h4>
-                                                    <table class="table table-actions">
-                                                        <thead>
-                                                        <tr>
-                                                            <th class="tablehead">Transport</th>
-                                                            <th class="tablehead">Vehicle Number</th>
-                                                            <th class="tablehead">Transport Cost</th>
-                                                            <th class="tablehead">Transport Agency</th>
-                                                            <th class="tablehead">Remark</th>
-                                                            <th class="tablehead">Driver</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tr>
-                                                            <td>
-                                                                {{selectedProduct.transportationmode}}
-                                                            </td>
-                                                            <td>
-                                                                {{selectedProduct.vehicleno}}
-                                                            </td>
-                                                            <td>
-                                                                {{selectedProduct.cost}}
-                                                            </td>
-                                                            <td>
-                                                                {{selectedProduct.transportagency}}
-                                                            </td>
-                                                            <td>
-                                                                {{selectedProduct.remark}}
-                                                            </td>
-                                                            <td>
-                                                                {{selectedProduct.drivername}}
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-
-
-                                                </div>
-                                                <h4 style="text-align: left;"><b>Material Details of {{selectedProduct.outwardno}}</b></h4>
-                                                <div class="col-md-12" style="overflow-y: auto;max-height: 200px;">
-                                                    <table class="table table-actions">
-                                                        <thead>
-                                                        <tr>
-                                                            <th class="tablehead">Material</th>
-                                                            <th class="tablehead">Quantity</th>
-                                                            <th class="tablehead">Packaging Type</th>
-                                                            <th class="tablehead">Packaging Size</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tr ng-repeat="materials in viewMaterials">
-                                                            <td>
-                                                                {{materials.productname}}
-                                                            </td>
-                                                            <td>
-                                                                {{materials.quantity}}
-                                                            </td>
-                                                            <td>
-                                                                {{materials.packagedunits}}
-                                                            </td>
-                                                            <td>
-                                                                {{materials.packagesize}}
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                        </div>
-                                        <!--End of modal-footer-->
-                                    </div>
-                                    <!--End of Modal Content-->
-                                    </form>
-                                </div>
-                                <!--End of modal dialog-->
-                            </div>
                             <!--<button class="btn btn-info btn-sm" disabled data-target="#modifyOutwardDetails" data-toggle="modal" ng-click="getProduct(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>-->
 
-                            <!-- START OF MODIFY MODAL-->
-                            <div class="modal fade inventoryDetails" id="modifyOutwardDetails" role="dialog">
-                                <div class="modal-dialog">                                 
-                                    <!-- Modal content-->
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                            <h4 class="modal-title">Outward Details</h4>
-                                        </div>
 
-                                        <form class="form-horizontal" name="outwardModifySearchForm" novalidate>
-                                        <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-6 padRight">
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Outward Number :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" class="form-control" ng-change="
-                                                            setOutwardTable()" ng-model="selectedProduct.outwardno" value="{{selectedProduct.outwardno}}" name="outwardNumber" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.outwardNumber.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter outward number.</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Product Name :</label>
-                                                    <div class="col-md-8">            
-                                                        <select class="form-control" ng-change="setOutwardDetailsTable()" ng-model="selectedProduct.materialid" name="productName" required>
-                                                            <option ng-repeat="x in products " value={{x.materialid}}>{{x.productname}}</option>
-                                                        </select>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.productName.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter product name.</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Company :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <select class="form-control" ng-change="
-                                                            setOutwardTable()" ng-model="selectedProduct.companyid" name="company" required>
-                                                                <option ng-repeat="x in Company" 
-                                                                value={{x.companyId}}>{{x.companyName}}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.company.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please select company.</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Warehouse :</label>
-                                                    <div class="col-md-8">            
-                                                        <select class="form-control" ng-change="
-                                                        setOutwardTable()" ng-model="selectedProduct.warehouseid" name="warehouse" required>
-                                                            <option value="" disabled selected>Select</option>
-                                                            <option ng-repeat="x in warehouses" 
-                                                                value={{x.warehouseId}}>{{x.warehouseName}}
-                                                            </option>
-                                                        </select>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.warehouse.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please select a warehouse</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Quantity :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardDetailsTable()" class="form-control" ng-model="selectedProduct.quantity" value="" name="quantity" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.quantity.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter quantity</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Date of Entry :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="
-                                                            setOutwardTable()" class="form-control" ng-model="selectedProduct.dateofentry" value="" name="dateOfEntry" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.dateOfEntry.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter date of entry</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Packaging :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardDetailsTable()" class="form-control" ng-model="selectedProduct.packagedunits" value="" name="packaging" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.packaging.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter packaging</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                            </div>   
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Suppervisor :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="
-                                                            setOutwardTable()" class="form-control" ng-model="selectedProduct.abbrevation" value="" name="suppervisor" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.suppervisor.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter supervisor name</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Transportation Mode :</label>
-                                                    <div class="col-md-8">            
-                                                        <select class="form-control" ng-change="setOutwardTransport()"  ng-model="selectedProduct.transportationmode" name="transportationMode" required>
-                                                            <option ng-repeat="x in transportMode" 
-                                                                value={{x.transportId}}>{{x.transport}}
-                                                            </option>
-                                                        </select>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.transportationMode.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please select transportation mode</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Vehicle No :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.vehicleno" value="" name="vehicleNumber" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.vehicleNumber.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter vehicle number</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Transport Cost :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.cost" value="" name="transportCost" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.transportCost.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter transportation cost</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Transport Agency :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.transportagency" value="" name="transportAgency" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.transportAgency.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter transport agency</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Driver Name :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.drivername" value="" name="driverName" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.driverName.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter driver name</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-4 control-label text-left">Remark :</label>
-                                                    <div class="col-md-8">            
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>    
-                                                            <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.remark" value="" name="remark" required/>
-                                                        </div>
-                                                        <div class="help-block" ng-messages="outwardModifySearchForm.remark.$error" ng-show="submitted">
-                                                            <p style="color:red" ng-message="required">Please enter remark</p>
-                                                        </div>
-                                                    </div>            
-                                                </div>
-                                            </div>
-                                            </div>    
-                                        </div>
-
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-ng-click="(submitted=false)" data-dismiss="modal">Close</button>
-                                            <button type="button" data-ng-click="(submitted=true) && outwardModifySearchForm.$valid &&updateOutwardInfo(selectedProduct)" class="btn btn-default">Modify</button>
-                                        </div>
-                                        <!--End of modal-footer-->
-                                        </form>
-                                    </div>
-                                    <!--End of Modal Content-->           
-                                </div>
-                                <!--End of modal dialog-->
-                            </div>
-
-                            <!-- END OF MODIFY MODAL-->
                             <!--<button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button></td>-->
                         </tr>
 
 
                     </tbody>
             </table>
-            <uib-pagination total-items="totalOutwardItems" ng-model="currentOutwardPage"
+            <uib-pagination total-items="OutwardSearchData.length" ng-model="currentOutwardPage"
                 max-size="10" boundary-links="true"
                 items-per-page="InventoryOutwardItemsPerPage" class="pagination-sm">
             </uib-pagination>  
@@ -456,3 +128,339 @@
 </div>
     <!-- END SEARCH RESULT -->
 </div>
+
+<!--VIEW MODAL -->
+<div class="modal fade inventoryDetails" id="viewOutwardDetails" role="dialog">
+    <div class="modal-dialog">
+        <form class="form-horizontal">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Outward Details of {{selectedProduct.outwardno}}</h4>
+                </div>
+
+                <div class="modal-body">
+                    <h4 style="text-align: left;"><b>Basic Details of  {{selectedProduct.outwardno}}</b></h4>
+                    <table class="table table-actions">
+                        <thead>
+                        <tr>
+                            <th class="tablehead">Outward Number</th>
+                            <th class="tablehead">Company</th>
+                            <th class="tablehead">Warehouse</th>
+                            <th class="tablehead">Date</th>
+                            <th class="tablehead">Supervisor</th>
+                        </tr>
+                        </thead>
+                        <tr>
+                            <td>
+                                {{selectedProduct.outwardno}}
+                            </td>
+                            <td>
+                                {{selectedProduct.companyName}}
+                            </td>
+                            <td>
+                                {{selectedProduct.warehouseName}}
+                            </td>
+                            <td>
+                                {{selectedProduct.dateofentry}}
+                            </td>
+                            <td>
+                                {{selectedProduct.supervisorid}}
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 style="text-align: left;"><b>Transport Details of  {{selectedProduct.outwardno}}</b></h4>
+                            <table class="table table-actions">
+                                <thead>
+                                <tr>
+                                    <th class="tablehead">Transport</th>
+                                    <th class="tablehead">Vehicle Number</th>
+                                    <th class="tablehead">Transport Cost</th>
+                                    <th class="tablehead">Transport Agency</th>
+                                    <th class="tablehead">Remark</th>
+                                    <th class="tablehead">Driver</th>
+                                </tr>
+                                </thead>
+                                <tr>
+                                    <td>
+                                        {{selectedProduct.transportationmode}}
+                                    </td>
+                                    <td>
+                                        {{selectedProduct.vehicleno}}
+                                    </td>
+                                    <td>
+                                        {{selectedProduct.cost}}
+                                    </td>
+                                    <td>
+                                        {{selectedProduct.transportagency}}
+                                    </td>
+                                    <td>
+                                        {{selectedProduct.remark}}
+                                    </td>
+                                    <td>
+                                        {{selectedProduct.drivername}}
+                                    </td>
+                                </tr>
+                            </table>
+
+
+                        </div>
+                        <h4 style="text-align: left;"><b>Material Details of {{selectedProduct.outwardno}}</b></h4>
+                        <div class="col-md-12" style="overflow-y: auto;max-height: 200px;">
+                            <table class="table table-actions">
+                                <thead>
+                                <tr>
+                                    <th class="tablehead">Material</th>
+                                    <th class="tablehead">Quantity</th>
+                                    <th class="tablehead">Packaging Type</th>
+                                    <th class="tablehead">Packaging Size</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="materials in viewMaterials">
+                                    <td>
+                                        {{materials.productname}}
+                                    </td>
+                                    <td>
+                                        {{materials.quantity}}
+                                    </td>
+                                    <td>
+                                        {{materials.packagedunits}}
+                                    </td>
+                                    <td>
+                                        {{materials.packagesize}}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+                <!--End of modal-footer-->
+            </div>
+            <!--End of Modal Content-->
+        </form>
+    </div>
+    <!--End of modal dialog-->
+</div>
+<!--END OF VIEW MODAL-->
+
+
+
+<!-- START OF MODIFY MODAL-->
+<div class="modal fade inventoryDetails" id="modifyOutwardDetails" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Outward Details</h4>
+            </div>
+
+            <form class="form-horizontal" name="outwardModifySearchForm" novalidate>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 padRight">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Outward Number :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" class="form-control" ng-change="
+                                                            setOutwardTable()" ng-model="selectedProduct.outwardno" value="{{selectedProduct.outwardno}}" name="outwardNumber" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.outwardNumber.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter outward number.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Product Name :</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" ng-change="setOutwardDetailsTable()" ng-model="selectedProduct.materialid" name="productName" required>
+                                        <option ng-repeat="x in products " value={{x.materialid}}>{{x.productname}}</option>
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.productName.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter product name.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Company :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <select class="form-control" ng-change="
+                                                            setOutwardTable()" ng-model="selectedProduct.companyid" name="company" required>
+                                            <option ng-repeat="x in Company"
+                                                    value={{x.companyId}}>{{x.companyName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.company.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select company.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Warehouse :</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" ng-change="
+                                                        setOutwardTable()" ng-model="selectedProduct.warehouseid" name="warehouse" required>
+                                        <option value="" disabled selected>Select</option>
+                                        <option ng-repeat="x in warehouses"
+                                                value={{x.warehouseId}}>{{x.warehouseName}}
+                                        </option>
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.warehouse.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select a warehouse</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Quantity :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardDetailsTable()" class="form-control" ng-model="selectedProduct.quantity" value="" name="quantity" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.quantity.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter quantity</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Date of Entry :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="
+                                                            setOutwardTable()" class="form-control" ng-model="selectedProduct.dateofentry" value="" name="dateOfEntry" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.dateOfEntry.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter date of entry</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Packaging :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardDetailsTable()" class="form-control" ng-model="selectedProduct.packagedunits" value="" name="packaging" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.packaging.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter packaging</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Suppervisor :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="
+                                                            setOutwardTable()" class="form-control" ng-model="selectedProduct.abbrevation" value="" name="suppervisor" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.suppervisor.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter supervisor name</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Transportation Mode :</label>
+                                <div class="col-md-8">
+                                    <select class="form-control" ng-change="setOutwardTransport()"  ng-model="selectedProduct.transportationmode" name="transportationMode" required>
+                                        <option ng-repeat="x in transportMode"
+                                                value={{x.transportId}}>{{x.transport}}
+                                        </option>
+                                    </select>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.transportationMode.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please select transportation mode</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Vehicle No :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.vehicleno" value="" name="vehicleNumber" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.vehicleNumber.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter vehicle number</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Transport Cost :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.cost" value="" name="transportCost" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.transportCost.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter transportation cost</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Transport Agency :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.transportagency" value="" name="transportAgency" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.transportAgency.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter transport agency</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Driver Name :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.drivername" value="" name="driverName" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.driverName.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter driver name</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label text-left">Remark :</label>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="text" ng-change="setOutwardTransport()"  class="form-control" ng-model="selectedProduct.remark" value="" name="remark" required/>
+                                    </div>
+                                    <div class="help-block" ng-messages="outwardModifySearchForm.remark.$error" ng-show="submitted">
+                                        <p style="color:red" ng-message="required">Please enter remark</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-ng-click="(submitted=false)" data-dismiss="modal">Close</button>
+                    <button type="button" data-ng-click="(submitted=true) && outwardModifySearchForm.$valid &&updateOutwardInfo(selectedProduct)" class="btn btn-default">Modify</button>
+                </div>
+                <!--End of modal-footer-->
+            </form>
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
+</div>
+
+<!-- END OF MODIFY MODAL-->
