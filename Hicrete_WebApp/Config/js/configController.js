@@ -641,26 +641,48 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
                 data: data
             }
         };
+
+        $scope.loading=true;
+        $scope.errorMessage="";
+        $scope.warningMessage="";
+        $('#loader').css("display","block");
+
         $http.post("Config/php/configFacade.php",null, config)
             .success(function (data)
             {
 
+                $scope.loading=false;
+                $('#loader').css("display","none");
+
                 if(data.status=="Successful"){
                     var index = $rootScope.Users.indexOf(user);
                     $rootScope.Users.splice(index, 1);
-                    alert("Deleted successfully");
+                    $scope.warningMessage="User Deleted successfully";
+                    console.log($scope.warningMessage);
+                    $('#warning').css("display","block");
+
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#warning').css("display","none");
+                        });
+                    }, 3000);
                 }
                 else
                 {
-                   alert(data.message);
-
+                    $scope.errorMessage=data.message;
+                    $('#error').css("display","block");
+                    setTimeout(function() {
+                        $scope.$apply(function() {
+                            $('#error').css("display","none");
+                        });
+                    }, 3000);
 
                 }
 
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+                alert("Error Occured: "+data);
             });
 
 
@@ -707,7 +729,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             {
 
                 if(data.status!="Successful"){
-                    //alert("Error Occured"+data.message);
+                    alert("Error Occured :"+data.message);
                 }else{
                     $scope.roleAccessList=[];
                     configService.marshalledAccessList(data.message,$scope.roleAccessList);
@@ -716,7 +738,7 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             })
             .error(function (data, status, headers, config)
             {
-                alert("Error Occured"+data);
+                alert("Error Occured :"+data);
             });
     }
     $scope.loadAccessPermission();
@@ -763,8 +785,10 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
             //console.log(data.message);
             //alert(data.message);
          }else{
+             $rootScope.errorMessage=data.message;
+             $('#error').css("display","block");
              console.log(data.message);
-            alert(data.message);
+
          }
 
 

@@ -43,7 +43,7 @@
                                 <td width="50%">
                                     <select class="form-control select" name="leaveApprover" ng-model="employee.approverId" required />
                                     <option value="" disabled selected>Choose leave Approver..</option>
-                                    <option ng-repeat="approver in payrollEmployeeDetails.LeaveApprover" value="{{approver.userId}}"> {{approver.firstName+approver.lastName}}</option>
+                                    <option ng-repeat="approver in payrollEmployeeDetails.LeaveApprover" value="{{approver.userId}}"> {{approver.firstName+" "+approver.lastName}}</option>
                                     </select>
                                 </td>
                             </tr>

@@ -98,7 +98,7 @@ class User
 					$this->isAdmin=true;
 				}
 
-				$this->populateAccessRights($roleId);
+				$this->populateAccessRights($roleId,$userId);
 				return true;
 			}
 

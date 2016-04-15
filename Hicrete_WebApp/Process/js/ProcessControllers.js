@@ -1169,7 +1169,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
-            templateUrl: 'Process/html/addTax.html',
+            templateUrl: 'Process/html/AddTax.html',
             controller: function ($scope, $uibModalInstance, amount,$rootScope) {
                 $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
                 $scope.amount = amount;
@@ -1678,7 +1678,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
-            templateUrl: 'Process/html/addTax.html',
+            templateUrl: 'Process/html/AddTax.html',
             controller: function ($scope, $uibModalInstance, amount,$rootScope) {
                 $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
                 $scope.amount = amount;
@@ -3731,7 +3731,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
-            templateUrl: 'Process/html/addTax.html',
+            templateUrl: 'Process/html/AddTax.html',
             controller: function ($scope, $uibModalInstance, amount,$rootScope) {
                 $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
                 $scope.amount = amount;

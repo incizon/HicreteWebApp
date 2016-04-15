@@ -23,7 +23,7 @@
                         HicreteLogger::logInfo("Checking if the package is available");
                         $db = Database::getInstance();
                         $conn = $db->getConnection();
-                        $stmt = $conn->prepare("select count(1) as count from payment_package_master where package_name=:packageName");
+                        $stmt = $conn->prepare("select count(1) as count from payment_package_master where package_name=:packageName and `is_deleted`=0");
                         $stmt->bindParam(':packageName', $packageName, PDO::PARAM_STR);
                         HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
                         $stmt->execute();
@@ -1166,6 +1166,15 @@
                     $connect = $db->getConnection();
                     $packageId=$data->package_id;
 
+                    $stmt1=$connect->prepare("SELECT * FROM `applicator_enrollment` WHERE `payment_package_id`=:packageId");
+                    $stmt1->bindParam(':packageId',$packageId);
+                    $stmt1->execute();
+                    $result1=$stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+                    if (count($result1) > 0)
+                        return 2;
+
+
                     $stmt=$connect->prepare("UPDATE payment_package_master SET is_deleted='1',
                                               deleted_by=:deletedBy,
                                               deletion_date=NOW()
@@ -1174,10 +1183,10 @@
                     $stmt->bindParam(':deletedBy',$userId);
 
                     if($stmt->execute()){
-                        return true;
+                        return 1;
                     }
                     else{
-                        return false;
+                        return 0;
                     }
 
                 }
