@@ -33,17 +33,41 @@
         public static function getCriticalStock(){
             $db = Database::getInstance();
             $conn = $db->getConnection();
+            $json_array=array();
             try{
-
+                $stmtGetCount=$conn->prepare("SELECT COUNT(*) AS totalCount FROM inventory ");
+                if($stmtGetCount->execute()){
+                    $result = $stmtGetCount->fetch(PDO::FETCH_ASSOC);
+                    $json_array['totalCount']=$result['totalCount'];
+                }
                 $stmt=$conn->prepare("SELECT productname,inventory.totalquantity ,product_details.alertquantity FROM product_master JOIN product_details ON product_details.productmasterid=product_master.productmasterid JOIN material On material.productmasterid=product_master.productmasterid JOIN inventory ON material.materialid=inventory.materialid WHERE inventory.totalquantity<=product_details.alertquantity");
-//                $stmt=$dbh->prepare("SELECT productname FROM product_master");
-                if($stmt->execute()){
-                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-//                    $material=$result['productname'];
-                    return $result;
+
+                if($stmt->execute()) {
+                    while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                        $json_array['criticalMaterial'][] = array(
+                        'productname' => $result['productname'],
+                        'alertquantity' => $result['alertquantity'],
+                        'totalquantity'=> $result['totalquantity']
+                        );
+                    }
+                    $json_array['totalCriticalCount'] = $stmt->rowCount();
+                }
+//                    return $json_array;
+                    $stmt1=$conn->prepare("SELECT productname,inventory.totalquantity ,product_details.alertquantity FROM product_master JOIN product_details ON product_details.productmasterid=product_master.productmasterid JOIN material On material.productmasterid=product_master.productmasterid JOIN inventory ON material.materialid=inventory.materialid WHERE inventory.totalquantity>=product_details.alertquantity");
+
+                    if($stmt1->execute()){
+                        while ($result = $stmt1->fetch(PDO::FETCH_ASSOC)) {
+                            $json_array['availableMaterial'][] = array(
+                                'productname' => $result['productname'],
+                                'alertquantity' => $result['alertquantity'],
+                                'totalquantity'=> $result['totalquantity']
+                            );
+                        }
+                      return $json_array;
                 }else{
                     return "no material";
                 }
+
             }catch(Exception $e){
 
             }

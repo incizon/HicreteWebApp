@@ -6,7 +6,6 @@
     require_once 'utils/InventoryUtils.php';
     require_once 'utils/Common_Methods.php';
 
-
     /********************************************************
      * Get connection to the Database
      **********************************************************/
@@ -53,7 +52,7 @@
             break;
         case 'getCriticalStock':
             $result=InventoryUtils::getCriticalStock();
-           echo json_encode($result);
+           echo getReturnStatus("Successful",$result);
             break;
         default:
             # code...
@@ -185,7 +184,6 @@
                 $productObjSearch->getOutwardEntries($dbh,$keyword,$SearchTerm);
                 break;
             case 'getProductAvailableQty':
-//                echo json_encode($pData->materialId);
                 getProductAvailableQty($pData->materialId);
                 break;
 
@@ -313,5 +311,8 @@
         $json = json_encode($result);
         echo $json;
     }
-
+ function getReturnStatus($status,$message){
+    $returnVal=array('status' => $status, 'message' => $message );
+    return json_encode($returnVal);
+}
 ?>
