@@ -7337,3 +7337,8 @@ li.ext_zip {
 .x-navigation-minimized .xn-logo{
 display:none;
 }
+/*Package Search*/
+.modal-body.packageModal {
+  height: 500px;
+  overflow-y: auto;
+}

@@ -1413,6 +1413,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     var remainingTotal = 0;
 
 
+
     $scope.createInvoice = function () {
 
         console.log("in createInvoice");
@@ -1450,7 +1451,6 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
             controller: function ($scope, $rootScope, $uibModalInstance, InvoiceData, myFile) {
-
 
                 $scope.save = function () {
                     console.log("Ok clicked");
@@ -1493,10 +1493,9 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                         console.log("Upload Successful");
                                         $http.post("Process/php/InvoiceFacade.php", null, config)
                                             .success(function (data) {
-
+                                                $('#loader').css("display", "none");
+                                                console.log(data);
                                                 if (data.status == "Successful") {
-
-                                                    $('#loader').css("display", "none");
                                                     $rootScope.warningMessage = "Invoice is Created Successfully...'";
                                                     console.log($rootScope.warningMessage);
                                                     $('#warning').css("display", "block");
@@ -1527,6 +1526,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
 
                                     } else {
+                                        $('#loader').css("display", "none");
                                         $rootScope.errorMessage = data.message;
                                         $('#error').css("display", "block");
                                         setTimeout(function () {
@@ -1535,6 +1535,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                                     }
                                 })
                                 .error(function () {
+                                    $('#loader').css("display", "none");
                                     $rootScope.errorMessage = "Something went wrong can not upload Invoice";
                                     $('#error').css("display", "block");
                                 });
@@ -2672,6 +2673,18 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
 
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
+    $scope.followups = [];
+    $scope.QuotationHistoryPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.QuotationHistoryPerPage;
+        end = begin + $scope.QuotationHistoryPerPage;
+        index =  $scope.followups.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     AppService.getAllProjects($http, $scope.projects);
     console.log("in QuotationFollowupHistoryController");
     $scope.selectProject = function (projectId) {
@@ -2681,7 +2694,7 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
         AppService.getAllQuotationOfProject($http, $scope.quotations, projectId);
     }
     $scope.showQuotationHistory = function () {
-        $scope.followups = [];
+
         var data = {
             operation: "getQuotationFollow",
             quotationId: $scope.selectedQuotationId
@@ -2742,6 +2755,18 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     $scope.selectedProjectId = "";
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
+    $scope.PaymentHistoryPerPage=10;
+    $scope.currentPage=1;
+    $scope.followups = [];
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.PaymentHistoryPerPage;
+        end = begin + $scope.PaymentHistoryPerPage;
+        index =  $scope.followups.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     AppService.getAllProjects($http, $scope.projects);
 
     $scope.selectProject = function () {
@@ -2751,7 +2776,7 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     }
 
     $scope.show = function () {
-        $scope.followups = [];
+
         var data = {
             operation: "getInvoiceFollowups",
             invoiceId: $scope.selectedInvoiceId
@@ -2807,6 +2832,18 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
     $scope.sortReverse = false;
     AppService.getAllSiteTrackingProjects($http, $scope.projects);
     $scope.followups = [];
+    $scope.SiteTrackingHistoryPerPage=1;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.SiteTrackingHistoryPerPage;
+        end = begin + $scope.SiteTrackingHistoryPerPage;
+        index =  $scope.followups.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
     $scope.show = function () {
 
         //getProjectSiteFollowup
@@ -3002,6 +3039,20 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
     $scope.sortType = 'amountPaid'; // set the default sort type
     $scope.sortReverse = false;
     var project = [];
+
+    $scope.paymentHistoryPerPage=10;
+    $scope.currentPage=1;
+    $scope.paginate = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.paymentHistoryPerPage;
+        end = begin + $scope.paymentHistoryPerPage;
+        index =  $scope.paymentHistoryData.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+
+
     AppService.getAllProjects($http, $scope.Projects);
 
 

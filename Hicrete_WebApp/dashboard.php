@@ -142,6 +142,10 @@ if(!$userObj->init($userId)){
     <script type="text/javascript" src="utils/AppService.js"></script>
 
 
+<!--    //REPORTING JS-->
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+<!--    <script src="http://code.highcharts.com/modules/exporting.js"></script>-->
+    <script src="http://highcharts.github.io/export-csv/export-csv.js"></script>
 </head>
 
 

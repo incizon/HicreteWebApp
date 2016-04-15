@@ -55,7 +55,7 @@ class HicreteLogger
     public static function  setPriority($priority){
         if($priority<=6 && $priority >=1){
             self::getLogger()->setPriority($priority);
-        }else{ 
+        }else{
             throw  new Exception("Invalid priority value");
         }
 

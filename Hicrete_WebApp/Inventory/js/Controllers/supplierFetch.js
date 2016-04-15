@@ -99,10 +99,9 @@ $scope.searchData=function(supplier){
             $scope.loading=false;
             $('#loader').css("display","none");
             $rootScope.suppliers=data;
-         console.log($scope.suppliers);
-            $scope.totalItems=$rootScope.suppliers.length;
-         /*$scope.messages.push(data.msg);
-         $scope.clearData(supplier);*/ 
+         //console.log($scope.suppliers);
+            $rootScope.totalItems=$rootScope.suppliers.length;
+
         })
         .error(function (data, status, headers)
         {

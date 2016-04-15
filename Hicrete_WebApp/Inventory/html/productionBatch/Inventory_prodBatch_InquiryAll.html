@@ -8,227 +8,236 @@
     <div ng-include="'utils/WarningMessage.html'"></div>
 </div>
 <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            
-                            <!-- START SEARCH -->                            
-                            <div class="panel panel-default">
-                                <div class="panel-body">                                    
-                                    <div class="row stacked">
-                                        <div class="col-md-6">
-                                            <div class="input-group push-down-10" >
-                                                <span class="input-group-addon"><span class="fa fa-search"></span></span>
-                                                <input type="text" class="form-control" placeholder="Keywords..." value="" ng-model="prodBatchInfo.Keywords"/>
-                                                <div class="input-group-btn">
-                                                    <button class="btn btn-primary" ng-click="initProd(prodBatchInfo,'Search','InquiryAll')">Search</button>
-                                                </div>
-                                            </div>                                                                                                  
-                                        </div>
-                                    </div>
-                                </div>                                                                
+    <div class="col-lg-12 col-md-12">
+
+        <!-- START SEARCH -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row stacked">
+                    <div class="col-md-6">
+                        <div class="input-group push-down-10">
+                            <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                            <input type="text" class="form-control" placeholder="Keywords..." value=""
+                                   ng-model="prodBatchInfo.Keywords"/>
+
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary"
+                                        ng-click="initProd(prodBatchInfo,'Search','InquiryAll')">Search
+                                </button>
                             </div>
-                            <!-- END SEARCH -->
-                            
-                            <!-- START SEARCH RESULT -->
-                            <div class="search-results">
-
-                               
-                                
-                                <div class="sr-item">
-                                    <div class="sr-item-title">Completed Production Batches</div>
-                                  
-                                    
-                                    <div class="table-responsive push-up-10">
-                                        <table class="table table-actions table-striped">
-                                            <!--<th style="padding:5px;"ead>                                            -->
-                                                <tr>
-                                                    <th style="padding:5px;" width="5%">Sr no.</th> 
-                                                    <th style="padding:5px;" width="20%">Production Batch code</th>
-                                                    <th style="padding:5px;" width="25%">Production Batch Name</th>
-                                                    <th style="padding:5px;" width="10%">Start date</th>
-                                                    <th style="padding:5px;" width="10%">End date</th>
-                                                    <th style="padding:5px;" width="30%">Actions</th>
-                                                </tr>
-                                                <!--</th>-->
-                                            </thead>
-                                            <tbody>
-                                                <tr ng-repeat="prodBatch in prodInqAll | filter:paginate1 | filter:prodBatchInfo.Keywords">
-                                                    <td>{{$index + 1}}</td>
-                                                    <td>{{prodBatch.batchNo}}</td>
-                                                    <td>{{prodBatch.batchCodeName}}</td>
-                                                    <td>{{prodBatch.startDate}}</td>
-                                                    <td>{{prodBatch.endDate}}</td>
-                                                    <td>  <button data-target="#viewProductInfo" ng-click="getProdInfo(prodBatch)" data-toggle="modal"  class="btn btn-primary btn-sm"><span class="fa fa-eye"></span> View</button>
-                                                        
-                                                    
-
-
-
-                                                        <button disabled ng-click="getProdInfo(prodBatch)" data-target="#modifyProdInfo" data-toggle="modal"
-                                                        class="btn btn-info btn-sm"><span class="fa fa-pencil-square-o"></span>Modify</button> 
-
-
-
-
-
-                                                      <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span> Delete</button></td> 
-                                                </tr>
-
-
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                   <!--  <ul class="list-tags">                                        
-                                        <li><a href="#"><span class="fa fa-tag"></span> Files</a></li>
-                                        <li><a href="#"><span class="fa fa-tag"></span> Attachments</a></li>
-                                    </ul> -->
-                                </div>
-
-                                
-                            </div>
-                            <!-- END SEARCH RESULT -->
-
-                            <uib-pagination total-items="totalItems" ng-model="currentPage"
-                                            max-size="10" boundary-links="true"
-                                            items-per-page="prodBatchPerPage" class="pagination-sm">
-                            </uib-pagination>
-                            
-                        </div>                        
-                    </div>
-
-                    
-            <div class="modal fade" id="modifyProdInfo" role="dialog">
-                                        
-                
-                    <div  class="row">
-    
-                            <div class="col-md-12">
-                                
-                                <!-- use ng-submit to catch the form submission and use our Angular function -->
-                                <!--<form  class="form-horizontal"  novalidate>-->
-
-                                    
-                                    <div ng-show="step==1">
-
-                                        <div ng-include="'Inventory/html/productionBatch/Inventory_Mod_Initialise_ProdBatch.html'"></div>
-
-                                    </div>
-
-                                     <div ng-show="step==2">
-
-                                        <div ng-include="'Inventory/html/productionBatch/Inventory_Mod_Raw_Material_ForProd.html'"></div>
-
-                                    </div>  
-
-                              
-                                    <div ng-show="step==3">
-
-                                        <div ng-include="'Inventory/html/productionBatch/Inventory_Mod_prodBatch_outward.html'"></div>
-
-                                    </div>     
-
-                                <!--</form>-->
                         </div>
                     </div>
+                </div>
             </div>
-    
+        </div>
+        <!-- END SEARCH -->
+
+        <!-- START SEARCH RESULT -->
+        <div class="search-results">
 
 
+            <div class="sr-item">
+                <div class="sr-item-title">Completed Production Batches</div>
 
-            <!--- ithe view ahe -->
 
-                    <div class="modal fade" id="viewProductInfo" role="dialog">
-                                                            <div class="modal-dialog">                                 
-                                                           
-                                                                <div class="modal-content">
-                                                                    <div class="modal-header">
-                                                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                        <h4 class="modal-title">Production Details</h4>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <table id="supplierDetails">
-                                                                        
-                                                                            <tr>
-                                                                                <th style="padding:5px;">Production Batch Number :</th>
-                                                                                <td>{{modProdBatchInfo.batchNo}}</td>
-                                                                    
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <th style="padding:5px;">Production Code Name</th>
-                                                                                <td>{{modProdBatchInfo.batchCodeName}}</td>
-                                                                            </tr>
-                                                                    <tr>
-                                                                        <th style="padding:5px;">Date of Entry :</th>
-                                                                                <td>{{modProdBatchInfo.dateOfEntry}}
-                                                                                </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <th style="padding:5px;">Production Start Date :</th>
-                                                                                <td>{{modProdBatchInfo.startDate}}
-                                                                                </td>
-                                                                            
-                                                                    </tr>
+                <div class="table-responsive push-up-10">
+                    <table class="table table-actions table-striped">
+                        <!--<th style="padding:5px;"ead>                                            -->
+                        <tr>
+                            <th style="padding:5px;" width="5%">Sr no.</th>
+                            <th style="padding:5px;" width="20%">Production Batch code</th>
+                            <th style="padding:5px;" width="25%">Production Batch Name</th>
+                            <th style="padding:5px;" width="10%">Start date</th>
+                            <th style="padding:5px;" width="10%">End date</th>
+                            <th style="padding:5px;" width="30%">Actions</th>
+                        </tr>
+                        <!--</th>-->
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="prodBatch in prodInqAll | filter:paginate1 | filter:prodBatchInfo.Keywords">
+                            <td>{{$index + 1}}</td>
+                            <td>{{prodBatch.batchNo}}</td>
+                            <td>{{prodBatch.batchCodeName}}</td>
+                            <td>{{prodBatch.startDate}}</td>
+                            <td>{{prodBatch.endDate}}</td>
+                            <td>
+                                <button data-target="#viewProductInfo" ng-click="getProdInfo(prodBatch)"
+                                        data-toggle="modal" class="btn btn-primary btn-sm"><span
+                                        class="fa fa-eye"></span> View
+                                </button>
 
-                                                                    
 
-                                                                            <tr>                                                 <th style="padding:5px;">Production End Date :</th>
-                                                                                <td>{{modProdBatchInfo.endDate}}</td>
-                                                                            
-                                                                            </tr>
-                                                                           <!--  <tr>                                                 <th style="padding:5px;">Date of Entry:</th>
-                                                                                <td>{{selectedProdBatchInfo.dateOfEntry}}</td>
-                                                                            
-                                                                            </tr> -->
-                                                                            <tr>                                                 <th style="padding:5px;">Production Supervisor :</th>
-                                                                                <td>{{modProdBatchInfo.supervisor}}</td>
-                                                                            
-                                                                            </tr>
+                                <button disabled ng-click="getProdInfo(prodBatch)" data-target="#modifyProdInfo"
+                                        data-toggle="modal"
+                                        class="btn btn-info btn-sm"><span class="fa fa-pencil-square-o"></span>Modify
+                                </button>
 
-                                                                    
-                                                                       
-                                                                        <th style="padding:5px;" >:::::Raw Material Details:::::</th>
-                                                                    
-                                                                            <!-- <th style="padding:5px;"><div class="sr-item-title">Raw Material Details</div></th> 
-                                                                             -->  <tr ng-repeat="raw in modProdBatchInfo.rawMaterial">                                        <th style="padding:5px;">{{$index+1}}] Material:</th>
-                                                                                <td>{{raw['materialName']}}</td>
-                                                                                   <th style="padding:5px;">Quantity:</th>
-                                                                                <td>{{raw['quantity']}}</td>
-                                                                            
-                                                                            </tr>
 
-                                                                        <th style="padding:5px;" >:::::Produced Good details Details:::::</th>        
-                                                                          <tr>                                                 <th style="padding:5px;">Producted Good :</th>
-                                                                                <td>{{modProdBatchInfo.producedgoodid}}</td>
-                                                                            
-                                                                            </tr>
-                                                                             <tr>                                                 <th style="padding:5px;">WareHouse :</th>
-                                                                                <td>{{modProdBatchInfo.wareHouse}}</td>
-                                                                            
-                                                                            </tr>
-                                                                             <tr>                                                 <th style="padding:5px;">Company :</th>
-                                                                                <td>{{modProdBatchInfo.company}}</td>
-                                                                            
-                                                                            </tr>
-                                                                             <tr>                                                 <th style="padding:5px;">Date of Entry :</th>
-                                                                                <td>{{modProdBatchInfo.dateOfEntryAftrProd}}</td>
-                                                                            
-                                                                            </tr>
-                                                                             <tr>                                                 <th style="padding:5px;">Production Supervisor :</th>
-                                                                                <td>{{modProdBatchInfo.supervisorid}}</td>
-                                                                            
-                                                                            </tr>
-                                                                             
+                                <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span> Delete</button>
+                            </td>
+                        </tr>
 
-                                                                        </table> 
-                                                                    </div>
-                                                      
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                                    </div>
-                                                                    <!--End of modal-footer-->
-                                                                </div>
-                                                                <!--End of Modal Content    -->       
-                                                            </div>
-                                                            <!--End of modal dialog-->
-                    </div>
 
-                    <!-- view smpla -->
+                        </tbody>
+                    </table>
+                </div>
+                <!--  <ul class="list-tags">
+                     <li><a href="#"><span class="fa fa-tag"></span> Files</a></li>
+                     <li><a href="#"><span class="fa fa-tag"></span> Attachments</a></li>
+                 </ul> -->
+            </div>
+
+
+        </div>
+        <!-- END SEARCH RESULT -->
+
+        <uib-pagination total-items="prodInqAll.length" ng-model="currentPage"
+                        max-size="10" boundary-links="true"
+                        items-per-page="prodBatchPerPage" class="pagination-sm">
+        </uib-pagination>
+
+    </div>
+</div>
+
+
+<div class="modal fade" id="modifyProdInfo" role="dialog">
+
+
+    <div class="row">
+
+        <div class="col-md-12">
+
+            <!-- use ng-submit to catch the form submission and use our Angular function -->
+            <!--<form  class="form-horizontal"  novalidate>-->
+
+
+            <div ng-show="step==1">
+
+                <div ng-include="'Inventory/html/productionBatch/Inventory_Mod_Initialise_ProdBatch.html'"></div>
+
+            </div>
+
+            <div ng-show="step==2">
+
+                <div ng-include="'Inventory/html/productionBatch/Inventory_Mod_Raw_Material_ForProd.html'"></div>
+
+            </div>
+
+
+            <div ng-show="step==3">
+
+                <div ng-include="'Inventory/html/productionBatch/Inventory_Mod_prodBatch_outward.html'"></div>
+
+            </div>
+
+            <!--</form>-->
+        </div>
+    </div>
+</div>
+
+
+<!--- ithe view ahe -->
+
+<div class="modal fade" id="viewProductInfo" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Production Details</h4>
+            </div>
+            <div class="modal-body">
+                <table id="supplierDetails">
+
+                    <tr>
+                        <th style="padding:5px;">Production Batch Number :</th>
+                        <td>{{modProdBatchInfo.batchNo}}</td>
+
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Production Code Name</th>
+                        <td>{{modProdBatchInfo.batchCodeName}}</td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Date of Entry :</th>
+                        <td>{{modProdBatchInfo.dateOfEntry}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Production Start Date :</th>
+                        <td>{{modProdBatchInfo.startDate}}
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+                        <th style="padding:5px;">Production End Date :</th>
+                        <td>{{modProdBatchInfo.endDate}}</td>
+
+                    </tr>
+                    <!--  <tr>                                                 <th style="padding:5px;">Date of Entry:</th>
+                         <td>{{selectedProdBatchInfo.dateOfEntry}}</td>
+
+                     </tr> -->
+                    <tr>
+                        <th style="padding:5px;">Production Supervisor :</th>
+                        <td>{{modProdBatchInfo.supervisor}}</td>
+
+                    </tr>
+
+
+                    <th style="padding:5px;">:::::Raw Material Details:::::</th>
+
+                    <!-- <th style="padding:5px;"><div class="sr-item-title">Raw Material Details</div></th>
+                     -->
+                    <tr ng-repeat="raw in modProdBatchInfo.rawMaterial">
+                        <th style="padding:5px;">{{$index+1}}] Material:</th>
+                        <td>{{raw['materialName']}}</td>
+                        <th style="padding:5px;">Quantity:</th>
+                        <td>{{raw['quantity']}}</td>
+
+                    </tr>
+
+                    <th style="padding:5px;">:::::Produced Good details Details:::::</th>
+                    <tr>
+                        <th style="padding:5px;">Producted Good :</th>
+                        <td>{{modProdBatchInfo.producedgoodid}}</td>
+
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">WareHouse :</th>
+                        <td>{{modProdBatchInfo.wareHouse}}</td>
+
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Company :</th>
+                        <td>{{modProdBatchInfo.company}}</td>
+
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Date of Entry :</th>
+                        <td>{{modProdBatchInfo.dateOfEntryAftrProd}}</td>
+
+                    </tr>
+                    <tr>
+                        <th style="padding:5px;">Production Supervisor :</th>
+                        <td>{{modProdBatchInfo.supervisorid}}</td>
+
+                    </tr>
+
+
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content    -->
+    </div>
+    <!--End of modal dialog-->
+</div>
+
+<!-- view smpla -->

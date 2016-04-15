@@ -152,6 +152,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Inventory/html/search/Inventory_Available_Search.html',
             controller: 'SearchController'
         })
+        .state('Inventory.report', {
+            url: '/report',
+            templateUrl: 'Inventory/html/TestReport.html',
+            controller: 'reportController'
+        })
+
         .state('Inventory.searchSupplier', {
             url: '/searchSupplier',
             templateUrl: 'Inventory/html/search/inventory_supplierSearch.php',
@@ -573,6 +579,9 @@ myApp.run(function($rootScope,$http) {
     $rootScope.tasks=[];
     $rootScope.warningMessage="";
     $rootScope.errorMessage="";
+
+    $rootScope.totalItems=0;
+    $rootScope.totalProducts=0;
 });
 
 
@@ -581,7 +590,7 @@ myApp.run(function($rootScope,$http) {
 
 // create the controller and inject Angular's $scope
 // set for Route Controller
-myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService) {
+myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibModal, $log,AppService,$rootScope) {
   /** create $scope.template **/
 
 
