@@ -154,7 +154,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Inventory.report', {
             url: '/report',
-            templateUrl: 'Inventory/html/TestReport.html',
+            templateUrl: 'Inventory/html/CriticalInventoryReport.html',
             controller: 'reportController'
         })
 

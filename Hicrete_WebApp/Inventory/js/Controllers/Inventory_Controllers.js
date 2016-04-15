@@ -1,6 +1,119 @@
 
 myApp.controller('reportController', function ($scope, $http, inventoryService) {
 
+    $scope.availableStockCount=0;
+    $scope.critialStock=0;
+    $scope.isShowCritical=false;
+    document.getElementById('availableStockDiv').style.display = 'none';
+    var data = {
+        module: 'getCriticalStock'
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log(data);
+            if(data.status=='Successful'){
+                $scope.criticalStock=data.message;
+                $scope.availableStockCount=$scope.criticalStock.totalCount;
+                $scope.critialStock=$scope.criticalStock.totalCriticalCount;
+                $scope.critial=($scope.critialStock/$scope.availableStockCount)*100;
+                $scope.available=100- $scope.critial;
+                $scope.showChart();
+            }
+
+
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
+        });
+
+    $scope.currentPage = 1;
+    $scope.CriticalMaterialPerPage = 10;
+
+    $scope.paginateCriticalMaterial = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.CriticalMaterialPerPage;
+        end = begin + $scope.CriticalMaterialPerPage;
+        index = $scope.criticalStock.criticalMaterial.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+    $scope.availableMaterialPerPage=10;
+    $scope.paginateavailableMaterial = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.availableMaterialPerPage;
+        end = begin + $scope.availableMaterialPerPage;
+        index = $scope.criticalStock.availableMaterial.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
+    $scope.showChart=function(){
+        $('#container').highcharts({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+
+            },
+            title: {
+                text: 'Critical Stock in inventory'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Percentage',
+                colorByPoint: true,
+                cursor: 'pointer',
+                point: {
+                    events: {
+                        click: function () {
+                            //alert('Category: ' + this.name + ', value: ' + this.y);
+                            if(this.name=="Available stock"){
+
+                                document.getElementById('availableStockDiv').style.display = 'block';
+                                document.getElementById('criticalStockDiv').style.display = 'none';
+
+                            }else if(this.name=="Critical stock"){
+                                document.getElementById('availableStockDiv').style.display = 'none';
+                                document.getElementById('criticalStockDiv').style.display = 'block';
+
+                            }
+                        }
+                    }
+                },
+                data: [{
+                    name: 'Available stock',
+                    y: $scope.available
+                },{
+                    name: 'Critical stock',
+                    y: $scope.critial
+                }]
+            }]
+        });
+    }
+
     //Highcharts.chart('container', {
     //
     //    title: {
@@ -16,36 +129,38 @@ myApp.controller('reportController', function ($scope, $http, inventoryService) 
     //    }]
     //
     //});
-    $(function () {
-        $('#container').highcharts({
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Company Profit'
-            },
-            xAxis: {
-                categories: ['Project1', 'Project2', 'Project3']
-            },
-            yAxis: {
-                title: {
-                    text: 'Profit in Lacs'
-                }
-            },
-            series: [{
-                name: 'Hi-Crete',
-                data: [1, 5, 4]
-            }, {
-                name: 'Hi-TechFlooring',
-                data: [5, 7, 3]
-            },
-                {
-                    name: 'Hi-TechEngg',
-                    data: [5, 7, 3]
-                }
-            ],
-        });
-    });
+
+
+    //$(function () {
+    //    $('#container').highcharts({
+    //        chart: {
+    //            type: 'bar'
+    //        },
+    //        title: {
+    //            text: 'Company Profit'
+    //        },
+    //        xAxis: {
+    //            categories: ['Project1', 'Project2', 'Project3']
+    //        },
+    //        yAxis: {
+    //            title: {
+    //                text: 'Profit in Lacs'
+    //            }
+    //        },
+    //        series: [{
+    //            name: 'Hi-Crete',
+    //            data: [5, 7, 4]
+    //        }, {
+    //            name: 'Hi-TechFlooring',
+    //            data: [5, 7, 3]
+    //        },
+    //            {
+    //                name: 'Hi-TechEngg',
+    //                data: [5, 7, 3]
+    //            }
+    //        ],
+    //    });
+    //});
 });
 
 
@@ -80,21 +195,6 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     var isProductPkgingTable = false;
 
 
-    /*
-     Start of Pagination Function
-     */
-    //$scope.paginate = function (value) {
-    //    //console.log("In Paginate");
-    //    var begin, end, index;
-    //    begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
-    //    end = begin + $scope.InventoryItemsPerPage;
-    //    index = $scope.products.indexOf(value);
-    //    //console.log(index);
-    //    return (begin <= index && index < end);
-    //};
-    /*
-     End of Pagination Function
-     */
     /**********************************************************************************
      * Purpose- This function will Add product details into database
      * @param1- product (all product details)
@@ -1159,11 +1259,6 @@ myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope)
     $scope.currentOutwardPage = 1;
     $scope.InventoryOutwardItemsPerPage = 10;
 
-    $scope.getProduct = function (product) {
-        $scope.selectedProduct = product;
-        $scope.viewMaterials = $scope.selectedProduct.materialDetails;
-
-    }
     $scope.paginateOutward = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1174,7 +1269,11 @@ myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope)
         return (begin <= index && index < end);
     };
 
+    $scope.getProduct = function (product) {
+        $scope.selectedProduct = product;
+        $scope.viewMaterials = $scope.selectedProduct.materialDetails;
 
+    }
     $scope.getOutwardDetails = function () {
         $scope.materialDetails = [];
         var data = {
@@ -1446,7 +1545,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
 /*********************************************************************************************
  * START of Search Controller
  *********************************************************************************************/
-myApp.controller('SearchController', function ($scope, $http, inventoryService) {
+myApp.controller('SearchController', function ($scope, $http, inventoryService,$rootScope) {
     //Pagination variables
     $scope.submitted = false;
     $scope.submittedModal = false;
@@ -1586,20 +1685,6 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         $scope.prodBatchInfo.endDate = $filter("date")($scope.prodBatchInfo.endDate, 'dd-MM-yyyy');
     }
 
-    var data = {
-        module: 'inventorySearch'
-    }
-    var config = {
-        params: {
-            data: data
-        }
-    };
-
-    //$scope.today = function() {
-    //    //$scope.prodBatchInfo.dateOfEntry = new Date();
-    //    $scope.prodBatchInfo.startDate = new Date();
-    //};
-    //$scope.today();
 
     $scope.maxDate = new Date(2020, 5, 22);
 
@@ -1625,6 +1710,14 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
 
     $scope.showEnd = {
         opened: false
+    };
+    var data = {
+        module: 'inventorySearch'
+    }
+    var config = {
+        params: {
+            data: data
+        }
     };
 
     $http.post("Inventory/php/InventoryIndex.php", null, config)
