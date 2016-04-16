@@ -274,7 +274,7 @@
 
                 $result_array=array();
 
-                $stmt1=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster WHERE usermaster.userId NOT IN (SELECT employee_id FROM employee_on_payroll)");
+                $stmt1=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster WHERE usermaster.isDeleted=0 and usermaster.isSuperUser=0 and usermaster.userId NOT IN (SELECT employee_id FROM employee_on_payroll)");
 
                 HicreteLogger::logDebug("query: \n".json_encode($stmt1));
 
@@ -285,7 +285,7 @@
 
                 }
 
-                $stmt2=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster");
+                $stmt2=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster WHERE usermaster.isDeleted=0");
                 HicreteLogger::logDebug("query: \n".json_encode($stmt2));
                 if($stmt2->execute()){
                     HicreteLogger::logDebug(" Row Count: \n".json_encode($stmt2->rowCount()));
@@ -639,7 +639,7 @@
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
 
-                $stmt1=$connect->prepare("SELECT userId,firstName,lastName from usermaster");
+                $stmt1=$connect->prepare("SELECT userId,firstName,lastName from usermaster WHERE `isDeleted`=0");
                 HicreteLogger::logDebug("query: \n" . json_encode($stmt1));
                 $stmt1->execute();
                 HicreteLogger::logDebug("Row Count : \n" . json_encode($stmt1->rowCount()));

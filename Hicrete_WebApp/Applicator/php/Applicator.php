@@ -200,14 +200,18 @@
 					break;
 
 			case 'deletePackage':
-
-                            if($operationObject->deletePackage($data,$userId)){
+							$deletionStatus=$operationObject->deletePackage($data,$userId);
+                            if($deletionStatus==1){
                                 $message = "Package Deleted Successfully...!!!";
                                 $arr = array('msg' => $message, 'error' => '');
                                 $jsn = json_encode($arr);
                                 echo($jsn);
-                            }
-                            else{
+                            }else if($deletionStatus==2){
+								$message = "Package already used for applicator..Can not delete package";
+								$arr = array('msg' => '', 'error' => $message);
+								$jsn = json_encode($arr);
+								echo($jsn);
+							} else{
                                 $message = "Could not delete Package";
                                 $arr = array('msg' => '', 'error' => $message);
                                 $jsn = json_encode($arr);

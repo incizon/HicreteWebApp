@@ -34,7 +34,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
 
         .state('Applicator.viewPackages', {
             url: '/ViewPackages',
-            templateUrl: 'Applicator/html/ViewPackages.html',
+            templateUrl: 'Applicator/html/ViewPackages.php',
             controller: 'ViewPackageController'
         })
 
@@ -250,7 +250,7 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Config.userSearch', {
             url: '/SearchUser',
-            templateUrl: 'Config/html/viewUser.html',
+            templateUrl: 'Config/html/viewUser.php',
             controller:'searchUserController'
         })
 

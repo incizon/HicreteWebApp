@@ -1,3 +1,19 @@
+<?php
+
+//error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: ../../index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$isSuper=appUtil::isSuperUser($userId);
+
+
+?>
+
 <div>
     <div ng-include="'utils/loader.html'"></div>
 </div>
@@ -34,7 +50,16 @@
                             <td width="15%">{{package.package_total_amount}}</td>
                             <td width="35%">
                                 <button class="btn btn-info"  data-toggle="modal" data-target="#viewPackageDetails" data-ng-click="showPackageDetails(package)">View Other Details</button>
-                                <button class="btn btn-danger"  data-ng-click="deletePackage(package.payment_package_id)">Delete</button>
+
+                                <?php
+                                if($isSuper){
+                                    echo "<button class=\"btn btn-danger\"  data-ng-click=\"deletePackage(package.payment_package_id)\">Delete</button>";
+                                }
+
+                                ?>
+
+
+
                             </td>
                         </tr>
                         </tbody>

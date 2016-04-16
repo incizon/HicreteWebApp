@@ -328,6 +328,22 @@ class ConfigUtils
             $conn = $db->getConnection();
             $conn->beginTransaction();
             HicreteLogger::logInfo("Deleting user");
+
+            $stmt = $conn->prepare("SELECT * FROM `employee_on_payroll` WHERE `leave_approver_id`=:key AND `employee_id` IN (SELECT `userId` FROM `usermaster` WHERE `isDeleted`=0) ");
+            $stmt->bindParam(':key',$key , PDO::PARAM_STR);
+            $stmt->execute();
+            $result1=$stmt->fetchAll(PDO::FETCH_ASSOC);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            HicreteLogger::logDebug("Data:\n ".json_encode($key));
+
+            if (count($result1) > 0){
+                HicreteLogger::logDebug("User is leave approver for some of the employees...Can not Delete User");
+                echo AppUtil::getReturnStatus("Unsuccessful","User is leave approver for some of the employees...Can not Delete User");
+                return;
+            }
+
+
+
             $stmt = $conn->prepare("UPDATE `usermaster` SET `isDeleted`=:flag,`deletedBy`=:deletedBy,`deletionDate`=now() WHERE userid=:key");
 
             $stmt->bindParam(':flag',$delFlg , PDO::PARAM_STR);
@@ -336,7 +352,7 @@ class ConfigUtils
             HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             HicreteLogger::logDebug("Data:\n ".json_encode($key));
             if($stmt->execute()){
-                $stmt = $conn->prepare("DELETE FROM `logindetails` WHERE `userId`=:userid");
+                $stmt = $conn->prepare("DELETE FROM `logindetails` WHERE `userId`=:userId");
                 $stmt->bindParam(':userId', $key, PDO::PARAM_STR);
                 HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
                 if($stmt->execute()){
@@ -356,8 +372,9 @@ class ConfigUtils
             }
 
         }catch(Exception $e){
+            $conn->rollBack();
             HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
-            echo AppUtil::getReturnStatus("Exception","Exception Occurred while fetching company details");
+            echo AppUtil::getReturnStatus("Exception","Exception Occurred while deleting user");
         }
     }
 
@@ -471,19 +488,19 @@ class ConfigUtils
     }
 
     private static function getQueryForSearchUserByName(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword)";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword)";
     }
 
     private static function getQueryForSearchUserByDesignation(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `designation` like :keyword)";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `designation` like :keyword)";
     }
 
     private static function getQueryForUserByUserType(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `userType` like :keyword)";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `userType` like :keyword)";
     }
 
     private static function getQueryForUserByCity(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`!=1 AND `isSuperUser`=0 AND city like :keyword";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND city like :keyword";
     }
 
     public static function getRoleDetails($key,$userId)

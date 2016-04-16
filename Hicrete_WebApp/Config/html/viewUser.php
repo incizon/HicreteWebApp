@@ -1,3 +1,20 @@
+<?php
+
+//error_reporting(E_ERROR | E_PARSE);
+require_once '../../php/appUtil.php';
+if (!isset($_SESSION['token'])) {
+    session_start();
+}else{
+    header("Location: ../../index.html");
+    exit();
+}
+$userId=$_SESSION['token'];
+$isSuper=appUtil::isSuperUser($userId);
+
+
+?>
+
+
 <div>
     <div ng-include="'utils/loader.html'"></div>
 </div>
@@ -64,7 +81,14 @@
                         <td>
                             <button class="btn btn-info"  data-toggle="modal" data-target="#viewDetails" ng-click="selectUser(user)">View Details</button>
                             <a ui-sref="Config.modifyUser({userToModify:user})"> <button class="btn btn-primary">Modify</button></a>
-                            <!--<button class="btn btn-danger" ng-click="deleteUser(user)">Delete</button>-->
+                            <?php
+                            if($isSuper){
+                                echo "<button class=\"btn btn-danger\" ng-click=\"deleteUser(user)\">Delete</button>";
+                            }
+
+                            ?>
+
+
                         </td>
                     </tr>
 
