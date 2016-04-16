@@ -2070,3 +2070,7 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
 {"queryString":"SELECT userId,firstName,lastName from usermaster"} 
 2016-04-16 9:46:02 - DEBUG --> Row Count : 
 9 
+2016-04-16 9:49:38 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:49:38 - DEBUG --> Row Count : 
+9 
