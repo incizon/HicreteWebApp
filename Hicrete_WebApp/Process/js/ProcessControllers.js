@@ -653,6 +653,14 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     };
     console.log("final scope is " + $scope.workorder);
 
+    $scope.workOrderDate = function(){
+        $scope.workOrder.opened = true;
+    };
+
+    $scope.workOrder = {
+        opened:false
+    };
+
     $scope.createWorkorder = function () {
 
         if ($scope.workOrderForm.$invalid) {
@@ -767,6 +775,16 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             controller: function ($scope, $uibModalInstance, $rootScope, $http) {
                 // console.log("quotation is "+JSON.stringify(q));
                 AppService.getUsers($scope, $http);
+
+                $scope.openFollowDate = function(){
+                    $scope.followup.opened = true;
+                };
+
+                $scope.followup = {
+                    opened:false
+                };
+
+
                 $scope.ok = function () {
 
                     // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);

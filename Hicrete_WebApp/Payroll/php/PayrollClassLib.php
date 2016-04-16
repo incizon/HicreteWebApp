@@ -639,7 +639,7 @@
                 $db = Database::getInstance();
                 $connect = $db->getConnection();
 
-                $stmt1=$connect->prepare("SELECT userId,firstName,lastName from usermaster and `isDeleted`=0");
+                $stmt1=$connect->prepare("SELECT userId,firstName,lastName from usermaster WHERE `isDeleted`=0");
                 HicreteLogger::logDebug("query: \n" . json_encode($stmt1));
                 $stmt1->execute();
                 HicreteLogger::logDebug("Row Count : \n" . json_encode($stmt1->rowCount()));
