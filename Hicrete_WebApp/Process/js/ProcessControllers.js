@@ -1875,7 +1875,6 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
     $scope.projectPaymentsInvoice = [];
     $scope.paymentDetails = {
         operation: ""
-
     };
     $scope.formSubmitted = false;
     $scope.showPaymentDetails = false;
@@ -1954,12 +1953,13 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
 
     }
     $scope.getPendingAmount = function () {
-        // console.log("In Pending amount function");
-        $scope.paymentDetails.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - $scope.previousAmountPaid;
-
+         console.log("In Pending amount function");
+        $scope.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - parseInt($scope.previousAmountPaid);
+        console.log($scope.pendingAmount);
     }
     $scope.submitPaymentDetails = function (size, paymentDetails, quotation_id) {
-        console.log("branch number is " + paymentDetails.branchName)
+        console.log("branch number is ");
+        console.log(paymentDetails);
         var iscash = 0;
         var paydate = $filter('date')(paymentDetails.paymentDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
         if (paymentDetails.paymentMode == 'cash') {
@@ -2018,10 +2018,10 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     $('#warning').css("display", "block");
 
                 }
-                setTimeout(function () {
-                    $('#warning').css("display", "none");
-                    window.location = "dashboard.php#/Process";
-                }, 1000);
+                //setTimeout(function () {
+                //    $('#warning').css("display", "none");
+                //    window.location = "dashboard.php#/Process";
+                //}, 1000);
 
             })
             .error(function (data, status, headers, config) {
@@ -2033,7 +2033,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
             });
 
         $scope.formSubmitted = false;
-
+        console.log($scope.paymentDetails.pendingAmount)
         if ($scope.paymentDetails.pendingAmount == 0) {
 
             paymentDetails.paymentStatus = 'Yes';
@@ -2054,7 +2054,7 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
                     $scope.ok = function () {
                         //console.log($scope.paymentDetails);
                         console.log("on Ok click");
-                        AppService.schedulePaymentFollowup($http, $scope, $filter, paymentDetails.InvoiceNo);
+                        AppService.schedulePaymentFollowup($http, $scope, $filter, paymentDetails.InvoiceNo,$rootScope);
 
                         $uibModalInstance.close();
 

@@ -113,8 +113,7 @@
             case 'search':
                 # code...
                 $productObjSearch = new InwardData($pData);
-               // echo $pData->keyword;
-               // echo $pData->SearchTerm;
+
                 if(isset($pData->keyword))
                 {
                     $keyword=$pData->keyword;

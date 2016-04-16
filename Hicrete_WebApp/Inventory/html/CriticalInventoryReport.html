@@ -15,7 +15,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr style="text-align: center;" ng-repeat="product in criticalStock.criticalMaterial | filter:paginateCriticalMaterial">
+            <tr style="text-align: center;" ng-repeat="product in criticalStock.criticalMaterial">
                 <td>{{$index+1}}</td>
                 <td>{{product.productname}}</td>
                 <td>{{product.totalquantity}}</td>
@@ -26,11 +26,11 @@
 
             </tbody>
         </table>
-        <uib-pagination total-items="criticalStock.criticalMaterial.length" ng-model="currentPage"
-                        boundary-links="true"
-                        items-per-page="CriticalMaterialPerPage" class="pagination-sm">
+        <!--<uib-pagination total-items="criticalStock.criticalMaterial.length" ng-model="currentPage"-->
+                        <!--boundary-links="true"-->
+                        <!--items-per-page="CriticalMaterialPerPage" class="pagination-sm">-->
 
-        </uib-pagination>
+        <!--</uib-pagination>-->
     </div>
     <div id="availableStockDiv" class="table-responsive push-up-10">
         <table  class="table table-actions table-striped">
@@ -43,7 +43,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr style="text-align: center;" ng-repeat="product in criticalStock.availableMaterial | filter:paginateavailableMaterial">
+            <tr style="text-align: center;" ng-repeat="product in criticalStock.availableMaterial">
                 <td>{{$index+1}}</td>
                 <td>{{product.productname}}</td>
                 <td>{{product.totalquantity}}</td>
@@ -54,10 +54,10 @@
 
             </tbody>
         </table>
-        <uib-pagination total-items="criticalStock.availableMaterial.length" ng-model="currentPage"
-                        boundary-links="true"
-                        items-per-page="availableMaterialPerPage" class="pagination-sm">
+        <!--<uib-pagination total-items="criticalStock.availableMaterial.length" ng-model="currentPage"-->
+                        <!--boundary-links="true"-->
+                        <!--items-per-page="availableMaterialPerPage" class="pagination-sm">-->
 
-        </uib-pagination>
+        <!--</uib-pagination>-->
     </div>
 </div>

@@ -156,9 +156,11 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control"
-                                               name="PendingAmount" ng-model="paymentDetails.pendingAmount" readonly>
+
+                                        <!--<input type="text" class="form-control"-->
+                                               <!--name="PendingAmount" ng-model="pendingAmount" readonly>-->
+                                        <label class="control-label" name="pendingAmount"
+                                               ng-model="paymentDetails.pendingAmount">{{totalPayableAmount - totalAmtPaid - paymentDetails.amountPaid}}</label>
                                     </div>
                                 </div>
                             </div>
@@ -262,7 +264,7 @@
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
                                         <input type="text" class="form-control" name="UniqueNumber"
                                                ng-model="paymentDetails.uniqueNumber"
-                                               pattern="[0-9]+" required/>
+                                               required/>
                                     </div>
                                     <div class="help-block"
                                          ng-messages="ProjectPaymentDetailsForm.UniqueNumber.$error"
@@ -294,13 +296,15 @@
                             <!--Start of pending amount field-->
                             <div class="form-group">
                                 <div class="col-md-3 ">
-                                    <label class="control-label">Pending Amount of Project</label>
+                                    <label class="control-label">Pending Amount</label>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-group">
-                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="pendingAmount"
-                                               ng-model="paymentDetails.pendingAmount" readonly>
+
+                                        <!--<input type="text" class="form-control" name="pendingAmount"-->
+                                               <!--ng-model="pendingAmount" readonly>-->
+                                        <label class="control-label" name="pendingAmount"
+                                               ng-model="paymentDetails.pendingAmount">{{totalPayableAmount - totalAmtPaid - paymentDetails.amountPaid}}</label>
                                     </div>
                                 </div>
                             </div>

@@ -1982,3 +1982,91 @@ SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty
  {"queryString":"SELECT * FROM payment_package_details WHERE payment_package_id=:payment_package_id"} 
 2016-04-14 20:44:59 - DEBUG --> Row count:
  1 
+2016-04-15 19:25:16 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-15 19:25:16 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:03:52 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:03:52 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:05:17 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:05:17 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:08:37 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:08:37 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:12:16 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:12:16 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:14:00 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:14:00 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:15:09 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:15:09 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:17:30 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:17:30 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:22:10 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:22:10 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:23:58 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:23:58 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:26:13 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:26:13 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:29:50 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:29:50 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:30:13 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:30:13 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:30:25 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:30:25 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:30:28 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:30:28 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:35:49 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:35:49 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:38:17 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:38:17 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:38:30 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:38:30 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:42:16 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:42:16 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:42:32 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:42:32 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:44:58 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:44:58 - DEBUG --> Row Count : 
+9 
+2016-04-16 9:46:02 - DEBUG --> query: 
+{"queryString":"SELECT userId,firstName,lastName from usermaster"} 
+2016-04-16 9:46:02 - DEBUG --> Row Count : 
+9 
