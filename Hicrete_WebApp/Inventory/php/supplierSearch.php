@@ -18,7 +18,7 @@ switch ($data->operation) {
         try {
             HicreteLogger::logInfo("Searching suppliers");
             $supplierName="%".$data->data."%";
-            $stmt = $dbh->prepare("select * from supplier where suppliername like :supplierName");
+            $stmt = $dbh->prepare("select * from supplier where suppliername like :supplierName ORDER BY suppliername");
             $stmt->bindParam(':supplierName', $supplierName, PDO::PARAM_STR);
             HicreteLogger::logDebug("Query: ".json_encode($stmt));
             if ($stmt->execute()) {

@@ -51,17 +51,37 @@
             <table class="table table-actions table-striped">
                 <thead >
                     <tr style="text-align: center;">
-                        <th  class="tablehead">Inward.No</th>
+                        <th  class="tablehead">
+                            <a ng-click="sortType = 'product.inwardno'; sortReverse = !sortReverse">Inward.No
+                                <span ng-show="sortType == 'product.inwardno' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'product.inwardno' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
                         <th  class="tablehead">TotalMaterialInwards</th>
                         <!-- <th width="13%">Company</th> -->
-                        <th  class="tablehead">Company</th>
-                        <th  class="tablehead">Warehouse</th>
-                        <th  class="tablehead">Date</th>
+                        <th  class="tablehead">
+                            <a ng-click="sortType = 'product.companyName'; sortReverse = !sortReverse">Company
+                                <span ng-show="sortType == 'product.companyName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'product.companyName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
+                        <th  class="tablehead">
+                            <a ng-click="sortType = 'product.warehouseName'; sortReverse = !sortReverse">Warehouse
+                                <span ng-show="sortType == 'product.warehouseName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'product.warehouseName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
+                        <th  class="tablehead">
+                            <a ng-click="sortType = 'product.dateofentry'; sortReverse = !sortReverse">Date
+                                <span ng-show="sortType == 'product.dateofentry' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'product.dateofentry' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
                         <th  class="tablehead">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | filter:keyword">
+                    <tr style="text-align: center;" ng-repeat="product in InwardSearchData | filter:paginateInward | orderBy:sortType:sortReverse">
                         <td>{{product.inwardno}}</td>
                         <td>{{product.materialDetails.length}}</td>
                         <td>{{product.companyName}}</td>

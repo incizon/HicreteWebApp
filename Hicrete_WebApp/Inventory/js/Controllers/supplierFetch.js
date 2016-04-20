@@ -2,7 +2,8 @@ myApp.controller('supplierFetchController', function($scope, $http,$rootScope) {
     $scope.currentPage = 1;
     $scope.supplierPerPage = 10;
 $scope.Keywords="";
-
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
     $scope.paginate = function(value) {
         //console.log("In Paginate");
         var begin, end, index;

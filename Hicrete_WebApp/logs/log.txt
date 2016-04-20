@@ -1,0 +1,2 @@
+2016-04-20 18:34:53 - ERROR --> Fetching inward details failed 
+2016-04-20 18:35:46 - ERROR --> Fetching inward details failed 

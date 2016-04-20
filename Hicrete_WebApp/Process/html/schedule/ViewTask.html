@@ -89,7 +89,7 @@
                             <div class="form-group">
                                 <div class="col-md-offset-4 col-md-6">
                                     <div class="input-group">
-                                        <input type="checkbox"  ng-disabled="ViewTask.task_isCompleted==1" ng-model="completed" ng-true-value="'1'" ng-false-value="'0'" name="completed" >  Mark This Task As Completed
+                                        <input type="checkbox"  ng-disabled="ViewTask.task_isCompleted==1" ng-change="setTaskCompletionPercentage()" ng-model="completed" ng-true-value="'1'" ng-false-value="'0'" name="completed" >  Mark This Task As Completed
                                     </div>
                                 </div>
                             </div>

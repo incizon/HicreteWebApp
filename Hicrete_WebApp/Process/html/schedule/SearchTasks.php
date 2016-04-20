@@ -61,16 +61,31 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                 <table class="table table-bordered">
                     <thead>
                     <tr>
-                        <th>TaskID</th>
-                        <th>Task Name</th>
+                        <th>
+                            <a ng-click="sortType = 'task.TaskID'; sortReverse = !sortReverse">TaskID
+                                <span ng-show="sortType == 'task.TaskID' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'task.TaskID' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
+                        <th>
+                            <a ng-click="sortType = 'task.TaskName'; sortReverse = !sortReverse">Task Name
+                                <span ng-show="sortType == 'task.TaskName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'task.TaskName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                        </th>
                         <th>Description</th>
-                        <th>Completion Percentage</th>
+                        <th>Completion Percentage
+<!--                            <a ng-click="sortType = 'task.CompletionPercentage'; sortReverse = !sortReverse">Completion Percentage-->
+<!--                                <span ng-show="sortType == 'task.CompletionPercentage' && !sortReverse" class="fa fa-caret-down"></span>-->
+<!--                                <span ng-show="sortType == 'task.CompletionPercentage' && sortReverse" class="fa fa-caret-up"></span>-->
+<!--                            </a>-->
+                           </th>
                         <th>Assign To</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="task in tasks | filter:paginateTasksDetails">
+                    <tr ng-repeat="task in tasks | filter:paginateTasksDetails | orderBy:sortType:sortReverse">
                         <td>{{task.TaskID}}</td>
                         <td>{{task.TaskName}}</td>
                         <td>{{task.TaskDescripion}}</td>
@@ -84,10 +99,10 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                                 </button>
                             </a>
                             <?php
-//                            if ($hasWrite == 1) {
-//                                echo "<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID)\">Delete</button>";
-//                            }
-//                            ?>
+                            //                            if ($hasWrite == 1) {
+                            //                                echo "<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID)\">Delete</button>";
+                            //                            }
+                            //                            ?>
 
                         </td>
                     </tr>

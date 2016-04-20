@@ -110,3 +110,11 @@ a.log_out:hover span{ color: #fff !important;}
 }
 
 /*Package Search Css */
+
+/*
+	Reporting
+*/
+#chartContainer{
+	height: 30%;
+	margin-top:2%
+}

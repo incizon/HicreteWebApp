@@ -1,0 +1,57 @@
+
+<div class="modal-header">
+
+    <h4 class="modal-title">Set Filters </h4>
+</div>
+<div class="modal-body">
+    <div class="row">
+        <div class="col-md-12">
+
+            <!--Start of form section-->
+            <div class="panel panel-default">
+                <!--End of form heading section-->
+
+                <div class="panel-body">
+                    <form name="filterForm" class="form-horizontal" novalidate>
+
+                        <!--Start of form container row-->
+                        <div class="row">
+
+                            <!--start-->
+                            <div class="form-group col-md-12">
+                                <label class="col-md-3  control-label">From Date : </label>
+                                <div class="col-md-3">
+                                    <div class="input-group" style="margin-top:8px">
+                                        <input type="date"/>
+                                    </div>
+                                </div>
+                                <label class="col-md-3  control-label">To Date : </label>
+                                <div class="col-md-3">
+                                    <div class="input-group" style="margin-top:8px">
+                                        <input type="date"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+
+                            </div>
+                            <!--end-->
+                        </div>
+                    </form>
+                    <!--end-->
+
+
+                </div>
+                <!--End of form section-->
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default"
+            ng-click="SaveFilter()">Submit</button>
+    <button type="button" class="btn btn-default"
+            ng-click="Cancel()">Cancel</button>
+</div>
