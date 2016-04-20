@@ -223,7 +223,16 @@ myApp.service('addMaterialTypeService', function () {
     this.addMaterialtype = function ($scope, $http, materialType) {
         $('#loader').css("display","block");
         //console.log("inside controller check"+materialType);
-        $http.post("Inventory/php/inventory_Add_MaterialType.php", materialType)
+        var data = {
+            operation: 'Add',
+            data:materialType,
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
             .success(function (data) {
                 if(data.msg!=""){
                     $scope.warningMessage=data.msg;
@@ -243,7 +252,9 @@ myApp.service('addMaterialTypeService', function () {
 
                 console.log(data);
                 $scope.submitted = false;
+                $scope.fetchMaterialTypes();
                 $scope.clear();
+                $scope.addField();
             })
             .error(function (data, status, headers, config) {
                 console.log("Error calling php");

@@ -1185,13 +1185,25 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
 
 myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
     $scope.materialType = [];
+    $scope.materialTypePerPage=7;
+
+    $scope.currentPage = 1;
+    //$scope.InventoryOutwardItemsPerPage = 10;
     $scope.submitted = false;
     $scope.errorMessage = "";
     $scope.warningMessage = "";
     $scope.materialType.push({
         type: ""
     });
-
+    $scope.paginate = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.materialTypePerPage;
+        end = begin + $scope.materialTypePerPage;
+        index = $scope.fetchedMaterialTypes.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     $scope.sizeCheck = function () {
         if ($scope.materialType.length == 0) {
             return 0;
@@ -1216,6 +1228,147 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
         $scope.noOfMaterials = "";
     };
 
+    $scope.deleteMaterialType = function(materialType)
+    {
+        var data = {
+            operation: 'Delete',
+            data:materialType
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
+            .success(function (data) {
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function () {
+                    if (data.msg != ""){
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","none");
+                    }
+                }, 3000);
+                $('#loader').css("display","none");
+                if (data.error != ""){
+
+                            $scope.errorMessage=data.error;
+                            $('#error').css("display","block");
+
+                    setTimeout(function () {
+                        $('#error').css("display","none");
+                    }, 3000);
+
+                }
+
+                console.log(data);
+                //$scope.submitted = false;
+                //$scope.fetchedMaterialTypes[index]=materialType;
+                $scope.fetchMaterialTypes();
+                //$scope.clear();
+                //$scope.addField();
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                $('#loader').css("display","none");
+                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $('#error').css("display","block");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+
+
+    }
+
+    $scope.modifyMaterialtype =function(materialType,index)
+    {
+        var data = {
+            operation: 'Modify',
+            data:materialType
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
+            .success(function (data) {
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function () {
+                    if (data.msg != ""){
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","none");
+                    }
+                }, 3000);
+                $('#loader').css("display","none");
+                if (data.error != ""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+
+                console.log(data);
+                //$scope.submitted = false;
+                //$scope.fetchedMaterialTypes[index]=materialType;
+                $scope.fetchMaterialTypes();
+                //$scope.clear();
+                //$scope.addField();
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                $('#loader').css("display","none");
+                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $('#error').css("display","block");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+    }
+
+    $scope.fetchMaterialTypes =function()
+    {
+        $('#loader').css("display","block");
+        var data = {
+            operation: 'fetch'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        //console.log("inside controller check"+materialType);
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
+            .success(function (data) {
+                if(data.msg!=""){
+                    //$scope.warningMessage=data.msg;
+                    console.log(data);
+                    $scope.fetchedMaterialTypes=data.data;
+                    $scope.length=$scope.fetchedMaterialTypes.length;
+                   // $('#warning').css("display","block");
+                }
+
+                $('#loader').css("display","none");
+                if (data.error != ""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                $('#loader').css("display","none");
+                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $('#error').css("display","block");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+    }
+
+    $scope.fetchMaterialTypes();
     $scope.clear = function () {
         $scope.materialType.splice(0, $scope.materialType.length);
     };
