@@ -488,19 +488,19 @@ class ConfigUtils
     }
 
     private static function getQueryForSearchUserByName(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword)";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND(firstname like :keyword or lastname like :keyword) ORDER BY firstName";
     }
 
     private static function getQueryForSearchUserByDesignation(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `designation` like :keyword)";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `designation` like :keyword)  ORDER BY firstName";
     }
 
     private static function getQueryForUserByUserType(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `userType` like :keyword)";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `userType` like :keyword)  ORDER BY firstName";
     }
 
     private static function getQueryForUserByCity(){
-        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND city like :keyword";
+        return "SELECT `userId`, `firstName`, `lastName`, `dateOfBirth`, `address`, `city`, `state`, `country`, `pincode`, `mobileNumber`, `emailId` FROM `usermaster` where `isDeleted`=0 AND `isSuperUser`=0 AND city like :keyword  ORDER BY firstName";
     }
 
     public static function getRoleDetails($key,$userId)
@@ -510,7 +510,7 @@ class ConfigUtils
             $conn = $db->getConnection();
             $key="%".$key."%";
             HicreteLogger::logInfo("Getting Role Details");
-            $stmt = $conn->prepare("SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword");
+            $stmt = $conn->prepare("SELECT roleId,roleName,createdBy,creationDate from rolemaster where roleName like :keyword ORDER BY roleName ");
             $stmt->bindParam(':keyword', $key, PDO::PARAM_STR);
             HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             if($stmt->execute()){

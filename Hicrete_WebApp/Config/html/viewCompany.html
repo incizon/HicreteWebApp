@@ -51,7 +51,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="Comp in Companies| filter:paginate">
+                    <tr ng-repeat="Comp in Companies| filter:paginateCompany">
                         <td>{{$index+1}}</td>
                         <td>{{Comp.companyName}}</td>
                         <td>{{Comp.startDate}}</td>
@@ -81,7 +81,7 @@
     </div>
     <uib-pagination total-items="Companies.length" ng-model="currentPage"
                     max-size="10" boundary-links="true"
-                    items-per-page="QuotationHistoryPerPage" class="pagination-sm">
+                    items-per-page="companiesPerPage" class="pagination-sm">
     </uib-pagination>
 
 

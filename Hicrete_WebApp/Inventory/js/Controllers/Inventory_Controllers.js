@@ -1449,6 +1449,9 @@ myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope)
     $scope.currentOutwardPage = 1;
     $scope.InventoryOutwardItemsPerPage = 10;
 
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
+
     $scope.paginateOutward = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1855,6 +1858,8 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
     $scope.currentPage = 1;
     $scope.prodBatchPerPage = 10;
     $scope.submitted = false;
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
 
     inventoryService.getProductsForOutward($scope, $http);
     $scope.paginate = function (value) {
