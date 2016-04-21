@@ -582,6 +582,7 @@ myApp.run(function($rootScope,$http) {
 
     $rootScope.totalItems=0;
     $rootScope.totalProducts=0;
+    $rootScope.inventoryData={};
 });
 
 

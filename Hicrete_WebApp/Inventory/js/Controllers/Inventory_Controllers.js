@@ -1601,7 +1601,6 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
         begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
         end = begin + $scope.InventoryItemsPerPage;
         index = $rootScope.products.indexOf(value);
-
         return (begin <= index && index < end);
     };
 
@@ -1748,13 +1747,13 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
     $scope.submittedModal = false;
     //$scope.totalItems = 0;
     $scope.currentPage = 1;
-    $scope.InventoryAvailableItemsPerPage = 10;
+    $scope.InventoryAvailableItemsPerPage = 3;
     $scope.filters = [
         {filterName: 'ProductName', id: 1},
         {filterName: 'CompanyName', id: 2},
         {filterName: 'WarehouseName', id: 3},
     ];
-    $scope.inventoryData = {};
+
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
@@ -1785,9 +1784,10 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
             .success(function (data) {
                 console.log(data);
                 $('#loader').css("display", "none");
-                $scope.inventoryData = data;
-                $scope.InventoryAvailableItemsPerPage = data;
-                $rootScope.totalItems = $scope.inventoryData.length;
+                $rootScope.inventoryData= data;
+
+                //$scope.InventoryAvailableItemsPerPage = data;
+                //$rootScope.totalItems = $scope.inventoryData.length;
 
             })
             .error(function (data, status, headers) {
@@ -1797,6 +1797,15 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
 
             });
     }
+
+    $scope.paginate = function (value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
+        end = begin + $scope.InventoryAvailableItemsPerPage;
+        index = $rootScope.inventoryData.indexOf(value);
+        return (begin <= index && index < end);
+    };
 
     $scope.getViewDataObject = function (product, materialDetails) {
 
@@ -1822,23 +1831,6 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
 
     }
 
-
-    /*
-     Start of Pagination Function
-     */
-    $scope.paginate = function (value) {
-
-        var begin, end, index;
-        begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
-        end = begin + $scope.InventoryAvailableItemsPerPage;
-        index = $scope.InventoryAvailableItemsPerPage.indexOf(value);
-
-        return (begin <= index && index < end);
-    };
-
-    /*
-     End of Pagination Function
-     */
 
 });
 
