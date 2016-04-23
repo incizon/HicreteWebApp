@@ -133,12 +133,12 @@
                                             <div class="col-md-9 col-xs-12 col-sm-8">
                                                 <div class="input-group">
                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                    <input maxlength = "15" ng-model="userInfo.pincode" name="pincode" type="text" class="form-control" required minlength="2" pattern="[0-9]+"/>
+                                                    <input maxlength = "15" ng-model="userInfo.pincode" name="pincode" type="text" class="form-control" required minlength="2" />
                                                 </div>
                                                 <div class="help-block" ng-messages="userInfoForm.pincode.$error" ng-hide="!userInfoSubmitted && !userInfoForm.pincode.$touched">
                                                     <p style="color:red" ng-message="required">Pincode Cannot be blank</p>
                                                     <p style="color:red" ng-message="minlength">Pincode must have more than 2 character</p>
-                                                    <p style="color:red" ng-message="pattern">Pincode must contain only digits</p>
+                                                    <!--<p style="color:red" ng-message="pattern">Pincode must contain only digits</p>-->
                                                 </div>
                                             </div>
                                         </div>
