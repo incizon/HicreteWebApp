@@ -370,7 +370,7 @@ class Expense
         $conn = $db->getConnection();
         $json_response=array();
         try {
-            $stmt = $conn->prepare("SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from cost_center_master)");
+            $stmt = $conn->prepare("SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)");
             HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
             if ($stmt->execute()) {
                 HicreteLogger::logDebug("Row count: \n" . json_encode($stmt->rowCount()));

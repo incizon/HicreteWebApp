@@ -286,11 +286,11 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
         .success(function (data) {
             console.log("IN Project Get");
             console.log(data);
-            if (data.status != "Successful") {
+            if (data.status != "success") {
                 alert("Failed:" + data.message);
             } else {
                 for (var i = 0; i < data.message.length; i++) {
-                    projectList.push({
+                    $scope.projectList.push({
                         id: data.message[i].ProjectId,
                         name: data.message[i].ProjectName
 
