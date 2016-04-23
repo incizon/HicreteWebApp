@@ -13,3 +13,7 @@ SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where cl
 2016-04-20 19:28:11 - ERROR --> Fetched unsuccessful 
 2016-04-20 19:28:15 - FATAL --> Exception Occured Message:
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-23 9:31:26 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-23 9:31:36 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
