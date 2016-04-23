@@ -408,6 +408,9 @@
                 $caption=$data->caption_of_year;
 
                 $dateDifference=$date2->diff($date1,true)->days;
+                //$dateDifference=date_diff($date2,$date1);
+                //echo json_encode($dateDifference);
+                $dateDifference=$dateDifference+2;
 
                 try {
                     $stmt1 = $connect->prepare("SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)
