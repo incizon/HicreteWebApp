@@ -17,3 +17,6 @@ SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where cl
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
 2016-04-23 9:31:36 - FATAL --> Exception Occured Message:
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-23 10:31:48 - ERROR --> No projects have cost center created 
+2016-04-23 10:34:43 - ERROR --> No projects have cost center created 
+2016-04-23 10:35:00 - ERROR --> No projects have cost center created 

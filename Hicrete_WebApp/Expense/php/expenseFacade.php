@@ -30,6 +30,9 @@
         case 'updateBillStatus':
             Expense::updateBillStatus($data,$userId);
             break;
+        case 'getProjectListForExpense':
+            Expense::getProjectsForExpense();
+            break;
     }
 
 ?>

@@ -364,6 +364,41 @@ class Expense
             echo "Exception occur while getting bill details";
         }
     }
+    public static function getProjectsForExpense()
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $json_response=array();
+        try {
+            $stmt = $conn->prepare("SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from cost_center_master)");
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+            if ($stmt->execute()) {
+                HicreteLogger::logDebug("Row count: \n" . json_encode($stmt->rowCount()));
+                while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $result_array = array();
+                    $result_array['ProjectId'] = $result['ProjectId'];
+                    $result_array['ProjectName'] = $result['ProjectName'];
+                    array_push($json_response, $result_array);
+                }
+                if (sizeof($json_response) > 0) {
+                    echo AppUtil::getReturnStatus("success", $json_response);
+                } else {
+                    HicreteLogger::logError("No projects have cost center created");
+                    echo AppUtil::getReturnStatus("failure", "No Projects have cost center created");
+                }
+
+
+                //echo AppUtil::getReturnStatus("success","Bill Status Updated Successfully");
+            } else {
+                echo AppUtil::getReturnStatus("failure", "Fetcging projects failed");
+            }
+        }catch(Exception $e)
+        {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            echo "Exception occur while getting bill details";
+        }
+
+    }
 
     public static function updateBillStatus($data,$userId){
 
