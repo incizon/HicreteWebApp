@@ -177,10 +177,86 @@ class InvoiceController
     }
 
 
-    public function updateInvoice($id,$data){
-        $invoice = Invoice::updateInvoice($id,$data);
-        return $invoice;
+    public static function modiifyInvoice($data)
+    {
+        try{
+
+            $loggedInUserId=AppUtil::getLoggerInUserId();
+            if($loggedInUserId!=null) {
+
+                if ($data != null) {
+
+                    if(Invoice::isInvoiceNoPresentInAnotherInvoice($data->Invoice->oldInvoiceNo,$data->Invoice->InvoiceNo)){
+                        echo AppUtil::getReturnStatus("Unsuccessful","Invoice number is already present");
+                        return;
+                    }
+                    if(Invoice::isInvoiceTitlePresentInAnotherInvoice($data->Invoice->QuotationId,$data->Invoice->InvoiceTitle,$data->Invoice->oldInvoiceNo)){
+                        echo AppUtil::getReturnStatus("Unsuccessful","Invoice Title already used for another invoice");
+                        return;
+                    }
+
+                    $invoice = Invoice::reviseInvoice($data->Invoice->oldInvoiceNo,$data);
+
+                    if($invoice) {
+                        echo AppUtil::getReturnStatus("Successful", "Invoice Modified successfully");
+                    }else{
+                        echo AppUtil::getReturnStatus("Unsuccessful", "Database Error Occurred");
+                    }
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Data value is empty");
+                }
+
+
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
     }
+
+    public static function isInvoiceAlreadyUploadedForAnotherInvoice($invoiceId,$invoiceBlob){
+        try{
+
+            if($invoiceId!==null && $invoiceBlob!=null) {
+
+                if(!Invoice::isInvoiceAlreadyUploadedForAnotherInvoice($invoiceBlob,$invoiceId)){
+                    echo AppUtil::getReturnStatus("Successful", "Invoice not Already Uploaded");
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Invoice Already Uploaded");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Invalid Parameters");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+    public static function isInvoiceAlreadyUploaded($invoiceBlob){
+        try{
+
+            if($invoiceBlob!=null) {
+
+                if(!Invoice::isInvoiceAlreadyUploaded($invoiceBlob)){
+                    echo AppUtil::getReturnStatus("Successful", "Invoice not Already Uploaded");
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Invoice Already Uploaded");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Invalid Parameters");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
 
 
     public static function getInvoiceList($id){

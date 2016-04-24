@@ -1587,9 +1587,9 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService,$
             $http.post("Inventory/php/InventoryIndex.php", null, config)
                 .success(function (data) {
                     $('#loader').css("display", "none");
-                    $scope.inventoryData = data;
-                    $scope.InventoryAvailableItemsPerPage = data;
-                    $rootScope.totalItems = $scope.inventoryData.length;
+                    $rootScope.inventoryData = data;
+                    //$scope.InventoryAvailableItemsPerPage = data;
+                   // $rootScope.totalItems = $scope.inventoryData.length;
 
                 })
                 .error(function (data, status, headers) {
@@ -1633,7 +1633,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService,$
         var begin, end, index;
         begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
         end = begin + $scope.InventoryAvailableItemsPerPage;
-        index = $scope.InventoryAvailableItemsPerPage.indexOf(value);
+        index = $rootScope.inventoryData.indexOf(value);
 
         return (begin <= index && index < end);
     };

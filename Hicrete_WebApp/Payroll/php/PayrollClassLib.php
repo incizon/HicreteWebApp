@@ -347,14 +347,15 @@
                 $result1=$stmt1->fetch(PDO::FETCH_ASSOC);
                 $approverId=$result1['leave_approver_id'];
 
-                $stmt2=$connect->prepare("SELECT firstName,lastName FROM userMaster WHERE userId='$approverId'");
+                $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId=:userId");
+                $stmt2->bindParam(':userId',$approverId);
                 HicreteLogger::logDebug("query: \n".json_encode($stmt2));
                 $stmt2->execute();
                 HicreteLogger::logDebug("Row count: ".$stmt2->rowCount());
                 $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
                 $result_array['approverName']=$result2['firstName']." ".$result2['lastName'];
 
-                $stmt3=$connect->prepare("SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId");
+                $stmt3=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster WHERE userId=:userId");
                 $stmt3->bindParam(':userId',$userId);
                 HicreteLogger::logDebug("query: \n".json_encode($stmt3));
                 $stmt3->execute();

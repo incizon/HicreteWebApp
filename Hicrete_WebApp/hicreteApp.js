@@ -406,6 +406,14 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'ViewInvoiceDetails',
             params:{InvoiceToView:null}
         })
+
+        .state('Process.modifyInvoice', {
+            url: '/ModifyInvoice',
+            templateUrl:'Process/html/ModifyInvoice.html',
+            controller:'ModifyInvoiceController',
+            params:{InvoiceToModify:null}
+        })
+
         .state('Process.viewQuotation', {
             url: '/ViewQuotation',
             templateUrl:'Process/html/ViewQuotation.html',
@@ -577,6 +585,7 @@ myApp.run(function($rootScope,$http) {
     $rootScope.customerSearch=[];
     $rootScope.projectSearch=[];
     $rootScope.tasks=[];
+    $rootScope.inventoryData={};
     $rootScope.warningMessage="";
     $rootScope.errorMessage="";
 

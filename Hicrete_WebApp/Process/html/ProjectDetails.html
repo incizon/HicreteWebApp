@@ -165,6 +165,7 @@
                                  <a ng-show="checkAvailability(wo.filePath)" href="{{wo.filePath}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
                                  <a ui-sref="Process.addInvoice({workOrder:wo})"><input type="button" class="btn btn-info" ng-click="passWork(wo)" value="Create Invoice"/></a>
 
+
                              </td>
                          </tr>
 
@@ -205,9 +206,9 @@
                              <td>{{iv.invoiceDate}}</td>
 
                              <td>
-                                 <a ui-sref="Process.viewInvoice({InvoiceToView:iv})"><button class="btn btn-default btn-sm" ng-click="passInvoice(iv)"><span class="fa fa-eye"></span>View</button></a>
+                                 <a ui-sref="Process.viewInvoice({InvoiceToView:iv})"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>
+                                 <a ui-sref="Process.modifyInvoice({InvoiceToModify:iv})"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>Modify</button></a>
                                  <a ng-show="checkAvailability(iv.invoiceBLOB)" href="{{iv.invoiceBLOB}}"><button class="btn btn-default btn-sm"><span class="fa fa-download"></span>Download</button></a>
-
                                  <button class="btn btn-default btn-sm" data-ng-click="scheduleFollowup('lg',iv,'invoice')"><span class="fa fa-edit"></span>Schedule Followup</button>
                              </td>
                          </tr>
