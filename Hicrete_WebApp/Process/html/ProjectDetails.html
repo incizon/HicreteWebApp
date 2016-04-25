@@ -357,16 +357,11 @@
             <div class="modal-body">
                 <div class="row">
                     <form name="workOrderForm" novalidate>
-                    <div class="form-horizontal">
+                        <label ng-show="showError" class="control-label" style="color:red">{{workorderErrorMessage}}</label>
+                        <div class="form-horizontal">
 
                         <div class="col-md-12">
 
-                            <div class="form-group" ng-show="showError">
-                                <div class="col-md-4">
-                                    <label class="control-label" style="color:red">All Fields are mandatory</label>
-                                </div>
-
-                            </div>
                             <div class="form-group">
                                 <div class="col-md-4">
                                     <label class="control-label">Quotation :</label>

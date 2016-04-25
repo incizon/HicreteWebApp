@@ -154,8 +154,9 @@ public function loadInvoiceForProject($projid){
 		$conn = $db->getConnection();
 		$conn->beginTransaction();
 
-		$date=time($main->InvoiceDate);
-		$invoiceDate=date("Y-m-d",$date);
+		$date1 = new DateTime($main->InvoiceDate);
+		$invoiceDate = $date1->format('Y-m-d');
+
 		$stmt = $conn->prepare("INSERT INTO invoice(InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB,  PurchasersVATNo, PAN, CreatedBy,ContactPerson) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		if($stmt->execute([$main->InvoiceNo, $main->QuotationId, $invoiceDate, $main->InvoiceTitle, $main->TotalAmount, $main->RoundingOffFactor, $main->GrandTotal, $main->InvoiceBLOB, $main->PurchasersVATNo, $main->PAN, $userId,$main->ContactPerson]) === TRUE){
@@ -216,9 +217,11 @@ public function loadInvoiceForProject($projid){
 		$invoiceTaxDetails = $data->taxDetails;
 		$detailIdArray = [];
 		$invoiceIndex = [];
-		$date=time($main->InvoiceDate);
-		$invoiceDate=date("Y-m-d",$date);
-		$stmt = $conn->prepare("UPDATE `invoice` SET ``InvoiceNo`=:newInvoiceNo ,InvoiceDate`=:invoiceDate,`InvoiceTitle`=:title,`TotalAmount`=:totalAmount,`RoundingOffFactor`=:roundOff,`GrandTotal`=:grandTotal,`InvoiceBLOB`=:invoiceBlob,`PurchasersVATNo`=:purchaserVatNo,`PAN`=:pan,`ContactPerson`=:contactPerson WHERE `InvoiceNo`=:oldInvoiceNo");
+		$date1 = new DateTime($main->InvoiceDate);
+		$invoiceDate = $date1->format('Y-m-d');
+
+
+		$stmt = $conn->prepare("UPDATE `invoice` SET `InvoiceNo`=:newInvoiceNo ,`InvoiceDate`=:invoiceDate,`InvoiceTitle`=:title,`TotalAmount`=:totalAmount,`RoundingOffFactor`=:roundOff,`GrandTotal`=:grandTotal,`InvoiceBLOB`=:invoiceBlob,`PurchasersVATNo`=:purchaserVatNo,`PAN`=:pan,`ContactPerson`=:contactPerson WHERE `InvoiceNo`=:oldInvoiceNo");
 		$stmt->bindparam(':invoiceDate',$invoiceDate ,PDO::PARAM_STR);
 		$stmt->bindparam(':title',$main->InvoiceTitle ,PDO::PARAM_STR);
 		$stmt->bindparam(':totalAmount',$main->TotalAmount ,PDO::PARAM_STR);
@@ -241,7 +244,7 @@ public function loadInvoiceForProject($projid){
 					array_push($invoiceIndex,$i+1);
 				}
 				else{
-					$conn->rollBack();
+
 					return false;
 				}
 			}
@@ -256,7 +259,7 @@ public function loadInvoiceForProject($projid){
 
 								$stmt3 = $conn->prepare("INSERT INTO invoice_tax_applicable_to(TaxId, DetailsId) VALUES(?,?)");
 								if($stmt3->execute([$TaxId,$detailIdArray[$qut]]) === FALSE){
-									$conn->rollBack();
+
 									return false;
 								}
 
@@ -265,20 +268,20 @@ public function loadInvoiceForProject($projid){
 					}
 				}
 				else{
-					$conn->rollBack();
+
 					return false;
 				}
 			}
 
 
 		} else {
-			$conn->rollBack();
+
 			return false;
 		}
 
-		$conn->commit();
+
 		return true;
-		$conn = null;
+
 
 	}
 
@@ -339,7 +342,7 @@ public function loadInvoiceForProject($projid){
 		$conn = $db->getConnection();
 		$conn->beginTransaction();
 		try {
-			$stmt1 = $conn->prepare("DELETE FROM `invoice_tax_applicable_to` WHERE `TaxId` IN (DELETE FROM `invoice_tax_details` WHERE `InvoiceId`=:invoiceNo)");
+			$stmt1 = $conn->prepare("DELETE FROM `invoice_tax_applicable_to` WHERE `TaxId` IN (SELECT `TaxId` FROM `invoice_tax_details` WHERE `InvoiceId`=:invoiceNo)");
 			$stmt1->bindParam(':invoiceNo',$oldInvoiceNo,PDO::PARAM_STR);
 			if($stmt1->execute() === TRUE){
 

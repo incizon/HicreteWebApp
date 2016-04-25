@@ -225,6 +225,51 @@ class QuotationController
     }
 
 
+
+    public static function isQuotationAlreadyUploadedForAnotherQuotation($quotationId,$quotationBlob){
+        try{
+
+            if($quotationId!==null && $quotationBlob!=null) {
+
+                if(!Quotation::isQuotationAlreadyUploadedForAnotherQuotation($quotationBlob,$quotationId)){
+                    echo AppUtil::getReturnStatus("Successful", "Quotation not Already Uploaded");
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Quotation Already Uploaded");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Invalid Parameters");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+    public static function isQuotationAlreadyUploaded($quotationBlob){
+        try{
+
+            if($quotationBlob!=null) {
+
+                if(!Quotation::isQuotationAlreadyUploaded($quotationBlob)){
+                    echo AppUtil::getReturnStatus("Successful", "Quotation not Already Uploaded");
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Quotation Already Uploaded");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Invalid Parameters");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+
+
     public function deleteQuotation($id){
         $quotation = Quotation::deleteQuotation($id);
         return $quotation;

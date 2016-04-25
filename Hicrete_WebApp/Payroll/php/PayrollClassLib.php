@@ -440,11 +440,14 @@
                     $numberOfDays = $resultdays1 + $resultdays2;
                     $numberOfLeaves = $dateDifference - $numberOfDays;
 
-                    if ($numberOfLeaves <= 0) {
+                    if ($numberOfLeaves == 0) {
+                        $numberOfLeaves = 1;
+                        echo json_encode($numberOfLeaves);
+                    }else if ($numberOfLeaves < 0) {
                         $numberOfLeaves = 0;
                         echo json_encode($numberOfLeaves);
-                    } else {
-                        echo json_encode($numberOfLeaves);
+                    }  else {
+                        echo json_encode($numberOfLeaves-1);
                     }
 
                 }

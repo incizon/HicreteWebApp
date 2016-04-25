@@ -360,6 +360,11 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
     }
     $scope.addOtherExpense = function () {
         $scope.otherExpenseClicked = false;
+
+        var viewValue=new Date($scope.billDetails.dateOfBill);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+
         var data = {
             operation: "addOtherExpense",
             otherExpenseData: $scope.expenseDetails,
@@ -409,6 +414,10 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
+        var viewValue=new Date($scope.billDetails.dateOfBill);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+
         var data = {
             operation: "addMaterialExpense",
             materialExpenseData: $scope.expenseDetails,

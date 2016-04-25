@@ -33,9 +33,14 @@ switch($data->operation)
     case "modifyQuotation":
         QuotationController::reviseQuotation($data->quotationId,$data->data);
         break;
-
     case "getQuotationDetails":
         QuotationController::getQuotationDetails($data->data);
+        break;
+    case "isQuotationAlreadyUploadedForOtherQuotation":
+        QuotationController::isQuotationAlreadyUploadedForAnotherQuotation($data->quotationId,$data->QuotationBlob);
+        break;
+    case "isQuotationAlreadyUploaded":
+        QuotationController::isQuotationAlreadyUploaded($data->QuotationBlob);
         break;
 
 

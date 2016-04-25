@@ -161,8 +161,10 @@ Class Quotation {
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
-		$current=time($quotation->DateOfQuotation);
-		$quotationDate=$current =date("Y-m-d",$current);
+
+		$date1 = new DateTime($quotation->DateOfQuotation);
+		$quotationDate = $date1->format('Y-m-d');
+
 		$stmt = $conn->prepare("UPDATE `quotation` SET `QuotationTitle`=:title,`RefNo`=:refNo,`DateOfQuotation`=:dateOfQuotation,`Subject`=:subject,`QuotationBlob`=:blob WHERE `QuotationId`=:quotationId");
 		$stmt->bindparam(':title',$quotation->QuotationTitle ,PDO::PARAM_STR);
 		$stmt->bindparam(':refNo',$quotation->RefNo ,PDO::PARAM_STR);
@@ -433,9 +435,9 @@ public static  function saveQuotationDetailsAndTax($data){
 	$db = Database::getInstance();
 	$conn = $db->getConnection();
 	$conn->beginTransaction();
-	$current=time($quotation->DateOfQuotation);
-	$quotationDate=date("Y-m-d",$current);
 
+	$date1 = new DateTime($quotation->DateOfQuotation);
+	$quotationDate = $date1->format('Y-m-d');
 		$stmt = $conn->prepare("INSERT INTO quotation(QuotationId, QuotationTitle, RefNo, DateOfQuotation, Subject, ProjectId, CompanyId, QuotationBlob, isApproved, isDeleted) VALUES(?,?,?,?,?,?,?,?,?,?);");
 		if($stmt->execute([$QuotationId,$quotation->QuotationTitle,$quotation->RefNo,$quotationDate,$quotation->Subject,$quotation->ProjectId,$quotation->CompanyId,$quotation->QuotationBlob,0,0]) === TRUE){
 
@@ -556,5 +558,36 @@ public static  function saveQuotationDetailsAndTax($data){
 
 
 	}
+
+	public static function isQuotationAlreadyUploaded($quotationBlob){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `QuotationBlob` FROM `quotation` WHERE `QuotationBlob`=:quotationBlob");
+		$stmt->bindParam(':quotationBlob',$quotationBlob, PDO::PARAM_STR);
+
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+
+	public static function isQuotationAlreadyUploadedForAnotherQuotation($quotationBlob,$quotationId){
+		$db = Database::getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT `QuotationBlob` FROM `quotation` WHERE `QuotationBlob`=:quotationBlob AND `QuotationId`!=:quotationId");
+		$stmt->bindParam(':quotationBlob',$quotationBlob, PDO::PARAM_STR);
+		$stmt->bindParam(':quotationId',$quotationId, PDO::PARAM_STR);
+		$stmt->execute();
+		$result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+		if (count($result) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+
 
 }

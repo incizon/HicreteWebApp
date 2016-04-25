@@ -96,8 +96,9 @@ Class Workorder {
         $db = Database::getInstance();
         $conn = $db->getConnection();
         $conn->beginTransaction();
-        $date=time($data->ReceivedDate);
-        $recievedDate =date("Y-m-d",$date);
+        $date1 = new DateTime($data->ReceivedDate);
+        $recievedDate = $date1->format('Y-m-d');
+
         $stmt = $conn->prepare("INSERT INTO `work_order`(`WorkOrderNo`, `WorkOrderName`, `ReceivedDate`, `WorkOrderBlob`, `CreationDate`, `CreatedBy`, `quotationId`) VALUES (?,?,?,?,?,?,?)");
         if($stmt->execute([$data->workOrderNumber, $data->WorkOrderName,$recievedDate,$data->WorkOrderBlob,$current,$userId,$data->QuotationId]) === TRUE) {
             /*$stmt1 = $conn->prepare("UPDATE quotation SET isApproved = 1 WHERE ProjectId = :projId AND CompanyId = :compId");*/
@@ -143,6 +144,21 @@ Class Workorder {
                 return "Exception in deletion of customer ".$e->getMessage();
         }
 
+    }
+
+
+    public static function isWorkorderAlreadyUploaded($workorderBlob){
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT `WorkOrderBlob` FROM `work_order` WHERE `WorkOrderBlob`=:workorderBlob");
+        $stmt->bindParam(':workorderBlob',$workorderBlob, PDO::PARAM_STR);
+
+        $stmt->execute();
+        $result=$stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (count($result) > 0) {
+            return true;
+        }
+        return false;
     }
 
 }
