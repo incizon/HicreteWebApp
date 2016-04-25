@@ -457,7 +457,7 @@ myApp.service('AppService', function () {
             });
     }
 
-    this.schedulePaymentFollowup = function ($http, $scope, $filter, invoiceNo) {
+    this.schedulePaymentFollowup = function ($http, $scope, $filter, invoiceNo,$rootScope) {
 
         var FollowupDate = $filter('date')($scope.applicatorDetails.followupdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
         var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
@@ -482,15 +482,20 @@ myApp.service('AppService', function () {
         $http.post('Process/php/followupFacade.php', null, config)
             .success(function (data, status, headers) {
                 console.log(data);
-                if (data.status == "Successful") {
+                if (data.status === "Successful") {
                     $('#loader').css("display", "block");
                     //$scope.PostDataResponse = data;
                     $('#loader').css("display", "none");
-                    $scope.warningMessage = "Followup Created Successfully";
+                    $rootScope.warningMessage = "Followup Created Successfully";
                     $('#warning').css("display", "block");
+
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 2000);
                 }
                 else {
-                    $scope.errorMessage = data.message;
+                    $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");

@@ -62,15 +62,30 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                 <thead>
                 <tr>
                     <th width="3%">Sr.No</th>
-                    <th width="20%">Product Name</th>
-                    <th width="10%">Unit of Measure</th>
-                    <th width="10%">Color</th>
+                    <th width="20%">
+                        <a ng-click="sortType = 'product.productname'; sortReverse = !sortReverse">Product Name
+                            <span ng-show="sortType == 'product.productname' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'product.productname' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                       </th>
+                    <th width="10%">
+                        <a ng-click="sortType = 'product.unitofmeasure'; sortReverse = !sortReverse">Unit of Measure
+                            <span ng-show="sortType == 'product.unitofmeasure' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'product.unitofmeasure' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                        </th>
+                    <th width="10%">
+                        <a ng-click="sortType = 'product.color'; sortReverse = !sortReverse">Color
+                            <span ng-show="sortType == 'product.color' && !sortReverse" class="fa fa-caret-down"></span>
+                            <span ng-show="sortType == 'product.color' && sortReverse" class="fa fa-caret-up"></span>
+                        </a>
+                        </th>
                     <th width="25%">Description</th>
                     <th width="40%">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr ng-repeat="product in products | filter :paginate | filter:keyword | orderBy:'productname'">
+                <tr ng-repeat="product in products | filter :paginate  |orderBy:sortType:sortReverse">
                     <td width="5%">{{$index + 1}}</td>
                     <td width="20%">{{product.productname}}</td>
                     <td width="10%">{{product.unitofmeasure}}</td>

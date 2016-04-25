@@ -64,15 +64,30 @@ $isSuper=appUtil::isSuperUser($userId);
                     <thead>
                     <tr>
                         <th>Sr.No</th>
-                        <th>User Name</th>
+                        <th>
+                            <a ng-click="sortType = 'user.firstName'; sortReverse = !sortReverse">User Name
+                                <span ng-show="sortType == 'user.firstName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'user.firstName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
                         <th>Contact Number</th>
-                        <th>Designation</th>
-                        <th>Role</th>
+                        <th>
+                            <a ng-click="sortType = 'user.designation'; sortReverse = !sortReverse">Designation
+                                <span ng-show="sortType == 'user.designation' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'user.designation' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
+                        <th>
+                            <a ng-click="sortType = 'user.role'; sortReverse = !sortReverse">Role
+                                <span ng-show="sortType == 'user.role' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'user.role' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="user in Users | filter :paginate" >
+                    <tr ng-repeat="user in Users | filter :paginate | orderBy:sortType:sortReverse" >
                         <td>{{$index+1}}</td>
                         <td>{{user.firstName}} {{user.lastName}}</td>
                         <td>{{user.mobileNumber}}</td>

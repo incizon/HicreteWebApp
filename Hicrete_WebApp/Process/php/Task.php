@@ -15,8 +15,8 @@ Class Task {
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
-                $stmt = $conn->prepare("INSERT INTO task_master (TaskID, TaskName, TaskDescripion, ScheduleStartDate, ScheduleEndDate, CompletionPercentage, TaskAssignedTo, isCompleted, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?,?)");
-                        if($stmt->execute([$taskId,$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$userId]) === TRUE)
+                $stmt = $conn->prepare("INSERT INTO task_master (TaskName, TaskDescripion, ScheduleStartDate, ScheduleEndDate, CompletionPercentage, TaskAssignedTo, isCompleted, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?)");
+                        if($stmt->execute([$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$userId]) === TRUE)
                         {
                             $conn->commit();
                             return "Task created successfully";
@@ -114,12 +114,12 @@ Class Task {
                     $searchKeyword = '%' ."". '%';
 
                 if($sortBy=="TaskName"){
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword ORDER BY t.TaskName,t.TaskID,t.CompletionPercentage DESC");
                     $stmt->bindParam(':searchKeyword',$searchKeyword);
                 }else if($sortBy=="CompleteTask"){
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1 ORDER BY t.TaskName,t.TaskID,t.CompletionPercentage DESC");
                 }else{
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 ORDER BY t.TaskName,t.TaskID,t.CompletionPercentage DESC");
                 }
 //                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {

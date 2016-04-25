@@ -2382,7 +2382,6 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
     $scope.projectPaymentsInvoice = [];
     $scope.paymentDetails = {
         operation: ""
-
     };
     $scope.formSubmitted = false;
     $scope.showPaymentDetails = false;
@@ -2461,12 +2460,13 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
 
     }
     $scope.getPendingAmount = function () {
-        // console.log("In Pending amount function");
-        $scope.paymentDetails.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - $scope.previousAmountPaid;
-
+         console.log("In Pending amount function");
+        $scope.pendingAmount = parseInt($scope.packageAmount) - parseInt($scope.paymentDetails.amountPaid) - parseInt($scope.previousAmountPaid);
+        console.log($scope.pendingAmount);
     }
     $scope.submitPaymentDetails = function (size, paymentDetails, quotation_id) {
-        console.log("branch number is " + paymentDetails.branchName)
+        console.log("branch number is ");
+        console.log(paymentDetails);
         var iscash = 0;
         var paydate = $filter('date')(paymentDetails.paymentDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
         if (paymentDetails.paymentMode == 'cash') {
@@ -2525,10 +2525,10 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
                     $('#warning').css("display", "block");
 
                 }
-                setTimeout(function () {
-                    $('#warning').css("display", "none");
-                    window.location = "dashboard.php#/Process";
-                }, 1000);
+                //setTimeout(function () {
+                //    $('#warning').css("display", "none");
+                //    window.location = "dashboard.php#/Process";
+                //}, 1000);
 
             })
             .error(function (data, status, headers, config) {
@@ -2540,7 +2540,7 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
             });
 
         $scope.formSubmitted = false;
-
+        console.log($scope.paymentDetails.pendingAmount)
         if ($scope.paymentDetails.pendingAmount == 0) {
 
             paymentDetails.paymentStatus = 'Yes';
@@ -2561,7 +2561,7 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
                     $scope.ok = function () {
                         //console.log($scope.paymentDetails);
                         console.log("on Ok click");
-                        AppService.schedulePaymentFollowup($http, $scope, $filter, paymentDetails.InvoiceNo);
+                        AppService.schedulePaymentFollowup($http, $scope, $filter, paymentDetails.InvoiceNo,$rootScope);
 
                         $uibModalInstance.close();
 
@@ -2597,6 +2597,8 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
     $scope.ProjectPerPage = 10;
     $scope.currentPage = 1;
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
 
     $scope.searchKeyword = "";
     $scope.isCostCenterAvailable = function (project) {
@@ -3261,7 +3263,7 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
     $scope.projects = [];
     $scope.selectedProjectId = "";
     $scope.sortType = ''; // set the default sort type
-    $scope.sortReverse = false;
+    $scope.sortReverse = true;
     $scope.PaymentHistoryPerPage=10;
     $scope.currentPage=1;
     $scope.followups = [];
@@ -4332,16 +4334,18 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
     };
     var task = setInfo.get();
     console.log("task set is " + JSON.stringify(task));
+    var startDate = $filter('date')(task.ScheduleStartDate, 'yyyy/MM/dd', '+0530');
+    var endDate = $filter('date')(task.ScheduleEndDate, 'yyyy/MM/dd', '+0530');
     $scope.ViewTask = {
         task_id: task.TaskID,
         task_name: task.TaskName,
         task_desc: task.TaskDescripion,
-        task_startDate: task.ScheduleStartDate,
-        task_endDate: task.ScheduleEndDate,
+        task_startDate: startDate,
+        task_endDate:endDate ,
         task_isCompleted: task.isCompleted
     };
 
-
+    $scope.taskCompletionP=task.CompletionPercentage;
     $scope.getViewNotes = function () {
         console.log("In view Notes");
         $scope.ViewNotes = [];
@@ -4385,7 +4389,13 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 
     }
     $scope.getViewNotes();
-
+    $scope.setTaskCompletionPercentage= function () {
+        if($scope.completed==1 ){
+            $scope.taskCompletionP=100;
+        }else{
+            $scope.taskCompletionP=task.CompletionPercentage;
+        }
+    }
     $scope.updateTask = function (taskid) {
         var isCompleted = $scope.completed;
         console.log("completed " + isCompleted);
@@ -4396,7 +4406,9 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
         var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
         var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-
+        if($scope.completed!=undefined ||$scope.completed==1 ){
+            $scope.taskCompletionP=100;
+        }
         var data = {
             "CompletionPercentage": $scope.taskCompletionP,
             "isCompleted": isCompleted,
@@ -4436,7 +4448,8 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                     $('#warning').css("display", "block");
                     setTimeout(function () {
                             $('#warning').css("display", "none");
-                    }, 1000);
+                        window.location="dashboard.php#/Process/SearchTask"
+                    }, 2500);
                 }
                 $scope.getViewNotes();
             })
@@ -4456,6 +4469,9 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
 
     $scope.sortBy = "";
     $scope.searchKeyword = ""
+
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
 
     $scope.getAllTasks = function () {
         var task = [];

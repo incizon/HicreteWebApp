@@ -98,9 +98,8 @@ class InwardData extends CommonMethods
     {
         $keyword = "%" . $keyword . "%";
         HicreteLogger::logInfo("Fetching inward details");
-        //$selectStatement = "SELECT * FROM inward ";
-        $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid";
-        //echo "select statement".$selectStatement;
+        $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid ORDER BY a.dateofentry DESC";
+
         HicreteLogger::logInfo("Getting inward details");
         switch ($searchTerm) {
             case'InwardNo':

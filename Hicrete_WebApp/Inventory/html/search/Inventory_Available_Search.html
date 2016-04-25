@@ -38,7 +38,12 @@
                 <thead>
                     <tr>
                         <th width="5%">Sr.No</th>
-                        <th width="10%">ProductName</th>
+                        <th width="10%">
+                            <a ng-click="sortType = 'product.productname'; sortReverse = !sortReverse">ProductName
+                                <span ng-show="sortType == 'product.productname' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'product.productname' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
                         <th width="10%">Company</th>
                         <th width="10%">Warehouse</th>
                         <th width="15%">Quantity</th>
@@ -47,7 +52,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in inventoryData | filter:paginate">
+                    <tr ng-repeat="product in inventoryData |filter:paginate |orderBy:sortType:sortReverse">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyName}}</td>

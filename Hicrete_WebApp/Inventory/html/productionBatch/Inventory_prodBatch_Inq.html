@@ -45,8 +45,18 @@
                         <!--<th style="padding:5px;"ead>                                            -->
                         <tr>
                             <th style="padding:5px;" width="5%">Sr no.</th>
-                            <th style="padding:5px;" width="20%">Production Batch code</th>
-                            <th style="padding:5px;" width="25%">Production Batch Name</th>
+                            <th style="padding:5px;" width="20%">
+                                <a ng-click="sortType = 'prodBatch.batchNo'; sortReverse = !sortReverse">Production Batch code
+                                    <span ng-show="sortType == 'prodBatch.batchNo' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'prodBatch.batchNo' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                                </th>
+                            <th style="padding:5px;" width="25%">
+                                <a ng-click="sortType = 'prodBatch.batchCodeName'; sortReverse = !sortReverse">Production Batch Name
+                                    <span ng-show="sortType == 'prodBatch.batchCodeName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'prodBatch.batchCodeName' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                                </th>
                             <th style="padding:5px;" width="10%">Start date</th>
                             <th style="padding:5px;" width="10%">End date</th>
                             <th style="padding:5px;" width="30%">Actions</th>
@@ -54,7 +64,7 @@
                         <!--</th>-->
                         </thead>
                         <tbody>
-                        <tr ng-repeat="prodBatch in prodInq | filter:paginate | filter:prodBatchInfo.Keywords">
+                        <tr ng-repeat="prodBatch in prodInq | filter:paginate | orderBy:sortType:sortReverse">
                             <td>{{$index + 1}}</td>
                             <td>{{prodBatch.batchNo}}</td>
                             <td>{{prodBatch.batchCodeName}}</td>

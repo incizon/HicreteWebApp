@@ -15,10 +15,10 @@
 	if(isset($mData->SearchTerm)) {
 		switch ($mData->SearchTerm) {
 			case 'productName':
-				$selectStatement = $selectStatement . " WHERE product_master.productname like :keyword";
+				$selectStatement = $selectStatement . " WHERE product_master.productname like :keyword ORDER BY product_master.`productname`,product_details.`color`,product_master.`unitofmeasure` DESC";
 				break;
 			case 'materialType':
-				$selectStatement = $selectStatement . " WHERE materialtype.materialtype like :keyword";
+				$selectStatement = $selectStatement . " WHERE materialtype.materialtype like :keyword ORDER BY product_master.`productname`,product_details.`color`,product_master.`unitofmeasure` DESC";
 				break;
 		}
 	}

@@ -270,8 +270,42 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
     };
 
      $scope.projectList=[];
-    AppService.getAllProjects($http,$scope.projectList);
+    //AppService.getAllProjects($http,$scope.projectList);
+    //Fetching project list only for those whose cost center is created
+    //Start
+    var data = {
+        operation: "getProjectListForExpense",
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
 
+    $http.post("Expense/php/expenseFacade.php", null, config)
+        .success(function (data) {
+            console.log("IN Project Get");
+            console.log(data);
+            if (data.status != "success") {
+                alert("Failed:" + data.message);
+            } else {
+                for (var i = 0; i < data.message.length; i++) {
+                    $scope.projectList.push({
+                        id: data.message[i].ProjectId,
+                        name: data.message[i].ProjectName
+
+                    });
+                }
+            }
+
+        })
+        .error(function (data) {
+            //alert("Error  Occurred:" + data);
+        });
+
+
+
+    //END
     var data = {
         module: 'getProducts'
     }

@@ -1,6 +1,7 @@
 <?php
 //require_once 'database/Database.php';
 require_once ("../../php/appUtil.php");
+require_once "../../php/HicreteLogger.php";
 
 class Expense
 {
@@ -9,42 +10,53 @@ class Expense
     public static function addSegment($data,$userId){
         $db = Database::getInstance();
         $conn = $db->getConnection();
+        HicreteLogger::logInfo("Adding segment");
 
         $success=false;
-
-        foreach ($data->segments as $segment) {
-            $uniqid=uniqid();
-            $stmt = $conn->prepare("INSERT INTO `budget_segment`(`budgetsegmentid`,`segmentname`, `createdby`, `creationdate`, `lastmodifieddate`, `lastmodifiedby`) 
-                VALUES (:segmentId,:segmentName,:createdBy,now(),now(),:lastModifiedBy)");
-            $stmt->bindParam(':segmentName', $segment->name, PDO::PARAM_STR);
-            $stmt->bindParam(':segmentId',$uniqid , PDO::PARAM_STR);
-            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-            if($stmt->execute()){
-                  $success=true;
-            }else{
-                  $success=false;
+        try {
+            foreach ($data->segments as $segment) {
+                $uniqid = uniqid();
+                $stmt = $conn->prepare("INSERT INTO `budget_segment`(`budgetsegmentid`,`segmentname`, `createdby`, `creationdate`, `lastmodifieddate`, `lastmodifiedby`)
+                        VALUES (:segmentId,:segmentName,:createdBy,now(),now(),:lastModifiedBy)");
+                $stmt->bindParam(':segmentName', $segment->name, PDO::PARAM_STR);
+                $stmt->bindParam(':segmentId', $uniqid, PDO::PARAM_STR);
+                $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+                HicreteLogger::logDebug("Data: \n" . json_encode($data));
+                if ($stmt->execute()) {
+                    HicreteLogger::logInfo("Budget segment inserted successfully");
+                    $success = true;
+                } else {
+                    HicreteLogger::logError("Error while inserting Budget segment");
+                    $success = false;
+                }
             }
-        }
 
-        if($success){
-            $message="Segment added successfully..!!!";
-            echo AppUtil::getReturnStatus("success", $message);
-        }
-        else{
-            $message="Could not add segment..!!!";
+            if ($success) {
+                $message = "Segment added successfully..!!!";
+                echo AppUtil::getReturnStatus("success", $message);
+            } else {
+                $message = "Could not add segment..!!!";
+                echo AppUtil::getReturnStatus("failure", $message);
+            }
+        }catch(Exception $e)
+        {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            $message = "Exception occured";
             echo AppUtil::getReturnStatus("failure", $message);
         }
-    }
+}
 
     public static function createCostCenter($data,$segmentData,$userId){
         $db = Database::getInstance();
         $conn = $db->getConnection();
-        $success=false;
-
-        $conn->beginTransaction();
+        try {
+            $success = false;
+            HicreteLogger::logInfo("Creating cost center");
+            $conn->beginTransaction();
             foreach ($segmentData as $segment) {
-                $bufgetId=uniqid();
+                $bufgetId = uniqid();
                 $stmt = $conn->prepare("INSERT INTO `budget_details`(`budgetdetailsid`,`projectid`, `budgetsegmentid`, `allocatedbudget`, `alertlevel`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:budgetId,:projectId,:segmentId,:allocatedBudget,:alertLevel,:createdBy,now(),now(),:lastModifiedBy)");
 
@@ -56,26 +68,33 @@ class Expense
                 $stmt->bindParam(':alertLevel', $segment->alertLevel, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                 $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-
-                if($stmt->execute()){
-                    $success=true;
-                }
-                else{
-                    $success=false;
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+                HicreteLogger::logDebug("Data: \n" . json_encode($data));
+                if ($stmt->execute()) {
+                    $success = true;
+                } else {
+                    $success = false;
                 }
 
             }
 
-        if($success){
-            $conn->commit();
-            $message="Cost Center Created successfully..!!!";
-            echo AppUtil::getReturnStatus("success", $message);
-        }else{
-            $conn->rollBack();
-            $message="Could not create cost center..!!!";
+            if ($success) {
+                $conn->commit();
+                $message = "Cost Center Created successfully..!!!";
+                HicreteLogger::logInfo("Cost center created  successfully");
+                echo AppUtil::getReturnStatus("success", $message);
+            } else {
+                $conn->rollBack();
+                $message = "Could not create cost center..!!!";
+                HicreteLogger::logError("Error while creating cost center");
+                echo AppUtil::getReturnStatus("failure", $message);
+            }
+        }catch(Exception $e)
+        {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            $message = "Exception occured";
             echo AppUtil::getReturnStatus("failure", $message);
-         }   
-
+        }
     }
 
     public static function addOtherExpense($data,$billData,$userId){
@@ -84,7 +103,7 @@ class Expense
         $conn = $db->getConnection();
         $expenseDetailsId=uniqid(); 
         $budget='5691e819829c3';
-
+        HicreteLogger::logInfo("Adding other expenses");
 
         try {
 
@@ -100,7 +119,8 @@ class Expense
             $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
             $success = false;
-
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+            HicreteLogger::logDebug("Data: \n" . json_encode($data));
 
             if ($stmt->execute()) {
 
@@ -120,12 +140,14 @@ class Expense
                     $stmt->bindParam(':dateofbill', $bilDate, PDO::PARAM_STR);
                     $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                     $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-
+                    HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+                    HicreteLogger::logDebug("Data: \n" . json_encode($data));
                     if ($stmt->execute()) {
                         $success = true;
                         $conn->commit();
                     } else {
                         $success = false;
+                        HicreteLogger::logError("Error while adding to Unapproved expense bills");
                         $conn->rollBack();
                     }
                 }else{
@@ -134,17 +156,22 @@ class Expense
                 }
             } else {
                 $success = false;
+                HicreteLogger::logError("Error while adding to Expense details");
                 $conn->rollBack();
             }
         }
         catch(Exception $e){
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo "Exception occur while adding other expense details";
+
         }
         if($success){
             $message="Other Expense Details Added successfully..!!!";
+            HicreteLogger::logInfo("Other expense details added successfully");
             echo AppUtil::getReturnStatus("success", $message);
         }else{
             $message="Could not add other expense details..!!!";
+            HicreteLogger::logError("Error while adding other expenses");
             echo AppUtil::getReturnStatus("failure", $message);
          }   
     }
@@ -154,7 +181,7 @@ class Expense
         $conn = $db->getConnection();
         $expenseDetailsId=uniqid();
         $budget='56b6e4bcf125c';
-
+        HicreteLogger::logInfo("Adding Material expense");
 
         try {
             $conn->beginTransaction();
@@ -169,7 +196,8 @@ class Expense
             $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
 
             $success = false;
-
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+            HicreteLogger::logDebug("Data: \n" . json_encode($data));
             if ($stmt->execute()) {
 
                 if ($data->isBillApplicable) {
@@ -188,7 +216,8 @@ class Expense
                     $stmt->bindParam(':dateofbill', $bilDate, PDO::PARAM_STR);
                     $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
                     $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-
+                    HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+                    HicreteLogger::logDebug("Data: \n" . json_encode($billData));
                     if ($stmt->execute()) {
                         $success=true;
                     } else {
@@ -203,15 +232,19 @@ class Expense
             }
         }
         catch(Exception $e){
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo "Exception occur while adding material expense";
+
         }
         if($success){
             $conn->commit();
             $message="Material Expense Details Added successfully..!!!";
+            HicreteLogger::logInfo("Material expense details added successfully");
             echo AppUtil::getReturnStatus("success", $message);
         }else{
             $conn->rollBack();
             $message="Could not add material expense details..!!!";
+            HicreteLogger::logError("Error while adding Material expenses");
             echo AppUtil::getReturnStatus("failure", $message);
         }
     }
@@ -225,9 +258,10 @@ class Expense
         try{
             $stmt1=$conn->prepare("select expense_details.`expensedetailsid`,expense_details.`budgetsegmentid`,expense_details.projectid,expense_details.description,unapproved_expense_bills.amount,unapproved_expense_bills.createdby FROM expense_details JOIN unapproved_expense_bills ON expense_details.expensedetailsid=unapproved_expense_bills.`expensedetailsid` WHERE unapproved_expense_bills.bill_status='pending' ");
 
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt1));
 
             if($stmt1->execute()){
-
+                HicreteLogger::logDebug("Row count: \n" . json_encode($stmt1->rowCount()));
             while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
 
                     $result_array=array();
@@ -252,15 +286,18 @@ class Expense
                   echo AppUtil::getReturnStatus("success", $json_response);
                 }
                 else{
+                    HicreteLogger::logError("Bill Approval data not available");
                     echo AppUtil::getReturnStatus("failure", "Bill Approval Data Not Available");
                 }
             }
             else{
+                HicreteLogger::logError("Bill Approval data not available");
                 echo AppUtil::getReturnStatus("failure", "Bill Approval Data Not Available");
             }
 
         }
         catch(Exception $e){
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo "Exception Occur while getting bill approval";
         }
 
@@ -271,33 +308,41 @@ class Expense
         $conn = $db->getConnection();
 
         $expenseDetailsId=$data->expenseDetailsId;
-
+        HicreteLogger::logInfo("Fetching bill details");
         $result_array=array();
 
         try{
 
             $stmt1=$conn->prepare("SELECT `projectid`,`budgetsegmentid` FROM expense_details WHERE expensedetailsid=:expenseDetailsId");
             $stmt1->bindParam(':expenseDetailsId',$expenseDetailsId);
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt1));
             $stmt1->execute();
+            HicreteLogger::logDebug("Row count: \n" . json_encode($stmt1->rowCount()));
             $result1=$stmt1->fetch(PDO::FETCH_ASSOC);
             $projectId=$result1['projectid'];
             $budgetSegmentId=$result1['budgetsegmentid'];
 
             $stmt2=$conn->prepare("SELECT projectName FROM project_master WHERE ProjectId=:projectId");
             $stmt2->bindParam(':projectId',$projectId);
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt2));
             $stmt2->execute();
+            HicreteLogger::logDebug("Row count: \n" . json_encode($stmt2->rowCount()));
             $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
             $result_array['projectName']=$result2['projectName'];
 
             $stmt3=$conn->prepare("SELECT segmentname FROM budget_segment WHERE budgetsegmentid=:budgetSegmentId");
             $stmt3->bindParam(':budgetSegmentId',$budgetSegmentId);
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt3));
             $stmt3->execute();
+            HicreteLogger::logDebug("Row count: \n" . json_encode($stmt3->rowCount()));
             $result3=$stmt3->fetch(PDO::FETCH_ASSOC);
             $result_array['budgetSegmentName']=$result3['segmentname'];
 
             $stmt4=$conn->prepare("select `billid`,`billno`,`billissueingentity`,`amount`,`dateofbill`from unapproved_expense_bills WHERE expensedetailsid=:expenseDetailsId");
             $stmt4->bindParam(':expenseDetailsId',$expenseDetailsId);
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt4));
             $stmt4->execute();
+            HicreteLogger::logDebug("Row count: \n" . json_encode($stmt4->rowCount()));
             $result4=$stmt4->fetch(PDO::FETCH_ASSOC);
             $result_array['billid']=$result4['billid'];
             $result_array['billNo']=$result4['billno'];
@@ -315,9 +360,44 @@ class Expense
             }
         }
         catch(Exception $e){
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo "Exception occur while getting bill details";
         }
+    }
+    public static function getProjectsForExpense()
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $json_response=array();
+        try {
+            $stmt = $conn->prepare("SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)");
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+            if ($stmt->execute()) {
+                HicreteLogger::logDebug("Row count: \n" . json_encode($stmt->rowCount()));
+                while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $result_array = array();
+                    $result_array['ProjectId'] = $result['ProjectId'];
+                    $result_array['ProjectName'] = $result['ProjectName'];
+                    array_push($json_response, $result_array);
+                }
+                if (sizeof($json_response) > 0) {
+                    echo AppUtil::getReturnStatus("success", $json_response);
+                } else {
+                    HicreteLogger::logError("No projects have cost center created");
+                    echo AppUtil::getReturnStatus("failure", "No Projects have cost center created");
+                }
+
+
+                //echo AppUtil::getReturnStatus("success","Bill Status Updated Successfully");
+            } else {
+                echo AppUtil::getReturnStatus("failure", "Fetcging projects failed");
+            }
+        }catch(Exception $e)
+        {
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            echo "Exception occur while getting bill details";
+        }
+
     }
 
     public static function updateBillStatus($data,$userId){
@@ -340,8 +420,9 @@ class Expense
             $stmt->bindParam(':modifiedBy', $userId);
             $stmt->bindParam(':status', $status);
             $stmt->bindParam(':billId', $billId);
-
+            HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
             if($stmt->execute()){
+                HicreteLogger::logDebug("Row count: \n" . json_encode($stmt->rowCount()));
                 echo AppUtil::getReturnStatus("success","Bill Status Updated Successfully");
             }
             else{
@@ -349,7 +430,7 @@ class Expense
             }
         }
         catch(Exception $e){
-
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo "Exception Occur While Updating Bill Status";
         }
     }

@@ -1,3 +1,29 @@
-2016-04-16 14:42:08 - FATAL --> Exception Occured Message:
-SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'employee_id' cannot be null 
-2016-04-16 17:04:08 - ERROR --> Fetched unsuccessful 
+2016-04-20 18:34:53 - ERROR --> Fetching inward details failed 
+2016-04-20 18:35:46 - ERROR --> Fetching inward details failed 
+2016-04-20 18:44:11 - ERROR --> Fetching inward details failed 
+2016-04-20 18:45:14 - ERROR --> Fetching inward details failed 
+2016-04-20 18:45:19 - ERROR --> Fetching inward details failed 
+2016-04-20 18:45:23 - ERROR --> Fetching inward details failed 
+2016-04-20 19:01:49 - FATAL --> Exception Occured Message:
+SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty 
+2016-04-20 19:03:55 - FATAL --> Exception Occured Message:
+SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty 
+2016-04-20 19:27:59 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-20 19:28:11 - ERROR --> Fetched unsuccessful 
+2016-04-20 19:28:15 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-23 9:31:26 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-23 9:31:36 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'is_deleted' in 'where clause' 
+2016-04-23 10:31:48 - ERROR --> No projects have cost center created 
+2016-04-23 10:34:43 - ERROR --> No projects have cost center created 
+2016-04-23 10:35:00 - ERROR --> No projects have cost center created 
+2016-04-23 10:47:01 - ERROR --> No projects have cost center created 
+2016-04-23 15:45:34 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'unapproved_expense_bills.bill_status' in 'where clause' 
+2016-04-23 15:54:07 - FATAL --> Exception Occured Message:
+SQLSTATE[42S22]: Column not found: 1054 Unknown column 'unapproved_expense_bills.bill_status' in 'where clause' 
+2016-04-23 18:05:48 - ERROR --> No projects have cost center created 
+2016-04-23 19:09:46 - ERROR --> No projects have cost center created 

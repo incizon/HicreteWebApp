@@ -113,8 +113,7 @@
             case 'search':
                 # code...
                 $productObjSearch = new InwardData($pData);
-               // echo $pData->keyword;
-               // echo $pData->SearchTerm;
+
                 if(isset($pData->keyword))
                 {
                     $keyword=$pData->keyword;
@@ -229,7 +228,8 @@
     {
         global $dbh;
         $keyword = "%" . $searchKeyword . "%";
-
+//        echo json_encode($keyword);
+//        echo json_encode($searchBy);
         $stmt ="SELECT inventory.warehouseid,inventory.companyid,material.abbrevation,material.materialid,materialtype.materialtype,
                     product_master.productname,inventory.totalquantity,warehousemaster.wareHouseName,companymaster.companyName,inventory.inventoryid
                 FROM inventory
@@ -242,22 +242,22 @@
                 JOIN companymaster ON
                 companymaster.companyid=inventory.companyid
                 JOIN warehousemaster on
-                warehousemaster.warehouseid=inventory.warehouseid ";
+                warehousemaster.warehouseid=inventory.warehouseid";
 
-        switch ($searchBy) {
-            case'ProductName':
-                $stmt = $stmt . "WHERE product_master.productname LIKE :keyword";
-                break;
-            case'CompanyName':
-                $stmt = $stmt . "WHERE companymaster.companyName like :keyword";
-                break;
-            case'WarehouseName':
-                $stmt = $stmt . "WHERE warehousemaster.wareHouseName like :keyword";
-                break;
-        }
+//        switch ($searchBy) {
+//            case'ProductName':
+//                $stmt = $stmt . "WHERE product_master.productname LIKE :keyword ";
+//                break;
+//            case'CompanyName':
+//                $stmt = $stmt . "WHERE companymaster.companyName like :keyword";
+//                break;
+//            case'WarehouseName':
+//                $stmt = $stmt . "WHERE warehousemaster.wareHouseName like :keyword";
+//                break;
+//        }
 
         $stmt=$dbh->prepare($stmt);
-        $stmt->bindParam(':keyword', $keyword);
+//        $stmt->bindParam(':keyword', $keyword);
         if($stmt->execute()){
             $json_array=array();
             while ($result2 = $stmt->fetch(PDO::FETCH_ASSOC)) {

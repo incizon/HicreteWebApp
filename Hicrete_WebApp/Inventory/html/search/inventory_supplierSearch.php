@@ -63,13 +63,18 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                         <thead>
                         <tr>
                             <th width="15%">Sr. No</th>
-                            <th width="25%">SupplierName</th>
+                            <th width="25%">
+                                <a ng-click="sortType = 'supplier.suppliername'; sortReverse = !sortReverse">SupplierName
+                                    <span ng-show="sortType == 'supplier.suppliername' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'supplier.suppliername' && sortReverse" class="fa fa-caret-up"></span>
+                                </a>
+                                </th>
                             <th width="25%">Contact No</th>
                             <th width="35%">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="supplier in suppliers |filter : paginate">
+                        <tr ng-repeat="supplier in suppliers |filter : paginate| orderBy:sortType:sortReverse">
                             <td>{{$index + 1}}</td>
                             <td>{{supplier.suppliername}}</td>
                             <td>{{supplier.contactno}}</td>

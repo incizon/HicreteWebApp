@@ -1,118 +1,156 @@
+myApp.controller('reportController', function ($scope, $http, $uibModal, $log) {
 
-myApp.controller('reportController', function ($scope, $http, inventoryService) {
+    $scope.availableStockCount = 0;
+    $scope.critialStock = 0;
+    $scope.isShowCritical = false;
+    var modalInstance = $uibModal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'Inventory/html/filter.html',
+        scope: $scope,
+        controller: function ($scope, $uibModalInstance, criticalStock, AppService, $rootScope) {
+            AppService.getUsers($scope, $http);
 
-    $scope.availableStockCount=0;
-    $scope.critialStock=0;
-    $scope.isShowCritical=false;
-    document.getElementById('availableStockDiv').style.display = 'none';
-    var data = {
-        module: 'getCriticalStock'
-    }
-    var config = {
-        params: {
-            data: data
-        }
-    };
+            $scope.SaveFilter = function () {
+                //console.log($scope.paymentDetails);
+                console.log("on Ok click");
+                document.getElementById('availableStockDiv').style.display = 'none';
+                var data = {
+                    module: 'getCriticalStock'
+                }
+                var config = {
+                    params: {
+                        data: data
+                    }
+                };
 
-    $http.post("Inventory/php/InventoryIndex.php", null, config)
-        .success(function (data) {
-            console.log(data);
-            if(data.status=='Successful'){
-                $scope.criticalStock=data.message;
-                $scope.availableStockCount=$scope.criticalStock.totalCount;
-                $scope.critialStock=$scope.criticalStock.totalCriticalCount;
-                $scope.critial=($scope.critialStock/$scope.availableStockCount)*100;
-                $scope.available=100- $scope.critial;
-                $scope.showChart();
+                $http.post("Inventory/php/InventoryIndex.php", null, config)
+                    .success(function (data) {
+                        console.log(data);
+                        if (data.status == 'Successful') {
+                            $scope.criticalStock = data.message;
+                            $scope.availableStockCount = $scope.criticalStock.totalCount;
+                            $scope.critialStock = $scope.criticalStock.totalCriticalCount;
+                            $scope.critial = ($scope.critialStock / $scope.availableStockCount) * 100;
+                            $scope.available = 100 - $scope.critial;
+                            $scope.showChart();
+                        }
+
+
+                    })
+                    .error(function (data, status, headers) {
+                        console.log(data);
+                    });
+
+                $scope.currentPage = 1;
+                $scope.CriticalMaterialPerPage = 10;
+
+                $scope.paginateCriticalMaterial = function (value) {
+                    //console.log("In Paginate");
+                    var begin, end, index;
+                    begin = ($scope.currentPage - 1) * $scope.CriticalMaterialPerPage;
+                    end = begin + $scope.CriticalMaterialPerPage;
+                    index = $scope.criticalStock.criticalMaterial.indexOf(value);
+                    //console.log(index);
+                    return (begin <= index && index < end);
+                };
+                $scope.availableMaterialPerPage = 10;
+                $scope.paginateavailableMaterial = function (value) {
+                    //console.log("In Paginate");
+                    var begin, end, index;
+                    begin = ($scope.currentPage - 1) * $scope.availableMaterialPerPage;
+                    end = begin + $scope.availableMaterialPerPage;
+                    index = $scope.criticalStock.availableMaterial.indexOf(value);
+                    //console.log(index);
+                    return (begin <= index && index < end);
+                };
+                $scope.showChart = function () {
+                    $('#chartContainer').highcharts({
+                        chart: {
+                            plotBackgroundColor: null,
+                            plotBorderWidth: null,
+                            plotShadow: false,
+                            type: 'pie',
+
+                        },
+                        title: {
+                            text: 'Critical Stock in inventory'
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Percentage',
+                            colorByPoint: true,
+                            cursor: 'pointer',
+                            point: {
+                                events: {
+                                    click: function () {
+                                        //alert('Category: ' + this.name + ', value: ' + this.y);
+                                        if (this.name == "Available stock") {
+
+                                            document.getElementById('availableStockDiv').style.display = 'block';
+                                            document.getElementById('criticalStockDiv').style.display = 'none';
+
+                                        } else if (this.name == "Critical stock") {
+                                            document.getElementById('availableStockDiv').style.display = 'none';
+                                            document.getElementById('criticalStockDiv').style.display = 'block';
+
+                                        }
+                                    }
+                                }
+                            },
+                            data: [{
+                                name: 'Available stock',
+                                y: $scope.available
+                            }, {
+                                name: 'Critical stock',
+                                y: $scope.critial
+                            }]
+                        }]
+                    });
+                }
+                $uibModalInstance.close();
+
+            };
+            $scope.Cancel = function () {
+                $uibModalInstance.dismiss('cancel');
+            };
+        },
+
+        resolve: {
+            criticalStock: function () {
+                return $scope.criticalStock;
             }
 
+        }
+    });
 
-        })
-        .error(function (data, status, headers) {
-            console.log(data);
-        });
-
-    $scope.currentPage = 1;
-    $scope.CriticalMaterialPerPage = 10;
-
-    $scope.paginateCriticalMaterial = function (value) {
-        //console.log("In Paginate");
-        var begin, end, index;
-        begin = ($scope.currentPage - 1) * $scope.CriticalMaterialPerPage;
-        end = begin + $scope.CriticalMaterialPerPage;
-        index = $scope.criticalStock.criticalMaterial.indexOf(value);
-        //console.log(index);
-        return (begin <= index && index < end);
+    modalInstance.result.then(function (criticalStock) {
+        //$scope.criticalStock = criticalStock.message;
+        //$scope.availableStockCount = $scope.criticalStock.totalCount;
+        //$scope.critialStock = $scope.criticalStock.totalCriticalCount;
+        //$scope.critial = ($scope.critialStock / $scope.availableStockCount) * 100;
+        //$scope.available = 100 - $scope.critial;
+    }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+    });
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
     };
-    $scope.availableMaterialPerPage=10;
-    $scope.paginateavailableMaterial = function (value) {
-        //console.log("In Paginate");
-        var begin, end, index;
-        begin = ($scope.currentPage - 1) * $scope.availableMaterialPerPage;
-        end = begin + $scope.availableMaterialPerPage;
-        index = $scope.criticalStock.availableMaterial.indexOf(value);
-        //console.log(index);
-        return (begin <= index && index < end);
-    };
-    $scope.showChart=function(){
-        $('#container').highcharts({
-            chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
-                type: 'pie',
 
-            },
-            title: {
-                text: 'Critical Stock in inventory'
-            },
-            tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-            },
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                        style: {
-                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                        }
-                    }
-                }
-            },
-            series: [{
-                name: 'Percentage',
-                colorByPoint: true,
-                cursor: 'pointer',
-                point: {
-                    events: {
-                        click: function () {
-                            //alert('Category: ' + this.name + ', value: ' + this.y);
-                            if(this.name=="Available stock"){
-
-                                document.getElementById('availableStockDiv').style.display = 'block';
-                                document.getElementById('criticalStockDiv').style.display = 'none';
-
-                            }else if(this.name=="Critical stock"){
-                                document.getElementById('availableStockDiv').style.display = 'none';
-                                document.getElementById('criticalStockDiv').style.display = 'block';
-
-                            }
-                        }
-                    }
-                },
-                data: [{
-                    name: 'Available stock',
-                    y: $scope.available
-                },{
-                    name: 'Critical stock',
-                    y: $scope.critial
-                }]
-            }]
-        });
-    }
 
     //Highcharts.chart('container', {
     //
@@ -514,7 +552,7 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
     $http.post("Inventory/php/InventoryIndex.php", null, config)
         .success(function (data) {
             console.log(data);
-                 $scope.suppliers = data;
+            $scope.suppliers = data;
         })
         .error(function (data, status, headers) {
             console.log(data);
@@ -1148,13 +1186,25 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
 
 myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeService) {
     $scope.materialType = [];
+    $scope.materialTypePerPage=7;
+
+    $scope.currentPage = 1;
+    //$scope.InventoryOutwardItemsPerPage = 10;
     $scope.submitted = false;
     $scope.errorMessage = "";
     $scope.warningMessage = "";
     $scope.materialType.push({
         type: ""
     });
-
+    $scope.paginate = function (value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.materialTypePerPage;
+        end = begin + $scope.materialTypePerPage;
+        index = $scope.fetchedMaterialTypes.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     $scope.sizeCheck = function () {
         if ($scope.materialType.length == 0) {
             return 0;
@@ -1179,6 +1229,147 @@ myApp.controller('addMaterialType', function ($scope, $http, addMaterialTypeServ
         $scope.noOfMaterials = "";
     };
 
+    $scope.deleteMaterialType = function(materialType)
+    {
+        var data = {
+            operation: 'Delete',
+            data:materialType
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
+            .success(function (data) {
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function () {
+                    if (data.msg != ""){
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","none");
+                    }
+                }, 3000);
+                $('#loader').css("display","none");
+                if (data.error != ""){
+
+                            $scope.errorMessage=data.error;
+                            $('#error').css("display","block");
+
+                    setTimeout(function () {
+                        $('#error').css("display","none");
+                    }, 3000);
+
+                }
+
+                console.log(data);
+                //$scope.submitted = false;
+                //$scope.fetchedMaterialTypes[index]=materialType;
+                $scope.fetchMaterialTypes();
+                //$scope.clear();
+                //$scope.addField();
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                $('#loader').css("display","none");
+                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $('#error').css("display","block");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+
+
+    }
+
+    $scope.modifyMaterialtype =function(materialType,index)
+    {
+        var data = {
+            operation: 'Modify',
+            data:materialType
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
+            .success(function (data) {
+                if(data.msg!=""){
+                    $scope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+                }
+                setTimeout(function () {
+                    if (data.msg != ""){
+                        $scope.warningMessage=data.msg;
+                        $('#warning').css("display","none");
+                    }
+                }, 3000);
+                $('#loader').css("display","none");
+                if (data.error != ""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+
+                console.log(data);
+                //$scope.submitted = false;
+                //$scope.fetchedMaterialTypes[index]=materialType;
+                $scope.fetchMaterialTypes();
+                //$scope.clear();
+                //$scope.addField();
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                $('#loader').css("display","none");
+                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $('#error').css("display","block");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+    }
+
+    $scope.fetchMaterialTypes =function()
+    {
+        $('#loader').css("display","block");
+        var data = {
+            operation: 'fetch'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        //console.log("inside controller check"+materialType);
+        $http.post("Inventory/php/inventory_Add_MaterialType.php",  null, config)
+            .success(function (data) {
+                if(data.msg!=""){
+                    //$scope.warningMessage=data.msg;
+                    console.log(data);
+                    $scope.fetchedMaterialTypes=data.data;
+                    $scope.length=$scope.fetchedMaterialTypes.length;
+                   // $('#warning').css("display","block");
+                }
+
+                $('#loader').css("display","none");
+                if (data.error != ""){
+                    $scope.errorMessage=data.error;
+                    $('#error').css("display","block");
+                }
+
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log("Error calling php");
+                $('#loader').css("display","none");
+                $scope.errorMessage="Problem While connecting to server.Please check internet connection";
+                $('#error').css("display","block");
+                //$scope.messages=data.error;
+                //$scope.messages.push(data.error);
+            });
+    }
+
+    $scope.fetchMaterialTypes();
     $scope.clear = function () {
         $scope.materialType.splice(0, $scope.materialType.length);
     };
@@ -1259,6 +1450,9 @@ myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope)
     $scope.currentOutwardPage = 1;
     $scope.InventoryOutwardItemsPerPage = 10;
 
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
+
     $scope.paginateOutward = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1310,7 +1504,6 @@ myApp.controller('OutwardSearchController', function ($http, $scope, $rootScope)
 //End of outward search controller
 
 
-
 /////////////////////////////////////////////////////////////////////////////////////
 //Start of inward search controller
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1320,6 +1513,8 @@ myApp.controller('InwardSearchController', function ($http, $scope, $rootScope) 
     $scope.totalInwardItems = 0;
     $scope.currentInwardPage = 1;
     $scope.InventoryInwardItemsPerPage = 10;
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
     $scope.paginateInward = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1388,6 +1583,10 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
     $scope.keyword = "";
+
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
+
     var isProductMasterTable = false;
     var isMaterialTable = false;
     var isPrductDetailsTable = false;
@@ -1403,7 +1602,6 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
         begin = ($scope.currentPage - 1) * $scope.InventoryItemsPerPage;
         end = begin + $scope.InventoryItemsPerPage;
         index = $rootScope.products.indexOf(value);
-
         return (begin <= index && index < end);
     };
 
@@ -1545,60 +1743,71 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
 /*********************************************************************************************
  * START of Search Controller
  *********************************************************************************************/
-myApp.controller('SearchController', function ($scope, $http, inventoryService,$rootScope) {
+myApp.controller('SearchController', function ($scope, $http, inventoryService, $rootScope) {
     //Pagination variables
     $scope.submitted = false;
     $scope.submittedModal = false;
     //$scope.totalItems = 0;
     $scope.currentPage = 1;
-    $scope.InventoryAvailableItemsPerPage = 10;
+    $scope.InventoryAvailableItemsPerPage = 3;
     $scope.filters = [
         {filterName: 'ProductName', id: 1},
         {filterName: 'CompanyName', id: 2},
         {filterName: 'WarehouseName', id: 3},
     ];
-    $scope.inventoryData = {};
+
     $scope.transportMode = [
         {transport: 'Air Transport', transportId: 1},
         {transport: 'Water Transport', transportId: 2},
         {transport: 'Road Transport', transportId: 3}
     ];
-    $scope.SearchTerm=$scope.filters[0].filterName
+    $scope.SearchTerm = $scope.filters[0].filterName
     $scope.loading = ""
 
-    $scope.keywords="";
+    $scope.keywords = "";
 
 
     /*************************************************
      * START of GETTING INVENTORY DATA
      **************************************************/
-        $scope.getInventoryData=function(){
-            $('#loader').css("display", "block");
-            var data = {
-                module: 'inventorySearch',
-                searchBy:$scope.SearchTerm,
-                searchKeyword:$scope.keywords
-            }
-            var config = {
-                params: {
-                    data: data
-                }
-            };
-            $http.post("Inventory/php/InventoryIndex.php", null, config)
-                .success(function (data) {
-                    $('#loader').css("display", "none");
-                    $rootScope.inventoryData = data;
-                    //$scope.InventoryAvailableItemsPerPage = data;
-                   // $rootScope.totalItems = $scope.inventoryData.length;
-
-                })
-                .error(function (data, status, headers) {
-                    console.log("IN SERVICE OF Inventory Search Failure=");
-                    console.log(data);
-                    $('#loader').css("display", "none");
-
-                });
+    $scope.getInventoryData = function () {
+        $('#loader').css("display", "block");
+        var data = {
+            module: 'inventorySearch',
+            searchBy: $scope.SearchTerm,
+            searchKeyword: $scope.keywords
         }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                $rootScope.inventoryData= data;
+
+                //$scope.InventoryAvailableItemsPerPage = data;
+                //$rootScope.totalItems = $scope.inventoryData.length;
+
+            })
+            .error(function (data, status, headers) {
+                console.log("IN SERVICE OF Inventory Search Failure=");
+                console.log(data);
+                $('#loader').css("display", "none");
+
+            });
+    }
+
+    $scope.paginate = function (value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
+        end = begin + $scope.InventoryAvailableItemsPerPage;
+        index = $rootScope.inventoryData.indexOf(value);
+        return (begin <= index && index < end);
+    };
 
     $scope.getViewDataObject = function (product, materialDetails) {
 
@@ -1625,23 +1834,6 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService,$
     }
 
 
-    /*
-     Start of Pagination Function
-     */
-    $scope.paginate = function (value) {
-
-        var begin, end, index;
-        begin = ($scope.currentPage - 1) * $scope.InventoryAvailableItemsPerPage;
-        end = begin + $scope.InventoryAvailableItemsPerPage;
-        index = $rootScope.inventoryData.indexOf(value);
-
-        return (begin <= index && index < end);
-    };
-
-    /*
-     End of Pagination Function
-     */
-
 });
 
 /*********************************************************************************************
@@ -1660,8 +1852,10 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
     $scope.currentPage = 1;
     $scope.prodBatchPerPage = 10;
     $scope.submitted = false;
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
 
-    inventoryService.getProductsForOutward($scope,$http);
+    inventoryService.getProductsForOutward($scope, $http);
     $scope.paginate = function (value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1768,8 +1962,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         return qty;
     };
 
-    $scope.check= function(quantity)
-    {
+    $scope.check = function (quantity) {
         //console.log(quantity);
         //console.log($scope.availableTotalquantity)
 

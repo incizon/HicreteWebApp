@@ -35,14 +35,19 @@
                     <thead>
                     <tr>
                         <th>Sr.No</th>
-                        <th>Role Name</th>
+                        <th>
+                            <a ng-click="sortType = 'role.roleName'; sortReverse = !sortReverse">Role Name
+                                <span ng-show="sortType == 'role.roleName' && !sortReverse" class="fa fa-caret-down"></span>
+                                <span ng-show="sortType == 'role.roleName' && sortReverse" class="fa fa-caret-up"></span>
+                            </a>
+                            </th>
                         <th>Created By</th>
                         <th>Creation Date</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="role in Roles | filter:paginate">
+                    <tr ng-repeat="role in Roles | filter:paginate | orderBy:sortType:sortReverse">
                         <td>{{$index+1}}</td>
                         <td>{{role.roleName}}</td>
                         <td>{{role.createdBy}}</td>

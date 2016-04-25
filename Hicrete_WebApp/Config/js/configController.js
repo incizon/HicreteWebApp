@@ -514,6 +514,8 @@ myApp.controller('searchUserController',function($scope,$rootScope,$http,configS
     $scope.searchKeyword="";
     $scope.searchAttribute="";
 
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
 
     $scope.userInfo={
         firstName:"",
@@ -808,6 +810,8 @@ myApp.controller('ModifyUserController',function($scope,$http,$stateParams,confi
 
 myApp.controller('viewRoleController',function($scope,$http,$rootScope,$stateParams,configService)
 {
+    $scope.sortType = ''; // set the default sort type
+    $scope.sortReverse = false;
     $scope.searchKeyword="";
     $scope.RolesPerPage=10;
     $scope.currentPage=1;
@@ -998,6 +1002,7 @@ $scope.warehouse={
 
     $scope.warehousesPerPage=10;
     $scope.currentPage=1;
+
     $scope.paginate = function(value) {
         //console.log("In Paginate");
         var begin, end, index;
@@ -1007,7 +1012,16 @@ $scope.warehouse={
         //console.log(index);
         return (begin <= index && index < end);
     };
-
+    $scope.companiesPerPage=10;
+    $scope.paginateCompany = function(value) {
+        //console.log("In Paginate");
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.companiesPerPage;
+        end = begin + $scope.companiesPerPage;
+        index =  $rootScope.Companies.indexOf(value);
+        //console.log(index);
+        return (begin <= index && index < end);
+    };
     $scope.getWareHouseDetails = function(keyword)
     {
         console.log(keyword);
