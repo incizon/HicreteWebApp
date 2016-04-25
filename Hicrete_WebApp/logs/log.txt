@@ -27,3 +27,4 @@ SQLSTATE[42S22]: Column not found: 1054 Unknown column 'unapproved_expense_bills
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'unapproved_expense_bills.bill_status' in 'where clause' 
 2016-04-23 18:05:48 - ERROR --> No projects have cost center created 
 2016-04-23 19:09:46 - ERROR --> No projects have cost center created 
+2016-04-23 20:06:57 - ERROR --> Bill Approval data not available 
