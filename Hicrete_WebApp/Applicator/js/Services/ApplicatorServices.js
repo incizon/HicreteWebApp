@@ -1,7 +1,7 @@
 myApp.service('ApplicatorService',function(){
 
 	this.submitApplicatorDetails=function($scope,$http,$rootScope,applicatorDetails){
-
+		console.log(applicatorDetails);
 		 var config = {
 						params: {
 									data: applicatorDetails
@@ -81,6 +81,7 @@ myApp.service('ApplicatorService',function(){
 		$scope.loading=true;
 		//$scope.errorMessage="";
 		//$scope.warningMessage="";
+		console.log(applicatorDetails);
 		$('#loader').css("display","block");
 		var config = {
 			params: {

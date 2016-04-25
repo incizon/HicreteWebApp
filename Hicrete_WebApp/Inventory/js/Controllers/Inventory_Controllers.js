@@ -634,10 +634,18 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
         opened: false
     };
 
+   // $scope.InwardData.date= new Date($scope.InwardData.date);
+    //console.log($scope.InwardData.date);
     $scope.addInwardDetails = function (inwardData) {
 
         console.log("Add inwardDetails function =");
         console.log($scope.InwardData);
+       // inwardData.date= new Date(inwardData.date);
+       //console.log(inwardData.date);
+        var viewValue1=new Date(inwardData.date);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        inwardData.date=viewValue1.toISOString().substring(0, 10);
+
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
@@ -959,6 +967,10 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
      * Return- success or failure
      *************************************************************/
     $scope.addOutwardDetails = function (outwardData) {
+
+        var viewValue1=new Date(outwardData.date);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        outwardData.date=viewValue1.toISOString().substring(0, 10);
 
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
@@ -1874,11 +1886,9 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         //console.log(index);
         return (begin <= index && index < end);
     };
-
     $scope.formatDate = function () {
         $scope.prodBatchInfo.endDate = $filter("date")($scope.prodBatchInfo.endDate, 'dd-MM-yyyy');
     }
-
 
     $scope.maxDate = new Date(2020, 5, 22);
 
@@ -2157,7 +2167,24 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         }
         else if ((prodBatchInfo.endDate > $filter("date")(Date.now(), 'dd-MM-yyyy') && page == 'Raw') || page == 'final') {
             $scope.prodBatchInfo.step = $scope.step;
-            //$scope.submitPart();
+
+            var viewValue1=new Date(prodBatchInfo.dateOfEntry);
+            viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+            prodBatchInfo.dateOfEntry=viewValue1.toISOString().substring(0, 10);
+
+           /* var viewValue2=new Date(prodBatchInfo.endDate);
+            viewValue2.setMinutes(viewValue2.getMinutes() - viewValue2.getTimezoneOffset());
+            prodBatchInfo.endDate=viewValue2.toISOString().substring(0, 10);
+*/
+            var viewValue3=new Date(prodBatchInfo.startDate);
+            viewValue3.setMinutes(viewValue3.getMinutes() - viewValue3.getTimezoneOffset());
+            prodBatchInfo.startDate=viewValue3.toISOString().substring(0, 10);
+
+            if(prodBatchInfo.dateOfEntryAftrProd != "") {
+                var viewValue4 = new Date(prodBatchInfo.dateOfEntryAftrProd);
+                viewValue4.setMinutes(viewValue4.getMinutes() - viewValue4.getTimezoneOffset());
+                prodBatchInfo.dateOfEntryAftrProd = viewValue4.toISOString().substring(0, 10);
+            }
             console.log("submitting now with step" + $scope.prodBatchInfo.step);
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo, $rootScope);
             //$scope.submitted=false;
@@ -2171,6 +2198,11 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         else if (page == "Search" || page == 'Complete') {
             prodBatchInfo.option = message;
             prodBatchInfo.step = 0;
+            if(prodBatchInfo.dateOfEntryAftrProd != "") {
+                var viewValue4 = new Date(prodBatchInfo.dateOfEntryAftrProd);
+                viewValue4.setMinutes(viewValue4.getMinutes() - viewValue4.getTimezoneOffset());
+                prodBatchInfo.dateOfEntryAftrProd = viewValue4.toISOString().substring(0, 10);
+            }
             ProductionBatchService.addProdBatchInfo($scope, $http, prodBatchInfo, $rootScope);
             if (page == 'Complete') {
                 /* setTimeout(function () {
