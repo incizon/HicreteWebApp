@@ -66,7 +66,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="customer in customerSearch | filter :paginate | orderBy:name">
+                    <tr ng-repeat="customer in customerSearch | filter : paginate | orderBy:name">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{customer.name}}</td>
                         <td width="10%">{{customer.city}}</td>
@@ -91,9 +91,9 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
 
     </div>
-    <uib-pagination total-items="customerSearch.length" ng-model="currentPage"
+    <uib-pagination total-items="length" ng-model="currentPage"
                     max-size="10" boundary-links="true"
-                    items-per-page="customerPerPage" class="pagination-sm">
+                    items-per-page="CustomerPerPage" class="pagination-sm">
     </uib-pagination>
 
 

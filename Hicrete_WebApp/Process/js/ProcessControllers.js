@@ -2778,7 +2778,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
 myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) {
 
-    $scope.CustomerPerPage = 5;
+    $scope.CustomerPerPage = 10;
     $scope.currentPage = 1;
 
     $scope.searchKeyword = "";
@@ -2830,6 +2830,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 
 
                         $rootScope.customerSearch = cust;
+                        $scope.length=$rootScope.customerSearch.length;
 
                     } else {
                         $rootScope.errorMessage = response.data.message;
