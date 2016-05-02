@@ -98,7 +98,7 @@ class InwardData extends CommonMethods
     {
         $keyword = "%" . $keyword . "%";
         HicreteLogger::logInfo("Fetching inward details");
-        $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid ORDER BY a.dateofentry DESC";
+        $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid ";
 
         HicreteLogger::logInfo("Getting inward details");
         switch ($searchTerm) {
@@ -113,6 +113,7 @@ class InwardData extends CommonMethods
                 break;
         }
 
+        $selectStatement=$selectStatement." ORDER BY a.dateofentry DESC";
         $stmt = $dbh->prepare($selectStatement);
         HicreteLogger::logDebug("Query: ".json_encode($stmt));
         if ($searchTerm == 'InwardNo' || $searchTerm == 'Company' || $searchTerm == 'Warehouse') {
