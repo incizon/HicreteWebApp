@@ -99,7 +99,7 @@ class InwardData extends CommonMethods
         $keyword = "%" . $keyword . "%";
         HicreteLogger::logInfo("Fetching inward details");
         $selectStatement = "select a.*,b.companyName as companyName,c.wareHouseName as wareHouseName from inward a, companymaster b, warehousemaster c where a.warehouseid=c.warehouseid and b.companyid =a.companyid ORDER BY a.dateofentry DESC";
-
+//
         HicreteLogger::logInfo("Getting inward details");
         switch ($searchTerm) {
             case'InwardNo':
@@ -130,6 +130,16 @@ class InwardData extends CommonMethods
                 $inwardData['warehouseid'] = $result2['warehouseid'];
                 $inwardData['companyid'] = $result2['companyid'];
                 $inwardData['supervisorid'] = $result2['supervisorid'];
+                $supervisorid=$result2['supervisorid'];
+                $stmtUser = $dbh->prepare("select usermaster.firstName as fname,usermaster.lastName as lname from usermaster WHERE userId=:id");
+                $stmtUser->bindParam(':id', $supervisorid, PDO::PARAM_STR, 10);
+                if ($stmtUser->execute()) {
+                    $res=$stmtUser->fetch(PDO::FETCH_ASSOC);
+                    $supervisorName=$res['fname']." ".$res['lname'];
+                    $inwardData['supervisor']=$supervisorName;
+                }else{
+                    $result2['supervisor']="";
+                }
                 $inwardData['dateofentry'] = $result2['dateofentry'];
                 $inwardData['companyName'] = $result2['companyName'];
                 $inwardData['warehouseName'] = $result2['wareHouseName'];
@@ -172,7 +182,6 @@ class InwardData extends CommonMethods
                 $stmt1->bindParam(':inwardID', $inwardID);
                 HicreteLogger::logDebug("Query: ".json_encode($stmt1));
                 if ($stmt1->execute()) {
-//                    array_push($inwardData,$stmt1->fetchAll());
                     while ($resultMaterials = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 
                         $inwardData['materialDetails'][] = array(

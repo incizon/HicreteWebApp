@@ -1546,6 +1546,8 @@ myApp.controller('InwardSearchController', function ($http, $scope, $rootScope) 
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 $('#loader').css("display", "none");
+                console.log("Inward Search=");
+                console.log(data);
                 $rootScope.InwardSearchData = data;
                 $scope.totalInwardItems = $rootScope.InwardSearchData.length;
 
@@ -1747,7 +1749,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
     $scope.submittedModal = false;
     //$scope.totalItems = 0;
     $scope.currentPage = 1;
-    $scope.InventoryAvailableItemsPerPage = 3;
+    $scope.InventoryAvailableItemsPerPage = 10;
     $scope.filters = [
         {filterName: 'ProductName', id: 1},
         {filterName: 'CompanyName', id: 2},
