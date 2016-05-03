@@ -91,7 +91,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 
 
     </div>
-    <uib-pagination total-items="length" ng-model="currentPage"
+    <uib-pagination total-items="customerSearch.length" ng-model="currentPage"
                     max-size="10" boundary-links="true"
                     items-per-page="CustomerPerPage" class="pagination-sm">
     </uib-pagination>
