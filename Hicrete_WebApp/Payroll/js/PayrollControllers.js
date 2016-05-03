@@ -36,6 +36,13 @@ myApp.controller('CreateYearController', function($scope,$http,$rootScope) {
         $scope.yearDetails.operation="createYear";
 
 
+        var viewValue=new Date($scope.yearDetails.startDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.yearDetails.startDate=viewValue.toISOString().substring(0, 10);
+
+        var viewValue1=new Date($scope.yearDetails.endDate);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        $scope.yearDetails.endDate=viewValue1.toISOString().substring(0, 10);
 
         var config = {
             params: {
@@ -151,11 +158,16 @@ myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http
 
         $scope.configureHoliday.operation="createHoliday";
 
+        var viewValue1=new Date($scope.configureHoliday.holidayDate);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        $scope.configureHoliday.holidayDate=viewValue1.toISOString().substring(0, 10);
+
         var config = {
             params: {
                 details: $scope.configureHoliday
             }
         };
+
 
         $('#loader').css("display","block");
 
@@ -168,7 +180,7 @@ myApp.controller('ConfigureHolidaysController', function($scope,$rootScope,$http
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
-                        window.location = "dashboard.php#/Payroll";
+                        window.location = "dashboard.php#/Payroll/ConfigureHolidays";
                     }, 1000);
                 }
                 if(data.status=="failure"){
@@ -309,13 +321,24 @@ myApp.controller('ApplyForLeaveController', function($scope,$http) {
 
             if(($scope.leaveDetails.fromDate!="" && $scope.leaveDetails.toDate!="")&&($scope.leaveDetails.fromDate!=undefined && $scope.leaveDetails.toDate!=undefined)){
 
+                var viewValue=new Date($scope.leaveDetails.fromDate);
+                viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+                $scope.leaveDetails.fromDate=viewValue.toISOString().substring(0, 10);
+
+
+
+                var viewValue1=new Date($scope.leaveDetails.toDate);
+                viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+                $scope.leaveDetails.toDate=viewValue1.toISOString().substring(0, 10);
+
+
                 $scope.leaveDetails.operation="getNoOfLeaves";
                 var config = {
                     params: {
                         details: $scope.leaveDetails
                     }
                 };
-
+                console.log(JSON.stringify($scope.leaveDetails));
                 $http.post("Payroll/php/PayrollFacade.php", null, config)
                     .success(function (data) {
                         console.log(data);
@@ -518,6 +541,15 @@ myApp.controller('ShowLeavesController', function($scope,$http) {
         $('#loader').css("display","block");
 
         $scope.leaves.operation="searchLeave";
+
+        var viewValue1=new Date($scope.leaves.fromDate);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        $scope.leaves.fromDate=viewValue1.toISOString().substring(0, 10);
+
+
+        var viewValue=new Date($scope.leaves.toDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.leaves.toDate=viewValue.toISOString().substring(0, 10);
 
         var config = {
             params: {
@@ -763,6 +795,16 @@ myApp.controller('SearchLeaveByDateController', function($scope,$http) {
         $scope.errorMessage="";
         $scope.warningMessage="";
 
+
+        var viewValue=new Date($scope.searchDetails.fromDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.yearDetails.fromDate=viewValue.toISOString().substring(0, 10);
+
+        var viewValue1=new Date($scope.searchDetails.toDate);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        $scope.yearDetails.toDate=viewValue1.toISOString().substring(0, 10);
+
+
         $scope.searchDetails.operation="searchLeaveByDate";
 
         $('#loader').css("display","block");
@@ -893,3 +935,4 @@ myApp.controller('LeaveApprovalController', function($scope,$http) {
         return (begin <= index && index < end);
     };
 });
+

@@ -31,6 +31,15 @@ switch($data->operation)
     case "getInvoiceDetails":
         InvoiceController::getInvoiceDetails($data->data);
         break;
+    case "isInvoiceAlreadyUploadedForOtherInvoice":
+        InvoiceController::isInvoiceAlreadyUploadedForAnotherInvoice($data->InvoiceNo,$data->InvoiceBlob);
+        break;
+    case "isInvoiceAlreadyUploaded":
+        InvoiceController::isInvoiceAlreadyUploaded($data->InvoiceBlob);
+        break;
+    case "modifyInvoice":
+        InvoiceController::modiifyInvoice($data->data);
+        break;
 }
 
 ?>

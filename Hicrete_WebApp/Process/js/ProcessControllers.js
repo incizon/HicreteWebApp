@@ -192,7 +192,11 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $rootScop
                     console.log(projectData);
                     $scope.ok = function () {
 
-                        var FollowupDate = $filter('date')($scope.applicatorDetails.followupdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+                        var viewValue=new Date( $scope.applicatorDetails.followupdate);
+                        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+                        $scope.applicatorDetails.followupdate=viewValue.toISOString().substring(0, 10);
+
+                        var FollowupDate = $scope.applicatorDetails.followupdate;
                         var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
                         var FollowupTitle = $scope.applicatorDetails.followTitle;
 
@@ -390,7 +394,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     $scope.PaidPaymentDetails = [];
     $scope.projectInvoice = [];
     $scope.projectWorkorders = [];
-
+    $scope.workorderErrorMessage="All Fields are mandatory";
     var data = {
         operation: "getQuotationByProjectId",
         data: projId
@@ -516,7 +520,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             }
         };
 
-        $http.post("Process/php/invoiceFacade.php", null, config)
+        $http.post("Process/php/InvoiceFacade.php", null, config)
             .success(function (data) {
                 if (data.status != "Successful") {
                     $rootScope.errorMessage = data.message;
@@ -664,6 +668,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
     $scope.createWorkorder = function () {
 
         if ($scope.workOrderForm.$invalid) {
+            $scope.workorderErrorMessage="All Fields are mandatory";
             $scope.showError = true;
             return;
         }
@@ -672,6 +677,11 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         console.log("company id is :" + JSON.stringify($scope.CompanyName));
         var uploadQuotationLocation = "upload/Workorders/";
         var fileName = uploadQuotationLocation + $scope.myFile.name;
+
+        var viewValue=new Date($scope.workorder.date);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.workorder.date=viewValue.toISOString().substring(0, 10);
+
         var workorderData = {
             ProjectId: $scope.workorder.projId,
             WorkOrderName: $scope.workorder.title,
@@ -695,59 +705,80 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
             }
         };
 
-        var fd = new FormData();
-        fd.append('file', $scope.myFile);
-        $http.post("Process/php/uploadWorkorder.php", fd, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-            })
+        var data1 = {
+            operation: "isWorkorderAlreadyUploaded",
+            workorderBlob:fileName
+
+        };
+
+        var config1 = {
+            params: {
+                data: data1
+            }
+        };
+
+        $http.post("Process/php/workorderFacade.php",null,config1)
             .success(function (data) {
                 if (data.status == "Successful") {
-                    console.log("Upload Successful");
-                    $http.post("Process/php/workorderFacade.php", null, config)
+                    ///Upload Workorder
+                    var fd = new FormData();
+                    fd.append('file', $scope.myFile);
+                    $http.post("Process/php/uploadWorkorder.php", fd, {
+                            transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}
+                        })
                         .success(function (data) {
-                            console.log(data);
-
                             if (data.status == "Successful") {
+                                console.log("Upload Successful");
+                                ////Create Workorder
+                                $http.post("Process/php/workorderFacade.php", null, config)
+                                    .success(function (data) {
+                                        console.log(data);
 
-                                $rootScope.warningMessage = "Workorder Created Successfully";
-                                $('#warning').css('display', 'block');
-                                setTimeout(function () {
-                                    $('#warning').css('display', 'none');
-                                }, 1000);
-                                $scope.workorder = {};
-                                $('#viewDetails').modal('hide');
-                                $scope.loadWorkOrderData(projId);
+                                        if (data.status == "Successful") {
+
+                                            $rootScope.warningMessage = "Workorder Created Successfully";
+                                            $('#warning').css('display', 'block');
+                                            setTimeout(function () {
+                                                $('#warning').css('display', 'none');
+                                            }, 3000);
+                                            $scope.workorder = {};
+                                            $('#viewDetails').modal('hide');
+                                            $scope.loadWorkOrderData(projId);
+                                        } else {
+                                            $scope.showError = true;
+                                            $scope.workorderErrorMessage=data.message;
+                                        }
+                                    })
+                                    .error(function (data) {
+                                        $scope.showError = true;
+                                        $scope.workorderErrorMessage="Error in Workorder Creation:"+data;
+
+                                    })
+                                //End Create Workorder
                             } else {
-                                $rootScope.errorMessage = data.message;
-                                $('#error').css('display', 'block');
-                                setTimeout(function () {
-                                    $('#warning').css('display', 'none');
-                                }, 1000);
-
+                                $scope.showError = true;
+                                $scope.workorderErrorMessage=data.message;
                             }
                         })
-                        .error(function (data) {
-                            $rootScope.errorMessage = "Error in work order creation" + data;
-                            $('#error').css('display', 'block');
-                            setTimeout(function () {
-                                $('#error').css('display', 'none');
-                            }, 1000);
-
-                        })
+                        .error(function () {
+                            $scope.showError = true;
+                            $scope.workorderErrorMessage="Something went wrong can not upload workorder";
+                        });
+                    //End Upload Workorder
 
                 } else {
-                    $rootScope.errorMessage = data.message;
-                    $('#error').css("display", "block");
-                    setTimeout(function () {
-                        $('#error').css("display", "none");
-                    }, 3000);
+                    $scope.showError = true;
+                    $scope.workorderErrorMessage="Workorder with same name already uploaded..Please change the name of workorder document";
                 }
+
             })
             .error(function () {
-                $rootScope.errorMessage = "Something went wrong can not upload workorder";
-                $('#error').css("display", "block");
+                $scope.showError = true;
+                $scope.workorderErrorMessage="Something went wrong can not check for already uploaded workorder";
+
             });
+
     }
 
     $scope.viewProjQuotationDetails = function (q) {
@@ -788,6 +819,10 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                 $scope.ok = function () {
 
                     // ApplicatorService.savePaymentDetails($scope, $http, paymentDetails);
+                    var viewValue=new Date($scope.applicatorDetails.followupdate);
+                    viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+                    $scope.applicatorDetails.followupdate=viewValue.toISOString().substring(0, 10);
+
                     var FollowupDate = $scope.applicatorDetails.followupdate;
                     var AssignEmployee = $scope.applicatorDetails.followupemployeeId;
                     var FollowupTitle = $scope.applicatorDetails.followTitle;
@@ -986,6 +1021,11 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
         }
 
+        var viewValue=new Date($scope.QuotationDetails.quotationDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.QuotationDetails.quotationDate=viewValue.toISOString().substring(0, 10);
+
+
         var quotationData = {
             QuotationTitle: $scope.QuotationDetails.quotationTitle,
             ProjectId: projectId,
@@ -1004,7 +1044,90 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             taxDetails: taxDetails
         };
 
-        console.log(QuotationData);
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadQuotationLocation = "upload/Quotations/";
+                fileName = uploadQuotationLocation + $scope.myFile.name;
+
+                var data = {
+                    operation: "isQuotationAlreadyUploaded",
+                    QuotationBlob: fileName
+
+                };
+                var config = {
+                    params: {
+                        data: data
+                    }
+                };
+
+                $('#loader').css("display", "block");
+                $http.post("Process/php/quotationFacade.php", null, config)
+                    .success(function (data) {
+                        if (data.status == "Successful") {
+                                $scope.postUploadQuotation(QuotationData);
+
+                        } else {
+                            $('#loader').css("display", "none");
+                            $rootScope.errorMessage = "Quotation File with same name is already uploaded..Please Change the name of file ";
+                            console.log($rootScope.errorMessage);
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 3000);
+                        }
+                    })
+                    .error(function (data) {
+                        $('#loader').css("display", "none");
+                        $rootScope.errorMessage = "Error Occured while Checking uploaded quotation";
+                        console.log($rootScope.errorMessage);
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 3000);
+                    });
+            }
+
+        } else {
+            $scope.postQuotationData(QuotationData);
+        }
+    }
+
+
+    $scope.postUploadQuotation=function(quotationData){
+        var uploadQuotationLocation = "upload/Quotations/";
+        fileName = uploadQuotationLocation + $scope.myFile.name;
+        quotationData.Quotation.QuotationBlob = fileName;
+        var fd = new FormData();
+        fd.append('file', $scope.myFile);
+        $('#loader').css("display", "block");
+        $http.post("Process/php/uploadQuotation.php", fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (data) {
+
+                if (data.status == "Successful") {
+                    console.log("Upload Successful");
+                    $('#loader').css("display", "none");
+                    $scope.postQuotationData(quotationData);
+                } else {
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = data.message;
+                    console.log($rootScope.errorMessage);
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+                }
+            })
+            .error(function () {
+                $rootScope.errorMessage = "Something went wrong can not upload quotation";
+                $('#error').css("display", "block");
+            });
+
+    }
+
+    $scope.postQuotationData=function(QuotationData){
         var data = {
             operation: "createQuotation",
             data: QuotationData
@@ -1016,114 +1139,41 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             }
         };
 
-        if ($scope.myFile != undefined) {
-            if ($scope.myFile.name != undefined) {
-                var uploadQuotationLocation = "upload/Quotations/";
-                fileName = uploadQuotationLocation + $scope.myFile.name;
-                quotationData.QuotationBlob = fileName;
-                var fd = new FormData();
-                fd.append('file', $scope.myFile);
 
-                $('#loader').css("display", "block");
-
-                $http.post("Process/php/uploadQuotation.php", fd, {
-                        transformRequest: angular.identity,
-                        headers: {'Content-Type': undefined}
-                    })
-                    .success(function (data) {
-
-                        if (data.status == "Successful") {
-                            console.log("Upload Successful");
-
-                            $('#loader').css("display", "none");
-
-                            $http.post("Process/php/quotationFacade.php", null, config)
-
-                                .success(function (data) {
-
-                                    if (data.status == "Successful") {
-                                        $rootScope.warningMessage = data.message;
-                                        console.log($rootScope.warningMessage);
-                                        $('#warning').css("display", "block");
-                                        $scope.clearForm();
-                                        setTimeout(function () {
-                                            $('#warning').css("display", "none");
-                                            window.location = "dashboard.php#/Process";
-                                        }, 1000);
-
-                                    } else {
-                                        $('#loader').css("display", "none");
-                                        $rootScope.errorMessage = data.message;
-                                        console.log($rootScope.errorMessage);
-                                        $('#error').css("display", "block");
-                                        setTimeout(function () {
-                                            $('#error').css("display", "none");
-                                        }, 3000);
-                                    }
-                                })
-                                .error(function (data) {
-                                    $('#loader').css("display", "none");
-                                    $rootScope.errorMessage = "Unable to create Quotation..Please try again";
-                                    console.log($rootScope.errorMessage);
-                                    $('#error').css("display", "block");
-                                    setTimeout(function () {
-                                        $('#error').css("display", "none");
-                                    }, 3000);
-                                });
-
-                        } else {
-                            $('#loader').css("display", "none");
-                            $rootScope.errorMessage = data.message;
-                            console.log($rootScope.errorMessage);
-                            $('#error').css("display", "block");
-                            setTimeout(function () {
-                                $('#error').css("display", "none");
-                            }, 3000);
-                        }
-                    })
-                    .error(function () {
-                        $rootScope.errorMessage = "Something went wrong can not upload quotation";
-                        $('#error').css("display", "block");
-                    });
-            }
-
-        } else {
-            $('#loader').css("display", "block");
-            $http.post("Process/php/quotationFacade.php", null, config)
-                .success(function (data) {
-                    if (data.status == "Successful") {
-                        $('#loader').css("display", "none");
-                        $rootScope.warningMessage = data.message;
-                        console.log($rootScope.warningMessage);
-                        $('#warning').css("display", "block");
-                        $scope.clearForm();
-                        setTimeout(function () {
-                            $('#warning').css("display", "none");
-                            window.location = "dashboard.php#/Process";
-                        }, 1000);
-
-                    } else {
-                        $('#loader').css("display", "none");
-                        $rootScope.errorMessage = data.message;
-                        console.log($rootScope.errorMessage);
-                        $('#error').css("display", "block");
-                        setTimeout(function () {
-                            $('#error').css("display", "none");
-                        }, 3000);
-                    }
-                })
-                .error(function (data) {
+        $('#loader').css("display", "block");
+        $http.post("Process/php/quotationFacade.php", null, config)
+            .success(function (data) {
+                if (data.status == "Successful") {
                     $('#loader').css("display", "none");
-                    $rootScope.errorMessage = "Unable to create Quotation..Please try again";
+                    $rootScope.warningMessage = data.message;
+                    console.log($rootScope.warningMessage);
+                    $('#warning').css("display", "block");
+                    $scope.clearForm();
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+
+                } else {
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = data.message;
                     console.log($rootScope.errorMessage);
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 3000);
-                });
-        }
+                }
+            })
+            .error(function (data) {
+                $('#loader').css("display", "none");
+                $rootScope.errorMessage = "Unable to create Quotation..Please try again";
+                console.log($rootScope.errorMessage);
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
+            });
     }
-
 
     $scope.addRows = function () {
         var rowCount = $scope.noOfRows;
@@ -1305,6 +1355,8 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         pan: '',
         contactPerson: ''
     }
+
+
     var data = {
         operation: "getQuotationDetails",
         data: qId
@@ -1419,7 +1471,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         });
 
     /************************************/
-    $scope.quotationDate = function () {
+    $scope.invoiceDate = function () {
         $scope.showQdate.opened = true;
     };
 
@@ -1436,7 +1488,11 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
         console.log("in createInvoice");
         var totalAmount = parseFloat($scope.totalAmnt) + parseFloat($scope.TaxAmnt);
-        var grandTotal = (+totalAmount ) - +$scope.roundingOff;
+        var grandTotal = (+totalAmount ) + +$scope.roundingOff;
+
+        var viewValue=new Date($scope.InvoiceDetails.invoiceDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.InvoiceDetails.invoiceDate=viewValue.toISOString().substring(0, 10);
 
         var invoiceData = {
             "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
@@ -1465,160 +1521,132 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         $scope.InvoiceData = InvoiceData;
         console.log($scope.myFile);
 
-        var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
-            templateUrl: 'utils/ConfirmDialog.html',
-            controller: function ($scope, $rootScope, $uibModalInstance, InvoiceData, myFile) {
+        var data = {
+            operation: "createInvoice",
+            data: InvoiceData
 
-                $scope.save = function () {
-                    console.log("Ok clicked");
-                    console.log(InvoiceData);
-                    $scope.saveInvoice($scope, $rootScope, $http, InvoiceData, myFile);
-                    $uibModalInstance.close();
-                };
-                $scope.cancel = function () {
-                    $uibModalInstance.dismiss('cancel');
-                };
-
-
-                $scope.saveInvoice = function ($scope, $rootScope, $http, InvoiceData, myFile) {
-                    var data = {
-                        operation: "createInvoice",
-                        data: InvoiceData
-
-                    };
-                    var config = {
-                        params: {
-                            data: data
-                        }
-                    };
-
-                    if (myFile != undefined) {
-                        if (myFile.name != undefined) {
-                            var uploadQuotationLocation = "upload/Invoices/";
-                            fileName = uploadQuotationLocation + myFile.name;
-                            InvoiceData.Invoice.InvoiceBLOB = fileName;
-                            console.log(InvoiceData);
-                            var fd = new FormData();
-                            fd.append('file', myFile);
-                            $('#loader').css("display", "block");
-                            $http.post("Process/php/uploadInvoice.php", fd, {
-                                    transformRequest: angular.identity,
-                                    headers: {'Content-Type': undefined}
-                                })
-                                .success(function (data) {
-                                    if (data.status == "Successful") {
-                                        console.log("Upload Successful");
-                                        $http.post("Process/php/InvoiceFacade.php", null, config)
-                                            .success(function (data) {
-                                                $('#loader').css("display", "none");
-                                                console.log(data);
-                                                if (data.status == "Successful") {
-                                                    $rootScope.warningMessage = "Invoice is Created Successfully...'";
-                                                    console.log($rootScope.warningMessage);
-                                                    $('#warning').css("display", "block");
-                                                    //$scope.clearForm();
-                                                    setTimeout(function () {
-                                                        $('#warning').css("display", "none");
-                                                        window.location = "dashboard.php#/Process/viewProjects";
-                                                    }, 1000);
-
-                                                } else {
-                                                    $rootScope.errorMessage = data.message;
-                                                    $('#error').css("display", "block");
-                                                    setTimeout(function () {
-                                                        $('#error').css("display", "none");
-                                                    }, 3000);
-                                                }
-
-                                            })
-                                            .error(function (data) {
-                                                $('#loader').css("display", "none");
-                                                $rootScope.errorMessage = "Error :" + data;
-                                                console.log($rootScope.errorMessage);
-                                                $('#error').css("display", "block");
-                                                setTimeout(function () {
-                                                    $('#error').css("display", "none");
-                                                }, 2000);
-                                            });
-
-
-                                    } else {
-                                        $('#loader').css("display", "none");
-                                        $rootScope.errorMessage = data.message;
-                                        $('#error').css("display", "block");
-                                        setTimeout(function () {
-                                            $('#error').css("display", "none");
-                                        }, 3000);
-                                    }
-                                })
-                                .error(function () {
-                                    $('#loader').css("display", "none");
-                                    $rootScope.errorMessage = "Something went wrong can not upload Invoice";
-                                    $('#error').css("display", "block");
-                                });
-                        }
-
-                    } else {
-                        $('#loader').css("display", "block");
-                        $http.post("Process/php/InvoiceFacade.php", null, config)
-                            .success(function (data) {
-
-                                if (data.status == "Successful") {
-
-                                    $('#loader').css("display", "none");
-                                    $rootScope.warningMessage = "Invoice is Created Successfully...'";
-                                    console.log($rootScope.warningMessage);
-                                    $('#warning').css("display", "block");
-                                    //$scope.clearForm();
-                                    setTimeout(function () {
-                                        $('#warning').css("display", "none");
-                                        window.location = "dashboard.php#/Process/viewProjects";
-                                    }, 1000);
-
-                                } else {
-                                    $rootScope.errorMessage = data.message;
-                                    $('#error').css("display", "block");
-                                    setTimeout(function () {
-                                        $('#error').css("display", "none");
-                                    }, 3000);
-                                }
-
-                            })
-                            .error(function (data) {
-                                $('#loader').css("display", "none");
-                                $rootScope.errorMessage = "Error :" + data;
-                                console.log($rootScope.errorMessage);
-                                $('#error').css("display", "block");
-                                setTimeout(function () {
-                                    $('#error').css("display", "none");
-                                }, 2000);
-                            });
-
-
-                    }
-                };
-            },
-            resolve: {
-                InvoiceData: function () {
-                    return $scope.InvoiceData;
-                },
-                myFile: function () {
-                    return $scope.myFile;
-                }
+        };
+        var config = {
+            params: {
+                data: data
             }
-
-        });
-
-        modalInstance.result.then(function () {
-            console.log("In result");
-        }, function () {
-
-        });
-        $scope.toggleAnimation = function () {
-            $scope.animationsEnabled = !$scope.animationsEnabled;
         };
 
+
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadQuotationLocation = "upload/Invoices/";
+                fileName = uploadQuotationLocation + $scope.myFile.name;
+                InvoiceData.Invoice.InvoiceBLOB = fileName;
+                console.log(InvoiceData);
+                var fd = new FormData();
+                fd.append('file', $scope.myFile);
+                $('#loader').css("display", "block");
+
+                var data = {
+                    operation: "isInvoiceAlreadyUploaded",
+                    InvoiceBlob:InvoiceData.Invoice.InvoiceBLOB
+                };
+                var config1 = {
+                    params: {
+                        data: data
+                    }
+                };
+                $http.post("Process/php/InvoiceFacade.php", null, config1)
+                    .success(function (data) {
+
+                        if (data.status == "Successful") {
+                            $scope.postUploadInvoice(fd,config);
+
+                        } else {
+                            $('#loader').css("display", "none");
+                            $rootScope.errorMessage = "Invoice document is already uploaded with  same file name..Please change file Name";
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 3000);
+                        }
+
+                    })
+                    .error(function (data) {
+                        $('#loader').css("display", "none");
+                        $rootScope.errorMessage = "Error :" + data;
+                        console.log($rootScope.errorMessage);
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 2000);
+                    });
+            }
+
+        } else {
+            $scope.postInvoiceData(config);
+        }
+    };
+
+
+    $scope.postUploadInvoice=function(fd,config){
+        $http.post("Process/php/uploadInvoice.php", fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (data) {
+                if (data.status == "Successful") {
+                    console.log("Upload Successful");
+                    $scope.postInvoiceData(config);
+                } else {
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+                }
+            })
+            .error(function () {
+                $('#loader').css("display", "none");
+                $rootScope.errorMessage = "Something went wrong can not upload Invoice";
+                $('#error').css("display", "block");
+            });
+
+    }
+
+    $scope.postInvoiceData=function(config) {
+        $('#loader').css("display", "block");
+        $http.post("Process/php/InvoiceFacade.php", null, config)
+            .success(function (data) {
+
+                if (data.status == "Successful") {
+
+                    $('#loader').css("display", "none");
+                    $rootScope.warningMessage = "Invoice is Created Successfully...'";
+                    console.log($rootScope.warningMessage);
+                    $('#warning').css("display", "block");
+                    //$scope.clearForm();
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+
+                    }, 3000);
+
+                } else {
+                    $('#loader').css("display", "none");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 3000);
+                }
+
+            })
+            .error(function (data) {
+                $('#loader').css("display", "none");
+                $rootScope.errorMessage = "Error :" + data;
+                console.log($rootScope.errorMessage);
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 2000);
+            });
 
     }
 
@@ -1880,7 +1908,502 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
 
 });
-myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal, $log, $filter, AppService,$rootScope) {
+
+
+
+
+myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, $rootScope, $stateParams) {
+
+    console.log("in Modify invoice");
+
+    var data = $stateParams.InvoiceToModify;
+    console.log(data);
+
+
+    $scope.InvoiceDetails = {
+        invoiceNumber: data.invoiceNo,
+        refNo: data.refNo,
+        invoiceDate: data.invoiceDate,
+        quotationDate: data.quotationDate,
+        companyId: data.companyId,
+        contactPerson: data.contactPerson,
+       // grandTotal: data.grandTotal,
+        pan: data.pan,
+        purchaserVatNo: data.PurchasersVATNo,
+        //totalAmount: data.totalAmount,
+        workoOrderNumber: data.workOrderNo,
+        workOrderDate: data.workOrderDate,
+        quotationNumber: data.quotationId,
+        invoiceTitle:data.invoiceTitle
+    };
+
+    $scope.oldInvoiceNo=data.invoiceNo;
+    $scope.invoiceBLOB=data.invoiceBLOB;
+    $scope.roundingOff= data.roundOff;
+    $scope.taxSelected = 0;
+    $scope.taxableAmount = 0;
+    $scope.noOfRows = 0;
+    $scope.currentItemList = [];
+    $scope.taxDetails=[];
+
+
+    $scope.checkAvailability = function () {
+
+        if ($scope.invoiceBLOB === null || $scope.invoiceBLOB === undefined) {
+
+            return false;
+        } else if ($scope.invoiceBLOB.trim() === '') {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    var data = {
+        operation: "getInvoiceDetails",
+        data: $scope.InvoiceDetails.invoiceNumber
+
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
+
+    $http.post("Process/php/InvoiceFacade.php", null, config)
+        .success(function (data) {
+
+            if (data.status != "Successful") {
+
+                $rootScope.errorMessage = "Error Occurred Getting Quotation Data";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 3000);
+                return;
+            }
+
+            var qData = data.message;
+
+            $scope.InvoiceDetails.invoiceItemDetails=[];
+            $scope.totalAmnt = 0;
+            for (var i = 0; i < qData.length; i++) {
+                $scope.InvoiceDetails.invoiceItemDetails.push({
+                    quotationItem: qData[i].Title,
+                    quotationDescription: qData[i].Description,
+                    quotationUnitRate: parseFloat(qData[i].UnitRate),
+                    amount: parseFloat(qData[i].Amount),
+                    quotationQuantity: parseFloat(qData[i].Quantity),
+                    'detailNo': qData[i].DetailNo,
+                    quotationUnit: qData[i].unit
+                });
+                $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
+            }
+            console.log("totalAmount is" + $scope.totalAmnt);
+        }).error(function (data) {
+        $rootScope.errorMessage = data;
+        $('#error').css("display", "block");
+        setTimeout(function () {
+            $('#error').css("display", "none");
+        }, 3000);
+    });
+
+
+    data = {
+        operation: "getInvoiceTaxDetails",
+        data: $scope.InvoiceDetails.invoiceNumber
+
+    };
+    config = {
+        params: {
+            data: data
+        }
+    };
+
+
+    $http.post("Process/php/InvoiceFacade.php", null, config)
+        .success(function (data) {
+            if (data.status != "Successful") {
+                //alert("Error Occurred while getting tax details");
+                $rootScope.errorMessage= "Error Occurred Getting Tax Details";
+                $('#error').css("display","block");
+                setTimeout(function() {
+                    $('#error').css("display","none");
+                }, 3000);
+                return;
+            }
+
+            var qtData = data.message;
+            $scope.qTaxDetails = [];
+            $scope.TaxAmnt = 0;
+            $scope.taxDetails = [];
+            $scope.qTaxDetails = [];
+            for (var i = 0; i < qtData.length; i++) {
+                var taxApplicableTo = 'All';
+                var itemArray = [];
+                if (qtData[i].DetailsNo.length > 0) {
+                    taxApplicableTo = "( Item No ";
+                    for (var j = 0; j < qtData[i].DetailsNo.length; j++) {
+                        if (j + 1 == qtData[i].DetailsNo.length)
+                            taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + " )";
+                        else
+                            taxApplicableTo = taxApplicableTo + qtData[i].DetailsNo[j] + ",";
+                        itemArray.push(parseInt(qtData[i].DetailsNo[j]));
+                    }
+
+                }
+
+                $scope.taxDetails.push({
+                    taxTitle: qtData[i].TaxName,
+                    taxPercentage: qtData[i].TaxPercentage,
+                    amount: parseFloat(qtData[i].TaxAmount),
+                    taxApplicableTo: taxApplicableTo,
+                    'taxArray': itemArray
+                });
+                $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
+
+            }
+            console.log($scope.TaxAmnt);
+        })
+        .error(function (data) {
+            $rootScope.errorMessage= data;
+            $('#error').css("display","block");
+            setTimeout(function() {
+                $('#error').css("display","none");
+            }, 3000);
+        });
+    /************************************/
+    $scope.quotationDate = function () {
+        $scope.showQdate.opened = true;
+    };
+
+    $scope.showQdate = {
+        opened: false
+    };
+
+    var totalAmount = 0;
+    var remainingTotal = 0;
+
+    $scope.modifyInvoice = function () {
+
+        console.log("in modifyInvoice");
+        var totalAmount = parseFloat($scope.totalAmnt) + parseFloat($scope.TaxAmnt);
+        var grandTotal = (+totalAmount ) + +$scope.roundingOff;
+
+        var viewValue=new Date($scope.InvoiceDetails.invoiceDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.InvoiceDetails.invoiceDate=viewValue.toISOString().substring(0, 10);
+
+        var invoiceData = {
+            "InvoiceNo": $scope.InvoiceDetails.invoiceNumber,
+            "InvoiceTitle": $scope.InvoiceDetails.invoiceTitle,
+            "TotalAmount": totalAmount,
+            "RoundingOffFactor": $scope.roundingOff,
+            "GrandTotal": grandTotal,
+            "InvoiceBLOB": $scope.invoiceBLOB,
+            "PurchasersVATNo": $scope.InvoiceDetails.purchaserVatNo,
+            "PAN": $scope.InvoiceDetails.pan,
+            "QuotationId": $scope.InvoiceDetails.quotationNumber,
+            "ContactPerson": $scope.InvoiceDetails.contactPerson,
+            "InvoiceDate": $scope.InvoiceDetails.invoiceDate,
+            oldInvoiceNo:$scope.oldInvoiceNo
+        }
+
+
+        taxData = $scope.taxDetails;
+        var invoiceDetails = $scope.InvoiceDetails.invoiceItemDetails;
+        var InvoiceData = {
+            Invoice: invoiceData,
+            Details: invoiceDetails,
+            taxDetails: taxData
+        };
+
+        var data = {
+            operation: "modifyInvoice",
+            data: InvoiceData
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadQuotationLocation = "upload/Invoices/";
+                fileName = uploadQuotationLocation + $scope.myFile.name;
+                InvoiceData.Invoice.InvoiceBLOB = fileName;
+                console.log(InvoiceData);
+                var fd = new FormData();
+                fd.append('file', $scope.myFile);
+                $('#loader').css("display", "block");
+
+                var data = {
+                    operation: "isInvoiceAlreadyUploadedForOtherInvoice",
+                    InvoiceNo: InvoiceData.Invoice.InvoiceNo,
+                    InvoiceBlob:InvoiceData.Invoice.InvoiceBLOB
+                };
+                var config1 = {
+                    params: {
+                        data: data
+                    }
+                };
+                $http.post("Process/php/InvoiceFacade.php", null, config1)
+                    .success(function (data) {
+
+                        if (data.status == "Successful") {
+                            $scope.postUploadInvoice(fd,config);
+
+                        } else {
+                            $('#loader').css("display", "none");
+                            $rootScope.errorMessage = "Invoice document is already uploaded with  same file name..Please change file Name";
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 3000);
+                        }
+
+                    })
+                    .error(function (data) {
+                        $('#loader').css("display", "none");
+                        $rootScope.errorMessage = "Error :" + data;
+                        console.log($rootScope.errorMessage);
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+                        }, 2000);
+                    });
+            }
+
+        } else {
+            $scope.postInvoiceData(config);
+        }
+    };
+
+    $scope.postUploadInvoice=function(fd,config){
+                    $http.post("Process/php/uploadInvoice.php", fd, {
+                            transformRequest: angular.identity,
+                            headers: {'Content-Type': undefined}
+                        })
+                        .success(function (data) {
+                            if (data.status == "Successful") {
+                                console.log("Upload Successful");
+                                $scope.postInvoiceData(config);
+                            } else {
+                                $('#loader').css("display", "none");
+                                $rootScope.errorMessage = data.message;
+                                $('#error').css("display", "block");
+                                setTimeout(function () {
+                                    $('#error').css("display", "none");
+                                }, 3000);
+                            }
+                        })
+                        .error(function () {
+                            $('#loader').css("display", "none");
+                            $rootScope.errorMessage = "Something went wrong can not upload Invoice";
+                            $('#error').css("display", "block");
+                        });
+
+                }
+
+    $scope.postInvoiceData=function(config){
+                    $('#loader').css("display", "block");
+                    $http.post("Process/php/InvoiceFacade.php", null, config)
+                        .success(function (data) {
+
+                            if (data.status == "Successful") {
+
+                                $('#loader').css("display", "none");
+                                $rootScope.warningMessage = "Invoice is Modified Successfully...'";
+                                console.log($rootScope.warningMessage);
+                                $('#warning').css("display", "block");
+                                //$scope.clearForm();
+                                setTimeout(function () {
+                                    $('#warning').css("display", "none");
+
+                                }, 3000);
+
+                            } else {
+                                $('#loader').css("display", "none");
+                                $rootScope.errorMessage = data.message;
+                                $('#error').css("display", "block");
+                                setTimeout(function () {
+                                    $('#error').css("display", "none");
+                                }, 3000);
+                            }
+
+                        })
+                        .error(function (data) {
+                            $('#loader').css("display", "none");
+                            $rootScope.errorMessage = "Error :" + data;
+                            console.log($rootScope.errorMessage);
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                $('#error').css("display", "none");
+                            }, 2000);
+                        });
+                }
+
+
+
+    $scope.addRows = function () {
+
+        for (var index = 0; index < $scope.noOfRows; index++) {
+            $scope.InvoiceDetails.invoiceItemDetails.push({
+
+                quotationItem: "",
+                quotationDescription: "",
+                quotationQuantity: 0,
+                quotationUnit: "",
+                quotationUnitRate: 0,
+                amount: 0,
+                isTaxAplicable: false
+            });
+        }
+    }
+
+
+    $scope.removeQuotationItem = function (index) {
+
+        $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
+        $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
+
+    };
+
+    $scope.removeInvoiceItem = function (index) {
+
+        $scope.totalAmnt = $scope.totalAmnt - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+        $scope.InvoiceDetails.invoiceItemDetails.splice(index, 1); //remove item by index
+    };
+
+    $scope.removeInvoiceTaxItem = function (index) {
+        $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
+        $scope.taxDetails.splice(index, 1);
+    };
+
+    $scope.calculateTaxableAmount = function (index) {
+
+        if ($scope.InvoiceDetails.invoiceItemDetails[index].isTaxAplicable) {
+            $scope.taxableAmount = $scope.taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+            $scope.taxSelected++;
+            $scope.currentItemList.push(index + 1);
+        } else {
+            $scope.taxableAmount = $scope.taxableAmount - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
+            $scope.taxSelected--;
+            $scope.currentItemList.splice($scope.currentItemList.indexOf(index + 1), 1);
+        }
+    }
+
+    $scope.calculateAmount = function (index) {
+        //alert("ttttt");
+
+        $scope.InvoiceDetails.invoiceItemDetails[index].amount = $scope.InvoiceDetails.invoiceItemDetails[index].quotationQuantity * $scope.InvoiceDetails.invoiceItemDetails[index].quotationUnitRate;
+        console.log("amount is " + $scope.InvoiceDetails.invoiceItemDetails[index].amount);
+    }
+
+
+    $scope.calculateTotal = function (amount) {
+
+        $scope.totalAmnt = 0;
+        for (var i = 0; i < $scope.InvoiceDetails.invoiceItemDetails.length; i++) {
+            $scope.totalAmnt = $scope.totalAmnt + $scope.InvoiceDetails.invoiceItemDetails[i].amount;
+        }
+    }
+
+
+    $scope.addTax = function (size) {
+        var allTax = false;
+        if ($scope.taxSelected <= 0) {
+            $scope.taxableAmount = $scope.totalAmnt;
+            allTax = true;
+        }
+
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'Process/html/AddTax.html',
+            controller: function ($scope, $uibModalInstance, amount, $rootScope) {
+                $scope.tax = {taxTitle: "", taxApplicableTo: "", taxPercentage: 0, amount: 0};
+                $scope.amount = amount;
+                console.log($scope.amount);
+                $scope.ok = function () {
+
+                    console.log($scope.tax);
+                    $uibModalInstance.close($scope.tax);
+                };
+
+                $scope.cancel = function () {
+                    $uibModalInstance.dismiss('cancel');
+                };
+
+                $scope.calculateTaxAmount = function () {
+                    $scope.tax.amount = $scope.amount * ($scope.tax.taxPercentage / 100);
+                }
+            },
+            size: size,
+            resolve: {
+                amount: function () {
+                    return $scope.taxableAmount;
+                }
+            }
+        });
+
+        modalInstance.result.then(function (tax) {
+            var itemString = "All";
+            var itemArray = [];
+            if (!allTax) {
+                itemString = " (Item ";
+                for (var i = 0; i < $scope.currentItemList.length - 1; i++) {
+                    itemString += $scope.currentItemList[i] + " ,";
+                    itemArray.push($scope.currentItemList[i]);
+                }
+                itemString += $scope.currentItemList[$scope.currentItemList.length - 1] + " )";
+                itemArray.push($scope.currentItemList[$scope.currentItemList.length - 1]);
+            }
+
+            $scope.taxDetails.push({
+                taxTitle: tax.taxTitle,
+                taxApplicableTo: itemString,
+                taxPercentage: tax.taxPercentage,
+                amount: tax.amount,
+                taxArray: itemArray
+            });
+
+            $scope.TaxAmnt = 0;
+            ;
+            for (var s = 0; s < $scope.taxDetails.length; s++) {
+
+                $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
+            }
+
+
+        }, function () {
+            console.log("modal Dismiss");
+        });
+        $scope.toggleAnimation = function () {
+            $scope.animationsEnabled = !$scope.animationsEnabled;
+        };
+        if (allTax)
+            $scope.taxableAmount = 0;
+
+
+    }
+
+    $scope.totalTaxAmount = function (amount) {
+        //  console.log("amount is "+amount);
+    }
+
+});
+
+
+
+
+
+
+
+
+    myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal, $log, $filter, AppService,$rootScope) {
     /**************************************************************************/
 
     $scope.projectPayment = [];
@@ -1979,7 +2502,11 @@ myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal,
         console.log("branch number is ");
         console.log(paymentDetails);
         var iscash = 0;
-        var paydate = $filter('date')(paymentDetails.paymentDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+        var viewValue=new Date(paymentDetails.paymentDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        paymentDetails.paymentDate=viewValue.toISOString().substring(0, 10);
+        var paydate = paymentDetails.paymentDate;
         if (paymentDetails.paymentMode == 'cash') {
             iscash = 1;
             //var data = '{"AmountPaid":"'+paymentDetails.amountPaid+'", "PaymentDate":"'+paydate+'", "IsCashPayment":"'+iscash+'", "PaidTo":"'+paymentDetails.paidTo+'","InstrumentOfPayment":"'+paymentDetails.paymentMode+'"}'
@@ -2251,7 +2778,7 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
 myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) {
 
-    $scope.CustomerPerPage = 5;
+    $scope.CustomerPerPage = 10;
     $scope.currentPage = 1;
 
     $scope.searchKeyword = "";
@@ -2303,6 +2830,7 @@ myApp.controller('ViewCustomerController', function ($scope, $http, $rootScope) 
 
 
                         $rootScope.customerSearch = cust;
+                        $scope.length=$rootScope.customerSearch.length;
 
                     } else {
                         $rootScope.errorMessage = response.data.message;
@@ -2580,7 +3108,7 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http, $stateParams,$ro
         }
     };
 
-    $http.post("Process/php/invoiceFacade.php", null, config)
+    $http.post("Process/php/InvoiceFacade.php", null, config)
         .success(function (data) {
 
             if (data.status != "Successful") {
@@ -2631,7 +3159,7 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http, $stateParams,$ro
     };
 
 
-    $http.post("Process/php/invoiceFacade.php", null, config)
+    $http.post("Process/php/InvoiceFacade.php", null, config)
         .success(function (data) {
             if (data.status != "Successful") {
                 //alert("Error Occurred while getting tax details");
@@ -3534,6 +4062,11 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
         }
 
+
+        var viewValue=new Date($scope.QuotationDetails.quotationDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.QuotationDetails.quotationDate=viewValue.toISOString().substring(0, 10);
+
         var quotationData = {
             QuotationTitle: $scope.QuotationDetails.quotationTitle,
             ProjectId: projectId,
@@ -3553,6 +4086,101 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
         };
 
         console.log(QuotationData);
+
+        if ($scope.myFile != undefined) {
+            if ($scope.myFile.name != undefined) {
+                var uploadQuotationLocation = "upload/Quotations/";
+                fileName = uploadQuotationLocation + $scope.myFile.name;
+                console.log("Check Quotation");
+                var data = {
+                    operation: "isQuotationAlreadyUploadedForOtherQuotation",
+                    quotationId: qId,
+                    QuotationBlob: fileName
+
+                };
+                var config = {
+                    params: {
+                        data: data
+                    }
+                };
+                $('#loader').css("display", "block");
+                $http.post("Process/php/quotationFacade.php", null, config)
+                    .success(function (data) {
+
+                        if (data.status == "Successful") {
+
+                            $scope.postUploadQuotation(qId,QuotationData);
+                        } else {
+                            $('#loader').css("display", "none");
+                            //$('#loading').css("display", "none");
+                            $rootScope.errorMessage = "Quotation Document with same name already uploaded..Please change the name of quotation document";
+                            console.log(data.message);
+                            $('#error').css("display", "block");
+                            setTimeout(function () {
+                                //$('#error').css("display", "none");
+                            }, 1000);
+                            // alert(data.message);
+                        }
+
+                    })
+                    .error(function (data) {
+                        $('#loader').css("display", "none");
+                        $rootScope.errorMessage = "Error Occured Please contact administrator";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            //$('#error').css("display", "none");
+                        }, 1000);
+                        //alert(data);
+                    });
+
+            }
+        } else {
+            $scope.postQuotationData(qId,QuotationData);
+        }
+    }
+
+    $scope.postUploadQuotation=function(qId,QuotationData){
+        var uploadQuotationLocation = "upload/Quotations/";
+        fileName = uploadQuotationLocation + $scope.myFile.name;
+        QuotationData.Quotation.QuotationBlob = fileName;
+        var fd = new FormData();
+        fd.append('file', $scope.myFile);
+        $('#loader').css("display", "block");
+        console.log("Upload Quotation");
+        $http.post("Process/php/uploadQuotation.php", fd, {
+                transformRequest: angular.identity,
+                headers: {'Content-Type': undefined}
+            })
+            .success(function (data) {
+
+                if (data.status == "Successful") {
+                    $scope.postQuotationData(qId,QuotationData);
+                } else {
+                    $('#loader').css("display", "none");
+                    //$('#loading').css("display", "none");
+                    $rootScope.errorMessage = data.message;
+                    $('#error').css("display", "block");
+                    setTimeout(function () {
+                        $('#error').css("display", "none");
+                    }, 1000);
+                    //alert(data.message);
+                }
+            })
+            .error(function () {
+                $('#loader').css("display", "none");
+                //$('#loading').css("display", "none");
+                $rootScope.errorMessage = "Error Occured Please contact administrator";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    $('#error').css("display", "none");
+                }, 1000);
+
+            });
+
+    }
+
+
+    $scope.postQuotationData=function(qId,QuotationData){
         var data = {
             operation: "modifyQuotation",
             quotationId: qId,
@@ -3565,127 +4193,49 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
             }
         };
 
-        if ($scope.myFile != undefined) {
-            if ($scope.myFile.name != undefined) {
-                var uploadQuotationLocation = "upload/Quotations/";
-                fileName = uploadQuotationLocation + $scope.myFile.name;
-                quotationData.QuotationBlob = fileName;
-                var fd = new FormData();
-                fd.append('file', $scope.myFile);
-                $('#loader').css("display", "block");
-                $http.post("Process/php/uploadQuotation.php", fd, {
-                        transformRequest: angular.identity,
-                        headers: {'Content-Type': undefined}
-                    })
-                    .success(function (data) {
-                        if (data.status == "Successful") {
-                            console.log("Upload Successful");
-                            $http.post("Process/php/quotationFacade.php", null, config)
-                                .success(function (data) {
+        console.log("Revise Quotation:"+QuotationData);
+        $('#loader').css("display", "block");
+        $http.post("Process/php/quotationFacade.php", null, config)
+            .success(function (data) {
 
-                                    if (data.status == "Successful") {
-                                        $('#loader').css("display", "none");
-                                        //alert("Customer created Successfully");
-                                        console.log(data.message);
-                                        $rootScope.warningMessage = data.message;
-                                        $('#warning').css("display", "block");
-                                        setTimeout(function () {
-                                            $('#warning').css("display", "none");
-                                            window.location = "dashboard.php#/Process/viewProjects";
-                                        }, 1000);
+                if (data.status == "Successful") {
 
-                                        // alert("Quotaion Revised Successfully");
-                                    } else {
-                                        // alert(data.message);
-                                        $('#loader').css("display", "none");
-                                        //$('#loading').css("display", "none");
-                                        $rootScope.errorMessage = data.message;
-                                        $('#error').css("display", "block");
-                                        setTimeout(function () {
-                                            $('#error').css("display", "none");
-                                        }, 1000);
-                                    }
-
-                                })
-                                .error(function (data) {
-                                    $('#loader').css("display", "none");
-                                    //$('#loading').css("display", "none");
-                                    $rootScope.errorMessage = "Error Occured Please contact administrator";
-                                    $('#error').css("display", "block");
-                                    setTimeout(function () {
-                                        $('#error').css("display", "none");
-                                    }, 1000);
-                                    // alert(data);
-                                });
-
-
-                        } else {
-                            $('#loader').css("display", "none");
-                            //$('#loading').css("display", "none");
-                            $rootScope.errorMessage = data.message;
-                            $('#error').css("display", "block");
-                            setTimeout(function () {
-                                $('#error').css("display", "none");
-                            }, 1000);
-                            //alert(data.message);
-                        }
-                    })
-                    .error(function () {
-                        $('#loader').css("display", "none");
-                        //$('#loading').css("display", "none");
-                        $rootScope.errorMessage = "Error Occured Please contact administrator";
-                        $('#error').css("display", "block");
-                        setTimeout(function () {
-                            $('#error').css("display", "none");
-                        }, 1000);
-
-                    });
-            }
-
-        } else {
-            $('#loader').css("display", "block");
-            $http.post("Process/php/quotationFacade.php", null, config)
-                .success(function (data) {
-
-                    if (data.status == "Successful") {
-
-                        $('#loader').css("display", "none");
-                        //alert("Customer created Successfully");
-                        console.log(data.message);
-                        $rootScope.warningMessage = data.message;
-                        $('#warning').css("display", "block");
-                        setTimeout(function () {
-                            $('#warning').css("display", "none");
-                            window.location = "dashboard.php#/Process/viewProjects";
-                        }, 1000);
-                        //alert("Quotation is Revised Successfully");
-
-                    } else {
-                        $('#loader').css("display", "none");
-                        //$('#loading').css("display", "none");
-                        $rootScope.errorMessage = data.message;
-                        console.log(data.message);
-                        $('#error').css("display", "block");
-                        setTimeout(function () {
-                            //$('#error').css("display", "none");
-                        }, 1000);
-                        // alert(data.message);
-                    }
-
-                })
-                .error(function (data) {
                     $('#loader').css("display", "none");
-                    $rootScope.errorMessage = "Error Occured Please contact administrator";
+                    //alert("Customer created Successfully");
+                    console.log(data.message);
+                    $rootScope.warningMessage = data.message;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location = "dashboard.php#/Process/viewProjects";
+                    }, 1000);
+                    //alert("Quotation is Revised Successfully");
+
+                } else {
+                    $('#loader').css("display", "none");
+                    //$('#loading').css("display", "none");
+                    $rootScope.errorMessage = data.message;
+                    console.log(data.message);
                     $('#error').css("display", "block");
                     setTimeout(function () {
                         //$('#error').css("display", "none");
                     }, 1000);
-                    //alert(data);
-                });
+                    // alert(data.message);
+                }
 
-        }
+            })
+            .error(function (data) {
+                $('#loader').css("display", "none");
+                $rootScope.errorMessage = "Error Occured Please contact administrator";
+                $('#error').css("display", "block");
+                setTimeout(function () {
+                    //$('#error').css("display", "none");
+                }, 1000);
+                //alert(data);
+            });
+
+
     }
-
 
     $scope.addRows = function () {
         var rowCount = $scope.noOfRows;
@@ -3915,8 +4465,16 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         console.log("is completed" + completed);
         var crdate = new Date();
         var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        var actualStart = $filter('date')($scope.actualStartDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        var actualEnd = $filter('date')($scope.actualEndDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+        var viewValue1=new Date($scope.actualStartDate);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        $scope.actualStartDate=viewValue1.toISOString().substring(0, 10);
+        var actualStart = $scope.actualStartDate;
+
+        var viewValue=new Date($scope.actualEndDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.actualEndDate=viewValue.toISOString().substring(0, 10);
+        var actualEnd = $scope.actualEndDate;
         if($scope.completed!=undefined ||$scope.completed==1 ){
             $scope.taskCompletionP=100;
         }
@@ -4121,8 +4679,16 @@ myApp.controller('AssignTaskController', function ($scope, $http, AppService, $f
         console.log("IN ASSIGN TASK");
         var date = new Date();
         var creationDate = $filter('date')(date, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        var startDate = $filter('date')($scope.task.startDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
-        var endDate = $filter('date')($scope.task.endDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+
+        var viewValue=new Date($scope.task.startDate);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.task.startDate=viewValue.toISOString().substring(0, 10);
+        var startDate = $scope.task.startDate;
+
+        var viewValue1=new Date($scope.task.endDate);
+        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+        $scope.task.endDate=viewValue1.toISOString().substring(0, 10);
+        var endDate = $scope.task.endDate;
 
         console.log("startDate " + startDate);
         var Taskdata = {

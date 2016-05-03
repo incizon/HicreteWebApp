@@ -242,6 +242,8 @@ designation:"",
 userType:""
 };
 
+
+
     $scope.clearFields= function(page)
     {
         if(page=='init')
@@ -316,7 +318,11 @@ userType:""
 
         $scope.addUser=function(){
 
-          var data={
+            var viewValue=new Date($scope.userInfo.dob);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            $scope.userInfo.dob=viewValue.toISOString().substring(0, 10);
+
+            var data={
             operation :"addUser",
             userInfo:$scope.userInfo,
             roleId: $scope.selectedRole.roleId,
@@ -956,6 +962,9 @@ myApp.controller('companyController',function($scope,$rootScope,$http){
      IFSCCode:""
 
  };
+
+
+
     console.log("Inside company controller");
 
 $scope.warehouse={
@@ -1151,6 +1160,11 @@ $scope.warehouse={
 
 
 $scope.addCompany=function(){
+
+    var viewValue=new Date($scope.company.startdate);
+    viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+    $scope.company.startdate=viewValue.toISOString().substring(0, 10);
+
     var data={
             operation :"addCompany",
             data:$scope.company
@@ -1334,6 +1348,8 @@ $scope.accessRequest={
   toDate:new Date(),
   description:""
 };
+
+
     $scope.requestFromDate=function(){
         $scope.from.opened=true;
     };
@@ -1401,7 +1417,15 @@ $scope.exemptedAccessList=[];
               }
 
 
-               var data={
+              var viewValue=new Date($scope.accessRequest.fromDate);
+              viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+              $scope.accessRequest.fromDate=viewValue.toISOString().substring(0, 10);
+              var viewValue1=new Date($scope.accessRequest.toDate);
+              viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+              $scope.accessRequest.toDate=viewValue1.toISOString().substring(0, 10);
+
+
+              var data={
                       operation :"addTempAcccessRequest",
                       accessRequest : $scope.accessRequest,
                       accessList: $scope.exemptedAccessList
@@ -1791,6 +1815,11 @@ myApp.controller('superUserController', function ($scope, $rootScope, $http, con
     }
     $scope.addSuperUserInfo=function(){
         console.log($scope.superUserInfo);
+
+        var viewValue=new Date($scope.superUserInfo.dateOfBirth);
+        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        $scope.superUserInfo.dateOfBirth=viewValue.toISOString().substring(0, 10);
+
         var data = {
             operation: "addSuperUser",
             superUserInfo: $scope.superUserInfo,
@@ -1885,7 +1914,10 @@ myApp.controller('MyProfileController',function($scope,$http,$filter,AppService)
 
         if(!$scope.userForm.$pristine ||$scope.myFile != undefined ){
             console.log($scope.userInfo);
-            $scope.userInfo.newDate = $filter('date')($scope.userInfo.newDate, 'yyyy/MM/dd hh:mm:ss', '+0530');
+            var viewValue=new Date($scope.userInfo.newDate);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            $scope.userInfo.newDate=viewValue.toISOString().substring(0, 10);
+
             console.log($scope.userInfo);
             var data = {
                 operation: "modifyUserDetails",

@@ -24,7 +24,12 @@ switch($data->operation)
         WorkorderController::saveWorkOrder($data->data);
         break;
     case "getWorkorderByProjectId":
-
         WorkorderController::getWokrorderByProject($data->data);
         break;
+
+    case "isWorkorderAlreadyUploaded":
+        WorkorderController::isWorkorderAlreadyUploaded($data->workorderBlob);
+        break;
+
+
 }

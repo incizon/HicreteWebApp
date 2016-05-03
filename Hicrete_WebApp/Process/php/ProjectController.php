@@ -24,6 +24,7 @@ class ProjectController
         try{
             if(!isset($searchKeyword))
                 $searchKeyword="";
+            $searchKeyword="%".$searchKeyword."%";
             $project = Project::searchProject($searchKeyword,$expression); // possible user loading method
             echo AppUtil::getReturnStatus("Successful",$project);
 

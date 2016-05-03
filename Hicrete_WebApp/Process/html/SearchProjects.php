@@ -38,6 +38,7 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                     <select class="form-control select" name="searchBy" ng-model="searchBy"/>
                     <option value="" disabled selected>Search by</option>
                     >
+                    <option value="project_customer">Customer</option>
                     <option value="project_name">Name</option>
                     <option value="project_city">City</option>
                     </select>

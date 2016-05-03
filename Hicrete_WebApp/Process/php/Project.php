@@ -143,6 +143,9 @@ Class Project
             return "SELECT pm.*,pad.*,pc.*,cm.`CustomerName` from project_master pm,project_address_details pad,customer_master cm ,`project_point_of_contact_details` pc where (pm.ProjectName LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0  AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ORDER BY pm.ProjectName,pm.ProjectStatus DESC ";
         } else if ($searchBy == 'project_city') {
             return "SELECT pm.*,pad.*,pc.*,cm.`CustomerName` from project_master pm,project_address_details pad,customer_master cm ,`project_point_of_contact_details` pc where (pad.`City` LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0  AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ORDER BY pm.ProjectName,pm.ProjectStatus DESC ";
+        }else if($searchBy == 'project_customer')
+        {
+            return "SELECT pm.*,pad.*,pc.*,cm.`CustomerName` from project_master pm,project_address_details pad,customer_master cm ,`project_point_of_contact_details` pc where (cm.`CustomerName` LIKE :searchTerm AND pad.ProjectId = pm.ProjectId ) AND pm.isDeleted = 0 AND pm.IsClosedProject = 0  AND cm.`CustomerId`=pm.`CustomerId` AND pc.`ProjectId`=pm.`ProjectId` ORDER BY pm.ProjectName,pm.ProjectStatus DESC ";
         }
     }
 

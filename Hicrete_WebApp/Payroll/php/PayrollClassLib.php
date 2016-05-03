@@ -347,14 +347,15 @@
                 $result1=$stmt1->fetch(PDO::FETCH_ASSOC);
                 $approverId=$result1['leave_approver_id'];
 
-                $stmt2=$connect->prepare("SELECT firstName,lastName FROM userMaster WHERE userId='$approverId'");
+                $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId=:userId");
+                $stmt2->bindParam(':userId',$approverId);
                 HicreteLogger::logDebug("query: \n".json_encode($stmt2));
                 $stmt2->execute();
                 HicreteLogger::logDebug("Row count: ".$stmt2->rowCount());
                 $result2=$stmt2->fetch(PDO::FETCH_ASSOC);
                 $result_array['approverName']=$result2['firstName']." ".$result2['lastName'];
 
-                $stmt3=$connect->prepare("SELECT userId,firstName,lastName FROM userMaster WHERE userId=:userId");
+                $stmt3=$connect->prepare("SELECT userId,firstName,lastName FROM usermaster WHERE userId=:userId");
                 $stmt3->bindParam(':userId',$userId);
                 HicreteLogger::logDebug("query: \n".json_encode($stmt3));
                 $stmt3->execute();
@@ -408,6 +409,9 @@
                 $caption=$data->caption_of_year;
 
                 $dateDifference=$date2->diff($date1,true)->days;
+                //$dateDifference=date_diff($date2,$date1);
+                //echo json_encode($dateDifference);
+                $dateDifference=$dateDifference+2;
 
                 try {
                     $stmt1 = $connect->prepare("SELECT count(*) FROM `weekly_off_in_year` WHERE (`weekly_off_date` BETWEEN :fromDate AND :toDate)
@@ -436,11 +440,14 @@
                     $numberOfDays = $resultdays1 + $resultdays2;
                     $numberOfLeaves = $dateDifference - $numberOfDays;
 
-                    if ($numberOfLeaves <= 0) {
+                    if ($numberOfLeaves == 0) {
+                        $numberOfLeaves = 1;
+                        echo json_encode($numberOfLeaves);
+                    }else if ($numberOfLeaves < 0) {
                         $numberOfLeaves = 0;
                         echo json_encode($numberOfLeaves);
-                    } else {
-                        echo json_encode($numberOfLeaves);
+                    }  else {
+                        echo json_encode($numberOfLeaves-1);
                     }
 
                 }

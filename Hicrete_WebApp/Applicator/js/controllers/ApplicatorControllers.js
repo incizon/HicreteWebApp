@@ -218,6 +218,11 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             $scope.applicatorDetails.paymentStatus='Yes';
             console.log($scope.applicatorDetails);
 
+            //applicatorDetails.paymentDate
+            /*var viewValue1=new Date(applicatorDetails.paymentDate);
+            viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+            applicatorDetails.paymentDate=viewValue1.toISOString().substring(0, 10);*/
+
             ApplicatorService.submitApplicatorDetails($scope,$http,$rootScope,$scope.applicatorDetails);
            // $scope.formSubmitted=false;
         }
@@ -233,6 +238,8 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             $scope.applicatorDetails.operation='createApplicator';
             $scope.applicatorDetails.paymentStatus="No";
 
+
+
             var modalInstance = $uibModal.open({
                 animation: $scope.animationsEnabled,
                 templateUrl: 'Applicator/html/paymentFollowup.html',
@@ -247,7 +254,13 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     $scope.followup = {
                         opened: false
                     };
+                   /* var viewValue1=new Date(applicatorDetails.paymentDate);
+                    viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+                    applicatorDetails.paymentDate=viewValue1.toISOString().substring(0, 10);
 
+                    var viewValue1=new Date(applicatorDetails.followupdate);
+                    viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+                    applicatorDetails.followupdate=viewValue1.toISOString().substring(0, 10);*/
 
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
@@ -299,6 +312,9 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     $scope.followup = {
                         opened: false
                     };
+                   /* var viewValue1=new Date(applicatorDetails.followupdate);
+                    viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+                    applicatorDetails.followupdate=viewValue1.toISOString().substring(0, 10);*/
 
                     $scope.applicatorDetails = applicatorDetails;
 

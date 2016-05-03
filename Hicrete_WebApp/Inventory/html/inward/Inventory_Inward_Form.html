@@ -31,7 +31,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                            <input maxlength="20" type="text" class="form-control" ng-model="InwardData.inwardNumber"
+                                            <input maxlength="50" type="text" class="form-control" ng-model="InwardData.inwardNumber"
                                                    name="inwardNumber" required  />
                                         </div>
                                         <div class="help-block" ng-messages="inwardEntryForm.inwardNumber.$error"
@@ -193,7 +193,7 @@
                                     <td width="15%">
 
 
-                                        <input maxlength="11" type="number" class="form-control" ng-model="materials.materialQuantity"
+                                        <input maxlength="10" type="text" class="form-control" ng-model="materials.materialQuantity"
                                                name="materialQuantity" min="1" required style="width:100%"/>
 
                                         <div class="help-block" ng-messages="inwardEntryForm.materialQuantity.$error"

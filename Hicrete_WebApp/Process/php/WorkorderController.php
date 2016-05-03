@@ -80,6 +80,29 @@ class WorkorderController
     }
 
 
+    public static function isWorkorderAlreadyUploaded($workorderBlob){
+        try{
+
+            if($workorderBlob!=null) {
+
+                if(!Workorder::isWorkorderAlreadyUploaded($workorderBlob)){
+                    echo AppUtil::getReturnStatus("Successful", "Workorder not Already Uploaded");
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Workorder Already Uploaded");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Invalid Parameters");
+            }
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
+
+    }
+
+
+
     public function updateProject($id,$data){
         $project = project::updateProject($id,$data);
         return $project;
