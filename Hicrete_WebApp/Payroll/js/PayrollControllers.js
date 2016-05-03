@@ -891,7 +891,7 @@ myApp.controller('LeaveApprovalController', function($scope,$http) {
 
     $scope.getLeavesApproval();
 
-    $scope.processLeaveApproval=function(actionStatus,applicationId){
+    $scope.processLeaveApproval=function(actionStatus,applicationId,index){
 
         console.log(actionStatus);
         console.log(applicationId);
@@ -912,10 +912,15 @@ myApp.controller('LeaveApprovalController', function($scope,$http) {
             .success(function (data)
             {
                 console.log(data);
-                if(data.status!="successful"){
+                if(data.status!="success"){
+
                     alert(data.message);
                 }else{
+                    //console.log(index);
+                    $scope.leaveApprovalList.splice(index, 1);
                     alert("Status Updated Successfully");
+
+
                 }
             })
             .error(function (data, status, headers, config)

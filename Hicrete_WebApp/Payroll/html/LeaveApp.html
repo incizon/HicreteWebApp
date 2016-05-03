@@ -31,8 +31,8 @@
                             <td>{{leave.from_date}}</td>
                             <td>{{leave.to_date}}</td>
                             <td>
-                                <button  class="btn btn-info" data-ng-click="processLeaveApproval('Accepted',leave.application_id)">Accept</button>
-                                <button  class="btn btn-danger" data-ng-click="processLeaveApproval('Rejected',leave.application_id)">Rejected</button>
+                                <button  class="btn btn-info" data-ng-click="processLeaveApproval('Accepted',leave.application_id,$index)">Accept</button>
+                                <button  class="btn btn-danger" data-ng-click="processLeaveApproval('Rejected',leave.application_id,$index)">Reject</button>
                             </td>
                         </tr>
 
