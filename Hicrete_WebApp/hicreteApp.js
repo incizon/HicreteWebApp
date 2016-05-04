@@ -705,9 +705,12 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
                   var followupTitle = $scope.payment.newFollowupTitle;
                   var assignedTo = $scope.payment.assignee;
 
-                  var viewValue=new Date($scope.payment.dateOfBill);
-                  viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-                  $scope.payment.dateOfBill=viewValue.toISOString().substring(0, 10);
+                  if($scope.payment.dateOfBill!=undefined || $scope.payment.dateOfBill!=undefined===""){
+                      var viewValue=new Date($scope.payment.dateOfBill);
+                      viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+                      $scope.payment.dateOfBill=viewValue.toISOString().substring(0, 10);
+                  }
+
                   var followupDate = $scope.payment.dateOfBill;
                   var scheduledata = {AssignEmployee:assignedTo,FollowupDate:followupDate,FollowupTitle:followupTitle};
 
@@ -1080,8 +1083,9 @@ myApp.controller('dashboardController', function($scope,$http,$cookieStore,$uibM
 
       modalInstance.result.then(function (followupDetails) {
           $scope.followupDetails = followupDetails;
+          window.location.reload(true);
       }, function () {
-          $log.info('Modal dismissed at: ' + new Date());
+
       });
       $scope.toggleAnimation = function () {
           $scope.animationsEnabled = !$scope.animationsEnabled;
