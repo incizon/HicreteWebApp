@@ -1,6 +1,5 @@
 <?php
 require_once 'database/Database.php';
-require_once '../../Inventory/php/utils/InventoryUtils.php';
 
 //$params = json_decode(file_get_contents('php://input'),false);
 $data = json_decode($_GET['data']);
@@ -140,7 +139,8 @@ function getExpenseDetails($projectId)
 
             $materialId = $result['materialid'];
 
-            $material = InventoryUtils::getProductById($materialId);
+            $material =getProductByID($materialId);
+                //InventoryUtils::getProductById($materialId);
 
             $stmtBillDetails = $conn->prepare("select * FROM material_expense_bills WHERE materialexpensedetailsid='$result[materialexpensedetailsid]'");
             if ($stmtBillDetails->execute()) {
@@ -188,7 +188,19 @@ function getExpenseDetails($projectId)
     echo $json;
 
 }
-
+function getProductByID($materialId){
+    $db = Database::getInstance();
+    $conn = $db->getConnection();
+    $stmt=$conn->prepare("SELECT productname FROM product_master,material WHERE material.materialid='$materialId' AND product_master.productmasterid=material.productmasterid");
+//                $stmt=$dbh->prepare("SELECT productname FROM product_master");
+    if($stmt->execute()){
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $material=$result['productname'];
+        return $material;
+    }else{
+        return "no material";
+    }
+}
 function getCostCenters()
 {
     $db = Database::getInstance();
