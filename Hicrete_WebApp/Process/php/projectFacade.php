@@ -56,6 +56,9 @@ switch($data->operation) {
         else
             echo AppUtil::getReturnStatus("fail", "Please select project");
         break;
+    case "getProjectListWithoutCostCenter":
+        ProjectController::getProjectListWithoutCostCenter();
+        break;
 }
 
 

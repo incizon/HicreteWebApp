@@ -402,8 +402,7 @@ Class Project
         }
     }
 
-    public
-    static function getProjectList()
+    public static function getProjectList()
     {
         $object = array();
 
@@ -422,6 +421,27 @@ Class Project
 
 
     }
+
+    public static function getProjectListWithoutCostCenter()
+    {
+        $object = array();
+
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT `ProjectId`,`ProjectName` FROM `project_master` WHERE `ProjectId` NOT IN (SELECT `projectid` FROM `budget_details`)");
+        if ($result = $stmt->execute()) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($object, $row);
+            }
+        } else
+            return null;
+
+        $db = null;
+        return $object;
+
+
+    }
+
 
     public
     static function getSiteTrackingProjectList()

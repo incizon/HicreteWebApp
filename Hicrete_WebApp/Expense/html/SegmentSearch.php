@@ -9,7 +9,7 @@ if (!isset($_SESSION['token'])) {
     exit();
 }
 $userId=$_SESSION['token'];
-$hasWrite=appUtil::doesUserHasAccess("Expense",$userId,"Write");
+$hasWrite=appUtil::isSuperUser($userId);
 
 ?>
 
@@ -47,13 +47,14 @@ $hasWrite=appUtil::doesUserHasAccess("Expense",$userId,"Write");
                             <td width="20%">{{$index+1}}</td>
                             <td width="30%">{{segment.name}}</td>
                             <td width="50%">
+
                                 <?php
                                     if($hasWrite==1){
 //                                        <button class="btn btn-info btn-sm" data-target="#modify" data-toggle="modal"
 //                                        ng-click=""><span class="fa fa-pencil-square-o"></span>Modify
 //                                </button>
                                         echo "
-                                <button class=\"btn btn-danger btn-sm\"><span class=\"fa fa-times\"></span>Delete</button>";
+                                <button  class=\"btn btn-danger btn-sm\" ng-click=\"deleteSegment(segment.id,\$index)\"><span class=\"fa fa-times\"></span>Delete</button>";
                                     }
                                 ?>
 

@@ -33,6 +33,22 @@
         case 'getProjectListForExpense':
             Expense::getProjectsForExpense();
             break;
+        case 'deleteSegment':
+            try{
+                $status=Expense::deleteSegment($data->segmentId);
+                if($status==2){
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Budget Segment is used in costcenter..Can not Delete");
+                }else if($status==1){
+                    echo AppUtil::getReturnStatus("Success", "Budget Segment deleted successfully");
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Budget Segment can not be deleted");
+                }
+            }catch(Exception $e){
+                echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+            }
+
+            break;
+
     }
 
 ?>

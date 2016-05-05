@@ -434,6 +434,31 @@ class Expense
             echo "Exception Occur While Updating Bill Status";
         }
     }
+
+    public static function deleteSegment($segmentId)
+    {
+        $db = Database::getInstance();
+        $connect = $db->getConnection();
+
+        $stmt1 = $connect->prepare("SELECT `budgetsegmentid` FROM `budget_details` where budgetsegmentid=:segmentId");
+        $stmt1->bindParam(':segmentId', $segmentId);
+        $stmt1->execute();
+        $result1 = $stmt1->fetchAll(PDO::FETCH_ASSOC);
+
+        if (count($result1) > 0)
+            return 2;
+
+
+        $stmt = $connect->prepare("DELETE FROM `budget_segment` WHERE `budgetsegmentid`=:segmentId");
+        $stmt->bindParam(':segmentId', $segmentId);
+        if ($stmt->execute()) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+
 }
 
 ?>
