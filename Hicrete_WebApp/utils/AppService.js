@@ -556,6 +556,248 @@ myApp.service('AppService', function () {
 
     }
 
+    this.getTaskAssignedToUser=function($http,$errorMessage,$Tasks){
+        var data = {
+            operation: "getAllTaskForUser",
+            includeCompleted:false
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        console.log(config);
+        $('#loader').css("display", "block");
+        $http.post("Process/php/TaskFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                $Tasks=[];
+                var b=[];
+                for (var i = 0; i < data.message.length; i++) {
+
+                    b.push({
+                        "TaskID": data.message[i].TaskID,
+                        "TaskName": data.message[i].TaskName,
+                        "TaskDescripion": data.message[i].TaskDescripion,
+                        "ScheduleStartDate": data.message[i].ScheduleStartDate,
+                        "ScheduleEndDate": data.message[i].ScheduleEndDate,
+                        "CompletionPercentage": data.message[i].CompletionPercentage,
+                        "TaskAssignedTo": data.message[i].TaskAssignedTo,
+                        "isCompleted": data.message[i].isCompleted,
+                        "CreationDate": data.message[i].CreationDate,
+                        "CreatedBy": data.message[i].CreatedBy,
+                        "ActualStartDate": data.message[i].ActualStartDate,
+                        "AcutalEndDate": data.message[i].AcutalEndDate,
+                        "UserId": data.message[i].UserId,
+                        "UserName": data.message[i].firstName + " " + data.message[i].lastName
+
+                    });
+                }
+                $Tasks=b;
+
+                console.log("get task on dashboard");
+
+            })
+            .error(function (data, status, headers, config) {
+                console.log(data.error);
+
+                $('#loader').css("display", "none");
+                $errorMessage = data.message;
+                $('#error').css("display", "block");
+            });
+
+    }
+
+
+    this.getPaymentFollowup=function($http,$errorMessage,$paymentFollowup){
+        var data={
+            operation :"getPaymentFollowup"
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/followupFacade.php',null,config)
+            .success(function (data, status, headers) {
+                console.log(data);
+
+                if(data.status == "Successful") {
+
+                    $paymentFollowup=[];
+                    console.log("Success");
+                    for(var i = 0; i<data.message.length ; i++){
+                        $paymentFollowup.push({
+                            followupId: data.message[i].FollowupId,
+                            assignEmployee: data.message[i].AssignEmployee,
+                            followupDate: data.message[i].FollowupDate,
+                            invoiceId:data.message[i].InvoiceId,
+                            followupDate:data.message[i].FollowupDate,
+                            followupTitle:data.message[i].FollowupTitle,
+                            creationDate:data.message[i].CreationDate,
+                            createdBy: data.message[i].CreatedBy,
+                            type : 'Payment'
+                        });
+                    }
+
+
+                }else{
+                    alert("Database error occurred while fetching payment followup");
+                }
+
+            })
+            .error(function (data, status, header) {
+                alert("Error Occured while fetching payment followup");
+            });
+
+    }
+
+    this.getQuotationFollowup=function($http,$errorMessage,$quotationFollowup){
+        var data={
+            operation :"getQuotationFollowup"
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/followupFacade.php',null,config)
+            .success(function (data, status, headers) {
+                console.log(data);
+
+                if(data.status == "Successful") {
+                    console.log("Success");
+                    $quotationFollowup = [];
+                    var b = [];
+
+                    for(var i = 0; i<data.message.length ; i++){
+                        $quotationFollowup.push({
+                            followupId: data.message[i].FollowupId,
+                            quotationId: data.message[i].QuotationId,
+                            assignEmployee:data.message[i].AssignEmployee,
+                            followupDate:data.message[i].FollowupDate,
+                            followupTitle: data.message[i].FollowupTitle,
+                            creationDate:data.message[i].CreationDate,
+                            createdBy :data.message[i].CreatedBy,
+                            type : 'Quotation'
+                        });
+                    }
+
+
+                }else{
+                    alert("Database error occurred while fetching Quotation followup");
+                }
+
+            })
+            .error(function (data, status, header) {
+                alert("Error Occured while fetching Quotation followup");
+            });
+
+
+    }
+
+
+    this.getSiteTrackingFollowup=function($http,$errorMessage,$sitetrackingFollowup){
+        var data={
+            operation :"getSitetrackingFollowup"
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/followupFacade.php',null,config)
+            .success(function (data, status, headers) {
+
+                console.log(data);
+
+                if(data.status == "Successful") {
+                    console.log("Success");
+                    $sitetrackingFollowup = [];
+                    var b = [];
+
+                    for(var i = 0; i<data.message.length ; i++){
+                        $sitetrackingFollowup.push({
+                            followupId: data.message[i].FollowupId,
+                            projectId: data.message[i].ProjectId,
+                            assignEmployee:data.message[i].AssignEmployee,
+                            followupDate:data.message[i].FollowupDate,
+                            followupTitle: data.message[i].FollowupTitle,
+                            creationDate:data.message[i].CreationDate,
+                            createdBy :data.message[i].CreatedBy,
+                            type : 'SiteTracking'
+                        });
+                    }
+
+
+                }else{
+                    alert("Database error occurred while fetching SiteTracking followup");
+                }
+
+            })
+            .error(function (data, status, header) {
+                alert("Error Occured while fetching SiteTracking followup");
+            });
+
+
+    }
+
+
+    this.getApplicatorFollowup=function($http,$errorMessage,$ApplicatorPaymentFollowup){
+        var data={
+            operation :"getApplicatorFollowup"
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post('Process/php/followupFacade.php',null,config)
+            .success(function (data, status, headers) {
+                console.log(data);
+
+                if(data.status == "Successful") {
+                    console.log("Success");
+                    $ApplicatorPaymentFollowup = [];
+                    var b = [];
+
+                    for(var i = 0; i<data.message.length ; i++){
+                        $ApplicatorPaymentFollowup.push({
+                            followupId: data.message[i].follow_up_id,
+                            ApplicatorId: data.message[i].enrollment_id,
+                            assignEmployee:data.message[i].assignEmployeeId,
+                            followupDate:data.message[i].date_of_follow_up,
+                            followupTitle: data.message[i].followup_title,
+                            creationDate:data.message[i].creation_date,
+                            createdBy :data.message[i].created_by,
+                            type : 'Applicator'
+                        });
+                    }
+
+
+                }else{
+                    alert("Database error occurred while fetching Applicator followup");
+                }
+
+            })
+            .error(function (data, status, header) {
+                alert("Error Occured while fetching Applicator followup");
+            });
+
+
+    }
+
+
+
 
 
 });

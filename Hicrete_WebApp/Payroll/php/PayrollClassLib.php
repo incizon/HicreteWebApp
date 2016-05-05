@@ -472,14 +472,14 @@
                     $toDate = $date2->format('Y-m-d');
                     //echo "\n".$toDate;
                     //echo "\n".$userId;
-                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date >= :fromDate AND to_date <= :toDate AND leave_applied_by=:userId");
+                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,no_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date >= :fromDate AND to_date <= :toDate AND leave_applied_by=:userId");
 
                     $stmt1->bindParam(':userId',$userId);
                     $stmt1->bindParam(':fromDate',$fromDate);
                     $stmt1->bindParam(':toDate',$toDate);
                 }
                 else{
-                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE leave_applied_by=:userId");
+                    $stmt1=$connect->prepare("SELECT application_id,from_date,to_date,type_of_leaves,no_of_leaves,reason,status,application_date FROM leave_application_master WHERE leave_applied_by=:userId");
                     $stmt1->bindParam(':userId',$userId);
                 }
                 HicreteLogger::logDebug("query: \n" . json_encode($stmt1));
@@ -495,6 +495,7 @@
                         $leaves['status']=$result1['status'];
                         $leaves['application_date']=$result1['application_date'];
                         $leaves['application_id']=$result1['application_id'];
+                        $leaves['no_of_leaves']=$result1['no_of_leaves'];
 
                         array_push($json_response, $leaves);
                     }
@@ -576,9 +577,9 @@
                         $year = $data->year;
                         if (isset($data->month)) {
                             $month = $data->month;
-                            $stmt1 = $connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year' AND DATE_FORMAT(`leave_application_master`.`from_date`, '%m') = '$month'");
+                            $stmt1 = $connect->prepare("SELECT leave_application_master.leave_applied_by,leave_application_master.no_of_leaves,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason,leave_application_master.status,leave_application_master.application_date FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year' AND DATE_FORMAT(`leave_application_master`.`from_date`, '%m') = '$month'");
                         } else {
-                            $stmt1 = $connect->prepare("SELECT * FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year'");
+                            $stmt1 = $connect->prepare("SELECT leave_application_master.leave_applied_by,leave_application_master.no_of_leaves,leave_application_master.from_date,leave_application_master.to_date,leave_application_master.type_of_leaves,leave_application_master.reason,leave_application_master.status,leave_application_master.application_date FROM `leave_application_master`,`attendance_year` WHERE (`leave_application_master`.`from_date`>=`attendance_year`.`from_date` AND `leave_application_master`.`to_date`<=`attendance_year`.`to_date`) AND `attendance_year`.`caption_of_year`='$year'");
                         }
                     }
                     else{
@@ -592,7 +593,7 @@
                         $fromDate = $date1->format('Y-m-d');
                         $date2 = new DateTime($data->toDate);
                         $toDate = $date2->format('Y-m-d');
-                        $stmt1 = $connect->prepare("SELECT leave_applied_by,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate");
+                        $stmt1 = $connect->prepare("SELECT leave_applied_by,no_of_leaves,from_date,to_date,type_of_leaves,reason,status,application_date FROM leave_application_master WHERE from_date>=:fromDate AND to_date<=:toDate");
                         $stmt1->bindParam(':fromDate', $fromDate);
                         $stmt1->bindParam(':toDate', $toDate);
                     }
@@ -613,6 +614,7 @@
                         $result_array['type_of_leaves']=$result['type_of_leaves'];
                         $result_array['status']=$result['status'];
                         $result_array['application_date']=$result['application_date'];
+                        $result_array['no_of_leaves']=$result['no_of_leaves'];
 
                         $userId=$result['leave_applied_by'];
                         $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId='$userId'");
@@ -674,6 +676,7 @@
                         $result_array['type_of_leaves']=$result['type_of_leaves'];
                         $result_array['status']=$result['status'];
                         $result_array['application_date']=$result['application_date'];
+                        $result_array['no_of_leaves']=$result['no_of_leaves'];
                         $userId=$result['leave_applied_by'];
                         $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId='$userId'");
                         if($stmt2->execute()){

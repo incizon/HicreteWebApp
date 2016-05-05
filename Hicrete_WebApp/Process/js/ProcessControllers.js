@@ -2503,9 +2503,12 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
         console.log(paymentDetails);
         var iscash = 0;
 
-        var viewValue=new Date(paymentDetails.paymentDate);
-        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        paymentDetails.paymentDate=viewValue.toISOString().substring(0, 10);
+        if(paymentDetails.paymentDate!=undefined && paymentDetails.paymentDate!==''){
+            var viewValue=new Date(paymentDetails.paymentDate);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            paymentDetails.paymentDate=viewValue.toISOString().substring(0, 10);
+        }
+
         var paydate = paymentDetails.paymentDate;
         if (paymentDetails.paymentMode == 'cash') {
             iscash = 1;
