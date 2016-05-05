@@ -124,7 +124,7 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
     $http.post("Process/php/projectFacade.php", null, config)
         .success(function (data) {
             console.log("IN Project Get");
-            console.log(data);
+            console.log(data );
             if (data.status != "Successful") {
                 alert("Failed:" + data.message);
             } else {
