@@ -175,7 +175,7 @@
                                 </thead>
                                 <tr ng-repeat="materials in InwardData.inwardMaterials">
                                     <td width="30%">
-                                        <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.material" name="material"
+                                        <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"
                                                 ng-value="Select" required style="width: 90%">
                                             <option value="" disabled selected>Select Material</option>
                                             <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}

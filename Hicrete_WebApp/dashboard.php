@@ -34,8 +34,10 @@ if(!$userObj->init($userId)){
     <!-- END META SECTION -->
 
     <!-- CSS INCLUDE -->
+
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/theme-white.css" />
     <link rel="stylesheet" type="text/css" id="theme" href="Assets/css/hicreteApp.css" />
+
     <!-- EOF CSS INCLUDE -->
 
     <style>
@@ -113,7 +115,9 @@ if(!$userObj->init($userId)){
 
     <script type="text/javascript" src="Assets/plugins/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="Assets/plugins/bootstrap/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="Assets/plugins/jquery/jquery-ui.min.js"></script>
+
     <script type="text/javascript" src="Assets/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
 
 

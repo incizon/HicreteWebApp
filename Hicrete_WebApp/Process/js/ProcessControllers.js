@@ -619,6 +619,10 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
     }
 
+    $scope.openInNewWindow = function (filePath) {
+        window.open(filePath, '_blank');
+    }
+
 
     $scope.checkAvailability = function (filePath) {
 
