@@ -160,6 +160,7 @@ public function loadInvoiceForProject($projid){
 		$stmt = $conn->prepare("INSERT INTO invoice(InvoiceNo, QuotationId, InvoiceDate, InvoiceTitle, TotalAmount, RoundingOffFactor, GrandTotal, InvoiceBLOB,  PurchasersVATNo, PAN, CreatedBy,ContactPerson) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
 
 		if($stmt->execute([$main->InvoiceNo, $main->QuotationId, $invoiceDate, $main->InvoiceTitle, $main->TotalAmount, $main->RoundingOffFactor, $main->GrandTotal, $main->InvoiceBLOB, $main->PurchasersVATNo, $main->PAN, $userId,$main->ContactPerson]) === TRUE){
+
 			for($i = 0;$i<sizeof($InvoicebasicDetails);$i++){
 				$DetailId = AppUtil::generateId();
 
@@ -184,6 +185,7 @@ public function loadInvoiceForProject($projid){
 
 									$stmt3 = $conn->prepare("INSERT INTO invoice_tax_applicable_to(TaxId, DetailsId) VALUES(?,?)");
 									if($stmt3->execute([$TaxId,$detailIdArray[$qut]]) === FALSE){
+
 										$conn->rollBack();
 										return false;
 									}

@@ -110,7 +110,41 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
     $scope.projectList = [];
     //$scope.projectList.push({name: "Project1", id: "1"});
     //$scope.projectList.push({name: "Project2", id: "2"});
-    AppService.getAllProjects($http,$scope.projectList);
+    //AppService.getAllProjects($http,$scope.projectList);
+
+    var data = {
+        operation: "getProjectListWithoutCostCenter"
+    };
+    var config = {
+        params: {
+            data: data
+        }
+    };
+
+    $http.post("Process/php/projectFacade.php", null, config)
+        .success(function (data) {
+            console.log("IN Project Get");
+            console.log(data );
+            if (data.status != "Successful") {
+                alert("Failed:" + data.message);
+            } else {
+                for (var i = 0; i < data.message.length; i++) {
+                    $scope.projectList.push({
+                        id: data.message[i].ProjectId,
+                        name: data.message[i].ProjectName
+
+                    });
+                }
+            }
+
+        })
+        .error(function (data) {
+            alert("Error  Occurred:" + data);
+        });
+
+
+
+
     $scope.segmentList = [];
     $scope.costCenterDetails = {
         projectId: "",
@@ -476,10 +510,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
 
     var projectid="";
-    if($stateParams.costCenterForProject!=null){
-        $scope.projectName=$stateParams.costCenterForProject.project_name;
-        projectid=$stateParams.costCenterForProject.projectId;
-    }
+
 
     console.log($stateParams.costCenterForProject);
     $scope.searchKewords=null;
@@ -520,6 +551,9 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     //$scope.getExpenseDetails=function(){
 
+    if($stateParams.costCenterForProject!=undefined){
+        $scope.projectName=$stateParams.costCenterForProject.project_name;
+        projectid=$stateParams.costCenterForProject.projectId;
         var keyword=$scope.searchKewords;
         //console.log(keyword);
         var data = {
@@ -543,7 +577,7 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
                     $rootScope.expenseDetails = data;
                     $scope.costCenterData=data;
                     console.log($rootScope.expenseDetails);
-                  //  console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
+                    //  console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
                 }
 
             })
@@ -552,7 +586,40 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
             });
 
+
+    }
+
+
     //}
+
+    $scope.deleteSegment=function($segmentId,$index){
+        var data = {
+            operation: "deleteSegment",
+            segmentId:$segmentId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                if(data.status=="Success"){
+                    $scope.Segments.splice($index,1);
+                    alert(data.message);
+                }else{
+                    alert(data.message);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                alert("Failure : Error Occurred");
+            });
+
+    }
 
     $scope.getTotalSegmentExpense=function(segment){
 

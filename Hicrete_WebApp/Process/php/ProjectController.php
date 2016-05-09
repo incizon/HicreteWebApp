@@ -167,6 +167,22 @@ class ProjectController
     }
 
 
+    public static function getProjectListWithoutCostCenter(){
+        try{
+            $project = Project::getProjectListWithoutCostCenter();
+            if($project!==null)
+                echo AppUtil::getReturnStatus("Successful",$project);
+            else
+                echo AppUtil::getReturnStatus("Unsuccessful","Database Error Occurred");
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+        }
+
+    }
+
+
     public static function getSiteTrackingProjectList(){
         try{
             $project = Project::getSiteTrackingProjectList();

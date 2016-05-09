@@ -134,8 +134,8 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                         <!--                                                                 <span class="fa fa-times"></span>-->
                         <!--                                                                    </button>-->
                         <!--                            </a>-->
-                        <a ui-sref="Process.searchExpense({costCenterForProject:project})">
-                            <button class="btn btn-primary" title="View cost center">
+                        <a  ng-show='!isCostCenterAvailable(project)' ui-sref="Process.searchExpense({costCenterForProject:project})">
+                            <button  class="btn btn-primary" title="View cost center">
                                 <span class="fa fa-eye"></span>
                                 Cost center
                             </button>
