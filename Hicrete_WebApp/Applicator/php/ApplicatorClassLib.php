@@ -645,9 +645,10 @@
                                             if ($affectedRow1 != 0) {
 
                                                 $result6 = $stmt6->fetch();
+                                                $newDate = date("d-m-Y", strtotime($result5['date_of_payment']));
                                                 $applicator['paymentDetails'][] = array(
                                                     'amount_paid' => $result5['amount_paid'],
-                                                    'date_of_payment' => $result5['date_of_payment'],
+                                                    'date_of_payment' => $newDate,
                                                     'paid_to' => $result5['paid_to'],
                                                     'payment_mode' => $result5['payment_mode'],
                                                     'bank_name' => $result6['bank_name'],
@@ -655,10 +656,10 @@
                                                     'unique_number' => $result6['number_of_instrument']
                                                 );
                                             } else {
-
+                                                $newDate = date("d-m-Y", strtotime($result5['date_of_payment']));
                                                 $applicator['paymentDetails'][] = array(
                                                     'amount_paid' => $result5['amount_paid'],
-                                                    'date_of_payment' => $result5['date_of_payment'],
+                                                    'date_of_payment' => $newDate,
                                                     'paid_to' => $result5['paid_to'],
                                                     'payment_mode' => $result5['payment_mode'],
                                                     'bank_name' => '-',
@@ -689,7 +690,8 @@
                                 $stmt7->execute();
                                 HicreteLogger::logDebug("Row count:\n " . json_encode($stmt7->rowCount()));
                                 $result7 = $stmt7->fetch(PDO::FETCH_ASSOC);
-                                $applicator['date_of_follow_up'] = $result7['date_of_follow_up'];
+                                $newDateFollowUp = date("d-m-Y", strtotime($result7['date_of_follow_up']));
+                                $applicator['date_of_follow_up'] = $newDateFollowUp;
                                 $applicator['remaining_amount'] = $applicator['package_total_amount'] - $applicator['total_paid_amount'];
 
                                 echo json_encode($applicator);
@@ -848,11 +850,11 @@
 
                                 if ($affectedRow != 0) {
                                     while ($result3 = $stmt3->fetch(PDO::FETCH_ASSOC)) {
-
+                                        $newDatePayment = date("d-m-Y", strtotime($result3['date_of_payment']));
 
                                         $applicator['paymentDetails'][] = array(
                                             'amount_paid' => $result3['amount_paid'],
-                                            'date_of_payment' => $result3['date_of_payment'],
+                                            'date_of_payment' => $newDatePayment,
                                             'paid_to' => $result3['paid_to'],
                                             'payment_mode' => $result3['payment_mode']
                                         );

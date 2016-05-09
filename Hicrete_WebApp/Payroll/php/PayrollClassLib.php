@@ -104,8 +104,8 @@
                             HicreteLogger::logDebug("Row Count: \n".$stmt1->rowCount());
                             $result1=$stmt1->fetch(PDO::FETCH_ASSOC);
                             $result_array['caption_of_year']=$result1['caption_of_year'];
-                            $result_array['from_date']=$result1['from_date'];
-                            $result_array['to_date']=$result1['to_date'];
+                            $result_array['from_date']=date("d-m-Y", strtotime($result1['from_date']));
+                            $result_array['to_date']=date("d-m-Y", strtotime($result1['to_date']));
                             $captionYear = $result1['caption_of_year'];
                             $stmt2=$connect->prepare("SELECT * FROM holiday_in_year WHERE caption_of_year=:captionYear");
                             $stmt2->bindParam(':captionYear',$captionYear);
@@ -114,9 +114,9 @@
                                 HicreteLogger::logDebug("Row Count: \n".$stmt2->rowCount());
                                 $holidaysList=array();
                                 while($result2=$stmt2->fetch(PDO::FETCH_ASSOC)){
-                                        $holidaysList['holiday_date']=$result2['holiday_date'];
+                                        $holidaysList['holiday_date']=date("d-m-Y", strtotime($result2['holiday_date']));
                                         $holidaysList['description']=$result2['description'];
-                                        $holidaysList['creation_date']=$result2['creation_date'];
+                                        $holidaysList['creation_date']=date("d-m-Y", strtotime($result2['creation_date']));
                                         $stmt3=$connect->prepare("SELECT firstName,lastName from usermaster WHERE userId='$result2[created_by]'");
 
                                         if($stmt3->execute()){
@@ -488,12 +488,12 @@
                     while($result1=$stmt1->fetch(PDO::FETCH_ASSOC)){
 
                         $leaves=array();
-                        $leaves['from_date']=$result1['from_date'];
-                        $leaves['to_date']=$result1['to_date'];
+                        $leaves['from_date']=date("d-m-Y", strtotime($result1['from_date']));
+                        $leaves['to_date']=date("d-m-Y", strtotime($result1['to_date']));
                         $leaves['type_of_leaves']=$result1['type_of_leaves'];
                         $leaves['reason']=$result1['reason'];
                         $leaves['status']=$result1['status'];
-                        $leaves['application_date']=$result1['application_date'];
+                        $leaves['application_date']=date("d-m-Y", strtotime($result1['application_date']));
                         $leaves['application_id']=$result1['application_id'];
                         $leaves['no_of_leaves']=$result1['no_of_leaves'];
 
@@ -608,12 +608,12 @@
                     while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
 
                         $result_array=array();
-                        $result_array['from_date']=$result['from_date'];
-                        $result_array['to_date']=$result['to_date'];
+                        $result_array['from_date']=date("d-m-Y", strtotime($result['from_date']));
+                        $result_array['to_date']=date("d-m-Y", strtotime($result['to_date']));
                         $result_array['reason']=$result['reason'];
                         $result_array['type_of_leaves']=$result['type_of_leaves'];
                         $result_array['status']=$result['status'];
-                        $result_array['application_date']=$result['application_date'];
+                        $result_array['application_date']=date("d-m-Y", strtotime($result['application_date']));
                         $result_array['no_of_leaves']=$result['no_of_leaves'];
 
                         $userId=$result['leave_applied_by'];
@@ -670,12 +670,12 @@
                     HicreteLogger::logDebug("Row Count : \n" . json_encode($stmt1->rowCount()));
                     while($result=$stmt1->fetch(PDO::FETCH_ASSOC)){
                         $result_array=array();
-                        $result_array['from_date']=$result['from_date'];
-                        $result_array['to_date']=$result['to_date'];
+                        $result_array['from_date']=date("d-m-Y", strtotime($result['from_date']));
+                        $result_array['to_date']=date("d-m-Y", strtotime($result['to_date']));
                         $result_array['reason']=$result['reason'];
                         $result_array['type_of_leaves']=$result['type_of_leaves'];
                         $result_array['status']=$result['status'];
-                        $result_array['application_date']=$result['application_date'];
+                        $result_array['application_date']=date("d-m-Y", strtotime($result['application_date']));
                         $result_array['no_of_leaves']=$result['no_of_leaves'];
                         $userId=$result['leave_applied_by'];
                         $stmt2=$connect->prepare("SELECT firstName,lastName FROM usermaster WHERE userId='$userId'");
