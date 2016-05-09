@@ -79,10 +79,12 @@ myApp.service('AppService', function () {
                                 branchName: data.message[i].BranchName,
                                 unqiueNo: data.message[i].IDOfInstrument
                             });
+
                             totalAmountPaid = totalAmountPaid + parseInt(data.message[i].AmountPaid);
 
                         }
-                        totalPayableAmt = parseInt(data.message[0].GrandTotal);
+                        //if(data.message[0].GrandTotal!=undefined)
+                         totalPayableAmt = parseInt(data.message[0].GrandTotal);
                     }
                     $scope.totalAmtPaid = totalAmountPaid;
                     $scope.totalPayableAmount = totalPayableAmt;

@@ -3,3 +3,5 @@
 2016-05-05 0:21:58 - ERROR --> Leave details not found   
 2016-05-05 0:22:08 - ERROR --> Leave details not found 
 2016-05-05 0:22:16 - ERROR --> Leave details not found 
+2016-05-07 6:13:44 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '572d6b7834b63' for key 'PRIMARY' 

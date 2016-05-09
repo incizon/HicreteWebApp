@@ -269,7 +269,7 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
         }
 });
 
-myApp.controller('expenseEntryController', function ($scope, $http,AppService,$rootScope,$filter) {
+myApp.controller('expenseEntryController', function ($scope, $http,AppService,$rootScope) {
 
     $scope.otherExpenseClicked = false;
     $scope.materialExpenseClicked = false;
@@ -394,11 +394,12 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
     }
     $scope.addOtherExpense = function () {
         $scope.otherExpenseClicked = false;
+        if($scope.expenseDetails.isBillApplicable){
+            var viewValue=new Date($scope.billDetails.dateOfBill);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
 
-       /* var viewValue=new Date($scope.billDetails.dateOfBill);
-        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);*/
-        $scope.billDetails.dateOfBill = $filter("date")($scope.billDetails.dateOfBill, 'dd-MM-yyyy');
+        }
 
         var data = {
             operation: "addOtherExpense",
@@ -449,11 +450,14 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
-       /* var viewValue=new Date($scope.billDetails.dateOfBill);
-        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);*/
+        console.log($scope.billDetails);
+        console.log($scope.expenseDetails);
+        if($scope.expenseDetails.isBillApplicable){
+            var viewValue=new Date($scope.billDetails.dateOfBill);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+        }
 
-        $scope.billDetails.dateOfBill = $filter("date")($scope.billDetails.dateOfBill, 'dd-MM-yyyy');
         var data = {
             operation: "addMaterialExpense",
             materialExpenseData: $scope.expenseDetails,
