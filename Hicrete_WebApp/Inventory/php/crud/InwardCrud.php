@@ -141,7 +141,8 @@ class InwardData extends CommonMethods
                 }else{
                     $result2['supervisor']="";
                 }
-                $inwardData['dateofentry'] = $result2['dateofentry'];
+                $newDate = date("d-m-Y", strtotime($result2['dateofentry']));
+                $inwardData['dateofentry'] = $newDate;
                 $inwardData['companyName'] = $result2['companyName'];
                 $inwardData['warehouseName'] = $result2['wareHouseName'];
                 $stmtTransport = $dbh->prepare("SELECT * FROM inward_transportation_details WHERE inwardid=:inwardID");

@@ -58,6 +58,13 @@ function getExpenseDetails($projectId)
     $segmentName = "";
     $totalSegmentExpense = 0;
     $result_array['SegmentExpenseDetails'] = array();
+    $stmtBudgetAllocated = $conn->prepare("SELECT SUM(`budget_details`.`allocatedbudget`) AS totalAllocatedBudget FROM `budget_details` WHERE `budget_details`.`projectid`='$projectId'");
+    if ($stmtBudgetAllocated->execute()) {
+        $resultAllocatedBudget=$stmtBudgetAllocated->Fetch(PDO::FETCH_ASSOC);
+        $totlaAllocatedBudget=$resultAllocatedBudget['totalAllocatedBudget'];
+    }else{
+        $totlaAllocatedBudget=0;
+    }
     $stmt = $conn->prepare("SELECT `budget_details`.`projectid`,`budget_details`.`budgetsegmentid`,`budget_details`.`allocatedbudget`,`budget_details`.`alertlevel`,`segmentname`,SUM(`amount`) AS totalExpense FROM `budget_details` INNER JOIN `expense_details` ON `expense_details`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` AND `budget_details`.`projectid`='$projectId' JOIN `budget_segment` ON `budget_segment`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` GROUP BY `budget_details`.`budgetsegmentid`");
     if ($stmt->execute()) {
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -67,12 +74,14 @@ function getExpenseDetails($projectId)
             $segmentWiseExpense['segmentId'] = $result['budgetsegmentid'];
             $segmentWiseExpense['segmentName'] = $result['segmentname'];
             $segmentWiseExpense['allocatedBudget'] = $result['allocatedbudget'];
+
             if ($result['totalExpense'] != "")
                 $segmentWiseExpense['totalSegmentExpense'] = $result['totalExpense'];
             else
                 $segmentWiseExpense['totalSegmentExpense'] = 0;
+
             $segmentWiseExpense['alertLevel'] = $result['alertlevel'];
-            $totlaAllocatedBudget = $totlaAllocatedBudget + $result['allocatedbudget'];
+          //  $totlaAllocatedBudget = $totlaAllocatedBudget + $result['allocatedbudget'];
             $stmt1 = $conn->prepare("SELECT expensedetailsid,`projectid`,budgetsegmentid,amount,description  FROM `expense_details` WHERE projectid='$projectId' AND budgetsegmentid='$result[budgetsegmentid]'");
             if ($stmt1->execute()) {
                 $segmentWiseExpense['SegmentExpense'] = array();
