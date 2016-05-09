@@ -282,9 +282,14 @@ else {
 					$result1_array['productionbatchmasterid'] = $result1['productionbatchmasterid'];
 					$result1_array['batchNo'] = $result1['batchno'];
 					$result1_array['batchCodeName'] = $result1['batchcodename'];
-					$result1_array['dateOfEntry'] = $result1['dateofentry'];
-					$result1_array['startDate'] = $result1['productionstartdate'];
-					$result1_array['endDate'] = $result1['productionenddate'];
+
+					$result1_array['dateOfEntry'] = date('d-m-y', strtotime($result1['dateofentry']));
+					$result1_array['startDate'] = date('d-m-y', strtotime($result1['productionstartdate']));
+					$result1_array['endDate'] = date('d-m-y', strtotime($result1['productionenddate']));
+
+//					$result1_array['dateOfEntry'] = $result1['dateofentry'];
+//					$result1_array['startDate'] = $result1['productionstartdate'];
+//					$result1_array['endDate'] = $result1['productionenddate'];
 					$result1_array['supervisor'] = $result1['productionsupervisorid'];
 
 					$result1_array['rawMaterial'] = array();

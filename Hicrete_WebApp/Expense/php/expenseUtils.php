@@ -107,9 +107,14 @@ function getExpenseDetails($projectId)
                         $billissueingentity = $resultBillDetails['billissueingentity'];
                         if ($billissueingentity == "")
                             $billissueingentity = "--";
-                        $dateofbill = $resultBillDetails['dateofbill'];
+
+                        $dateofbill =$resultBillDetails['dateofbill'];
                         if ($dateofbill == "")
                             $dateofbill = "--";
+                        else{
+                            $newDate = date("d-m-Y", strtotime( $resultBillDetails['dateofbill']));
+                            $dateofbill=$newDate;
+                        }
 
                     }
 
@@ -164,9 +169,14 @@ function getExpenseDetails($projectId)
                 $billissueingentity = $resultBillDetails['billissueingentity'];
                 if ($billissueingentity == "")
                     $billissueingentity = "--";
-                $dateofbill = $resultBillDetails['dateofbill'];
+
+                $dateofbill =$resultBillDetails['dateofbill'];
                 if ($dateofbill == "")
                     $dateofbill = "--";
+                else{
+                    $newDate = date("d-m-Y", strtotime( $resultBillDetails['dateofbill']));
+                    $dateofbill=$newDate;
+                }
 
             }
             $result_array['materialExpenseDetails'][] = array(

@@ -3,3 +3,5 @@
 2016-05-05 0:21:58 - ERROR --> Leave details not found   
 2016-05-05 0:22:08 - ERROR --> Leave details not found 
 2016-05-05 0:22:16 - ERROR --> Leave details not found 
+2016-05-09 18:44:15 - FATAL --> Exception Occured Message:
+SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty 
