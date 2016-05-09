@@ -269,7 +269,7 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
         }
 });
 
-myApp.controller('expenseEntryController', function ($scope, $http,AppService,$rootScope) {
+myApp.controller('expenseEntryController', function ($scope, $http,AppService,$rootScope,$filter) {
 
     $scope.otherExpenseClicked = false;
     $scope.materialExpenseClicked = false;
@@ -395,9 +395,10 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
     $scope.addOtherExpense = function () {
         $scope.otherExpenseClicked = false;
 
-        var viewValue=new Date($scope.billDetails.dateOfBill);
+       /* var viewValue=new Date($scope.billDetails.dateOfBill);
         viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);*/
+        $scope.billDetails.dateOfBill = $filter("date")($scope.billDetails.dateOfBill, 'dd-MM-yyyy');
 
         var data = {
             operation: "addOtherExpense",
@@ -448,10 +449,11 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
-        var viewValue=new Date($scope.billDetails.dateOfBill);
+       /* var viewValue=new Date($scope.billDetails.dateOfBill);
         viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+        $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);*/
 
+        $scope.billDetails.dateOfBill = $filter("date")($scope.billDetails.dateOfBill, 'dd-MM-yyyy');
         var data = {
             operation: "addMaterialExpense",
             materialExpenseData: $scope.expenseDetails,
