@@ -423,7 +423,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     QuotationId: data.message[i].QuotationId,
                     CompanyId: data.message[i].companyId,
                     CompanyName: data.message[i].companyName,
-                    CreationDate: data.message[i].DateOfQuotation,
+                    CreationDate: AppService.getFormattedDate(data.message[i].DateOfQuotation),
                     ProjectName: data.message[i].ProjectName,
                     ProjectId: data.message[i].ProjectId,
                     Subject: data.message[i].Subject,
@@ -433,6 +433,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     isApproved: data.message[i].isApproved,
                     filePath: data.message[i].QuotationBlob
                 });
+            console.log(data.message[i].DateOfQuotation);
+               // $scope.projectQuotations[i].CreationDate=AppService.getFormattedDate($scope.projectQuotations[i].CreationDate);
             }
             myService.set($scope.projectQuotations);
             if ($scope.projectQuotations.length > 0) {
@@ -479,7 +481,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     $scope.projectWorkorders.push({
                         workOrderNo: data.message[i].WorkOrderNo,
                         workoOrderTitle: data.message[i].WorkOrderName,
-                        receivedDate: data.message[i].ReceivedDate,
+                        receivedDate: AppService.getFormattedDate(data.message[i].ReceivedDate),
                         quotationTitle: data.message[i].QuotationTitle,
                         quotationId: data.message[i].QuotationId,
                         creationDate: data.message[i].CreationDate,
@@ -535,14 +537,14 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     $scope.projectInvoice.push({
                         invoiceNo: data.message[i].InvoiceNo,
                         quotationId: data.message[i].QuotationId,
-                        invoiceDate: data.message[i].InvoiceDate,
+                        invoiceDate:AppService.getFormattedDate(data.message[i].InvoiceDate),
                         invoiceTitle: data.message[i].InvoiceTitle,
                         totalAmount: data.message[i].TotalAmount,
                         invoiceBLOB: data.message[i].InvoiceBLOB,
                         isPaymentRetention: data.message[i].isPaymentRetention,
                         CreatedBy: data.message[i].CreatedBy,
                         quotationTitle: data.message[i].QuotationTitle,
-                        quotationDate: data.message[i].DateOfQuotation,
+                        quotationDate:AppService.getFormattedDate( data.message[i].DateOfQuotation),
                         refNo: data.message[i].RefNo,
                         companyId: data.message[i].CompanyId,
                         contactPerson: data.message[i].ContactPerson,
@@ -551,7 +553,7 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                         grandTotal: data.message[i].GrandTotal,
                         roundOff: data.message[i].RoundingOffFactor,
                         workOrderNo: data.message[i].WorkOrderNo,
-                        workOrderDate: data.message[i].ReceivedDate
+                        workOrderDate: AppService.getFormattedDate(data.message[i].ReceivedDate)
                     });
                 }
 
@@ -659,7 +661,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
         //porjName: proj.project_name,
         //quotationId: projDetailsData.QuotationId
     };
-    console.log("final scope is " + $scope.workorder);
+    console.log("final scope is ");
+    console.log($scope.workorder);
 
     $scope.workOrderDate = function(){
         $scope.workOrder.opened = true;
@@ -3277,10 +3280,10 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
                     for (var i = 0; i < data.message.length; i++) {
                         $scope.followups.push({
                             followup_id: data.message[i].FollowupId,
-                            followup_date: data.message[i].FollowupDate,
+                            followup_date: AppService.getFormattedDate(data.message[i].FollowupDate),
                             followup_title: data.message[i].FollowupTitle,
                             followup_description: data.message[i].Description,
-                            followup_conductionDate: data.message[i].ConductDate,
+                            followup_conductionDate:AppService.getFormattedDate( data.message[i].ConductDate),
                             followup_by: data.message[i].firstName + " " + data.message[i].lastName
                         });
                     }
@@ -3358,10 +3361,10 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
                     for (var i = 0; i < data.message.length; i++) {
                         $scope.followups.push({
                             followup_id: data.message[i].FollowupId,
-                            followup_date: data.message[i].FollowupDate,
+                            followup_date:AppService.getFormattedDate( data.message[i].FollowupDate),
                             followup_title: data.message[i].FollowupTitle,
                             followup_description: data.message[i].Description,
-                            followup_conductionDate: data.message[i].ConductDate,
+                            followup_conductionDate: AppService.getFormattedDate(data.message[i].ConductDate),
                             followup_by: data.message[i].firstName + " " + data.message[i].lastName
                         });
                     }
@@ -3428,10 +3431,10 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
                     for (var i = 0; i < data.message.length; i++) {
                         $scope.followups.push({
                             followup_id: data.message[i].FollowupId,
-                            followup_date: data.message[i].FollowupDate,
+                            followup_date: AppService.getFormattedDate(data.message[i].FollowupDate),
                             followup_title: data.message[i].FollowupTitle,
                             followup_description: data.message[i].Description,
-                            followup_conductionDate: data.message[i].ConductDate,
+                            followup_conductionDate: AppService.getFormattedDate(data.message[i].ConductDate),
                             followup_by: data.message[i].firstName + " " + data.message[i].lastName
                         });
                     }
@@ -4376,7 +4379,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 });
 
 
-myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter, $rootScope) {
+myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter, $rootScope,AppService) {
 
     $scope.today = function () {
         $scope.actualStartDate = new Date();
@@ -4402,8 +4405,8 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
     };
     var task = setInfo.get();
     console.log("task set is " + JSON.stringify(task));
-    var startDate = $filter('date')(task.ScheduleStartDate, 'yyyy/MM/dd', '+0530');
-    var endDate = $filter('date')(task.ScheduleEndDate, 'yyyy/MM/dd', '+0530');
+    var startDate = $filter('date')(task.ScheduleStartDate, 'dd/MM/yyyy', '+0530');
+    var endDate = $filter('date')(task.ScheduleEndDate, 'dd/MM/yyyy', '+0530');
     $scope.ViewTask = {
         task_id: task.TaskID,
         task_name: task.TaskName,
@@ -4440,9 +4443,9 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                     $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
                         notes.push({
-                            Note: data.message[i].ConductionNote,
+                            Note:AppService.getFormattedDate(data.message[i].ConductionNote),
                             AddedBy: data.message[i].firstName + " " + data.message[i].lastName,
-                            NoteDate: data.message[i].DateAdded
+                            NoteDate: AppService.getFormattedDate(data.message[i].DateAdded)
                         });
                     }
                     $scope.ViewNotes = notes;

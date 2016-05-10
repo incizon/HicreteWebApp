@@ -32,5 +32,11 @@ function doShowAlertFailure(title,message) {
        stack: stack_bottomright
    });
 
+function getFormatteddDate(date1){
+    var mydate = new Date(date1);
+    var str = mydate.toString("dd-MM-yyyy");
+    return str;
+}
+
 
 }
