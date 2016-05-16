@@ -191,9 +191,9 @@ else {
 					$result1_array['productionbatchmasterid'] = $result1['productionbatchmasterid'];
 					$result1_array['batchNo'] = $result1['batchno'];
 					$result1_array['batchCodeName'] = $result1['batchcodename'];
-					$result1_array['dateOfEntry'] = date('d-m-y', strtotime($result1['dateofentry']));
-					$result1_array['startDate'] = date('d-m-y', strtotime($result1['productionstartdate']));
-					$result1_array['endDate'] = date('d-m-y', strtotime($result1['productionenddate']));
+					$result1_array['dateOfEntry'] = date("d-m-Y", strtotime($result1['dateofentry']));
+					$result1_array['startDate'] = date("d-m-Y", strtotime($result1['productionstartdate']));
+					$result1_array['endDate'] = date("d-m-Y", strtotime($result1['productionenddate']));
 					$result1_array['supervisor'] = $result1['productionsupervisorid'];
 
 					$result1_array['rawMaterial'] = array();
@@ -234,7 +234,7 @@ else {
 					$result1_array['inhouseinwardid'] = $result4['inhouseinwardid'];
 					$result1_array['wareHouse'] = $result4['warehouseName'];
 					$result1_array['company'] = $result4['companyName'];
-					$result1_array['dateOfEntryAftrProd'] = $result4['dateofentry'];
+					$result1_array['dateOfEntryAftrProd'] = date("d-m-Y", strtotime($result4['dateofentry']));
 					$result1_array['supervisorid'] = $result4['supervisorid'];
 
 					$stmt5 = $dbh->prepare("select a.productname,c.quantity,c.packagedunits,c.materialproducedid from product_master a,material b,produced_good c where a.productmasterid=b.productmasterid and c.producedgoodid=:producedgoodid and c.materialproducedid=b.materialid");
@@ -282,9 +282,11 @@ else {
 					$result1_array['productionbatchmasterid'] = $result1['productionbatchmasterid'];
 					$result1_array['batchNo'] = $result1['batchno'];
 					$result1_array['batchCodeName'] = $result1['batchcodename'];
-					$result1_array['dateOfEntry'] = $result1['dateofentry'];
-					$result1_array['startDate'] = $result1['productionstartdate'];
-					$result1_array['endDate'] = $result1['productionenddate'];
+					//$newDate = date("d-m-Y", strtotime($result1['dateofentry']));
+					$result1_array['dateOfEntry'] = date("d-m-Y", strtotime($result1['dateofentry']));
+
+					$result1_array['startDate'] = date("d-m-Y", strtotime($result1['productionstartdate']));
+					$result1_array['endDate'] = date("d-m-Y", strtotime($result1['productionenddate']));
 					$result1_array['supervisor'] = $result1['productionsupervisorid'];
 
 					$result1_array['rawMaterial'] = array();

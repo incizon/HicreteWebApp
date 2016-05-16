@@ -109,7 +109,7 @@ if(!$userObj->init($userId)){
     <script type="text/javascript" src="Assets/js/angular.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-route.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-cookies.js"></script>
-
+    <script type="text/javascript" src="jsUtils.js"></script>
     <script type="text/javascript" src="Assets/js/angular-ui-router.min.js"></script>
     <script type="text/javascript" src="Assets/js/angular-messages.js"></script>
 
@@ -128,7 +128,7 @@ if(!$userObj->init($userId)){
     <script src="Assets/js/ui-bootstrap-tpls-0.14.3.min.js"></script>
 
     <script type="text/javascript" src="hicreteApp.js"></script>
-
+    <script type="text/javascript" src="Assets/js/date.js"></script>
     <!-- END SCRIPTS -->
 
     <!--Controllers and service-->

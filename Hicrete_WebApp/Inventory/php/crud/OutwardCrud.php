@@ -94,7 +94,9 @@ class OutwardData extends CommonMethods
                 $outwardData['warehouseid'] = $result2['warehouseid'];
                 $outwardData['companyid'] = $result2['companyid'];
                 $outwardData['supervisorid'] = $result2['supervisorid'];
-                $outwardData['dateofentry'] = $result2['dateofentry'];
+
+                $newDate = date("d-m-Y", strtotime($result2['dateofentry']));
+                $outwardData['dateofentry'] = $newDate;
 
                 $outwardData['companyName'] = $result2['companyName'];
                 $outwardData['warehouseName'] = $result2['wareHouseName'];

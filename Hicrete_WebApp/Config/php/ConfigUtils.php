@@ -525,7 +525,7 @@ class ConfigUtils
                     $result_array['roleId'] = $result['roleId'];
                     $result_array['roleName'] = $result['roleName'];
                     $date = new DateTime($result['creationDate']);
-                    $dob = $date->format('Y-m-d');
+                    $dob = $date->format('d-m-Y');
 
                     $result_array['creationDate'] =$dob;
 
@@ -644,7 +644,8 @@ class ConfigUtils
                     $result_array['companyId'] = $result['companyId'];
                     $result_array['companyName'] = $result['companyName'];
                     $result_array['companyAbbrevation'] =$result['companyAbbrevation'];
-                    $result_array['startDate'] =$result['startDate'];
+                    $newDate = date("d-m-Y", strtotime($result['startDate']));
+                    $result_array['startDate'] =$newDate;
                     $result_array['address'] =$result['address'];
                     $result_array['city'] =$result['city'];
                     $result_array['state'] =$result['state'];

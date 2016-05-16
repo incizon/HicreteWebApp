@@ -3,6 +3,15 @@
  */
 myApp.service('AppService', function () {
 
+    this.getFormattedDate=function (input){
+        var d = new Date(input);
+        //var str = mydate.toString("dd-MM-yyyy");
+        var curr_date = d.getDate();
+        var curr_month = d.getMonth() + 1; //Months are zero based
+        var curr_year = d.getFullYear();
+
+        return curr_date + "-" + curr_month + "-" + curr_year;
+    }
     this.getCompanyList = function ($http, $companies) {
         $('#loader').css("display", "block");
         var data = {
@@ -79,10 +88,14 @@ myApp.service('AppService', function () {
                                 branchName: data.message[i].BranchName,
                                 unqiueNo: data.message[i].IDOfInstrument
                             });
+                            var mydate = new Date(invoiceDetail[i].paymentDate);
+                            var str = mydate.toString("dd-MM-yyyy");
+                            invoiceDetail[i].paymentDate=str;
                             totalAmountPaid = totalAmountPaid + parseInt(data.message[i].AmountPaid);
 
                         }
-                        totalPayableAmt = parseInt(data.message[0].GrandTotal);
+                        //if(data.message[0].GrandTotal!=undefined)
+                         totalPayableAmt = parseInt(data.message[0].GrandTotal);
                     }
                     $scope.totalAmtPaid = totalAmountPaid;
                     $scope.totalPayableAmount = totalPayableAmt;
