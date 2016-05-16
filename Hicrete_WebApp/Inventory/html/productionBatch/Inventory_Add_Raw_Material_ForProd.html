@@ -78,7 +78,7 @@
                                         <div class="col-md-7">
                                             <div class="input-group" style="width:100%">
                                                 <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
-                                                <input ng-blur="check(rawMat.quantity)" name="quantity"
+                                                <input ng-change="getAvailableQty(rawMat.material)" name="quantity"
                                                        style="width: 66%;" type="text" ng-model="rawMat.quantity"
                                                        class="form-control" required>
                                                 <ul class="panel-controls">
@@ -96,7 +96,7 @@
                                                             class="fa fa-times"></span></a></li>
                                                 </ul>
 
-                                                <div class="help-block" ng-show="qtyError">
+                                                <div class="help-block" ng-show="check(rawMat.quantity ,rawMat.material)">
                                                     <span style="color:red">Don't have sufficient quantity available in stock. Current available quantity is {{getAvailableQty(rawMat.material)}}</span>
                                                 </div>
 

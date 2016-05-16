@@ -892,6 +892,7 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
 
     $scope.getAvailableQty = function (pMaterialId) {
         var qty;
+       console.log(pMaterialId);
 
         for (var i = 0; i < $scope.materialsForOutward.length; i++) {
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
@@ -902,9 +903,17 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
             }
 
         }
-
+       console.log("Available Quantity:"+$scope.availableTotalquantity);
         return qty;
     }
+
+    $scope.showErrorMessage=function(availableQty,Qty){
+        if(availableQty < Qty)
+          return true;
+        else
+          return false;
+    }
+
     $scope.getUnit = function (pMaterialId) {
         var qty;
 
@@ -1974,19 +1983,22 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
         return qty;
     };
 
-    $scope.check = function (quantity) {
-        //console.log(quantity);
+    $scope.check = function (quantity,materialName) {
+        console.log(materialName);
         //console.log($scope.availableTotalquantity)
+       if(materialName===undefined || materialName===null || materialName==="")
+         return false;
 
-        if ($scope.availableTotalquantity < quantity || $scope.availableTotalquantity == 0) {
+        if (parseInt($scope.availableTotalquantity) < parseInt(quantity) || parseInt($scope.availableTotalquantity) == 0) {
 
-            //console.log("m alo nighalo");
             $scope.qtyError = 1;
             console.log($scope.qtyError);
+            return true;
         }
         else {
-            //console.log("kai prob ahe rao");
             $scope.qtyError = 0;
+            return false;
+
         }
     };
 
