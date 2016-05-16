@@ -14,6 +14,7 @@ $hasWrite=appUtil::doesUserHasAccess("Business Process",$userId,"Write");
 $hasReadForExpense=appUtil::doesUserHasAccess("Expense",$userId,"Read");
 $hasWriteForExpense=appUtil::doesUserHasAccess("Expense",$userId,"Write");
 
+
 if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
     header("Location: ../../Dashboard.php");
     exit();
@@ -109,7 +110,7 @@ if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
     <?php
     echo "<nav id=\"primary_nav_wrap\"> <ul>";
 
-        if($hasRead==1 || $hasWrite==1) {
+
             if ($hasWrite == 1) {
                 echo "<li><a>Create</a>
                     <ul>
@@ -121,17 +122,23 @@ if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
                     </ul>
                 </li>";
             }
-            if ($hasRead == 1) {
+            if ($hasRead == 1 || $hasReadForExpense==1) {
+
                 echo "<li><a>Search</a>
-                    <ul>
-                        <li><a ui-sref=\"Process.viewCustomers\">Customer</a></li>
-                        <li><a ui-sref=\"Process.viewProject\">Project</a></li>
-
-                        </li>
-                    </ul>
+                    <ul>";
+                if($hasRead == 1){
+                    echo "<li><a ui-sref=\"Process.viewCustomers\">Customer</a></li>
+                   <li><a ui-sref=\"Process.viewProject\">Project</a></li>
+                 </ul>
                 </li>";
-            }
+                }else if($hasReadForExpense==1){
+                    echo "<li><a ui-sref=\"Process.viewProject\">Project</a></li>
+                 </ul>
+                </li>";
+                }
 
+            }
+       if($hasRead==1 || $hasWrite==1) {
             echo "<li><a>Payment</a>
                     <ul>";
             if ($hasWrite == 1)
@@ -163,7 +170,8 @@ if(!$hasRead && !$hasWrite && !$hasReadForExpense && !$hasWriteForExpense){
             }
         }
            if($hasReadForExpense==1|| $hasWriteForExpense==1){
-              echo  "<li><a>Project Expense</a>
+
+               echo  "<li><a>Project Expense</a>
                 <ul>";
               if($hasWriteForExpense==1){
                   echo "<li><a ui-sref=\"Process.addSegment\">Create Budget Segment</a></li>

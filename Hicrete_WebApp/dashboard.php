@@ -202,13 +202,13 @@ if(!$userObj->init($userId)){
                     </li>";
             }
 
-            if($userObj->isSuper or $userObj->isBusinessProcess){
+            if($userObj->isSuper or $userObj->isBusinessProcess or $userObj->isExpense){
                 echo "<li ng-class=\"{active:tab.isSet(3)}\">
                             <a ng-click=\"tab.setTab(3)\" ui-sref=\"Process\"><span class=\"fa fa-refresh\"></span> <span class=\"xn-text\">Process</span></a>
                     </li>";
             }
 
-            if($userObj->isSuper or $userObj->isExpense){
+            if($userObj->isSuper ){
 //                echo "<li class=\"\">
 //                            <a ui-sref=\"Expense\"><span class=\"fa fa-inr\"></span> <span class=\"xn-text\">Expense</span></a>
 //                    </li>";

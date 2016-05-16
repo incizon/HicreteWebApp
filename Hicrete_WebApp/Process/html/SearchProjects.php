@@ -10,7 +10,9 @@ if (!isset($_SESSION['token'])) {
 }
 $userId = $_SESSION['token'];
 $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
-
+$hasRead = appUtil::doesUserHasAccess("Business Process", $userId, "Read");
+$hasExpenseRead = appUtil::doesUserHasAccess("Expense", $userId, "Read");
+$hasWriteForExpense=appUtil::doesUserHasAccess("Expense",$userId,"Write");
 ?>
 <div>
     <div ng-include="'utils/loader.html'"></div>
@@ -114,13 +116,16 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                     <td>{{project.project_manager}}</td>
 
                     <td>
-                        <a ui-sref="Process.ProjectDetails({projectToView:project})">
-                            <button class="btn btn-info" title="View project details">
-                                <span class="fa fa-eye"></span>
-                            </button>
-                        </a>
+
 
                         <?php
+                        if($hasRead==1){
+                            echo "<a ui-sref=\"Process.ProjectDetails({projectToView:project})\">
+                            <button class=\"btn btn-info\" title=\"View project details\">
+                                <span class=\"fa fa-eye\"></span>
+                            </button>
+                        </a>";
+                        }
                         if ($hasWrite == 1) {
                             echo "<a ui-sref=\"Process.modifyProject({projectToModify:project})\">
                                 <button class=\"btn btn-info\" title=\"Modify project details\">
@@ -128,20 +133,16 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                                 </button>
                             </a>";
                         }
-                        ?>
-                        <!--                                                   <a href="">-->
-                        <!--                                                       <button class="btn btn-danger" title="Delete">-->
-                        <!--                                                                 <span class="fa fa-times"></span>-->
-                        <!--                                                                    </button>-->
-                        <!--                            </a>-->
-                        <a  ng-show='!isCostCenterAvailable(project)' ui-sref="Process.searchExpense({costCenterForProject:project})">
-                            <button  class="btn btn-primary" title="View cost center">
-                                <span class="fa fa-eye"></span>
+                        if($hasExpenseRead==1){
+                            echo "<a  ng-show='!isCostCenterAvailable(project)' ui-sref=\"Process.searchExpense({costCenterForProject:project})\">
+                            <button  class=\"btn btn-primary\" title=\"View cost center\">
+                                <span class=\"fa fa-eye\"></span>
                                 Cost center
                             </button>
-                        </a>
-                        <?php
-                        if ($hasWrite == 1) {
+                           </a>";
+                        }
+
+                        if ($hasWriteForExpense == 1) {
                             echo "<a ui-sref=\"Process.createCostCenter\">
                                 <button ng-show='isCostCenterAvailable(project)' class=\"btn btn-primary\" title=\"Add cost center\">
                                     <span class=\"fa fa-plus\"></span>
@@ -150,6 +151,8 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                             </a>";
                         }
                         ?>
+
+
 
 
                     </td>
