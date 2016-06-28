@@ -4544,7 +4544,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 });
 
 
-myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, $http) {
+myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, $http,$filter) {
 
     $scope.sortBy = "";
     $scope.searchKeyword = ""
@@ -4574,6 +4574,14 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                 if (data.status == "sucess") {
                     $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
+                        var date = new Date(data.message[i].CreationDate);
+                        var creationDate = $filter('date')(date, 'dd/MM/yyyy', '+0530');
+                        var viewValue=new Date(data.message[i].CreationDate);
+                        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+
+                        var startDate = viewValue.toISOString().substring(0, 10);
+
+
                         task.push({
                             "TaskID": data.message[i].TaskID,
                             "TaskName": data.message[i].TaskName,
@@ -4583,7 +4591,7 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                             "CompletionPercentage": data.message[i].CompletionPercentage,
                             "TaskAssignedTo": data.message[i].TaskAssignedTo,
                             "isCompleted": data.message[i].isCompleted,
-                            "CreationDate": data.message[i].CreationDate,
+                            "CreationDate":creationDate ,
                             "CreatedBy": data.message[i].CreatedBy,
                             "ActualStartDate": data.message[i].ActualStartDate,
                             "AcutalEndDate": data.message[i].AcutalEndDate,
