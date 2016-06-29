@@ -31,11 +31,11 @@
                                                 <div class="col-md-4">                                            
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input type="number"  name="noOfElement"  ng-model="noOfElement" class="form-control" required pattern="[0-9]+"/> 
+                                                        <input type="number"  name="noOfElement"  ng-model="noOfElement" class="form-control" required />
                                                     </div> 
                                                     <div class="help-block" ng-messages="segmentForm.noOfElement.$error" ng-show="addClicked">
                                                     <p style="color:red" ng-message="required">Enter Number</p> 
-                                                    <p style="color:red" ng-message="pattern">Only positive numbers is allowed</p>
+                                                    <!--<p style="color:red" ng-message="pattern">Only positive numbers is allowed</p>-->
                                                         
                                             </div> 
                                                 </div>  
