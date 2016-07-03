@@ -390,7 +390,7 @@
                                     <label class="control-label"><strong>Total Amount :</strong></label>
                                 </div>
                                 <div class="col-md-8" ng-model="totalAmount">
-                                    {{+totalAmnt + +TaxAmnt}}
+                                    {{totalAmnt + TaxAmnt}}
                                 </div>
                             </div>
                         </div>
@@ -404,7 +404,7 @@
                                 <div class="col-md-8">
                                     <div class="input-group">
                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                        <input type="text" class="form-control" name="RoundingOff" ng-model="roundingOff"/>
+                                        <input type="text" class="form-control" name="RoundingOff" ng-model="roundingOff" ng-change="calculateGrandTotal()"/>
                                     </div>
                                 </div>
                             </div>
@@ -422,7 +422,7 @@
                                         <input type="text" class="form-control" name="GrandTotal" ng-model="grandTotal">{{(+totalAmnt + +TaxAmnt) - +roundingOff}}</input>
                                     </div> -->
                                      <div class="col-md-8" ng-model="totalAmount">
-                                    {{(+totalAmnt + +TaxAmnt) + +roundingOff}}
+                                    {{totalAmount}}
                                 </div>
                                 </div>
                             </div>

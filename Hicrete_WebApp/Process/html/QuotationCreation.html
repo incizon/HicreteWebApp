@@ -255,7 +255,7 @@
                             </td>
                             <td>
                                 <input type="text" name="UnitRate" placeholder="Unit Rate"
-                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)" ng-blur="calculateTotal(quotation.amount)"
+                                       class="form-control" ng-model="quotation.quotationUnitRate" ng-change="calculateAmount($index)" ng-blur="calculateTotal(quotation.amount,$index)"
                                        pattern="[0-9.]+" required/>
                                 <div class="help-block"
                                      ng-messages="QuotationForm.UnitRate.$error"
@@ -284,7 +284,7 @@
                         <div class="col-md-4">
                             <label class="control-label">Total Amount :</label>
                         </div>
-                        <div class="col-md-8" ng-model="totalAmnt">
+                        <div class="col-md-8" ng-model="totalAmnt" ng-change="reviseTaxAmount($index+1)">
                                 {{totalAmnt}}
                         </div>
                     </div>
@@ -350,7 +350,7 @@
                 <div class="row">
                     <div class="col-md-offset-7 col-md-5">
                         <div class="col-md-4">
-                            <label class="control-label"><strong>Total Amount :</strong></label>
+                            <label class="control-label"><strong>Grand Total :</strong></label>
                         </div>
                         <div class="col-md-8">
                             {{totalAmnt + TaxAmnt}}

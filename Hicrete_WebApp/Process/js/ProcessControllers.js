@@ -996,6 +996,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     }
 
     $scope.getCompaniesForProject = function () {
+        $scope.Companies=[];
         AppService.getCompaniesForProject($http, $scope.QuotationDetails.projectId, $scope.Companies);
     }
 
@@ -1250,6 +1251,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.removeTaxItem = function (index) {
         $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
+        $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
     };
 
     $scope.addTax = function (size) {
@@ -1311,12 +1313,12 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
             });
 
             $scope.TaxAmnt = 0;
-            ;
+
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
                 $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
             }
-
+            $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
 
         }, function () {
             console.log("modal Dismiss");
@@ -1356,6 +1358,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         for(var i=0;i<$scope.taxDetails.length;i++){
             if($scope.taxDetails[i].taxApplicableTo=="All"){
                 $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }else{
                 var taxableAmount=0;
                 for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
@@ -1363,10 +1366,11 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                     taxableAmount = taxableAmount + $scope.QuotationDetails.quotationItemDetails[quotationDetailsNo].amount;
                 }
                 $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
-
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }
             $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
         }
+        $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
     }
 
 });
@@ -1388,6 +1392,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     $scope.totalAmnt = 0;
     $scope.currentItemList = [];
     $scope.taxDetails = [];
+    $scope.roundingOff=0;
 
     $scope.InvoiceDetails = {
         invoiceItemDetails: [],
@@ -1443,11 +1448,11 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 });
                 $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
             }
+            $scope.calculateGrandTotal();
             console.log("totalAmount is" + $scope.totalAmount);
         }).error(function (data) {
 
     });
-
 
     data = {
         operation: "getQuotationTaxDetails",
@@ -1505,6 +1510,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                 $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
 
             }
+            $scope.calculateGrandTotal();
             console.log($scope.TaxAmnt);
         })
         .error(function (data) {
@@ -1527,7 +1533,14 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     var totalAmount = 0;
     var remainingTotal = 0;
 
-
+    Math.round = (function() {
+        var originalRound = Math.round;
+        return function(number, precision) {
+            precision = Math.abs(parseInt(precision)) || 0;
+            var multiplier = Math.pow(10, precision);
+            return (originalRound(number * multiplier) / multiplier);
+        };
+    })();
 
     $scope.createInvoice = function () {
 
@@ -1629,7 +1642,6 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         }
     };
 
-
     $scope.postUploadInvoice=function(fd,config){
         $http.post("Process/php/uploadInvoice.php", fd, {
                 transformRequest: angular.identity,
@@ -1711,23 +1723,17 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         }
     }
 
-
-    $scope.removeQuotationItem = function (index) {
-
-        $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
-        $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
-
-    };
-
     $scope.removeInvoiceItem = function (index) {
 
         $scope.totalAmnt = $scope.totalAmnt - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
         $scope.InvoiceDetails.invoiceItemDetails.splice(index, 1); //remove item by index
+        $scope.totalAmnt=Math.round($scope.totalAmnt, 2);
     };
 
     $scope.removeInvoiceTaxItem = function (index) {
         $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
+        $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
     };
 
     $scope.calculateTaxableAmount = function (index) {
@@ -1744,9 +1750,8 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
     }
 
     $scope.calculateAmount = function (index) {
-        //alert("ttttt");
-
         $scope.InvoiceDetails.invoiceItemDetails[index].amount = $scope.InvoiceDetails.invoiceItemDetails[index].quotationQuantity * $scope.InvoiceDetails.invoiceItemDetails[index].quotationUnitRate;
+        $scope.InvoiceDetails.invoiceItemDetails[index].amount=Math.round($scope.InvoiceDetails.invoiceItemDetails[index].amount, 2);
         console.log("amount is " + $scope.InvoiceDetails.invoiceItemDetails[index].amount);
     }
 
@@ -1757,8 +1762,15 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         for (var i = 0; i < $scope.InvoiceDetails.invoiceItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.InvoiceDetails.invoiceItemDetails[i].amount;
         }
+        $scope.totalAmnt=Math.round($scope.totalAmnt, 2);
         $scope.reviseTaxAmount();
+        $scope.calculateGrandTotal()
     }
+
+   $scope.calculateGrandTotal=function(){
+       $scope.totalAmount=$scope.totalAmnt + $scope.TaxAmnt +parseFloat($scope.roundingOff);
+       $scope.totalAmount=Math.round($scope.totalAmount, 2);
+   }
 
 
     $scope.addTax = function (size) {
@@ -1787,6 +1799,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
                 $scope.calculateTaxAmount = function () {
                     $scope.tax.amount = $scope.amount * ($scope.tax.taxPercentage / 100);
+                    $scope.tax.amount=Math.round($scope.tax.amount, 2);
                 }
             },
             size: size,
@@ -1819,12 +1832,13 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
             });
 
             $scope.TaxAmnt = 0;
-            ;
+
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
                 $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
             }
-
+            $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
+            $scope.calculateGrandTotal();
 
         }, function () {
             console.log("modal Dismiss");
@@ -1838,16 +1852,13 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
     }
 
-    $scope.totalTaxAmount = function (amount) {
-        //  console.log("amount is "+amount);
-    }
-
     $scope.reviseTaxAmount=function(){
 
         $scope.TaxAmnt=0;
         for(var i=0;i<$scope.taxDetails.length;i++){
             if($scope.taxDetails[i].taxApplicableTo=="All"){
                 $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }else{
                 var taxableAmount=0;
                 for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
@@ -1855,10 +1866,12 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
                     taxableAmount = taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[quotationDetailsNo].amount;
                 }
                 $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
 
             }
             $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
         }
+        $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
     }
 
 
@@ -2150,6 +2163,15 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
     var totalAmount = 0;
     var remainingTotal = 0;
 
+    Math.round = (function() {
+        var originalRound = Math.round;
+        return function(number, precision) {
+            precision = Math.abs(parseInt(precision)) || 0;
+            var multiplier = Math.pow(10, precision);
+            return (originalRound(number * multiplier) / multiplier);
+        };
+    })();
+
     $scope.modifyInvoice = function () {
 
         console.log("in modifyInvoice");
@@ -2331,18 +2353,20 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
 
         $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
-
+        $scope.totalAmnt=Math.round($scope.totalAmnt, 2);
     };
 
     $scope.removeInvoiceItem = function (index) {
 
         $scope.totalAmnt = $scope.totalAmnt - $scope.InvoiceDetails.invoiceItemDetails[index].amount;
         $scope.InvoiceDetails.invoiceItemDetails.splice(index, 1); //remove item by index
+        $scope.totalAmnt=Math.round($scope.totalAmnt, 2);
     };
 
     $scope.removeInvoiceTaxItem = function (index) {
         $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
+        $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
     };
 
     $scope.calculateTaxableAmount = function (index) {
@@ -2359,9 +2383,8 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
     }
 
     $scope.calculateAmount = function (index) {
-        //alert("ttttt");
-
         $scope.InvoiceDetails.invoiceItemDetails[index].amount = $scope.InvoiceDetails.invoiceItemDetails[index].quotationQuantity * $scope.InvoiceDetails.invoiceItemDetails[index].quotationUnitRate;
+        $scope.InvoiceDetails.invoiceItemDetails[index].amount= Math.round($scope.InvoiceDetails.invoiceItemDetails[index].amount, 2);
         console.log("amount is " + $scope.InvoiceDetails.invoiceItemDetails[index].amount);
     }
 
@@ -2371,8 +2394,14 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
         for (var i = 0; i < $scope.InvoiceDetails.invoiceItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.InvoiceDetails.invoiceItemDetails[i].amount;
         }
+        $scope.totalAmnt= Math.round($scope.totalAmnt, 2);
         $scope.reviseTaxAmount();
+        $scope.calculateGrandTotal();
+    }
 
+    $scope.calculateGrandTotal=function(){
+        $scope.totalAmount=$scope.totalAmnt + $scope.TaxAmnt + parseFloat($scope.roundingOff);
+        $scope.totalAmount=Math.round($scope.totalAmount, 2);
     }
 
     $scope.addTax = function (size) {
@@ -2401,6 +2430,7 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
 
                 $scope.calculateTaxAmount = function () {
                     $scope.tax.amount = $scope.amount * ($scope.tax.taxPercentage / 100);
+                    $scope.tax.amount= Math.round($scope.tax.amount, 2);
                 }
             },
             size: size,
@@ -2433,13 +2463,12 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
             });
 
             $scope.TaxAmnt = 0;
-            ;
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
                 $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
             }
-
-
+            $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
+            $scope.calculateGrandTotal();
         }, function () {
             console.log("modal Dismiss");
         });
@@ -2462,6 +2491,7 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
         for(var i=0;i<$scope.taxDetails.length;i++){
             if($scope.taxDetails[i].taxApplicableTo=="All"){
                 $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }else{
                 var taxableAmount=0;
                 for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
@@ -2469,10 +2499,11 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
                     taxableAmount = taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[quotationDetailsNo].amount;
                 }
                 $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
-
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }
             $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
         }
+        $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
     }
 
 });
@@ -4115,6 +4146,15 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
     var remainingTotal = 0;
 
 
+    Math.round = (function() {
+        var originalRound = Math.round;
+        return function(number, precision) {
+            precision = Math.abs(parseInt(precision)) || 0;
+            var multiplier = Math.pow(10, precision);
+            return (originalRound(number * multiplier) / multiplier);
+        };
+    })();
+
     $scope.ModifyQuotation = function () {
         if ($scope.QuotationForm.$pristine) {
 
@@ -4354,8 +4394,8 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
     }
 
     $scope.calculateAmount = function (index) {
-
         $scope.QuotationDetails.quotationItemDetails[index].amount = $scope.QuotationDetails.quotationItemDetails[index].quotationQuantity * $scope.QuotationDetails.quotationItemDetails[index].quotationUnitRate;
+        $scope.QuotationDetails.quotationItemDetails[index].amount= Math.round($scope.QuotationDetails.quotationItemDetails[index].amount, 2);
     }
 
     $scope.calculateTotal = function (amount) {
@@ -4363,6 +4403,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
+        $scope.totalAmnt= Math.round($scope.totalAmnt, 2);
         $scope.reviseTaxAmount();
 
     }
@@ -4372,11 +4413,13 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
         $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
         $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
-
+        $scope.totalAmnt= Math.round($scope.totalAmnt, 2);
     };
+
     $scope.removeTaxItem = function (index) {
         $scope.TaxAmnt = $scope.TaxAmnt - $scope.taxDetails[index].amount;
         $scope.taxDetails.splice(index, 1);
+        $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
     };
 
     $scope.addTax = function (size) {
@@ -4405,6 +4448,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
                 $scope.calculateTaxAmount = function () {
                     $scope.tax.amount = $scope.amount * ($scope.tax.taxPercentage / 100);
+                    $scope.tax.amount= Math.round($scope.tax.amount, 2);
                 }
             },
             size: size,
@@ -4437,12 +4481,13 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
             });
 
             $scope.TaxAmnt = 0;
-            ;
+
             for (var s = 0; s < $scope.taxDetails.length; s++) {
 
                 $scope.TaxAmnt = $scope.TaxAmnt + $scope.taxDetails[s].amount;
-            }
 
+            }
+            $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
 
         }, function () {
             console.log("modal Dismiss");
@@ -4461,6 +4506,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
         for(var i=0;i<$scope.taxDetails.length;i++){
             if($scope.taxDetails[i].taxApplicableTo=="All"){
                 $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }else{
                 var taxableAmount=0;
                 for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
@@ -4468,10 +4514,11 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
                     taxableAmount = taxableAmount + $scope.QuotationDetails.quotationItemDetails[quotationDetailsNo].amount;
                 }
                 $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
-
+                $scope.taxDetails[i].amount=Math.round($scope.taxDetails[i].amount, 2);
             }
             $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
         }
+        $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
     }
 });
 

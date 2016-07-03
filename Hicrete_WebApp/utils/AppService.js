@@ -392,13 +392,13 @@ myApp.service('AppService', function () {
                         if(data.message[i].AmountPaid==undefined || data.message[i].AmountPaid==null || data.message[i].AmountPaid=="")
                             AmountPaid=0;
                         else
-                            AmountPaid= parseInt(data.message[i].AmountPaid);
+                            AmountPaid= parseFloat(data.message[i].AmountPaid);
 
                         $paymentDetails.push({
                             AmountPaid:AmountPaid,
-                            GrandTotal: parseInt(data.message[i].GrandTotal),
+                            GrandTotal: parseFloat(data.message[i].GrandTotal),
                             InvoiceNo :data.message[i].InvoiceNo ,
-                            Remaining :parseInt(data.message[i].GrandTotal)-AmountPaid
+                            Remaining :parseFloat(data.message[i].GrandTotal)-AmountPaid
                         });
 
                     }
