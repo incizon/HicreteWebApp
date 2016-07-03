@@ -4380,7 +4380,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
 
 
 myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter, $rootScope,AppService) {
-
+    $scope.completed=0;
     $scope.today = function () {
         $scope.actualStartDate = new Date();
         $scope.actualEndDate = new Date();
@@ -4443,7 +4443,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
                     $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
                         notes.push({
-                            Note:AppService.getFormattedDate(data.message[i].ConductionNote),
+                            Note:data.message[i].ConductionNote,
                             AddedBy: data.message[i].firstName + " " + data.message[i].lastName,
                             NoteDate: AppService.getFormattedDate(data.message[i].DateAdded)
                         });
@@ -4485,7 +4485,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
             $scope.actualEndDate=viewValue.toISOString().substring(0, 10);
         var actualEnd = $scope.actualEndDate;
-        if($scope.completed!=undefined ||$scope.completed==1 ){
+        if($scope.completed!=undefined && $scope.completed==1 ){
             $scope.taskCompletionP=100;
         }
         var data = {
@@ -4544,7 +4544,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
 });
 
 
-myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, $http) {
+myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, $http,$filter) {
 
     $scope.sortBy = "";
     $scope.searchKeyword = ""
@@ -4574,6 +4574,14 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                 if (data.status == "sucess") {
                     $('#loader').css("display", "none");
                     for (var i = 0; i < data.message.length; i++) {
+                        var date = new Date(data.message[i].CreationDate);
+                        var creationDate = $filter('date')(date, 'dd/MM/yyyy', '+0530');
+                        var viewValue=new Date(data.message[i].CreationDate);
+                        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+
+                        var startDate = viewValue.toISOString().substring(0, 10);
+
+
                         task.push({
                             "TaskID": data.message[i].TaskID,
                             "TaskName": data.message[i].TaskName,
@@ -4583,7 +4591,7 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                             "CompletionPercentage": data.message[i].CompletionPercentage,
                             "TaskAssignedTo": data.message[i].TaskAssignedTo,
                             "isCompleted": data.message[i].isCompleted,
-                            "CreationDate": data.message[i].CreationDate,
+                            "CreationDate":creationDate ,
                             "CreatedBy": data.message[i].CreatedBy,
                             "ActualStartDate": data.message[i].ActualStartDate,
                             "AcutalEndDate": data.message[i].AcutalEndDate,

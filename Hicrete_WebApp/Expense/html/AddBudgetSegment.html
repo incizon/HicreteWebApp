@@ -31,11 +31,11 @@
                                                 <div class="col-md-4">                                            
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input type="number"  name="noOfElement"  ng-model="noOfElement" class="form-control" required pattern="[0-9]+"/> 
+                                                        <input type="number"  name="noOfElement"  ng-model="noOfElement" class="form-control" required />
                                                     </div> 
                                                     <div class="help-block" ng-messages="segmentForm.noOfElement.$error" ng-show="addClicked">
                                                     <p style="color:red" ng-message="required">Enter Number</p> 
-                                                    <p style="color:red" ng-message="pattern">Only positive numbers is allowed</p>
+                                                    <!--<p style="color:red" ng-message="pattern">Only positive numbers is allowed</p>-->
                                                         
                                             </div> 
                                                 </div>  
@@ -53,7 +53,7 @@
                                             <div class="col-md-5">                                            
                                                 <div class="input-group">
                                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                <input type="text" required pattern="^[-\w\s]+$"  name="elementType" ng-model="segment.name" class="form-control"/>
+                                                <input type="text" required  name="elementType" ng-model="segment.name" class="form-control"/>
                                             </div>
                                             <div class="help-block" ng-messages="segmentForm.elementType.$error" ng-show="submitClicked">
                                                     <p style="color:red" ng-message="required">Segment Field can not be blank</p> 

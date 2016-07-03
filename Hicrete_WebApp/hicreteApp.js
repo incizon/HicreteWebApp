@@ -1191,6 +1191,7 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
     $('#loader').css("display", "block");
     $http.post("Process/php/TaskFacade.php", null, config)
         .success(function (data) {
+            console.log("Dashboard Task list");
             console.log(data);
             $('#loader').css("display", "none");
 

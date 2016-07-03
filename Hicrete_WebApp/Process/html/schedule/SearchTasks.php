@@ -74,6 +74,7 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                             </a>
                         </th>
                         <th>Description</th>
+                        <th>Task CreationDate</th>
                         <th>Completion Percentage
 <!--                            <a ng-click="sortType = 'task.CompletionPercentage'; sortReverse = !sortReverse">Completion Percentage-->
 <!--                                <span ng-show="sortType == 'task.CompletionPercentage' && !sortReverse" class="fa fa-caret-down"></span>-->
@@ -86,9 +87,10 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                     </thead>
                     <tbody>
                     <tr ng-repeat="task in tasks | filter:paginateTasksDetails | orderBy:sortType:sortReverse">
-                        <td>{{task.TaskID}}</td>
+                        <td>{{$index+1}}</td>
                         <td>{{task.TaskName}}</td>
                         <td>{{task.TaskDescripion}}</td>
+                        <td>{{task.CreationDate}}</td>
                         <td>{{task.CompletionPercentage}}</td>
                         <td>{{task.UserName}}</td>
                         <td>

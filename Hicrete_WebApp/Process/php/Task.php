@@ -15,8 +15,8 @@ Class Task {
             $db = Database::getInstance();
             $conn = $db->getConnection();
             $conn->beginTransaction();
-                $stmt = $conn->prepare("INSERT INTO task_master (TaskName, TaskDescripion, ScheduleStartDate, ScheduleEndDate, CompletionPercentage, TaskAssignedTo, isCompleted, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?)");
-                        if($stmt->execute([$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$userId]) === TRUE)
+                $stmt = $conn->prepare("INSERT INTO task_master (TaskID,TaskName, TaskDescripion, ScheduleStartDate, ScheduleEndDate, CompletionPercentage, TaskAssignedTo, isCompleted, CreationDate, CreatedBy) VALUES(?,?,?,?,?,?,?,?,?,?)");
+                        if($stmt->execute([$taskId,$data->TaskName,$data->TaskDescripion,$data->ScheduleStartDate,$data->ScheduleEndDate,$data->CompletionPercentage,$data->TaskAssignedTo,$data->isCompleted,$data->CreationDate,$userId]) === TRUE)
                         {
                             $conn->commit();
                             return "Task created successfully";
@@ -47,18 +47,18 @@ Class Task {
             if($includeCompleted)
                 $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId");
             else
-                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId AND t.	isCompleted!=1");
+                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId AND t.isCompleted!=1");
 
                     $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
                         {
-//                            if($stmt->rowCount()>0){
+                            if($stmt->rowCount()>0){
                                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     array_push($object, $row);
                                 }
-//                            }else{
-//                                return "No Task assigned yet..";
-//                            }
+                            }else{
+                                return "No Task assigned yet..";
+                            }
 
                         }
                         else
