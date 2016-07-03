@@ -363,7 +363,7 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                         <div class="form-group">
                             <label class="col-md-4 col-xs-12 control-label">Address</label>
                             <div class="col-md-8 col-xs-12">
-                                <textarea class="form-control"  ng-model="selectedSupplier.address" rows="5"></textarea>
+                                <textarea class="form-control"  ng-model="selectedSupplier.address" rows="5" maxlength="200"></textarea>
                                 <!--<span class="help-block">Default textarea field</span>-->
                             </div>
                         </div>

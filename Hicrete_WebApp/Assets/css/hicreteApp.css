@@ -127,3 +127,8 @@ a.log_out:hover span{ color: #fff !important;}
 	height: 30%;
 	margin-top:2%
 }
+/*Newly Added*/
+.table-responsive.package-details {
+	overflow-y: scroll;
+	height: 272px;
+}
