@@ -4476,14 +4476,14 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         var crdate = new Date();
         var noteCreatedDate = $filter('date')(crdate, 'yyyy/MM/dd hh:mm:ss', '+0530');
 
-        var viewValue1=new Date($scope.actualStartDate);
-        viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
-        $scope.actualStartDate=viewValue1.toISOString().substring(0, 10);
+            var viewValue1=new Date($scope.actualStartDate);
+            viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
+            $scope.actualStartDate=viewValue1.toISOString().substring(0, 10);
         var actualStart = $scope.actualStartDate;
 
-        var viewValue=new Date($scope.actualEndDate);
-        viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        $scope.actualEndDate=viewValue.toISOString().substring(0, 10);
+            var viewValue=new Date($scope.actualEndDate);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            $scope.actualEndDate=viewValue.toISOString().substring(0, 10);
         var actualEnd = $scope.actualEndDate;
         if($scope.completed!=undefined ||$scope.completed==1 ){
             $scope.taskCompletionP=100;

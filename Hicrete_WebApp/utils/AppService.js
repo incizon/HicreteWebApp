@@ -9,7 +9,8 @@ myApp.service('AppService', function () {
         var curr_date = d.getDate();
         var curr_month = d.getMonth() + 1; //Months are zero based
         var curr_year = d.getFullYear();
-
+        if(curr_month<=9)
+            return curr_date + "-0" + curr_month + "-" + curr_year;
         return curr_date + "-" + curr_month + "-" + curr_year;
     }
     this.getCompanyList = function ($http, $companies) {
