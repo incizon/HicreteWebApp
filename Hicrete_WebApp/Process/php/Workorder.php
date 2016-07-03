@@ -9,7 +9,7 @@ Class Workorder {
         $final = array();
         $db = Database::getInstance();
         $conn = $db->getConnection();
-        $stmt = $conn->prepare("SELECT w.*,q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation FROM work_order w ,quotation q WHERE w.`quotationId` IN (SELECT `QuotationId` FROM `quotation` WHERE `ProjectId`=:projId) AND w.`quotationId`=q.`QuotationId`");
+        $stmt = $conn->prepare("SELECT w.*,q.QuotationTitle,q.QuotationId ,q.RefNo ,q.DateOfQuotation FROM work_order w ,quotation q WHERE w.`quotationId` IN (SELECT `QuotationId` FROM `quotation` WHERE `ProjectId`=:projId) AND w.`quotationId`=q.`QuotationId` order by w.`ReceivedDate`");
         $stmt->bindParam(':projId',$projId,PDO::PARAM_STR);
         if($result = $stmt->execute()){
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){

@@ -423,7 +423,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     QuotationId: data.message[i].QuotationId,
                     CompanyId: data.message[i].companyId,
                     CompanyName: data.message[i].companyName,
-                    CreationDate: AppService.getFormattedDate(data.message[i].DateOfQuotation),
+                    CreationDate: data.message[i].DateOfQuotation,
+                    formattedQuotationDate:AppService.getFormattedDate(data.message[i].DateOfQuotation),
                     ProjectName: data.message[i].ProjectName,
                     ProjectId: data.message[i].ProjectId,
                     Subject: data.message[i].Subject,
@@ -537,7 +538,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                     $scope.projectInvoice.push({
                         invoiceNo: data.message[i].InvoiceNo,
                         quotationId: data.message[i].QuotationId,
-                        invoiceDate:AppService.getFormattedDate(data.message[i].InvoiceDate),
+                        invoiceDate:data.message[i].InvoiceDate,
+                        formattedInvoiceDate:AppService.getFormattedDate(data.message[i].InvoiceDate),
                         invoiceTitle: data.message[i].InvoiceTitle,
                         totalAmount: data.message[i].TotalAmount,
                         invoiceBLOB: data.message[i].InvoiceBLOB,
@@ -553,7 +555,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
                         grandTotal: data.message[i].GrandTotal,
                         roundOff: data.message[i].RoundingOffFactor,
                         workOrderNo: data.message[i].WorkOrderNo,
-                        workOrderDate: AppService.getFormattedDate(data.message[i].ReceivedDate)
+                        workOrderDate: AppService.getFormattedDate(data.message[i].ReceivedDate),
+                        workorderName:data.message[i].WorkOrderName
                     });
                 }
 
@@ -1211,15 +1214,18 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     }
 
     $scope.calculateAmount = function (index) {
-
         $scope.QuotationDetails.quotationItemDetails[index].amount = $scope.QuotationDetails.quotationItemDetails[index].quotationQuantity * $scope.QuotationDetails.quotationItemDetails[index].quotationUnitRate;
+
     }
 
-    $scope.calculateTotal = function (amount) {
+    $scope.calculateTotal = function (amount,index) {
         $scope.totalAmnt = 0;
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
+
+        $scope.reviseTaxAmount(index);
+
     }
 
 
@@ -1289,7 +1295,8 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 taxApplicableTo: itemString,
                 taxPercentage: tax.taxPercentage,
                 amount: tax.amount,
-                taxArray: itemArray
+                taxArray: itemArray,
+
             });
 
             $scope.TaxAmnt = 0;
@@ -1303,6 +1310,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         }, function () {
             console.log("modal Dismiss");
         });
+
         $scope.toggleAnimation = function () {
             $scope.animationsEnabled = !$scope.animationsEnabled;
         };
@@ -1330,6 +1338,25 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
     }
 
+
+    $scope.reviseTaxAmount=function(itemNumber){
+
+        $scope.TaxAmnt=0;
+        for(var i=0;i<$scope.taxDetails.length;i++){
+            if($scope.taxDetails[i].taxApplicableTo=="All"){
+                $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+            }else{
+                var taxableAmount=0;
+                for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
+                    var quotationDetailsNo=$scope.taxDetails[i].taxArray[j]-1;
+                    taxableAmount = taxableAmount + $scope.QuotationDetails.quotationItemDetails[quotationDetailsNo].amount;
+                }
+                $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
+
+            }
+            $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
+        }
+    }
 
 });
 
@@ -1719,6 +1746,7 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
         for (var i = 0; i < $scope.InvoiceDetails.invoiceItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.InvoiceDetails.invoiceItemDetails[i].amount;
         }
+        $scope.reviseTaxAmount();
     }
 
 
@@ -1801,6 +1829,25 @@ myApp.controller('InvoiceController', function ($scope, $http, $uibModal, $rootS
 
     $scope.totalTaxAmount = function (amount) {
         //  console.log("amount is "+amount);
+    }
+
+    $scope.reviseTaxAmount=function(){
+
+        $scope.TaxAmnt=0;
+        for(var i=0;i<$scope.taxDetails.length;i++){
+            if($scope.taxDetails[i].taxApplicableTo=="All"){
+                $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+            }else{
+                var taxableAmount=0;
+                for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
+                    var quotationDetailsNo=$scope.taxDetails[i].taxArray[j]-1;
+                    taxableAmount = taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[quotationDetailsNo].amount;
+                }
+                $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
+
+            }
+            $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
+        }
     }
 
 
@@ -2253,8 +2300,6 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
                         });
                 }
 
-
-
     $scope.addRows = function () {
 
         for (var index = 0; index < $scope.noOfRows; index++) {
@@ -2270,7 +2315,6 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
             });
         }
     }
-
 
     $scope.removeQuotationItem = function (index) {
 
@@ -2310,15 +2354,15 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
         console.log("amount is " + $scope.InvoiceDetails.invoiceItemDetails[index].amount);
     }
 
-
     $scope.calculateTotal = function (amount) {
 
         $scope.totalAmnt = 0;
         for (var i = 0; i < $scope.InvoiceDetails.invoiceItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.InvoiceDetails.invoiceItemDetails[i].amount;
         }
-    }
+        $scope.reviseTaxAmount();
 
+    }
 
     $scope.addTax = function (size) {
         var allTax = false;
@@ -2401,13 +2445,26 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
         //  console.log("amount is "+amount);
     }
 
+    $scope.reviseTaxAmount=function(){
+
+        $scope.TaxAmnt=0;
+        for(var i=0;i<$scope.taxDetails.length;i++){
+            if($scope.taxDetails[i].taxApplicableTo=="All"){
+                $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+            }else{
+                var taxableAmount=0;
+                for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
+                    var quotationDetailsNo=$scope.taxDetails[i].taxArray[j]-1;
+                    taxableAmount = taxableAmount + $scope.InvoiceDetails.invoiceItemDetails[quotationDetailsNo].amount;
+                }
+                $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
+
+            }
+            $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
+        }
+    }
+
 });
-
-
-
-
-
-
 
 
     myApp.controller('ProjectPaymentController', function ($scope, $http, $uibModal, $log, $filter, AppService,$rootScope) {
@@ -2428,6 +2485,7 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
     $scope.showPaymentDetails = false;
     /**********************/
     $scope.Projects = [];
+    $scope.allPaymentDetails=[];
     var project = [];
 
     $scope.dateOfPayment = function () {
@@ -2444,13 +2502,14 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
 
     AppService.getAllProjects($http, $scope.Projects);
 
-    AppService.getAllInvoicesOfProject($http, $scope.Invoices, $scope.paymentDetails.projectID);
+
 
     $scope.viewProjectPaymentDetails = function (project_id) {
         $scope.Invoices = [];
         var invoice = [];
         console.log(project_id);
         AppService.getAllInvoicesOfProject($http, $scope.Invoices, project_id);
+        AppService.getAmountPaidForAllInvoices(project_id, $scope.allPaymentDetails, $http);
         var data = {
             operation: "getAllPaymentForProject",
             projectId: project_id
@@ -2496,9 +2555,15 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
     }
 
     $scope.getInvoicePayment = function (invoicenumber) {
-        console.log("In get Invoice payment");
-        AppService.getInvoicePaymentDetails(invoicenumber, $scope, $http);
 
+        for (var i = 0; i < $scope.allPaymentDetails.length; i++) {
+
+            if($scope.allPaymentDetails[i].InvoiceNo==invoicenumber){
+                $scope.totalPayableAmount=$scope.allPaymentDetails[i].GrandTotal;
+                $scope.totalAmtPaid=$scope.allPaymentDetails[i].AmountPaid;
+
+            }
+        }
     }
     $scope.getPendingAmount = function () {
          console.log("In Pending amount function");
@@ -4287,6 +4352,7 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
+        $scope.reviseTaxAmount();
 
     }
 
@@ -4375,6 +4441,26 @@ myApp.controller('ReviseQuotationController', function ($scope, $http, $uibModal
         };
         if (allTax)
             $scope.taxableAmount = 0;
+    }
+
+
+    $scope.reviseTaxAmount=function(){
+
+        $scope.TaxAmnt=0;
+        for(var i=0;i<$scope.taxDetails.length;i++){
+            if($scope.taxDetails[i].taxApplicableTo=="All"){
+                $scope.taxDetails[i].amount=$scope.totalAmnt * ($scope.taxDetails[i].taxPercentage / 100);
+            }else{
+                var taxableAmount=0;
+                for(var j=0;j<$scope.taxDetails[i].taxArray.length;j++){
+                    var quotationDetailsNo=$scope.taxDetails[i].taxArray[j]-1;
+                    taxableAmount = taxableAmount + $scope.QuotationDetails.quotationItemDetails[quotationDetailsNo].amount;
+                }
+                $scope.taxDetails[i].amount=taxableAmount * ($scope.taxDetails[i].taxPercentage / 100);
+
+            }
+            $scope.TaxAmnt=$scope.TaxAmnt+$scope.taxDetails[i].amount;
+        }
     }
 });
 

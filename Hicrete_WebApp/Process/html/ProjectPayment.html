@@ -61,7 +61,7 @@
                                             required/>
 
                                     <option value="" disabled selected>Choose Invoice</option>
-                                    <option ng-repeat="invoice in Invoices" value="{{invoice.id }}">{{invoice.name}}
+                                    <option ng-repeat="invoice in Invoices" value="{{invoice.id }}">{{invoice.id+" ("+invoice.name+")" }}
                                     </option>
                                     </select>
 

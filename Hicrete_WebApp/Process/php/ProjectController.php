@@ -65,8 +65,18 @@ class ProjectController
 
 
     public function getInvoicesByProject($projid){
-        
-             $project = Project::getInvoicesByProject($projid); // possible user loading method
+        try{
+            $project = Project::getInvoicesByProject($projid); // possible user loading method
+            if($project==1){
+                echo AppUtil::getReturnStatus("Unsuccessful","Unexpected Error Occurred while retrieving Invoice Details.");
+            }else{
+                echo AppUtil::getReturnStatus("Successful",$project);
+            }
+
+
+        }catch(Exception $e){
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
+        }
 
     }
 

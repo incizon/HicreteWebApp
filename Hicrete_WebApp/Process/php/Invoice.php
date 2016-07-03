@@ -57,7 +57,7 @@ public function loadInvoiceForProject($projid){
 
 	$db = Database::getInstance();
 	$conn = $db->getConnection();//SELECT * FROM invoice i , quotation q WHERE i.quotationId = q.quotationId AND i.QuotationId in (SELECT q.QuotationId FROM quotation q  WHERE q.ProjectId = :projid)
-	$stmt = $conn->prepare("SELECT * FROM invoice i , quotation q ,`work_order` w WHERE  q.ProjectId = :projid  AND  i.QuotationId = q.QuotationId AND i.QuotationId = w.`quotationId`");
+	$stmt = $conn->prepare("SELECT * FROM invoice i , quotation q ,`work_order` w WHERE  q.ProjectId = :projid  AND  i.QuotationId = q.QuotationId AND i.QuotationId = w.`quotationId` order by i.`InvoiceDate`");
 	$stmt->bindParam(':projid',$projid,PDO::PARAM_STR);
 	if($stmt->execute() === TRUE){
 			while($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -378,24 +378,7 @@ public function loadInvoiceForProject($projid){
 
 	}
 
-	public static function getInvoiceListForProject($projectId) {
-		$object = array();
 
-		$db = Database::getInstance();
-		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT `InvoiceNo`,`InvoiceTitle` FROM `invoice` WHERE `QuotationId` IN (SELECT `QuotationId` FROM `quotation` WHERE `ProjectId`=:projectId)");
-		$stmt->bindParam(':projectId',$projectId);
-		if($result = $stmt->execute()) {
-			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-				array_push($object, $row);
-			}
-		}
-
-		$db = null;
-		return $object;
-
-
-	}
 
 
 	public static function getInvoiceDetails($qid){
@@ -457,6 +440,25 @@ public function loadInvoiceForProject($projid){
 	}
 
 
+	public static function getAmountPaidForInvoice($projId){
+		$object= array();
+
+		$db = Database:: getInstance();
+		$conn = $db->getConnection();
+		$stmt = $conn->prepare("SELECT  i.`InvoiceNo` ,SUM(  `AmountPaid` )  'AmountPaid' ,`GrandTotal` FROM   `invoice` i LEFT JOIN `project_payment` p  ON  p.`InvoiceNo`=i.`InvoiceNo` and i.`InvoiceNo` IN (SELECT invoiceNo FROM invoice i where i.QuotationId IN (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId =:projId  AND q.isApproved = 1)) GROUP BY  i.`InvoiceNo`");
+		$stmt->bindparam(':projId',$projId ,PDO::PARAM_STR);
+		if($stmt->execute() === TRUE){
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				array_push($object, $row);
+			}
+		}
+		else{
+			return null;
+		}
+
+		$db= null;
+		return $object;
+	}
 
 
 
