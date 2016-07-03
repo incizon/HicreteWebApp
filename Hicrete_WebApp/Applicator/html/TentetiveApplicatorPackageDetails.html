@@ -54,63 +54,63 @@
 
                 </div>
 
-                <div class="col-md-6"  ng-show="packageDetailsShow=='Yes'"> 
-                    
-                    <div class="table-responsive">
-                    
+                <div class="col-md-6"  ng-show="packageDetailsShow=='Yes'">
+
+                    <div class="table-responsive package-details">
+
                         <table class="table table-actions table-striped">
-                    
-                            <thead>                                            
-                    
+
+                            <thead>
+
                                 <tr>
-                    
+
                                     <th width="15%">Package Element</th>
                                     <th width="15%">Element Quantity</th>
                                     <th width="15%">Element Rate</th>
                                     <th width="15%">Element Amount</th>
-                    
+
                                 </tr>
-                    
+
                             </thead>
-                    
+
                             <tbody>
-                    
+
                                 <tr ng-repeat="elementData in applicatorDetails.elementDetails">
-                    
+
                                     <td>{{elementData.element_name}}</td>
                                     <td>{{elementData.element_quantity}}</td>
                                     <td>{{elementData.element_rate}}</td>
                                     <td>{{elementData.element_quantity * elementData.element_rate}}</td>
-                    
-                                </tr>                                               
-                           
+
+                                </tr>
+
                             </tbody>
-                         
+
                         </table>
-                    
+
                     </div>
-                    
+                    <br>
                     <div class="form-group">
-                    
+
                         <div class="col-md-4">
-                    
+
                             <label class="control-label"><b>Package Total Amount</b></label>
-                    
+
                         </div>
-                    
+
                         <div class="col-md-3">
-                    
+
                             <b> {{package_total_amount}} </b>
-                    
+
                         </div>
                         <div class="col-md-3">
 
                             <button class="btn btn-primary" ng-click="editPackageDetails()">Edit Package</button>
 
                         </div>
-                    
-                     </div>      
-               
+
+                     </div>
+
                 </div>
 
             </form>

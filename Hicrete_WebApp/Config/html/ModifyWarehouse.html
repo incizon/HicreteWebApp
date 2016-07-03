@@ -24,7 +24,7 @@
                         <div class="col-md-3 col-xs-12 col-sm-4">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <input maxlength = "40" ng-model="selectedWarehouse.wareHouseName" name="warehouseName"type="text" class="form-control" required minlength=2  />
+                                <input maxlength="40" ng-model="selectedWarehouse.wareHouseName" name="warehouseName"type="text" class="form-control" required minlength="2"/>
                             </div>
                             <div class="help-block" ng-messages="warehouseForm.warehouseName.$error" ng-show="warehouseSubmitted">
                                 <p style="color:red" ng-message="required">WareHouse name cannot be blank</p>
@@ -49,7 +49,7 @@
                     <div class="form-group">
                         <label class="col-md-2 col-xs-12 control-label col-sm-2">Address</label>
                         <div class="col-md-3 col-xs-12 col-sm-4">
-                            <textarea ng-model="selectedWarehouse.address" name="address" class="form-control" rows="5" required minlength=10></textarea>
+                            <textarea ng-model="selectedWarehouse.address" name="address" class="form-control" rows="6" required minlength=10 maxlength="200"></textarea>
                         </div>
                         <div class="help-block" ng-messages="warehouseForm.address.$error" ng-show="warehouseSubmitted">
                             <p style="color:red" ng-message="required">Address Cannot be blank</p>

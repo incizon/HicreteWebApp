@@ -1011,6 +1011,14 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     var totalAmount = 0;
     var remainingTotal = 0;
 
+    Math.round = (function() {
+        var originalRound = Math.round;
+        return function(number, precision) {
+            precision = Math.abs(parseInt(precision)) || 0;
+            var multiplier = Math.pow(10, precision);
+            return (originalRound(number * multiplier) / multiplier);
+        };
+    })();
 
     $scope.createQuotation = function () {
         var b = [];
@@ -1215,7 +1223,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
     $scope.calculateAmount = function (index) {
         $scope.QuotationDetails.quotationItemDetails[index].amount = $scope.QuotationDetails.quotationItemDetails[index].quotationQuantity * $scope.QuotationDetails.quotationItemDetails[index].quotationUnitRate;
-
+        $scope.QuotationDetails.quotationItemDetails[index].amount= Math.round($scope.QuotationDetails.quotationItemDetails[index].amount, 2);
     }
 
     $scope.calculateTotal = function (amount,index) {
@@ -1223,6 +1231,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
         for (var i = 0; i < $scope.QuotationDetails.quotationItemDetails.length; i++) {
             $scope.totalAmnt = $scope.totalAmnt + $scope.QuotationDetails.quotationItemDetails[i].amount;
         }
+        $scope.totalAmnt= Math.round($scope.totalAmnt, 2);
 
         $scope.reviseTaxAmount(index);
 
@@ -1232,7 +1241,9 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
     $scope.removeQuotationItem = function (index) {
 
         $scope.totalAmnt = $scope.totalAmnt - $scope.QuotationDetails.quotationItemDetails[index].amount;
-        $scope.QuotationDetails.quotationItemDetails.splice(index, 1); //remove item by index
+        $scope.totalAmnt= Math.round($scope.totalAmnt, 2);
+        $scope.QuotationDetails.quotationItemDetails.splice(index, 1);//remove item by index
+
 
     };
 
@@ -1267,6 +1278,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
                 $scope.calculateTaxAmount = function () {
                     $scope.tax.amount = $scope.amount * ($scope.tax.taxPercentage / 100);
+                    $scope.tax.amount= Math.round($scope.tax.amount, 2);
                 }
             },
             size: size,
@@ -1295,8 +1307,7 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
                 taxApplicableTo: itemString,
                 taxPercentage: tax.taxPercentage,
                 amount: tax.amount,
-                taxArray: itemArray,
-
+                taxArray: itemArray
             });
 
             $scope.TaxAmnt = 0;

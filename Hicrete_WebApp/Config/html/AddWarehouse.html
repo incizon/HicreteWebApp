@@ -109,7 +109,7 @@
                                         <div class="form-group">
                                             <label class="col-md-4 col-xs-12 control-label col-sm-4">Address</label>
                                             <div class="col-md-8 col-xs-12 col-sm-8">
-                                                <textarea maxlength = "80" ng-model="warehouse.address" name="address" class="form-control" rows="6" required minlength=10></textarea>
+                                                <textarea maxlength = "200" ng-model="warehouse.address" name="address" class="form-control" rows="6" required minlength=10></textarea>
                                                 <div class="help-block" ng-messages="warehouseForm.address.$error" ng-show="warehouseSubmitted">
                                                     <p style="color:red" ng-message="required">Address Cannot be blank</p>
                                                     <p style="color:red" ng-message="minlength">Address must have more than 10 characters</p>
