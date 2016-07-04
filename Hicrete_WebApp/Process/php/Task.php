@@ -114,12 +114,12 @@ Class Task {
                     $searchKeyword = '%' ."". '%';
 
                 if($sortBy=="TaskName"){
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword ORDER BY t.TaskName,t.TaskID,t.CompletionPercentage DESC");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword ORDER BY t.CreationDate DESC");
                     $stmt->bindParam(':searchKeyword',$searchKeyword);
                 }else if($sortBy=="CompleteTask"){
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1 ORDER BY t.TaskName,t.TaskID,t.CompletionPercentage DESC");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1 ORDER BY t.CreationDate DESC");
                 }else{
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 ORDER BY t.TaskName,t.TaskID,t.CompletionPercentage DESC");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 ORDER BY t.CreationDate DESC");
                 }
 //                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {

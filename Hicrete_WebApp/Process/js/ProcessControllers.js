@@ -4569,11 +4569,13 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         $scope.taskEnd.opened = true;
     };
 
-    //$scope.checkPercentage=function(){
-    //    if($scope.taskCompletionP===100){
-    //        $scope.completed=1;
-    //    }
-    //}
+    $scope.checkPercentage=function(){
+        //console.log($scope.taskCompletionP);
+        //if($scope.taskCompletionP==100){
+        //    $scope.completed=1;
+        //    console.log("completed");
+        //}
+    }
     $scope.taskEnd = {
         opened: false
     };
