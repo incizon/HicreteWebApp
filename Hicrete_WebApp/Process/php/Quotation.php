@@ -98,7 +98,7 @@ Class Quotation {
 
 		$db = Database:: getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT * FROM quotation q JOIN quotation_details qd ON q.QuotationId = qd.QuotationId  where q.QuotationId =:id;");
+		$stmt = $conn->prepare("SELECT * FROM quotation q JOIN quotation_details qd ON q.QuotationId = qd.QuotationId  where q.QuotationId =:id order by `DetailNo` ASC;");
 		$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
 		if($stmt->execute() === TRUE){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){

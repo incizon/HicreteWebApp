@@ -386,7 +386,7 @@ public function loadInvoiceForProject($projid){
 
 		$db = Database:: getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT * FROM `invoice` i,`invoice_details` id WHERE i.`InvoiceNo`=id.`InvoiceId` AND i.`InvoiceNo`=:id ");
+		$stmt = $conn->prepare("SELECT * FROM `invoice` i,`invoice_details` id WHERE i.`InvoiceNo`=id.`InvoiceId` AND i.`InvoiceNo`=:id order by `DetailNo` ASC");
 		$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
 		if($stmt->execute() === TRUE){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){

@@ -2023,7 +2023,7 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
     $scope.noOfRows = 0;
     $scope.currentItemList = [];
     $scope.taxDetails=[];
-
+    $scope.totalAmount=0;
 
     $scope.checkAvailability = function () {
 
@@ -2078,6 +2078,9 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
                 });
                 $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
             }
+            $scope.totalAmnt=Math.round($scope.totalAmnt, 2);
+            $scope.totalAmount=$scope.totalAmnt+$scope.TaxAmnt;
+            $scope.totalAmount=Math.round($scope.totalAmount, 2);
             console.log("totalAmount is" + $scope.totalAmnt);
         }).error(function (data) {
         $rootScope.errorMessage = data;
@@ -2142,6 +2145,9 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
                 $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
 
             }
+            $scope.TaxAmnt=Math.round($scope.TaxAmnt, 2);
+            $scope.totalAmount=$scope.totalAmnt+$scope.TaxAmnt;
+            $scope.totalAmount=Math.round($scope.totalAmount, 2);
             console.log($scope.TaxAmnt);
         })
         .error(function (data) {
@@ -2481,9 +2487,6 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
 
     }
 
-    $scope.totalTaxAmount = function (amount) {
-        //  console.log("amount is "+amount);
-    }
 
     $scope.reviseTaxAmount=function(){
 
@@ -3207,6 +3210,16 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http, $stateParams,$ro
 
     };
 
+
+    Math.round = (function() {
+        var originalRound = Math.round;
+        return function(number, precision) {
+            precision = Math.abs(parseInt(precision)) || 0;
+            var multiplier = Math.pow(10, precision);
+            return (originalRound(number * multiplier) / multiplier);
+        };
+    })();
+
     var qId = $scope.invoiceDetail.quotationNumber;
     var iId = $scope.invoiceDetail.invoiceNumber;
     var cId = $scope.invoiceDetail.companyId;
@@ -3254,6 +3267,7 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http, $stateParams,$ro
                 });
                 $scope.totalAmnt = $scope.totalAmnt + parseFloat(qData[i].Amount);
             }
+            $scope.totalAmnt= Math.round($scope.totalAmnt, 2);
             console.log("totalAmount is" + $scope.totalAmnt);
         }).error(function (data) {
             $rootScope.errorMessage = data;
@@ -3318,6 +3332,7 @@ myApp.controller('ViewInvoiceDetails', function ($scope, $http, $stateParams,$ro
                 $scope.TaxAmnt = $scope.TaxAmnt + parseFloat(qtData[i].TaxAmount);
 
             }
+            $scope.TaxAmnt= Math.round($scope.TaxAmnt, 2);
             console.log($scope.TaxAmnt);
         })
         .error(function (data) {
@@ -3573,6 +3588,15 @@ myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scop
     }
 
 
+    Math.round = (function() {
+        var originalRound = Math.round;
+        return function(number, precision) {
+            precision = Math.abs(parseInt(precision)) || 0;
+            var multiplier = Math.pow(10, precision);
+            return (originalRound(number * multiplier) / multiplier);
+        };
+    })();
+
     var data = {
         operation: "getQuotationDetails",
         data: qId
@@ -3600,9 +3624,10 @@ myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scop
 
             $scope.totalAmount = 0;
             for (var i = 0; i < qData.length; i++) {
-                $scope.totalAmount = $scope.totalAmount + parseInt(qData[i].Amount);
+                $scope.totalAmount = $scope.totalAmount + parseFloat(qData[i].Amount);
 
             }
+            $scope.totalAmount= Math.round($scope.totalAmount, 2);
             console.log("totalAmount is" + $scope.totalAmount);
 
             $scope.qDetails = [];
@@ -3680,9 +3705,9 @@ myApp.controller('ViewQuotationDetailsController', function ($stateParams, $scop
                     'taxAmount': qtData[i].TaxAmount,
                     taxApplicableTo: taxApplicableTo
                 });
-                $scope.TotalTax = $scope.TotalTax + parseInt(qtData[i].TaxAmount);
+                $scope.TotalTax = $scope.TotalTax + parseFloat(qtData[i].TaxAmount);
             }
-
+            $scope.TotalTax= Math.round($scope.TotalTax, 2);
         }).error(function (data, status, headers, config) {
         console.log(data.error);
         $rootScope.errorMessage= data;
