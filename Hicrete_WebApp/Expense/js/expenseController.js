@@ -108,9 +108,6 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
     $scope.createCostCenterClicked = false;
 
     $scope.projectList = [];
-    //$scope.projectList.push({name: "Project1", id: "1"});
-    //$scope.projectList.push({name: "Project2", id: "2"});
-    //AppService.getAllProjects($http,$scope.projectList);
 
     var data = {
         operation: "getProjectListWithoutCostCenter"

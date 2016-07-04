@@ -4544,19 +4544,22 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
         $scope.taskEnd.opened = true;
     };
 
+    //$scope.checkPercentage=function(){
+    //    if($scope.taskCompletionP===100){
+    //        $scope.completed=1;
+    //    }
+    //}
     $scope.taskEnd = {
         opened: false
     };
     var task = setInfo.get();
     console.log("task set is " + JSON.stringify(task));
-    var startDate = $filter('date')(task.ScheduleStartDate, 'dd/MM/yyyy', '+0530');
-    var endDate = $filter('date')(task.ScheduleEndDate, 'dd/MM/yyyy', '+0530');
     $scope.ViewTask = {
         task_id: task.TaskID,
         task_name: task.TaskName,
         task_desc: task.TaskDescripion,
-        task_startDate: startDate,
-        task_endDate:endDate ,
+        task_startDate: AppService.getFormattedDate(task.ScheduleStartDate),
+        task_endDate:AppService.getFormattedDate(task.ScheduleEndDate),
         task_isCompleted: task.isCompleted
     };
 
@@ -4623,7 +4626,7 @@ myApp.controller('ViewTaskController', function (setInfo, $scope, $http, $filter
             var viewValue1=new Date($scope.actualStartDate);
             viewValue1.setMinutes(viewValue1.getMinutes() - viewValue1.getTimezoneOffset());
             $scope.actualStartDate=viewValue1.toISOString().substring(0, 10);
-        var actualStart = $scope.actualStartDate;
+            var actualStart = $scope.actualStartDate;
 
             var viewValue=new Date($scope.actualEndDate);
             viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());

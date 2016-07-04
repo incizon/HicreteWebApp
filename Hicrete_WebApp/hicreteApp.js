@@ -1196,7 +1196,10 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             $('#loader').css("display", "none");
 
             for (var i = 0; i < data.message.length; i++) {
-
+                //var viewValue=new Date($scope.workorder.date);
+                //viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+                //$scope.workorder.date=viewValue.toISOString().substring(0, 10);
+                //console.log("Date=",data.message[i].ActualStartDate);
                 task.push({
                     "TaskID": data.message[i].TaskID,
                     "TaskName": data.message[i].TaskName,
