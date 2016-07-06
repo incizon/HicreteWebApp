@@ -45,9 +45,9 @@ Class Task {
             $conn = $db->getConnection();
             $conn->beginTransaction();
             if($includeCompleted)
-                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId");
+                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId ORDER BY  `CreationDate` DESC");
             else
-                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId AND t.isCompleted!=1");
+                $stmt = $conn->prepare("SELECT * FROM task_master t WHERE t.TaskAssignedTo = :userId AND t.isCompleted!=1 ORDER BY  `CreationDate` DESC");
 
                     $stmt->bindParam(':userId',$userId,PDO::PARAM_STR);
                         if($stmt->execute() === TRUE)
@@ -114,12 +114,12 @@ Class Task {
                     $searchKeyword = '%' ."". '%';
 
                 if($sortBy=="TaskName"){
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword ORDER BY t.CreationDate DESC");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.TaskName LIKE :searchKeyword ORDER BY t.`CreationDate` DESC");
                     $stmt->bindParam(':searchKeyword',$searchKeyword);
                 }else if($sortBy=="CompleteTask"){
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1 ORDER BY t.CreationDate DESC");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 AND t.isCompleted=1 ORDER BY t.`CreationDate` DESC");
                 }else{
-                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 ORDER BY t.CreationDate DESC");
+                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0 ORDER BY t.`CreationDate` DESC");
                 }
 //                    $stmt = $conn->prepare("SELECT * FROM task_master t , usermaster u WHERE t.TaskAssignedTo = u.UserId AND t.isDeleted = 0");
                         if($result = $stmt->execute()) {
