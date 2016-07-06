@@ -48,7 +48,7 @@ class Expense
         }
 }
 
-    public static function createCostCenter($data,$segmentData,$userId){
+    public static function createCostCenter($data,$segmentData,$costCentermaterials,$userId){
         $db = Database::getInstance();
         $conn = $db->getConnection();
         try {
@@ -56,11 +56,11 @@ class Expense
             HicreteLogger::logInfo("Creating cost center");
             $conn->beginTransaction();
             foreach ($segmentData as $segment) {
-                $bufgetId = uniqid();
+                $budgetId = uniqid();
                 $stmt = $conn->prepare("INSERT INTO `budget_details`(`budgetdetailsid`,`projectid`, `budgetsegmentid`, `allocatedbudget`, `alertlevel`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:budgetId,:projectId,:segmentId,:allocatedBudget,:alertLevel,:createdBy,now(),now(),:lastModifiedBy)");
 
-                $stmt->bindParam(':budgetId', $bufgetId, PDO::PARAM_STR);
+                $stmt->bindParam(':budgetId', $budgetId, PDO::PARAM_STR);
 
                 $stmt->bindParam(':projectId', $data->projectId, PDO::PARAM_STR);
                 $stmt->bindParam(':segmentId', $segment->id, PDO::PARAM_STR);
@@ -78,6 +78,27 @@ class Expense
 
             }
 
+            foreach($costCentermaterials as $material){
+
+                $materialbudgetdetailsid=uniqid();
+                $stmtCostCenterMaterial = $conn->prepare("INSERT INTO `material_budget_details`(`materialbudgetdetailsid`,`projectid`,`materialid` ,`allocatedbudget`, `alertlevel`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                    VALUES (:materialbudgetdetailsid,:projectId,:materialid,:allocatedBudget,:alertLevel,:creadtedby,now(),now(),:lastmodifiedby)");
+
+                $stmtCostCenterMaterial->bindParam(':materialbudgetdetailsid', $materialbudgetdetailsid, PDO::PARAM_STR);
+                $stmtCostCenterMaterial->bindParam(':projectId', $data->projectId, PDO::PARAM_STR);
+                $stmtCostCenterMaterial->bindParam(':materialid', $material->material, PDO::PARAM_STR);
+                $stmtCostCenterMaterial->bindParam(':allocatedBudget', $material->allocatedBudget, PDO::PARAM_INT);
+                $stmtCostCenterMaterial->bindParam(':alertLevel', $material->alertLevel, PDO::PARAM_STR);
+                $stmtCostCenterMaterial->bindParam(':creadtedby', $userId, PDO::PARAM_STR);
+                $stmtCostCenterMaterial->bindParam(':lastmodifiedby', $userId, PDO::PARAM_STR);
+
+                if ($stmtCostCenterMaterial->execute()) {
+                    $success = true;
+                } else {
+                    $success = false;
+                }
+            }
+
             if ($success) {
                 $conn->commit();
                 $message = "Cost Center Created successfully..!!!";
@@ -92,8 +113,7 @@ class Expense
         }catch(Exception $e)
         {
             HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
-            $message = "Exception occured";
-            echo AppUtil::getReturnStatus("failure", $message);
+            echo AppUtil::getReturnStatus("failure", $e->getMessage());
         }
     }
 

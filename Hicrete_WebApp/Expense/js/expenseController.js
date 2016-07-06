@@ -104,7 +104,7 @@ myApp.controller('budgetSegmentController', function ($scope, $http,$rootScope) 
 });
 
 
-myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope,$uibModal,$log) {
+myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope,$uibModal,$log,inventoryService) {
     $scope.createCostCenterClicked = false;
 
     $scope.projectList = [];
@@ -143,13 +143,14 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
 
 
     $scope.segmentList = [];
+    $scope.costCentermaterials=[];
     $scope.costCenterDetails = {
         projectId: "",
         costCenterName: "",
         segments: null
     }
 
-    $scope.remove = function (index) {
+    $scope.removeSegments = function (index) {
 
         $scope.segmentList.splice(index, 1);
         //remove item by index
@@ -176,31 +177,51 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
 
         });
 
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.costCentermaterials.push({
+                material: "",
+                allocatedBudget: "",
+                alertLevel: ""
+            });
+        }
+        ;
+    }
 
+    $scope.remove = function (index) {
+        $scope.costCentermaterials.splice(index, 1); //remove item by index
+    };
+
+    inventoryService.getProductsForInwardand($scope, $http);
+    $scope.getNoOfMaterials = function () {
+        return $scope.costCentermaterials.length;
+    }
     $scope.createCostCenter = function () {
         $scope.createCostCenterClicked = false;
 
-        console.log($scope.segmentList);
+       console.log("cost center material");
+        console.log($scope.costCentermaterials);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
-            controller:  function ($scope,$rootScope,$uibModalInstance,costCenterData,segmentList) {
+            controller:  function ($scope,$rootScope,$uibModalInstance,costCenterData,segmentList,costCentermaterials) {
 
                  $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(costCenterData);
                      console.log(segmentList);
-                    $scope.saveCostCenter($scope,$rootScope, $http,costCenterData,segmentList);
+                    $scope.saveCostCenter($scope,$rootScope, $http,costCenterData,segmentList,costCentermaterials);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
-                $scope.saveCostCenter = function ($scope,$rootScope, $http, costCenterData,segmentList) {
+                $scope.saveCostCenter = function ($scope,$rootScope, $http, costCenterData,segmentList,costCentermaterials) {
                     var data = {
                         operation: "createCostCenter",
                         costCenterData: costCenterData,
-                        segments:segmentList
+                        segments:segmentList,
+                        materials:costCentermaterials
                     };
                     console.log(data);
                     var config = {
@@ -249,6 +270,9 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
                 },
                 segmentList:function(){
                     return $scope.segmentList;
+                },
+                costCentermaterials:function(){
+                    return $scope.costCentermaterials;
                 }
             }
 
