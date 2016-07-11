@@ -2760,7 +2760,6 @@ myApp.controller('viewProjectController', function ($scope, $http, $rootScope, m
 
     $scope.searchKeyword = "";
     $scope.isCostCenterAvailable = function (project) {
-        console.log("isCostCenterAvailable");
         if (project.isCostCenterAvailable === "true")
             return false;
         else

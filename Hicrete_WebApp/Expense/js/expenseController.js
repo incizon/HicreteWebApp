@@ -591,14 +591,16 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
         $http.post("Expense/php/expenseUtils.php", null, config)
             .success(function (data) {
-                console.log("Expense Details= "+data);
+                console.log("Expense DETAILSD= ");
+                console.log(data);
                 if (data == "1") {
 
                 } else {
                     $rootScope.expenseDetails = data;
                     $scope.costCenterData=data;
-                    console.log($rootScope.expenseDetails);
-                    //  console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
+
+                    console.log("Budget Values=");
+                    console.log($scope.costCenterData[0].SegmentBudgetDetails);
                 }
 
             })

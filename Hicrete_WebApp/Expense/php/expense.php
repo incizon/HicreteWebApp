@@ -78,24 +78,26 @@ class Expense
 
             }
 
-            foreach($costCentermaterials as $material){
+            if($costCentermaterials!=null){
+                foreach($costCentermaterials as $material){
 
-                $materialbudgetdetailsid=uniqid();
-                $stmtCostCenterMaterial = $conn->prepare("INSERT INTO `material_budget_details`(`materialbudgetdetailsid`,`projectid`,`materialid` ,`allocatedbudget`, `alertlevel`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                    $materialbudgetdetailsid=uniqid();
+                    $stmtCostCenterMaterial = $conn->prepare("INSERT INTO `material_budget_details`(`materialbudgetdetailsid`,`projectid`,`materialid` ,`allocatedbudget`, `alertlevel`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:materialbudgetdetailsid,:projectId,:materialid,:allocatedBudget,:alertLevel,:creadtedby,now(),now(),:lastmodifiedby)");
 
-                $stmtCostCenterMaterial->bindParam(':materialbudgetdetailsid', $materialbudgetdetailsid, PDO::PARAM_STR);
-                $stmtCostCenterMaterial->bindParam(':projectId', $data->projectId, PDO::PARAM_STR);
-                $stmtCostCenterMaterial->bindParam(':materialid', $material->material, PDO::PARAM_STR);
-                $stmtCostCenterMaterial->bindParam(':allocatedBudget', $material->allocatedBudget, PDO::PARAM_INT);
-                $stmtCostCenterMaterial->bindParam(':alertLevel', $material->alertLevel, PDO::PARAM_STR);
-                $stmtCostCenterMaterial->bindParam(':creadtedby', $userId, PDO::PARAM_STR);
-                $stmtCostCenterMaterial->bindParam(':lastmodifiedby', $userId, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':materialbudgetdetailsid', $materialbudgetdetailsid, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':projectId', $data->projectId, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':materialid', $material->material, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':allocatedBudget', $material->allocatedBudget, PDO::PARAM_INT);
+                    $stmtCostCenterMaterial->bindParam(':alertLevel', $material->alertLevel, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':creadtedby', $userId, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':lastmodifiedby', $userId, PDO::PARAM_STR);
 
-                if ($stmtCostCenterMaterial->execute()) {
-                    $success = true;
-                } else {
-                    $success = false;
+                    if ($stmtCostCenterMaterial->execute()) {
+                        $success = true;
+                    } else {
+                        $success = false;
+                    }
                 }
             }
 
