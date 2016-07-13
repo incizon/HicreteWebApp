@@ -127,7 +127,51 @@ myApp.service('ApplicatorService',function(){
 				});
 	}
 
+    this.deleteApplicator=function($scope,$rootScope,$http,applicator_id){
 
+        var data = {
+            operation: "deleteApplicator",
+            applicator_id: applicator_id
+        };
+
+        var config = {
+            params: {
+                data:data
+            }
+
+        };
+        $('#loader').css("display","block");
+        $http.post("Applicator/php/Applicator.php", null,config)
+            .success(function (data, status, headers, config){
+                console.log(data);
+                $scope.loading=false;
+                $('#loader').css("display","none");
+                if(data.msg!=""){
+                    $rootScope.warningMessage=data.msg;
+                    $('#warning').css("display","block");
+
+                    setTimeout(function(){
+                        window.location = "dashboard.php#/Applicator";
+                        //window.location.reload(true);
+                    },1000);
+                }
+                if(data.error!=""){
+                    $rootScope.errorMessage=data.error;
+                    $('#error').css("display","block");
+
+                    setTimeout(function(){
+                        window.location = "dashboard.php#/Applicator";
+                       // window.location.reload(true);
+                    },4000);
+                }
+            })
+            .error(function (data, status, headers, config){
+                console.log(data);
+                $('#loader').css("display","none");
+                $rootScope.errorMessage="Unable to delete Applicator";
+                $('#error').css("display","block");
+            });
+    }
 
 
 });
@@ -243,6 +287,8 @@ myApp.service('PackageService',function(){
                 $('#error').css("display","block");
             });
     };
+
+
 
 
 });

@@ -1192,6 +1192,26 @@
                     }
 
                 }
+                 public function deleteApplicator($data,$userId){
+
+                     $db = Database::getInstance();
+                     $connect = $db->getConnection();
+                     $applicatorId= $data->applicator_id;
+
+                     $stmt1=$connect->prepare("DELETE FROM `applicator_master` WHERE `applicator_master_id`=:applicatorId");
+                     $stmt1->bindParam(':applicatorId',$applicatorId);
+
+                     if($stmt1->execute()){
+                            HicreteLogger::logInfo("Applicator deleted successfully");
+                            return true;
+                     }
+                     else{
+                            HicreteLogger::logError("Could Not Delete Applicator");
+                            return false;
+                     }
+
+                 }
+
             }
 
 ?>

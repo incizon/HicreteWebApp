@@ -86,7 +86,7 @@ $hasWrite=appUtil::doesUserHasAccess("Applicator",$userId,"Write");
                               if($hasWrite==1){
                                   echo "<a ui-sref=\"Applicator.modifyPermanentApplicatorDetails({applicator_id:applicator.applicator_master_id})\"> <button class=\"btn btn-default btn-sm\"><span class=\"fa fa-pencil-square-o\"></span>Modify</button></a>
                             ";
-//                                  <button class="btn btn-danger btn-sm"><span class="fa fa-times"></span>Delete</button>
+                                  echo "<button class='btn btn-danger btn-sm' data-ng-click=\"deleteApplicator(applicator.applicator_master_id)\"><span class='fa fa-times'></span>Delete</button>";
                               }
 
 

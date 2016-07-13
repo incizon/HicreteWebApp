@@ -361,7 +361,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
 /*Start of view tentative applicator controller */
 
-myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
+myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http,ApplicatorService){
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 10;
@@ -437,6 +437,31 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
         //console.log(index);
         return (begin <= index && index < end);
     };
+
+    $scope.deleteApplicator=function(applicator_id){
+        console.log(applicator_id);
+
+        var answer = confirm("Are you sure you want to delete this applicator ?");
+        if (answer){
+           console.log("Yes");
+
+            for(var i = $rootScope.tentativeApplicators.length - 1; i >= 0; i--) {
+                if($rootScope.tentativeApplicators[i].applicator_master_id === applicator_id) {
+                    console.log("Find");
+                    console.log($rootScope.tentativeApplicators);
+                    $rootScope.tentativeApplicators.splice(i, 1);
+                    console.log($rootScope.tentativeApplicators);
+                    ApplicatorService.deleteApplicator($scope,$rootScope,$http,applicator_id);
+                }
+            }
+
+        }
+        else{
+            console.log("No");
+            //some code
+        }
+
+    }
 
 });
 
@@ -584,7 +609,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
 
 /*Start of view permanent applicator */
 
-myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
+myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http,ApplicatorService){
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 10;
@@ -660,6 +685,31 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
         //console.log(index);
         return (begin <= index && index < end);
     };
+
+    $scope.deleteApplicator=function(applicator_id){
+        console.log(applicator_id);
+
+        var answer = confirm("Are you sure you want to delete this applicator ?");
+        if (answer){
+            console.log("Yes");
+
+            for(var i = $rootScope.permanentApplicators.length - 1; i >= 0; i--) {
+                if($rootScope.permanentApplicators[i].applicator_master_id === applicator_id) {
+                    console.log("Find");
+                    console.log($rootScope.permanentApplicators);
+                    $rootScope.permanentApplicators.splice(i, 1);
+                    console.log($rootScope.permanentApplicators);
+                    ApplicatorService.deleteApplicator($scope,$rootScope,$http,applicator_id);
+                }
+            }
+
+        }
+        else{
+            console.log("No");
+            //some code
+        }
+
+    }
 
 });
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stateParams){
