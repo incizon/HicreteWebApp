@@ -78,7 +78,7 @@ Class Quotation {
 
 			$db = Database:: getInstance();
 			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT q.*,cm.`companyId`,cm.`companyName` from quotation q ,`companymaster` cm WHERE q.ProjectId =:id AND q.`companyId`=cm.`companyId`");
+			$stmt = $conn->prepare("SELECT q.*,cm.`companyId`,cm.`companyName` from quotation q ,`companymaster` cm WHERE q.ProjectId =:id AND q.`companyId`=cm.`companyId` order by q.`DateOfQuotation` ASC");
 			$stmt->bindparam(':id',$id ,PDO::PARAM_STR);
 				if($stmt->execute() === TRUE){
 					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -98,7 +98,7 @@ Class Quotation {
 
 		$db = Database:: getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT * FROM quotation q JOIN quotation_details qd ON q.QuotationId = qd.QuotationId  where q.QuotationId =:id;");
+		$stmt = $conn->prepare("SELECT * FROM quotation q JOIN quotation_details qd ON q.QuotationId = qd.QuotationId  where q.QuotationId =:id order by `DetailNo` ASC;");
 		$stmt->bindparam(':id',$qid ,PDO::PARAM_STR);
 		if($stmt->execute() === TRUE){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){

@@ -103,9 +103,9 @@
                      <thead>
                      <tr>
                          <th>Sr.No</th>
-                         <th>Quotation</th>
+                         <th>Quotation Title</th>
                          <th>Company</th>
-                         <th>Date</th>
+                         <th>Quotation Date</th>
                          <th>Actions</th>
                      </tr>
                      </thead>
@@ -114,7 +114,7 @@
                          <td>{{$index + 1}}</td>
                          <td>{{q.QuotationTitle}}</td>
                          <td>{{q.CompanyName}}</td>
-                         <td>{{q.CreationDate}}</td>
+                         <td>{{q.formattedQuotationDate}}</td>
 
                          <td>
                              <a ui-sref="Process.viewQuotation({quotationToView:q,projectName:projDetailsData.project_name})"><button class="btn btn-default btn-sm"><span class="fa fa-eye" ></span>View</button></a>
@@ -145,9 +145,9 @@
                          <thead>
                          <tr>
                              <th>Sr.No</th>
-                             <th>Work Order</th>
-                             <th>Quotation</th>
-                             <th>Date</th>
+                             <th>WorkOrder Title</th>
+                             <th>Quotation Title</th>
+                             <th>WorkOrder Date</th>
                              <th>Actions</th>
                            
                          </tr>
@@ -192,9 +192,9 @@
                          <thead>
                          <tr>
                              <th>Sr.No</th>
-                             <th>Invoice Name</th>
-                             <th>Quotation</th>
-                             <th>Date</th>
+                             <th>Invoice Title</th>
+                             <th>Workorder Title</th>
+                             <th>Invoice Date</th>
                              <th>Actions</th>
                          </tr>
                          </thead>
@@ -202,8 +202,8 @@
                          <tr ng-repeat="iv in projectInvoice">
                              <td>{{$index + 1}}</td>
                              <td>{{iv.invoiceTitle}}</td>
-                             <td>{{iv.quotationTitle}}</td>
-                             <td>{{iv.invoiceDate}}</td>
+                             <td>{{iv.workorderName}}</td>
+                             <td>{{iv.formattedInvoiceDate}}</td>
 
                              <td>
                                  <a ui-sref="Process.viewInvoice({InvoiceToView:iv})"><button class="btn btn-default btn-sm"><span class="fa fa-eye"></span>View</button></a>

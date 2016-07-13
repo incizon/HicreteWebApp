@@ -58,13 +58,49 @@ function getExpenseDetails($projectId)
     $segmentName = "";
     $totalSegmentExpense = 0;
     $result_array['SegmentExpenseDetails'] = array();
-    $stmtBudgetAllocated = $conn->prepare("SELECT SUM(`budget_details`.`allocatedbudget`) AS totalAllocatedBudget FROM `budget_details` WHERE `budget_details`.`projectid`='$projectId'");
+
+    $stmtBudgetAllocated = $conn->prepare("SELECT `budgetdetailsid`,`projectid`,budget_details.`budgetsegmentid`,budget_segment.segmentname,`allocatedbudget`,`alertlevel` FROM `budget_details`,`budget_segment` WHERE `budget_details`.`projectid`='$projectId' AND budget_details.`budgetsegmentid`=budget_segment.`budgetsegmentid`");
     if ($stmtBudgetAllocated->execute()) {
-        $resultAllocatedBudget=$stmtBudgetAllocated->Fetch(PDO::FETCH_ASSOC);
-        $totlaAllocatedBudget=$resultAllocatedBudget['totalAllocatedBudget'];
+
+        $totlaAllocatedBudget=0;
+
+        while ($resultAllocatedBudget=$stmtBudgetAllocated->Fetch(PDO::FETCH_ASSOC)) {
+            $totlaAllocatedBudget=$totlaAllocatedBudget+$resultAllocatedBudget['allocatedbudget'];
+            $result_array['SegmentBudgetDetails'][] = array(
+                'budgetdetailsid' => $resultAllocatedBudget['budgetdetailsid'],
+                'projectid' => $resultAllocatedBudget['projectid'],
+                'budgetsegmentid' => $resultAllocatedBudget['budgetsegmentid'],
+                'segmentname' => $resultAllocatedBudget['segmentname'],
+                'allocatedbudget' => $resultAllocatedBudget['allocatedbudget'],
+                'alertlevel' => $resultAllocatedBudget['alertlevel']
+            );
+        }
+
+
+
     }else{
         $totlaAllocatedBudget=0;
     }
+
+
+    $stmtMaterialBudgetAllocated = $conn->prepare("SELECT `materialbudgetdetailsid`,material_budget_details.`materialid`,`allocatedbudget`,`alertlevel`,product_master.productname FROM `material_budget_details`,material,product_master WHERE `material_budget_details`.`projectid`='$projectId' And material_budget_details.materialid =material.materialid AND material.productmasterid=product_master.productmasterid");
+    if ($stmtMaterialBudgetAllocated->execute()) {
+
+        while ($resultAllocatedMaterialBudget=$stmtMaterialBudgetAllocated->Fetch(PDO::FETCH_ASSOC)) {
+            $totlaAllocatedBudget=$totlaAllocatedBudget+$resultAllocatedMaterialBudget['allocatedbudget'];
+            $result_array['MaterialBudgetDetails'][] = array(
+                'materialbudgetdetailsid' => $resultAllocatedMaterialBudget['materialbudgetdetailsid'],
+                'materialid' => $resultAllocatedMaterialBudget['materialid'],
+                'productname' => $resultAllocatedMaterialBudget['productname'],
+                'allocatedbudget' => $resultAllocatedMaterialBudget['allocatedbudget'],
+                'alertlevel' => $resultAllocatedMaterialBudget['alertlevel']
+            );
+        }
+
+
+    }
+
+
     $stmt = $conn->prepare("SELECT `budget_details`.`projectid`,`budget_details`.`budgetsegmentid`,`budget_details`.`allocatedbudget`,`budget_details`.`alertlevel`,`segmentname`,SUM(`amount`) AS totalExpense FROM `budget_details` INNER JOIN `expense_details` ON `expense_details`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` AND `budget_details`.`projectid`='$projectId' JOIN `budget_segment` ON `budget_segment`.`budgetsegmentid`=`budget_details`.`budgetsegmentid` GROUP BY `budget_details`.`budgetsegmentid`");
     if ($stmt->execute()) {
         while ($result = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -81,7 +117,7 @@ function getExpenseDetails($projectId)
                 $segmentWiseExpense['totalSegmentExpense'] = 0;
 
             $segmentWiseExpense['alertLevel'] = $result['alertlevel'];
-          //  $totlaAllocatedBudget = $totlaAllocatedBudget + $result['allocatedbudget'];
+
             $stmt1 = $conn->prepare("SELECT expensedetailsid,`projectid`,budgetsegmentid,amount,description  FROM `expense_details` WHERE projectid='$projectId' AND budgetsegmentid='$result[budgetsegmentid]'");
             if ($stmt1->execute()) {
                 $segmentWiseExpense['SegmentExpense'] = array();

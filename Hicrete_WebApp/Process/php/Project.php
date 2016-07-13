@@ -54,7 +54,7 @@ Class Project
 
 		$db = Database::getInstance();
 		$conn = $db->getConnection();
-		$stmt = $conn->prepare("SELECT DISTINCT c.companyId,c.companyName FROM companymaster c, companies_involved_in_project cp WHERE cp.CompanyID != c.companyId and cp.ProjectId =:projid;");
+		$stmt = $conn->prepare("SELECT companyId, companyName FROM companymaster where companyId NOT IN (SELECT DISTINCT  `companyId` FROM companies_involved_in_project cp WHERE cp.ProjectId =  :projid)");
 		$stmt->bindParam(':projid',$projId,PDO::PARAM_STR);
 		if($result = $stmt->execute()){
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
@@ -67,27 +67,21 @@ Class Project
 	}
 
 
-    public function getInvoicesByProject($projid)
+    public static function getInvoicesByProject($projid)
     {
         $object = array();
-        try {
-            $db = Database::getInstance();
-            $conn = $db->getConnection();
-            $stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId = (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = '$projid'  AND q.isApproved = 1)");
-            //$stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
-            if ($result = $stmt->execute()) {
-                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    array_push($object, $row);
-                }
-                echo AppUtil::getReturnStatus("success", $object);
-            } else {
-                echo AppUtil::getReturnStatus("unsuccessful", "Error in stmt in getInvoicesByProject");
-//						return "Error in stmt in getInvoicesByProject";
-					}
-		}
-		catch(PDOException $e){
-			return "In exception in getInvoicesByProject".$e->getMessage();
-		}
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $stmt = $conn->prepare("SELECT * FROM invoice i where i.QuotationId IN (SELECT q.QuotationId FROM quotation q WHERE q.ProjectId = :projId  AND q.isApproved = 1)");
+        $stmt->bindParam(':projId',$projid,PDO::PARAM_STR);
+        if ($result = $stmt->execute()) {
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                array_push($object, $row);
+            }
+
+        } else {
+          return 1;
+        }
 		$db = null;
 		return $object;
 	}

@@ -40,6 +40,9 @@ switch($data->operation)
     case "modifyInvoice":
         InvoiceController::modiifyInvoice($data->data);
         break;
+    case "getAmountPaidForAllInvoice" :
+        InvoiceController::getAmountPaidForInvoice($data->projectId);
+        break;
 }
 
 ?>

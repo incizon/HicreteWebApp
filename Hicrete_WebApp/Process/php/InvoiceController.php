@@ -257,17 +257,30 @@ class InvoiceController
 
     }
 
-
-
-    public static function getInvoiceList($id){
+    public static function getAmountPaidForInvoice($projId){
         try{
-            $invoice = Invoice::getInvoiceListForProject($id);
-            echo AppUtil::getReturnStatus("Successful",$invoice);
+
+            if($projId!=null) {
+                $object=Invoice::getAmountPaidForInvoice($projId);
+                if($object!=null){
+                    echo AppUtil::getReturnStatus("Successful", $object);
+                }else{
+                    echo AppUtil::getReturnStatus("Unsuccessful", "Unexpected Error Occurred While Retrieving Amount Paid For Invoice");
+                }
+
+            }else{
+                echo AppUtil::getReturnStatus("Unsuccessful", "Invalid Parameters");
+            }
 
         }catch(Exception $e){
-            echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            echo AppUtil::getReturnStatus("Unsuccessful",$e->getMessage());
         }
 
     }
+
+
+
+
+
   
 }

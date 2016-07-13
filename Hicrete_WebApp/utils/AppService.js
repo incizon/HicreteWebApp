@@ -9,7 +9,8 @@ myApp.service('AppService', function () {
         var curr_date = d.getDate();
         var curr_month = d.getMonth() + 1; //Months are zero based
         var curr_year = d.getFullYear();
-
+        if(curr_month<=9)
+            return curr_date + "-0" + curr_month + "-" + curr_year;
         return curr_date + "-" + curr_month + "-" + curr_year;
     }
     this.getCompanyList = function ($http, $companies) {
@@ -343,7 +344,7 @@ myApp.service('AppService', function () {
             .success(function (data) {
                 console.log("IN Invoice Get");
                 console.log(data);
-                if (data.status == "success") {
+                if (data.status == "Successful") {
                     //alert("Failed:"+data.message);
                     console.log("else block");
                     for (var i = 0; i < data.message.length; i++) {
@@ -353,36 +354,67 @@ myApp.service('AppService', function () {
                         });
 
                     }
+                    console.log("Main :"+$invoices);
 
                 } else {
-                    //  alert("Failed:"+data.message);
+                    alert("Failed:"+data.message);
                 }
             })
             .error(function (data) {
                 alert("Error  Occurred:" + data);
             });
-        /* $http.post("php/api/invoicelist/"+$projectId, null)
-         .success(function (data) {
 
-         console.log("IN Invoice Get");
-         console.log(data);
-         if(data.status!="Successful"){
-         alert("Failed:"+data.message);
-         }else {
-         for(var i=0;i<data.message.length;i++){
-         $invoices.push({
-         id: data.message[i].InvoiceNo,
-         name: data.message[i].InvoiceTitle
-         });
-         }
-         }
-         })
-         .error(function (data, status, headers, config) {
-         alert("Error  Occurred:"+data);
-
-         });*/
 
     }
+
+    this.getAmountPaidForAllInvoices = function ($projectId ,$paymentDetails,$http  ) {
+        console.log($projectId);
+        var data = {
+            operation: "getAmountPaidForAllInvoice",
+            projectId: $projectId
+
+        };
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Process/php/InvoiceFacade.php", null, config)
+            .success(function (data) {
+                console.log("IN Invoice Get");
+                console.log(data);
+                if (data.status == "Successful") {
+
+                    console.log("else block");
+                    for (var i = 0; i < data.message.length; i++) {
+                        var AmountPaid;
+                        if(data.message[i].AmountPaid==undefined || data.message[i].AmountPaid==null || data.message[i].AmountPaid=="")
+                            AmountPaid=0;
+                        else
+                            AmountPaid= parseFloat(data.message[i].AmountPaid);
+
+                        $paymentDetails.push({
+                            AmountPaid:AmountPaid,
+                            GrandTotal: parseFloat(data.message[i].GrandTotal),
+                            InvoiceNo :data.message[i].InvoiceNo ,
+                            Remaining :parseFloat(data.message[i].GrandTotal)-AmountPaid
+                        });
+
+                    }
+                    console.log("Main :"+$paymentDetails);
+
+                } else {
+                    alert("Failed:"+data.message);
+                }
+            })
+            .error(function (data) {
+                alert("Error  Occurred:" + data);
+            });
+
+
+    }
+
 
 
     this.getAllSiteTrackingProjects = function ($http, $projects) {

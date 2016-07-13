@@ -1194,29 +1194,30 @@ myApp.controller('MainPageController' , function(setInfo,$scope,$http,$filter){
             console.log("Dashboard Task list");
             console.log(data);
             $('#loader').css("display", "none");
+            if(data.message!="No Task assigned yet.."){
+                for (var i = 0; i < data.message.length; i++) {
+                    task.push({
+                        "TaskID": data.message[i].TaskID,
+                        "TaskName": data.message[i].TaskName,
+                        "TaskDescripion": data.message[i].TaskDescripion,
+                        "ScheduleStartDate": data.message[i].ScheduleStartDate,
+                        "ScheduleEndDate": data.message[i].ScheduleEndDate,
+                        "CompletionPercentage": data.message[i].CompletionPercentage,
+                        "TaskAssignedTo": data.message[i].TaskAssignedTo,
+                        "isCompleted": data.message[i].isCompleted,
+                        "CreationDate": data.message[i].CreationDate,
+                        "CreatedBy": data.message[i].CreatedBy,
+                        "ActualStartDate": data.message[i].ActualStartDate,
+                        "AcutalEndDate": data.message[i].AcutalEndDate,
+                        "UserId": data.message[i].UserId,
+                        "UserName": data.message[i].firstName + " " + data.message[i].lastName
 
-            for (var i = 0; i < data.message.length; i++) {
-
-                task.push({
-                    "TaskID": data.message[i].TaskID,
-                    "TaskName": data.message[i].TaskName,
-                    "TaskDescripion": data.message[i].TaskDescripion,
-                    "ScheduleStartDate": data.message[i].ScheduleStartDate,
-                    "ScheduleEndDate": data.message[i].ScheduleEndDate,
-                    "CompletionPercentage": data.message[i].CompletionPercentage,
-                    "TaskAssignedTo": data.message[i].TaskAssignedTo,
-                    "isCompleted": data.message[i].isCompleted,
-                    "CreationDate": data.message[i].CreationDate,
-                    "CreatedBy": data.message[i].CreatedBy,
-                    "ActualStartDate": data.message[i].ActualStartDate,
-                    "AcutalEndDate": data.message[i].AcutalEndDate,
-                    "UserId": data.message[i].UserId,
-                    "UserName": data.message[i].firstName + " " + data.message[i].lastName
-
-                });
+                    });
+                }
+                $scope.Tasks = task;
+                console.log("get task on dashboard");
             }
-            $scope.Tasks = task;
-            console.log("get task on dashboard");
+
 
         })
         .error(function (data, status, headers, config) {

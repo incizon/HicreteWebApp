@@ -84,7 +84,7 @@
                                                        placeholder="" class="form-control" required
                                                        pattern="[0-9]*[.]?[0-9]*"></td>
                                             <td style="text-align: center;">
-                                                <a ng-click="remove($index)" class="panel-remove">
+                                                <a ng-click="removeSegments($index)" class="panel-remove">
                                                     <span class="fa fa-times"></span>
                                                 </a>
                                             </td>
@@ -94,7 +94,72 @@
                                 </div>
                             </div>
                             <!--End of project Field-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Number of Materials</label>
 
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="number" name="noOfElement" ng-model="noOfElement"
+                                               class="form-control" pattern="[0-9]+">
+                                    </div>
+                                    <div class="help-block" ng-messages="costCenterForm.noOfElement.$error"
+                                         ng-show="submitted">
+                                        <span style="color:red"
+                                              ng-message="pattern">Only numeric value is allowed</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" ng-click="addFields()">Add</button>
+                                </div>
+                            </div>
+                            <div class="form-group adjust-padding">
+                                <label class="col-md-2 control-label">Material Budget</label>
+
+                                <div class="col-md-7">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-md-3">Material</th>
+                                            <th class="col-md-3">Allocated Budget</th>
+                                            <th class="col-md-2">Alert level</th>
+                                            <th class="col-md-2">Remove</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="materials in costCentermaterials">
+                                            <td width="30%">
+                                                <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"
+                                                        ng-value="Select" required style="width: 90%">
+                                                    <option value="" disabled selected>Select Material</option>
+                                                    <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
+                                                    </option>
+                                                </select>
+                                                <div class="help-block" ng-show="getNoOfMaterials()<=0"
+                                                     ng-show="createCostCenterClicked">
+                                                    <p style="color:red">Please add atleast one material.</p>
+                                                </div>
+                                                <div class="help-block" ng-messages="costCenterForm.material.$error"
+                                                     ng-show="createCostCenterClicked">
+                                                    <p style="color:red" ng-message="required">Please enter material.</p>
+                                                </div>
+                                            </td>
+                                            <td><input name="allocatedBudget" ng-model="materials.allocatedBudget"
+                                                       type="text" placeholder="" class="form-control" required
+                                                       "></td>
+                                            <td><input ng-model="materials.alertLevel" name="alertLevel" type="text"
+                                                       placeholder="" class="form-control" required
+                                                       pattern="[0-9]*[.]?[0-9]*"></td>
+                                            <td style="text-align: center;">
+                                                <a ng-click="remove($index)" class="panel-remove">
+                                                    <span class="fa fa-times"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div><!--main division select tag-->
 
                         <!--End of First column of form-->
