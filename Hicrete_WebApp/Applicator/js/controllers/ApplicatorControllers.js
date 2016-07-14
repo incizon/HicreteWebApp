@@ -265,13 +265,21 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
                         applicatorDetails.isFollowup=true;
+                        console.log("Create Followup");
                         ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                       console.log("Cancel Followup");
+                        //ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                        $rootScope.errorMessage = "Followup is Compulsory.Applicator will not be created.";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+
+                        }, 5000);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -326,7 +334,13 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                        //ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                        $rootScope.errorMessage = "Followup is Compulsory.Applicator will not be created.";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+
+                        }, 5000);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -337,7 +351,6 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     }
                 }
             });
-
             modalInstance.result.then(function (applicatorDetails) {
                 //$scope.applicatorDetails = applicatorDetails;
 
@@ -350,9 +363,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             };
         }
         $('#loader').css("display","none");
-
     };
-
 
 });
 
@@ -964,7 +975,13 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
+                        //ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
+                        $rootScope.errorMessage = "Followup is Compulsory.Payment will not done";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+
+                        }, 5000);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },

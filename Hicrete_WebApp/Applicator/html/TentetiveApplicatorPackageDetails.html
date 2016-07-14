@@ -23,13 +23,13 @@
                             </div>
                             <div class="col-md-9">
 
-                                <input type="text" ng-model="applicatorDetails.packageID" placeholder="Select Package" uib-typeahead="package as package.package_name for package in packages | filter:{package_name:$viewValue}"  class="form-control">
-                                {{applicatorDetails.packageID}}
-                                <!--<select class="form-control" name="packageName" ng-model="applicatorDetails.packageID" ng-change="getPackageDetails(applicatorDetails.packageID)" required/>-->
+                                <!--<input type="text" ng-model="applicatorDetails.packageID" placeholder="Select Package" uib-typeahead="package as package.package_name for package in packages | filter:{package_name:$viewValue}"  class="form-control">-->
+                                <!--{{applicatorDetails.packageID}}-->
+                                <select class="form-control" name="packageName" ng-model="applicatorDetails.packageID" ng-change="getPackageDetails(applicatorDetails.packageID)" required/>
 
-                                    <!--<option value="" disabled selected>Choose package</option>-->
-                                    <!--<option ng-repeat="package in packages" value="{{package.payment_package_id }}">{{package.package_name}}</option>-->
-                                <!--</select>-->
+                                    <option value="" disabled selected>Choose package</option>
+                                    <option ng-repeat="package in packages" value="{{package.payment_package_id }}">{{package.package_name}}</option>
+                                </select>
                                 <div class="help-block"
                                      ng-messages="applicatorPackageForm.packageName.$error"
                                      ng-show="formSubmitted"> 

@@ -93,29 +93,27 @@ myApp.service('ApplicatorService',function(){
 				.success(function (data, status, headers, config){
 					$('#loader').css("display","none");
 					console.log(data.msg);
-					if(data.msg!=""){
-						$rootScope.warningMessage = "Payment Details Added Successfully..";
-						$('#warning').css("display","block");
-					}
-					setTimeout(function() {
-
-							if(data.msg!=""){
-								$('#warning').css("display","none");
-                                window.location.reload(true);
-                            }
-
-					}, 1000);
-
 					$scope.loading=false;
 					$('#loader').css("display","none");
-					if(data.msg==""){
-						$rootScope.errorMessage="Unable to Add Payment Details..";
-						$('#error').css("display","block");
+					if(data.msg!=""){
+						$rootScope.warningMessage =data.msg;
+						$('#warning').css("display", "block");
+						setTimeout(function() {
+							$('#warning').css("display", "none");
+							window.location = "dashboard.php#/Applicator";
+						},1000);
 					}
-					console.log(data);
-					setTimeout(function(){
-						window.location.reload(true);
-					},4000);
+
+					if(data.error!=""){
+						$rootScope.errorMessage=data.error;
+						$('#error').css("display","block");
+
+						setTimeout(function() {
+							$('#error').css("display","none");
+							window.location = "dashboard.php#/Applicator";
+						},5000);
+
+					}
 
 				})
 
@@ -123,7 +121,9 @@ myApp.service('ApplicatorService',function(){
 					console.log(data);
 					$('#loader').css("display","none");
 					$rootScope.errorMessage="Unable to Add Payment Details..";
-					$('#error').css("display","block");
+					setTimeout(function() {
+						$('#error').css("display","block");
+					},5000);
 				});
 	}
 
