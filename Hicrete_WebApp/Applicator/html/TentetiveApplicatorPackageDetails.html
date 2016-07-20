@@ -23,8 +23,8 @@
                             </div>
                             <div class="col-md-9">
 
-                                <!--<input type="text" ng-model="applicatorDetails.packageID" placeholder="Select Package" uib-typeahead="package as package.package_name for package in packages | filter:{package_name:$viewValue}"  class="form-control">-->
-                                <!--{{applicatorDetails.packageID}}-->
+                                <!--<input type="text" class="form-control" name="packageName" ng-model="packageSelected" typeahead-on-select="getPackageDetails(packageSelected)" uib-typeahead="package as package.package_name for package in packages | filter:$viewValue" typeahead-editable="true" required/>-->
+
                                 <select class="form-control" name="packageName" ng-model="applicatorDetails.packageID" ng-change="getPackageDetails(applicatorDetails.packageID)" required/>
 
                                     <option value="" disabled selected>Choose package</option>

@@ -92,6 +92,7 @@ myApp.service('ApplicatorService',function(){
 		$http.post("Applicator/php/Applicator.php", null,config)
 				.success(function (data, status, headers, config){
 					$('#loader').css("display","none");
+					console.log(data);
 					console.log(data.msg);
 					$scope.loading=false;
 					$('#loader').css("display","none");
@@ -151,7 +152,7 @@ myApp.service('ApplicatorService',function(){
                     $('#warning').css("display","block");
 
                     setTimeout(function(){
-                        window.location = "dashboard.php#/Applicator";
+                        //window.location = "dashboard.php#/Applicator";
                         //window.location.reload(true);
                     },1000);
                 }
@@ -160,7 +161,7 @@ myApp.service('ApplicatorService',function(){
                     $('#error').css("display","block");
 
                     setTimeout(function(){
-                        window.location = "dashboard.php#/Applicator";
+                        //window.location = "dashboard.php#/Applicator";
                        // window.location.reload(true);
                     },4000);
                 }
@@ -172,7 +173,6 @@ myApp.service('ApplicatorService',function(){
                 $('#error').css("display","block");
             });
     }
-
 
 });
 myApp.service('PackageService',function(){

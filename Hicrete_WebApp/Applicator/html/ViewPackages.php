@@ -89,7 +89,7 @@ $isSuper=appUtil::isSuperUser($userId);
                     <thead>
                     <tr>
                         <th width="5%">Sr.No</th>
-                        <th width="10%">Element Name</th>
+                        <th width="20%">Element Name</th>
                         <th width="10%">Element Quantity</th>
                         <th width="10%">Element rate</th>
                         <th width="10%">Element Amount</th>
@@ -99,7 +99,7 @@ $isSuper=appUtil::isSuperUser($userId);
                     <tbody>
                     <tr ng-repeat="Element in selectedPackage.elementType">
                         <td width="5%">{{$index + 1}}</td>
-                        <td width="10%">{{Element['element_name']}}</td>
+                        <td width="25%">{{Element['element_name']}}</td>
                         <td width="10%">{{Element['element_quantity']}}</td>
                         <td width="10%">{{Element['element_rate']}}</td>
                         <td width="10%">{{Element['element_amount']}}</td>

@@ -18,6 +18,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
         pannumber:"",
         operation:"",
         packageEdited:"false",
+        packageID:"",
         elementDetails:[]
     };
 
@@ -98,9 +99,12 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
 
     /* to show package details while creating applicator */
-
+    //$scope.packageSelected=null;
     $scope.getPackageDetails=function(packageID){
-        console.log(packageID);
+        //console.log(selected);
+        //packageID=selected.payment_package_id;
+
+        $scope.applicatorDetails.packageID=packageID;
         $scope.packageDetailsShow='Yes';
         $scope.editPackage=false;
         $scope.applicatorDetails.packageEdited="false";
@@ -109,7 +113,6 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
         for(var pindex=0;pindex<$scope.packages.length;pindex++){
 
             if($scope.packages[pindex].payment_package_id==packageID){
-
 
                 $scope.applicatorDetails.package_name=$scope.packages[pindex].package_name;
                 $scope.applicatorDetails.package_description=$scope.packages[pindex].package_description;
@@ -127,8 +130,10 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     });
                 }
             }
+
         }
     }
+
 
     /* if package edited then set packageEdited to true and editPackage to true adn hide package details*/
     $scope.editPackageDetails=function(){
@@ -976,7 +981,7 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
                         //ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
-                        $rootScope.errorMessage = "Followup is Compulsory.Payment will not done";
+                        $rootScope.errorMessage = "Followup is Compulsory.Payment will not be done";
                         $('#error').css("display", "block");
                         setTimeout(function () {
                             $('#error').css("display", "none");
