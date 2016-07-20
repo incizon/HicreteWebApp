@@ -1,16 +1,19 @@
 <?php
 require_once('ProdBatch.php');
-require_once 'Database/Database.php';
+require_once '../../php/Database.php';
+require_once '../../php/appUtil.php';
 //include('../../Logger/Logger.php');
 //Logger::configure('../config.xml');
 
 $db = Database::getInstance();
 $dbh = $db->getConnection();
 $prodBatchinfo = json_decode($_GET["prodBatchInfo"]);
-session_start();
 
+if (!isset($_SESSION['token'])) {
+	session_start();
+}
+$userId=$_SESSION['token'];
 
-$userId = $_SESSION['token'];
 /*echo $userId;
 echo $dbh;*/
 
@@ -19,7 +22,7 @@ $opt = array(
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
 );
-error_reporting(E_ERROR | E_PARSE);
+//error_reporting(E_ERROR | E_PARSE);
 
 if($prodBatchinfo->option=="getQuantity")
 {
@@ -181,8 +184,16 @@ else {
 			break;
 		case "InquiryAll":
 			$keywords="%".$prodBatchinfo->Keywords."%";
-			$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid IN (select productionbatchmasterid from produced_good)");
-			$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
+			if(AppUtil::isSuperUser($userId)) {
+				$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid IN (select productionbatchmasterid from produced_good)");
+				$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
+			}
+			else {
+				$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid IN (select productionbatchmasterid from produced_good) and creuserid=:userId");
+				$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
+				$stmt1->bindParam(':userId',$userId , PDO::PARAM_STR,10);
+			}
+
 			if ($stmt1->execute()) {
 
 				$json_response = array();
@@ -272,8 +283,15 @@ else {
 
 		case "Inquiry":
 			$keywords="%".$prodBatchinfo->Keywords."%";
-			$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid NOT IN (select productionbatchmasterid from produced_good)");
-			$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
+			if(AppUtil::isSuperUser($userId)) {
+				$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid IN (select productionbatchmasterid from produced_good)");
+				$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
+			}
+			else {
+				$stmt1 = $dbh->prepare("SELECT * FROM production_batch_master where batchno like :keywords and productionbatchmasterid IN (select productionbatchmasterid from produced_good) and creuserid=:userId");
+				$stmt1->bindParam(':keywords',$keywords , PDO::PARAM_STR,10);
+				$stmt1->bindParam(':userId',$userId , PDO::PARAM_STR,10);
+			}
 			if ($stmt1->execute()) {
 
 				$json_response = array();

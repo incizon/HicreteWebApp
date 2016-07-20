@@ -5,7 +5,7 @@
  * Date: 03/12/16
  * Time: 10:13 PM
  */
-    require_once 'Database/Database.php';
+require_once '../../php/Database.php';
 
     class InventoryUtils
     {

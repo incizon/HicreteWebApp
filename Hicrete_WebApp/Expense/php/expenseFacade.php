@@ -19,7 +19,7 @@
             Expense::addOtherExpense($data->otherExpenseData, $data->billDetails, $userId);
             break;
         case "addMaterialExpense":
-            Expense::addMaterialExpense($data->materialExpenseData, $data->billDetails, $userId);
+            Expense::addMaterialExpense($data->projectId, $data->materialsExpense, $userId);
             break;
         case 'getBillApproval':
             Expense::getBillApproval();

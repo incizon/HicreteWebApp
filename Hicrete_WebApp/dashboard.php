@@ -319,6 +319,9 @@ if(!$userObj->init($userId)){
                                 echo "<a ui-sref=\"RequestAccess\" class=\"list-group-item\">
                             <span class=\"contacts-title\">Request for access</span>
                         </a>";
+                                echo "<a ui-sref=\"ShowAccessRequest\" class=\"list-group-item\">
+                            <span class=\"contacts-title\">Show Access Request</span>
+                        </a>";
                             }
                         ?>
 

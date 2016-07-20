@@ -78,8 +78,9 @@ switch ($data->operation) {
                                 }else{
                                     echo appUtil::getReturnStatus("Unsuccessful","You Do not have authority to view");
                                 }
-
-
+    case "getAccessRequestList" : ConfigUtils::getAllAccessRequestForUser($userId);
+        break;
+    case "CancelTempAccessRequest" :ConfigUtils::CancelTempAccessRequest($data->requestId);
         break;
 
 }

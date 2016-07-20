@@ -37,7 +37,7 @@
                             <tr style="text-align: center;" ng-repeat="costCenter in costCenterData">
                                 <td width="10%">{{projectName}}</td>
                                 <td width="10%">{{costCenter.budgetAllocated}}</td>
-                                <td width="10%">{{costCenter.materialExpense}}</td>
+                                <td width="10%" ng-model="totalMaterialExpense">{{costCenter.materialExpense}}</td>
                                 <td width="10%">{{costCenter.otherExpense}}</td>
                                 <td width="8%">{{costCenter.totalExpenditure}}</td>
                                 <!--<td width="10%">{{costCenter.status}}</td>-->
@@ -48,10 +48,10 @@
 
                     <div class="form-group col-md-12">
                         <div>
-                            <h3>Segment Budget</h3>
+                            <h3>Segment Budget = {{costCenterData[0].SegmentsTotalBudgetAllocated}}</h3>
                         </div>
                         <!--table start-->
-                        <div class="col-md-12" style="padding-left:0px;">
+                        <div class="col-md-8" style="padding-left:0px;">
                             <table class="table datatable">
                                 <thead style="text-align: center;">
                                 <tr style="text-align: center;">
@@ -72,9 +72,9 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-8">
                         <div>
-                            <h3>Material Budget</h3>
+                            <h3>Material Budget = {{costCenterData[0].MaterialsTotalBudgetAllocated}}</h3>
                         </div>
                         <!--table start-->
                         <div class="col-md-12" style="padding-left:0px;">
@@ -83,7 +83,7 @@
                                 <tr style="text-align: center;">
                                     <th width="10%" style="text-align: center;">Material Name</th>
                                     <th width="10%" style="text-align: center;">Budget Allocated</th>
-                                    <!--<th width="5%" style="text-align: center;">Status</th>-->
+                                    <th width="5%" style="text-align: center;">TotalMaterialExpense</th>
 
                                 </tr>
                                 </thead>
@@ -91,6 +91,7 @@
                                 <tr style="text-align: center;" ng-repeat="materialWiseBudget in costCenterData[0].MaterialBudgetDetails">
                                     <td width="10%">{{materialWiseBudget.productname}}</td>
                                     <td width="10%">{{materialWiseBudget.allocatedbudget}}</td>
+                                    <td width="10%">{{getTotalMaterialExpense(materialWiseBudget.materialid,costCenterData[0])}}</td>
 
                                 </tr>
                                 </tbody>
@@ -100,8 +101,8 @@
 
                     <!--table end-->
                     <uib-accordion>
-                        <uib-accordion-group heading="Material Expense Details" ng-show="expenseDetails[0].materialExpenseDetails.length>0">
-                            <table class="table table-actions table-striped">
+                        <uib-accordion-group heading="Material Expense Details = {{costCenterData[0].materialExpense}}" ng-show="expenseDetails[0].materialExpenseDetails.length>0">
+                            <table class="table table-actions table-striped tableScrollable">
                                 <thead>
                                 <tr>
                                     <th>Sr.No</th>
@@ -135,7 +136,7 @@
                     </uib-accordion>
                     <uib-accordion>
 
-                        <uib-accordion-group  heading="{{segmentExpense.segmentName}} Segment -   TotalExpense: {{getTotalSegmentExpense(segmentExpense.SegmentExpense)}}" ng-repeat="segmentExpense in expenseDetails[0].SegmentExpenseDetails">
+                        <uib-accordion-group ng-show="{{getTotalSegmentExpense(segmentExpense.SegmentExpense)}}>0"  heading="{{segmentExpense.segmentName}} Segment -   TotalExpense: {{getTotalSegmentExpense(segmentExpense.SegmentExpense)}}" ng-repeat="segmentExpense in expenseDetails[0].SegmentExpenseDetails">
 
                             <table class="table table-actions table-striped">
                                 <thead>
