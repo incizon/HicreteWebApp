@@ -1,5 +1,5 @@
 <?php
-require_once 'Database/Database.php';
+require_once '../../php/Database.php';
 include_once 'crud/ProductCrud.php';
 include_once 'models/Product_Model.php';
 require_once 'utils/Common_Methods.php';

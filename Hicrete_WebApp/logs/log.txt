@@ -15,3 +15,7 @@ SQLSTATE[42S22]: Column not found: 1054 Unknown column 'createdby' in 'field lis
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'createdby' in 'field list' 
 2016-07-06 20:07:56 - FATAL --> Exception Occured Message:
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'createdby' in 'field list' 
+2016-07-19 22:16:08 - FATAL --> Exception Occured Message:
+SQLSTATE[42000]: Syntax error or access violation: 1065 Query was empty 
+2016-07-20 20:10:25 - ERROR --> Invalid temp access request 
+2016-07-20 20:23:50 - ERROR --> Invalid temp access request 

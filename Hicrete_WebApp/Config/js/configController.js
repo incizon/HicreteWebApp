@@ -2134,3 +2134,146 @@ myApp.controller('AccessApprovalController',function($scope,$http,configService)
         return (begin <= index && index < end);
     };
 });
+
+myApp.controller('ShowAccessRequestController',function($scope,$http,configService,AppService) {
+
+    console.log("In");
+    $scope.AccessApprovalPerPage=10;
+    $scope.currentPage=1;
+    $scope.ApprovalList=[];
+
+
+    $scope.getAccessApprovals=function(){
+
+        var data = {
+            operation: "getAccessRequestList"
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php", null, config)
+            .success(function (data) {
+                $scope.ApprovalList=data.message;
+                for(var i=0;i<$scope.ApprovalList.length;i++){
+                    $scope.ApprovalList[i].requestDate=AppService.getFormattedDate($scope.ApprovalList[i].requestDate);
+                    if($scope.ApprovalList[i].firstName==undefined || $scope.ApprovalList[i].firstName==undefined || $scope.ApprovalList[i].firstName==null){
+                        $scope.ApprovalList[i].firstName="-";
+                    }
+                    if($scope.ApprovalList[i].lastName=="" || $scope.ApprovalList[i].lastName==undefined || $scope.ApprovalList[i].lastName==null){
+                        $scope.ApprovalList[i].lastName="-";
+                    }
+                    if($scope.ApprovalList[i].remark=="" ||$scope.ApprovalList[i].remark==undefined || $scope.ApprovalList[i].remark==null){
+                        $scope.ApprovalList[i].remark="--";
+                    }
+                }
+                $scope.totalItems=$scope.ApprovalList.length;
+                console.log($scope.totalItems);
+            })
+            .error(function (data, status, headers, config) {
+
+
+            });
+    }
+
+    $scope.isRequestPending=function(status){
+        if(status=='Pending'){
+            return true;
+        }
+        return false;
+    }
+
+    $scope.getAccessApprovals();
+
+    $scope.viewApproveDetails=function(requestId){
+
+        console.log(requestId);
+        $scope.requestId=requestId;
+        $scope.tempSubmitted=false;
+        $scope.accessRequested=[];
+        $scope.tempAccess={};
+        $scope.remark="";
+        $scope.buttonDisabled=true;
+        var data={
+            operation :"getTempAccessRequestDetails",
+            requestId : $scope.requestId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    alert(data.message);
+                }else{
+
+                    $scope.tempAccess=data.message.requestDetails;
+                    configService.marshalledAccessList(data.message.accessRequested,$scope.accessRequested);
+                    $scope.tempAccess.fromDate= AppService.getFormattedDate($scope.tempAccess.fromDate);
+                    $scope.tempAccess.toDate= AppService.getFormattedDate($scope.tempAccess.toDate);
+                    $scope.buttonDisabled=false;
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                alert("Error Occured"+data);
+            });
+
+    }
+    $scope.cancelAccessRequest=function(requestId){
+        $scope.buttonDisabled=true;
+        $scope.tempSubmitted=false;
+        var data={
+            operation :"CancelTempAccessRequest",
+            requestId : requestId
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Config/php/configFacade.php",null, config)
+            .success(function (data)
+            {
+
+                if(data.status!="Successful"){
+                    alert(data.message);
+                }else{
+
+                    for(var i=0;i<$scope.ApprovalList.length;i++){
+                        if($scope.ApprovalList[i].requestId==$scope.requestId){
+                            $scope.ApprovalList[i].status="Cancel";
+                            break;
+                        }
+                    }
+                    alert("Request Cancelled Successfully");
+                }
+
+            })
+            .error(function (data, status, headers, config)
+            {
+                alert("Error Occured"+data);
+            });
+    }
+
+    $scope.paginate = function(value) {
+
+        var begin, end, index;
+        begin = ($scope.currentPage - 1) * $scope.AccessApprovalPerPage;
+        end = begin + $scope.AccessApprovalPerPage;
+        index = $scope.ApprovalList.indexOf(value);
+
+        return (begin <= index && index < end);
+    };
+});
+

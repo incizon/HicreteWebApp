@@ -1,5 +1,5 @@
 <?php
-require_once 'Database/Database.php';
+require_once "../../php/Database.php";
 require_once 'utils/Common_Methods.php';
 require_once "../../php/HicreteLogger.php";
 

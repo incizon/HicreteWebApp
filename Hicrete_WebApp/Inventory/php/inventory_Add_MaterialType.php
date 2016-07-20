@@ -1,6 +1,6 @@
 <?php
 
-    require_once 'Database/Database.php';
+require_once '../../php/Database.php';
 include_once "../../php/HicreteLogger.php";
     $db = Database::getInstance();
     $dbh = $db->getConnection();

@@ -518,6 +518,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             controller:'AccessApprovalController'
         })
 
+        .state('ShowAccessRequest', {
+            url: '/ShowAccessRequest',
+            templateUrl:'Config/html/ShowAccessRequest.html',
+            controller:'ShowAccessRequestController'
+        })
+
         .state('Payroll', {
             url: '/Payroll',
             templateUrl:'Payroll/html/PayrollWidget.php'

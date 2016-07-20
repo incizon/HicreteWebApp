@@ -6,7 +6,7 @@
 //$password = 'hicrete@123';
 //$userId="Pranav";
 
-require_once 'Database/Database.php';
+require_once '../../php/Database.php';
 $db = Database::getInstance();
 $dbh = $db->getConnection();
 //$dbh= new PDO("mysql:host=$hostname;dbname=$dbname" , $username ,$password);
