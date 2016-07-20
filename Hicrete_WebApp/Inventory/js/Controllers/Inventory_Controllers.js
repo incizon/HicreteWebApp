@@ -1862,6 +1862,404 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
 /*********************************************************************************************
  * END of Search Controller
  *********************************************************************************************/
+/*********************************************************************************************
+ * Start of modifyOutwardcontroller
+ *********************************************************************************************/
+
+myApp.controller('modifyOutwardController', function ($scope, $rootScope,$stateParams, $filter, $http, inventoryService, inwardService, AppService) {
+
+    $scope.step=1;
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.open1 = function () {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+    $scope.openDate = function () {
+        $scope.popup1.opened = true;
+    };
+    //inventoryService.getProductsForInwardand($scope, $http);
+    inventoryService.getProductsForOutward($scope, $http);
+    //Get Warehouses
+    inventoryService.getWarehouses($scope, $http);
+    // Get Company
+    inventoryService.getCompanys($scope, $http);
+
+    //GetUsers
+    AppService.getUsers($scope, $http);
+
+    var data = {
+        module: 'getSuppliers',
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log(data);
+            $scope.suppliers = data;
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
+        });
+
+    $scope.getNoOfMaterials = function () {
+        return $scope.OutwardDataModify.materialDetails.length;
+    }
+
+    $scope.getUnit = function (pMaterialId) {
+        var qty;
+
+        for (var i = 0; i < $scope.materialsForOutward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutward[i].materialid) {
+                $scope.unitofMeasure = $scope.materialsForOutward[i].unitofmeasure;
+                qty = $scope.unitofMeasure;
+
+            }
+        }
+
+        return qty;
+    }
+
+
+    /*$scope.getNoOfMaterials = function () {
+        return $scope.InwardDataModify.inwardMaterials.length;
+    }
+*/
+
+
+    console.log($stateParams.selectedOutward);
+    $scope.OutwardDataModify=$stateParams.selectedOutward;
+
+    //$scope.InwardDataModify.inwardMaterials=$stateParams.selectedInward.materialDetails;
+    //$scope.InwardDataModify.inwardMaterials=$stateParams.selectedInward.materialDetails;
+
+
+
+
+    if($scope.OutwardDataModify.drivername == "--")
+    {
+        $scope.OutwardDataModify.hasTransportDetails="No";
+    }else
+    {
+        $scope.OutwardDataModify.hasTransportDetails="Yes";
+    }
+    //console.log($scope.OutwardDataModify);
+
+    $scope.transportMode = [
+        {transport: 'Air Transport', transportId: 1},
+        {transport: 'Water Transport', transportId: 2},
+        {transport: 'Road Transport', transportId: 3}
+    ];
+
+    $scope.remove = function (index) {
+
+        $scope.OutwardDataModify.materialDetails.splice(index, 1); //remove item by index
+    };
+    $scope.prevStep = function () {
+        $scope.step--;
+    }
+
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.OutwardDataModify.materialDetails.push({
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            });
+        }
+        ;
+    }
+
+
+
+    $scope.getAvailableQty1 = function (pMaterialId) {
+        var qty;
+        console.log(pMaterialId);
+       // console.log($scope.materialsForOutward);
+        for (var i = 0; i < $scope.materialsForOutward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutward[i].materialid) {
+                qty = $scope.materialsForOutward[i].totalquantity;
+                $scope.availableTotalquantity = qty;
+                $scope.unitofMeasure = $scope.materialsForOutward[i].unitofmeasure;
+                break;
+            }
+
+        }
+        console.log("Available Quantity:"+$scope.availableTotalquantity);
+        return qty;
+    }
+
+    $scope.modifyOutwardDetails=function (OutwardDataModify)
+    {
+        $('#loader').css("display", "block");
+        var data = {
+            outwardData: OutwardDataModify,
+            module: 'outward',
+            operation: 'Modify'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                $('#loader').css("display", "none");
+                if (data.msg != "") {
+                    console.log(data);
+                    $rootScope.warningMessage = data.msg;
+                     $('#warning').css("display", "block");
+                     setTimeout(function () {
+                     $('#warning').css("display", "none");
+                     window.location="dashboard.php#/Inventory";
+                     }, 2000);
+                     // $scope.submitted= false;
+                     $scope.step = 1;
+
+                } else {
+                    console.log(data);
+                    $rootScope.errorMessage = data.error;
+                     $('#error').css("display", "block");
+                }
+
+
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                 $('#error').css("display", "block");
+            });
+
+    }
+
+
+
+
+    $scope.nextStep = function () {
+        //alert("next step:"+$scope.InwardData.hasTransportDetails);
+
+        if ($scope.OutwardDataModify.hasTransportDetails == 'No') {
+            $scope.modifyOutwardDetails($scope.OutwardDataModify);
+        } else if ($scope.OutwardDataModify.hasTransportDetails == 'Yes') {
+            $scope.step++;
+            $scope.submitted = false;
+        }
+    }
+
+});
+
+
+/*********************************************************************************************
+ *END of modifyOutwardcontroller
+ *********************************************************************************************/
+
+
+
+
+
+/*********************************************************************************************
+ * Start of modifyInwardcontroller
+ *********************************************************************************************/
+myApp.controller('modifyInwardController', function ($scope, $rootScope,$stateParams, $filter, $http, inventoryService, inwardService, AppService) {
+
+    $scope.step=1;
+
+
+
+
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.open1 = function () {
+        $scope.popup1.opened = true;
+    };
+
+    $scope.popup1 = {
+        opened: false
+    };
+    $scope.openDate = function () {
+        $scope.popup1.opened = true;
+    };
+
+
+
+    inventoryService.getProductsForInwardand($scope, $http);
+    //Get Warehouses
+    inventoryService.getWarehouses($scope, $http);
+    // Get Company
+    inventoryService.getCompanys($scope, $http);
+
+    //GetUsers
+    AppService.getUsers($scope, $http);
+
+    var data = {
+        module: 'getSuppliers',
+    }
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $http.post("Inventory/php/InventoryIndex.php", null, config)
+        .success(function (data) {
+            console.log(data);
+            $scope.suppliers = data;
+        })
+        .error(function (data, status, headers) {
+            console.log(data);
+        });
+
+    $scope.getUnit = function (pMaterialId) {
+        var qty;
+        console.log(pMaterialId);
+        for (var i = 0; i < $scope.materialsForOutwardInward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutwardInward[i].materialid) {
+                $scope.unitofMeasure = $scope.materialsForOutwardInward[i].unitofmeasure;
+                qty = $scope.unitofMeasure;
+
+            }
+        }
+
+        return qty;
+    }
+/*
+    $scope.getUnitOfMeasure = function (pMaterialId) {
+        var qty;
+
+        for (var i = 0; i < $scope.materialsForOutwardInward.length; i++) {
+            if (pMaterialId == $scope.materialsForOutwardInward[i].materialid) {
+                // qty = $scope.materialsForOutward[i].totalquantity;
+                $scope.availableTotalquantity = qty;
+                $scope.unitofMeasure = $scope.materialsForOutwardInward[i].unitofmeasure;
+                qty = $scope.unitofMeasure;
+            }
+        }
+
+        return qty;
+    }*/
+
+    $scope.getNoOfMaterials = function () {
+        console.log( $scope.InwardDataModify.inwardMaterials.length);
+        return $scope.InwardDataModify.inwardMaterials.length;
+    }
+
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.InwardDataModify.inwardMaterials.push({
+                material: "",
+                materialQuantity: "",
+                packageUnit: "",
+                suppplierName: ""
+            });
+        }
+        ;
+    }
+
+
+    console.log($stateParams.selectedInward);
+    $scope.InwardDataModify=$stateParams.selectedInward;
+
+    $scope.InwardDataModify.inwardMaterials=$stateParams.selectedInward.materialDetails;
+    //$scope.InwardDataModify.inwardMaterials=$stateParams.selectedInward.materialDetails;
+
+
+
+    if($scope.InwardDataModify.drivername == "--")
+    {
+        $scope.InwardDataModify.hasTransportDetails="No";
+    }else
+    {
+        $scope.InwardDataModify.hasTransportDetails="Yes";
+    }
+    console.log($scope.InwardDataModify);
+
+    $scope.transportMode = [
+        {transport: 'Air Transport', transportId: 1},
+        {transport: 'Water Transport', transportId: 2},
+        {transport: 'Road Transport', transportId: 3}
+    ];
+
+    $scope.remove = function (index) {
+
+        $scope.InwardDataModify.inwardMaterials.splice(index, 1); //remove item by index
+    };
+    $scope.prevStep = function () {
+        $scope.step--;
+    }
+
+    $scope.modifyInwardDetails=function (InwardDataModify)
+    {
+        InwardDataModify.dateofentry = $filter("date")(InwardDataModify.dateofentry, 'dd-MM-yyyy');
+        $('#loader').css("display", "block");
+        var data = {
+            inwardData: InwardDataModify,
+            module: 'inward',
+            operation: 'Modify'
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                $('#loader').css("display", "none");
+                if (data.msg != "") {
+                    console.log(data);
+                    $rootScope.warningMessage = data.msg;
+                    $('#warning').css("display", "block");
+                    setTimeout(function () {
+                        $('#warning').css("display", "none");
+                        window.location="dashboard.php#/Inventory";
+                    }, 2000);
+                    //$scope.clearFields(inwardData);
+                    // $scope.submitted= false;
+                    $scope.step = 1;
+                   // window.location="dashboard.php#/Inventory";
+                } else {
+                    console.log(data);
+                    $rootScope.errorMessage = data.error;
+                    $('#error').css("display", "block");
+                }
+                //$('#loader').css("display", "none");
+
+            })
+            .error(function (data, status, headers) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                $('#error').css("display", "block");
+            });
+
+    }
+
+
+
+
+    $scope.nextStep = function () {
+        //alert("next step:"+$scope.InwardData.hasTransportDetails);
+        console.log($scope.InwardDataModify.hasTransportDetails);
+        if ($scope.InwardDataModify.hasTransportDetails == 'No') {
+            $scope.modifyInwardDetails($scope.InwardDataModify);
+        } else if ($scope.InwardDataModify.hasTransportDetails == 'Yes') {
+            $scope.step++;
+            $scope.submitted = false;
+        }
+    }
+
+});
+/*********************************************************************************************
+ * End of modifyInwardcontroller
+ *********************************************************************************************/
+
+
 
 
 /*********************************************************************************************

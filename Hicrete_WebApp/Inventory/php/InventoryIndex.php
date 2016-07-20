@@ -131,7 +131,9 @@
                     $SearchTerm ="";
                         $productObjSearch->getInwardEntries($dbh,$keyword,$SearchTerm,$dbhHicret);
                 break;
-
+            case 'Modify':
+                InwardData::ModifyInwardDetails($dbh,$userId,$pData->inwardData);
+                break;
             default:
                 # code... return with error msg
                 break;
@@ -157,10 +159,11 @@
             case 'delete':
                 # code...
                 break;
-            case 'modify':
+            case 'Modify':
                 # code...
-                $productObjUpdate = new OutwardData($pData);
-                $productObjUpdate->updateOutwardDetails($dbh, $userId, $pData);
+               // $productObjUpdate = new OutwardData($pData);
+                //$productObjUpdate->updateOutwardDetails($dbh, $userId, $pData);
+                OutwardData::ModifyOutwardDetails($dbh,$userId,$pData->outwardData);
                 break;
             case 'search':
                 # code...

@@ -86,7 +86,7 @@
                         <td  class="tablerow">{{product.dateofentry}}</td>
                         <td  class="tablerow">
                             <button data-target="#viewOutwardDetails" ng-click="getProduct(product)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View</button>
-
+                            <a ui-sref="Inventory.modifyOutwardItem({selectedOutward:product})"> <button class="btn btn-info">Modify</button></a>
                             <!--<button class="btn btn-info btn-sm" disabled data-target="#modifyOutwardDetails" data-toggle="modal" ng-click="getProduct(product)"><span class="fa fa-pencil-square-o" ></span>Modify</button>-->
 
 

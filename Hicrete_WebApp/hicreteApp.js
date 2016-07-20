@@ -147,6 +147,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Inventory/html/inward/Inventory_Inward_Form.html',
             controller: 'inwardController'
         })
+        .state('Inventory.modifyInwardItem', {
+            url: '/modifyInwardItem',
+            templateUrl: 'Inventory/html/inward/Inventory_Modify_Inward.html',
+            controller: 'modifyInwardController',
+            params : { selectedInward: null }
+        })
         //.state('Inventory.inwardSearch', {
         //    url: '/inwardSearch',
         //    templateUrl: 'Inventory/html/search/Inventory_Inward_Search.html',
@@ -156,6 +162,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/outwardItem',
             templateUrl: 'Inventory/html/outward/Inventory_Outward_steps.html',
             controller: 'outwardController'
+        })
+        .state('Inventory.modifyOutwardItem', {
+            url: '/modifyOutwardItem',
+            templateUrl: 'Inventory/html/outward/inventory_Modify_outward.html',
+            controller: 'modifyOutwardController',
+            params : { selectedOutward: null }
         })
          .state('Inventory.addMaterialType', {
             url: '/addMaterial',
