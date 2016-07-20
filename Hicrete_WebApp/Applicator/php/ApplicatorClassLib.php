@@ -50,7 +50,6 @@
 
                 public function createPackage($data,$userId)
                 {
-
                     try {
                         $db = Database::getInstance();
                         $connect = $db->getConnection();
@@ -199,272 +198,297 @@
                  *
                  */
 
-                public function createApplicator($data,$userId)
-                {
-                    global $connect;
-                    try {
-                        $companyId = 0;
-                        $firmName = $data->firmname;
-                        $applicatorAddressLine1 = $data->addressline1;
-                        $applicatorAddressLine2 = $data->addressline2;
-                        $applicatorCountry = $data->country;
-                        $applicatorState = $data->state;
-                        $applicatorCity = $data->city;
-                        $applicatorContactNo = $data->contactno;
-                        $applicatorVatNumber = $data->vatnumber;
-                        $applicatorCstNumber = $data->cstnumber;
-                        $applicatorServiceTaxNumber = $data->servicetaxnumber;
-                        $applicatorPanNumber = $data->pannumber;
-                        if (isset($data->pointofcontact)) {
-                            $pointOfContact = $data->pointofcontact;
-                        } else
-                            $pointOfContact = "";
-                        if (isset($data->pointcontactno)) {
-                            $pointContactNo = $data->pointcontactno;
-                        } else
-                            $pointContactNo = "";
-
-                        if ($data->packageEdited == "false") {
-                            $MasterPackageId = $data->packageID;
-                        } else {
-                            $MasterPackageId = $this->lastInsertedPackageId;
-                        }
-
-                        $paymentReceived = $data->received;
-                        $paymentStatus = $data->paymentStatus;
-
-                        if (($paymentReceived == 'Yes' && $paymentStatus == 'Yes') || ($paymentReceived == 'Yes' && $paymentStatus == 'No')) {
-
-                            $paymentMode = $data->mode;
-                            $amountPaid = $data->amountpaid;
-                            $amountPaidTo = $data->paidto;
-
-                            $date1 = new DateTime($data->paymentDate);
-                            $dateOfPayment = $date1->format('Y-m-d');
+                public function createApplicator($data,$userId){
 
 
-                            if ($paymentMode != "cash") {
-
-                                $bankName = $data->bankname;
-                                $branchName = $data->branchname;
-                                $instrumentOfPayment = $data->mode;
-                                $numberOfInstrument = $data->uniquenumber;
-                            }
+                    try{
+                            if($this->saveApplicatorDetails($data,$userId)){
 
 
-                        }
-                        if (($paymentReceived == 'No' && $paymentStatus == 'No') || ($paymentReceived == 'Yes' && $paymentStatus == 'No')) {
+                                 if($this->createApplicatorEnrollment($data,$userId)) {
 
-                            $date2 = new DateTime($data->followupdate);
-                            $followupDate = $date2->format('Y-m-d');
+                                     //Check payment received or not
+                                     //1.Full Amount
+                                     if (($data->received == 'Yes' && $data->paymentStatus == 'Yes')) {
+                                         if ($this->savePaymentInfo($data, $userId,$this->lastInsertedEnrollmentId)) {
 
-                            $followupEmployeeId = $data->followupemployeeId;
+                                             if($this->changeApplicatorStatus($this->lastInsertedApplicatorId)) {
+                                                 return true;
+                                             }
+                                             else{
+                                                 return false;
+                                             }
 
+                                         } else {
 
-                        }
+                                             return false;
+                                         }
+                                     }
 
-                        $stmt1 = $connect->prepare("INSERT INTO applicator_master(applicator_name,applicator_contact,applicator_address_line1,applicator_address_line2,applicator_city,applicator_state,applicator_country,applicator_vat_number,applicator_cst_number,applicator_stax_number,applicator_pan_number,last_modification_date,last_modified_by,created_by,creation_date)
-	                 VALUES (:firmName,:applicatorContactNo,:applicatorAddressLine1,:applicatorAddressLine2,:applicatorCity,:applicatorState,:applicatorCountry,:applicatorVatNumber,:applicatorCstNumber,:applicatorServiceTaxNumber,:applicatorPanNumber,NOW(),:lastModifiedBy,:createdBy,NOW())");
+                                     //2.Half Amount
+                                     else if(($data->received == 'Yes' && $data->paymentStatus == 'No')){
 
-                        $stmt1->bindParam(':firmName', $firmName);
-                        $stmt1->bindParam(':applicatorContactNo', $applicatorContactNo);
-                        $stmt1->bindParam(':applicatorAddressLine1', $applicatorAddressLine1);
-                        $stmt1->bindParam(':applicatorAddressLine2', $applicatorAddressLine2);
-                        $stmt1->bindParam(':applicatorCity', $applicatorCity);
-                        $stmt1->bindParam(':applicatorState', $applicatorState);
-                        $stmt1->bindParam(':applicatorCountry', $applicatorCountry);
-                        $stmt1->bindParam(':applicatorVatNumber', $applicatorVatNumber);
-                        $stmt1->bindParam(':applicatorCstNumber', $applicatorCstNumber);
-                        $stmt1->bindParam(':applicatorServiceTaxNumber', $applicatorServiceTaxNumber);
-                        $stmt1->bindParam(':applicatorPanNumber', $applicatorPanNumber);
+                                         if ($this->savePaymentInfo($data, $userId,$this->lastInsertedEnrollmentId)) {
 
-                        $stmt1->bindParam(':lastModifiedBy', $userId);
-                        $stmt1->bindParam(':createdBy', $userId);
+                                              if($this->saveFollowupDetails($data,$userId,$this->lastInsertedEnrollmentId)){
 
+                                                  return true;
+                                              }
+                                             else{
 
-                        $stmt2 = $connect->prepare("INSERT INTO applicator_pointof_contact(point_of_contact, point_of_contact_no, last_modification_date, last_modified_by, created_by, creation_date, applicator_master_id)
-	       			VALUES (:pointOfContact , :pointContactNo , NOW(), :lastModifiedBy, :createdBy, NOW(), :lastApplicatorId)");
+                                                 return false;
+                                             }
 
-                        $stmt2->bindParam(':pointOfContact', $pointOfContact);
-                        $stmt2->bindParam(':pointContactNo', $pointContactNo);
-                        $stmt2->bindParam(':lastApplicatorId', $this->lastInsertedApplicatorId);
+                                         } else {
 
-                        $stmt2->bindParam(':lastModifiedBy', $userId);
-                        $stmt2->bindParam(':createdBy', $userId);
+                                             return false;
+                                         }
 
-                        $stmt3 = $connect->prepare("INSERT INTO applicator_enrollment(applicator_master_id,company_id,payment_package_id,payment_status,created_by,creation_date)
-	                                          VALUES (:lastApplicatorId,:companyId ,:MasterPackageId,:paymentStatus,:createdBy, NOW())");
+                                     }
+                                     //3.No Amount
+                                     else if(($data->received == 'No' && $data->paymentStatus == 'No')){
 
-                        $stmt3->bindParam(':lastApplicatorId', $this->lastInsertedApplicatorId);
-                        $stmt3->bindParam(':companyId', $companyId);
-                        $stmt3->bindParam(':MasterPackageId', $MasterPackageId);
-                        $stmt3->bindParam(':paymentStatus', $paymentStatus);
-                        $stmt3->bindParam(':createdBy', $userId);
+                                             if($this->saveFollowupDetails($data,$userId,$this->lastInsertedEnrollmentId)){
 
-                        $stmt4 = $connect->prepare("INSERT INTO applicator_payment_info(enrollment_id,amount_paid,date_of_payment,paid_to,payment_mode,created_by,creation_date)
-	       								VALUES (:lastEnrollmentId,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,:createdBy, NOW())");
-
-                        $stmt4->bindParam(':lastEnrollmentId', $this->lastInsertedEnrollmentId);
-                        $stmt4->bindParam(':amountPaid', $amountPaid);
-                        $stmt4->bindParam(':dateOfPayment', $dateOfPayment);
-                        $stmt4->bindParam(':amountPaidTo', $amountPaidTo);
-                        $stmt4->bindParam(':paymentMode', $paymentMode);
-                        $stmt4->bindParam(':createdBy', $userId);
-
-                        $stmt5 = $connect->prepare("INSERT INTO payment_mode_details(instrument_of_payment,number_of_instrument,bank_name,branch_name,created_by,creation_date,payment_id)
-	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,:createdBy, NOW(),:lastPaymentId)");
-
-                        $stmt5->bindParam(':instrumentOfPayment', $instrumentOfPayment);
-                        $stmt5->bindParam(':numberOfInstrument', $numberOfInstrument);
-                        $stmt5->bindParam(':bankName', $bankName);
-                        $stmt5->bindParam(':branchName', $branchName);
-                        $stmt5->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
-                        $stmt5->bindParam(':createdBy', $userId);
-
-
-                        $stmt6 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id, `followup_title`,`assignEmployeeId`)
-                                  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
-
-                        $stmt6->bindParam(':followupDate', $followupDate);
-                        $stmt6->bindParam(':lastEnrollmentId', $this->lastInsertedEnrollmentId);
-                        $stmt6->bindParam(':lastModifiedBy', $userId);
-                        $stmt6->bindParam(':createdBy', $userId);
-                        $stmt6->bindParam(':followupTitle', $data->followTitle);
-                        $stmt6->bindParam(':assignEmployeeId', $data->followupemployeeId);
-
-
-                        /* Update status of applicator */
-                        $stmt8 = $connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
-                        $stmt8->bindParam(':lastCreatedApplicator', $this->lastInsertedApplicatorId);
-
-                        HicreteLogger::logDebug("Query:\n ".json_encode($stmt1));
-                        HicreteLogger::logDebug("Data:\n ".json_encode($data));
-                        if ($stmt1->execute()) {
-
-                            $this->lastInsertedApplicatorId = $connect->lastInsertId();
-                            HicreteLogger::logDebug("Query:\n ".json_encode($stmt2));
-                            HicreteLogger::logDebug("Data:\n ".json_encode($data));
-                            if ($stmt2->execute()) {
-                                HicreteLogger::logDebug("Query:\n ".json_encode($stmt3));
-                                HicreteLogger::logDebug("Data:\n ".json_encode($data));
-                                if ($stmt3->execute()) {
-
-                                    $this->lastInsertedEnrollmentId = $connect->lastInsertId();
-
-                                    if ($paymentReceived == 'Yes' && $paymentStatus == 'Yes') {
-                                        HicreteLogger::logDebug("Query:\n ".json_encode($stmt4));
-                                        //HicreteLogger::logDebug("Data:\n ".json_encode($data));
-                                        if ($stmt4->execute()) {
-
-                                            if ($paymentMode != 'cash') {
-
-                                                $this->lastInsertedPaymentId = $connect->lastInsertId();
-                                                HicreteLogger::logDebug("Query:\n ".json_encode($stmt5));
-                                                if ($stmt5->execute()) {
-                                                    HicreteLogger::logDebug("Query:\n ".json_encode($stmt8));
-                                                    if ($stmt8->execute()) {
-                                                        HicreteLogger::logInfo("Applicator created successfully");
-                                                        return true;
-                                                    } else {
-                                                        HicreteLogger::logError("Applicator not created successfully: error in updating applicator master");
-                                                        return false;
-                                                    }
-                                                } else {
-                                                    HicreteLogger::logError("Applicator not created successfully: error in insertion of payment_mode_details");
-                                                    return false;
-                                                }
+                                                  return true;
+                                             }
+                                            else{
+                                                   return false;
                                             }
-                                            if ($stmt8->execute()) {
-                                                HicreteLogger::logInfo("Applicator created successfully");
-                                                return true;
-                                            } else {
-                                                HicreteLogger::logError("Applicator not created successfully:error in updating applicator master");
-                                                return false;
-                                            }
-                                        } else {
-                                            HicreteLogger::logError("Applicator not created successfully: error in insertion of applicator_payment_info");
-                                            return false;
-                                        }
-                                    }
-                                    if ($paymentReceived == 'No' && $paymentStatus == 'No') {
+                                     }
 
-                                        if ($data->isFollowup) {
-                                            HicreteLogger::logDebug("Query:\n ".json_encode($stmt6));
-                                            if ($stmt6->execute()) {
-                                                HicreteLogger::logInfo("Follow up added successfully");
-                                                return true;
+                                 }
+                            }else{
 
-                                            } else {
-                                                HicreteLogger::logError("Error while adding followup");
-                                                return false;
-                                            }
-                                        } else
-                                            return true;
-
-                                    }
-                                    if ($paymentReceived == 'Yes' && $paymentStatus == 'No') {
-
-                                        HicreteLogger::logDebug("Query:\n ".json_encode($stmt4));
-                                        if ($stmt4->execute()) {
-
-
-                                            if ($paymentMode != 'cash') {
-
-                                                $this->lastInsertedPaymentId = $connect->lastInsertId();
-                                                HicreteLogger::logDebug("Query:\n ".json_encode($stmt5));
-                                                if ($stmt5->execute()) {
-                                                    if ($data->isFollowup) {
-                                                        HicreteLogger::logDebug("Query:\n ".json_encode($stmt6));
-                                                        if ($stmt6->execute()) {
-                                                            HicreteLogger::logInfo("Followup added successfully");
-                                                            return true;
-                                                        } else {
-                                                            HicreteLogger::logError("Followup not added successfully");
-                                                            return false;
-                                                        }
-                                                    } else
-                                                        return true;
-
-                                                } else {
-                                                    HicreteLogger::logError("Insertion to payment mode details failed");
-                                                    return false;
-                                                }
-                                            } else {
-
-                                                if ($data->isFollowup) {
-                                                    if ($stmt6->execute()) {
-                                                        HicreteLogger::logInfo("Followup added successfully");
-                                                        return true;
-                                                    } else {
-                                                        HicreteLogger::logError("Followup not added successfully");
-                                                        return false;
-                                                    }
-                                                }
-
-                                            }
-                                        } else {
-                                            HicreteLogger::logError("Error while inserting to applicator payment info");
-                                            return false;
-                                        }
-                                    }
-                                } else {
-                                    return false;
-                                }
-                            } else {
-                                HicreteLogger::logError("Error while inserting to applicator enrollment");
                                 return false;
                             }
-                        } else {
-                            HicreteLogger::logError("Error while inserting to applicator Master");
-                            return false;
-                        }
                     }
                     catch(Exception $e){
-                        HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
-                        return false;
+
                     }
                 }
 
+                public function saveApplicatorDetails($data,$userId){
+
+                    global $connect;
+                    $firmName = $data->firmname;
+                    $applicatorAddressLine1 = $data->addressline1;
+                    $applicatorAddressLine2 = $data->addressline2;
+                    $applicatorCountry = $data->country;
+                    $applicatorState = $data->state;
+                    $applicatorCity = $data->city;
+                    $applicatorContactNo = $data->contactno;
+                    $applicatorVatNumber = $data->vatnumber;
+                    $applicatorCstNumber = $data->cstnumber;
+                    $applicatorServiceTaxNumber = $data->servicetaxnumber;
+                    $applicatorPanNumber = $data->pannumber;
+
+                    if (isset($data->pointofcontact)) {
+                        $pointOfContact = $data->pointofcontact;
+                    } else{
+                        $pointOfContact = "null";
+                    }
+                    if (isset($data->pointcontactno)) {
+                        $pointContactNo = $data->pointcontactno;
+                    } else{
+                        $pointContactNo = "null";
+                    }
+
+                    $stmt1 = $connect->prepare("INSERT INTO applicator_master(applicator_name,applicator_contact,applicator_address_line1,applicator_address_line2,applicator_city,applicator_state,applicator_country,applicator_vat_number,applicator_cst_number,applicator_stax_number,applicator_pan_number,last_modification_date,last_modified_by,created_by,creation_date)
+	                 VALUES (:firmName,:applicatorContactNo,:applicatorAddressLine1,:applicatorAddressLine2,:applicatorCity,:applicatorState,:applicatorCountry,:applicatorVatNumber,:applicatorCstNumber,:applicatorServiceTaxNumber,:applicatorPanNumber,NOW(),:lastModifiedBy,:createdBy,NOW())");
+
+                    $stmt1->bindParam(':firmName', $firmName);
+                    $stmt1->bindParam(':applicatorContactNo', $applicatorContactNo);
+                    $stmt1->bindParam(':applicatorAddressLine1', $applicatorAddressLine1);
+                    $stmt1->bindParam(':applicatorAddressLine2', $applicatorAddressLine2);
+                    $stmt1->bindParam(':applicatorCity', $applicatorCity);
+                    $stmt1->bindParam(':applicatorState', $applicatorState);
+                    $stmt1->bindParam(':applicatorCountry', $applicatorCountry);
+                    $stmt1->bindParam(':applicatorVatNumber', $applicatorVatNumber);
+                    $stmt1->bindParam(':applicatorCstNumber', $applicatorCstNumber);
+                    $stmt1->bindParam(':applicatorServiceTaxNumber', $applicatorServiceTaxNumber);
+                    $stmt1->bindParam(':applicatorPanNumber', $applicatorPanNumber);
+
+                    $stmt1->bindParam(':lastModifiedBy', $userId);
+                    $stmt1->bindParam(':createdBy', $userId);
+
+
+                    $stmt2 = $connect->prepare("INSERT INTO applicator_pointof_contact(point_of_contact, point_of_contact_no, last_modification_date, last_modified_by, created_by, creation_date, applicator_master_id)
+	       			VALUES (:pointOfContact , :pointContactNo , NOW(), :lastModifiedBy, :createdBy, NOW(), :lastApplicatorId)");
+
+                    $stmt2->bindParam(':pointOfContact', $pointOfContact);
+                    $stmt2->bindParam(':pointContactNo', $pointContactNo);
+                    $stmt2->bindParam(':lastApplicatorId', $this->lastInsertedApplicatorId);
+
+                    $stmt2->bindParam(':lastModifiedBy', $userId);
+                    $stmt2->bindParam(':createdBy', $userId);
+
+
+                        if ($stmt1->execute()) {
+
+                            $this->lastInsertedApplicatorId = $connect->lastInsertId();
+
+                            if ($stmt2->execute()) {
+
+                                    return true;
+                            }
+                            else{
+                                HicreteLogger::logError("Error while inserting to applicator point of contact");
+                                return false;
+                            }
+                        }
+                        else{
+                            HicreteLogger::logError("Error while inserting to applicator Master");
+                            return false;
+                        }
+
+
+                }
+
+                public function createApplicatorEnrollment($data,$userId){
+
+                    $companyId=0;
+                    global $connect;
+                    if ($data->packageEdited == "false") {
+                        $MasterPackageId = $data->packageID;
+                    } else {
+                        $MasterPackageId = $this->lastInsertedPackageId;
+                    }
+
+                    $paymentStatus = $data->paymentStatus;
+
+                    $stmt1 = $connect->prepare("INSERT INTO applicator_enrollment(applicator_master_id,company_id,payment_package_id,payment_status,created_by,creation_date)
+	                                          VALUES (:lastApplicatorId,:companyId ,:MasterPackageId,:paymentStatus,:createdBy, NOW())");
+
+                    $stmt1->bindParam(':lastApplicatorId', $this->lastInsertedApplicatorId);
+                    $stmt1->bindParam(':companyId', $companyId);
+                    $stmt1->bindParam(':MasterPackageId', $MasterPackageId);
+                    $stmt1->bindParam(':paymentStatus', $paymentStatus);
+                    $stmt1->bindParam(':createdBy', $userId);
+
+                    if($stmt1->execute()){
+
+                            $this->lastInsertedEnrollmentId = $connect->lastInsertId();
+                            return true;
+                    }
+                    else{
+                        HicreteLogger::logError("Error while creating applicator enrollment");
+                        return false;
+                    }
+                }
+                public function savePaymentInfo($data,$userId,$enrollmentId){
+
+                    global $connect;
+
+                    $paymentMode = $data->mode;
+                    $amountPaid = $data->amountpaid;
+                    $amountPaidTo = $data->paidto;
+
+                    $date1 = new DateTime($data->paymentDate);
+                    $dateOfPayment = $date1->format('Y-m-d');
+
+
+                    $stmt1 = $connect->prepare("INSERT INTO applicator_payment_info(enrollment_id,amount_paid,date_of_payment,paid_to,payment_mode,created_by,creation_date)
+	       								VALUES (:lastEnrollmentId,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,:createdBy, NOW())");
+
+                    $stmt1->bindParam(':lastEnrollmentId', $enrollmentId);
+                    $stmt1->bindParam(':amountPaid', $amountPaid);
+                    $stmt1->bindParam(':dateOfPayment', $dateOfPayment);
+                    $stmt1->bindParam(':amountPaidTo', $amountPaidTo);
+                    $stmt1->bindParam(':paymentMode', $paymentMode);
+                    $stmt1->bindParam(':createdBy', $userId);
+
+
+                    $stmt2 = $connect->prepare("INSERT INTO payment_mode_details(instrument_of_payment,number_of_instrument,bank_name,branch_name,created_by,creation_date,payment_id)
+	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,:createdBy, NOW(),:lastPaymentId)");
+
+                    $stmt2->bindParam(':instrumentOfPayment', $data->mode);
+                    $stmt2->bindParam(':numberOfInstrument', $data->uniquenumber);
+                    $stmt2->bindParam(':bankName', $data->bankname);
+                    $stmt2->bindParam(':branchName', $data->branchname);
+                    $stmt2->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
+                    $stmt2->bindParam(':createdBy', $userId);
+
+
+                    if ($paymentMode === "cash") {
+
+                          if($stmt1->execute()){
+
+                                return true;
+                          }
+                        else{
+                            return false;
+                            HicreteLogger::logError("Error saving payment details");
+                        }
+                    }
+                    else{
+
+                            if($stmt1->execute()){
+
+                                $this->lastInsertedPaymentId = $connect->lastInsertId();
+
+                                if($stmt2->execute()){
+
+                                    return true;
+                                }
+                                else{
+
+                                    return false;
+                                    HicreteLogger::logError("Error while saving applicator payment mode details");
+                                }
+                            }
+                            else{
+                                return false;
+                                HicreteLogger::logError("Error while saving applicator payment details");
+                            }
+                    }
+
+                }
+
+                public function saveFollowupDetails($data,$userId,$enrollment_id){
+
+                    global $connect;
+
+                    $date2 = new DateTime($data->followupdate);
+                    $followupDate = $date2->format('Y-m-d');
+
+                    $stmt1 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id, `followup_title`,`assignEmployeeId`)
+                                  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
+
+                    $stmt1->bindParam(':followupDate', $followupDate);
+                    $stmt1->bindParam(':lastEnrollmentId',$enrollment_id);
+                    $stmt1->bindParam(':lastModifiedBy', $userId);
+                    $stmt1->bindParam(':createdBy', $userId);
+                    $stmt1->bindParam(':followupTitle', $data->followTitle);
+                    $stmt1->bindParam(':assignEmployeeId', $data->followupemployeeId);
+
+                    if($stmt1->execute()){
+                        return true;
+                    }
+                    else{
+                        return false;
+                        HicreteLogger::logError("Error while creating applicator follow up");
+                    }
+
+                }
+
+
+                public function changeApplicatorStatus($applicatorId){
+
+                    global $connect;
+
+                    $stmt1 = $connect->prepare("UPDATE applicator_master set applicator_status='permanent' WHERE applicator_master_id=:lastCreatedApplicator");
+                    $stmt1->bindParam(':lastCreatedApplicator', $applicatorId);
+
+                    if($stmt1->execute()){
+
+                        return true;
+                    }
+                    else{
+                        return false;
+                        HicreteLogger::logError("Error while applicator status change");
+                    }
+                }
 
                 public function viewTentativeApplicators($data){
 
@@ -888,195 +912,87 @@
                     }
                 }
 
-                public function savePaymentDetails($data,$userId){
+                public function savePaymentDetails($data,$userId)
+                {
+                    global $connect;
+                    $paymentStatus = $data->paymentStatus;
+                    $enrollment_id = $data->enrollmentID;
+                    if($paymentStatus == 'Yes'){
 
-                    try {
-                        global $connect;
+                             if($this->updatePaymentStatus($paymentStatus,$enrollment_id)){
 
-                        $enrollment_id = $data->enrollmentID;
-                        $paymentStatus = $data->paymentStatus;
-                        $paymentMode = $data->mode;
-                        $amountPaid = $data->amountpaid;
-                        $dateOfPayment = $data->paymentDate;
-                        $amountPaidTo = $data->paidto;
+                                    if($this->savePaymentInfo($data,$userId,$enrollment_id)){
 
+                                        $stmt1 = $connect->prepare("SELECT  applicator_master_id FROM applicator_enrollment WHERE enrollment_id=:enrollmentID ");
+                                        $stmt1->bindParam(':enrollmentID', $enrollment_id);
 
-                        if ($paymentMode != "cash") {
+                                        $stmt1->execute();
+                                        $result = $stmt1->fetch();
+                                        $applicator_master_id = $result['applicator_master_id'];
 
-                            $bankName = $data->bankname;
-                            $branchName = $data->branchname;
-                            $instrumentOfPayment = $data->mode;
-                            $numberOfInstrument = $data->uniquenumber;
+                                        if($this->changeApplicatorStatus($applicator_master_id)){
 
-                        }
-                        if ($data->pendingAmount != 0) {
-
-                            $followupDate = $data->followupdate;
-                            $followupEmployeeId = $data->followupemployeeId;
-                        }
-
-
-                        $stmt1 = $connect->prepare("UPDATE applicator_enrollment SET payment_status=:paymentStatus WHERE enrollment_id=:enrollment_id");
-                        $stmt1->bindParam(':enrollment_id', $enrollment_id);
-                        $stmt1->bindParam(':paymentStatus', $paymentStatus);
-
-
-                        $stmt2 = $connect->prepare("INSERT INTO applicator_payment_info(enrollment_id,amount_paid,date_of_payment,paid_to,payment_mode,created_by,creation_date)
-	       								VALUES (:enrollment_id,:amountPaid,:dateOfPayment,:amountPaidTo,:paymentMode,:createdBy, NOW())");
-
-                        $stmt2->bindParam(':enrollment_id', $enrollment_id);
-                        $stmt2->bindParam(':amountPaid', $amountPaid);
-                        $stmt2->bindParam(':dateOfPayment', $dateOfPayment);
-                        $stmt2->bindParam(':amountPaidTo', $amountPaidTo);
-                        $stmt2->bindParam(':paymentMode', $paymentMode);
-                        $stmt2->bindParam(':createdBy', $userId);
-
-
-                        $stmt3 = $connect->prepare("INSERT INTO payment_mode_details(instrument_of_payment,number_of_instrument,bank_name,branch_name,created_by,creation_date,payment_id)
-	       								VALUES (:instrumentOfPayment,:numberOfInstrument,:bankName,:branchName,:createdBy, NOW(),:lastPaymentId)");
-
-                        $stmt3->bindParam(':instrumentOfPayment', $instrumentOfPayment);
-                        $stmt3->bindParam(':numberOfInstrument', $numberOfInstrument);
-                        $stmt3->bindParam(':bankName', $bankName);
-                        $stmt3->bindParam(':branchName', $branchName);
-                        $stmt3->bindParam(':lastPaymentId', $this->lastInsertedPaymentId);
-                        $stmt2->bindParam(':createdBy', $userId);
-
-
-                        $stmt4 = $connect->prepare("INSERT INTO applicator_follow_up(date_of_follow_up,last_modification_date,last_modified_by,created_by,creation_date,enrollment_id, `followup_title`,`assignEmployeeId`)
-                                  VALUES (:followupDate,NOW(),:lastModifiedBy,:createdBy,NOW(),:lastEnrollmentId ,:followupTitle ,:assignEmployeeId)");
-
-                        $stmt4->bindParam(':followupDate', $followupDate);
-                        $stmt4->bindParam(':lastEnrollmentId', $enrollment_id);
-                        $stmt4->bindParam(':lastModifiedBy', $userId);
-                        $stmt4->bindParam(':createdBy', $userId);
-                        $stmt4->bindParam(':followupTitle', $data->followTitle);
-                        $stmt4->bindParam(':assignEmployeeId', $data->followupemployeeId);
-
-
-                        $stmt6 = $connect->prepare("SELECT  applicator_master_id FROM applicator_enrollment WHERE enrollment_id=:enrollmentID ");
-                        $stmt6->bindParam(':enrollmentID', $enrollment_id);
-
-                        $stmt6->execute();
-                        $result = $stmt6->fetch();
-                        $applicator_master_id = $result['applicator_master_id'];
-
-                        /* Update status of applicator */
-                        $stmt7 = $connect->prepare("UPDATE applicator_master set applicator_status='permanent',last_modified_by=:lastModifiedBy WHERE applicator_master_id=:applicator_id");
-                        $stmt7->bindParam(':applicator_id', $applicator_master_id);
-                        $stmt7->bindParam(':lastModifiedBy', $userId);
-
-                        if ($paymentStatus == 'Yes') {
-
-                            HicreteLogger::logDebug("Query:\n " . json_encode($stmt1));
-                            HicreteLogger::logDebug("Data:\n " . json_encode($data));
-                            if ($stmt1->execute()) {
-                                HicreteLogger::logDebug("Query:\n " . json_encode($stmt2));
-                                if ($stmt2->execute()) {
-
-                                    $this->lastInsertedPaymentId = $connect->lastInsertId();
-
-                                    if ($paymentMode != 'cash') {
-                                        HicreteLogger::logDebug("Query:\n " . json_encode($stmt3));
-                                        if ($stmt3->execute()) {
-
-                                            HicreteLogger::logDebug("Query:\n " . json_encode($stmt7));
-                                            if ($stmt7->execute()) {
-                                                HicreteLogger::logDebug("successful");
-                                                return true;
-                                            } else {
-                                                HicreteLogger::logDebug("unsuccessful");
-                                                return false;
-                                            }
-
-
-                                        } else {
-                                            HicreteLogger::logDebug("unsuccessful");
-                                            return false;
-                                        }
-
-                                    } else {
-                                        HicreteLogger::logDebug("Query:\n " . json_encode($stmt7));
-                                        if ($stmt7->execute()) {
-                                            HicreteLogger::logDebug("successful");
                                             return true;
-                                        } else {
-                                            HicreteLogger::logDebug("unsuccessful");
-                                            return false;
+                                        }
+                                        else{
+                                            false;
                                         }
                                     }
-
-                                } else {
-                                    HicreteLogger::logDebug("unsuccessful");
+                                 else{
+                                     return false;
+                                 }
+                             }
+                            else{
                                     return false;
-                                }
-                            } else {
-                                HicreteLogger::logDebug("unsuccessful");
-                                return false;
                             }
-
-                        }
-
-
-                        if ($paymentStatus == 'No') {
-                            HicreteLogger::logDebug("Query:\n " . json_encode($stmt1));
-                            if ($stmt1->execute()) {
-                                HicreteLogger::logDebug("Query:\n " . json_encode($stmt2));
-                                if ($stmt2->execute()) {
-
-                                    $this->lastInsertedPaymentId = $connect->lastInsertId();
-
-                                    if ($paymentMode != 'cash') {
-                                        HicreteLogger::logDebug("Query:\n " . json_encode($stmt3));
-                                        if ($stmt3->execute()) {
-
-                                            if ($data->isFollowup) {
-                                                HicreteLogger::logDebug("Query:\n " . json_encode($stmt4));
-                                                if ($stmt4->execute()) {
-                                                    HicreteLogger::logInfo("success");
-                                                    return true;
-                                                } else {
-                                                    HicreteLogger::logDebug("unsuccessful");
-                                                    return false;
-                                                }
-
-                                            }
-
-                                        } else {
-                                            HicreteLogger::logDebug("unsuccessful");
-                                            return false;
-                                        }
-                                    } else {
-
-                                        if ($data->isFollowup) {
-                                            if ($stmt4->execute()) {
-                                                HicreteLogger::logInfo("success");
-                                                return true;
-                                            } else {
-                                                HicreteLogger::logDebug("unsuccessful");
-                                                return false;
-                                            }
-                                        }
-
-                                    }
-                                } else {
-                                    HicreteLogger::logDebug("unsuccessful");
-                                    return false;
-                                }
-                            } else {
-                                HicreteLogger::logDebug("unsuccessful");
-                                return false;
-                            }
-                        }
-                        return false;
-                    }catch(Exception $e)
-                    {
-                        HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
-                        return false;
                     }
-                }
+                   if($paymentStatus == 'No'){
 
-                public function modifyApplicatorDetails($data,$userId){
+                       if($this->updatePaymentStatus($paymentStatus,$enrollment_id)){
+
+                           if($this->savePaymentInfo($data,$userId,$enrollment_id)){
+
+                                if($this->saveFollowupDetails($data,$userId,$enrollment_id)){
+
+                                    return true;
+                                }
+                               else{
+                                   return false;
+                               }
+                           }
+                           else{
+                               return false;
+                           }
+                       }
+                       else{
+                           return false;
+                       }
+                   }
+
+
+                }
+                public function updatePaymentStatus($paymentStatus,$enrollment_id){
+
+                    global $connect;
+
+                   try{
+                       $stmt1 = $connect->prepare("UPDATE applicator_enrollment SET payment_status=:paymentStatus WHERE enrollment_id=:enrollment_id");
+                       $stmt1->bindParam(':enrollment_id', $enrollment_id);
+                       $stmt1->bindParam(':paymentStatus', $paymentStatus);
+
+                       if($stmt1->execute()){
+                            return true;
+                       }
+                       else{
+                           HicreteLogger::logDebug("Failed updating payment status");
+                           return false;
+                       }
+                   }
+                   catch(Exception $e){
+                       HicreteLogger::logDebug("Exception occur while updating payment status"+$e->getMessage());
+                   }
+                }
+                    public function modifyApplicatorDetails($data,$userId){
 
                     try {
                         $db = Database::getInstance();
@@ -1192,6 +1108,26 @@
                     }
 
                 }
+                 public function deleteApplicator($data,$userId){
+
+                     $db = Database::getInstance();
+                     $connect = $db->getConnection();
+                     $applicatorId= $data->applicator_id;
+
+                     $stmt1=$connect->prepare("DELETE FROM `applicator_master` WHERE `applicator_master_id`=:applicatorId");
+                     $stmt1->bindParam(':applicatorId',$applicatorId);
+
+                     if($stmt1->execute()){
+                            HicreteLogger::logInfo("Applicator deleted successfully");
+                            return true;
+                     }
+                     else{
+                            HicreteLogger::logError("Could Not Delete Applicator");
+                            return false;
+                     }
+
+                 }
+
             }
 
 ?>

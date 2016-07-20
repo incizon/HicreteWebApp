@@ -104,7 +104,7 @@ myApp.controller('budgetSegmentController', function ($scope, $http,$rootScope) 
 });
 
 
-myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope,$uibModal,$log) {
+myApp.controller('costCenterController', function ($scope, $http,AppService,$rootScope,$uibModal,$log,inventoryService) {
     $scope.createCostCenterClicked = false;
 
     $scope.projectList = [];
@@ -143,13 +143,14 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
 
 
     $scope.segmentList = [];
+    $scope.costCentermaterials=[];
     $scope.costCenterDetails = {
         projectId: "",
         costCenterName: "",
         segments: null
     }
 
-    $scope.remove = function (index) {
+    $scope.removeSegments = function (index) {
 
         $scope.segmentList.splice(index, 1);
         //remove item by index
@@ -176,31 +177,51 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
 
         });
 
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.costCentermaterials.push({
+                material: "",
+                allocatedBudget: "",
+                alertLevel: ""
+            });
+        }
+        ;
+    }
 
+    $scope.remove = function (index) {
+        $scope.costCentermaterials.splice(index, 1); //remove item by index
+    };
+
+    inventoryService.getProductsForInwardand($scope, $http);
+    $scope.getNoOfMaterials = function () {
+        return $scope.costCentermaterials.length;
+    }
     $scope.createCostCenter = function () {
         $scope.createCostCenterClicked = false;
 
-        console.log($scope.segmentList);
+       console.log("cost center material");
+        console.log($scope.costCentermaterials);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
-            controller:  function ($scope,$rootScope,$uibModalInstance,costCenterData,segmentList) {
+            controller:  function ($scope,$rootScope,$uibModalInstance,costCenterData,segmentList,costCentermaterials) {
 
                  $scope.save = function () {
                     console.log("Ok clicked");
                     console.log(costCenterData);
                      console.log(segmentList);
-                    $scope.saveCostCenter($scope,$rootScope, $http,costCenterData,segmentList);
+                    $scope.saveCostCenter($scope,$rootScope, $http,costCenterData,segmentList,costCentermaterials);
                     $uibModalInstance.close();
                 };
                 $scope.cancel = function () {
                     $uibModalInstance.dismiss('cancel');
                 };
-                $scope.saveCostCenter = function ($scope,$rootScope, $http, costCenterData,segmentList) {
+                $scope.saveCostCenter = function ($scope,$rootScope, $http, costCenterData,segmentList,costCentermaterials) {
                     var data = {
                         operation: "createCostCenter",
                         costCenterData: costCenterData,
-                        segments:segmentList
+                        segments:segmentList,
+                        materials:costCentermaterials
                     };
                     console.log(data);
                     var config = {
@@ -249,6 +270,9 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
                 },
                 segmentList:function(){
                     return $scope.segmentList;
+                },
+                costCentermaterials:function(){
+                    return $scope.costCentermaterials;
                 }
             }
 
@@ -445,20 +469,43 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
     }
 
+    $scope.materialsExpense=[];
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.materialsExpense.push({
+                material: "",
+                amount: "",
+                description: "",
+                isBillApplicable:true,
+                billno: "",
+                billIssuingEntity: "",
+                billdate: "",
+            });
+        }
+        ;
+    }
+    $scope.remove = function (index) {
+
+        $scope.materialsExpense.splice(index, 1);
+    };
+
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
-        console.log($scope.billDetails);
+
         console.log($scope.expenseDetails);
-        if($scope.expenseDetails.isBillApplicable){
-            var viewValue=new Date($scope.billDetails.dateOfBill);
+
+        if($scope.materialsExpense.billdate!=undefined){
+            var viewValue=new Date($scope.materialsExpense.billdate);
             viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-            $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+            $scope.materialsExpense.billdate=viewValue.toISOString().substring(0, 10);
         }
+        console.log("Material Expenses");
+        console.log($scope.materialsExpense);
 
         var data = {
             operation: "addMaterialExpense",
-            materialExpenseData: $scope.expenseDetails,
-            billDetails: $scope.billDetails
+            projectId: $scope.expenseDetails.project,
+            materialsExpense: $scope.materialsExpense
         };
 
         var config = {
@@ -471,23 +518,24 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
-                if (data.status == "success"){
+                $('#loader').css("display","none");
+                if (data.status === "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
                         window.location = "dashboard.php#/Process";
-                    }, 1000);
+                    }, 3000);
                 }
-                if(data.status=="failure"){
+                if(data.status==="failure"){
                     $('#loader').css("display","none");
                     $rootScope.errorMessage =data.message;
                     $("#error").css("display", "block");
                     setTimeout(function () {
                         $("#error").css("display", "none");
                         window.location = "dashboard.php#/Process";
-                    }, 1000);
+                    }, 3000);
                 }
             })
             .error(function (data, status, headers, config) {
@@ -504,7 +552,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
 });
 
-myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
+myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams,AppService) {
 
     var projectid="";
 
@@ -567,14 +615,16 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
         $http.post("Expense/php/expenseUtils.php", null, config)
             .success(function (data) {
-                console.log("Expense Details= "+data);
+                console.log("Expense DETAILSD= ");
+                console.log(data);
                 if (data == "1") {
 
                 } else {
                     $rootScope.expenseDetails = data;
                     $scope.costCenterData=data;
-                    console.log($rootScope.expenseDetails);
-                    //  console.log($rootScope.expenseDetails[0].SegmentExpenseDetails[1].segmentName);
+
+                    console.log("Budget Values=");
+                    console.log($scope.costCenterData[0].SegmentBudgetDetails);
                 }
 
             })
@@ -589,6 +639,17 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     //}
 
+    $scope.getTotalMaterialExpense=function($materialId,$costCenterData){
+        var totalMaterialExpense=0;
+        if($costCenterData.materialExpenseDetails!=null || $costCenterData.materialExpenseDetails!=undefined){
+            for(var i=0;i<$costCenterData.materialExpenseDetails.length;i++){
+                if(parseInt($materialId)==parseInt($costCenterData.materialExpenseDetails[i].materialID)){
+                    totalMaterialExpense=totalMaterialExpense+parseInt($costCenterData.materialExpenseDetails[i].amountMaterialExpenseDetails);
+                }
+            }
+        }
+        return totalMaterialExpense;
+    }
     $scope.deleteSegment=function($segmentId,$index){
         var data = {
             operation: "deleteSegment",

@@ -1,0 +1,142 @@
+<div class="row">
+    <div class="col-lg-12 col-md-12">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h3 class="panel-title"><strong>Access Request</strong> List</h3>
+            </div>
+            <div class="panel-body form-horizontal">
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Reason</th>
+                            <th>Request Date</th>
+                            <th>Status</th>
+                            <th>Remark By Authority</th>
+                            <th>Action Authority</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="accessRequest in ApprovalList | filter:paginate">
+                            <td>{{$index+1}}</td>
+                            <td>{{accessRequest.description}}</td>
+                            <td>{{accessRequest.requestDate}}</td>
+                            <td>{{accessRequest.status}}</td>
+                            <td>{{accessRequest.remark}}</td>
+                            <td>{{accessRequest.firstName+" "+accessRequest.lastName}}</td>
+                            <td>
+                                <button data-toggle="modal"  data-target="#viewAccessApproval" class="btn btn-info" data-ng-click="viewApproveDetails(accessRequest.requestId)">View</button>
+                                <button  ng-show="isRequestPending(accessRequest.status)" class="btn btn-info" data-ng-click="cancelAccessRequest(accessRequest.requestId)">Cancel</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <uib-pagination total-items="totalItems" ng-model="currentPage"
+                        max-size="10" boundary-links="true"
+                        items-per-page="AccessApprovalPerPage" class="pagination-sm">
+        </uib-pagination>
+    </div>
+</div>
+<div class="modal fade" id="viewAccessApproval" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Access Approval</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">User Name</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <label class="control-label">{{tempAccess.username}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Designation</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <label class="control-label ">{{tempAccess.designation}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Access requested</label>
+                                </div>
+                                <div class="col-md-8 permission">
+                                    <div class="panel panel-default">
+                                        <table class="table table-fixed">
+                                            <thead>
+                                            <tr>
+                                                <th class="col-xs-8">Module name</th>
+                                                <th class="col-xs-2">Read</th>
+                                                <th class="col-xs-2">Write</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr ng-repeat="accessEntry in accessRequested">
+                                                <td ng-model="accessEntry.entry.moduleName"class="col-xs-8">{{accessEntry.moduleName}}</td>
+                                                <td class="col-xs-2 text-center"><input ng-model="accessEntry.read.ispresent" type="checkbox" disabled></td>
+                                                <td class="col-xs-2 text-center"><input ng-model="accessEntry.write.ispresent"  type="checkbox" disabled></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">From Date</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <label class="control-label">{{tempAccess.fromDate}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">To Date</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="input-group">
+                                        <label class="control-label">{{tempAccess.toDate}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-4">
+                                    <label class="control-label">Reason For Request</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <textarea ng-model="tempAccess.description" class="form-control" rows="2" readOnly></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <!--End of modal-footer-->
+        </div>
+        <!--End of Modal Content-->
+    </div>
+    <!--End of modal dialog-->
+</div>

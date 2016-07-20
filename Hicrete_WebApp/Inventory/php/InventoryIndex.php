@@ -1,5 +1,5 @@
 <?php
-    require_once 'Database/Database.php';
+require_once '../../php/Database.php';
     include_once 'crud/InwardCrud.php';
     include_once 'crud/OutwardCrud.php';
     require_once 'utils/DatabaseCommonOperations.php';
@@ -35,7 +35,6 @@
             outwardOperations($mData->operation, $mData);
             break;
         case 'inventorySearch':
-
             getInventory($mData->searchBy,$mData->searchKeyword);
             break;
         case 'getProducts':

@@ -13,13 +13,13 @@
             Expense::addSegment($data, $userId);
             break;
         case "createCostCenter":
-            Expense::createCostCenter($data->costCenterData, $data->segments, $userId);
+            Expense::createCostCenter($data->costCenterData, $data->segments,$data->materials, $userId);
             break;
         case "addOtherExpense":
             Expense::addOtherExpense($data->otherExpenseData, $data->billDetails, $userId);
             break;
         case "addMaterialExpense":
-            Expense::addMaterialExpense($data->materialExpenseData, $data->billDetails, $userId);
+            Expense::addMaterialExpense($data->projectId, $data->materialsExpense, $userId);
             break;
         case 'getBillApproval':
             Expense::getBillApproval();

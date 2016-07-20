@@ -1182,6 +1182,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
         HicreteLogger::logInfo("Fetching all process users");
         try {
             $stmt = $conn->prepare("SELECT `userId`,`firstName`,`lastName` FROM `usermaster` WHERE `userId` IN (SELECT `userId` FROM `userroleinfo` WHERE `roleId` IN (SELECT `roleId` FROM `roleaccesspermission` WHERE `accessId` IN (SELECT `accessId` FROM `accesspermission` WHERE `ModuleName`=\"Business Process\")))");
+
             HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
             if ($stmt->execute()) {
                 $result = $stmt->fetchAll();
@@ -1191,7 +1192,7 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
                 HicreteLogger::logError("Database error has occured");
                 echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
             }
-        }catch(Exceptio $e){
+        }catch(Exception $e){
             HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception",$e.getMessage());
         }
@@ -1213,11 +1214,64 @@ WHERE tempaccessrequest.requestId =:requestId AND usermaster.userId =tempaccessr
                 HicreteLogger::logError("Database error has occured");
                 echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
             }
-        }catch(Exceptio $e){
+        }catch(Exception $e){
             HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
             echo AppUtil::getReturnStatus("Exception",$e.getMessage());
         }
     }
+
+    public static function getAllAccessRequestForUser($userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        HicreteLogger::logInfo("Getting access approvals");
+        try {
+            $stmt = $conn->prepare("SELECT tempaccessrequest.*,tempaccessrequestaction.actionBy,tempaccessrequestaction.actionDate,tempaccessrequestaction.remark,`firstName`,`lastName` FROM tempaccessrequest LEFT OUTER JOIN      tempaccessrequestaction
+                                    ON tempaccessrequest.requestId=tempaccessrequestaction.requestId AND requestedBy=:userId  LEFT OUTER JOIN usermaster ON usermaster.userId=tempaccessrequestaction.actionBy
+                                    ORDER BY requestDate DESC");
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            if ($stmt->execute()) {
+                $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                echo  AppUtil::getReturnStatus("Successful",$result);
+            } else {
+                HicreteLogger::logError("Database error has occured");
+                echo AppUtil::getReturnStatus("Failure", "Database Error Occurred");
+            }
+        }catch(Exception $e){
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            echo AppUtil::getReturnStatus("Exception",$e.getMessage());
+        }
+    }
+
+    public static function CancelTempAccessRequest($requestId){
+        try{
+
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+
+            HicreteLogger::logInfo("Adding temporary request");
+            $stmt = $conn->prepare("UPDATE `tempaccessrequest` SET `status`='Cancel' WHERE `requestId`=:requestId");
+            $stmt->bindParam(':requestId', $requestId, PDO::PARAM_STR);
+            HicreteLogger::logDebug("Query:\n ".json_encode($stmt));
+            if($stmt->execute()){
+
+                HicreteLogger::logInfo("Access request added");
+                echo AppUtil::getReturnStatus("Successful","Access Request Added");
+
+            } else{
+                HicreteLogger::logError("Unknown databse error occured");
+                echo AppUtil::getReturnStatus("Unsuccessful","Unknown database error occurred");
+            }
+
+
+        }catch(Exception $e){
+            HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
+            echo AppUtil::getReturnStatus("Exception",$e->getMessage());
+        }
+
+    }
+
 
 
 }

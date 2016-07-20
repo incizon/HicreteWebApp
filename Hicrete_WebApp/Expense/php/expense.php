@@ -48,7 +48,7 @@ class Expense
         }
 }
 
-    public static function createCostCenter($data,$segmentData,$userId){
+    public static function createCostCenter($data,$segmentData,$costCentermaterials,$userId){
         $db = Database::getInstance();
         $conn = $db->getConnection();
         try {
@@ -56,11 +56,11 @@ class Expense
             HicreteLogger::logInfo("Creating cost center");
             $conn->beginTransaction();
             foreach ($segmentData as $segment) {
-                $bufgetId = uniqid();
+                $budgetId = uniqid();
                 $stmt = $conn->prepare("INSERT INTO `budget_details`(`budgetdetailsid`,`projectid`, `budgetsegmentid`, `allocatedbudget`, `alertlevel`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:budgetId,:projectId,:segmentId,:allocatedBudget,:alertLevel,:createdBy,now(),now(),:lastModifiedBy)");
 
-                $stmt->bindParam(':budgetId', $bufgetId, PDO::PARAM_STR);
+                $stmt->bindParam(':budgetId', $budgetId, PDO::PARAM_STR);
 
                 $stmt->bindParam(':projectId', $data->projectId, PDO::PARAM_STR);
                 $stmt->bindParam(':segmentId', $segment->id, PDO::PARAM_STR);
@@ -78,6 +78,29 @@ class Expense
 
             }
 
+            if($costCentermaterials!=null){
+                foreach($costCentermaterials as $material){
+
+                    $materialbudgetdetailsid=uniqid();
+                    $stmtCostCenterMaterial = $conn->prepare("INSERT INTO `material_budget_details`(`materialbudgetdetailsid`,`projectid`,`materialid` ,`allocatedbudget`, `alertlevel`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                    VALUES (:materialbudgetdetailsid,:projectId,:materialid,:allocatedBudget,:alertLevel,:creadtedby,now(),now(),:lastmodifiedby)");
+
+                    $stmtCostCenterMaterial->bindParam(':materialbudgetdetailsid', $materialbudgetdetailsid, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':projectId', $data->projectId, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':materialid', $material->material, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':allocatedBudget', $material->allocatedBudget, PDO::PARAM_INT);
+                    $stmtCostCenterMaterial->bindParam(':alertLevel', $material->alertLevel, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':creadtedby', $userId, PDO::PARAM_STR);
+                    $stmtCostCenterMaterial->bindParam(':lastmodifiedby', $userId, PDO::PARAM_STR);
+
+                    if ($stmtCostCenterMaterial->execute()) {
+                        $success = true;
+                    } else {
+                        $success = false;
+                    }
+                }
+            }
+
             if ($success) {
                 $conn->commit();
                 $message = "Cost Center Created successfully..!!!";
@@ -92,8 +115,7 @@ class Expense
         }catch(Exception $e)
         {
             HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
-            $message = "Exception occured";
-            echo AppUtil::getReturnStatus("failure", $message);
+            echo AppUtil::getReturnStatus("failure", $e->getMessage());
         }
     }
 
@@ -176,64 +198,65 @@ class Expense
          }   
     }
 
-    public static function addMaterialExpense($data,$billData,$userId){
+    public static function addMaterialExpense($projectId,$materialsExpense,$userId){
         $db = Database::getInstance();
         $conn = $db->getConnection();
-        $expenseDetailsId=uniqid();
-        $budget='56b6e4bcf125c';
+
         HicreteLogger::logInfo("Adding Material expense");
 
         try {
             $conn->beginTransaction();
-            $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
-        VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
-            $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
-            $stmt->bindParam(':projectid', $data->project, PDO::PARAM_STR);
-            $stmt->bindParam(':materialid', $data->material, PDO::PARAM_STR);
-            $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
-            $stmt->bindParam(':description', $data->desc, PDO::PARAM_STR);
-            $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
-            $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+            foreach ($materialsExpense as $material) {
+                $expenseDetailsId=uniqid();
+                $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
+                $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
+                $stmt->bindParam(':projectid', $projectId, PDO::PARAM_STR);
+                $stmt->bindParam(':materialid', $material->material, PDO::PARAM_STR);
+                $stmt->bindParam(':amount', $material->amount, PDO::PARAM_STR);
+                $stmt->bindParam(':description', $material->description, PDO::PARAM_STR);
+                $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
 
-            $success = false;
-            HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
-            HicreteLogger::logDebug("Data: \n" . json_encode($data));
-            if ($stmt->execute()) {
-
-                if ($data->isBillApplicable) {
+                $success = false;
+                HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+                HicreteLogger::logDebug("Data: \n" . json_encode($material));
+                if ($stmt->execute()) {
                     $billId = uniqid();
+                    if ($material->isBillApplicable==true) {
+                        $date = new DateTime($material->billdate);
+                        $bilDate = $date->format('Y-m-d');
 
-                    $date = new DateTime($billData->dateOfBill);
-                    $bilDate = $date->format('Y-m-d');
-
-                    $stmt = $conn->prepare("INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                        $stmt = $conn->prepare("INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)");
-                    $stmt->bindParam(':billid', $billId, PDO::PARAM_STR);
-                    $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
-                    $stmt->bindParam(':billno', $billData->billNo, PDO::PARAM_STR);
-                    $stmt->bindParam(':billissueingentity', $billData->Issueing, PDO::PARAM_INT);
-                    $stmt->bindParam(':amount', $data->amount, PDO::PARAM_STR);
-                    $stmt->bindParam(':dateofbill', $bilDate, PDO::PARAM_STR);
-                    $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
-                    $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
-                    HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
-                    HicreteLogger::logDebug("Data: \n" . json_encode($billData));
-                    if ($stmt->execute()) {
+                        $stmt->bindParam(':billid', $billId, PDO::PARAM_STR);
+                        $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
+                        $stmt->bindParam(':billno', $material->billno, PDO::PARAM_STR);
+                        $stmt->bindParam(':billissueingentity', $material->billIssuingEntity, PDO::PARAM_INT);
+                        $stmt->bindParam(':amount', $material->amount, PDO::PARAM_STR);
+                        $stmt->bindParam(':dateofbill', $bilDate, PDO::PARAM_STR);
+                        $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                        $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+                        HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+                        HicreteLogger::logDebug("Data: \n" . json_encode($material));
+                        if ($stmt->execute()) {
+                            $success=true;
+                        } else {
+                            $success=false;
+                        }
+                    }else{
                         $success=true;
-                    } else {
-                        $success=false;
                     }
-                }else{
-                    $success=true;
-                }
-            } else {
+                } else {
 
-                $success =false;
+                    $success =false;
+                }
             }
+
         }
         catch(Exception $e){
             HicreteLogger::logFatal("Exception Occured Message:\n".$e->getMessage());
-            echo "Exception occur while adding material expense";
+            echo "Exception occur while adding material expense".$e->getMessage();
 
         }
         if($success){
@@ -242,7 +265,7 @@ class Expense
             HicreteLogger::logInfo("Material expense details added successfully");
             echo AppUtil::getReturnStatus("success", $message);
         }else{
-            $conn->rollBack();
+//            $conn->rollBack();
             $message="Could not add material expense details..!!!";
             HicreteLogger::logError("Error while adding Material expenses");
             echo AppUtil::getReturnStatus("failure", $message);

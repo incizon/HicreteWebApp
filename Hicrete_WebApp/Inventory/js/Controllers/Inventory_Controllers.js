@@ -572,7 +572,6 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
         return qty;
     }
 
-    //function to fetch unit of measure -ENd
     $scope.addFields = function () {
         for (var i = 0; i < $scope.noOfElement; i++) {
             $scope.InwardData.inwardMaterials.push({

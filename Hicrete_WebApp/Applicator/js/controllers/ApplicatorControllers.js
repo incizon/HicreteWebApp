@@ -18,6 +18,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
         pannumber:"",
         operation:"",
         packageEdited:"false",
+        packageID:"",
         elementDetails:[]
     };
 
@@ -98,9 +99,12 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
 
     /* to show package details while creating applicator */
-
+    //$scope.packageSelected=null;
     $scope.getPackageDetails=function(packageID){
-        console.log(packageID);
+        //console.log(selected);
+        //packageID=selected.payment_package_id;
+
+        $scope.applicatorDetails.packageID=packageID;
         $scope.packageDetailsShow='Yes';
         $scope.editPackage=false;
         $scope.applicatorDetails.packageEdited="false";
@@ -109,7 +113,6 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
         for(var pindex=0;pindex<$scope.packages.length;pindex++){
 
             if($scope.packages[pindex].payment_package_id==packageID){
-
 
                 $scope.applicatorDetails.package_name=$scope.packages[pindex].package_name;
                 $scope.applicatorDetails.package_description=$scope.packages[pindex].package_description;
@@ -127,8 +130,10 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     });
                 }
             }
+
         }
     }
+
 
     /* if package edited then set packageEdited to true and editPackage to true adn hide package details*/
     $scope.editPackageDetails=function(){
@@ -265,13 +270,21 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     $scope.applicatorDetails = applicatorDetails;
                     $scope.ok = function () {
                         applicatorDetails.isFollowup=true;
+                        console.log("Create Followup");
                         ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
                         $uibModalInstance.close();
                     };
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                       console.log("Cancel Followup");
+                        //ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                        $rootScope.errorMessage = "Followup is Compulsory.Applicator will not be created.";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+
+                        }, 5000);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -326,7 +339,13 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                        //ApplicatorService.submitApplicatorDetails($scope, $http,$rootScope,applicatorDetails);
+                        $rootScope.errorMessage = "Followup is Compulsory.Applicator will not be created.";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+
+                        }, 5000);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
@@ -337,7 +356,6 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                     }
                 }
             });
-
             modalInstance.result.then(function (applicatorDetails) {
                 //$scope.applicatorDetails = applicatorDetails;
 
@@ -350,9 +368,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
             };
         }
         $('#loader').css("display","none");
-
     };
-
 
 });
 
@@ -361,7 +377,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
 /*Start of view tentative applicator controller */
 
-myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
+myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScope,$uibModal,$log,$http,ApplicatorService){
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 10;
@@ -437,6 +453,31 @@ myApp.controller('SearchTentativeApplicatorController',function($scope,$rootScop
         //console.log(index);
         return (begin <= index && index < end);
     };
+
+    $scope.deleteApplicator=function(applicator_id){
+        console.log(applicator_id);
+
+        var answer = confirm("Are you sure you want to delete this applicator ?");
+        if (answer){
+           console.log("Yes");
+
+            for(var i = $rootScope.tentativeApplicators.length - 1; i >= 0; i--) {
+                if($rootScope.tentativeApplicators[i].applicator_master_id === applicator_id) {
+                    console.log("Find");
+                    console.log($rootScope.tentativeApplicators);
+                    $rootScope.tentativeApplicators.splice(i, 1);
+                    console.log($rootScope.tentativeApplicators);
+                    ApplicatorService.deleteApplicator($scope,$rootScope,$http,applicator_id);
+                }
+            }
+
+        }
+        else{
+            console.log("No");
+            //some code
+        }
+
+    }
 
 });
 
@@ -584,7 +625,7 @@ myApp.controller('ModifyTentativeApplicatorController',function($scope,$http,$ro
 
 /*Start of view permanent applicator */
 
-myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http){
+myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScope,$uibModal,$log,$http,ApplicatorService){
 
     $scope.currentPage = 1;
     $scope.ApplicatorPerPage = 10;
@@ -660,6 +701,31 @@ myApp.controller('SearchPermanentApplicatorController',function($scope,$rootScop
         //console.log(index);
         return (begin <= index && index < end);
     };
+
+    $scope.deleteApplicator=function(applicator_id){
+        console.log(applicator_id);
+
+        var answer = confirm("Are you sure you want to delete this applicator ?");
+        if (answer){
+            console.log("Yes");
+
+            for(var i = $rootScope.permanentApplicators.length - 1; i >= 0; i--) {
+                if($rootScope.permanentApplicators[i].applicator_master_id === applicator_id) {
+                    console.log("Find");
+                    console.log($rootScope.permanentApplicators);
+                    $rootScope.permanentApplicators.splice(i, 1);
+                    console.log($rootScope.permanentApplicators);
+                    ApplicatorService.deleteApplicator($scope,$rootScope,$http,applicator_id);
+                }
+            }
+
+        }
+        else{
+            console.log("No");
+            //some code
+        }
+
+    }
 
 });
 myApp.controller('ViewPermanentApplicatorController',function($scope,$http,$stateParams){
@@ -914,7 +980,13 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
 
                     $scope.cancel = function () {
                         applicatorDetails.isFollowup=false;
-                        ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
+                        //ApplicatorService.savePaymentDetails($scope,$rootScope, $http, applicatorDetails);
+                        $rootScope.errorMessage = "Followup is Compulsory.Payment will not be done";
+                        $('#error').css("display", "block");
+                        setTimeout(function () {
+                            $('#error').css("display", "none");
+
+                        }, 5000);
                         $uibModalInstance.dismiss('cancel');
                     };
                 },
