@@ -469,61 +469,82 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
     }
 
+    $scope.materialsExpense=[];
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.materialsExpense.push({
+                material: "",
+                amount: "",
+                description: "",
+                billno: "",
+                billIssuingEntity: "",
+                billdate: "",
+            });
+        }
+        ;
+    }
+    $scope.remove = function (index) {
+
+        $scope.materialsExpense.splice(index, 1);
+    };
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
-        console.log($scope.billDetails);
+        console.log("Material Expenses");
+        console.log($scope.materialsExpense);
         console.log($scope.expenseDetails);
-        if($scope.expenseDetails.isBillApplicable){
-            var viewValue=new Date($scope.billDetails.dateOfBill);
-            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-            $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
-        }
 
-        var data = {
-            operation: "addMaterialExpense",
-            materialExpenseData: $scope.expenseDetails,
-            billDetails: $scope.billDetails
-        };
 
-        var config = {
-            params: {
-                data: data
-            }
-        };
-
-        $("#loader").css("display","block");
-        $http.post("Expense/php/expenseFacade.php", null, config)
-            .success(function (data) {
-                console.log(data);
-                if (data.status == "success"){
-                    $('#loader').css("display","none");
-                    $rootScope.warningMessage =data.message;
-                    $("#warning").css("display", "block");
-                    setTimeout(function () {
-                        $("#warning").css("display", "none");
-                        window.location = "dashboard.php#/Process";
-                    }, 1000);
-                }
-                if(data.status=="failure"){
-                    $('#loader').css("display","none");
-                    $rootScope.errorMessage =data.message;
-                    $("#error").css("display", "block");
-                    setTimeout(function () {
-                        $("#error").css("display", "none");
-                        window.location = "dashboard.php#/Process";
-                    }, 1000);
-                }
-            })
-            .error(function (data, status, headers, config) {
-                $('#loader').css("display","none");
-                $rootScope.errorMessage ="Error Occur While Adding Material Expense Details";
-
-                $("#error").css("display", "block");
-                setTimeout(function () {
-                    $("#error").css("display", "none");
-                    window.location = "dashboard.php#/Process";
-                },1000);
-            });
+        //if($scope.expenseDetails.isBillApplicable){
+        //    var viewValue=new Date($scope.billDetails.dateOfBill);
+        //    viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+        //    $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+        //}
+        //
+        //var data = {
+        //    operation: "addMaterialExpense",
+        //    materialExpenseData: $scope.expenseDetails,
+        //    billDetails: $scope.billDetails
+        //};
+        //
+        //var config = {
+        //    params: {
+        //        data: data
+        //    }
+        //};
+        //
+        //$("#loader").css("display","block");
+        //$http.post("Expense/php/expenseFacade.php", null, config)
+        //    .success(function (data) {
+        //        console.log(data);
+        //        if (data.status == "success"){
+        //            $('#loader').css("display","none");
+        //            $rootScope.warningMessage =data.message;
+        //            $("#warning").css("display", "block");
+        //            setTimeout(function () {
+        //                $("#warning").css("display", "none");
+        //                window.location = "dashboard.php#/Process";
+        //            }, 1000);
+        //        }
+        //        if(data.status=="failure"){
+        //            $('#loader').css("display","none");
+        //            $rootScope.errorMessage =data.message;
+        //            $("#error").css("display", "block");
+        //            setTimeout(function () {
+        //                $("#error").css("display", "none");
+        //                window.location = "dashboard.php#/Process";
+        //            }, 1000);
+        //        }
+        //    })
+        //    .error(function (data, status, headers, config) {
+        //        $('#loader').css("display","none");
+        //        $rootScope.errorMessage ="Error Occur While Adding Material Expense Details";
+        //
+        //        $("#error").css("display", "block");
+        //        setTimeout(function () {
+        //            $("#error").css("display", "none");
+        //            window.location = "dashboard.php#/Process";
+        //        },1000);
+        //    });
     }
 
 });

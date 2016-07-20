@@ -38,129 +38,91 @@
                                             </div>
 
                                         </div>
+
                                         <div class="form-group">
-                                            <label class="col-md-2 control-label">Material</label>
-                                            <div class="col-md-7">                   
-                                                
-                                                    <select class="form-control" name="material" required  ng-model="expenseDetails.material">
-                                                        <option value="" disabled>Select</option>
-                                                        <option  ng-repeat="materialEntry in materialEntryList" value="{{materialEntry.materialid}}">{{materialEntry.productname}}</option>
-                                                    </select>
-                                                    <div class="help-block"
-                                                         ng-messages="materialExpenseForm.material.$error"
-                                                         ng-show="materialExpenseClicked"> 
-                                                         <span style="color:red" ng-message="required">Please select material </span>      
-                                                    </div> 
+                                            <label class="col-md-3 control-label">Number of Materials</label>
+
+                                            <div class="col-md-4">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                                    <input type="number" name="noOfElement" ng-model="noOfElement"
+                                                           class="form-control" pattern="[0-9]+">
+                                                </div>
+                                                <div class="help-block" ng-messages="costCenterForm.noOfElement.$error"
+                                                     ng-show="submitted">
+                                        <span style="color:red"
+                                              ng-message="pattern">Only numeric value is allowed</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button class="btn btn-primary" ng-click="addFields()">Add</button>
                                             </div>
                                         </div>
 
-                                         <div class="form-group">                                                
-                                                <label class="col-md-2  control-label">Amount</label>
-                                                    <div class="col-md-7">                                      
-                                                    <div class="input-group">
-                                                     <span class="input-group-addon"><span class="fa fa-rupee"></span></span>
-                                                        <input type="text"  name="amount"  ng-model="expenseDetails.amount" class="form-control" required pattern="[0-9]+"/>
-                                                    </div>
-                                                    <div class="help-block"
-                                                         ng-messages="materialExpenseForm.amount.$error"
-                                                         ng-show="materialExpenseClicked"> 
-                                                         <span style="color:red" ng-message="required">Please enter amount </span>
-                                                         <span style="color:red" ng-message="pattern">Invalid amount.Only numbers are allowed </span>       
-                                                    </div>
-                                                    </div>  
-                                        </div> 
-                                        <!--end-->    
 
-                                         <!--start-->
-                                        
-                                            <div class="form-group">
-                                                
-                                                <label class="col-md-2 col-xs-12 control-label">Description</label>
-                                                <div class="col-md-7 col-xs-12">                                            
-                                                    <textarea name="description" class="form-control" rows="5" ng-model="expenseDetails.desc" pattern="[a-zA-Z0-9 ]+" required></textarea>
-                                                    <div class="help-block"
-                                                         ng-messages="materialExpenseForm.description.$error"
-                                                         ng-show="materialExpenseClicked">
-                                                        <span style="color:red" ng-message="required">Please enter description </span>
-                                                        <span style="color:red" ng-message="pattern">Aplhanumeric values are allowed </span>
-                                                    </div>
+                                        <div class="form-group adjust-padding col-md-12">
+                                            <div class="col-md-12">
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="col-md-3">Material</th>
+                                                        <th class="col-md-2">Amount</th>
+                                                        <th class="col-md-2">Description</th>
+                                                        <th class="col-md-1">Bill No</th>
+                                                        <th class="col-md-2">BillDate</th>
+                                                        <th class="col-md-2">BillIssuingEntity</th>
+                                                        <th class="col-md-1">Remove</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr ng-repeat="materials in materialsExpense">
+                                                        <td width="30%">
+                                                            <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"
+                                                                    ng-value="Select" required style="width: 90%">
+                                                                <option value="" disabled selected>Select Material</option>
+                                                                <option ng-repeat="x in materialEntryList" value={{x.materialid}}>{{x.productname}}
+                                                                </option>
+                                                            </select>
+                                                            <div class="help-block" ng-show="getNoOfMaterials()<=0"
+                                                                 ng-show="createCostCenterClicked">
+                                                                <p style="color:red">Please add atleast one material.</p>
+                                                            </div>
+                                                            <div class="help-block" ng-messages="costCenterForm.material.$error"
+                                                                 ng-show="createCostCenterClicked">
+                                                                <p style="color:red" ng-message="required">Please enter material.</p>
+                                                            </div>
+                                                        </td>
+                                                        <td><input name="amount" ng-model="materials.amount"
+                                                                   type="text" placeholder="" class="form-control" required/></td>
+                                                        <td><input ng-model="materials.description" name="description" type="text"
+                                                                   placeholder="" class="form-control" required
+                                                                   ></td>
 
-                                                </div>
-                                           
-                                        </div></br/>
-                                        <!--end--> 
+                                                        <td><input name="billno" ng-model="materials.billno"
+                                                                   type="text" placeholder="" class="form-control" required/></td>
+                                                        <td><input name="billdate" ng-model="materials.billdate"
+                                                                   type="date" placeholder="" class="form-control" required/></td>
+                                                        <td><input name="billIssuingEntity" ng-model="materials.billIssuingEntity"
+                                                                   type="text" placeholder="" class="form-control" required/></td>
 
-                                        <!--start-->
 
-                                        <div class="form-group">
-                                                <label class="col-md-2  control-label">Expense proof</label>
-                                                    <div class="col-md-7">                                       
-                                                    <div class="input-group col-md-8">
-                                                     <label class="check">
-                                                        <input type="checkbox" class="mycheck" ng-model="expenseDetails.isBillApplicable"/>Mark if applicable</label>
-                                                    </div>  
-                                                    </div>  
-                                        </div> 
+
+                                                        <td style="text-align: center;">
+                                                            <a ng-click="remove($index)" class="panel-remove">
+                                                                <span class="fa fa-times"></span>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+
+
                                     </div>
                                   </form>      
-                                        <!--end--> 
-                                            
-                                        <div class="row" id="paymentmode" ng-show="expenseDetails.isBillApplicable">
-                                            <!--start-->
-                                            <form name="materialBillForm" class="form-horizontal" novalidate> 
-                                            <div class="form-group">
-                                                        <label class="col-md-2  control-label">Bill no</label>
-                                                        <div class="col-md-7">                                       
-                                                            <div class="input-group col-md-8">
-                                                                <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                                <input type="text"  name="billNo"  ng-model="billDetails.billNo" class="form-control"  required/>
-                                                            </div>  
-                                                             <div class="help-block" ng-messages="materialBillForm.billNo.$error" ng-show="materialExpenseClicked">
-                                                                <p style="color:red" ng-message="required">Bill No cannot be blank</p>
-
-                                                                <!--<p style="color:red" ng-message="minlength">Atleast 5 digits are allowed</p>-->
-                                                                <!--<p style="color:red" ng-message="maxlength">Only 8 digits are allowed</p>-->
-                                                            </div>
-                                                        </div>  
-                                                
-                                            </div> 
-                                            <!--end--> 
-
-                                        <!--start-->
-                                        <div class="form-group">
-                                                <label class="col-md-2  control-label">Bill Issueing Entity</label>
-                                                    <div class="col-md-7">                                       
-                                                    <div class="input-group col-md-8">
-                                                     <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                                        <input type="text"  name="Issueing"  ng-model="billDetails.Issueing" class="form-control" pattern="[a-zA-Z0-9 ]+" required/>
-                                                    
-                                                    </div>  
-                                                    <div class="help-block" ng-messages="materialBillForm.Issueing.$error" ng-show="materialExpenseClicked">
-                                                            <p style="color:red" ng-message="required">Firm Name cannot be blank</p>
-                                                            <p style="color:red" ng-message="pattern">Should have only alphanumeric value</p>
-                                                    </div>
-                                                    </div>  
-                                        </div>
                                         <!--end-->
-
-                                        <!--start-->
-                                        <div class="form-group">
-                                                <label class="col-md-2  control-label">Date of Bill</label>
-                                                    <div class="col-md-7">                                       
-                                                    <div class="input-group col-md-8">
-                                                     <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
-                                                        <input  name="billDate" ng-model="billDetails.dateOfBill" type="text" class="form-control" ng-click="billDate()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="dateOfBill.opened" datepicker-options="dateOptions" show-button-bar="true"  ng-required="true" readonly/>
-                                                    </div> 
-                                                        <div class="help-block" ng-messages="materialBillForm.billDate.$error" ng-show="materialExpenseClicked">
-                                                            <p style="color:red" ng-message="required">Date Of Bill cannot be blank</p>
-                                                                      
-                                                    </div> 
-                                                    </div>  
-                                        </div>
-                                        <!--end-->  
-                                       </form> 
-
-                                    </div>
 
 
 
@@ -171,7 +133,7 @@
                             </div>
                                 <!--Start of buttons section-->
                                 <div class="panel-footer">
-                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true) &&  ( materialExpenseForm.$valid && (!expenseDetails.isBillApplicable || materialBillForm.$valid ))  &&  addMaterialExpense()">Submit</button>
+                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true)&& addMaterialExpense()">Submit</button>
 
                                     <button class="btn  btn-default pull-right">Clear Form</button>
                                 </div>
@@ -182,3 +144,6 @@
                         </div>
                     </div>
             </div>
+
+
+
