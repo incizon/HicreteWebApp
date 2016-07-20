@@ -174,3 +174,54 @@ SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'billno' cannot be 
 {"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
 2016-07-20 13:04:11 - DEBUG --> Row count: 
 8 
+2016-07-20 14:18:11 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:19:03 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:19:30 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:45:27 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f7267c7eb3' for key 'PRIMARY' 
+2016-07-20 14:45:27 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:46:52 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f72bcc3a69' for key 'PRIMARY' 
+2016-07-20 14:46:53 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:48:59 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f733bb2307' for key 'PRIMARY' 
+2016-07-20 14:48:59 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:55:52 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f74d8e7699' for key 'PRIMARY' 
+2016-07-20 14:55:53 - ERROR --> Error while adding Material expenses 
+2016-07-20 14:57:00 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f751ca5ad8' for key 'PRIMARY' 
+2016-07-20 14:57:00 - ERROR --> Error while adding Material expenses 
+2016-07-20 15:12:15 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f78af6feb9' for key 'PRIMARY' 
+2016-07-20 15:12:15 - ERROR --> Error while adding Material expenses 
+2016-07-20 15:12:54 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f78d6bb288' for key 'PRIMARY' 
+2016-07-20 15:12:54 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:29:16 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f8abc9b542' for key 'PRIMARY' 
+2016-07-20 16:29:16 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:48:33 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f8f413c735' for key 'PRIMARY' 
+2016-07-20 16:48:33 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:50:31 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f8fb75fd38' for key 'PRIMARY' 
+2016-07-20 16:50:31 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:50:50 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f8fcaed73e' for key 'PRIMARY' 
+2016-07-20 16:50:50 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:52:23 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f90270ad9c' for key 'PRIMARY' 
+2016-07-20 16:52:23 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:52:30 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f902e491dd' for key 'PRIMARY' 
+2016-07-20 16:52:30 - ERROR --> Error while adding Material expenses 
+2016-07-20 16:53:37 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f90716135b' for key 'PRIMARY' 
+2016-07-20 16:53:37 - ERROR --> Error while adding Material expenses 
+2016-07-20 17:02:05 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f926de459e' for key 'PRIMARY' 
+2016-07-20 17:02:05 - ERROR --> Error while adding Material expenses 
+2016-07-20 17:07:30 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f93b29bcee' for key 'PRIMARY' 
+2016-07-20 17:07:30 - ERROR --> Error while adding Material expenses 
