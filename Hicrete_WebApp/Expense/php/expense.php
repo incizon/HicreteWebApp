@@ -203,7 +203,7 @@ class Expense
         $conn = $db->getConnection();
 
         HicreteLogger::logInfo("Adding Material expense");
-        echo json_encode($materialsExpense);
+
         try {
             $conn->beginTransaction();
             foreach ($materialsExpense as $material) {
@@ -222,9 +222,8 @@ class Expense
                 HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
                 HicreteLogger::logDebug("Data: \n" . json_encode($material));
                 if ($stmt->execute()) {
-                    if ($material->isBillApplicable) {
-                        $billId = uniqid();
-
+                    $billId = uniqid();
+                    if ($material->isBillApplicable==true) {
                         $date = new DateTime($material->billdate);
                         $bilDate = $date->format('Y-m-d');
 
@@ -266,7 +265,7 @@ class Expense
             HicreteLogger::logInfo("Material expense details added successfully");
             echo AppUtil::getReturnStatus("success", $message);
         }else{
-            $conn->rollBack();
+//            $conn->rollBack();
             $message="Could not add material expense details..!!!";
             HicreteLogger::logError("Error while adding Material expenses");
             echo AppUtil::getReturnStatus("failure", $message);

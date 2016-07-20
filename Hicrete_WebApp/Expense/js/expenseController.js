@@ -519,23 +519,23 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
             .success(function (data) {
                 console.log(data);
                 $('#loader').css("display","none");
-                if (data.status == "success"){
+                if (data.status === "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
                     $("#warning").css("display", "block");
                     setTimeout(function () {
                         $("#warning").css("display", "none");
                         window.location = "dashboard.php#/Process";
-                    }, 1000);
+                    }, 3000);
                 }
-                if(data.status=="failure"){
+                if(data.status==="failure"){
                     $('#loader').css("display","none");
                     $rootScope.errorMessage =data.message;
                     $("#error").css("display", "block");
                     setTimeout(function () {
                         $("#error").css("display", "none");
                         window.location = "dashboard.php#/Process";
-                    }, 1000);
+                    }, 3000);
                 }
             })
             .error(function (data, status, headers, config) {
@@ -552,7 +552,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
 });
 
-myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams) {
+myApp.controller('costCenterSearchController', function ($scope, $rootScope,$http,$stateParams,AppService) {
 
     var projectid="";
 
@@ -641,9 +641,11 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     $scope.getTotalMaterialExpense=function($materialId,$costCenterData){
         var totalMaterialExpense=0;
-        for(var i=0;i<$costCenterData.materialExpenseDetails.length;i++){
-            if(parseInt($materialId)==parseInt($costCenterData.materialExpenseDetails[i].materialID)){
-                totalMaterialExpense=totalMaterialExpense+parseInt($costCenterData.materialExpenseDetails[i].amountMaterialExpenseDetails);
+        if($costCenterData.materialExpenseDetails!=null || $costCenterData.materialExpenseDetails!=undefined){
+            for(var i=0;i<$costCenterData.materialExpenseDetails.length;i++){
+                if(parseInt($materialId)==parseInt($costCenterData.materialExpenseDetails[i].materialID)){
+                    totalMaterialExpense=totalMaterialExpense+parseInt($costCenterData.materialExpenseDetails[i].amountMaterialExpenseDetails);
+                }
             }
         }
         return totalMaterialExpense;

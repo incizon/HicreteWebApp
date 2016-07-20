@@ -75,8 +75,7 @@ function getExpenseDetails($projectId)
                 'alertlevel' => $resultAllocatedBudget['alertlevel']
             );
         }
-
-
+        $result_array['SegmentsTotalBudgetAllocated']=$totlaAllocatedBudget;
 
     }else{
         $totlaAllocatedBudget=0;
@@ -85,8 +84,9 @@ function getExpenseDetails($projectId)
 
     $stmtMaterialBudgetAllocated = $conn->prepare("SELECT `materialbudgetdetailsid`,material_budget_details.`materialid`,`allocatedbudget`,`alertlevel`,product_master.productname FROM `material_budget_details`,material,product_master WHERE `material_budget_details`.`projectid`='$projectId' And material_budget_details.materialid =material.materialid AND material.productmasterid=product_master.productmasterid");
     if ($stmtMaterialBudgetAllocated->execute()) {
-
+        $totalMaterialBudget=0;
         while ($resultAllocatedMaterialBudget=$stmtMaterialBudgetAllocated->Fetch(PDO::FETCH_ASSOC)) {
+            $totalMaterialBudget=$totalMaterialBudget+$resultAllocatedMaterialBudget['allocatedbudget'];
             $totlaAllocatedBudget=$totlaAllocatedBudget+$resultAllocatedMaterialBudget['allocatedbudget'];
             $result_array['MaterialBudgetDetails'][] = array(
                 'materialbudgetdetailsid' => $resultAllocatedMaterialBudget['materialbudgetdetailsid'],
@@ -97,7 +97,7 @@ function getExpenseDetails($projectId)
             );
         }
 
-
+        $result_array['MaterialsTotalBudgetAllocated']=$totalMaterialBudget;
     }
 
 
@@ -237,6 +237,7 @@ function getExpenseDetails($projectId)
     $result_array['totalExpenditure'] = $totalExpense;
     $result_array['otherExpense'] = $otherExpense;
     $result_array['budgetAllocated'] = $totlaAllocatedBudget;
+
     array_push($json_response, $result_array);
 
     $json = json_encode($json_response);
