@@ -469,20 +469,43 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
     }
 
+    $scope.materialsExpense=[];
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.materialsExpense.push({
+                material: "",
+                amount: "",
+                description: "",
+                isBillApplicable:true,
+                billno: "",
+                billIssuingEntity: "",
+                billdate: "",
+            });
+        }
+        ;
+    }
+    $scope.remove = function (index) {
+
+        $scope.materialsExpense.splice(index, 1);
+    };
+
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
-        console.log($scope.billDetails);
+
         console.log($scope.expenseDetails);
-        if($scope.expenseDetails.isBillApplicable){
-            var viewValue=new Date($scope.billDetails.dateOfBill);
+
+        if($scope.materialsExpense.billdate!=undefined){
+            var viewValue=new Date($scope.materialsExpense.billdate);
             viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-            $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
+            $scope.materialsExpense.billdate=viewValue.toISOString().substring(0, 10);
         }
+        console.log("Material Expenses");
+        console.log($scope.materialsExpense);
 
         var data = {
             operation: "addMaterialExpense",
-            materialExpenseData: $scope.expenseDetails,
-            billDetails: $scope.billDetails
+            projectId: $scope.expenseDetails.project,
+            materialsExpense: $scope.materialsExpense
         };
 
         var config = {
@@ -495,6 +518,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
         $http.post("Expense/php/expenseFacade.php", null, config)
             .success(function (data) {
                 console.log(data);
+                $('#loader').css("display","none");
                 if (data.status == "success"){
                     $('#loader').css("display","none");
                     $rootScope.warningMessage =data.message;
@@ -615,6 +639,15 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     //}
 
+    $scope.getTotalMaterialExpense=function($materialId,$costCenterData){
+        var totalMaterialExpense=0;
+        for(var i=0;i<$costCenterData.materialExpenseDetails.length;i++){
+            if(parseInt($materialId)==parseInt($costCenterData.materialExpenseDetails[i].materialID)){
+                totalMaterialExpense=totalMaterialExpense+parseInt($costCenterData.materialExpenseDetails[i].amountMaterialExpenseDetails);
+            }
+        }
+        return totalMaterialExpense;
+    }
     $scope.deleteSegment=function($segmentId,$index){
         var data = {
             operation: "deleteSegment",
