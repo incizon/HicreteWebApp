@@ -15,3 +15,162 @@ SQLSTATE[42S22]: Column not found: 1054 Unknown column 'createdby' in 'field lis
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'createdby' in 'field list' 
 2016-07-06 20:07:56 - FATAL --> Exception Occured Message:
 SQLSTATE[42S22]: Column not found: 1054 Unknown column 'createdby' in 'field list' 
+2016-07-20 12:19:41 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f503d96ad5' for key 'PRIMARY' 
+2016-07-20 12:19:41 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:22:34 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f50ea78da9' for key 'PRIMARY' 
+2016-07-20 12:22:34 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:24:26 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f515a7d34e' for key 'PRIMARY' 
+2016-07-20 12:24:26 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:27:19 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f5207e17f1' for key 'PRIMARY' 
+2016-07-20 12:27:20 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:28:28 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f524c5a922' for key 'PRIMARY' 
+2016-07-20 12:28:28 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:31:47 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 12:31:47 - DEBUG --> Row count: 
+8 
+2016-07-20 12:32:03 - INFO  --> Adding Material expense 
+2016-07-20 12:32:03 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:32:03 - DEBUG --> Data: 
+{"material":"1","amount":"324","description":"cvcv","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:32:03 - INFO  --> Material expense details added successfully 
+2016-07-20 12:33:27 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 12:33:27 - DEBUG --> Row count: 
+8 
+2016-07-20 12:33:56 - INFO  --> Adding Material expense 
+2016-07-20 12:33:56 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:33:56 - DEBUG --> Data: 
+{"material":"1","amount":"1231","description":"dfgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:33:56 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:33:56 - DEBUG --> Data: 
+{"material":"2","amount":"12345","description":"fgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:33:56 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f539467829' for key 'PRIMARY' 
+2016-07-20 12:33:56 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:35:44 - INFO  --> Adding Material expense 
+2016-07-20 12:35:44 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:35:44 - DEBUG --> Data: 
+{"material":"1","amount":"1231","description":"dfgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:35:45 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:35:45 - DEBUG --> Data: 
+{"material":"2","amount":"12345","description":"fgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:35:45 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '578f5400f0da5' for key 'PRIMARY' 
+2016-07-20 12:35:45 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:37:01 - INFO  --> Adding Material expense 
+2016-07-20 12:37:01 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:37:01 - DEBUG --> Data: 
+{"material":"1","amount":"1231","description":"dfgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:37:01 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:37:01 - DEBUG --> Data: 
+{"material":"2","amount":"12345","description":"fgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:37:01 - INFO  --> Material expense details added successfully 
+2016-07-20 12:43:45 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 12:43:45 - DEBUG --> Row count: 
+8 
+2016-07-20 12:48:44 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 12:48:44 - DEBUG --> Row count: 
+8 
+2016-07-20 12:49:32 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 12:49:32 - DEBUG --> Row count: 
+8 
+2016-07-20 12:50:27 - INFO  --> Adding Material expense 
+2016-07-20 12:50:27 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:50:27 - DEBUG --> Data: 
+{"material":"1","amount":"450","description":"test check","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:50:27 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'projectid' cannot be null 
+2016-07-20 12:50:27 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:50:55 - INFO  --> Adding Material expense 
+2016-07-20 12:50:55 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:50:55 - DEBUG --> Data: 
+{"material":"1","amount":"450","description":"test check","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:50:55 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'projectid' cannot be null 
+2016-07-20 12:50:55 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:51:19 - INFO  --> Adding Material expense 
+2016-07-20 12:51:19 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:51:19 - DEBUG --> Data: 
+{"material":"1","amount":"450","description":"test check","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 12:51:19 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:51:19 - DEBUG --> Data: 
+{"material":"2","amount":"500","description":"test check","isBillApplicable":true,"billno":"123","billIssuingEntity":"dfsfsdfsd","billdate":"2016-07-19T18:30:00.000Z"} 
+2016-07-20 12:51:19 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                    VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:51:19 - DEBUG --> Data: 
+{"material":"2","amount":"500","description":"test check","isBillApplicable":true,"billno":"123","billIssuingEntity":"dfsfsdfsd","billdate":"2016-07-19T18:30:00.000Z","billNo":null} 
+2016-07-20 12:51:19 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'billno' cannot be null 
+2016-07-20 12:51:19 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:53:12 - INFO  --> Adding Material expense 
+2016-07-20 12:53:12 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:53:12 - DEBUG --> Data: 
+{"material":"2","amount":"500","description":"test check","isBillApplicable":true,"billno":"123","billIssuingEntity":"dfsfsdfsd","billdate":"2016-07-19T18:30:00.000Z"} 
+2016-07-20 12:53:12 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                    VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:53:12 - DEBUG --> Data: 
+{"material":"2","amount":"500","description":"test check","isBillApplicable":true,"billno":"123","billIssuingEntity":"dfsfsdfsd","billdate":"2016-07-19T18:30:00.000Z","billNo":null} 
+2016-07-20 12:53:12 - FATAL --> Exception Occured Message:
+SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'billno' cannot be null 
+2016-07-20 12:53:12 - ERROR --> Error while adding Material expenses 
+2016-07-20 12:54:07 - INFO  --> Adding Material expense 
+2016-07-20 12:54:07 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:54:07 - DEBUG --> Data: 
+{"material":"2","amount":"500","description":"test check","isBillApplicable":true,"billno":"123","billIssuingEntity":"dfsfsdfsd","billdate":"2016-07-19T18:30:00.000Z"} 
+2016-07-20 12:54:07 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                    VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 12:54:07 - DEBUG --> Data: 
+{"material":"2","amount":"500","description":"test check","isBillApplicable":true,"billno":"123","billIssuingEntity":"dfsfsdfsd","billdate":"2016-07-19T18:30:00.000Z"} 
+2016-07-20 12:54:07 - INFO  --> Material expense details added successfully 
+2016-07-20 12:55:24 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 12:55:24 - DEBUG --> Row count: 
+8 
+2016-07-20 13:02:44 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 13:02:44 - DEBUG --> Row count: 
+8 
+2016-07-20 13:03:19 - INFO  --> Adding Material expense 
+2016-07-20 13:03:19 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 13:03:19 - DEBUG --> Data: 
+{"material":"1","amount":"232233","description":"fgdgdfgdfg","isBillApplicable":false,"billno":"","billIssuingEntity":""} 
+2016-07-20 13:03:19 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 13:03:19 - DEBUG --> Data: 
+{"material":"2","amount":"435354","description":"fdgfdgdf","isBillApplicable":true,"billno":"2000","billIssuingEntity":"sdkfhsdf","billdate":"2016-07-18T18:30:00.000Z"} 
+2016-07-20 13:03:19 - DEBUG --> Query: 
+{"queryString":"INSERT INTO `material_expense_bills`(`billid`, `materialexpensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)\r\n                    VALUES (:billid,:expensedetailsid,:billno,:billissueingentity,:amount,:dateofbill,:createdBy,now(),now(),:lastModifiedBy)"} 
+2016-07-20 13:03:19 - DEBUG --> Data: 
+{"material":"2","amount":"435354","description":"fdgfdgdf","isBillApplicable":true,"billno":"2000","billIssuingEntity":"sdkfhsdf","billdate":"2016-07-18T18:30:00.000Z"} 
+2016-07-20 13:03:19 - INFO  --> Material expense details added successfully 
+2016-07-20 13:03:42 - DEBUG --> Query:
+ {"queryString":"SELECT `companyId` ,`companyName` FROM `companymaster`"} 
+2016-07-20 13:03:42 - DEBUG --> Count:
+ 3 
+2016-07-20 13:04:11 - DEBUG --> Query: 
+{"queryString":"SELECT ProjectId,ProjectName from project_master where ProjectId IN (SELECT ProjectId from budget_details)"} 
+2016-07-20 13:04:11 - DEBUG --> Row count: 
+8 

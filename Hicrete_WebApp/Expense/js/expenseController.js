@@ -476,6 +476,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
                 material: "",
                 amount: "",
                 description: "",
+                isBillApplicable:true,
                 billno: "",
                 billIssuingEntity: "",
                 billdate: "",
@@ -487,64 +488,66 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
 
         $scope.materialsExpense.splice(index, 1);
     };
+
     $scope.addMaterialExpense = function () {
         $scope.materialExpenseClicked = false;
-        console.log("Material Expenses");
-        console.log($scope.materialsExpense);
+
         console.log($scope.expenseDetails);
 
+        if($scope.materialsExpense.billdate!=undefined){
+            var viewValue=new Date($scope.materialsExpense.billdate);
+            viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
+            $scope.materialsExpense.billdate=viewValue.toISOString().substring(0, 10);
+        }
+        console.log("Material Expenses");
+        console.log($scope.materialsExpense);
 
-        //if($scope.expenseDetails.isBillApplicable){
-        //    var viewValue=new Date($scope.billDetails.dateOfBill);
-        //    viewValue.setMinutes(viewValue.getMinutes() - viewValue.getTimezoneOffset());
-        //    $scope.billDetails.dateOfBill=viewValue.toISOString().substring(0, 10);
-        //}
-        //
-        //var data = {
-        //    operation: "addMaterialExpense",
-        //    materialExpenseData: $scope.expenseDetails,
-        //    billDetails: $scope.billDetails
-        //};
-        //
-        //var config = {
-        //    params: {
-        //        data: data
-        //    }
-        //};
-        //
-        //$("#loader").css("display","block");
-        //$http.post("Expense/php/expenseFacade.php", null, config)
-        //    .success(function (data) {
-        //        console.log(data);
-        //        if (data.status == "success"){
-        //            $('#loader').css("display","none");
-        //            $rootScope.warningMessage =data.message;
-        //            $("#warning").css("display", "block");
-        //            setTimeout(function () {
-        //                $("#warning").css("display", "none");
-        //                window.location = "dashboard.php#/Process";
-        //            }, 1000);
-        //        }
-        //        if(data.status=="failure"){
-        //            $('#loader').css("display","none");
-        //            $rootScope.errorMessage =data.message;
-        //            $("#error").css("display", "block");
-        //            setTimeout(function () {
-        //                $("#error").css("display", "none");
-        //                window.location = "dashboard.php#/Process";
-        //            }, 1000);
-        //        }
-        //    })
-        //    .error(function (data, status, headers, config) {
-        //        $('#loader').css("display","none");
-        //        $rootScope.errorMessage ="Error Occur While Adding Material Expense Details";
-        //
-        //        $("#error").css("display", "block");
-        //        setTimeout(function () {
-        //            $("#error").css("display", "none");
-        //            window.location = "dashboard.php#/Process";
-        //        },1000);
-        //    });
+        var data = {
+            operation: "addMaterialExpense",
+            projectId: $scope.expenseDetails.project,
+            materialsExpense: $scope.materialsExpense
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $("#loader").css("display","block");
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display","none");
+                if (data.status == "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+                }
+                if(data.status=="failure"){
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                        window.location = "dashboard.php#/Process";
+                    }, 1000);
+                }
+            })
+            .error(function (data, status, headers, config) {
+                $('#loader').css("display","none");
+                $rootScope.errorMessage ="Error Occur While Adding Material Expense Details";
+
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                    window.location = "dashboard.php#/Process";
+                },1000);
+            });
     }
 
 });
@@ -636,6 +639,15 @@ myApp.controller('costCenterSearchController', function ($scope, $rootScope,$htt
 
     //}
 
+    $scope.getTotalMaterialExpense=function($materialId,$costCenterData){
+        var totalMaterialExpense=0;
+        for(var i=0;i<$costCenterData.materialExpenseDetails.length;i++){
+            if(parseInt($materialId)==parseInt($costCenterData.materialExpenseDetails[i].materialID)){
+                totalMaterialExpense=totalMaterialExpense+parseInt($costCenterData.materialExpenseDetails[i].amountMaterialExpenseDetails);
+            }
+        }
+        return totalMaterialExpense;
+    }
     $scope.deleteSegment=function($segmentId,$index){
         var data = {
             operation: "deleteSegment",

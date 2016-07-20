@@ -68,6 +68,7 @@
                                                         <th class="col-md-3">Material</th>
                                                         <th class="col-md-2">Amount</th>
                                                         <th class="col-md-2">Description</th>
+                                                        <th>IsBillApplicable</th>
                                                         <th class="col-md-1">Bill No</th>
                                                         <th class="col-md-2">BillDate</th>
                                                         <th class="col-md-2">BillIssuingEntity</th>
@@ -97,13 +98,15 @@
                                                         <td><input ng-model="materials.description" name="description" type="text"
                                                                    placeholder="" class="form-control" required
                                                                    ></td>
-
+                                                        <td>
+                                                        <input type="checkbox" class="mycheck" ng-model="materials.isBillApplicable"/>
+                                                        </td>
                                                         <td><input name="billno" ng-model="materials.billno"
-                                                                   type="text" placeholder="" class="form-control" required/></td>
+                                                                   type="text" ng-hide="!materials.isBillApplicable" placeholder="" class="form-control" required/></td>
                                                         <td><input name="billdate" ng-model="materials.billdate"
-                                                                   type="date" placeholder="" class="form-control" required/></td>
+                                                                   type="date" ng-hide="!materials.isBillApplicable" placeholder="" class="form-control" required/></td>
                                                         <td><input name="billIssuingEntity" ng-model="materials.billIssuingEntity"
-                                                                   type="text" placeholder="" class="form-control" required/></td>
+                                                                   type="text" ng-hide="!materials.isBillApplicable" placeholder="" class="form-control" required/></td>
 
 
 
