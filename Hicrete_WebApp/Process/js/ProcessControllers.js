@@ -4812,8 +4812,9 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
         setInfo.set(task);
     }
 
-    $scope.deleteTask = function (taskid) {
+    $scope.deleteTask = function (taskid ,index1){
         console.log("delete task " + taskid);
+        console.log(index1);
         var data = {
             operation: "deleteTask",
             taskId: taskid
@@ -4832,13 +4833,16 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                     $('#loader').css("display", "none");
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
+
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 3000);
+
                 } else {
                     $('#loader').css("display", "none");
                     $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
+                    $rootScope.tasks.splice(index1, 1);
                     setTimeout(function () {
                         $('#warning').css("display", "none");
                         window.location = "dashboard.php#/Process/";
@@ -4853,7 +4857,6 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                     $('#error').css("display", "none");
                 }, 3000);
             });
-
     }
 
 });

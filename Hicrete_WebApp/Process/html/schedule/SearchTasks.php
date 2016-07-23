@@ -101,10 +101,10 @@ $hasWrite = appUtil::doesUserHasAccess("Business Process", $userId, "Write");
                                 </button>
                             </a>
                             <?php
-                            //                            if ($hasWrite == 1) {
-                            //                                echo "<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID)\">Delete</button>";
-                            //                            }
-                            //                            ?>
+                                                        if ($hasWrite == 1) {
+                                                            echo "<button class=\"btn btn-danger\" ng-click = \"deleteTask(task.TaskID,\$index)\">Delete</button>";
+                                                        }
+                                                        ?>
 
                         </td>
                     </tr>
