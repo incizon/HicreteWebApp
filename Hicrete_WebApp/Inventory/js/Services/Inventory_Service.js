@@ -40,6 +40,7 @@ myApp.service('inventoryService', function () {
                 console.log("IN SERVICE OF Inventory PRODUCTS FOR INWARD OUTWARD=");
                 console.log(data);
                 $('#loader').css("display","none");
+                $scope.doneFetching=true;
                 $scope.materialsForOutwardInward = data;
             })
             .error(function (data, status, headers) {

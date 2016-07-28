@@ -837,3 +837,41 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
     };
 
 });
+
+myApp.controller('modifyCostCenterController', function ($scope, $rootScope,$stateParams, $filter, $http,inventoryService) {
+
+    console.log("In Modify Cost CCenter");
+    $scope.costCentermaterials=null;
+    $scope.segmentList=null;
+    console.log($stateParams.projectName);
+    $scope.projectName=$stateParams.projectName;
+    $scope.costCentermaterials=$stateParams.materialBudget;
+    $scope.segmentList=$stateParams.segmentBudget;
+
+    inventoryService.getProductsForInwardand($scope, $http);
+
+
+    $scope.addFields = function () {
+        for (var i = 0; i < $scope.noOfElement; i++) {
+            $scope.costCentermaterials.push({
+                materialid: "",
+                allocatedbudget: "",
+                alertlevel: ""
+            });
+        }
+        ;
+    }
+
+    $scope.remove = function (index) {
+        $scope.costCentermaterials.splice(index, 1); //remove item by index
+    };
+    $scope.removeSegments = function (index) {
+        $scope.segmentList.splice(index, 1);
+    };
+
+    $scope.modifyCostCenter= function () {
+        console.log("In Modify Cost Center");
+        console.log($scope.segmentList);
+        console.log($scope.costCentermaterials);
+    }
+});

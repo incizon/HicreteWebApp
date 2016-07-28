@@ -229,7 +229,12 @@ myApp.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'Expense/html/CreateCostCenter.html',
             controller: 'costCenterController'
         })
-
+        .state('Process.modifyCostCenter', {
+            url: '/modifyCostCenter',
+            templateUrl: 'Expense/html/ModifyCostCenter.html',
+            controller: 'modifyCostCenterController',
+            params : { projectName:null,segmentBudget: null,materialBudget:null }
+        })
         .state('Process.addSegment', {
             url: '/addSegment',
             templateUrl: 'Expense/html/AddBudgetSegment.html',

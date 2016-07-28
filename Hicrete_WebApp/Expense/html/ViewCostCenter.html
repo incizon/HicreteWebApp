@@ -48,7 +48,9 @@
 
                     <div class="form-group col-md-12">
                         <div>
-                            <h3>Segment Budget = {{costCenterData[0].SegmentsTotalBudgetAllocated}}</h3>
+                            <h3>Segment Budget = {{costCenterData[0].SegmentsTotalBudgetAllocated}}
+                                <a ui-sref="Process.modifyCostCenter({projectName:projectName,segmentBudget:costCenterData[0].SegmentBudgetDetails,materialBudget:costCenterData[0].MaterialBudgetDetails})"> <button class="btn btn-info">Modify Budget</button></a>
+                            </h3>
                         </div>
                         <!--table start-->
                         <div class="col-md-8" style="padding-left:0px;">
