@@ -1808,7 +1808,7 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
                 $rootScope.inventoryHistoryInward=$rootScope.inventoryHistory.InwardMaterial;
                 //console.log($scope.inventoryHistoryInward[0].inwardno);
                 $rootScope.inventoryHistoryOutward=$rootScope.inventoryHistory.outwardMaterial;
-
+                $rootScope.productName = $rootScope.inventoryHistory.commonDetails[0].productName;
             })
             .error(function (data, status, headers) {
                 console.log("IN SERVICE OF Inventory Search Failure=");

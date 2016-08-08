@@ -86,7 +86,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">History of material</h4>
+                        <h4 class="modal-title">History of material: {{productName}}</h4>
                     </div>
                     <div class="modal-body">
                         <h4 style="text-align: left;"><b>Inward Entries</b></h4>
@@ -99,8 +99,8 @@
                                 <th class="tablehead">Inward Number</th>
                                 <th class="tablehead">Date Of Entry</th>
                                 <th class="tablehead">Quantity</th>
-                               <!-- <th class="tablehead">Date</th>
-                                <th class="tablehead">Supervisor</th>-->
+                                <th class="tablehead">Packaged units</th>
+                                <th class="tablehead">Packaging Size</th>
                             </tr>
                             </thead>
                             <tr ng-repeat="inwardEntries in inventoryHistoryInward">
@@ -116,12 +116,12 @@
                                 <td class="tablerow">
                                     {{inwardEntries.quantity}}
                                 </td>
-                               <!-- <td class="tablerow">
-                                    {{viewProduct.dateofentry}}
+                                <td class="tablerow">
+                                    {{inwardEntries.packagedunits}}
                                 </td>
                                 <td class="tablerow">
-                                    {{viewProduct.supervisor}}
-                                </td>-->
+                                    {{inwardEntries.size}}
+                                </td>
                             </tr>
                         </table>
                         </div>
@@ -135,29 +135,29 @@
                                 <th class="tablehead">Outward Number</th>
                                 <th class="tablehead">Date Of Entry</th>
                                 <th class="tablehead">Quantity</th>
-                                <!-- <th class="tablehead">Date</th>
-                                 <th class="tablehead">Supervisor</th>-->
+                                <th class="tablehead">Packaged units</th>
+                                <th class="tablehead">Packaging Size</th>
                             </tr>
                             </thead>
-                            <tr ng-repeat="inwardEntries in inventoryHistoryOutward">
+                            <tr ng-repeat="outwardEntries in inventoryHistoryOutward">
                                 <td class="tablerow">
                                     {{$index+1}}
                                 </td>
                                 <td class="tablerow">
-                                    {{inwardEntries.outwardno}}
+                                    {{outwardEntries.outwardno}}
                                 </td>
                                 <td class="tablerow">
-                                    {{inwardEntries.dateofentry}}
+                                    {{outwardEntries.dateofentry}}
                                 </td>
                                 <td class="tablerow">
-                                    {{inwardEntries.quantity}}
+                                    {{outwardEntries.quantity}}
                                 </td>
-                                <!-- <td class="tablerow">
-                                     {{viewProduct.dateofentry}}
+                                 <td class="tablerow">
+                                     {{outwardEntries.packagedunits}}
                                  </td>
                                  <td class="tablerow">
-                                     {{viewProduct.supervisor}}
-                                 </td>-->
+                                     {{outwardEntries.size}}
+                                 </td>
                             </tr>
                         </table>
                         </div>

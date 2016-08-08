@@ -38,8 +38,12 @@ require_once '../../php/Database.php';
             $json_array=array();
             $inward_array=array();
             $outward_array=array();
+            $json_array['commonDetails'][]=array(
+                'productName'=> $product->productname
+
+            );
             //echo json_encode($product);
-            $stmtGetHistry=$conn->prepare("SELECT a.inwardno as inwardno ,date_format(a.dateofentry,'%d-%m-%Y') as dateofentry,b.quantity as quantity,b.supplierid as supplierid from inward a,inward_details b where a.inwardid=b.inwardid and b.materialid = :materialid order by a.dateofentry desc");
+            $stmtGetHistry=$conn->prepare("SELECT a.inwardno as inwardno ,date_format(a.dateofentry,'%d-%m-%Y') as dateofentry,b.quantity as quantity,b.packagedunits as packagedunits,b.size as size from inward a,inward_details b where a.inwardid=b.inwardid and b.materialid = :materialid order by a.dateofentry desc");
             $stmtGetHistry->bindParam(':materialid', $product->materialid);
             if($stmtGetHistry->execute()) {
                 while ($result2 = $stmtGetHistry->fetch(PDO::FETCH_ASSOC)) {
@@ -48,7 +52,9 @@ require_once '../../php/Database.php';
                     $json_array['InwardMaterial'][]=  array(
                         'inwardno' => $result2['inwardno'],
                         'dateofentry' => $result2['dateofentry'],
-                        'quantity'=> $result2['quantity']
+                        'quantity'=> $result2['quantity'],
+                        'packagedunits'=>$result2['packagedunits'],
+                        'size'=>$result2['size']
                     );
 
                     /*$inventoryData['inwardno'] = $result2['inwardno'];
@@ -59,7 +65,7 @@ require_once '../../php/Database.php';
                 }
             }
 
-            $stmtGetHistry=$conn->prepare("SELECT a.outwardno as outwardno ,date_format(a.dateofentry,'%d-%m-%Y') as dateofentry,b.quantity as quantity from outward a,outward_details b where a.outwardid=b.outwardid and b.materialid = :materialid order by a.dateofentry desc");
+            $stmtGetHistry=$conn->prepare("SELECT a.outwardno as outwardno ,date_format(a.dateofentry,'%d-%m-%Y') as dateofentry,b.quantity as quantity,b.packagedunits as packagedunits,b.packagesize as size from outward a,outward_details b where a.outwardid=b.outwardid and b.materialid = :materialid order by a.dateofentry desc");
             $stmtGetHistry->bindParam(':materialid', $product->materialid);
             if($stmtGetHistry->execute()) {
                 while ($result3 = $stmtGetHistry->fetch(PDO::FETCH_ASSOC)) {
@@ -67,7 +73,10 @@ require_once '../../php/Database.php';
                     $json_array['outwardMaterial'][]=  array(
                         'outwardno' => $result3['outwardno'],
                         'dateofentry' => $result3['dateofentry'],
-                        'quantity'=> $result3['quantity']
+                        'quantity'=> $result3['quantity'],
+                        'packagedunits'=>$result3['packagedunits'],
+                        'size'=>$result3['size']
+
                     );
 
                    /* $inventoryData = array();
