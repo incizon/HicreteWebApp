@@ -913,7 +913,9 @@ myApp.controller('modifyCostCenterController', function ($scope, $rootScope,$sta
 
 
         });
-
+    $scope.getNoOfMaterials = function () {
+        return $scope.costCentermaterials.length;
+    }
     $scope.modifyCostCenter= function () {
         console.log("In Modify Cost Center");
         console.log($scope.segmentList);

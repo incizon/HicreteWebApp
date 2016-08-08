@@ -149,6 +149,7 @@ class Expense
                 if ($data->isBillApplicable) {
                     $unapprovedExpenseBillsId = AppUtil::generateId();
                     $date = new DateTime($billData->dateOfBill);
+
                     $bilDate = $date->format('Y-m-d');
 
                     $stmt = $conn->prepare("INSERT INTO `unapproved_expense_bills`(`billid`, `expensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
@@ -207,11 +208,12 @@ class Expense
             $conn->beginTransaction();
             foreach ($materialsExpense as $material) {
                 $expenseDetailsId=AppUtil::generateId();
-                $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
-                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
+                $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`,`quantity` ,`amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                                    VALUES (:expensedetailsid,:projectid,:materialid,:quantity,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
                 $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
                 $stmt->bindParam(':projectid', $projectId, PDO::PARAM_STR);
                 $stmt->bindParam(':materialid', $material->material, PDO::PARAM_STR);
+                $stmt->bindParam(':quantity', $material->qty, PDO::PARAM_STR);
                 $stmt->bindParam(':amount', $material->amount, PDO::PARAM_STR);
                 $stmt->bindParam(':description', $material->description, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);

@@ -109,6 +109,7 @@
                                 <tr>
                                     <th>Sr.No</th>
                                     <th>Material Name</th>
+                                    <th>Quantity</th>
                                     <th>Expense</th>
                                     <th>Description</th>
                                     <th>Bill No</th>
@@ -122,6 +123,7 @@
                                 <tr ng-repeat="materialExpense in expenseDetails[0].materialExpenseDetails">
                                     <td>{{$index + 1}}</td>
                                     <td>{{materialExpense.material}}</td>
+                                    <td>{{materialExpense.quantity}}</td>
                                     <td >{{materialExpense.amountMaterialExpenseDetails}}</td>
                                     <td >{{materialExpense.descriptionMaterialExpenseDetails}}</td>
                                     <td >{{materialExpense.billNo}}</td>

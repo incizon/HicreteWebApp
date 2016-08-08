@@ -207,3 +207,8 @@ SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '579dc91a6
 2016-08-01 18:06:02 - ERROR --> Exception while creating cost center 
 2016-08-01 18:06:33 - ERROR --> Exception while creating cost center 
 2016-08-01 18:07:06 - ERROR --> Exception while creating cost center 
+2016-08-08 18:57:38 - ERROR --> Error while adding Material expenses 
+2016-08-08 19:00:24 - ERROR --> Error while adding Material expenses 
+2016-08-08 19:03:59 - ERROR --> Error while adding Material expenses 
+2016-08-08 19:04:11 - ERROR --> Error while adding Material expenses 
+2016-08-08 19:06:08 - ERROR --> Error while adding Material expenses 
