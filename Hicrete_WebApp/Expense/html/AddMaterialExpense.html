@@ -48,11 +48,11 @@
                                                     <input type="number" name="noOfElement" ng-model="noOfElement"
                                                            class="form-control" pattern="[0-9]+">
                                                 </div>
-                                                <div class="help-block" ng-messages="costCenterForm.noOfElement.$error"
-                                                     ng-show="materialExpenseClicked">
-                                        <span style="color:red"
-                                              ng-message="pattern">Only numeric value is allowed</span>
-                                                </div>
+                                                <!--<div class="help-block" ng-messages="materialExpenseForm.noOfElement.$error"-->
+                                                     <!--ng-show="materialExpenseClicked">-->
+                                                     <!--<span style="color:red"-->
+                                              <!--ng-message="pattern">Only numeric value is allowed</span>-->
+                                                <!--</div>-->
                                             </div>
                                             <div class="col-md-2">
                                                 <button class="btn btn-primary" ng-click="addFields()">Add</button>
@@ -66,9 +66,10 @@
                                                     <thead>
                                                     <tr>
                                                         <th class="col-md-3">Material</th>
+                                                        <th>Quantity</th>
                                                         <th class="col-md-2">Amount</th>
                                                         <th class="col-md-2">Description</th>
-                                                        <th>IsBillApplicable</th>
+                                                        <th>Is Bill Applicable</th>
                                                         <th class="col-md-1">Bill No</th>
                                                         <th class="col-md-2">BillDate</th>
                                                         <th class="col-md-2">BillIssuingEntity</th>
@@ -84,18 +85,20 @@
                                                                 <option ng-repeat="x in materialEntryList" value={{x.materialid}}>{{x.productname}}
                                                                 </option>
                                                             </select>
-                                                            <div class="help-block" ng-show="getNoOfMaterials()<=0"
-                                                                 ng-show="createCostCenterClicked">
-                                                                <p style="color:red">Please add atleast one material.</p>
-                                                            </div>
-                                                            <div class="help-block" ng-messages="costCenterForm.material.$error"
-                                                                 ng-show="createCostCenterClicked">
-                                                                <p style="color:red" ng-message="required">Please enter material.</p>
-                                                            </div>
+                                                            <!--<div class="help-block" ng-show="getNoOfMaterials()<=0"-->
+                                                                 <!--ng-show="materialExpenseClicked">-->
+                                                                <!--<p style="color:red">Please add atleast one material.</p>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="help-block" ng-messages="materialExpenseForm.material.$error"-->
+                                                                 <!--ng-show="materialExpenseClicked">-->
+                                                                <!--<p style="color:red" ng-message="required">Please enter material.</p>-->
+                                                            <!--</div>-->
                                                         </td>
+                                                        <td><input name="qty" ng-model="materials.qty"
+                                                                   type="text" placeholder="" class="form-control" required/></td>
                                                         <td><input name="amount" ng-model="materials.amount"
                                                                    type="text" placeholder="" class="form-control" required/></td>
-                                                        <td><input ng-model="materials.description" name="description" type="text"
+                                                        <td><input ng-model="materials.description"  name="description" type="text"
                                                                    placeholder="" class="form-control" required
                                                                    ></td>
                                                         <td>
@@ -136,7 +139,7 @@
                             </div>
                                 <!--Start of buttons section-->
                                 <div class="panel-footer">
-                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true)&& addMaterialExpense()">Submit</button>
+                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true) && addMaterialExpense()">Submit</button>
 
                                     <button class="btn  btn-default pull-right">Clear Form</button>
                                 </div>
