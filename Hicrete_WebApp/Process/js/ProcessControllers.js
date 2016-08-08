@@ -240,7 +240,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $rootScop
                                     $('#warning').css("display", "block");
                                     setTimeout(function () {
                                         $('#warning').css("display", "none");
-                                        window.location = "dashboard.php#/Process";
+                                        window.location = "dashboard.php#/Process/viewProjects";
                                     }, 1000);
                                     $scope.clearForm();
                                 }

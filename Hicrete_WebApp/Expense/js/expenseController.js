@@ -201,6 +201,7 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
 
        console.log("cost center material");
         console.log($scope.costCentermaterials);
+        console.log($scope.segmentList);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'utils/ConfirmDialog.html',
@@ -840,9 +841,11 @@ myApp.controller('BillApprovalController', function ($scope,$http,$rootScope) {
 
 myApp.controller('modifyCostCenterController', function ($scope, $rootScope,$stateParams, $filter, $http,inventoryService) {
 
+    $scope.costCentermaterials={};
+    $scope.segmentList={};
     console.log("In Modify Cost CCenter");
-    $scope.costCentermaterials=null;
-    $scope.segmentList=null;
+
+
     console.log($stateParams.projectName);
     $scope.projectName=$stateParams.projectName;
     $scope.costCentermaterials=$stateParams.materialBudget;
@@ -869,9 +872,101 @@ myApp.controller('modifyCostCenterController', function ($scope, $rootScope,$sta
         $scope.segmentList.splice(index, 1);
     };
 
+    var data = {
+        operation: "getSegments",
+    };
+
+    var config = {
+        params: {
+            data: data
+        }
+    };
+    $('#loader').css("display","block");
+    $http.post("Expense/php/expenseUtils.php", null, config)
+        .success(function (data) {
+            console.log("SEGMENTS");
+            console.log(data);
+            //$scope.segmentList = data;
+            if($scope.segmentList.length>1){
+                for (var i = 0; i < data.length; i++) {
+                    for(var j=0;j<$scope.segmentList.length;j++){
+                        if($scope.segmentList[j].segmentname==data[i].name){
+                            data.splice(i,1);
+                            break;
+                        }
+                    }
+
+                }
+            }
+
+            for(var i=0;i<data.length;i++){
+                $scope.segmentList.push({
+                    segmentname: data[i].name,
+                    budgetsegmentid:data[i].id,
+                    allocatedbudget: "",
+                    alertlevel: ""
+                });
+            }
+            $('#loader').css("display","none");
+        })
+        .error(function (data, status, headers, config) {
+
+
+        });
+
     $scope.modifyCostCenter= function () {
         console.log("In Modify Cost Center");
         console.log($scope.segmentList);
         console.log($scope.costCentermaterials);
+        console.log("PROJECT ID=");
+        console.log($scope.segmentList[0]);
+        $('#loader').css("display","block");
+        var data = {
+            operation: "modifyCostCenter",
+            projectId:$scope.segmentList[0].projectid,
+            segments:$scope.segmentList,
+            materials:$scope.costCentermaterials
+        };
+
+        var config = {
+            params: {
+                data: data
+            }
+        };
+
+        $http.post("Expense/php/expenseFacade.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display","none");
+                if (data.status === "success"){
+                    $('#loader').css("display","none");
+                    $rootScope.warningMessage =data.message;
+                    $("#warning").css("display", "block");
+                    setTimeout(function () {
+                        $("#warning").css("display", "none");
+                        window.location = "dashboard.php#/Process/viewProjects";
+                    }, 3000);
+                }else {
+                    $('#loader').css("display","none");
+                    $rootScope.errorMessage =data.message;
+                    $("#error").css("display", "block");
+                    setTimeout(function () {
+                        $("#error").css("display", "none");
+                        window.location = "dashboard.php#/Process/viewProjects";
+                    }, 1000);
+                }
+
+            })
+            .error(function (data, status, headers, config) {
+                $('#loader').css("display","none");
+                $rootScope.errorMessage =data.message;
+                $("#error").css("display", "block");
+                setTimeout(function () {
+                    $("#error").css("display", "none");
+                    window.location = "dashboard.php#/Process/viewProjects";
+                }, 1000);
+
+            });
+
     }
 });

@@ -67,7 +67,7 @@
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="segmentEntry in segmentList">
-                                            <td>{{segmentEntry.segmentname}}</td>
+                                            <td><label ng-value="">{{segmentEntry.segmentname}}</label></td>
                                             <td><input name="allocatedBudget" ng-model="segmentEntry.allocatedbudget"
                                                        type="text" placeholder="" class="form-control" required
                                                        pattern="[0-9]*[.]?[0-9]*"></td>
