@@ -12,6 +12,9 @@
         case "addSegment":
             Expense::addSegment($data, $userId);
             break;
+        case "modifyCostCenter":
+            Expense::modifyCostCenter($data->projectId, $data->segments,$data->materials, $userId);
+            break;
         case "createCostCenter":
             Expense::createCostCenter($data->costCenterData, $data->segments,$data->materials, $userId);
             break;

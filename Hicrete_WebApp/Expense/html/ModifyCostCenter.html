@@ -1,0 +1,174 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+
+        <form name="costCenterUpdateForm" class="form-horizontal" novalidate>
+            <!--Start of form section-->
+            <div class="panel panel-default">
+                <!--Start of form heading section-->
+                <div class="panel-heading">
+                    <h3 class="panel-title"><strong>Modify Cost</strong> Center</h3>
+                </div>
+                <!--End of form heading section-->
+
+                <div class="panel-body">
+                    <!--Start of form container row-->
+                    <div class="row">
+                        <!--Start of First column of form-->
+
+
+                        <!--Start of project Field-->
+                        <div class="form-group adjust-padding">
+                            <label class="col-md-2 control-label">Project</label>
+
+                            <div class="col-md-7">
+
+                                <label class="col-md-2 control-label">{{projectName}}</label>
+                            </div>
+
+                        </div>
+                        <!--End of project Field-->
+                        <div><!--main start division select tag-->
+
+                            <!--Start of project Field-->
+                            <div class="help-block" ng-messages="costCenterUpdateForm.allocatedBudget.$error"
+                                 ng-show="modifyCostCenterClicked">
+                                <p style="color:red" ng-message="required">Budget Allocated Name Cannot be blank</p>
+
+                                <p style="color:red" ng-message="pattern">Invalid Amount in Budget Allocated.Only
+                                    numbers allowed</p>
+                            </div>
+                            <div class="help-block" ng-messages="costCenterUpdateForm.alertLevel.$error"
+                                 ng-show="modifyCostCenterClicked">
+                                <p style="color:red" ng-message="required">Alert Level Name Cannot be blank</p>
+
+                                <p style="color:red" ng-message="pattern">Invalid Percentage in Alert Level</p>
+                            </div>
+                            <div class="form-group adjust-padding">
+                                <label class="col-md-2 control-label">Budget Details</label>
+
+                                <div class="col-md-7">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-md-3">Segment name</th>
+                                            <th class="col-md-3">Allocated Budget</th>
+                                            <th class="col-md-2">Alert level</th>
+                                            <th class="col-md-2">Remove</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="segmentEntry in segmentList">
+                                            <td><label ng-value="">{{segmentEntry.segmentname}}</label></td>
+                                            <td><input name="allocatedBudget" ng-model="segmentEntry.allocatedbudget"
+                                                       type="text" placeholder="" class="form-control" required
+                                                       pattern="[0-9]*[.]?[0-9]*"></td>
+                                            <td><input ng-model="segmentEntry.alertlevel" name="alertLevel" type="text"
+                                                       placeholder="" class="form-control" required
+                                                       pattern="[0-9]*[.]?[0-9]*"></td>
+                                            <td style="text-align: center;">
+                                                <a ng-click="removeSegments($index)" class="panel-remove">
+                                                    <span class="fa fa-times"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--End of project Field-->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Number of Materials</label>
+
+                                <div class="col-md-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                        <input type="number" name="noOfElement" ng-model="noOfElement"
+                                               class="form-control" pattern="[0-9]+">
+                                    </div>
+                                    <div class="help-block" ng-messages="costCenterUpdateForm.noOfElement.$error"
+                                         ng-show="submitted">
+                                        <span style="color:red"
+                                              ng-message="pattern">Only numeric value is allowed</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" ng-click="addFields()">Add</button>
+                                </div>
+                            </div>
+                            <div class="form-group adjust-padding">
+                                <label class="col-md-2 control-label">Material Budget</label>
+
+                                <div class="col-md-7">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th class="col-md-3">Material</th>
+                                            <th class="col-md-3">Allocated Budget</th>
+                                            <th class="col-md-2">Alert level</th>
+                                            <th class="col-md-2">Remove</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="materials in costCentermaterials">
+                                            <td width="30%">
+                                                <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.materialid" name="material"
+                                                        ng-value="Select" required style="width: 90%">
+                                                    <option value="" disabled selected>Select Material</option>
+                                                    <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
+                                                    </option>
+                                                </select>
+                                                <div class="help-block" ng-show="getNoOfMaterials()<=0"
+                                                     ng-show="modifyCostCenterClicked">
+                                                    <p style="color:red">Please add atleast one material.</p>
+                                                </div>
+                                                <div class="help-block" ng-messages="costCenterUpdateForm.material.$error"
+                                                     ng-show="modifyCostCenterClicked">
+                                                    <p style="color:red" ng-message="required">Please enter material.</p>
+                                                </div>
+                                            </td>
+                                            <td><input name="allocatedBudget" ng-model="materials.allocatedbudget"
+                                                       type="text" placeholder="" class="form-control" required></td>
+                                            <td><input ng-model="materials.alertlevel" name="alertLevel" type="text"
+                                                       placeholder="" class="form-control" required
+                                                       pattern="[0-9]*[.]?[0-9]*"></td>
+                                            <td style="text-align: center;">
+                                                <a ng-click="remove($index)" class="panel-remove">
+                                                    <span class="fa fa-times"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div><!--main division select tag-->
+
+                        <!--End of First column of form-->
+                    </div>
+                    <!--End of form container row-->
+
+                    <!--Start of buttons section-->
+                    <div class="panel-footer">
+                        <button class="btn  btn-primary pull-right"
+                                ng-click="modifyCostCenter()">
+                            Submit
+                        </button>
+
+                        <button class="btn  btn-default pull-right">Clear Form</button>
+                    </div>
+                    <!--End of buttons section-->
+                </div>
+                <!--End of form section-->
+            </div>
+        </form>
+    </div>
+</div>

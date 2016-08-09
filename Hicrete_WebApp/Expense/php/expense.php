@@ -15,7 +15,7 @@ class Expense
         $success=false;
         try {
             foreach ($data->segments as $segment) {
-                $uniqid = uniqid();
+                $uniqid = AppUtil::generateId();
                 $stmt = $conn->prepare("INSERT INTO `budget_segment`(`budgetsegmentid`,`segmentname`, `createdby`, `creationdate`, `lastmodifieddate`, `lastmodifiedby`)
                         VALUES (:segmentId,:segmentName,:createdBy,now(),now(),:lastModifiedBy)");
                 $stmt->bindParam(':segmentName', $segment->name, PDO::PARAM_STR);
@@ -56,7 +56,7 @@ class Expense
             HicreteLogger::logInfo("Creating cost center");
             $conn->beginTransaction();
             foreach ($segmentData as $segment) {
-                $budgetId = uniqid();
+                $budgetId =AppUtil::generateId();
                 $stmt = $conn->prepare("INSERT INTO `budget_details`(`budgetdetailsid`,`projectid`, `budgetsegmentid`, `allocatedbudget`, `alertlevel`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:budgetId,:projectId,:segmentId,:allocatedBudget,:alertLevel,:createdBy,now(),now(),:lastModifiedBy)");
 
@@ -81,7 +81,7 @@ class Expense
             if($costCentermaterials!=null){
                 foreach($costCentermaterials as $material){
 
-                    $materialbudgetdetailsid=uniqid();
+                    $materialbudgetdetailsid=AppUtil::generateId();
                     $stmtCostCenterMaterial = $conn->prepare("INSERT INTO `material_budget_details`(`materialbudgetdetailsid`,`projectid`,`materialid` ,`allocatedbudget`, `alertlevel`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
                     VALUES (:materialbudgetdetailsid,:projectId,:materialid,:allocatedBudget,:alertLevel,:creadtedby,now(),now(),:lastmodifiedby)");
 
@@ -123,8 +123,7 @@ class Expense
 
         $db = Database::getInstance();
         $conn = $db->getConnection();
-        $expenseDetailsId=uniqid(); 
-        $budget='5691e819829c3';
+        $expenseDetailsId=AppUtil::generateId();
         HicreteLogger::logInfo("Adding other expenses");
 
         try {
@@ -148,8 +147,9 @@ class Expense
 
 
                 if ($data->isBillApplicable) {
-                    $unapprovedExpenseBillsId = uniqid();
+                    $unapprovedExpenseBillsId = AppUtil::generateId();
                     $date = new DateTime($billData->dateOfBill);
+
                     $bilDate = $date->format('Y-m-d');
 
                     $stmt = $conn->prepare("INSERT INTO `unapproved_expense_bills`(`billid`, `expensedetailsid`, `billno`, `billissueingentity`, `amount`, `dateofbill`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
@@ -207,12 +207,13 @@ class Expense
         try {
             $conn->beginTransaction();
             foreach ($materialsExpense as $material) {
-                $expenseDetailsId=uniqid();
-                $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`, `amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
-                                    VALUES (:expensedetailsid,:projectid,:materialid,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
+                $expenseDetailsId=AppUtil::generateId();
+                $stmt = $conn->prepare("INSERT INTO `material_expense_details`(`materialexpensedetailsid`, `projectid`, `materialid`,`quantity` ,`amount`, `description`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                                    VALUES (:expensedetailsid,:projectid,:materialid,:quantity,:amount,:description,:createdBy,now(),now(),:lastModifiedBy)");
                 $stmt->bindParam(':expensedetailsid', $expenseDetailsId, PDO::PARAM_STR);
                 $stmt->bindParam(':projectid', $projectId, PDO::PARAM_STR);
                 $stmt->bindParam(':materialid', $material->material, PDO::PARAM_STR);
+                $stmt->bindParam(':quantity', $material->qty, PDO::PARAM_STR);
                 $stmt->bindParam(':amount', $material->amount, PDO::PARAM_STR);
                 $stmt->bindParam(':description', $material->description, PDO::PARAM_STR);
                 $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
@@ -222,7 +223,7 @@ class Expense
                 HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
                 HicreteLogger::logDebug("Data: \n" . json_encode($material));
                 if ($stmt->execute()) {
-                    $billId = uniqid();
+                    $billId = AppUtil::generateId();
                     if ($material->isBillApplicable==true) {
                         $date = new DateTime($material->billdate);
                         $bilDate = $date->format('Y-m-d');
@@ -480,7 +481,95 @@ class Expense
             return 0;
         }
     }
+    public static function modifyCostCenter($projectId,$segmentData,$costCentermaterials,$userId)
+    {
+        $db = Database::getInstance();
+        $conn = $db->getConnection();
+        $conn->beginTransaction();
+        try{
+            $stmt1 = $conn->prepare("DELETE FROM `budget_details` where projectid=:projectid");
+            $stmt1->bindParam(':projectid', $projectId);
+            if($stmt1->execute()){
+                $stmt2 = $conn->prepare("DELETE FROM `material_budget_details` where projectid=:projectid");
+                $stmt2->bindParam(':projectid', $projectId);
+                if($stmt2->execute()){
 
+                    $success = false;
+                    HicreteLogger::logInfo("Creating cost center");
+
+                    foreach ($segmentData as $segment) {
+                        $budgetId = AppUtil::generateId();
+                        $stmt = $conn->prepare("INSERT INTO `budget_details`(`budgetdetailsid`,`projectid`, `budgetsegmentid`, `allocatedbudget`, `alertlevel`, `createdby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                    VALUES (:budgetId,:projectId,:segmentId,:allocatedBudget,:alertLevel,:createdBy,now(),now(),:lastModifiedBy)");
+
+                        $stmt->bindParam(':budgetId', $budgetId, PDO::PARAM_STR);
+
+                        $stmt->bindParam(':projectId',$projectId, PDO::PARAM_STR);
+                        $stmt->bindParam(':segmentId', $segment->budgetsegmentid, PDO::PARAM_STR);
+                        $stmt->bindParam(':allocatedBudget', $segment->allocatedbudget, PDO::PARAM_INT);
+                        $stmt->bindParam(':alertLevel', $segment->alertlevel, PDO::PARAM_STR);
+                        $stmt->bindParam(':createdBy', $userId, PDO::PARAM_STR);
+                        $stmt->bindParam(':lastModifiedBy', $userId, PDO::PARAM_STR);
+                        HicreteLogger::logDebug("Query: \n" . json_encode($stmt));
+
+                        if ($stmt->execute()) {
+                            $success = true;
+                        } else {
+                            $success = false;
+                        }
+                    }
+                    if($costCentermaterials!=null){
+
+                        foreach($costCentermaterials as $material){
+
+                            $materialbudgetdetailsid=uniqid();
+                            $stmtCostCenterMaterial = $conn->prepare("INSERT INTO `material_budget_details`(`materialbudgetdetailsid`,`projectid`,`materialid` ,`allocatedbudget`, `alertlevel`, `creadtedby`, `creationdate`, `lastmodificationdate`, `lastmodifiedby`)
+                    VALUES (:materialbudgetdetailsid,:projectId,:materialid,:allocatedBudget,:alertLevel,:creadtedby,now(),now(),:lastmodifiedby)");
+
+                            $stmtCostCenterMaterial->bindParam(':materialbudgetdetailsid', $materialbudgetdetailsid, PDO::PARAM_STR);
+                            $stmtCostCenterMaterial->bindParam(':projectId', $projectId, PDO::PARAM_STR);
+                            $stmtCostCenterMaterial->bindParam(':materialid', $material->materialid, PDO::PARAM_STR);
+                            $stmtCostCenterMaterial->bindParam(':allocatedBudget', $material->allocatedbudget, PDO::PARAM_INT);
+                            $stmtCostCenterMaterial->bindParam(':alertLevel', $material->alertlevel, PDO::PARAM_STR);
+                            $stmtCostCenterMaterial->bindParam(':creadtedby', $userId, PDO::PARAM_STR);
+                            $stmtCostCenterMaterial->bindParam(':lastmodifiedby', $userId, PDO::PARAM_STR);
+
+                            if ($stmtCostCenterMaterial->execute()) {
+                                $success = true;
+                            } else {
+                                $success = false;
+                            }
+                        }
+                    }
+
+                    if ($success) {
+                        $conn->commit();
+                        $message = "Cost Center Updated successfully..!!!";
+                        HicreteLogger::logInfo("Cost center Updated  successfully");
+                        echo AppUtil::getReturnStatus("success", $message);
+                    } else {
+                        $conn->rollBack();
+                        $message = "Could not create cost center..!!!";
+                        HicreteLogger::logError("Error while creating cost center");
+                        echo AppUtil::getReturnStatus("failure", $message);
+                    }
+
+                }
+
+            }
+            else{
+                $conn->rollBack();
+                $message = "Could not update cost center..!!!";
+                HicreteLogger::logError("Error while updating cost center");
+                echo AppUtil::getReturnStatus("failure", $message);
+            }
+
+        }catch(Exception $e){
+            $conn->rollBack();
+            HicreteLogger::logError("Exception while updating cost center");
+            echo AppUtil::getReturnStatus("failure", $e->getMessage());
+        }
+    }
 
 }
 

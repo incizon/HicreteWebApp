@@ -255,7 +255,7 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $rootScop
                                     $('#warning').css("display", "block");
                                     setTimeout(function () {
                                         $('#warning').css("display", "none");
-                                        window.location = "dashboard.php#/Process";
+                                        window.location = "dashboard.php#/Process/viewProjects";
                                     }, 1000);
                                     $scope.clearForm();
                                 }
@@ -3070,9 +3070,12 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
         pointOfConactMobileNo: $stateParams.projectToModify.MobileNo,
         projectManager: $stateParams.projectToModify.project_manager,
         projectManagerId: $stateParams.projectToModify.projectManagerId,
-        customerId: $stateParams.projectToModify.customerId
+        customerName: $stateParams.projectToModify.customerName
     };
-
+    $scope.autoComplete=function($item,$model,$label,projectDetails){
+        projectDetails.customerId=$model.customerId;
+        console.log("Modify="+$model.customerId);
+    }
     var companiesInvolved;
     $scope.companies = [];
     var data = {
@@ -4852,8 +4855,9 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
         setInfo.set(task);
     }
 
-    $scope.deleteTask = function (taskid) {
+    $scope.deleteTask = function (taskid ,index1){
         console.log("delete task " + taskid);
+        console.log(index1);
         var data = {
             operation: "deleteTask",
             taskId: taskid
@@ -4872,13 +4876,16 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                     $('#loader').css("display", "none");
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");
+
                     setTimeout(function () {
                         $('#error').css("display", "none");
                     }, 3000);
+
                 } else {
                     $('#loader').css("display", "none");
                     $rootScope.warningMessage = data.message;
                     $('#warning').css("display", "block");
+                    $rootScope.tasks.splice(index1, 1);
                     setTimeout(function () {
                         $('#warning').css("display", "none");
                         window.location = "dashboard.php#/Process/";
@@ -4893,7 +4900,6 @@ myApp.controller('SearchTaskController', function (setInfo, $rootScope, $scope, 
                     $('#error').css("display", "none");
                 }, 3000);
             });
-
     }
 
 });

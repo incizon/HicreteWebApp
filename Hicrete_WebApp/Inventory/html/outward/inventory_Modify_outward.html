@@ -1,0 +1,246 @@
+<div>
+    <div ng-include="'utils/loader.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/ErrorMessage.html'"></div>
+</div>
+<div>
+    <div ng-include="'utils/WarningMessage.html'"></div>
+</div>
+
+<div ng-show="step==1">
+
+    <!--<div ng-include="'Inventory/html/outward/Inventory_Outward_Item.html'"></div>-->
+    <div class="row">
+        <div class="col-md-12">
+
+            <form class="form-horizontal" name="modifyOutwardMaterialForm" novalidate>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><strong>Modify Outward Details</strong></h4>
+                    </div>
+
+                    <div class="panel-body">
+                        <div>
+                            <h5>Basic Details</h5>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Outward Number</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input readonly  maxlength="50" type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardDataModify.outwardno"
+                                                    name="OutwardNumber" required/>
+                                        </div>
+                                        <div class="help-block"  ng-messages="modifyOutwardMaterialForm.OutwardNumber.$error" ng-show="submitted" >
+                                            <p style="color:red" ng-message="required">Please enter outward number</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label"> Company</label>
+                                    <div class="col-md-9">
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-disabled="availableTotalquantity==0"
+                                                ng-model="OutwardDataModify.companyid" name="companyName" required>
+                                            <option value="" disabled selected>Select Company</option>
+                                            <option ng-repeat="x in Company"
+                                                    value={{x.companyId}}>{{x.companyName}}
+                                            </option>
+                                        </select>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.companyName.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select company name</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Supervisor</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <select class="select btn dropdown-toggle selectpicker" ng-disabled="availableTotalquantity==0" ng-model="OutwardDataModify.supervisorid" name="suppervisor"
+                                                    required>
+                                                <option value="" disabled selected>Select supervisor</option>
+                                                <option ng-repeat="x in users"
+                                                        value={{x.id}}>{{x.name}}
+                                                </option>
+                                            </select>
+
+                                            <!--<span class="input-group-addon"><span class="fa fa-pencil"></span></span>-->
+                                            <!--<input maxlength="20" type="text" ng-disabled="availableTotalquantity==0" class="form-control" ng-model="OutwardDataModify.suppervisor" name="suppervisor" required/>-->
+                                        </div>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.suppervisor.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter suppervisor name</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Number of Materials</label>
+
+                                    <div class="col-md-7">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
+                                            <input type="number" name="noOfElement" ng-model="noOfElement"
+                                                   class="form-control" pattern="[0-9]+">
+                                        </div>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.noOfElement.$error"
+                                             ng-show="submitted">
+                                        <span style="color:red"
+                                              ng-message="pattern">Only numeric value is allowed</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-primary" ng-click="addFields()">Add</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-6">
+
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Date</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
+                                            <input readonly type="text" ng-disabled="availableTotalquantity==0" class="form-control datepicker" ng-model="OutwardDataModify.dateofentry" name="date" ng-click="open1()" uib-datepicker-popup="{{'dd-MM-yyyy'}}" show-weeks="false" is-open="popup1.opened" datepicker-options="dateOptions"  show-button-bar="false" ng-required="true"/>
+                                        </div>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.date.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter date</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Warehouse</label>
+                                    <div class="col-md-9">
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-disabled="availableTotalquantity==0"
+                                                ng-model="OutwardDataModify.warehouseid" name="warehouseName" required>
+                                            <option value="" disabled selected>Select Warehouse</option>
+                                            <option ng-repeat="x in warehouses"
+                                                    value={{x.warehouseId}}>{{x.wareHouseName}}
+                                            </option>
+                                        </select>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.warehouseName.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select warehouse name</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">Has Transport?</label>
+                                    <div class="col-md-9 col-xs-12">
+                                        <select class="btn dropdown-toggle selectpicker btn-default" ng- ng-disabled="availableTotalquantity==0" ng-model="OutwardDataModify.hasTransportDetails" ng-value="Select" name="hasTransportDetails" required>
+                                            <option value="" disabled selected>Select</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.hasTransportDetails.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select the transport requirement</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 3%">
+                            <p style="color:red" ng-if="getNoOfMaterials()==0">Please add atleast one material</p>
+                            <table class="table table-actions">
+                                <thead>
+                                <tr>
+                                    <th width="30%">Material</th>
+                                    <th width="15%">Quantity</th>
+                                    <th width="13%">Packaging Type</th>
+                                    <th width="10%">Packaging Size</th>
+                                    <th width="10%">Unit</th>
+                                    <th width="12%">Available Quantity</th>
+                                    <th width="10%">Remove</th>
+                                </tr>
+                                </thead>
+                                <tr ng-repeat="materials in OutwardDataModify.materialDetails">
+
+                                    <td>
+                                        <input type="text" name="material" class="form-control"  ng-model="materials.productname"
+                                               uib-typeahead="material as material.productname for material in materialsForOutward | filter:$viewValue | limitTo:8"
+                                               typeahead-on-select="autoComplete($item,$model,$label,materials)" typeahead-editable="false"
+                                               typeahead-no-results="noMaterial" required placeholder="Enter Material name"
+                                        />
+                                        <!--<select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"-->
+                                                <!--ng-model="materials.materialid" ng-value="Select" name="material" required style="width: 100%;">-->
+                                            <!--<option value="" disabled selected>Select Material</option>-->
+                                            <!--<option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>-->
+
+                                        <!--</select>-->
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.material.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please select material</p>
+                                            <p style="color:red" ng-if="noMaterial">Material doesn't exist</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <input maxlength ="10" type="text" min="1" ng-disabled="availableTotalquantity==0" class="form-control"
+                                               ng-model="materials.quantity" name="materialQuantity"  ng-change="getAvailableQty1(materials.materialid)"  required style="width: 100%;"/>
+                                        <div class="help-block" ng-messages="modifyOutwardMaterialForm.materialQuantity.$error" ng-show="submitted">
+                                            <p style="color:red" ng-message="required">Please enter material quantity</p>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <input type="text" ng-disabled="availableTotalquantity==0" class="form-control"
+                                               ng-model="materials.packagedunits" name="packageUnit" required style="width: 100%;"/>
+
+                                    </td>
+                                    <td>
+
+                                        <input maxlength="20" type="text" class="form-control" ng-model="materials.packagesize"
+                                               name="size" style="width: 100%;" />
+
+                                        <div class="help-block" ng-messages="inwardEntryForm.packagesize.$error"
+                                             ng-show="submitted">
+                                            <p style="color:red" ng-message="pattern">Only Numeric values allowed</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <!--{{getAvailableQty(materials.material)}}-->
+                                        <label style="width: 100%;">{{getUnit(materials.materialid)}}</label>
+                                    </td>
+                                    <!--<td>-->
+                                    <!--<button ng-show="selected==true" data-target="#showAvailablequantity" data-ng-click="getAvailableQuantiyPerPackage(materials.material)" data-toggle="modal" class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>Available Qty</button>-->
+
+                                    <!--</td>-->
+                                    <td>
+                                        <label style="width: 100%;"  name="availableQty">{{getAvailableQty1(materials.materialid)}}</label>
+                                        <div class="help-block" ng-show="submitted && availableTotalquantity==0">
+                                            <span style="color:red">Selected material is not available. Contact inventory manager</span>
+                                        </div>
+                                        <div class="help-block" ng-show="showErrorMessage(availableTotalquantity,materials.materialQuantity)">
+                                            <span style="color:red" >Don't have sufficient quantity available in stock. Current available quantity is {{availableTotalquantity}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <a ng-click="remove($index)" class="panel-remove">
+                                            <span class="fa fa-times"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel-footer" style="text-align:center">
+                        <a ui-sref="Inventory.searchOutward"> <button class="btn btn-default">Cancel</button></a>
+                        <button class="btn btn-primary" ng-disabled="availableTotalquantity==0"
+                                data-ng-click="(submitted=true) && getNoOfMaterials()>0 && modifyOutwardMaterialForm.$valid && nextStep()">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+<div ng-show="step==2">
+
+    <div ng-include="'Inventory/html/outward/Inventory_Outward_ModifyTransportDetails.html'"></div>
+
+</div>

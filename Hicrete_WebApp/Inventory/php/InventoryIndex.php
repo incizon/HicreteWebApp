@@ -53,6 +53,9 @@ require_once '../../php/Database.php';
             $result=InventoryUtils::getCriticalStock();
            echo getReturnStatus("Successful",$result);
             break;
+        case 'getHistory':
+            InventoryUtils::getHistory($mData->data);
+            break;
         default:
             # code...
             break;
@@ -130,7 +133,9 @@ require_once '../../php/Database.php';
                     $SearchTerm ="";
                         $productObjSearch->getInwardEntries($dbh,$keyword,$SearchTerm,$dbhHicret);
                 break;
-
+            case 'Modify':
+                InwardData::ModifyInwardDetails($dbh,$userId,$pData->inwardData);
+                break;
             default:
                 # code... return with error msg
                 break;
@@ -156,10 +161,11 @@ require_once '../../php/Database.php';
             case 'delete':
                 # code...
                 break;
-            case 'modify':
+            case 'Modify':
                 # code...
-                $productObjUpdate = new OutwardData($pData);
-                $productObjUpdate->updateOutwardDetails($dbh, $userId, $pData);
+               // $productObjUpdate = new OutwardData($pData);
+                //$productObjUpdate->updateOutwardDetails($dbh, $userId, $pData);
+                OutwardData::ModifyOutwardDetails($dbh,$userId,$pData->outwardData);
                 break;
             case 'search':
                 # code...

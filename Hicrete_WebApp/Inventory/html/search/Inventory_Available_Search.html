@@ -47,19 +47,22 @@
                         <th width="10%">Company</th>
                         <th width="10%">Warehouse</th>
                         <th width="15%">Quantity</th>
-                        <th width="40%">Material Type</th>
+                        <th width="20%">Material Type</th>
+                        <th  width="15%">Action</th>>
 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="product in inventoryData |filter:paginate |orderBy:sortType:sortReverse">
+                    <tr  ng-repeat="product in inventoryData |filter:paginate |orderBy:sortType:sortReverse">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyName}}</td>
                         <td width="15%">{{product.warehouseName}}</td>
                         <td width="15%">{{product.totalquantity}}</td>
-                        <td width="35%">{{product.materialtype}}
-
+                        <td width="20%">{{product.materialtype}}
+                        <td width=15%">  <button data-target="#viewMaterialHistory"  data-toggle="modal"  ng-click="getValues(product)"
+                                      class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View
+                    </button></td>
                         </td>
                     </tr>
 
@@ -74,5 +77,175 @@
         items-per-page="InventoryAvailableItemsPerPage" class="pagination-sm">
     </uib-pagination>
 </div>
+
+
+
+
+
+    <div class="modal fade inventoryDetails" id="viewMaterialHistory" role="dialog">
+        <div class="modal-dialog">
+            <form class="form-horizontal">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">History of material: {{productName}}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4 style="text-align: left;"><b>Inward Entries</b></h4>
+                        <div style="height: 100%;max-height: 250px;overflow-y: scroll;overflow-x: hidden;">
+
+                        <table class="table table-actions">
+                            <thead>
+                            <tr >
+                                <th class="tablehead">Sr. No</th>
+                                <th class="tablehead">Inward Number</th>
+                                <th class="tablehead">Date Of Entry</th>
+                                <th class="tablehead">Quantity</th>
+                                <th class="tablehead">Packaged units</th>
+                                <th class="tablehead">Packaging Size</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="inwardEntries in inventoryHistoryInward">
+                                <td class="tablerow">
+                                    {{$index+1}}
+                                </td>
+                                <td class="tablerow">
+                                    {{inwardEntries.inwardno}}
+                                </td>
+                                <td class="tablerow">
+                                    {{inwardEntries.dateofentry}}
+                                </td>
+                                <td class="tablerow">
+                                    {{inwardEntries.quantity}}
+                                </td>
+                                <td class="tablerow">
+                                    {{inwardEntries.packagedunits}}
+                                </td>
+                                <td class="tablerow">
+                                    {{inwardEntries.size}}
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+                        <h4 style="text-align: left;"><b>Outward Entries</b></h4>
+                        <div style="height: 100%;max-height: 250px;overflow-y: scroll;overflow-x: hidden;">
+
+                        <table class="table table-actions">
+                            <thead>
+                            <tr >
+                                <th class="tablehead">Sr. No</th>
+                                <th class="tablehead">Outward Number</th>
+                                <th class="tablehead">Date Of Entry</th>
+                                <th class="tablehead">Quantity</th>
+                                <th class="tablehead">Packaged units</th>
+                                <th class="tablehead">Packaging Size</th>
+                            </tr>
+                            </thead>
+                            <tr ng-repeat="outwardEntries in inventoryHistoryOutward">
+                                <td class="tablerow">
+                                    {{$index+1}}
+                                </td>
+                                <td class="tablerow">
+                                    {{outwardEntries.outwardno}}
+                                </td>
+                                <td class="tablerow">
+                                    {{outwardEntries.dateofentry}}
+                                </td>
+                                <td class="tablerow">
+                                    {{outwardEntries.quantity}}
+                                </td>
+                                 <td class="tablerow">
+                                     {{outwardEntries.packagedunits}}
+                                 </td>
+                                 <td class="tablerow">
+                                     {{outwardEntries.size}}
+                                 </td>
+                            </tr>
+                        </table>
+                        </div>
+                        <!--<div class="row">
+
+                            <div class="col-md-12">
+                                <h4 style="text-align: left;"><b>Transport Details of {{viewProduct.inwardno}}</b></h4>
+                                <table class="table table-actions">
+                                    <thead>
+                                    <tr>
+                                        <th class="tablehead">Transport</th>
+                                        <th class="tablehead">Vehicle Number</th>
+                                        <th class="tablehead">Transport Cost</th>
+                                        <th class="tablehead">Transport Agency</th>
+                                        <th class="tablehead">Remark</th>
+                                        <th class="tablehead">Driver</th>
+                                    </tr>
+                                    </thead>
+                                    <tr>
+                                        <td class="tablerow">
+                                            {{viewProduct.transportationmode}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{viewProduct.vehicleno}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{viewProduct.cost}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{viewProduct.transportagency}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{viewProduct.remark}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{viewProduct.drivername}}
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            <h4 style="text-align: left;"><b>Material Details of {{viewProduct.inwardno}}</b></h4>
+                            <div class="col-md-12" style="overflow-y: auto;max-height: 200px;">
+
+                                <table class="table table-actions">
+                                    <thead>
+                                    <tr>
+                                        <th class="tablehead">Material</th>
+                                        <th class="tablehead">Quantity</th>
+                                        <th class="tablehead">Packaging Type</th>
+                                        <th class="tablehead">Packaging Size</th>
+                                        <th class="tablehead">Supplier</th>
+                                    </tr>
+                                    </thead>
+                                    <tr ng-repeat="materials in viewMaterials">
+                                        <td class="tablerow">
+                                            {{materials.productname}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{materials.quantity}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{materials.packagedunits}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{materials.packagesize}}
+                                        </td>
+                                        <td class="tablerow">
+                                            {{materials.suppliername}}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>-->
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    <!--End of modal-footer-->
+                </div>
+                <!--End of Modal Content-->
+            </form>
+        </div>
+        <!--End of modal dialog-->
+    </div>
 <!-- END SEARCH RESULT -->
 </div> 

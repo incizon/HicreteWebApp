@@ -171,7 +171,7 @@ class InwardData extends CommonMethods
                 }
 
                 // Join
-                $stmt1 = $dbh->prepare("SELECT inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,
+                $stmt1 = $dbh->prepare("SELECT inward_details.inwarddetailsid,inward_details.inwardid,inward_details.quantity,inward_details.packagedunits,
                        inward_details.size,supplier.supplierid,supplier.suppliername,material.materialid,product_master.productname FROM inward_details
                         JOIN supplier ON
                         inward_details.supplierid=supplier.supplierid
@@ -187,9 +187,11 @@ class InwardData extends CommonMethods
                     while ($resultMaterials = $stmt1->fetch(PDO::FETCH_ASSOC)) {
 
                         $inwardData['materialDetails'][] = array(
+                            'inwarddetailsid' => $resultMaterials['inwarddetailsid'],
                             'inwardid' => $resultMaterials['inwardid'],
                             'materialid' => $resultMaterials['materialid'],
                             'quantity' => $resultMaterials['quantity'],
+                            'prevQuantity' => $resultMaterials['quantity'],
                             'supplierid' => $resultMaterials['supplierid'],
                             'productname' => $resultMaterials['productname'],
                             'suppliername' => $resultMaterials['suppliername'],
@@ -386,6 +388,190 @@ class InwardData extends CommonMethods
     public function deleteProduct()
     {
     }
+
+
+
+    public static function ModifyInwardDetails($dbh,$userId,$InwrdData)
+    {
+        $flag = false;
+        $dbh->beginTransaction();
+        //Updating main Inward details -START
+       try {
+           $date = new DateTime($InwrdData->dateofentry);
+           $InwrdData->dateofentry = $date->format('Y-m-d');
+           $stmtInwardUpdate = $dbh->prepare("UPDATE inward SET warehouseid =:warehouseid,companyid=:companyid,
+            supervisorid=:supervisorid,dateofentry=:dateofentry,inwardno=:inwardno,lchnguserid=:lchnguserid,lchngtime=now() WHERE inwardid = :inwardid");
+           $stmtInwardUpdate->bindParam(':warehouseid', $InwrdData->warehouseid, PDO::PARAM_STR, 10);
+           $stmtInwardUpdate->bindParam(':companyid', $InwrdData->companyid, PDO::PARAM_STR, 10);
+           $stmtInwardUpdate->bindParam(':supervisorid', $InwrdData->supervisorid, PDO::PARAM_STR, 10);
+           $stmtInwardUpdate->bindParam(':dateofentry', $InwrdData->dateofentry, PDO::PARAM_STR, 40);
+           $stmtInwardUpdate->bindParam(':inwardno', $InwrdData->inwardno, PDO::PARAM_STR, 10);
+           $stmtInwardUpdate->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+           $stmtInwardUpdate->bindParam(':inwardid', $InwrdData->inwardid, PDO::PARAM_STR, 10);
+           if ($stmtInwardUpdate->execute()) {
+               $flag = true;
+               // $this->showAlert('success',"Inward details updated Successfully!!!");
+           } else {
+               $message="Error while updating inward details";
+               $arr = array('msg' => '', 'error' => $message);
+               $jsn = json_encode($arr);
+               echo($jsn);
+               $dbh->rollBack();
+               return;
+           }
+           //Updating main Inward Details -END
+           $count = 0;
+           //Updating materials added in inward entry-Start
+
+           $stmtInwardDetailsCheck = $dbh->prepare("Select materialid,quantity from inward_details where  inwardid=:inwardid ");
+
+           $stmtInwardDetailsCheck->bindParam(':inwardid', $InwrdData->inwardid, PDO::PARAM_STR, 10);
+
+
+           if ($stmtInwardDetailsCheck->execute()) {
+               $Maxcount = $stmtInwardDetailsCheck->rowcount();
+               $count = 0;
+               while ($resultMaterials = $stmtInwardDetailsCheck->fetch(PDO::FETCH_ASSOC)) {
+                   //$result = $stmtInwardDetailsCheck->fetch(PDO::FETCH_ASSOC);
+
+                   $quantity = $resultMaterials['quantity'];
+                   $materialid = $resultMaterials['materialid'];
+
+                   $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity - :quantity
+                            WHERE materialid = :materialid");
+                   $stmtInventory->bindParam(':quantity', $quantity, PDO::PARAM_STR, 10);
+                   $stmtInventory->bindParam(':materialid', $materialid, PDO::PARAM_STR, 10);
+                   if ($stmtInventory->execute()) {
+                       $count++;
+                   } else {
+                       break;
+                   }
+               }
+               if ($Maxcount != $count) {
+                   $message="Error while updating inward details";
+                   $arr = array('msg' => '', 'error' => $message);
+                   $jsn = json_encode($arr);
+                   echo($jsn);
+                   $dbh->rollBack();
+               }
+
+           } else {
+               $message="Error while updating inward details";
+               $arr = array('msg' => '', 'error' => $message);
+               $jsn = json_encode($arr);
+               echo($jsn);
+               $dbh->rollBack();
+           }
+           //echo "INWARD ID :$InwrdData->inwardid";
+
+           $stmtDeleteInwdDetails = $dbh->prepare("DELETE FROM inward_details where inwardid = :inwardid");
+           $stmtDeleteInwdDetails->bindParam(':inwardid', $InwrdData->inwardid, PDO::PARAM_STR, 10);
+           if (!$stmtDeleteInwdDetails->execute()) {
+               $message="Error while updating inward details";
+               $arr = array('msg' => '', 'error' => $message);
+               $jsn = json_encode($arr);
+               echo($jsn);
+               $dbh->rollBack();
+               return;
+           }
+
+           $count = 0;
+           for ($i = 0; $i < sizeof($InwrdData->inwardMaterials); $i++) {
+               $stmtInsertInwdDetails = $dbh->prepare("INSERT INTO `inward_details`(`inwardid`, `materialid`, `supplierid`, `quantity`, `packagedunits`, `size`, `lchnguserid`, `lchngtime`, `creuserid`, `cretime`)
+                 VALUES (:inwardid,:materialid,:supplierid,:quantity,:packagedunits,:size,:lchnguserid,now(),:creuserid,now())");
+               $stmtInsertInwdDetails->bindParam(':inwardid', $InwrdData->inwardid, PDO::PARAM_STR, 10);
+               $stmtInsertInwdDetails->bindParam(':materialid', $InwrdData->inwardMaterials[$i]->materialid, PDO::PARAM_STR, 10);
+               $stmtInsertInwdDetails->bindParam(':supplierid', $InwrdData->inwardMaterials[$i]->supplierid, PDO::PARAM_STR, 10);
+               $stmtInsertInwdDetails->bindParam(':quantity', $InwrdData->inwardMaterials[$i]->quantity, PDO::PARAM_STR, 40);
+               $stmtInsertInwdDetails->bindParam(':packagedunits', $InwrdData->inwardMaterials[$i]->packagedunits, PDO::PARAM_STR, 10);
+               $stmtInsertInwdDetails->bindParam(':size', $InwrdData->inwardMaterials[$i]->packagesize, PDO::PARAM_STR, 10);
+               $stmtInsertInwdDetails->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+               $stmtInsertInwdDetails->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+
+               if (!$stmtInsertInwdDetails->execute()) {
+                   break;
+               } else {
+
+                   $stmtInventory = $dbh->prepare("UPDATE inventory SET totalquantity =totalquantity+ :quantity
+                            WHERE materialid = :materialid");
+                   $stmtInventory->bindParam(':quantity', $InwrdData->inwardMaterials[$i]->quantity, PDO::PARAM_STR, 10);
+                   $stmtInventory->bindParam(':materialid', $InwrdData->inwardMaterials[$i]->materialid, PDO::PARAM_STR, 10);
+
+                   if ($stmtInventory->execute()) {
+                       $count++;
+                   } else
+                       break;
+               }
+           }
+
+           if ($count != sizeof($InwrdData->inwardMaterials)) {
+               $message="Error while updating inward details";
+               $arr = array('msg' => '', 'error' => $message);
+               $jsn = json_encode($arr);
+               echo($jsn);
+               $dbh->rollBack();
+               return;
+           } else {
+               //echo "Inward entry Updated successfully";
+               if($InwrdData->hasTransportDetails == "No") {
+                   $message = "Inward details Updated successfully";
+                   $arr = array('msg' => $message, 'error' => '');
+                   $jsn = json_encode($arr);
+                   echo($jsn);
+                   $dbh->commit();
+               }
+               else if($InwrdData->hasTransportDetails == "Yes")
+               {
+                   $stmtModifyTransport = $dbh->prepare("DELETE FROM inward_transportation_details WHERE inwardid=:inwardid");
+                   $stmtModifyTransport->bindParam(':inwardid', $InwrdData->inwardid, PDO::PARAM_STR, 10);
+                   if ($stmtModifyTransport->execute()) {
+
+                       $stmtModifyTransport = $dbh->prepare("INSERT INTO inward_transportation_details (inwardid,transportationmode,vehicleno,drivername,transportagency,cost,lchnguserid,lchngtime,creuserid,cretime,remark)
+                       values (:inwardid,:transportationmode,:vehicleno,:drivername,:transportagency,:cost,:lchnguserid,now(),:creuserid,now(),:remark)");
+                       $stmtModifyTransport->bindParam(':inwardid', $InwrdData->inwardid, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':transportationmode', $InwrdData->transportationmode, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':vehicleno', $InwrdData->vehicleno, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':drivername', $InwrdData->drivername, PDO::PARAM_STR, 40);
+                       $stmtModifyTransport->bindParam(':transportagency', $InwrdData->transportagency, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':cost', $InwrdData->cost, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':lchnguserid', $userId, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':creuserid', $userId, PDO::PARAM_STR, 10);
+                       $stmtModifyTransport->bindParam(':remark', $InwrdData->remark, PDO::PARAM_STR, 10);
+
+                       if ($stmtModifyTransport->execute()) {
+                           $message = "Inward details Updated successfully";
+                           $arr = array('msg' => $message, 'error' => '');
+                           $jsn = json_encode($arr);
+                           echo($jsn);
+                           $dbh->commit();
+
+                       }else
+                       {
+                           $message="Error while updating inward transport details";
+                           $arr = array('msg' => '', 'error' => $message);
+                           $jsn = json_encode($arr);
+                           echo($jsn);
+                           $dbh->rollBack();
+                       }
+
+
+                   }else
+                   {
+                       $message="Error while updating inward transport details";
+                       $arr = array('msg' => '', 'error' => $message);
+                       $jsn = json_encode($arr);
+                       echo($jsn);
+                       $dbh->rollBack();
+                   }
+               }
+           }
+       }catch(Exception $e)
+       {
+           echo $e->getMessage();
+           $dbh->rollBack();
+       }
+    }
+
 
 
     /**********************************************************************************

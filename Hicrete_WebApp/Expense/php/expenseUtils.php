@@ -177,7 +177,7 @@ function getExpenseDetails($projectId)
 
 //    array_push($result_array,$segmentWiseExpense);
     $totalMaterialExpense = 0;
-    $stmt2 = $conn->prepare("SELECT materialexpensedetailsid,materialid,amount,description  FROM `material_expense_details` WHERE projectid='$projectId' ");
+    $stmt2 = $conn->prepare("SELECT materialexpensedetailsid,materialid,quantity,amount,description  FROM `material_expense_details` WHERE projectid='$projectId' ");
     if ($stmt2->execute()) {
         while ($result = $stmt2->fetch(PDO::FETCH_ASSOC)) {
             //GET BILL DETAILS
@@ -216,6 +216,7 @@ function getExpenseDetails($projectId)
 
             }
             $result_array['materialExpenseDetails'][] = array(
+                'quantity'=>$result['quantity'],
                 'amountMaterialExpenseDetails' => $result['amount'],
                 'descriptionMaterialExpenseDetails' => $result['description'],
                 'billId' => $billId,
