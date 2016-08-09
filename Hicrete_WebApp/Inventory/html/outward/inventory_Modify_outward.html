@@ -55,7 +55,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">Suppervisor</label>
+                                    <label class="col-md-3 control-label">Supervisor</label>
                                     <div class="col-md-9">
                                         <div class="input-group">
                                             <select class="select btn dropdown-toggle selectpicker" ng-disabled="availableTotalquantity==0" ng-model="OutwardDataModify.supervisorid" name="suppervisor"
@@ -160,14 +160,20 @@
                                 <tr ng-repeat="materials in OutwardDataModify.materialDetails">
 
                                     <td>
-                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"
-                                                ng-model="materials.materialid" ng-value="Select" name="material" required style="width: 100%;">
-                                            <option value="" disabled selected>Select Material</option>
-                                            <option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>
+                                        <input type="text" name="material" class="form-control"  ng-model="materials.productname"
+                                               uib-typeahead="material as material.productname for material in materialsForOutward | filter:$viewValue | limitTo:8"
+                                               typeahead-on-select="autoComplete($item,$model,$label,materials)" typeahead-editable="false"
+                                               typeahead-no-results="noMaterial" required placeholder="Enter Material name"
+                                        />
+                                        <!--<select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"-->
+                                                <!--ng-model="materials.materialid" ng-value="Select" name="material" required style="width: 100%;">-->
+                                            <!--<option value="" disabled selected>Select Material</option>-->
+                                            <!--<option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>-->
 
-                                        </select>
+                                        <!--</select>-->
                                         <div class="help-block" ng-messages="modifyOutwardMaterialForm.material.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please select material</p>
+                                            <p style="color:red" ng-if="noMaterial">Material doesn't exist</p>
                                         </div>
                                     </td>
                                     <td>

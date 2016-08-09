@@ -246,6 +246,7 @@
                                         <div class="help-block" ng-messages="inwardEntryModifyForm.supplierName.$error"
                                              ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please select supplier name.</p>
+                                            <p style="color:red" ng-if="noMaterial">Supplier doesn't exist</p>
                                         </div>
                                     </td>
                                     <td>

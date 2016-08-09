@@ -1891,6 +1891,10 @@ myApp.controller('modifyOutwardController', function ($scope, $rootScope,$stateP
     //GetUsers
     AppService.getUsers($scope, $http);
 
+    $scope.autoComplete=function($item,$model,$label,materials){
+        materials.materialid=$model.materialid;
+        console.log("Modify="+$model.materialid);
+    }
     var data = {
         module: 'getSuppliers',
     }
@@ -1981,7 +1985,7 @@ myApp.controller('modifyOutwardController', function ($scope, $rootScope,$stateP
 
     $scope.getAvailableQty1 = function (pMaterialId) {
         var qty;
-        console.log(pMaterialId);
+
        // console.log($scope.materialsForOutward);
         for (var i = 0; i < $scope.materialsForOutward.length; i++) {
             if (pMaterialId == $scope.materialsForOutward[i].materialid) {
