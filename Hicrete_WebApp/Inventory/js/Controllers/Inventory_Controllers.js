@@ -469,6 +469,7 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
     //$scope.errorMessage="";
     //$scope.warningMessage="";
 
+
     /***********************************************
      *Start of Clear Fields Function
      ************************************************/
@@ -2071,9 +2072,6 @@ myApp.controller('modifyInwardController', function ($scope, $rootScope,$statePa
 
     $scope.step=1;
 
-
-
-
     $scope.maxDate = new Date(2020, 5, 22);
 
     $scope.open1 = function () {
@@ -2087,8 +2085,14 @@ myApp.controller('modifyInwardController', function ($scope, $rootScope,$statePa
         $scope.popup1.opened = true;
     };
 
-
-
+    $scope.autoComplete=function($item,$model,$label,materials){
+        materials.materialid=$model.materialid;
+        console.log("Modify="+$model.materialid);
+    }
+    $scope.autoCompleteSupplier=function($item,$model,$label,materials){
+        materials.supplierid=$model.supplierid;
+        console.log("Modify="+$model.supplierid);
+    }
     inventoryService.getProductsForInwardand($scope, $http);
     //Get Warehouses
     inventoryService.getWarehouses($scope, $http);
@@ -2117,7 +2121,7 @@ myApp.controller('modifyInwardController', function ($scope, $rootScope,$statePa
 
     $scope.getUnit = function (pMaterialId) {
         var qty;
-        console.log(pMaterialId);
+
         for (var i = 0; i < $scope.materialsForOutwardInward.length; i++) {
             if (pMaterialId == $scope.materialsForOutwardInward[i].materialid) {
                 $scope.unitofMeasure = $scope.materialsForOutwardInward[i].unitofmeasure;
@@ -2145,7 +2149,7 @@ myApp.controller('modifyInwardController', function ($scope, $rootScope,$statePa
     }*/
 
     $scope.getNoOfMaterials = function () {
-        console.log( $scope.InwardDataModify.inwardMaterials.length);
+       // console.log( $scope.InwardDataModify.inwardMaterials.length);
         return $scope.InwardDataModify.inwardMaterials.length;
     }
 
@@ -2207,7 +2211,8 @@ myApp.controller('modifyInwardController', function ($scope, $rootScope,$statePa
                 data: data
             }
         };
-
+        console.log("Modify Inward");
+        console.log(data);
         $http.post("Inventory/php/InventoryIndex.php", null, config)
             .success(function (data) {
                 $('#loader').css("display", "none");
