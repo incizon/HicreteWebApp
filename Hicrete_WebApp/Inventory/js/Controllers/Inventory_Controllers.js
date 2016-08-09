@@ -1789,6 +1789,36 @@ myApp.controller('SearchController', function ($scope, $http, inventoryService, 
 
     $scope.keywords = "";
 
+    $scope.getValues = function(product){
+
+        $('#loader').css("display", "block");
+        var data = {
+            module: 'getHistory',
+            data: product
+        }
+        var config = {
+            params: {
+                data: data
+            }
+        };
+        $http.post("Inventory/php/InventoryIndex.php", null, config)
+            .success(function (data) {
+                console.log(data);
+                $('#loader').css("display", "none");
+                $rootScope.inventoryHistory = data;
+                $rootScope.inventoryHistoryInward=$rootScope.inventoryHistory.InwardMaterial;
+                //console.log($scope.inventoryHistoryInward[0].inwardno);
+                $rootScope.inventoryHistoryOutward=$rootScope.inventoryHistory.outwardMaterial;
+                $rootScope.productName = $rootScope.inventoryHistory.commonDetails[0].productName;
+            })
+            .error(function (data, status, headers) {
+                console.log("IN SERVICE OF Inventory Search Failure=");
+                console.log(data);
+                $('#loader').css("display", "none");
+
+            });
+
+    }
 
     /*************************************************
      * START of GETTING INVENTORY DATA

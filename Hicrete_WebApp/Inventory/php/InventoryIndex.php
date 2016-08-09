@@ -53,6 +53,9 @@ require_once '../../php/Database.php';
             $result=InventoryUtils::getCriticalStock();
            echo getReturnStatus("Successful",$result);
             break;
+        case 'getHistory':
+            InventoryUtils::getHistory($mData->data);
+            break;
         default:
             # code...
             break;

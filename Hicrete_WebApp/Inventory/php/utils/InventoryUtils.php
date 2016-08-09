@@ -30,6 +30,71 @@ require_once '../../php/Database.php';
             }
 
         }
+
+        public static function getHistory($product)
+        {
+            $db = Database::getInstance();
+            $conn = $db->getConnection();
+            $json_array=array();
+            $inward_array=array();
+            $outward_array=array();
+            $json_array['commonDetails'][]=array(
+                'productName'=> $product->productname
+
+            );
+            //echo json_encode($product);
+            $stmtGetHistry=$conn->prepare("SELECT a.inwardno as inwardno ,date_format(a.dateofentry,'%d-%m-%Y') as dateofentry,b.quantity as quantity,b.packagedunits as packagedunits,b.size as size from inward a,inward_details b where a.inwardid=b.inwardid and b.materialid = :materialid order by a.dateofentry desc");
+            $stmtGetHistry->bindParam(':materialid', $product->materialid);
+            if($stmtGetHistry->execute()) {
+                while ($result2 = $stmtGetHistry->fetch(PDO::FETCH_ASSOC)) {
+                    //$inventoryData = array();
+
+                    $json_array['InwardMaterial'][]=  array(
+                        'inwardno' => $result2['inwardno'],
+                        'dateofentry' => $result2['dateofentry'],
+                        'quantity'=> $result2['quantity'],
+                        'packagedunits'=>$result2['packagedunits'],
+                        'size'=>$result2['size']
+                    );
+
+                    /*$inventoryData['inwardno'] = $result2['inwardno'];
+                    $inventoryData['dateofentry'] = $result2['dateofentry'];
+                    $inventoryData['quantity'] = $result2['quantity'];
+                    $inventoryData['supplierid'] = $result2['supplierid'];
+                    array_push($json_array,$inventoryData);*/
+                }
+            }
+
+            $stmtGetHistry=$conn->prepare("SELECT a.outwardno as outwardno ,date_format(a.dateofentry,'%d-%m-%Y') as dateofentry,b.quantity as quantity,b.packagedunits as packagedunits,b.packagesize as size from outward a,outward_details b where a.outwardid=b.outwardid and b.materialid = :materialid order by a.dateofentry desc");
+            $stmtGetHistry->bindParam(':materialid', $product->materialid);
+            if($stmtGetHistry->execute()) {
+                while ($result3 = $stmtGetHistry->fetch(PDO::FETCH_ASSOC)) {
+
+                    $json_array['outwardMaterial'][]=  array(
+                        'outwardno' => $result3['outwardno'],
+                        'dateofentry' => $result3['dateofentry'],
+                        'quantity'=> $result3['quantity'],
+                        'packagedunits'=>$result3['packagedunits'],
+                        'size'=>$result3['size']
+
+                    );
+
+                   /* $inventoryData = array();
+                    $inventoryData['outwardno'] = $result3['outwardno'];
+                    $inventoryData['dateofentry'] = $result3['dateofentry'];
+                    $inventoryData['quantity'] = $result3['quantity'];
+
+                    array_push($outward_array,$inventoryData);*/
+                }
+            }
+            //array_push($json_array,$inward_array);
+            //array_push($json_array,$outward_array);
+
+            echo json_encode($json_array);
+
+
+        }
+
         public static function getCriticalStock(){
             $db = Database::getInstance();
             $conn = $db->getConnection();
