@@ -47,19 +47,22 @@
                         <th width="10%">Company</th>
                         <th width="10%">Warehouse</th>
                         <th width="15%">Quantity</th>
-                        <th width="40%">Material Type</th>
+                        <th width="20%">Material Type</th>
+                        <th  width="15%">Action</th>>
 
                     </tr>
                 </thead>
                 <tbody>
-                    <tr data-target="#viewMaterialHistory"  data-toggle="modal"  ng-click="getValues(product)" ng-repeat="product in inventoryData |filter:paginate |orderBy:sortType:sortReverse">
+                    <tr  ng-repeat="product in inventoryData |filter:paginate |orderBy:sortType:sortReverse">
                         <td width="5%">{{$index + 1}}</td>
                         <td width="20%">{{product.productname}}</td>
                         <td width="10%">{{product.companyName}}</td>
                         <td width="15%">{{product.warehouseName}}</td>
                         <td width="15%">{{product.totalquantity}}</td>
-                        <td width="35%">{{product.materialtype}}
-
+                        <td width="20%">{{product.materialtype}}
+                        <td width=15%">  <button data-target="#viewMaterialHistory"  data-toggle="modal"  ng-click="getValues(product)"
+                                      class="btn btn-primary btn-sm"><span class="fa fa-eye"></span>View
+                    </button></td>
                         </td>
                     </tr>
 

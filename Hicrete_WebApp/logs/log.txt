@@ -212,3 +212,6 @@ SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '579dc91a6
 2016-08-08 19:03:59 - ERROR --> Error while adding Material expenses 
 2016-08-08 19:04:11 - ERROR --> Error while adding Material expenses 
 2016-08-08 19:06:08 - ERROR --> Error while adding Material expenses 
+2016-08-09 19:48:59 - ERROR --> Error in inserting outward details 
+2016-08-09 19:48:59 - ERROR --> Error in inserting outward details 
+2016-08-09 19:48:59 - ERROR --> Error in inserting outward details 

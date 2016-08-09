@@ -30,17 +30,23 @@
                                 <label class="control-label">Customer Name :</label>
                             </div>
                             <div class="col-md-8">
-                                <select class="form-control select" name="customer" ng-model="projectDetails.customerId" required>
-                                    <option value="" disabled selected>Choose Customer</option>
-                                    <option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>
+                                <input type="text" name="customer" class="form-control"  ng-model="projectDetails.customerName"
+                                       uib-typeahead="customer as customer.customerName for customer in customers | filter:$viewValue | limitTo:8"
+                                       typeahead-on-select="autoComplete($item,$model,$label,projectDetails)" typeahead-editable="false"
+                                       typeahead-no-results="noMaterial" required placeholder="Enter Customer name"
+                                />
+                                <!--<select class="form-control select" name="customer" ng-model="projectDetails.customerId" required>-->
+                                    <!--<option value="" disabled selected>Choose Customer</option>-->
+                                    <!--<option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>-->
 
-                                </select>
+                                <!--</select>-->
 
                             </div>
                             <div class="help-block"
                                  ng-messages="ProjectInfoForm.customer.$error"
                                  ng-show="formSubmitted">
                                 <span style="color:red" ng-message="required">Customer Name is required</span>
+                                <p style="color:red" ng-if="noMaterial">Customer doesn't exist</p>
                             </div>
 
                         </div>

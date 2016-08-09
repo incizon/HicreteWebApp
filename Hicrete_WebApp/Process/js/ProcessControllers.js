@@ -3040,9 +3040,12 @@ myApp.controller('ModifyProjectController', function ($scope, $http, $stateParam
         pointOfConactMobileNo: $stateParams.projectToModify.MobileNo,
         projectManager: $stateParams.projectToModify.project_manager,
         projectManagerId: $stateParams.projectToModify.projectManagerId,
-        customerId: $stateParams.projectToModify.customerId
+        customerName: $stateParams.projectToModify.customerName
     };
-
+    $scope.autoComplete=function($item,$model,$label,projectDetails){
+        projectDetails.customerId=$model.customerId;
+        console.log("Modify="+$model.customerId);
+    }
     var companiesInvolved;
     $scope.companies = [];
     var data = {
