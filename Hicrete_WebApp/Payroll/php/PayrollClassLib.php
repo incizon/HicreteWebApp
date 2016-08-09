@@ -292,8 +292,16 @@
                     $result2=$stmt2->fetchAll(PDO::FETCH_ASSOC);
                     $result_array['LeaveApprover']=$result2;
                 }
-                echo json_encode($result_array);
 
+                if(sizeof($result_array['EmployeeDetails'])>0){
+                    echo json_encode($result_array);
+                }
+                else{
+
+                    $message = "Employee Details Not Available...!!!";
+                    $arr = array('msg' => '', 'error' => $message);
+                    echo json_encode($arr);
+                }
 
             }
 

@@ -24,15 +24,14 @@
                                 <label class="control-label">Project Name</label>
                             </div>
                             <div class="col-md-9">
-                                <select class="form-control select" name="projectName" ng-model="project" ng-change="viewProjectInvoices(project)" >
-                                    <option value="" disabled selected>Choose Project..</option>
-                                    <option ng-repeat="project in Projects" value="{{project.id}}" >{{project.name}}</option>
-                                   <!--  <option value="Project 2">Project 2</option> -->
-                                </select>
+                                <input type="text" class="form-control" name="ProjectName" ng-model="selectedProject"  typeahead-on-select="viewProjectInvoices($item, $model, $label)" uib-typeahead="project as project.name for project in Projects | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noProject" required  placeholder="Enter project name" />
+                                <!--<select class="form-control select" name="projectName" ng-model="project" ng-change="viewProjectInvoices(project)" >-->
+                                    <!--<option value="" disabled selected>Choose Project..</option>-->
+                                    <!--<option ng-repeat="project in Projects" value="{{project.id}}" >{{project.name}}</option>-->
+                                   <!--&lt;!&ndash;  <option value="Project 2">Project 2</option> &ndash;&gt;-->
+                                <!--</select>-->
                             </div>
                         </div>
-
-
 
                         <!--End of Project name feild-->
 

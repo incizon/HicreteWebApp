@@ -23,18 +23,19 @@
                             </div>
                             <div class="col-md-9">
 
-                                <!--<input type="text" class="form-control" name="packageName" ng-model="packageSelected" typeahead-on-select="getPackageDetails(packageSelected)" uib-typeahead="package as package.package_name for package in packages | filter:$viewValue" typeahead-editable="true" required/>-->
+                                <input type="text" class="form-control" name="packageName" ng-model="packageSelected" typeahead-on-select="getPackageDetails(packageSelected)" uib-typeahead="package as package.package_name for package in packages | filter:$viewValue"  required ng-change="hidePackageDetails()" placeholder="Enter package name" typeahead-editable="false" typeahead-no-results="noPackage"/>
 
-                                <select class="form-control" name="packageName" ng-model="applicatorDetails.packageID" ng-change="getPackageDetails(applicatorDetails.packageID)" required/>
+                                <!--<select class="form-control" name="packageName" ng-model="applicatorDetails.packageID" ng-change="getPackageDetails(applicatorDetails.packageID)" required/>-->
 
-                                    <option value="" disabled selected>Choose package</option>
-                                    <option ng-repeat="package in packages" value="{{package.payment_package_id }}">{{package.package_name}}</option>
-                                </select>
+                                    <!--<option value="" disabled selected>Choose package</option>-->
+                                    <!--<option ng-repeat="package in packages" value="{{package.payment_package_id }}">{{package.package_name}}</option>-->
+                                <!--</select>-->
                                 <div class="help-block"
                                      ng-messages="applicatorPackageForm.packageName.$error"
                                      ng-show="formSubmitted"> 
-                                     <span style="color:red" ng-message="required">Please select package </span>      
-                                </div>      
+                                     <span style="color:#ff0000" ng-message="required">Please select package </span>
+                                     <div style="color:#ff0000" ng-if="noPackage">Package not available.</div>
+                                </div>
                                
                             </div>        
                         
@@ -278,8 +279,8 @@
         <button ng-click="prevStep()" class="btn btn-default"><span class="glyphicon glyphicon-circle-arrow-left"></span> Previous
         </button> 
         <button ng-click="(formSubmitted=true) 
-                    && applicatorPackageForm.$valid 
-                    && nextStep()"  class="btn  btn-primary pull-right">Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                    && applicatorPackageForm.$valid
+                    && nextStep() "  class="btn  btn-primary pull-right">Next <span class="glyphicon glyphicon-circle-arrow-right"></span>
         </button>
         <button ng-click="clearFields(applicatorDetails)" class="btn  btn-default pull-right">Clear Form</button>
     </div>

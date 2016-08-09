@@ -159,14 +159,16 @@
                                 <tr ng-repeat="materials in OutwardData.outwardMaterials">
 
                                     <td>
-                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"
-                                                ng-model="materials.material" ng-value="Select" name="material" required style="width: 100%;">
-                                            <option value="" disabled selected>Select Material</option>
-                                            <option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>
+                                        <input type="text" class="form-control" name="material" ng-model="selectedMaterial"  uib-typeahead="material as material.productname for material in materialsForOutward | filter:$viewValue | limitTo:8" typeahead-on-select="materialSelected($item,$model,$label,materials)" typeahead-editable="false" typeahead-no-results="noMaterial" required  placeholder="Material name"/>
+                                        <!--<select class="btn dropdown-toggle selectpicker btn-default" ng-change="selected=true"-->
+                                                <!--ng-model="materials.material" ng-value="Select" name="material" required style="width: 100%;">-->
+                                            <!--<option value="" disabled selected>Select Material</option>-->
+                                            <!--<option ng-repeat="x in materialsForOutward" value={{x.materialid}}>{{x.productname}}</option>-->
 
-                                        </select>
+                                        <!--</select>-->
                                         <div class="help-block" ng-messages="outwardMaterialForm.material.$error" ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please select material</p>
+                                            <p style="color:red" ng-if="noMaterial">Material does not exist</p>
                                         </div>
                                     </td>
                                     <td>

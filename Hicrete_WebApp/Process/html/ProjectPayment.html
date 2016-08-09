@@ -11,11 +11,8 @@
     <div class="panel panel-default">
 
         <div class="panel-heading">
-
             <h3 class="panel-title"><strong> Project Payment</strong> Details</h3>
-
         </div>
-
         <div class="panel-body">
 
             <div class="row">
@@ -32,18 +29,18 @@
 
                             </div>
                             <div class="col-md-9">
-
-                                <select class="form-control" name="ProjectName" ng-model="paymentDetails.projectID"
-                                        ng-change="viewProjectPaymentDetails(paymentDetails.projectID)" required/>
-
-                                <option value="" disabled selected>Choose Project</option>
-                                <option ng-repeat="project in Projects" value="{{project.id }}">{{project.name}}
-                                </option>
-                                </select>
+                                <input type="text" class="form-control" name="ProjectName" ng-model="selectedProject"  typeahead-on-select="viewProjectPaymentDetails($item, $model, $label)" uib-typeahead="project as project.name for project in Projects | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noProject" required  placeholder="Enter project name" ng-change="hidePaymentDetails()"/>
+                                <!--<select class="form-control" name="ProjectName" ng-model="paymentDetails.projectID"-->
+                                        <!--ng-change="viewProjectPaymentDetails(paymentDetails.projectID)" required/>-->
+                                <!--<option value="" disabled selected>Choose Project</option>-->
+                                <!--<option ng-repeat="project in Projects" value="{{project.id }}">{{project.name}}-->
+                                <!--</option>-->
+                                <!--</select>-->
                                 <div class="help-block"
                                      ng-messages="ProjectPaymentDetailsForm.ProjectName.$error"
                                      ng-show="formSubmitted">
-                                    <span style="color:red" ng-message="required">Please select Project </span>
+                                    <span style="color:red" ng-message="required">Please select Project</span>
+                                    <span style="color:red" ng-if="noProject">Project does not exist </span>
                                 </div>
 
                             </div>

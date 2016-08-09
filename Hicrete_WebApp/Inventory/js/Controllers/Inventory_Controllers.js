@@ -422,7 +422,17 @@ myApp.controller('productController', function ($scope, $http, inventoryService)
     /***************************************************************************
      * End of Get Material Types
      ****************************************************************************/
+    /*************************************************************************
+     No Material Found Variable Autocomplte
+     *************************************************************************/
+    $scope.noMaterial=false;
 
+    $scope.materialTypeSelected=function(material){
+
+        $scope.product.materialtypeid=material.materialtypeid;
+        console.log($scope.product);
+
+    }
 });
 /**********************************************************************************
  * End of Product controller
@@ -506,7 +516,20 @@ myApp.controller('inwardController', function ($scope, $rootScope, $http, inward
     /*************************************************
      *End of Clear Fields Function
      **************************************************/
+    /*Auto complete start*/
 
+    $scope.noMaterial=false;
+    $scope.noSupplier=false;
+
+    $scope.materialSelected=function($item,$model,$label,materials){
+        materials.material=$model.materialid;
+        console.log($model);
+    }
+
+    $scope.supplierSelected=function($item,$model,$label,materials){
+        console.log($model);
+        materials.suppplierName=$model.supplierid;
+    }
 
     $scope.getNoOfMaterials = function () {
         return $scope.InwardData.inwardMaterials.length;
@@ -927,6 +950,13 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
         return qty;
     }
 
+    /*Auto complete start*/
+    $scope.noMaterial=false;
+    $scope.materialSelected=function($item,$model,$label,materials){
+
+        materials.material=$model.materialid;
+        console.log($model);
+    }
     /**********************************
      Add material fields
      *******************************/
@@ -1058,7 +1088,6 @@ myApp.controller('outwardController', function ($scope, $rootScope, $http, outwa
                                 }, 3000);
                             }
                             $scope.submitted = false;
-
 
                         })
                         .error(function (data, status, headers) {
@@ -1601,11 +1630,11 @@ myApp.controller('InwardSearchController', function ($http, $scope, $rootScope) 
  *********************************************************************************************/
 
 myApp.controller('ProductSearchController', function ($scope, $http, $rootScope) {
+
     //$scope.totalItems = 0;
     $scope.currentPage = 1;
     $scope.InventoryItemsPerPage = 10;
     $scope.keyword = "";
-
     $scope.sortType = ''; // set the default sort type
     $scope.sortReverse = false;
 
@@ -1661,7 +1690,9 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
     /**********************************************************************************
      *Setters to set true/false for tables to modify
      **********************************************************************************/
-    $scope.setMasterTable = function () {
+    $scope.setMasterTable = function ($item,$model,$label) {
+        console.log($model);
+        $scope.selectedProduct.materialtypeid=$model.materialtypeid;
         isProductMasterTable = true;
     }
     $scope.setProductDetailsTable = function () {
@@ -1674,6 +1705,11 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
         isMaterialTable = true;
 
     }
+
+
+    /*Autocomplet start */
+    $scope.noMaterial=false;
+
     /**********************************************************************************
      *End of Setters
      **********************************************************************************/
@@ -1684,6 +1720,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
      ***********************************************************************************/
     $scope.updateProductInfo = function (product) {
 
+        console.log(product);
         //Set Extra attribute in object to identify operation to be performed as update
         product.opertaion = "modify";
         //Check which tables should get affected
@@ -1707,6 +1744,7 @@ myApp.controller('ProductSearchController', function ($scope, $http, $rootScope)
         $http.post("Inventory/php/InventoryProduct.php", null, config)
             .success(function (data) {
                 $scope.lodaing = false;
+                console.log(data);
                 $('#loader').css("display", "none");
                 if (data.msg != "") {
                     //alert("Success", data.msg);
@@ -1954,7 +1992,22 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
             $('#loader').css("display", "none");
         });
 
+    /*Autocomplete start*/
+    $scope.noMaterial=false;
+    $scope.noMaterialProduced=false;
+    $scope.materialSelected=function($item,$model,$label,rawMat){
+        console.log($model);
+        rawMat.material=$model.materialid;
+        $scope.getAvailableQty($model.materialid);
+
+    }
+    $scope.materialProducedSelected=function($item,$model,$label){
+        $scope.prodBatchInfo.prodcdMaterial=$model.materialid;
+        console.log($model);
+    }
+
     $scope.getAvailableQty = function (pMaterialId) {
+
         var qty;
         // console.log("New function here");
         for (var i = 0; i < $scope.materialsForOutward.length; i++) {
@@ -1983,7 +2036,7 @@ myApp.controller('productionBatchController', function ($scope, $rootScope, $fil
     };
 
     $scope.check = function (quantity,materialName) {
-        console.log(materialName);
+        //console.log(materialName);
         //console.log($scope.availableTotalquantity)
        if(materialName===undefined || materialName===null || materialName==="")
          return false;

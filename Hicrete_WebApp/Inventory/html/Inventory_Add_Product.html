@@ -52,13 +52,15 @@
                         <div class="col-md-4 col-xs-12">
                             <div class="input-group">
                                 <span class="input-group-addon"><span class="fa fa-pencil"></span></span>
-                                <select class="form-control" ng-model="product.materialtypeid" name="productType" required>
-                                    <option value="" selected="" disabled>Select Material Type</option>
-                                    <option ng-repeat="x in materialNames " value={{x.materialtypeid}}>{{x.materialtype}}</option>
-                                </select>
+                                <input type="text" class="form-control" name="productType" ng-model="materialSelected"  uib-typeahead="material as material.materialtype for material in materialNames | filter:$viewValue | limitTo:8" typeahead-on-select="materialTypeSelected(materialSelected)" typeahead-editable="false" typeahead-no-results="noMaterial" required  placeholder="Enter product name"/>
+                                <!--<select class="form-control" ng-model="product.materialtypeid" name="productType" required>-->
+                                    <!--<option value="" selected="" disabled>Select Material Type</option>-->
+                                    <!--<option ng-repeat="x in materialNames " value={{x.materialtypeid}}>{{x.materialtype}}</option>-->
+                                <!--</select>-->
                             </div>
                             <div class="help-block" ng-messages="addProductForm.productType.$error" ng-show="submitted">
                                 <p style="color:red" ng-message="required">Please select product type</p>
+                                <p style="color:red" ng-if="noMaterial">Product product type not available</p>
 
                             </div>
                             <!-- {{product.productType}} -->

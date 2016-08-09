@@ -27,18 +27,17 @@
                                         <div class="form-group">
                                             <label class="col-md-2 control-label">Select Project</label>
                                             <div class="col-md-7">
-
-                                                <select class="form-control" name="projectName"  required  ng-model="expenseDetails.project">
-                                                    <option value="" disabled>Select</option>
-                                                    <option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>
-                                                </select>
+                                                <input type="text" class="form-control" name="projectName" ng-model="selectedProject"  typeahead-on-select="projectSelected($item, $model, $label)" uib-typeahead="project as project.name for project in projectList | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-no-results="noProject" required  placeholder="Enter project name"/>
+                                                <!--<select class="form-control" name="projectName"  required  ng-model="expenseDetails.project">-->
+                                                    <!--<option value="" disabled>Select</option>-->
+                                                    <!--<option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>-->
+                                                <!--</select>-->
                                                 <div class="help-block" ng-messages="materialExpenseForm.projectName.$error" ng-show="materialExpenseClicked">
                                                     <p style="color:red" ng-message="required">Select Project Name</p>
+                                                    <p style="color:red" ng-if="noProject">Project does not exist</p>
                                                 </div>
                                             </div>
-
                                         </div>
-
                                         <div class="form-group">
                                             <label class="col-md-3 control-label">Number of Materials</label>
 
@@ -78,12 +77,13 @@
                                                     <tbody>
                                                     <tr ng-repeat="materials in materialsExpense">
                                                         <td width="30%">
-                                                            <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"
-                                                                    ng-value="Select" required style="width: 90%">
-                                                                <option value="" disabled selected>Select Material</option>
-                                                                <option ng-repeat="x in materialEntryList" value={{x.materialid}}>{{x.productname}}
-                                                                </option>
-                                                            </select>
+                                                            <input type="text" class="form-control" name="material" ng-model="selectedMaterial"  typeahead-on-select="materialSelected($item, $model, $label,materials)" uib-typeahead="materialEntry as materialEntry.productname for materialEntry in materialEntryList | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-no-results="noMaterial" required  placeholder="Material name"/>
+                                                            <!--<select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"-->
+                                                                    <!--ng-value="Select" required style="width: 90%">-->
+                                                                <!--<option value="" disabled selected>Select Material</option>-->
+                                                                <!--<option ng-repeat="x in materialEntryList" value={{x.materialid}}>{{x.productname}}-->
+                                                                <!--</option>-->
+                                                            <!--</select>-->
                                                             <div class="help-block" ng-show="getNoOfMaterials()<=0"
                                                                  ng-show="createCostCenterClicked">
                                                                 <p style="color:red">Please add atleast one material.</p>
@@ -91,6 +91,7 @@
                                                             <div class="help-block" ng-messages="costCenterForm.material.$error"
                                                                  ng-show="createCostCenterClicked">
                                                                 <p style="color:red" ng-message="required">Please enter material.</p>
+                                                                <p style="color:red" ng-if="noMaterial">Material does not exist.</p>
                                                             </div>
                                                         </td>
                                                         <td><input name="amount" ng-model="materials.amount"
@@ -129,14 +130,14 @@
 
 
 
-                                
+
                                 <!--End of form container row-->
 
 
                             </div>
                                 <!--Start of buttons section-->
                                 <div class="panel-footer">
-                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true)&& addMaterialExpense()">Submit</button>
+                                    <button class="btn  btn-primary pull-right" ng-click="(materialExpenseClicked=true) && materialExpenseForm.$valid && addMaterialExpense()">Submit</button>
 
                                     <button class="btn  btn-default pull-right">Clear Form</button>
                                 </div>

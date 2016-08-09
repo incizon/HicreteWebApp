@@ -32,14 +32,16 @@
                                   <label class="control-label">Project Name :</label>
                               </div>
                               <div class="col-md-8">
-                                    <select class="form-control select" name="project" ng-model="QuotationDetails.projectId"  ng-change="getCompaniesForProject()" required>
-                                    <option value="" disabled selected>Choose Project..</option>
-                                      <option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
-                                  </select>
+                                  <input type="text" class="form-control" name="project" ng-model="selectedProject"  typeahead-on-select="projectSelected($item, $model, $label)" uib-typeahead="project as project.name for project in projects | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noProject" required  placeholder="Enter project name"/>
+                                    <!--<select class="form-control select" name="project" ng-model="QuotationDetails.projectId"  ng-change="getCompaniesForProject()" required>-->
+                                    <!--<option value="" disabled selected>Choose Project..</option>-->
+                                      <!--<option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>-->
+                                  <!--</select>-->
                                   <div class="help-block"
                                        ng-messages="QuotationForm.project.$error"
                                        ng-show="formSubmitted">
                                       <span style="color:red" ng-message="required">Project Name is required</span>
+                                      <span style="color:red" ng-if="noProject">Project does not exist </span>
                                   </div>
                               </div>
                           </div>

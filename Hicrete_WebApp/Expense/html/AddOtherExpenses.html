@@ -27,14 +27,15 @@
                                         <!--start-->
                                         <div class="form-group">
                                             <label class="col-md-2 control-label">Select Project</label>
-                                            <div class="col-md-7">                   
-                                                
-                                                    <select class="form-control" name="projectName" required ng-change="getProjectSegments(expenseDetails.project)"  ng-model="expenseDetails.project">
-                                                        <option value="" disabled>Select</option>
-                                                        <option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>
-                                                    </select>
+                                            <div class="col-md-7">
+                                                <input type="text" class="form-control" name="projectName" ng-model="selectedProject"  typeahead-on-select="getProjectSegments($item, $model, $label)" uib-typeahead="project as project.name for project in projectList | filter:$viewValue | limitTo:8" typeahead-editable="false" typeahead-no-results="noProject1" required  placeholder="Enter project name"/>
+                                                    <!--<select class="form-control" name="projectName" required ng-change="getProjectSegments(expenseDetails.project)"  ng-model="expenseDetails.project">-->
+                                                        <!--<option value="" disabled>Select</option>-->
+                                                        <!--<option  ng-repeat="project in projectList" value="{{project.id}}">{{project.name}}</option>-->
+                                                    <!--</select>-->
                                                 <div class="help-block" ng-messages="otherExpenseForm.projectName.$error" ng-show="otherExpenseClicked">
                                                     <p style="color:red" ng-message="required">Select Project Name</p>
+                                                    <p style="color:red" ng-if="noProject1">Project does not exist</p>
                                                 </div>
                                             </div>
 

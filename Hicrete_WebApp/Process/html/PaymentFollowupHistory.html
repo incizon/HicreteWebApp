@@ -24,12 +24,13 @@
                     </div>
                     <div class="col-md-9">
 
-                        <select class="form-control select"  ng-model= "selectedProjectId" ng-change = "selectProject()" name="projects">
-                            <option value="" disabled selected>Choose project </option>
-                            <option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>
+                        <input type="text" class="form-control" name="projects" ng-model="selectedProject"  typeahead-on-select="selectProject($item, $model, $label)" uib-typeahead="project as project.name for project in projects | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noProject" required  placeholder="Enter project name"/>
+                        <!--<select class="form-control select"  ng-model= "selectedProjectId" ng-change = "selectProject()" name="projects">-->
+                            <!--<option value="" disabled selected>Choose project </option>-->
+                            <!--<option  ng-repeat="project in projects" value="{{project.id}}">{{project.name}}</option>-->
 
-                        </select>
-
+                        <!--</select>-->
+                        <span style="color:red" ng-if="noProject">Project does not exist </span>
 
                     </div>
 
