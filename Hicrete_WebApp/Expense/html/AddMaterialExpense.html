@@ -85,15 +85,15 @@
                                                                 <!--<option ng-repeat="x in materialEntryList" value={{x.materialid}}>{{x.productname}}-->
                                                                 <!--</option>-->
                                                             <!--</select>-->
-                                                            <div class="help-block" ng-show="getNoOfMaterials()<=0"
-                                                                 ng-show="createCostCenterClicked">
-                                                                <p style="color:red">Please add atleast one material.</p>
-                                                            </div>
-                                                            <div class="help-block" ng-messages="costCenterForm.material.$error"
-                                                                 ng-show="createCostCenterClicked">
-                                                                <p style="color:red" ng-message="required">Please enter material.</p>
-                                                                <p style="color:red" ng-if="noMaterial">Material does not exist.</p>
-                                                            </div>
+                                                            <!--<div class="help-block" ng-show="getNoOfMaterials()<=0"-->
+                                                                 <!--ng-show="createCostCenterClicked">-->
+                                                                <!--<p style="color:red">Please add atleast one material.</p>-->
+                                                            <!--</div>-->
+                                                            <!--<div class="help-block" ng-messages="costCenterForm.material.$error"-->
+                                                                 <!--ng-show="createCostCenterClicked">-->
+                                                                <!--<p style="color:red" ng-message="required">Please enter material.</p>-->
+                                                                <!--<p style="color:red" ng-if="noMaterial">Material does not exist.</p>-->
+                                                            <!--</div>-->
                                                         </td>
                                                         <td><input name="qty" ng-model="materials.qty"
                                                                    type="text" placeholder="" class="form-control" required/></td>
