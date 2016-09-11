@@ -63,8 +63,9 @@ myApp.service('ApplicatorService',function(){
 		        $http.post("Applicator/php/Applicator.php", null,config)
 
 				.success(function (data, status, headers, config){
-					console.log(data);
+
 					$scope.Applicators=data;
+					console.log($scope.Applicators);
 
 				})
 

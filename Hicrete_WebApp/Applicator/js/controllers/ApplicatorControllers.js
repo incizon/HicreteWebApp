@@ -53,7 +53,7 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
     }
 
 
-    /*to store all packages from return from  server */
+    /*to store all packages return from  server */
 
     $scope.packages=[];
 
@@ -99,10 +99,12 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
 
 
     /* to show package details while creating applicator */
-    //$scope.packageSelected=null;
-    $scope.getPackageDetails=function(packageID){
-        //console.log(selected);
-        //packageID=selected.payment_package_id;
+
+    $scope.noPackage=false;
+    $scope.getPackageDetails=function(selected){
+
+        console.log(selected);
+        packageID=selected.payment_package_id;
 
         $scope.applicatorDetails.packageID=packageID;
         $scope.packageDetailsShow='Yes';
@@ -126,14 +128,15 @@ myApp.controller('ApplicatorController',function($scope,$rootScope,$http,Applica
                         element_name:$scope.packages[pindex].elementType[index].element_name,
                         element_quantity:$scope.packages[pindex].elementType[index].element_quantity,
                         element_rate:$scope.packages[pindex].elementType[index].element_rate,
-
                     });
                 }
             }
-
         }
     }
 
+    $scope.hidePackageDetails=function(){
+        $scope.packageDetailsShow='No';
+    }
 
     /* if package edited then set packageEdited to true and editPackage to true adn hide package details*/
     $scope.editPackageDetails=function(){
@@ -899,9 +902,13 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
 
     ApplicatorService.getApplicatorPaymentDetails($scope,$http,$scope.applicatorDetails);
 
-    $scope.viewApplicatorPaymentDetails=function(enrollmentId){
+    $scope.noApplicator=false;
+    $scope.viewApplicatorPaymentDetails=function(applicator){
 
+        console.log(applicator)
         $scope.applicatorPayment=[];
+        $scope.applicatorDetails.enrollmentID=applicator.enrollment_id;
+        enrollmentId=applicator.enrollment_id;
         for(var index=0;index<$scope.Applicators.length;index++){
 
             if($scope.Applicators[index].enrollment_id==enrollmentId) {
@@ -933,6 +940,10 @@ myApp.controller('ApplicatorPaymentController',function($scope,$rootScope,$http,
             }
         }
 
+    }
+
+    $scope.hidePaymentDetails=function(){
+           $scope.showPaymentDetails=false;
     }
 
     $scope.getPendingAmount=function(){

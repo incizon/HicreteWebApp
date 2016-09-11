@@ -20,16 +20,18 @@
                                                 <label class="col-md-4 control-label">Material Produced</label>
                                                 <div class="col-md-7">
                                                     <div class="input-group">
+                                                        <input type="text" class="form-control" name="materialProduced" ng-model="selectedMaterial"  uib-typeahead="material as material.productname for material in existingMaterials | filter:$viewValue | limitTo:8" typeahead-on-select="materialProducedSelected($item,$model,$label)" typeahead-editable="false" typeahead-no-results="noMaterialProduced" required  placeholder="Material name"/>
                                                         <!-- <span class="input-group-addon"><span class="fa fa-pencil"></span></span> -->
-                                                        <select style="width:100%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" name="materialProduced" ng-model="prodBatchInfo.prodcdMaterial" required>
-                                                            <option value="" disabled selected>Select Material</option>
-                                                            <option ng-repeat="x in existingMaterials" 
-                                                                      value={{x.materialid}}>{{x.productname}}
-                                                                   </option>
-                                                        </select>
+                                                        <!--<select style="width:100%; margin: 0;" class="btn dropdown-toggle selectpicker btn-default" name="materialProduced" ng-model="prodBatchInfo.prodcdMaterial" required>-->
+                                                            <!--<option value="" disabled selected>Select Material</option>-->
+                                                            <!--<option ng-repeat="x in existingMaterials" -->
+                                                                      <!--value={{x.materialid}}>{{x.productname}}-->
+                                                                   <!--</option>-->
+                                                        <!--</select>-->
                                                     </div>
                                                     <div class="help-block" ng-messages="prodBatchOutwardForm.materialProduced.$error" ng-show="submitted">
                                                         <p style="color:red" ng-message="required">Please select material produced</p>
+                                                        <p style="color:red" ng-if="noMaterialProduced">Material produced does not exist</p>
                                                     </div>
                                                 </div>
                                             </div>

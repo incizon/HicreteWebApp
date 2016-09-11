@@ -20,7 +20,6 @@
 
                     <div class="panel-body">
                         <h5><b>Basic details</b></h5>
-
                         <div class="row">
 
                             <div class="col-md-6">
@@ -175,19 +174,24 @@
                                 </thead>
                                 <tr ng-repeat="materials in InwardData.inwardMaterials">
                                     <td width="30%">
-                                        <select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"
-                                                ng-value="Select" required style="width: 90%">
-                                            <option value="" disabled selected>Select Material</option>
-                                            <option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}
-                                            </option>
-                                        </select>
+                                        <input type="text" class="form-control" name="material" ng-model="selectedMaterial"  uib-typeahead="material as material.productname for material in materialsForOutwardInward | filter:$viewValue | limitTo:8" typeahead-on-select="materialSelected($item,$model,$label,materials)" typeahead-editable="false" typeahead-no-results="noMaterial" required  placeholder="Material name"/>
+                                        <!--<select ng-change="" class="btn dropdown-toggle selectpicker btn-default" data-live-search="true" ng-model="materials.material" name="material"-->
+                                                <!--ng-value="Select" required style="width: 90%">-->
+                                            <!--<option value="" disabled selected>Select Material</option>-->
+                                            <!--<option ng-repeat="x in materialsForOutwardInward" value={{x.materialid}}>{{x.productname}}-->
+                                            <!--</option>-->
+                                        <!--</select>-->
+
                                         <div class="help-block" ng-show="getNoOfMaterials()<=0"
                                              ng-show="submitted">
-                                            <p style="color:red">Please add atleast one material.</p>
+                                            <p style="color:red">Please add at least one material.</p>
+
+
                                         </div>
                                         <div class="help-block" ng-messages="inwardEntryForm.material.$error"
                                              ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please enter material.</p>
+                                            <p style="color:red" ng-if="noMaterial">Material does not exist.</p>
                                         </div>
                                     </td>
                                     <td width="15%">
@@ -225,16 +229,18 @@
                                         {{getUnitOfMeasure(materials.material)}}
                                     </td>
                                     <td width="25%">
-                                        <select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.suppplierName"
-                                                ng-value="Select" name="supplierName" required style="width:100%">
-                                            <option value="" disabled selected>Select Supplier</option>
-                                            <option ng-repeat="x in suppliers " value={{x.supplierid}}>{{x.suppliername}}
-                                            </option>
-                                        </select>
+                                        <input type="text" class="form-control" name="supplierName" ng-model="selectedSupplier"  uib-typeahead="supplier as supplier.suppliername for supplier in suppliers | filter:$viewValue | limitTo:8" typeahead-on-select="supplierSelected($item,$model,$label,materials)" typeahead-editable="false" typeahead-no-results="noSupplier" required  placeholder="Supplier name"/>
+                                        <!--<select class="btn dropdown-toggle selectpicker btn-default" ng-model="materials.suppplierName"-->
+                                                <!--ng-value="Select" name="supplierName" required style="width:100%">-->
+                                            <!--<option value="" disabled selected>Select Supplier</option>-->
+                                            <!--<option ng-repeat="x in suppliers " value={{x.supplierid}}>{{x.suppliername}}-->
+                                            <!--</option>-->
+                                        <!--</select>-->
 
                                         <div class="help-block" ng-messages="inwardEntryForm.supplierName.$error"
                                              ng-show="submitted">
                                             <p style="color:red" ng-message="required">Please select supplier name.</p>
+                                            <p style="color:red" ng-if="noSupplier">Supplier does not exist.</p>
                                         </div>
                                     </td>
                                     <td>

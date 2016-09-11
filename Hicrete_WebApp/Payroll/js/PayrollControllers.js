@@ -428,22 +428,34 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
     };
     $scope.getEmployeeDetails=function(){
 
+
+
         $scope.employeeDetails.operation="getEmployeeDetails";
         var config = {
             params: {
                 details: $scope.employeeDetails
             }
         };
+        $('#loader').css("display","block");
         $http.post("Payroll/php/PayrollFacade.php", null, config)
             .success(function (data) {
-
-                //console.log(data);
-                $scope.payrollEmployeeDetails=data;
-                $scope.modifyObject();
+                console.log(data);
+                $('#loader').css("display","none");
+                if(data.msg==""){
+                    $scope.errorMessage=data.error;
+                    setTimeout(function(){
+                        $('#error').css("display","block");
+                    },3000);
+                }
+                else{
+                    $scope.payrollEmployeeDetails=data;
+                    $scope.modifyObject();
+                }
             })
             .error(function (data, status, headers, config) {
-
-
+                $('#loader').css("display","none");
+                $scope.errorMessage="Could not fetch data";
+                $('#error').css("display","block");
             });
 
     }
@@ -456,8 +468,7 @@ myApp.controller('AddEmployeeToPayRollController', function($scope,$http) {
 
            $scope.payrollEmployeeDetails.EmployeeDetails[i].val=false;
        }
-       console.log($scope.payrollEmployeeDetails.EmployeeDetails);
-
+       //console.log($scope.payrollEmployeeDetails.EmployeeDetails);
    }
 
     $scope.AddEmployee=function(){

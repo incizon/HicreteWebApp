@@ -150,6 +150,14 @@ myApp.controller('costCenterController', function ($scope, $http,AppService,$roo
         segments: null
     }
 
+    /*Autocomplete start*/
+
+    $scope.noProject=false;
+    $scope.projectSelected=function($item,$model,$label){
+        $scope.costCenterDetails.projectId=$model.id;
+        console.log($scope.costCenterDetails);
+    }
+
     $scope.removeSegments = function (index) {
 
         $scope.segmentList.splice(index, 1);
@@ -360,7 +368,23 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
         });
 
 
+    /*Auto complete starts*/
+    $scope.noProject=false;
+    $scope.noProject1=false;
+    $scope.noMaterial=false;
+    $scope.projectSelected=function($item,$model,$label){
 
+        console.log($model);
+        $scope.expenseDetails.project=$model.id;
+        console.log($scope.expenseDetails);
+    }
+
+    $scope.materialSelected=function($item,$model,$label,materials){
+            console.log($model);
+            materials.material=$model.materialid;
+            console.log($scope.materialsExpense);
+
+    }
     //END
     var data = {
         module: 'getProducts'
@@ -381,13 +405,15 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
             console.log(data);
         });
 
-
     /*
      START of getting segment list
      */
+    $scope.getProjectSegments=function($item, $model, $label){
 
+        console.log($model);
+        projectId=$model.id;
+        $scope.expenseDetails.project=$model.id;
 
-    $scope.getProjectSegments=function(projectId){
         console.log("IN Project Segment Get");
         var data = {
             operation: "getProjectWiseSegments",
@@ -415,6 +441,8 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
             });
     }
     $scope.addOtherExpense = function () {
+
+
         $scope.otherExpenseClicked = false;
         if($scope.expenseDetails.isBillApplicable){
             var viewValue=new Date($scope.billDetails.dateOfBill);
@@ -428,6 +456,7 @@ myApp.controller('expenseEntryController', function ($scope, $http,AppService,$r
             otherExpenseData: $scope.expenseDetails,
             billDetails: $scope.billDetails
         };
+        console.log(data);
         var config = {
             params: {
                 data: data

@@ -234,19 +234,21 @@ $hasWrite=appUtil::doesUserHasAccess("Inventory",$userId,"Write");
                                                             :</label>
 
                                                         <div class="col-md-8">
-                                                            <select class="form-control" ng-change="setMasterTable()"
+                                                            <input type="text" class="form-control" name="materialType" ng-model="selectedProduct.materialtype"  uib-typeahead="material as material.materialtype for material in materialNames | filter:$viewValue | limitTo:8" typeahead-on-select="setMasterTable($item,$model,$label)" typeahead-editable="false" typeahead-no-results="noMaterial" required  placeholder="Material name"/>
+                                                            <!--<select class="form-control" ng-change="setMasterTable()"
                                                                     ng-model="selectedProduct.materialtypeid"
                                                                     name="materialType" required>
                                                                 <option ng-repeat="x in materialNames "
                                                                         value={{x.materialtypeid}}>{{x.materialtype}}
                                                                 </option>
                                                             </select>
-
+                                                            -->
                                                             <div class="help-block"
                                                                  ng-messages="modifyItemSearchForm.materialType.$error"
                                                                  ng-show="submittedModal">
                                                                 <p style="color:red" ng-message="required">Please select
                                                                     material type.</p>
+                                                                <p style="color:red" ng-if="noMaterial">Material does not exist.</p>
                                                             </div>
                                                         </div>
                                                     </div>

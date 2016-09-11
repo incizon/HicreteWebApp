@@ -33,15 +33,17 @@
                             </div>
                             <div class="col-md-9">
 
-                                <select class="form-control" name="applicatorName" ng-model="applicatorDetails.enrollmentID" ng-change="viewApplicatorPaymentDetails(applicatorDetails.enrollmentID)" required/>
+                                <input type="text" class="form-control" name="applicatorName" ng-model="applicatorSelected" typeahead-on-select="viewApplicatorPaymentDetails(applicatorSelected)" uib-typeahead="applicator as applicator.applicator_name for applicator in Applicators | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noApplicator" required ng-change="hidePaymentDetails()" placeholder="Enter applicator name"/>
+                                <!--<select class="form-control" name="applicatorName" ng-model="applicatorDetails.enrollmentID" ng-change="viewApplicatorPaymentDetails(applicatorDetails.enrollmentID)" required/>-->
 
-                                <option value="" disabled selected>Choose Applicator</option>
-                                <option ng-repeat="applicator in Applicators" value="{{applicator.enrollment_id }}">{{applicator.applicator_name}}</option>
-                                </select>
+                                <!--<option value="" disabled selected>Choose Applicator</option>-->
+                                <!--<option ng-repeat="applicator in Applicators" value="{{applicator.enrollment_id }}">{{applicator.applicator_name}}</option>-->
+                                <!--</select>-->
                                 <div class="help-block"
                                      ng-messages="applicatorPaymentDetailsForm.applicatorName.$error"
                                      ng-show="formSubmitted">
                                     <span style="color:red" ng-message="required">Please select applicator </span>
+                                    <span style="color:red" ng-if="noApplicator">Applicator does not exist </span>
                                 </div>
 
                             </div>

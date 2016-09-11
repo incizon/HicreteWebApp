@@ -30,18 +30,20 @@
                             <label class="col-md-2 control-label">Project</label>
 
                             <div class="col-md-7">
-                                <select class="form-control" name="projectName" ng-model="costCenterDetails.projectId"
-                                        required>
-                                    <option value="" disabled selected>Select Project</option>
-                                    <option ng-repeat="projectEntry in projectList" value="{{projectEntry.id}}">
-                                        {{projectEntry.name}}
-                                    </option>
+                                <input type="text" class="form-control" name="projectName" ng-model="selectedProject"  typeahead-on-select="projectSelected($item, $model, $label)" uib-typeahead="project as project.name for project in projectList | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noProject" required  placeholder="Enter project name"/>
+                                <!--<select class="form-control" name="projectName" ng-model="costCenterDetails.projectId"-->
+                                        <!--required>-->
+                                    <!--<option value="" disabled selected>Select Project</option>-->
+                                    <!--<option ng-repeat="projectEntry in projectList" value="{{projectEntry.id}}">-->
+                                        <!--{{projectEntry.name}}-->
+                                    <!--</option>-->
 
-                                </select>
+                                <!--</select>-->
                             </div>
                             <div class="help-block" ng-messages="costCenterForm.projectName.$error"
                                  ng-show="createCostCenterClicked">
-                                <p style="color:red" ng-message="required">Select Project</p>
+                                <p style="color:red" ng-message="required">Select Project From List</p>
+                                <p style="color:red" ng-if="noProject">Project does not exist</p>
                             </div>
                         </div>
                         <!--End of project Field-->
@@ -146,7 +148,7 @@
                                             </td>
                                             <td><input name="allocatedBudget" ng-model="materials.allocatedBudget"
                                                        type="text" placeholder="" class="form-control" required
-                                                       "></td>
+                                                       /></td>
                                             <td><input ng-model="materials.alertLevel" name="alertLevel" type="text"
                                                        placeholder="" class="form-control" required
                                                        pattern="[0-9]*[.]?[0-9]*"></td>

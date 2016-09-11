@@ -121,6 +121,10 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $rootScop
 
     }
 
+
+
+
+
     $scope.Companies = [];
     AppService.getCompanyList($http, $scope.Companies);
 
@@ -130,6 +134,17 @@ myApp.controller('ProjectCreationController', function ($scope, $http, $rootScop
 
     $scope.customers = [];
     AppService.getAllCustomers($http, $scope.customers);
+
+
+    /**Autocomplete start*/
+    $scope.noCustomer=false;
+    $scope.customerSelected=function($item, $model, $label){
+        $scope.projectDetails.customerId=$model.customerId;
+        console.log($scope.projectDetails);
+    }
+
+
+
 
 
     $scope.creteProject = function () {
@@ -989,6 +1004,14 @@ myApp.controller('QuotationController', function (fileUpload, $scope, $http, $ui
 
     $scope.projects = [];
     AppService.getAllProjects($http, $scope.projects);
+
+    /*Autocomplete start */
+
+    $scope.noProject=false;
+    $scope.projectSelected=function($item,$model,$label){
+        $scope.QuotationDetails.projectId=$model.id;
+    }
+
 
     $scope.Companies = [];
     if ($stateParams.projectId !== null || $stateParams.projectId !== undefined) {
@@ -2549,9 +2572,16 @@ myApp.controller('ModifyInvoiceController', function ($scope, $http, $uibModal, 
 
     AppService.getAllProjects($http, $scope.Projects);
 
+   /*Autocomplet start*/
+        $scope.noProject=false;
 
+     $scope.hidePaymentDetails=function(){
 
-    $scope.viewProjectPaymentDetails = function (project_id) {
+         $scope.showPaymentDetails=false;
+     }
+
+    $scope.viewProjectPaymentDetails = function ($item, $model, $label) {
+        project_id=$model.id;
         $scope.Invoices = [];
         var invoice = [];
         console.log(project_id);
@@ -3371,7 +3401,10 @@ myApp.controller('QuotationFollowupHistoryController', function ($scope, $http, 
     };
     AppService.getAllProjects($http, $scope.projects);
     console.log("in QuotationFollowupHistoryController");
-    $scope.selectProject = function (projectId) {
+
+    $scope.noProject=false;
+    $scope.selectProject = function ($item, $model, $label) {
+        projectId=$model.id;
         $scope.quotations = [];
         var quotation = []
         console.log("changed" + projectId);
@@ -3452,8 +3485,9 @@ myApp.controller('PaymentFollowupHistoryController', function ($scope, $http, Ap
         return (begin <= index && index < end);
     };
     AppService.getAllProjects($http, $scope.projects);
-
-    $scope.selectProject = function () {
+    $scope.noProject=false;
+    $scope.selectProject = function ($item, $model, $label) {
+        $scope.selectedProjectId=$model.id;
         $scope.invoices = [];
         console.log("In payment followup history");
         AppService.getAllInvoicesOfProject($http, $scope.invoices, $scope.selectedProjectId);
@@ -3528,6 +3562,10 @@ myApp.controller('SiteTrackingFollowupHistoryController', function ($scope, $htt
         return (begin <= index && index < end);
     };
 
+    $scope.noProject=false;
+    $scope.selectProject=function($item,$model,$label){
+        $scope.selectedProjectId=$model.id;
+    }
     $scope.show = function () {
 
         //getProjectSiteFollowup
@@ -3750,7 +3788,9 @@ myApp.controller('PaymentHistoryController', function ($scope, $http, AppService
     AppService.getAllProjects($http, $scope.Projects);
 
 
-    $scope.viewProjectInvoices = function (project) {
+    $scope.viewProjectInvoices = function ($item, $model, $label) {
+        //console.log($model);
+        project=$model.id;
         $scope.paymentHistoryData = [];
         $scope.Invoices = [];
         var invoice = [];

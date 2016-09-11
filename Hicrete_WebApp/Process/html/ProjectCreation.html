@@ -30,14 +30,16 @@
                                     <label class="control-label">Customer Name :</label>
                                 </div>
                                 <div class="col-md-8">
-                                    <select class="form-control select" name="customer" ng-model="projectDetails.customerId" required>
-                                        <option value="" disabled selected>Choose Customer</option>
-                                        <option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>
-                                    </select>
+                                    <input type="text" class="form-control" name="customer" ng-model="selectedCustomer"  typeahead-on-select="customerSelected($item, $model, $label)" uib-typeahead="customer as customer.customerName for customer in customers | filter:$viewValue" typeahead-editable="false" typeahead-no-results="noCustomer" required  placeholder="Enter customer name"/>
+                                    <!--<select class="form-control select" name="customer" ng-model="projectDetails.customerId" required>-->
+                                        <!--<option value="" disabled selected>Choose Customer</option>-->
+                                        <!--<option ng-repeat="customer in customers" value="{{customer.customerId}}">{{customer.customerName}}</option>-->
+                                    <!--</select>-->
                                     <div class="help-block"
                                          ng-messages="ProjectInfoForm.customer.$error"
                                          ng-show="formSubmitted">
-                                        <span style="color:red" ng-message="required">Customer Name is required</span>
+                                        <span style="color:red" ng-message="required">Customer name is required</span>
+                                        <span style="color:red" ng-if="noCustomer">Customer name not exist</span>
                                     </div>
                                 </div>
                             </div>
@@ -284,11 +286,10 @@
                             <th>Sr.No</th>
                             <th>Company Name</th>
                             <th>Mark</th>
-
                         </tr>
                         </thead>
                         <tr ng-repeat="companyEntry in Companies">
-                            <td>1</td>
+                            <td>{{$index+1}}</td>
 
                             <td>
                                {{companyEntry.companyName}}
