@@ -595,6 +595,8 @@ myApp.controller('ProjectDetailsController', function ($stateParams, myService, 
 
         $http.post("Process/php/ProjectPaymentFacade.php", null, config)
             .success(function (data) {
+                console.log("PaymentDetails load payment");
+                console.log(data);
                 if (data.status != "Successful") {
                     $rootScope.errorMessage = data.message;
                     $('#error').css("display", "block");

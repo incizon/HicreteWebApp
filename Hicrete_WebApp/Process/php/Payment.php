@@ -118,23 +118,25 @@ Class Payment
 			$final = array();
 			$db = Database::getInstance();
 			$conn = $db->getConnection();
-			$stmt = $conn->prepare("SELECT p.`InvoiceNo`,sum(`AmountPaid`),i.`TotalAmount`,i.`InvoiceTitle` FROM project_payment p,invoice i where p.InvoiceNo=i.InvoiceNo AND i.QuotationId in(SELECT q.QuotationId FROM quotation q where q.ProjectId = ':projid') group by p.`InvoiceNo`");
+			$stmt = $conn->prepare("SELECT p.`InvoiceNo`,sum(`AmountPaid`) As AmountPaid,i.`TotalAmount`,i.`InvoiceTitle` FROM project_payment p,invoice i where p.InvoiceNo=i.InvoiceNo AND i.QuotationId in(SELECT q.QuotationId FROM quotation q where q.ProjectId =:projid) group by p.`InvoiceNo`");
 
 			$stmt->bindParam(':projid', $projid, PDO::PARAM_STR);
-			if($result = $stmt->execute()){
+			if($stmt->execute()){
 				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-					$final['ProjectAmount'] = $row['TotalAmount'];
-					$final['AmountPaid'] = $row['AmountPaid'];
-					$final['InvoiceNo'] = $row['InvoiceNo'];
-					$final['InvoiceTitle'] = $row['InvoiceTitle'];
+                    $resultArray=array();
+                    $resultArray['ProjectAmount'] = $row['TotalAmount'];
+                    $resultArray['AmountPaid'] = $row['AmountPaid'];
+                    $resultArray['InvoiceNo'] = $row['InvoiceNo'];
+                    $resultArray['InvoiceTitle'] = $row['InvoiceTitle'];
+                    array_push($final,$resultArray);
 				}
-
+//              return $final;
 			}else{
 				return null;
 			}
 
 			$db = null;
-			return $final ;
+            return $final;
 
 	}
 
